@@ -26,11 +26,11 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
     lg: "w-36 h-36 sm:w-44 sm:h-44 text-lg sm:text-2xl",
   }
 
-  // Reducir el tamaño del aura para que sea más discreta
-  const auraSize = {
-    sm: "w-[3.75rem] h-[3.75rem]", // 15px más que el logo
-    md: "w-[8.5rem] h-[8.5rem]", // 20px más que el logo
-    lg: "w-[9.5rem] h-[9.5rem] sm:w-[11.5rem] sm:h-[11.5rem]", // 20px más que el logo
+  // Tamaños del aura
+  const auraSizes = {
+    sm: { width: "3.75rem", height: "3.75rem" },
+    md: { width: "8.5rem", height: "8.5rem" },
+    lg: { width: "9.5rem", height: "9.5rem", smWidth: "11.5rem", smHeight: "11.5rem" },
   }
 
   // Definir la animación del aura para que haga un movimiento circular sutil
@@ -50,36 +50,40 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
     triggerHapticFeedback("medium")
   }
 
-  // Determinar la clase de aura basada en la sección
-  let auraClass = ""
+  // Determinar el color del aura basado en la sección
+  let auraColor = "transparent"
   if (section === "mente") {
-    auraClass = "logo-aura-mente"
+    auraColor = "rgba(59, 130, 246, 0.5)" // Color azul para mente
   } else if (section === "cuerpo") {
-    auraClass = "logo-aura-cuerpo"
+    auraColor = "rgba(245, 158, 11, 0.5)" // Color ámbar para cuerpo
   } else if (section === "finanzas") {
-    auraClass = "logo-aura-finanzas"
+    auraColor = "rgba(34, 197, 94, 0.5)" // Color verde para finanzas
+  }
+
+  // Determinar el tamaño del aura basado en el tamaño del logo
+  let auraWidth = auraSizes[size].width
+  let auraHeight = auraSizes[size].height
+
+  // Para tamaño lg, tenemos diferentes tamaños para pantallas pequeñas y grandes
+  if (size === "lg" && typeof window !== "undefined" && window.innerWidth >= 640) {
+    auraWidth = auraSizes.lg.smWidth
+    auraHeight = auraSizes.lg.smHeight
   }
 
   const LogoContent = () => (
     <div className="relative flex items-center justify-center">
       {section && (
         <motion.div
-          className={`logo-aura ${auraClass} ${auraSize[size]}`}
           animate={auraAnimation}
           style={{
             position: "absolute",
             zIndex: 0,
+            width: auraWidth,
+            height: auraHeight,
             borderRadius: "9999px",
             opacity: 0.3,
             filter: "blur(8px)",
-            backgroundColor:
-              section === "mente"
-                ? "rgba(59, 130, 246, 0.5)"
-                : section === "cuerpo"
-                  ? "rgba(245, 158, 11, 0.5)"
-                  : section === "finanzas"
-                    ? "rgba(34, 197, 94, 0.5)"
-                    : "transparent",
+            backgroundColor: auraColor,
           }}
         />
       )}

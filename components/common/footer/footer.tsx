@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 
 interface FooterProps {
@@ -5,22 +7,39 @@ interface FooterProps {
 }
 
 export default function Footer({ section }: FooterProps) {
-  // Determinar las clases de color basadas en la sección
-  let linkClass = "text-blue-500 hover:text-blue-700"
+  // Determinar el color del enlace basado en la sección
+  let linkColor = "#3B82F6" // Color azul por defecto
+  let linkHoverColor = "#1D4ED8" // Color azul oscuro por defecto
 
   if (section === "mente") {
-    linkClass = "text-mente-DEFAULT hover:text-mente-dark"
+    linkColor = "#1976d2" // Color mente
+    linkHoverColor = "#0d47a1" // Color mente oscuro
   } else if (section === "cuerpo") {
-    linkClass = "text-cuerpo-DEFAULT hover:text-cuerpo-dark"
+    linkColor = "#ffa000" // Color cuerpo
+    linkHoverColor = "#e65100" // Color cuerpo oscuro
   } else if (section === "finanzas") {
-    linkClass = "text-finanzas-DEFAULT hover:text-finanzas-dark"
+    linkColor = "#388e3c" // Color finanzas
+    linkHoverColor = "#1b5e20" // Color finanzas oscuro
   }
 
   return (
     <footer className="w-full mt-12 py-6 text-center text-sm text-gray-600 dark:text-gray-400">
       <div className="mb-2">Hecho con ❤ 🇩🇴 #VERyGoodforlife</div>
       <div className="text-xs opacity-75">
-        <Link href="https://daurydicaprio.com" target="_blank" className={linkClass}>
+        <Link
+          href="https://daurydicaprio.com"
+          target="_blank"
+          style={{
+            color: linkColor,
+            transition: "color 0.2s ease",
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.color = linkHoverColor
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.color = linkColor
+          }}
+        >
           Daury DiCaprio
         </Link>
       </div>

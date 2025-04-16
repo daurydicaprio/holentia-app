@@ -3,8 +3,9 @@
 import Link from "next/link"
 import { ChevronRight } from "lucide-react"
 import type { CardData } from "@/types"
-import { cn } from "@/lib/utils"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
+import { useTheme } from "next-themes"
+import { useState, useEffect } from "react"
 
 interface ToolCardProps {
   card: CardData
@@ -14,32 +15,38 @@ interface ToolCardProps {
 export default function ToolCard({ card, index }: ToolCardProps) {
   const { title, description, slug, isAvailable, category } = card
   const { triggerHapticFeedback } = useHapticFeedback()
+  const { theme } = useTheme()
+  const [mounted, setMounted] = useState(false)
 
-  // Clases específicas por categoría usando clases explícitas en lugar de interpolación
-  let bgClass = ""
-  let borderClass = ""
-  let categoryTextClass = ""
-  let titleTextClass = ""
-  let descriptionTextClass = ""
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Determinar los colores basados en la categoría
+  let bgColor = theme === "dark" ? "rgba(30, 30, 30, 0.4)" : "rgba(255, 255, 255, 0.4)"
+  let borderColor = theme === "dark" ? "#333333" : "#e5e7eb"
+  let categoryTextColor = theme === "dark" ? "#a0a0a0" : "#4b5563"
+  let titleTextColor = theme === "dark" ? "#e0e0e0" : "#1f2937"
+  let descriptionTextColor = theme === "dark" ? "#a0a0a0" : "#4b5563"
 
   if (category === "mente") {
-    bgClass = "bg-mente-glass"
-    borderClass = "border-mente-border"
-    categoryTextClass = "text-mente-category"
-    titleTextClass = "text-mente-text"
-    descriptionTextClass = "text-mente-text"
+    bgColor = theme === "dark" ? "rgba(25, 118, 210, 0.2)" : "rgba(25, 118, 210, 0.4)"
+    borderColor = theme === "dark" ? "rgba(144, 202, 249, 0.3)" : "rgba(144, 202, 249, 0.5)"
+    categoryTextColor = theme === "dark" ? "#90caf9" : "#e3f2fd"
+    titleTextColor = theme === "dark" ? "#e0e0e0" : "#ffffff"
+    descriptionTextColor = theme === "dark" ? "#e0e0e0" : "#ffffff"
   } else if (category === "cuerpo") {
-    bgClass = "bg-cuerpo-glass"
-    borderClass = "border-cuerpo-border"
-    categoryTextClass = "text-cuerpo-category"
-    titleTextClass = "text-cuerpo-text"
-    descriptionTextClass = "text-cuerpo-text"
+    bgColor = theme === "dark" ? "rgba(255, 160, 0, 0.2)" : "rgba(255, 160, 0, 0.4)"
+    borderColor = theme === "dark" ? "rgba(255, 224, 130, 0.3)" : "rgba(255, 224, 130, 0.6)"
+    categoryTextColor = theme === "dark" ? "#ffe082" : "#795548"
+    titleTextColor = theme === "dark" ? "#e0e0e0" : "#3e2723"
+    descriptionTextColor = theme === "dark" ? "#e0e0e0" : "#3e2723"
   } else if (category === "finanzas") {
-    bgClass = "bg-finanzas-glass"
-    borderClass = "border-finanzas-border"
-    categoryTextClass = "text-finanzas-category"
-    titleTextClass = "text-finanzas-text"
-    descriptionTextClass = "text-finanzas-text"
+    bgColor = theme === "dark" ? "rgba(56, 142, 60, 0.2)" : "rgba(56, 142, 60, 0.4)"
+    borderColor = theme === "dark" ? "rgba(165, 214, 167, 0.3)" : "rgba(165, 214, 167, 0.6)"
+    categoryTextColor = theme === "dark" ? "#a5d6a7" : "#e8f5e9"
+    titleTextColor = theme === "dark" ? "#e0e0e0" : "#ffffff"
+    descriptionTextColor = theme === "dark" ? "#e0e0e0" : "#ffffff"
   }
 
   // Animación de entrada escalonada
@@ -53,32 +60,71 @@ export default function ToolCard({ card, index }: ToolCardProps) {
     }
   }
 
+  if (!mounted) return null
+
   const CardContent = () => (
     <div
-      className={cn(
-        "relative p-6 rounded-[14px] border backdrop-blur-md shadow-md h-[165px]",
-        "transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:scale-[1.02]",
-        bgClass,
-        borderClass,
-        !isAvailable && "card-coming-soon",
-        isAvailable && "shadow-md hover:shadow-lg",
-      )}
-      style={{ animationDelay }}
+      style={{
+        position: "relative",
+        padding: "1.5rem",
+        borderRadius: "14px",
+        border: `1px solid ${borderColor}`,
+        backdropFilter: "blur(14px)",
+        backgroundColor: bgColor,
+        boxShadow: "0 10px 25px rgba(0, 0, 0, 0.06)",
+        height: "165px",
+        transition: "all 0.3s ease",
+        opacity: isAvailable ? 1 : 0.5,
+        animationDelay,
+      }}
+      className="animate-fadeIn hover:shadow-lg hover:-translate-y-1 hover:scale-[1.02]"
       onTouchStart={handleCardPress}
     >
-      <div className="pr-6">
-        <span className={cn("text-xs font-medium uppercase tracking-wider opacity-85", categoryTextClass)}>
+      <div style={{ paddingRight: "1.5rem" }}>
+        <span
+          style={{
+            fontSize: "0.75rem",
+            fontWeight: 500,
+            textTransform: "uppercase",
+            letterSpacing: "0.05em",
+            opacity: 0.85,
+            color: categoryTextColor,
+          }}
+        >
           {category.charAt(0).toUpperCase() + category.slice(1)}
         </span>
-        <h3 className={cn("text-lg font-semibold mt-1", titleTextClass)}>{title}</h3>
-        <p className={cn("text-sm mt-1 opacity-90", descriptionTextClass)}>{description}</p>
+        <h3
+          style={{
+            fontSize: "1.125rem",
+            fontWeight: 600,
+            marginTop: "0.25rem",
+            color: titleTextColor,
+          }}
+        >
+          {title}
+        </h3>
+        <p
+          style={{
+            fontSize: "0.875rem",
+            marginTop: "0.25rem",
+            opacity: 0.9,
+            color: descriptionTextColor,
+          }}
+        >
+          {description}
+        </p>
       </div>
       <div
-        className={cn(
-          "absolute top-1/2 right-4 -translate-y-1/2 opacity-65 transition-all group-hover:translate-x-1",
-          titleTextClass,
-          "card-arrow",
-        )}
+        style={{
+          position: "absolute",
+          top: "50%",
+          right: "1rem",
+          transform: "translateY(-50%)",
+          opacity: 0.65,
+          color: titleTextColor,
+          transition: "transform 0.3s ease",
+        }}
+        className="group-hover:translate-x-1"
       >
         <ChevronRight className="h-5 w-5" />
       </div>

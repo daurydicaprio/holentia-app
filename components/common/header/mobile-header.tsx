@@ -8,7 +8,6 @@ import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Moon, Sun } from "lucide-react"
-import { cn } from "@/lib/utils"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 
 interface MobileHeaderProps {
@@ -21,24 +20,33 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
   const { setTheme, theme } = useTheme()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { triggerHapticFeedback } = useHapticFeedback()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Verificar si estamos en una página de herramienta
   const pathParts = pathname ? pathname.split("/").filter(Boolean) : []
   const isToolPage = pathParts.length > 1
 
-  // Determinar las clases de color basadas en la sección
-  let sectionTextClass = ""
-  let headerBgClass = "bg-white/80 dark:bg-gray-800/80 border-b border-gray-200 dark:border-gray-700"
+  // Determinar los estilos basados en la sección
+  let headerBgColor = theme === "dark" ? "rgba(30, 30, 30, 0.8)" : "rgba(255, 255, 255, 0.8)"
+  let headerBorderColor = theme === "dark" ? "#333333" : "#e5e7eb"
+  let donationTextColor = "#3B82F6" // Color azul por defecto
 
   if (section === "mente") {
-    sectionTextClass = "text-mente-DEFAULT"
-    headerBgClass = "bg-mente-glass border-b border-mente-border"
+    headerBgColor = theme === "dark" ? "rgba(25, 118, 210, 0.2)" : "rgba(25, 118, 210, 0.4)"
+    headerBorderColor = theme === "dark" ? "rgba(144, 202, 249, 0.3)" : "rgba(144, 202, 249, 0.5)"
+    donationTextColor = "#1976d2" // Color mente
   } else if (section === "cuerpo") {
-    sectionTextClass = "text-cuerpo-DEFAULT"
-    headerBgClass = "bg-cuerpo-glass border-b border-cuerpo-border"
+    headerBgColor = theme === "dark" ? "rgba(255, 160, 0, 0.2)" : "rgba(255, 160, 0, 0.4)"
+    headerBorderColor = theme === "dark" ? "rgba(255, 224, 130, 0.3)" : "rgba(255, 224, 130, 0.6)"
+    donationTextColor = "#ffa000" // Color cuerpo
   } else if (section === "finanzas") {
-    sectionTextClass = "text-finanzas-DEFAULT"
-    headerBgClass = "bg-finanzas-glass border-b border-finanzas-border"
+    headerBgColor = theme === "dark" ? "rgba(56, 142, 60, 0.2)" : "rgba(56, 142, 60, 0.4)"
+    headerBorderColor = theme === "dark" ? "rgba(165, 214, 167, 0.3)" : "rgba(165, 214, 167, 0.6)"
+    donationTextColor = "#388e3c" // Color finanzas
   }
 
   // Efecto para manejar el backdrop del menú
@@ -63,17 +71,33 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
     router.back()
   }
 
+  if (!mounted) return null
+
   return (
     <>
       <div className="menu-backdrop"></div>
-      <header className={`sticky top-0 z-50 backdrop-blur-md ${headerBgClass} w-full`}>
+      <header
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 50,
+          backdropFilter: "blur(12px)",
+          backgroundColor: headerBgColor,
+          borderBottom: `1px solid ${headerBorderColor}`,
+          width: "100%",
+        }}
+      >
         <div className="flex items-center justify-between h-14 px-4">
           {isToolPage ? (
             <Button
               variant="ghost"
               size="icon"
               onClick={handleBackClick}
-              className="mr-2 hover:bg-white/30 dark:hover:bg-gray-700/30"
+              style={{
+                marginRight: "0.5rem",
+                backgroundColor: "transparent",
+              }}
+              className="hover:bg-white/30 dark:hover:bg-gray-700/30"
             >
               <ChevronLeft className="h-5 w-5" />
               <span className="sr-only">Volver</span>
@@ -84,8 +108,13 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
 
           <Link
             href="/"
-            className="font-bold text-lg bg-white/40 dark:bg-gray-800/40 px-4 py-1.5 rounded-md hover:bg-white/60 dark:hover:bg-gray-700/60 transition-colors"
+            className="font-bold text-lg hover:bg-white/60 dark:hover:bg-gray-700/60 transition-colors"
             onClick={() => triggerHapticFeedback("light")}
+            style={{
+              backgroundColor: theme === "dark" ? "rgba(30, 30, 30, 0.4)" : "rgba(255, 255, 255, 0.4)",
+              padding: "0.375rem 1rem",
+              borderRadius: "0.375rem",
+            }}
           >
             HOLENTIA
           </Link>
@@ -97,6 +126,9 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
                 size="icon"
                 className="hover:bg-white/30 dark:hover:bg-gray-700/30 active:scale-95 transition-transform"
                 onClick={handleMenuToggle}
+                style={{
+                  backgroundColor: "transparent",
+                }}
               >
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Menú</span>
@@ -134,8 +166,9 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
               <DropdownMenuItem asChild>
                 <Link
                   href="/apoyar"
-                  className={cn("mobile-menu-item", sectionTextClass)}
+                  className="mobile-menu-item"
                   onClick={() => triggerHapticFeedback("light")}
+                  style={{ color: donationTextColor }}
                 >
                   Hacer donación
                 </Link>

@@ -8,22 +8,20 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Moon, Sun } from "lucide-react"
 import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
 
 export default function DesktopHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { setTheme, theme } = useTheme()
   const pathname = usePathname()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Extraer la sección del pathname
   const pathParts = pathname.split("/").filter(Boolean)
   const section = pathParts.length > 0 ? pathParts[0] : null
-
-  // Determinar las clases de color basadas en la sección
-  let sectionTextClass = ""
-  if (section === "mente") sectionTextClass = "text-mente-DEFAULT"
-  else if (section === "cuerpo") sectionTextClass = "text-cuerpo-DEFAULT"
-  else if (section === "finanzas") sectionTextClass = "text-finanzas-DEFAULT"
 
   // Efecto para manejar el backdrop del menú
   useEffect(() => {
@@ -37,6 +35,18 @@ export default function DesktopHeader() {
     }
   }, [isMenuOpen])
 
+  // Determinar el color del texto para el botón de donación
+  let donationTextColor = "#3B82F6" // Color azul por defecto
+  if (section === "mente") {
+    donationTextColor = "#1976d2" // Color mente
+  } else if (section === "cuerpo") {
+    donationTextColor = "#ffa000" // Color cuerpo
+  } else if (section === "finanzas") {
+    donationTextColor = "#388e3c" // Color finanzas
+  }
+
+  if (!mounted) return null
+
   return (
     <>
       <div className="menu-backdrop"></div>
@@ -46,7 +56,15 @@ export default function DesktopHeader() {
             <Button
               variant="outline"
               size="icon"
-              className="h-12 w-12 rounded-full bg-white dark:bg-gray-800 shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 active:scale-95 transition-transform"
+              style={{
+                height: "48px",
+                width: "48px",
+                borderRadius: "9999px",
+                backgroundColor: theme === "dark" ? "#1e1e1e" : "#ffffff",
+                boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+                border: `1px solid ${theme === "dark" ? "#333333" : "#e5e7eb"}`,
+              }}
+              className="active:scale-95 transition-transform"
             >
               <Menu className="h-5 w-5" />
             </Button>
@@ -81,7 +99,7 @@ export default function DesktopHeader() {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href="/apoyar" className={cn("mobile-menu-item", sectionTextClass)}>
+              <Link href="/apoyar" className="mobile-menu-item" style={{ color: donationTextColor }}>
                 Hacer donación
               </Link>
             </DropdownMenuItem>
