@@ -1,0 +1,88 @@
+import type { Config } from "tailwindcss"
+
+const config: Config = {
+  darkMode: ["class"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+    "*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
+    extend: {
+      colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "var(--color-background)",
+        foreground: "var(--color-text-primary)",
+        secondary: {
+          DEFAULT: "var(--color-text-secondary)",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        mente: {
+          DEFAULT: "var(--color-mente-active)",
+          dark: "var(--color-mente-active-dark)",
+          foreground: "var(--color-mente-text-active)",
+          glass: "var(--color-mente-glass-bg)",
+          border: "var(--color-mente-glass-border)",
+          text: "var(--color-mente-text-card)",
+          category: "var(--color-mente-text-category)",
+        },
+        cuerpo: {
+          DEFAULT: "var(--color-cuerpo-active)",
+          dark: "var(--color-cuerpo-active-dark)",
+          foreground: "var(--color-cuerpo-text-active)",
+          glass: "var(--color-cuerpo-glass-bg)",
+          border: "var(--color-cuerpo-glass-border)",
+          text: "var(--color-cuerpo-text-card)",
+          category: "var(--color-cuerpo-text-category)",
+        },
+        finanzas: {
+          DEFAULT: "var(--color-finanzas-active)",
+          dark: "var(--color-finanzas-active-dark)",
+          foreground: "var(--color-finanzas-text-active)",
+          glass: "var(--color-finanzas-glass-bg)",
+          border: "var(--color-finanzas-glass-border)",
+          text: "var(--color-finanzas-text-card)",
+          category: "var(--color-finanzas-text-category)",
+        },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        fadeIn: {
+          from: { opacity: "0", transform: "translateY(10px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        fadeIn: "fadeIn 0.5s ease-out forwards",
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate")],
+}
+
+export default config
