@@ -1,5 +1,6 @@
 import { sectionsData } from "@/lib/data"
 import ToolPageClient from "@/components/tool-page-client"
+import { BudgetSimulator } from "@/components/tools/budget-simulator/budget-simulator"
 
 export default function CrearPresupuestoPersonalPage() {
   const section = "finanzas"
@@ -14,5 +15,5 @@ export default function CrearPresupuestoPersonalPage() {
     tool: toolSlug,
   }
 
-  return <ToolPageClient params={toolPageParams} toolData={toolData} />
+  return <ToolPageClient params={toolPageParams} toolData={toolData} toolContent={<BudgetSimulator />} />
 }
