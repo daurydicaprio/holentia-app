@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Moon, Sun } from "lucide-react"
 import { usePathname } from "next/navigation"
-import { getSectionColor } from "@/lib/utils"
 import { cn } from "@/lib/utils"
 
 export default function DesktopHeader() {
@@ -19,7 +18,12 @@ export default function DesktopHeader() {
   // Extraer la sección del pathname
   const pathParts = pathname.split("/").filter(Boolean)
   const section = pathParts.length > 0 ? pathParts[0] : null
-  const sectionColor = getSectionColor(section)
+
+  // Determinar las clases de color basadas en la sección
+  let sectionTextClass = ""
+  if (section === "mente") sectionTextClass = "text-mente-DEFAULT"
+  else if (section === "cuerpo") sectionTextClass = "text-cuerpo-DEFAULT"
+  else if (section === "finanzas") sectionTextClass = "text-finanzas-DEFAULT"
 
   // Efecto para manejar el backdrop del menú
   useEffect(() => {
@@ -77,10 +81,7 @@ export default function DesktopHeader() {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link
-                href="/apoyar"
-                className={cn("mobile-menu-item", sectionColor ? `text-${sectionColor}-DEFAULT` : "")}
-              >
+              <Link href="/apoyar" className={cn("mobile-menu-item", sectionTextClass)}>
                 Hacer donación
               </Link>
             </DropdownMenuItem>

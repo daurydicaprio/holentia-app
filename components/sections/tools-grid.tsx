@@ -18,6 +18,17 @@ export default function ToolsGrid({ cards, section }: ToolsGridProps) {
   const visibleCards = showAll ? cards : cards.slice(0, 4)
   const hasMoreCards = cards.length > 4
 
+  // Determinar las clases de color basadas en la sección
+  let buttonTextClass = "text-gray-600 hover:text-gray-800"
+
+  if (section === "mente") {
+    buttonTextClass = "text-mente-DEFAULT hover:text-mente-dark"
+  } else if (section === "cuerpo") {
+    buttonTextClass = "text-cuerpo-DEFAULT hover:text-cuerpo-dark"
+  } else if (section === "finanzas") {
+    buttonTextClass = "text-finanzas-DEFAULT hover:text-finanzas-dark"
+  }
+
   return (
     <div className="w-full max-w-6xl mx-auto px-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -30,7 +41,7 @@ export default function ToolsGrid({ cards, section }: ToolsGridProps) {
         <div className="flex justify-center mt-8">
           <Button
             variant="ghost"
-            className={cn(`text-${section}-DEFAULT hover:text-${section}-dark flex items-center gap-2`)}
+            className={cn("flex items-center gap-2", buttonTextClass)}
             onClick={() => setShowAll(!showAll)}
           >
             <span>{showAll ? "Mostrar menos" : "Ver todas las herramientas"}</span>

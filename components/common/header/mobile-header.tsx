@@ -8,7 +8,6 @@ import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Moon, Sun } from "lucide-react"
-import { getSectionColor } from "@/lib/utils"
 import { cn } from "@/lib/utils"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 
@@ -20,13 +19,27 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
   const router = useRouter()
   const pathname = usePathname()
   const { setTheme, theme } = useTheme()
-  const sectionColor = getSectionColor(section)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { triggerHapticFeedback } = useHapticFeedback()
 
   // Verificar si estamos en una página de herramienta
   const pathParts = pathname ? pathname.split("/").filter(Boolean) : []
   const isToolPage = pathParts.length > 1
+
+  // Determinar las clases de color basadas en la sección
+  let sectionTextClass = ""
+  let headerBgClass = "bg-white/80 dark:bg-gray-800/80 border-b border-gray-200 dark:border-gray-700"
+
+  if (section === "mente") {
+    sectionTextClass = "text-mente-DEFAULT"
+    headerBgClass = "bg-mente-glass border-b border-mente-border"
+  } else if (section === "cuerpo") {
+    sectionTextClass = "text-cuerpo-DEFAULT"
+    headerBgClass = "bg-cuerpo-glass border-b border-cuerpo-border"
+  } else if (section === "finanzas") {
+    sectionTextClass = "text-finanzas-DEFAULT"
+    headerBgClass = "bg-finanzas-glass border-b border-finanzas-border"
+  }
 
   // Efecto para manejar el backdrop del menú
   useEffect(() => {
@@ -50,14 +63,10 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
     router.back()
   }
 
-  const headerClasses = sectionColor
-    ? `bg-${sectionColor}-glass border-b border-${sectionColor}-border`
-    : "bg-white/80 dark:bg-gray-800/80 border-b border-gray-200 dark:border-gray-700"
-
   return (
     <>
       <div className="menu-backdrop"></div>
-      <header className={`sticky top-0 z-50 backdrop-blur-md ${headerClasses} w-full`}>
+      <header className={`sticky top-0 z-50 backdrop-blur-md ${headerBgClass} w-full`}>
         <div className="flex items-center justify-between h-14 px-4">
           {isToolPage ? (
             <Button
@@ -125,7 +134,7 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
               <DropdownMenuItem asChild>
                 <Link
                   href="/apoyar"
-                  className={cn("mobile-menu-item", sectionColor ? `text-${sectionColor}-DEFAULT` : "")}
+                  className={cn("mobile-menu-item", sectionTextClass)}
                   onClick={() => triggerHapticFeedback("light")}
                 >
                   Hacer donación

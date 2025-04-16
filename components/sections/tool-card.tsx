@@ -15,32 +15,32 @@ export default function ToolCard({ card, index }: ToolCardProps) {
   const { title, description, slug, isAvailable, category } = card
   const { triggerHapticFeedback } = useHapticFeedback()
 
-  // Clases específicas por categoría
-  const categoryClasses = {
-    mente: {
-      bg: "bg-mente-glass",
-      border: "border-mente-border",
-      category: "text-mente-category",
-      title: "text-mente-text",
-      description: "text-mente-text",
-    },
-    cuerpo: {
-      bg: "bg-cuerpo-glass",
-      border: "border-cuerpo-border",
-      category: "text-cuerpo-category",
-      title: "text-cuerpo-text",
-      description: "text-cuerpo-text",
-    },
-    finanzas: {
-      bg: "bg-finanzas-glass",
-      border: "border-finanzas-border",
-      category: "text-finanzas-category",
-      title: "text-finanzas-text",
-      description: "text-finanzas-text",
-    },
-  }
+  // Clases específicas por categoría usando clases explícitas en lugar de interpolación
+  let bgClass = ""
+  let borderClass = ""
+  let categoryTextClass = ""
+  let titleTextClass = ""
+  let descriptionTextClass = ""
 
-  const classes = categoryClasses[category]
+  if (category === "mente") {
+    bgClass = "bg-mente-glass"
+    borderClass = "border-mente-border"
+    categoryTextClass = "text-mente-category"
+    titleTextClass = "text-mente-text"
+    descriptionTextClass = "text-mente-text"
+  } else if (category === "cuerpo") {
+    bgClass = "bg-cuerpo-glass"
+    borderClass = "border-cuerpo-border"
+    categoryTextClass = "text-cuerpo-category"
+    titleTextClass = "text-cuerpo-text"
+    descriptionTextClass = "text-cuerpo-text"
+  } else if (category === "finanzas") {
+    bgClass = "bg-finanzas-glass"
+    borderClass = "border-finanzas-border"
+    categoryTextClass = "text-finanzas-category"
+    titleTextClass = "text-finanzas-text"
+    descriptionTextClass = "text-finanzas-text"
+  }
 
   // Animación de entrada escalonada
   const animationDelay = `${index * 0.1}s`
@@ -58,8 +58,8 @@ export default function ToolCard({ card, index }: ToolCardProps) {
       className={cn(
         "relative p-6 rounded-[14px] border backdrop-blur-md shadow-md h-[165px]",
         "transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:scale-[1.02]",
-        classes.bg,
-        classes.border,
+        bgClass,
+        borderClass,
         !isAvailable && "card-coming-soon",
         isAvailable && "shadow-md hover:shadow-lg",
       )}
@@ -67,16 +67,16 @@ export default function ToolCard({ card, index }: ToolCardProps) {
       onTouchStart={handleCardPress}
     >
       <div className="pr-6">
-        <span className={cn("text-xs font-medium uppercase tracking-wider opacity-85", classes.category)}>
+        <span className={cn("text-xs font-medium uppercase tracking-wider opacity-85", categoryTextClass)}>
           {category.charAt(0).toUpperCase() + category.slice(1)}
         </span>
-        <h3 className={cn("text-lg font-semibold mt-1", classes.title)}>{title}</h3>
-        <p className={cn("text-sm mt-1 opacity-90", classes.description)}>{description}</p>
+        <h3 className={cn("text-lg font-semibold mt-1", titleTextClass)}>{title}</h3>
+        <p className={cn("text-sm mt-1 opacity-90", descriptionTextClass)}>{description}</p>
       </div>
       <div
         className={cn(
           "absolute top-1/2 right-4 -translate-y-1/2 opacity-65 transition-all group-hover:translate-x-1",
-          classes.title,
+          titleTextClass,
           "card-arrow",
         )}
       >

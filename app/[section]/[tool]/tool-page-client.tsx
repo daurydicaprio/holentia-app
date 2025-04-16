@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import Header from "@/components/common/header/header"
 import Footer from "@/components/common/footer/footer"
 import Logo from "@/components/common/logo/logo"
-import { cn } from "@/lib/utils"
 import { ArrowLeft, Coffee } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -43,6 +42,29 @@ export default function ToolPageClient({ params, toolData }: ToolPageClientProps
   const sectionTitle =
     section && typeof section === "string" ? section.charAt(0).toUpperCase() + section.slice(1) : "Sección"
 
+  // Determinar las clases de color basadas en la sección
+  let backButtonClass = "hover:text-gray-700 hover:border-gray-300"
+  let donateButtonClass = "text-gray-700 border-gray-300 hover:bg-gray-100"
+  let titleClass = "text-gray-800"
+  let headerLineClass = "tool-header-line"
+
+  if (section === "mente") {
+    backButtonClass = "hover:text-mente-DEFAULT hover:border-mente-DEFAULT"
+    donateButtonClass = "text-mente-DEFAULT border-mente-DEFAULT hover:bg-blue-50"
+    titleClass = "text-mente-DEFAULT"
+    headerLineClass = "tool-header-line tool-header-line-mente"
+  } else if (section === "cuerpo") {
+    backButtonClass = "hover:text-cuerpo-DEFAULT hover:border-cuerpo-DEFAULT"
+    donateButtonClass = "text-cuerpo-DEFAULT border-cuerpo-DEFAULT hover:bg-amber-50"
+    titleClass = "text-cuerpo-DEFAULT"
+    headerLineClass = "tool-header-line tool-header-line-cuerpo"
+  } else if (section === "finanzas") {
+    backButtonClass = "hover:text-finanzas-DEFAULT hover:border-finanzas-DEFAULT"
+    donateButtonClass = "text-finanzas-DEFAULT border-finanzas-DEFAULT hover:bg-green-50"
+    titleClass = "text-finanzas-DEFAULT"
+    headerLineClass = "tool-header-line tool-header-line-finanzas"
+  }
+
   return (
     <main className="min-h-screen flex flex-col">
       <Header />
@@ -58,28 +80,14 @@ export default function ToolPageClient({ params, toolData }: ToolPageClientProps
 
             <div className="flex justify-between items-center mt-4 mb-6 px-4">
               <Link href={`/${section}`}>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className={cn(
-                    "flex items-center gap-2 text-sm",
-                    `hover:text-${section}-DEFAULT hover:border-${section}-DEFAULT transition-colors`,
-                  )}
-                >
+                <Button variant="outline" size="sm" className={`flex items-center gap-2 text-sm ${backButtonClass}`}>
                   <ArrowLeft className="h-4 w-4" />
                   Volver a {sectionTitle}
                 </Button>
               </Link>
 
               <Link href="/apoyar">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className={cn(
-                    "flex items-center gap-2 text-sm",
-                    `text-${section}-DEFAULT border-${section}-DEFAULT hover:bg-${section}-glass transition-colors`,
-                  )}
-                >
+                <Button variant="outline" size="sm" className={`flex items-center gap-2 text-sm ${donateButtonClass}`}>
                   <Coffee className="h-4 w-4" />
                   Hacer donación
                 </Button>
@@ -88,10 +96,10 @@ export default function ToolPageClient({ params, toolData }: ToolPageClientProps
           </>
         )}
 
-        <div className={cn("mb-8 text-center", mounted && isMobile ? "mt-4" : "")}>
-          <h1 className={cn("text-2xl sm:text-3xl font-bold", `text-${section}-DEFAULT`)}>{toolData.title}</h1>
+        <div className={`mb-8 text-center ${mounted && isMobile ? "mt-4" : ""}`}>
+          <h1 className={`text-2xl sm:text-3xl font-bold ${titleClass}`}>{toolData.title}</h1>
           <p className="text-gray-600 dark:text-gray-300 mt-2">{toolData.description}</p>
-          <div className={cn("tool-header-line", `tool-header-line-${section}`)}></div>
+          <div className={headerLineClass}></div>
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { getSectionColor } from "@/lib/utils"
 import Link from "next/link"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 
@@ -13,7 +12,6 @@ interface LogoProps {
 
 export default function Logo({ section = null, size = "lg" }: LogoProps) {
   const [mounted, setMounted] = useState(false)
-  const sectionColor = getSectionColor(section)
   const { triggerHapticFeedback } = useHapticFeedback()
 
   useEffect(() => {
@@ -52,11 +50,15 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
     triggerHapticFeedback("medium")
   }
 
+  // Determinar la clase de aura basada en la sección
+  let auraClass = ""
+  if (section === "mente") auraClass = "logo-aura-mente"
+  else if (section === "cuerpo") auraClass = "logo-aura-cuerpo"
+  else if (section === "finanzas") auraClass = "logo-aura-finanzas"
+
   const LogoContent = () => (
     <div className="relative flex items-center justify-center">
-      {sectionColor && (
-        <motion.div className={`logo-aura logo-aura-${sectionColor} ${auraSize[size]}`} animate={auraAnimation} />
-      )}
+      {section && <motion.div className={`logo-aura ${auraClass} ${auraSize[size]}`} animate={auraAnimation} />}
       <div
         className={`${sizeClasses[size]} bg-white dark:bg-gray-800 backdrop-blur-md rounded-full flex items-center justify-center font-bold text-gray-800 dark:text-white shadow-lg border border-gray-100 dark:border-gray-700 z-10 relative`}
       >

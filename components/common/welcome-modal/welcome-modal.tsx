@@ -4,21 +4,28 @@ import { useState, useEffect } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import Logo from "@/components/common/logo/logo"
-import { motion } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 
 export default function WelcomeModal() {
   const [isOpen, setIsOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const { triggerHapticFeedback } = useHapticFeedback()
 
   useEffect(() => {
+    setMounted(true)
+
     // Verificar si es la primera visita
     const hasVisited = localStorage.getItem("holentia-visited")
 
     if (!hasVisited) {
-      setIsOpen(true)
-      localStorage.setItem("holentia-visited", "true")
+      // Pequeño retraso para asegurar que el componente esté montado
+      const timer = setTimeout(() => {
+        setIsOpen(true)
+        localStorage.setItem("holentia-visited", "true")
+      }, 500)
+
+      return () => clearTimeout(timer)
     }
   }, [])
 
@@ -27,16 +34,11 @@ export default function WelcomeModal() {
     setIsOpen(false)
   }
 
-  const MotionDialogContent = motion(DialogContent)
+  if (!mounted) return null
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <MotionDialogContent
-        className="sm:max-w-md p-0 overflow-hidden border-0 shadow-xl"
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3 }}
-      >
+      <DialogContent className="sm:max-w-md p-0 overflow-hidden border-0 shadow-xl">
         {/* Encabezado con gradiente */}
         <div className="relative bg-gradient-to-r from-blue-500 via-purple-500 to-green-500 p-8 pb-16">
           <DialogHeader>
@@ -59,32 +61,20 @@ export default function WelcomeModal() {
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6">
-              <motion.div
-                className="bg-mente-glass/30 p-4 rounded-lg"
-                whileHover={{ y: -5 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <h3 className="font-semibold text-mente-DEFAULT">Cultivar tu mente</h3>
+              <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg transform transition-transform hover:-translate-y-1">
+                <h3 className="font-semibold text-blue-600 dark:text-blue-400">Cultivar tu mente</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Claridad y bienestar emocional</p>
-              </motion.div>
+              </div>
 
-              <motion.div
-                className="bg-cuerpo-glass/30 p-4 rounded-lg"
-                whileHover={{ y: -5 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <h3 className="font-semibold text-cuerpo-DEFAULT">Energizar tu cuerpo</h3>
+              <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-lg transform transition-transform hover:-translate-y-1">
+                <h3 className="font-semibold text-amber-600 dark:text-amber-400">Energizar tu cuerpo</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Salud y actividad física</p>
-              </motion.div>
+              </div>
 
-              <motion.div
-                className="bg-finanzas-glass/30 p-4 rounded-lg"
-                whileHover={{ y: -5 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <h3 className="font-semibold text-finanzas-DEFAULT">Dominar tus finanzas</h3>
+              <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg transform transition-transform hover:-translate-y-1">
+                <h3 className="font-semibold text-green-600 dark:text-green-400">Dominar tus finanzas</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Planificación y crecimiento</p>
-              </motion.div>
+              </div>
             </div>
 
             <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -103,7 +93,7 @@ export default function WelcomeModal() {
             <span className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </Button>
         </DialogFooter>
-      </MotionDialogContent>
+      </DialogContent>
     </Dialog>
   )
 }
