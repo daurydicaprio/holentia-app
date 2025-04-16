@@ -52,13 +52,37 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
 
   // Determinar la clase de aura basada en la sección
   let auraClass = ""
-  if (section === "mente") auraClass = "logo-aura-mente"
-  else if (section === "cuerpo") auraClass = "logo-aura-cuerpo"
-  else if (section === "finanzas") auraClass = "logo-aura-finanzas"
+  if (section === "mente") {
+    auraClass = "logo-aura-mente"
+  } else if (section === "cuerpo") {
+    auraClass = "logo-aura-cuerpo"
+  } else if (section === "finanzas") {
+    auraClass = "logo-aura-finanzas"
+  }
 
   const LogoContent = () => (
     <div className="relative flex items-center justify-center">
-      {section && <motion.div className={`logo-aura ${auraClass} ${auraSize[size]}`} animate={auraAnimation} />}
+      {section && (
+        <motion.div
+          className={`logo-aura ${auraClass} ${auraSize[size]}`}
+          animate={auraAnimation}
+          style={{
+            position: "absolute",
+            zIndex: 0,
+            borderRadius: "9999px",
+            opacity: 0.3,
+            filter: "blur(8px)",
+            backgroundColor:
+              section === "mente"
+                ? "rgba(59, 130, 246, 0.5)"
+                : section === "cuerpo"
+                  ? "rgba(245, 158, 11, 0.5)"
+                  : section === "finanzas"
+                    ? "rgba(34, 197, 94, 0.5)"
+                    : "transparent",
+          }}
+        />
+      )}
       <div
         className={`${sizeClasses[size]} bg-white dark:bg-gray-800 backdrop-blur-md rounded-full flex items-center justify-center font-bold text-gray-800 dark:text-white shadow-lg border border-gray-100 dark:border-gray-700 z-10 relative`}
       >

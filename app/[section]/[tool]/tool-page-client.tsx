@@ -43,9 +43,9 @@ export default function ToolPageClient({ params, toolData }: ToolPageClientProps
     section && typeof section === "string" ? section.charAt(0).toUpperCase() + section.slice(1) : "Sección"
 
   // Determinar las clases de color basadas en la sección
-  let backButtonClass = "hover:text-gray-700 hover:border-gray-300"
-  let donateButtonClass = "text-gray-700 border-gray-300 hover:bg-gray-100"
-  let titleClass = "text-gray-800"
+  let backButtonClass = ""
+  let donateButtonClass = ""
+  let titleClass = ""
   let headerLineClass = "tool-header-line"
 
   if (section === "mente") {

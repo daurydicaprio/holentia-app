@@ -1,0 +1,108 @@
+/* Este archivo contiene clases de colores explícitas para evitar que Tailwind las purgue */
+
+/* Clases de texto para secciones */
+.text-mente-DEFAULT {
+  color: var(--color-mente-active);
+}
+.text-cuerpo-DEFAULT {
+  color: var(--color-cuerpo-active);
+}
+.text-finanzas-DEFAULT {
+  color: var(--color-finanzas-active);
+}
+
+.text-mente-dark {
+  color: var(--color-mente-active-dark);
+}
+.text-cuerpo-dark {
+  color: var(--color-cuerpo-active-dark);
+}
+.text-finanzas-dark {
+  color: var(--color-finanzas-active-dark);
+}
+
+/* Clases de fondo para secciones */
+.bg-mente-DEFAULT {
+  background-color: var(--color-mente-active);
+}
+.bg-cuerpo-DEFAULT {
+  background-color: var(--color-cuerpo-active);
+}
+.bg-finanzas-DEFAULT {
+  background-color: var(--color-finanzas-active);
+}
+
+.bg-mente-dark {
+  background-color: var(--color-mente-active-dark);
+}
+.bg-cuerpo-dark {
+  background-color: var(--color-cuerpo-active-dark);
+}
+.bg-finanzas-dark {
+  background-color: var(--color-finanzas-active-dark);
+}
+
+.bg-mente-glass {
+  background-color: var(--color-mente-glass-bg);
+}
+.bg-cuerpo-glass {
+  background-color: var(--color-cuerpo-glass-bg);
+}
+.bg-finanzas-glass {
+  background-color: var(--color-finanzas-glass-bg);
+}
+
+/* Clases de borde para secciones */
+.border-mente-border {
+  border-color: var(--color-mente-glass-border);
+}
+.border-cuerpo-border {
+  border-color: var(--color-cuerpo-glass-border);
+}
+.border-finanzas-border {
+  border-color: var(--color-finanzas-glass-border);
+}
+
+/* Clases de texto para categorías */
+.text-mente-category {
+  color: var(--color-mente-text-category);
+}
+.text-cuerpo-category {
+  color: var(--color-cuerpo-text-category);
+}
+.text-finanzas-category {
+  color: var(--color-finanzas-text-category);
+}
+
+/* Clases de texto para tarjetas */
+.text-mente-text {
+  color: var(--color-mente-text-card);
+}
+.text-cuerpo-text {
+  color: var(--color-cuerpo-text-card);
+}
+.text-finanzas-text {
+  color: var(--color-finanzas-text-card);
+}
+
+/* Clases para líneas de herramientas */
+.tool-header-line-mente {
+  background-color: var(--color-mente-active);
+}
+.tool-header-line-cuerpo {
+  background-color: var(--color-cuerpo-active);
+}
+.tool-header-line-finanzas {
+  background-color: var(--color-finanzas-active);
+}
+
+/* Clases para auras de logo */
+.logo-aura-mente {
+  background-color: rgba(59, 130, 246, 0.5);
+}
+.logo-aura-cuerpo {
+  background-color: rgba(245, 158, 11, 0.5);
+}
+.logo-aura-finanzas {
+  background-color: rgba(34, 197, 94, 0.5);
+}
