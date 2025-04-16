@@ -17,7 +17,9 @@ export default function SectionTabs() {
     setMounted(true)
 
     // Extraer la sección del pathname
-    const section = pathname.split("/")[1]
+    const pathParts = pathname.split("/").filter(Boolean)
+    const section = pathParts[0]
+
     if (section && ["mente", "cuerpo", "finanzas"].includes(section)) {
       setActiveTab(section)
     } else {

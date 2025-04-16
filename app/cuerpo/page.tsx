@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation"
 import { sectionsData } from "@/lib/data"
 import Header from "@/components/common/header/header"
 import Footer from "@/components/common/footer/footer"
@@ -9,24 +8,8 @@ import ToolsGrid from "@/components/sections/tools-grid"
 import MobileFab from "@/components/common/mobile-fab/mobile-fab"
 import SectionSwipeNavigation from "@/components/sections/section-swipe-navigation"
 
-interface SectionPageProps {
-  params: {
-    section: string
-  }
-}
-
-export function generateStaticParams() {
-  return [{ section: "mente" }, { section: "cuerpo" }, { section: "finanzas" }]
-}
-
-export default function SectionPage({ params }: SectionPageProps) {
-  const { section } = params
-
-  // Verificar si la sección existe
-  if (!sectionsData[section]) {
-    notFound()
-  }
-
+export default function CuerpoPage() {
+  const section = "cuerpo"
   const sectionData = sectionsData[section]
 
   return (

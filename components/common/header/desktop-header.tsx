@@ -11,7 +11,7 @@ import { usePathname } from "next/navigation"
 
 export default function DesktopHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { setTheme, theme } = useTheme()
+  const { setTheme, theme, resolvedTheme } = useTheme()
   const pathname = usePathname()
   const [mounted, setMounted] = useState(false)
 
@@ -45,7 +45,19 @@ export default function DesktopHeader() {
     donationTextColor = "#388e3c" // Color finanzas
   }
 
-  if (!mounted) return null
+  // Usar el tema resuelto para evitar parpadeos
+  const currentTheme = mounted ? resolvedTheme : "light"
+  const buttonBgColor = currentTheme === "dark" ? "#1e1e1e" : "#ffffff"
+  const buttonBorderColor = currentTheme === "dark" ? "#333333" : "#e5e7eb"
+
+  if (!mounted) {
+    // Renderizar un placeholder mientras se monta para evitar parpadeos
+    return (
+      <div className="absolute top-4 right-4 z-50">
+        <div className="h-12 w-12 rounded-full bg-gray-200 dark:bg-gray-800"></div>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -60,9 +72,10 @@ export default function DesktopHeader() {
                 height: "48px",
                 width: "48px",
                 borderRadius: "9999px",
-                backgroundColor: theme === "dark" ? "#1e1e1e" : "#ffffff",
+                backgroundColor: buttonBgColor,
                 boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-                border: `1px solid ${theme === "dark" ? "#333333" : "#e5e7eb"}`,
+                border: `1px solid ${buttonBorderColor}`,
+                transition: "background-color 0.3s ease, border-color 0.3s ease",
               }}
               className="active:scale-95 transition-transform"
             >
@@ -104,11 +117,11 @@ export default function DesktopHeader() {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              onClick={() => setTheme(currentTheme === "dark" ? "light" : "dark")}
               className="mobile-menu-item flex items-center justify-between"
             >
-              <span>Modo {theme === "dark" ? "Claro" : "Oscuro"}</span>
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              <span>Modo {currentTheme === "dark" ? "Claro" : "Oscuro"}</span>
+              {currentTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

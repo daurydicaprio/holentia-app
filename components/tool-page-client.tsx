@@ -24,7 +24,7 @@ export default function ToolPageClient({ params, toolData }: ToolPageClientProps
   const { section } = params
   const [isMobile, setIsMobile] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const { theme } = useTheme()
+  const { theme, resolvedTheme } = useTheme()
 
   useEffect(() => {
     setMounted(true)
@@ -63,6 +63,11 @@ export default function ToolPageClient({ params, toolData }: ToolPageClientProps
     headerLineColor = "#388e3c" // Color finanzas
   }
 
+  // Usar el tema resuelto para evitar parpadeos
+  const currentTheme = mounted ? resolvedTheme : "light"
+  const buttonBorderColor = currentTheme === "dark" ? "#333333" : "#e5e7eb"
+  const buttonTextColor = currentTheme === "dark" ? "#e0e0e0" : "#4b5563"
+
   if (!mounted) return null
 
   return (
@@ -85,8 +90,8 @@ export default function ToolPageClient({ params, toolData }: ToolPageClientProps
                   size="sm"
                   className="flex items-center gap-2 text-sm"
                   style={{
-                    borderColor: theme === "dark" ? "#333333" : "#e5e7eb",
-                    color: theme === "dark" ? "#e0e0e0" : "#4b5563",
+                    borderColor: buttonBorderColor,
+                    color: buttonTextColor,
                     backgroundColor: "transparent",
                     transition: "all 0.2s ease",
                   }}
@@ -95,8 +100,8 @@ export default function ToolPageClient({ params, toolData }: ToolPageClientProps
                     e.currentTarget.style.color = sectionColor
                   }}
                   onMouseOut={(e) => {
-                    e.currentTarget.style.borderColor = theme === "dark" ? "#333333" : "#e5e7eb"
-                    e.currentTarget.style.color = theme === "dark" ? "#e0e0e0" : "#4b5563"
+                    e.currentTarget.style.borderColor = buttonBorderColor
+                    e.currentTarget.style.color = buttonTextColor
                   }}
                 >
                   <ArrowLeft className="h-4 w-4" />
@@ -136,10 +141,23 @@ export default function ToolPageClient({ params, toolData }: ToolPageClientProps
         )}
 
         <div className={`mb-8 text-center ${isMobile ? "mt-4" : ""}`}>
-          <h1 className="text-2xl sm:text-3xl font-bold" style={{ color: sectionColor }}>
+          <h1
+            className="text-2xl sm:text-3xl font-bold"
+            style={{
+              color: sectionColor,
+              marginBottom: "0.5rem",
+            }}
+          >
             {toolData.title}
           </h1>
-          <p className="text-gray-600 dark:text-gray-300 mt-2">{toolData.description}</p>
+          <p
+            className="text-gray-600 dark:text-gray-300 mt-2"
+            style={{
+              marginBottom: "0.75rem",
+            }}
+          >
+            {toolData.description}
+          </p>
           <div
             style={{
               height: "0.175rem",

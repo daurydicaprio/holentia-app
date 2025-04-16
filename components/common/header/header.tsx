@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 import DesktopHeader from "./desktop-header"
 import MobileHeader from "./mobile-header"
+import { sectionsData } from "@/lib/data"
 
 export default function Header() {
   const [isMobile, setIsMobile] = useState(false)
@@ -12,8 +13,27 @@ export default function Header() {
 
   // Extraer la sección del pathname
   const pathParts = pathname.split("/").filter(Boolean)
-  const section = pathParts.length > 0 ? pathParts[0] : null
-  const isToolPage = pathParts.length > 1
+  const firstPart = pathParts.length > 0 ? pathParts[0] : null
+
+  // Determinar si estamos en una sección o en una herramienta
+  let section = null
+  let isToolPage = false
+
+  if (["mente", "cuerpo", "finanzas"].includes(firstPart)) {
+    // Estamos en una página de sección
+    section = firstPart
+    isToolPage = pathParts.length > 1
+  } else if (firstPart) {
+    // Podría ser una herramienta, buscar en todas las secciones
+    for (const [sectionId, sectionData] of Object.entries(sectionsData)) {
+      const toolExists = sectionData.cards.some((card) => card.slug === firstPart)
+      if (toolExists) {
+        section = sectionId
+        isToolPage = true
+        break
+      }
+    }
+  }
 
   useEffect(() => {
     setMounted(true)

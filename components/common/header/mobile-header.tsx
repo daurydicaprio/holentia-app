@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Moon, Sun } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
+import { sectionsData } from "@/lib/data"
 
 interface MobileHeaderProps {
   section?: string | null
@@ -17,7 +18,7 @@ interface MobileHeaderProps {
 export default function MobileHeader({ section }: MobileHeaderProps) {
   const router = useRouter()
   const pathname = usePathname()
-  const { setTheme, theme } = useTheme()
+  const { setTheme, theme, resolvedTheme } = useTheme()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { triggerHapticFeedback } = useHapticFeedback()
   const [mounted, setMounted] = useState(false)
@@ -28,24 +29,43 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
 
   // Verificar si estamos en una página de herramienta
   const pathParts = pathname ? pathname.split("/").filter(Boolean) : []
-  const isToolPage = pathParts.length > 1
+  const firstPart = pathParts.length > 0 ? pathParts[0] : null
+
+  // Determinar si estamos en una herramienta
+  let isToolPage = false
+  let toolSection = section
+
+  if (!["mente", "cuerpo", "finanzas"].includes(firstPart)) {
+    // Podría ser una herramienta, buscar en todas las secciones
+    for (const [sectionId, sectionData] of Object.entries(sectionsData)) {
+      const toolExists = sectionData.cards.some((card) => card.slug === firstPart)
+      if (toolExists) {
+        isToolPage = true
+        toolSection = sectionId
+        break
+      }
+    }
+  }
+
+  // Usar el tema resuelto para evitar parpadeos
+  const currentTheme = mounted ? resolvedTheme : "light"
 
   // Determinar los estilos basados en la sección
-  let headerBgColor = theme === "dark" ? "rgba(30, 30, 30, 0.8)" : "rgba(255, 255, 255, 0.8)"
-  let headerBorderColor = theme === "dark" ? "#333333" : "#e5e7eb"
+  let headerBgColor = currentTheme === "dark" ? "rgba(30, 30, 30, 0.8)" : "rgba(255, 255, 255, 0.8)"
+  let headerBorderColor = currentTheme === "dark" ? "#333333" : "#e5e7eb"
   let donationTextColor = "#3B82F6" // Color azul por defecto
 
-  if (section === "mente") {
-    headerBgColor = theme === "dark" ? "rgba(25, 118, 210, 0.2)" : "rgba(25, 118, 210, 0.4)"
-    headerBorderColor = theme === "dark" ? "rgba(144, 202, 249, 0.3)" : "rgba(144, 202, 249, 0.5)"
+  if (toolSection === "mente") {
+    headerBgColor = currentTheme === "dark" ? "rgba(25, 118, 210, 0.2)" : "rgba(25, 118, 210, 0.4)"
+    headerBorderColor = currentTheme === "dark" ? "rgba(144, 202, 249, 0.3)" : "rgba(144, 202, 249, 0.5)"
     donationTextColor = "#1976d2" // Color mente
-  } else if (section === "cuerpo") {
-    headerBgColor = theme === "dark" ? "rgba(255, 160, 0, 0.2)" : "rgba(255, 160, 0, 0.4)"
-    headerBorderColor = theme === "dark" ? "rgba(255, 224, 130, 0.3)" : "rgba(255, 224, 130, 0.6)"
+  } else if (toolSection === "cuerpo") {
+    headerBgColor = currentTheme === "dark" ? "rgba(255, 160, 0, 0.2)" : "rgba(255, 160, 0, 0.4)"
+    headerBorderColor = currentTheme === "dark" ? "rgba(255, 224, 130, 0.3)" : "rgba(255, 224, 130, 0.6)"
     donationTextColor = "#ffa000" // Color cuerpo
-  } else if (section === "finanzas") {
-    headerBgColor = theme === "dark" ? "rgba(56, 142, 60, 0.2)" : "rgba(56, 142, 60, 0.4)"
-    headerBorderColor = theme === "dark" ? "rgba(165, 214, 167, 0.3)" : "rgba(165, 214, 167, 0.6)"
+  } else if (toolSection === "finanzas") {
+    headerBgColor = currentTheme === "dark" ? "rgba(56, 142, 60, 0.2)" : "rgba(56, 142, 60, 0.4)"
+    headerBorderColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.3)" : "rgba(165, 214, 167, 0.6)"
     donationTextColor = "#388e3c" // Color finanzas
   }
 
@@ -68,6 +88,14 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
 
   const handleBackClick = () => {
     triggerHapticFeedback("medium")
+
+    // Si estamos en una página de herramienta, ir a la sección correspondiente
+    if (isToolPage && toolSection) {
+      router.push(`/${toolSection}`)
+      return
+    }
+
+    // Comportamiento por defecto: volver atrás
     router.back()
   }
 
@@ -85,6 +113,7 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
           backgroundColor: headerBgColor,
           borderBottom: `1px solid ${headerBorderColor}`,
           width: "100%",
+          transition: "background-color 0.3s ease, border-color 0.3s ease",
         }}
       >
         <div className="flex items-center justify-between h-14 px-4">
@@ -111,9 +140,10 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
             className="font-bold text-lg hover:bg-white/60 dark:hover:bg-gray-700/60 transition-colors"
             onClick={() => triggerHapticFeedback("light")}
             style={{
-              backgroundColor: theme === "dark" ? "rgba(30, 30, 30, 0.4)" : "rgba(255, 255, 255, 0.4)",
+              backgroundColor: currentTheme === "dark" ? "rgba(30, 30, 30, 0.4)" : "rgba(255, 255, 255, 0.4)",
               padding: "0.375rem 1rem",
               borderRadius: "0.375rem",
+              transition: "background-color 0.3s ease",
             }}
           >
             HOLENTIA
@@ -176,12 +206,12 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
               <DropdownMenuItem
                 onClick={() => {
                   triggerHapticFeedback("medium")
-                  setTheme(theme === "dark" ? "light" : "dark")
+                  setTheme(currentTheme === "dark" ? "light" : "dark")
                 }}
                 className="mobile-menu-item flex items-center justify-between"
               >
-                <span>Modo {theme === "dark" ? "Claro" : "Oscuro"}</span>
-                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                <span>Modo {currentTheme === "dark" ? "Claro" : "Oscuro"}</span>
+                {currentTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

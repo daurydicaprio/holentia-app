@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
+import { useTheme } from "next-themes"
 
 interface LogoProps {
   section?: string | null
@@ -13,12 +14,11 @@ interface LogoProps {
 export default function Logo({ section = null, size = "lg" }: LogoProps) {
   const [mounted, setMounted] = useState(false)
   const { triggerHapticFeedback } = useHapticFeedback()
+  const { resolvedTheme } = useTheme()
 
   useEffect(() => {
     setMounted(true)
   }, [])
-
-  if (!mounted) return null
 
   const sizeClasses = {
     sm: "w-14 h-14 text-xs",
@@ -70,6 +70,21 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
     auraHeight = auraSizes.lg.smHeight
   }
 
+  // Usar el tema resuelto para evitar parpadeos
+  const currentTheme = mounted ? resolvedTheme : "light"
+  const logoBgColor = currentTheme === "dark" ? "#1e1e1e" : "#ffffff"
+  const logoBorderColor = currentTheme === "dark" ? "#333333" : "#e5e7eb"
+  const logoTextColor = currentTheme === "dark" ? "#ffffff" : "#1f2937"
+
+  if (!mounted) {
+    // Renderizar un placeholder mientras se monta para evitar parpadeos
+    return (
+      <div className={`${sizeClasses[size]} rounded-full flex items-center justify-center font-bold shadow-lg`}>
+        HOLENTIA
+      </div>
+    )
+  }
+
   const LogoContent = () => (
     <div className="relative flex items-center justify-center">
       {section && (
@@ -88,7 +103,12 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
         />
       )}
       <div
-        className={`${sizeClasses[size]} bg-white dark:bg-gray-800 backdrop-blur-md rounded-full flex items-center justify-center font-bold text-gray-800 dark:text-white shadow-lg border border-gray-100 dark:border-gray-700 z-10 relative`}
+        className={`${sizeClasses[size]} backdrop-blur-md rounded-full flex items-center justify-center font-bold shadow-lg z-10 relative`}
+        style={{
+          backgroundColor: logoBgColor,
+          color: logoTextColor,
+          border: `1px solid ${logoBorderColor}`,
+        }}
       >
         HOLENTIA
       </div>

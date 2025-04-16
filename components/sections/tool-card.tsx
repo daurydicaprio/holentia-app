@@ -15,38 +15,42 @@ interface ToolCardProps {
 export default function ToolCard({ card, index }: ToolCardProps) {
   const { title, description, slug, isAvailable, category } = card
   const { triggerHapticFeedback } = useHapticFeedback()
-  const { theme } = useTheme()
+  const { theme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
+  // Usar el tema resuelto para evitar parpadeos
+  const currentTheme = mounted ? resolvedTheme : "light"
+
   // Determinar los colores basados en la categoría
-  let bgColor = theme === "dark" ? "rgba(30, 30, 30, 0.4)" : "rgba(255, 255, 255, 0.4)"
-  let borderColor = theme === "dark" ? "#333333" : "#e5e7eb"
-  let categoryTextColor = theme === "dark" ? "#a0a0a0" : "#4b5563"
-  let titleTextColor = theme === "dark" ? "#e0e0e0" : "#1f2937"
-  let descriptionTextColor = theme === "dark" ? "#a0a0a0" : "#4b5563"
+  let bgColor = currentTheme === "dark" ? "rgba(30, 30, 30, 0.4)" : "rgba(255, 255, 255, 0.4)"
+  let borderColor = currentTheme === "dark" ? "#333333" : "#e5e7eb"
+  let categoryTextColor = currentTheme === "dark" ? "#a0a0a0" : "#4b5563"
+  let titleTextColor = currentTheme === "dark" ? "#e0e0e0" : "#1f2937"
+  let descriptionTextColor = currentTheme === "dark" ? "#a0a0a0" : "#4b5563"
 
   if (category === "mente") {
-    bgColor = theme === "dark" ? "rgba(25, 118, 210, 0.2)" : "rgba(25, 118, 210, 0.4)"
-    borderColor = theme === "dark" ? "rgba(144, 202, 249, 0.3)" : "rgba(144, 202, 249, 0.5)"
-    categoryTextColor = theme === "dark" ? "#90caf9" : "#e3f2fd"
-    titleTextColor = theme === "dark" ? "#e0e0e0" : "#ffffff"
-    descriptionTextColor = theme === "dark" ? "#e0e0e0" : "#ffffff"
+    bgColor = currentTheme === "dark" ? "rgba(25, 118, 210, 0.2)" : "rgba(25, 118, 210, 0.4)"
+    borderColor = currentTheme === "dark" ? "rgba(144, 202, 249, 0.3)" : "rgba(144, 202, 249, 0.5)"
+    categoryTextColor = currentTheme === "dark" ? "#90caf9" : "#e3f2fd"
+    titleTextColor = currentTheme === "dark" ? "#e0e0e0" : "#ffffff"
+    descriptionTextColor = currentTheme === "dark" ? "#e0e0e0" : "#ffffff"
   } else if (category === "cuerpo") {
-    bgColor = theme === "dark" ? "rgba(255, 160, 0, 0.2)" : "rgba(255, 160, 0, 0.4)"
-    borderColor = theme === "dark" ? "rgba(255, 224, 130, 0.3)" : "rgba(255, 224, 130, 0.6)"
-    categoryTextColor = theme === "dark" ? "#ffe082" : "#795548"
-    titleTextColor = theme === "dark" ? "#e0e0e0" : "#3e2723"
-    descriptionTextColor = theme === "dark" ? "#e0e0e0" : "#3e2723"
+    bgColor = currentTheme === "dark" ? "rgba(255, 160, 0, 0.2)" : "rgba(255, 160, 0, 0.4)"
+    borderColor = currentTheme === "dark" ? "rgba(255, 224, 130, 0.3)" : "rgba(255, 224, 130, 0.6)"
+    categoryTextColor = currentTheme === "dark" ? "#ffe082" : "#795548"
+    titleTextColor = currentTheme === "dark" ? "#e0e0e0" : "#3e2723"
+    descriptionTextColor = currentTheme === "dark" ? "#e0e0e0" : "#3e2723"
   } else if (category === "finanzas") {
-    bgColor = theme === "dark" ? "rgba(56, 142, 60, 0.2)" : "rgba(56, 142, 60, 0.4)"
-    borderColor = theme === "dark" ? "rgba(165, 214, 167, 0.3)" : "rgba(165, 214, 167, 0.6)"
-    categoryTextColor = theme === "dark" ? "#a5d6a7" : "#e8f5e9"
-    titleTextColor = theme === "dark" ? "#e0e0e0" : "#ffffff"
-    descriptionTextColor = theme === "dark" ? "#e0e0e0" : "#ffffff"
+    bgColor = currentTheme === "dark" ? "rgba(56, 142, 60, 0.2)" : "rgba(56, 142, 60, 0.4)"
+    borderColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.3)" : "rgba(165142,60,0.4)"
+    borderColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.3)" : "rgba(165, 214, 167, 0.6)"
+    categoryTextColor = currentTheme === "dark" ? "#a5d6a7" : "#e8f5e9"
+    titleTextColor = currentTheme === "dark" ? "#e0e0e0" : "#ffffff"
+    descriptionTextColor = currentTheme === "dark" ? "#e0e0e0" : "#ffffff"
   }
 
   // Animación de entrada escalonada
@@ -77,7 +81,7 @@ export default function ToolCard({ card, index }: ToolCardProps) {
         opacity: isAvailable ? 1 : 0.5,
         animationDelay,
       }}
-      className="animate-fadeIn hover:shadow-lg hover:-translate-y-1 hover:scale-[1.02]"
+      className={`animate-fadeIn hover:shadow-lg hover:-translate-y-1 hover:scale-[1.02] ${!isAvailable ? "card-coming-soon" : ""}`}
       onTouchStart={handleCardPress}
     >
       <div style={{ paddingRight: "1.5rem" }}>
@@ -139,12 +143,9 @@ export default function ToolCard({ card, index }: ToolCardProps) {
     )
   }
 
+  // Usar la ruta directa al slug de la herramienta
   return (
-    <Link
-      href={`/${category}/${slug}`}
-      className="animate-fadeIn group"
-      onClick={() => triggerHapticFeedback("medium")}
-    >
+    <Link href={`/${slug}`} className="animate-fadeIn group" onClick={() => triggerHapticFeedback("medium")}>
       <CardContent />
     </Link>
   )

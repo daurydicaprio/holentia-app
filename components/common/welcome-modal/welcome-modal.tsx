@@ -38,15 +38,21 @@ export default function WelcomeModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="sm:max-w-md p-0 overflow-hidden border-0 shadow-xl">
-        {/* Encabezado con gradiente */}
-        <div className="relative bg-gradient-to-r from-blue-500 via-purple-500 to-green-500 p-8 pb-16">
+      <DialogContent
+        className="sm:max-w-2xl p-0 overflow-hidden border-0 shadow-xl bg-white dark:bg-gray-900"
+        style={{
+          width: "95vw",
+          maxWidth: "700px",
+        }}
+      >
+        {/* Encabezado con diseño más neutro */}
+        <div className="relative bg-gray-100 dark:bg-gray-800 p-8 pb-16">
           <DialogHeader>
-            <h2 className="text-center text-3xl font-bold text-white">Bienvenido a HOLENTIA</h2>
+            <h2 className="text-center text-3xl font-bold text-gray-800 dark:text-gray-100">Bienvenido a HOLENTIA</h2>
           </DialogHeader>
         </div>
 
-        {/* Logo superpuesto sobre el borde del gradiente */}
+        {/* Logo superpuesto sobre el borde del encabezado */}
         <div className="flex justify-center -mt-12 mb-4">
           <div className="bg-white dark:bg-gray-800 p-2 rounded-full shadow-lg">
             <Logo size="sm" />
@@ -61,17 +67,17 @@ export default function WelcomeModal() {
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6">
-              <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg transform transition-transform hover:-translate-y-1">
+              <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg transform transition-transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700">
                 <h3 className="font-semibold text-blue-600 dark:text-blue-400">Cultivar tu mente</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Claridad y bienestar emocional</p>
               </div>
 
-              <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-lg transform transition-transform hover:-translate-y-1">
+              <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg transform transition-transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700">
                 <h3 className="font-semibold text-amber-600 dark:text-amber-400">Energizar tu cuerpo</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Salud y actividad física</p>
               </div>
 
-              <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg transform transition-transform hover:-translate-y-1">
+              <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg transform transition-transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700">
                 <h3 className="font-semibold text-green-600 dark:text-green-400">Dominar tus finanzas</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Planificación y crecimiento</p>
               </div>
@@ -85,12 +91,25 @@ export default function WelcomeModal() {
         </div>
 
         <DialogFooter className="px-8 pb-8 pt-2">
-          <Button onClick={handleClose} className="w-full sm:w-auto px-8 py-6 text-base relative group overflow-hidden">
+          <Button
+            onClick={handleClose}
+            className="w-full sm:w-auto px-8 py-6 text-base relative group"
+            style={{
+              backgroundColor: "#f8f9fa",
+              color: "#212529",
+              border: "1px solid #dee2e6",
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.backgroundColor = "#e9ecef"
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.backgroundColor = "#f8f9fa"
+            }}
+          >
             <span className="relative z-10 flex items-center justify-center gap-2 group-hover:gap-4 transition-all duration-300">
               Comenzar a explorar
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </span>
-            <span className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </Button>
         </DialogFooter>
       </DialogContent>
