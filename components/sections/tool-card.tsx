@@ -46,7 +46,6 @@ export default function ToolCard({ card, index }: ToolCardProps) {
     descriptionTextColor = currentTheme === "dark" ? "#e0e0e0" : "#3e2723"
   } else if (category === "finanzas") {
     bgColor = currentTheme === "dark" ? "rgba(56, 142, 60, 0.2)" : "rgba(56, 142, 60, 0.4)"
-    borderColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.3)" : "rgba(165142,60,0.4)"
     borderColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.3)" : "rgba(165, 214, 167, 0.6)"
     categoryTextColor = currentTheme === "dark" ? "#a5d6a7" : "#e8f5e9"
     titleTextColor = currentTheme === "dark" ? "#e0e0e0" : "#ffffff"

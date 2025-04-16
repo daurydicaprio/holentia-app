@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState, useEffect } from "react"
 import Header from "@/components/common/header/header"
 import Footer from "@/components/common/footer/footer"
@@ -18,9 +20,10 @@ interface ToolPageClientProps {
     tool: string
   }
   toolData: CardData
+  toolContent?: React.ReactNode
 }
 
-export default function ToolPageClient({ params, toolData }: ToolPageClientProps) {
+export default function ToolPageClient({ params, toolData, toolContent }: ToolPageClientProps) {
   const { section } = params
   const [isMobile, setIsMobile] = useState(false)
   const [mounted, setMounted] = useState(false)
@@ -173,9 +176,15 @@ export default function ToolPageClient({ params, toolData }: ToolPageClientProps
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
-          <div className="p-8 border border-dashed border-gray-300 dark:border-gray-600 rounded-md text-center">
-            <p className="text-gray-500 dark:text-gray-400">Contenido de la herramienta pendiente de implementación</p>
-          </div>
+          {toolContent ? (
+            toolContent
+          ) : (
+            <div className="p-8 border border-dashed border-gray-300 dark:border-gray-600 rounded-md text-center">
+              <p className="text-gray-500 dark:text-gray-400">
+                Contenido de la herramienta pendiente de implementación
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
