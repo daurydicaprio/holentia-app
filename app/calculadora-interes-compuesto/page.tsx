@@ -1,5 +1,6 @@
 import { sectionsData } from "@/lib/data"
 import ToolPageClient from "@/components/tool-page-client"
+import { CompoundInterestCalculator } from "@/components/tools/compound-interest/compound-interest-calculator"
 
 export default function CalculadoraInteresCompuestoPage() {
   const section = "finanzas"
@@ -14,5 +15,5 @@ export default function CalculadoraInteresCompuestoPage() {
     tool: toolSlug,
   }
 
-  return <ToolPageClient params={toolPageParams} toolData={toolData} />
+  return <ToolPageClient params={toolPageParams} toolData={toolData} toolContent={<CompoundInterestCalculator />} />
 }
