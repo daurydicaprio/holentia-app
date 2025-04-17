@@ -36,13 +36,13 @@ export interface PieChartData {
 }
 
 export function useCompoundInterestCalculator() {
-  // Inputs con valores iniciales más realistas
-  const [initialDeposit, setInitialDeposit] = useState<number>(10000)
-  const [contribution, setContribution] = useState<number>(1000)
+  // Inputs con valores iniciales en cero, excepto años (5) y frecuencia (mensual)
+  const [initialDeposit, setInitialDeposit] = useState<number>(0)
+  const [contribution, setContribution] = useState<number>(0)
   const [contributionFrequency, setContributionFrequency] = useState<number>(12) // 1: anual, 12: mensual
-  const [years, setYears] = useState<number>(10)
-  const [interestRate, setInterestRate] = useState<number>(8)
-  const [inflation, setInflation] = useState<number>(4)
+  const [years, setYears] = useState<number>(5)
+  const [interestRate, setInterestRate] = useState<number>(0)
+  const [inflation, setInflation] = useState<number>(0)
 
   // Resultados
   const [summary, setSummary] = useState<SummaryData>({
@@ -165,7 +165,16 @@ export function useCompoundInterestCalculator() {
         // Usar la simulación mensual para ambos casos cuando la frecuencia es mensual
         if (contributionFrequency === 12) {
           monthlyData = simulateInvestmentMonthly(initialDeposit, contribution, years, r, contributionFrequency)
-          simData = monthlyData // Usar los mismos datos mensuales
+
+          // Filtrar datos mensuales para obtener solo los datos anuales (último mes de cada año)
+          const annualData: SimulationData[] = []
+          for (let y = 1; y <= years; y++) {
+            const monthsOfYear = monthlyData.filter((item) => item.year === y)
+            if (monthsOfYear.length > 0) {
+              annualData.push(monthsOfYear[monthsOfYear.length - 1])
+            }
+          }
+          simData = annualData
         } else {
           simData = simulateInvestmentAnnual(initialDeposit, contribution, years, r, contributionFrequency)
           monthlyData = simulateInvestmentMonthly(initialDeposit, contribution, years, r, contributionFrequency)
@@ -322,7 +331,7 @@ export function useCompoundInterestCalculator() {
 
       const dataDoughnut = [depositoVal, totalContribVal, totalGainVal]
       const labelsDoughnut = ["Inversión inicial", "Contribuciones", "Ganancia"]
-      const bgColors = ["#2e7d32", "#388e3c", "#81c784"]
+      const bgColors = ["#2e7d32", "#1b5e20", "#81c784"]
 
       if (inflation > 0) {
         dataDoughnut.push(inflacionTotalVal)

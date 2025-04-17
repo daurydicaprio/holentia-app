@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useMediaQuery } from "@/hooks/use-media-query"
 
 interface CalculatorInputsProps {
@@ -33,6 +35,32 @@ export function CalculatorInputs({
 }: CalculatorInputsProps) {
   const isMobile = useMediaQuery("(max-width: 768px)")
 
+  // Manejadores de cambio que permiten valores vacíos
+  const handleInitialDepositChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setInitialDeposit(value === "" ? 0 : Number(value))
+  }
+
+  const handleContributionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setContribution(value === "" ? 0 : Number(value))
+  }
+
+  const handleYearsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setYears(value === "" ? 0 : Number(value))
+  }
+
+  const handleInterestRateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setInterestRate(value === "" ? 0 : Number(value))
+  }
+
+  const handleInflationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setInflation(value === "" ? 0 : Number(value))
+  }
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
       <h3 className="text-lg font-semibold text-[#388e3c] mb-4">Datos de la inversión</h3>
@@ -47,8 +75,8 @@ export function CalculatorInputs({
             </span>
             <input
               type="number"
-              value={initialDeposit}
-              onChange={(e) => setInitialDeposit(Number(e.target.value))}
+              value={initialDeposit || ""}
+              onChange={handleInitialDepositChange}
               min="0"
               className="flex-1 block w-full min-w-0 p-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#388e3c] focus:border-[#388e3c]"
               placeholder="Ingresa tu depósito inicial"
@@ -66,8 +94,8 @@ export function CalculatorInputs({
               </span>
               <input
                 type="number"
-                value={contribution}
-                onChange={(e) => setContribution(Number(e.target.value))}
+                value={contribution || ""}
+                onChange={handleContributionChange}
                 min="0"
                 className="flex-1 block w-full min-w-0 p-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#388e3c] focus:border-[#388e3c]"
                 placeholder="Aporte periódico"
@@ -97,8 +125,8 @@ export function CalculatorInputs({
               </span>
               <input
                 type="number"
-                value={years}
-                onChange={(e) => setYears(Number(e.target.value))}
+                value={years || ""}
+                onChange={handleYearsChange}
                 className="flex-1 block w-full min-w-0 p-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#388e3c] focus:border-[#388e3c]"
                 placeholder="Años"
                 max={99}
@@ -113,8 +141,8 @@ export function CalculatorInputs({
               </span>
               <input
                 type="number"
-                value={interestRate}
-                onChange={(e) => setInterestRate(Number(e.target.value))}
+                value={interestRate || ""}
+                onChange={handleInterestRateChange}
                 className="flex-1 block w-full min-w-0 p-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#388e3c] focus:border-[#388e3c]"
                 placeholder="Tasa de interés"
                 max={99}
@@ -129,8 +157,8 @@ export function CalculatorInputs({
               </span>
               <input
                 type="number"
-                value={inflation}
-                onChange={(e) => setInflation(Number(e.target.value))}
+                value={inflation || ""}
+                onChange={handleInflationChange}
                 className="flex-1 block w-full min-w-0 p-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#388e3c] focus:border-[#388e3c]"
                 placeholder="Inflación"
                 max={99}

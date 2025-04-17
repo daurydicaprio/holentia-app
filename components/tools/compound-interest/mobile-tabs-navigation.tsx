@@ -12,7 +12,7 @@ export function MobileTabsNavigation({ activeTab, onTabChange }: MobileTabsNavig
     <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex rounded-lg mt-6">
       <button
         onClick={() => onTabChange("calculator")}
-        className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-colors ${
+        className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-colors rounded-l-lg ${
           activeTab === "calculator"
             ? "bg-[#388e3c] text-white"
             : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -24,7 +24,7 @@ export function MobileTabsNavigation({ activeTab, onTabChange }: MobileTabsNavig
 
       <button
         onClick={() => onTabChange("charts")}
-        className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-colors ${
+        className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-colors rounded-r-lg ${
           activeTab === "charts"
             ? "bg-[#388e3c] text-white"
             : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"

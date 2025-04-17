@@ -31,6 +31,9 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
     text: resolvedTheme === "dark" ? "#e0e0e0" : "#1E3A2E",
   }
 
+  // Colores más distinguibles para el gráfico de donut
+  const donutColors = ["#2e7d32", "#1b5e20", "#81c784", "#c8e6c9"]
+
   // Crear/actualizar gráfico de línea
   useEffect(() => {
     if (!lineChartRef.current) return
@@ -47,6 +50,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
     if (!ctx) return
 
     lineChartInstance.current = new Chart(ctx, {
+      type: "bar",
       data: {
         labels: lineChartData.labels,
         datasets: [
@@ -58,10 +62,12 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             backgroundColor: "transparent",
             borderWidth: 2,
             fill: false,
-            tension: 0.3,
-            pointRadius: 4,
+            tension: 0.1,
+            pointRadius: 0,
+            pointHoverRadius: 4,
             pointBackgroundColor: chartColors.line,
             order: 0,
+            yAxisID: "y",
           },
           {
             type: "bar",
@@ -70,6 +76,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             backgroundColor: chartColors.deposit,
             stack: "stack1",
             order: 1,
+            yAxisID: "y",
           },
           {
             type: "bar",
@@ -77,13 +84,8 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             data: lineChartData.interestData,
             backgroundColor: chartColors.interest,
             stack: "stack1",
-            borderRadius: {
-              topLeft: 10,
-              topRight: 10,
-              bottomLeft: 0,
-              bottomRight: 0,
-            },
             order: 2,
+            yAxisID: "y",
           },
         ],
       },
@@ -122,11 +124,39 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
           },
           legend: {
             display: true,
+            position: "top",
             labels: {
-              usePointStyle: true,
+              usePointStyle: false,
+              boxWidth: 15,
+              boxHeight: 15,
               font: { size: 13, weight: "bold" },
               color: chartColors.text,
               padding: 15,
+              generateLabels: (chart) => {
+                const labels = Chart.defaults.plugins.legend.labels.generateLabels(chart)
+                // Modificar el tipo de símbolo para el dataset de línea
+                labels.forEach((label) => {
+                  if (label.text === "Balance final ajustado") {
+                    label.lineWidth = 2
+                    label.pointStyle = false
+                    label.lineDash = []
+                  }
+                })
+                return labels
+              },
+            },
+          },
+          title: {
+            display: true,
+            text: "Composición de la inversión",
+            color: chartColors.line,
+            font: {
+              size: 18,
+              weight: "bold",
+            },
+            padding: {
+              top: 10,
+              bottom: 30,
             },
           },
         },
@@ -162,7 +192,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
         datasets: [
           {
             data: pieChartData.data,
-            backgroundColor: ["#2e7d32", "#388e3c", "#81c784", "#c8e6c9"],
+            backgroundColor: donutColors,
             borderColor: resolvedTheme === "dark" ? "#1e1e1e" : "#ffffff",
             borderWidth: 2,
           },
@@ -180,11 +210,26 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
           },
           legend: {
             display: true,
-            position: "bottom",
+            position: "left",
+            align: "center",
             labels: {
               font: { size: 12 },
               color: chartColors.text,
               padding: 15,
+              usePointStyle: true,
+            },
+          },
+          title: {
+            display: true,
+            text: "Inversión total",
+            color: chartColors.line,
+            font: {
+              size: 18,
+              weight: "bold",
+            },
+            padding: {
+              top: 10,
+              bottom: 30,
             },
           },
         },
