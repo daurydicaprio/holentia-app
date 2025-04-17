@@ -6,6 +6,7 @@ import type { CardData } from "@/types"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useTheme } from "next-themes"
 import { useState, useEffect, useRef } from "react"
+import { useMediaQuery } from "@/hooks/use-media-query"
 
 interface ToolCardProps {
   card: CardData
@@ -25,6 +26,7 @@ export default function ToolCard({ card, index }: ToolCardProps) {
 
   // Usar el tema resuelto para evitar parpadeos
   const currentTheme = mounted ? resolvedTheme : "light"
+  const isMobile = useMediaQuery("(max-width: 768px)")
 
   // Determinar los colores basados en la categoría y disponibilidad
   let bgColor = currentTheme === "dark" ? "rgba(30, 30, 30, 0.4)" : "rgba(255, 255, 255, 0.4)"
@@ -129,7 +131,8 @@ export default function ToolCard({ card, index }: ToolCardProps) {
           ? `${bgColor.replace(/[^,]+(?=\))/, "0.75")}`
           : `${bgColor.replace(/[^,]+(?=\))/, "0.5")}`,
         boxShadow: isAvailable ? "0 12px 28px rgba(0, 0, 0, 0.1)" : "0 6px 16px rgba(0, 0, 0, 0.05)",
-        height: "175px",
+        minHeight: "175px",
+        height: "auto",
         transition: "all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
         opacity: isAvailable ? 1 : 0.6,
         animationDelay,
@@ -140,7 +143,7 @@ export default function ToolCard({ card, index }: ToolCardProps) {
       <div style={{ paddingRight: "1.75rem" }}>
         <span
           style={{
-            fontSize: "0.8rem",
+            fontSize: isMobile ? "0.8rem" : "0.75rem",
             fontWeight: 500,
             textTransform: "uppercase",
             letterSpacing: "0.05em",
@@ -152,7 +155,7 @@ export default function ToolCard({ card, index }: ToolCardProps) {
         </span>
         <h3
           style={{
-            fontSize: "1.25rem",
+            fontSize: isMobile ? "1.25rem" : "1.125rem",
             fontWeight: 600,
             marginTop: "0.35rem",
             color: titleTextColor,
@@ -162,10 +165,11 @@ export default function ToolCard({ card, index }: ToolCardProps) {
         </h3>
         <p
           style={{
-            fontSize: "0.9rem",
+            fontSize: isMobile ? "0.9rem" : "0.85rem",
             marginTop: "0.35rem",
             opacity: 0.95,
             color: descriptionTextColor,
+            lineHeight: "1.4",
           }}
         >
           {description}

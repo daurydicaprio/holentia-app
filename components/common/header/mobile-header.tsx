@@ -128,7 +128,7 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
                 height: "44px",
                 width: "44px",
               }}
-              className="hover:bg-white/30 dark:hover:bg-gray-700/30"
+              className="hover:bg-white/30 dark:hover:bg-gray-700/30 active:scale-90 transition-all duration-200"
             >
               <ChevronLeft className="h-6 w-6" />
               <span className="sr-only">Volver</span>
@@ -136,13 +136,13 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
 
             <Link
               href="/"
-              className="font-bold text-xl hover:bg-white/60 dark:hover:bg-gray-700/60 transition-colors"
+              className="font-bold text-xl hover:bg-white/60 dark:hover:bg-gray-700/60 transition-all duration-200 active:scale-95"
               onClick={() => triggerHapticFeedback("light")}
               style={{
                 backgroundColor: currentTheme === "dark" ? "rgba(30, 30, 30, 0.4)" : "rgba(255, 255, 255, 0.4)",
                 padding: "0.5rem 1.25rem",
                 borderRadius: "0.5rem",
-                transition: "background-color 0.3s ease",
+                transition: "all 0.2s ease",
               }}
             >
               HOLENTIA
@@ -153,7 +153,7 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="hover:bg-white/30 dark:hover:bg-gray-700/30 active:scale-95 transition-transform"
+                  className="hover:bg-white/30 dark:hover:bg-gray-700/30 active:scale-90 transition-all duration-200"
                   onClick={handleMenuToggle}
                   style={{
                     backgroundColor: "transparent",
