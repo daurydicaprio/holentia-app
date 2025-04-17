@@ -34,22 +34,20 @@ export function CalculatorInputs({
   const isMobile = useMediaQuery("(max-width: 768px)")
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-sm border border-gray-200 dark:border-gray-700">
-      <h3 className="text-lg font-semibold text-finanzas-dark dark:text-finanzas-DEFAULT mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
-        Datos de la inversión
-      </h3>
+    <div className="bg-white dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
+      <h3 className="text-lg font-semibold text-finanzas-DEFAULT mb-4">Datos de la inversión</h3>
 
       <div className="space-y-5">
         {/* Depósito inicial */}
         <div className="input-field">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Depósito inicial</label>
-          <div className="flex rounded-md shadow-sm border border-gray-300 dark:border-gray-600 overflow-hidden focus-within:ring-2 focus-within:ring-finanzas-DEFAULT focus-within:border-finanzas-DEFAULT transition-all">
-            <span className="inline-flex items-center px-3 bg-finanzas-DEFAULT text-white font-medium">$</span>
+          <div className="flex rounded-md overflow-hidden">
+            <span className="inline-flex items-center px-3 bg-[#388e3c] text-white font-medium">$</span>
             <input
               type="number"
               value={initialDeposit}
               onChange={(e) => setInitialDeposit(Number(e.target.value))}
-              className="flex-1 block w-full min-w-0 p-2.5 border-0 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none"
+              className="flex-1 block w-full min-w-0 p-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#388e3c] focus:border-[#388e3c]"
               placeholder="Ingresa tu depósito inicial"
             />
           </div>
@@ -59,95 +57,71 @@ export function CalculatorInputs({
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="sm:col-span-2">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Aporte</label>
-            <div className="flex rounded-md shadow-sm border border-gray-300 dark:border-gray-600 overflow-hidden focus-within:ring-2 focus-within:ring-finanzas-DEFAULT focus-within:border-finanzas-DEFAULT transition-all">
-              <span className="inline-flex items-center px-3 bg-finanzas-DEFAULT text-white font-medium">$</span>
+            <div className="flex rounded-md overflow-hidden">
+              <span className="inline-flex items-center px-3 bg-[#388e3c] text-white font-medium">$</span>
               <input
                 type="number"
                 value={contribution}
                 onChange={(e) => setContribution(Number(e.target.value))}
-                className="flex-1 block w-full min-w-0 p-2.5 border-0 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none"
+                className="flex-1 block w-full min-w-0 p-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#388e3c] focus:border-[#388e3c]"
                 placeholder="Aporte periódico"
               />
             </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Frecuencia</label>
-            <div className="flex rounded-md shadow-sm border border-gray-300 dark:border-gray-600 overflow-hidden focus-within:ring-2 focus-within:ring-finanzas-DEFAULT focus-within:border-finanzas-DEFAULT transition-all">
-              <select
-                value={contributionFrequency}
-                onChange={(e) => setContributionFrequency(Number(e.target.value))}
-                className="flex-1 block w-full min-w-0 p-2.5 border-0 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none"
-              >
-                <option value={1}>Anual</option>
-                <option value={12}>Mensual</option>
-              </select>
-            </div>
+            <select
+              value={contributionFrequency}
+              onChange={(e) => setContributionFrequency(Number(e.target.value))}
+              className="w-full p-2.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#388e3c] focus:border-[#388e3c]"
+            >
+              <option value={1}>Anual</option>
+              <option value={12}>Mensual</option>
+            </select>
           </div>
         </div>
 
         {/* Parte inferior del recuadro: Años, Tasa de interés e Inflación */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center">
-              Años
-              <span
-                className="ml-1.5 w-4 h-4 rounded-full bg-finanzas-DEFAULT text-white text-xs flex items-center justify-center cursor-help"
-                title="El interés siempre se calculará al año."
-              >
-                i
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Años</label>
+            <div className="flex rounded-md overflow-hidden">
+              <span className="inline-flex items-center px-3 bg-[#388e3c] text-white font-medium">
+                <span className="text-lg">⏳</span>
               </span>
-            </label>
-            <div className="flex rounded-md shadow-sm border border-gray-300 dark:border-gray-600 overflow-hidden focus-within:ring-2 focus-within:ring-finanzas-DEFAULT focus-within:border-finanzas-DEFAULT transition-all">
-              <span className="inline-flex items-center px-3 bg-finanzas-DEFAULT text-white font-medium">⏳</span>
               <input
                 type="number"
                 value={years}
                 onChange={(e) => setYears(Number(e.target.value))}
-                className="flex-1 block w-full min-w-0 p-2.5 border-0 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none"
+                className="flex-1 block w-full min-w-0 p-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#388e3c] focus:border-[#388e3c]"
                 placeholder="Años"
                 max={99}
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center">
-              Tasa de interés
-              <span
-                className="ml-1.5 w-4 h-4 rounded-full bg-finanzas-DEFAULT text-white text-xs flex items-center justify-center cursor-help"
-                title="La tasa de interés que esperas tener"
-              >
-                i
-              </span>
-            </label>
-            <div className="flex rounded-md shadow-sm border border-gray-300 dark:border-gray-600 overflow-hidden focus-within:ring-2 focus-within:ring-finanzas-DEFAULT focus-within:border-finanzas-DEFAULT transition-all">
-              <span className="inline-flex items-center px-3 bg-finanzas-DEFAULT text-white font-medium">%</span>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tasa de interés</label>
+            <div className="flex rounded-md overflow-hidden">
+              <span className="inline-flex items-center px-3 bg-[#388e3c] text-white font-medium">%</span>
               <input
                 type="number"
                 value={interestRate}
                 onChange={(e) => setInterestRate(Number(e.target.value))}
-                className="flex-1 block w-full min-w-0 p-2.5 border-0 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none"
+                className="flex-1 block w-full min-w-0 p-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#388e3c] focus:border-[#388e3c]"
                 placeholder="Tasa de interés"
                 max={99}
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center">
-              Inflación
-              <span
-                className="ml-1.5 w-4 h-4 rounded-full bg-finanzas-DEFAULT text-white text-xs flex items-center justify-center cursor-help"
-                title="La pérdida de poder adquisitivo cada año"
-              >
-                i
-              </span>
-            </label>
-            <div className="flex rounded-md shadow-sm border border-gray-300 dark:border-gray-600 overflow-hidden focus-within:ring-2 focus-within:ring-finanzas-DEFAULT focus-within:border-finanzas-DEFAULT transition-all">
-              <span className="inline-flex items-center px-3 bg-finanzas-DEFAULT text-white font-medium">%</span>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Inflación</label>
+            <div className="flex rounded-md overflow-hidden">
+              <span className="inline-flex items-center px-3 bg-[#388e3c] text-white font-medium">%</span>
               <input
                 type="number"
                 value={inflation}
                 onChange={(e) => setInflation(Number(e.target.value))}
-                className="flex-1 block w-full min-w-0 p-2.5 border-0 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none"
+                className="flex-1 block w-full min-w-0 p-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#388e3c] focus:border-[#388e3c]"
                 placeholder="Inflación"
                 max={99}
               />

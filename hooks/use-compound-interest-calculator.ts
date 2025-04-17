@@ -93,7 +93,7 @@ export function useCompoundInterestCalculator() {
     r: number,
     freqContrib: number,
   ): SimulationData[] => {
-    const annualPMT = freqContrib === 12 ? PMT * 12 * 1.0446 : PMT
+    const annualPMT = freqContrib === 12 ? PMT * 12 : PMT
     const simulation: SimulationData[] = []
     let balance = P
 
@@ -107,7 +107,7 @@ export function useCompoundInterestCalculator() {
     return simulation
   }
 
-  // Función para simular inversión mensual
+  // Función para simular inversión mensual - CORREGIDA
   const simulateInvestmentMonthly = (
     P: number,
     PMT: number,
@@ -123,9 +123,14 @@ export function useCompoundInterestCalculator() {
     for (let m = 1; m <= totalMonths; m++) {
       const startBalance = balance
       const interest = startBalance * monthlyRate
-      balance = startBalance * (1 + monthlyRate)
+
+      // Aplicar interés al balance actual
+      balance = startBalance + interest
+
+      // Añadir contribución según frecuencia
       const contrib = freqContrib === 12 ? PMT : m % 12 === 0 ? PMT : 0
       balance += contrib
+
       simulation.push({
         period: m,
         year: Math.ceil(m / 12),
@@ -137,101 +142,6 @@ export function useCompoundInterestCalculator() {
     }
 
     return simulation
-  }
-
-  // Función para calcular el NPV (Valor Presente Neto)
-  const computeNPV = (rate: number, cashFlows: { time: number; value: number }[]): number => {
-    let npv = 0
-    if (rate <= -1) {
-      let hasFutureFlow = false
-      for (let i = 0; i < cashFlows.length; i++) {
-        if (cashFlows[i].time > 0 && cashFlows[i].value !== 0) {
-          hasFutureFlow = true
-          break
-        }
-      }
-      if (hasFutureFlow) return Number.NaN
-      const initialFlow = cashFlows.find((cf) => cf.time === 0)
-      return initialFlow ? initialFlow.value : 0
-    }
-    for (let i = 0; i < cashFlows.length; i++) {
-      if (
-        typeof cashFlows[i].value !== "number" ||
-        typeof cashFlows[i].time !== "number" ||
-        isNaN(cashFlows[i].value) ||
-        isNaN(cashFlows[i].time)
-      ) {
-        continue
-      }
-      try {
-        npv += cashFlows[i].value / Math.pow(1 + rate, cashFlows[i].time)
-      } catch (e) {
-        return Number.NaN
-      }
-    }
-    if (!isFinite(npv)) {
-      return Number.NaN
-    }
-    return npv
-  }
-
-  // Función para calcular el IRR (Tasa Interna de Retorno)
-  const computeIRR = (cashFlows: { time: number; value: number }[], guess = 0.1): number => {
-    const hasNegative = cashFlows.some((cf) => cf.value < 0)
-    const hasPositive = cashFlows.some((cf) => cf.value > 0)
-    if (!hasNegative || !hasPositive) {
-      if (hasPositive && !hasNegative) return Number.POSITIVE_INFINITY
-      if (!hasPositive && hasNegative) return -1
-      return Number.NaN
-    }
-
-    let rateLow = -0.99999
-    let rateHigh = 10
-    let irr = guess
-    const maxIterations = 100
-    const tolerance = 0.00001
-
-    let npvLow = computeNPV(rateLow, cashFlows)
-    let npvHigh = computeNPV(rateHigh, cashFlows)
-
-    if (isNaN(npvLow) || isNaN(npvHigh) || npvLow * npvHigh > 0) {
-      const npvGuess = computeNPV(guess, cashFlows)
-      if (!isNaN(npvGuess) && Math.abs(npvGuess) < tolerance * 10) return guess
-      return Number.NaN
-    }
-
-    for (let i = 0; i < maxIterations; i++) {
-      irr = (rateLow + rateHigh) / 2
-      if (irr <= -1) {
-        irr = -0.999999
-      }
-      const npv = computeNPV(irr, cashFlows)
-      if (isNaN(npv)) {
-        if (irr === rateLow) rateLow += tolerance
-        else if (irr === rateHigh) rateHigh -= tolerance
-        else return Number.NaN
-        continue
-      }
-      if (Math.abs(npv) < tolerance) {
-        return irr
-      }
-      if (npv * npvLow > 0) {
-        rateLow = irr
-        npvLow = npv
-      } else {
-        rateHigh = irr
-        npvHigh = npv
-      }
-      if (Math.abs(rateHigh - rateLow) < tolerance / 100) {
-        break
-      }
-    }
-
-    const finalNpv = computeNPV(irr, cashFlows)
-    if (isNaN(finalNpv) || Math.abs(finalNpv) > tolerance * 100) {
-      return Number.NaN
-    }
-    return irr
   }
 
   // Función principal para calcular todo
@@ -250,9 +160,6 @@ export function useCompoundInterestCalculator() {
       if (years <= 0) {
         simData = []
         monthlyData = []
-      } else if (contributionFrequency === 12) {
-        simData = simulateInvestmentMonthly(initialDeposit, contribution, years, r, contributionFrequency)
-        monthlyData = simData
       } else {
         simData = simulateInvestmentAnnual(initialDeposit, contribution, years, r, contributionFrequency)
         monthlyData = simulateInvestmentMonthly(initialDeposit, contribution, years, r, contributionFrequency)
@@ -270,24 +177,19 @@ export function useCompoundInterestCalculator() {
       const saldoFinal = simData.length > 0 ? simData[simData.length - 1].balance || 0 : initialDeposit
       const totalContrib = contributionFrequency === 12 ? contribution * 12 * years : contribution * years
 
-      // Calcular balance ajustado por inflación
-      let balanceAjustado
-      if (simData.length > 0) {
-        if (contributionFrequency === 12) {
-          const lastPeriod = simData[simData.length - 1].period
-          balanceAjustado = infl > 0 && lastPeriod ? saldoFinal / Math.pow(1 + infl, lastPeriod / 12) : saldoFinal
-        } else {
-          balanceAjustado = infl > 0 && years > 0 ? saldoFinal / Math.pow(1 + infl, years) : saldoFinal
-        }
-      } else {
-        balanceAjustado = initialDeposit
+      // Calcular balance ajustado por inflación - CORREGIDO
+      let balanceAjustado = saldoFinal
+      if (infl > 0 && years > 0) {
+        // Fórmula corregida para el cálculo de la inflación
+        balanceAjustado = saldoFinal / Math.pow(1 + infl, years)
       }
 
       if (!isFinite(balanceAjustado)) balanceAjustado = 0
 
-      const gananciaAjustada = balanceAjustado - initialDeposit - totalContrib
-      const inflacionTotalEfecto = saldoFinal - balanceAjustado
+      // Calcular ganancia ajustada y efecto de inflación - CORREGIDO
       const totalInvertido = initialDeposit + totalContrib
+      const gananciaAjustada = Math.max(0, balanceAjustado - totalInvertido)
+      const inflacionTotalEfecto = Math.max(0, saldoFinal - balanceAjustado)
 
       // Calcular rendimiento de inversión
       let rendimientoInversion = 0
@@ -295,49 +197,6 @@ export function useCompoundInterestCalculator() {
         rendimientoInversion = (gananciaAjustada / totalInvertido) * 100
       } else if (gananciaAjustada > 0) {
         rendimientoInversion = Number.POSITIVE_INFINITY
-      }
-
-      // Calcular flujos de efectivo para IRR
-      const cashFlows: { time: number; value: number }[] = []
-      if (initialDeposit > 0) {
-        cashFlows.push({ time: 0, value: -initialDeposit })
-      }
-
-      if (simData.length > 0) {
-        const finalBalance = simData[simData.length - 1].balance
-        if (simData[0].hasOwnProperty("period")) {
-          simData.forEach((item) => {
-            if (item.contribution > 0) {
-              cashFlows.push({ time: (item.period as number) / 12, value: -item.contribution })
-            }
-          })
-          if (isFinite(finalBalance))
-            cashFlows.push({ time: (simData[simData.length - 1].period as number) / 12, value: finalBalance })
-        } else {
-          simData.forEach((item) => {
-            if (item.contribution > 0) {
-              cashFlows.push({ time: item.year, value: -item.contribution })
-            }
-          })
-          if (isFinite(finalBalance)) cashFlows.push({ time: simData[simData.length - 1].year, value: finalBalance })
-        }
-      } else if (cashFlows.length > 0 && isFinite(initialDeposit)) {
-        cashFlows.push({ time: years > 0 ? years : 0.1, value: initialDeposit })
-      }
-
-      // Calcular IRR nominal y real
-      let nominalIRR = Number.NaN
-      if (cashFlows.length > 1 && cashFlows.some((cf) => cf.value < 0)) {
-        try {
-          nominalIRR = computeIRR(cashFlows)
-        } catch (e) {
-          nominalIRR = Number.NaN
-        }
-      }
-
-      let realIRR = Number.NaN
-      if (!isNaN(nominalIRR) && isFinite(nominalIRR)) {
-        realIRR = infl > 0 ? (1 + nominalIRR) / (1 + infl) - 1 : nominalIRR
       }
 
       // Actualizar resumen
@@ -348,18 +207,8 @@ export function useCompoundInterestCalculator() {
         initialDeposit: initialDeposit,
         inflationEffect: inflacionTotalEfecto,
         doubleTime: r > 0 && r < 1 ? (72 / (r * 100)).toFixed(1) + " años" : "--",
-        annualizedReturn:
-          !isNaN(realIRR) && isFinite(realIRR)
-            ? (realIRR * 100).toFixed(2) + "%"
-            : nominalIRR === Number.POSITIVE_INFINITY
-              ? "∞%"
-              : "--",
-        totalReturn:
-          totalInvertido > 0 || gananciaAjustada !== 0
-            ? isFinite(rendimientoInversion)
-              ? rendimientoInversion.toFixed(2) + "%"
-              : "∞%"
-            : "--",
+        annualizedReturn: (r * 100).toFixed(2) + "%",
+        totalReturn: isFinite(rendimientoInversion) ? rendimientoInversion.toFixed(2) + "%" : "∞%",
       })
 
       // Preparar datos para gráficos
@@ -377,21 +226,8 @@ export function useCompoundInterestCalculator() {
       const currentYear = new Date().getFullYear()
 
       if (years > 0) {
-        const sourceData = contributionFrequency === 1 ? simData : monthlyData
-        if (sourceData.length > 0 && sourceData[0].hasOwnProperty("period")) {
-          for (let y = 1; y <= years; y++) {
-            const monthIndex = y * 12 - 1
-            if (monthIndex < sourceData.length) {
-              const entry = { ...sourceData[monthIndex] }
-              if (!entry.hasOwnProperty("year")) {
-                entry.year = Math.ceil((entry.period as number) / 12)
-              }
-              annualDataForChart.push(entry)
-            }
-          }
-        } else if (sourceData.length > 0 && sourceData[0].hasOwnProperty("year")) {
-          annualDataForChart = sourceData
-        }
+        // Usar los datos anuales directamente
+        annualDataForChart = [...simData]
       }
 
       // Preparar datos para gráfico de línea
@@ -417,13 +253,19 @@ export function useCompoundInterestCalculator() {
 
           labels.push((currentYear + item.year - 1).toString())
 
-          let bAjust = inflation > 0 ? item.balance / Math.pow(1 + inflation / 100, item.year) : item.balance
+          // Calcular balance ajustado por inflación
+          let bAjust = item.balance
+          if (inflation > 0) {
+            bAjust = item.balance / Math.pow(1 + inflation / 100, item.year)
+          }
+
           if (!isFinite(bAjust)) {
             datosValidosG1 = false
             bAjust = 0
           }
           lineData.push(bAjust)
 
+          // Calcular capital acumulado (depósito inicial + contribuciones)
           let capAcum = initialDeposit + contribution * factorG1 * item.year
           if (!isFinite(capAcum)) {
             datosValidosG1 = false
@@ -431,6 +273,7 @@ export function useCompoundInterestCalculator() {
           }
           capitalData.push(capAcum)
 
+          // Calcular interés acumulado (balance ajustado - capital acumulado)
           let intAcum = bAjust - capAcum
           if (!isFinite(intAcum)) {
             datosValidosG1 = false
@@ -466,12 +309,12 @@ export function useCompoundInterestCalculator() {
 
       const dataDoughnut = [depositoVal, totalContribVal, totalGainVal]
       const labelsDoughnut = ["Inversión inicial", "Contribuciones", "Ganancia"]
-      const bgColors = ["#325832", "#2b613a", "#8FBC8F"]
+      const bgColors = ["#2e7d32", "#388e3c", "#81c784"]
 
       if (inflation > 0) {
         dataDoughnut.push(inflacionTotalVal)
         labelsDoughnut.push("Inflación")
-        bgColors.push("#2d5335")
+        bgColors.push("#c8e6c9")
       }
 
       const filteredDataPie: number[] = []

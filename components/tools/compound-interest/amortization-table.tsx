@@ -61,9 +61,9 @@ export function AmortizationTable({
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-sm border border-gray-200 dark:border-gray-700">
-      <h2 className="text-xl font-bold text-center text-finanzas-dark dark:text-finanzas-DEFAULT mb-6">
+      <h2 className="text-xl font-bold text-center text-[#388e3c] mb-6">
         Tabla de amortización
-        <span className="block w-16 h-1 bg-finanzas-DEFAULT mx-auto mt-2"></span>
+        <span className="block w-16 h-1 bg-[#388e3c] mx-auto mt-2"></span>
       </h2>
 
       {/* Botones para cambiar vista */}
@@ -72,7 +72,7 @@ export function AmortizationTable({
           onClick={() => setTableView("annual")}
           className={`px-4 py-2 rounded-md transition-colors ${
             tableView === "annual"
-              ? "bg-finanzas-DEFAULT text-white shadow-sm"
+              ? "bg-[#388e3c] text-white shadow-sm"
               : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
           }`}
         >
@@ -83,7 +83,7 @@ export function AmortizationTable({
           disabled={contributionFrequency !== 12}
           className={`px-4 py-2 rounded-md transition-colors ${
             tableView === "monthly"
-              ? "bg-finanzas-DEFAULT text-white shadow-sm"
+              ? "bg-[#388e3c] text-white shadow-sm"
               : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
           } ${contributionFrequency !== 12 ? "opacity-50 cursor-not-allowed" : ""}`}
         >
@@ -96,19 +96,19 @@ export function AmortizationTable({
         <table className="w-full border-collapse">
           <thead>
             <tr>
-              <th className="p-3 text-left bg-finanzas-DEFAULT/20 dark:bg-finanzas-DEFAULT/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700 rounded-tl-md">
+              <th className="p-3 text-left bg-[#388e3c]/20 dark:bg-[#388e3c]/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700 rounded-tl-md">
                 {tableView === "annual" ? "Año" : "Mes"}
               </th>
-              <th className="p-3 text-left bg-finanzas-DEFAULT/20 dark:bg-finanzas-DEFAULT/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700">
+              <th className="p-3 text-left bg-[#388e3c]/20 dark:bg-[#388e3c]/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700">
                 Capital inicial
               </th>
-              <th className="p-3 text-left bg-finanzas-DEFAULT/20 dark:bg-finanzas-DEFAULT/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700">
+              <th className="p-3 text-left bg-[#388e3c]/20 dark:bg-[#388e3c]/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700">
                 Interés acumulado
               </th>
-              <th className="p-3 text-left bg-finanzas-DEFAULT/20 dark:bg-finanzas-DEFAULT/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700">
+              <th className="p-3 text-left bg-[#388e3c]/20 dark:bg-[#388e3c]/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700">
                 Balance final
               </th>
-              <th className="p-3 text-left bg-finanzas-DEFAULT/20 dark:bg-finanzas-DEFAULT/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700 rounded-tr-md">
+              <th className="p-3 text-left bg-[#388e3c]/20 dark:bg-[#388e3c]/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700 rounded-tr-md">
                 Balance ajustado
               </th>
             </tr>
@@ -126,7 +126,7 @@ export function AmortizationTable({
                     key={period}
                     className={`${
                       index % 2 === 0 ? "bg-white dark:bg-gray-900" : "bg-gray-50 dark:bg-gray-800/50"
-                    } hover:bg-finanzas-DEFAULT/5 dark:hover:bg-finanzas-DEFAULT/10`}
+                    } hover:bg-[#388e3c]/5 dark:hover:bg-[#388e3c]/10`}
                   >
                     <td className="p-3 border border-gray-200 dark:border-gray-700">{period}</td>
                     <td className="p-3 border border-gray-200 dark:border-gray-700">

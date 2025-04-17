@@ -24,9 +24,9 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
   // Colores para los gráficos
   const chartColors = {
     line: "#388e3c",
-    deposit: "#325832",
-    contribution: "#2b613a",
-    interest: "#8FBC8F",
+    deposit: "#2e7d32",
+    contribution: "#1b5e20",
+    interest: "#81c784",
     grid: resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)",
     text: resolvedTheme === "dark" ? "#e0e0e0" : "#1E3A2E",
   }
@@ -109,6 +109,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             ticks: {
               font: { weight: "bold" },
               color: chartColors.text,
+              callback: (value) => formatCurrency(value as number).replace(".00", ""),
             },
           },
         },
@@ -161,7 +162,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
         datasets: [
           {
             data: pieChartData.data,
-            backgroundColor: pieChartData.colors,
+            backgroundColor: ["#2e7d32", "#388e3c", "#81c784", "#c8e6c9"],
             borderColor: resolvedTheme === "dark" ? "#1e1e1e" : "#ffffff",
             borderWidth: 2,
           },
@@ -201,9 +202,9 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
     <div className="space-y-8">
       {/* Gráfico de línea */}
       <div className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-sm border border-gray-200 dark:border-gray-700">
-        <h2 className="text-xl font-bold text-center text-finanzas-dark dark:text-finanzas-DEFAULT mb-6">
+        <h2 className="text-xl font-bold text-center text-[#388e3c] mb-6">
           Composición de la inversión
-          <span className="block w-16 h-1 bg-finanzas-DEFAULT mx-auto mt-2"></span>
+          <span className="block w-16 h-1 bg-[#388e3c] mx-auto mt-2"></span>
         </h2>
         <div className="h-[250px] sm:h-[300px]">
           <canvas ref={lineChartRef}></canvas>
@@ -213,9 +214,9 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
       {/* Gráfico de pastel - solo mostrar en escritorio o si showPieChart es true */}
       {showPieChart && (
         <div className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-sm border border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-bold text-center text-finanzas-dark dark:text-finanzas-DEFAULT mb-6">
+          <h2 className="text-xl font-bold text-center text-[#388e3c] mb-6">
             Inversión total
-            <span className="block w-16 h-1 bg-finanzas-DEFAULT mx-auto mt-2"></span>
+            <span className="block w-16 h-1 bg-[#388e3c] mx-auto mt-2"></span>
           </h2>
           <div className="h-[300px] sm:h-[400px]">
             <canvas ref={pieChartRef}></canvas>

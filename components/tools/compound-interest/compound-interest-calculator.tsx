@@ -6,7 +6,7 @@ import { CalculatorInputs } from "./calculator-inputs"
 import { CalculatorSummary } from "./calculator-summary"
 import { CalculatorCharts } from "./calculator-charts"
 import { AmortizationTable } from "./amortization-table"
-import { CalculatorTabs } from "./calculator-tabs"
+import { MobileTabsNavigation } from "./mobile-tabs-navigation"
 import { useMediaQuery } from "@/hooks/use-media-query"
 
 export function CompoundInterestCalculator() {
@@ -33,7 +33,7 @@ export function CompoundInterestCalculator() {
     formatCurrency,
   } = useCompoundInterestCalculator()
 
-  const [activeTab, setActiveTab] = useState<string>("chart")
+  const [activeTab, setActiveTab] = useState<string>("calculator")
   const isMobile = useMediaQuery("(max-width: 768px)")
 
   // Función para cambiar de pestaña
@@ -41,163 +41,116 @@ export function CompoundInterestCalculator() {
     setActiveTab(tab)
   }
 
-  // Renderizado condicional basado en el tamaño de pantalla
+  // Renderizado para móvil con pestañas
   if (isMobile) {
     return (
-      <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 rounded-lg p-4 shadow-sm">
-        {/* Sección de inputs */}
-        <div className="mb-6">
-          <CalculatorInputs
-            initialDeposit={initialDeposit}
-            setInitialDeposit={setInitialDeposit}
-            contribution={contribution}
-            setContribution={setContribution}
-            contributionFrequency={contributionFrequency}
-            setContributionFrequency={setContributionFrequency}
-            years={years}
-            setYears={setYears}
-            interestRate={interestRate}
-            setInterestRate={setInterestRate}
-            inflation={inflation}
-            setInflation={setInflation}
-          />
+      <>
+        {/* Título y descripción solo una vez */}
+        <div className="text-center mb-6">
+          <h1 className="text-2xl font-bold text-[#388e3c]">Calculadora interés compuesto</h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-1">Visualiza el crecimiento de ahorros.</p>
+          <div className="w-16 h-1 bg-[#388e3c] mx-auto mt-3"></div>
         </div>
 
-        {/* Sección de resumen */}
-        <div className="mb-6">
-          <CalculatorSummary summary={summary} formatCurrency={formatCurrency} />
-        </div>
+        {/* Pestañas móviles */}
+        <MobileTabsNavigation activeTab={activeTab} onTabChange={handleTabChange} />
 
-        {/* Pestañas y contenido */}
-        <div className="mb-6">
-          <CalculatorTabs activeTab={activeTab} onTabChange={handleTabChange} />
-
-          <div className="mt-4">
-            {activeTab === "chart" && (
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700">
-                <CalculatorCharts
-                  lineChartData={lineChartData}
-                  pieChartData={pieChartData}
-                  formatCurrency={formatCurrency}
-                  showPieChart={false}
-                />
+        {/* Contenido según la pestaña activa */}
+        <div className="p-4">
+          {activeTab === "calculator" && (
+            <>
+              <CalculatorInputs
+                initialDeposit={initialDeposit}
+                setInitialDeposit={setInitialDeposit}
+                contribution={contribution}
+                setContribution={setContribution}
+                contributionFrequency={contributionFrequency}
+                setContributionFrequency={setContributionFrequency}
+                years={years}
+                setYears={setYears}
+                interestRate={interestRate}
+                setInterestRate={setInterestRate}
+                inflation={inflation}
+                setInflation={setInflation}
+              />
+              <div className="mt-6">
+                <CalculatorSummary summary={summary} formatCurrency={formatCurrency} />
               </div>
-            )}
+            </>
+          )}
 
-            {activeTab === "summary" && (
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700">
-                <div className="text-sm text-gray-700 dark:text-gray-300 space-y-3">
-                  <div className="p-3 bg-finanzas-DEFAULT/10 dark:bg-finanzas-DEFAULT/20 rounded-md">
-                    <p className="font-medium">
-                      <span className="text-finanzas-DEFAULT dark:text-finanzas-DEFAULT">Inversión inicial:</span>{" "}
-                      {formatCurrency(initialDeposit)}
-                    </p>
-                  </div>
-
-                  <div className="p-3 bg-finanzas-DEFAULT/10 dark:bg-finanzas-DEFAULT/20 rounded-md">
-                    <p className="font-medium">
-                      <span className="text-finanzas-DEFAULT dark:text-finanzas-DEFAULT">
-                        Aporte {contributionFrequency === 12 ? "mensual" : "anual"}:
-                      </span>{" "}
-                      {formatCurrency(contribution)}
-                    </p>
-                  </div>
-
-                  <div className="p-3 bg-finanzas-DEFAULT/10 dark:bg-finanzas-DEFAULT/20 rounded-md">
-                    <p className="font-medium">
-                      <span className="text-finanzas-DEFAULT dark:text-finanzas-DEFAULT">Tasa de interés:</span>{" "}
-                      {interestRate}%
-                    </p>
-                  </div>
-
-                  <div className="p-3 bg-finanzas-DEFAULT/10 dark:bg-finanzas-DEFAULT/20 rounded-md">
-                    <p className="font-medium">
-                      <span className="text-finanzas-DEFAULT dark:text-finanzas-DEFAULT">Inflación:</span> {inflation}%
-                    </p>
-                  </div>
-
-                  <div className="p-3 bg-finanzas-DEFAULT/10 dark:bg-finanzas-DEFAULT/20 rounded-md">
-                    <p className="font-medium">
-                      <span className="text-finanzas-DEFAULT dark:text-finanzas-DEFAULT">Plazo:</span> {years} años
-                    </p>
-                  </div>
-
-                  <hr className="my-4 border-gray-200 dark:border-gray-700" />
-
-                  <div className="p-3 bg-finanzas-DEFAULT/20 dark:bg-finanzas-DEFAULT/30 rounded-md">
-                    <p className="font-medium">
-                      <span className="text-finanzas-dark dark:text-finanzas-DEFAULT">Balance final:</span>{" "}
-                      {formatCurrency(summary.balanceNet)}
-                    </p>
-                  </div>
-
-                  <div className="p-3 bg-finanzas-DEFAULT/20 dark:bg-finanzas-DEFAULT/30 rounded-md">
-                    <p className="font-medium">
-                      <span className="text-finanzas-dark dark:text-finanzas-DEFAULT">Ganancia neta:</span>{" "}
-                      {formatCurrency(summary.netGain)}
-                    </p>
-                  </div>
-
-                  <div className="p-3 bg-finanzas-DEFAULT/20 dark:bg-finanzas-DEFAULT/30 rounded-md">
-                    <p className="font-medium">
-                      <span className="text-finanzas-dark dark:text-finanzas-DEFAULT">Rendimiento total:</span>{" "}
-                      {summary.totalReturn}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+          {activeTab === "charts" && (
+            <CalculatorCharts
+              lineChartData={lineChartData}
+              pieChartData={pieChartData}
+              formatCurrency={formatCurrency}
+              showPieChart={false}
+            />
+          )}
         </div>
-      </div>
+
+        {/* Espacio para evitar que el contenido quede debajo de la navegación */}
+        <div className="h-16"></div>
+      </>
     )
   }
 
-  // Versión de escritorio (sin pestañas móviles)
+  // Renderizado para escritorio (sin pestañas)
   return (
-    <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 rounded-lg p-6 shadow-sm">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <div>
-          <CalculatorInputs
-            initialDeposit={initialDeposit}
-            setInitialDeposit={setInitialDeposit}
-            contribution={contribution}
-            setContribution={setContribution}
-            contributionFrequency={contributionFrequency}
-            setContributionFrequency={setContributionFrequency}
-            years={years}
-            setYears={setYears}
-            interestRate={interestRate}
-            setInterestRate={setInterestRate}
-            inflation={inflation}
-            setInflation={setInflation}
+    <>
+      {/* Título y descripción solo una vez */}
+      <div className="text-center mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-[#388e3c]">Calculadora interés compuesto</h1>
+        <p className="text-gray-600 dark:text-gray-300 mt-1">Visualiza el crecimiento de ahorros.</p>
+        <div className="w-16 h-1 bg-[#388e3c] mx-auto mt-3"></div>
+      </div>
+
+      <div className="pt-2">
+        {/* Sección superior: Inputs y Resumen */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <div>
+            <CalculatorInputs
+              initialDeposit={initialDeposit}
+              setInitialDeposit={setInitialDeposit}
+              contribution={contribution}
+              setContribution={setContribution}
+              contributionFrequency={contributionFrequency}
+              setContributionFrequency={setContributionFrequency}
+              years={years}
+              setYears={setYears}
+              interestRate={interestRate}
+              setInterestRate={setInterestRate}
+              inflation={inflation}
+              setInflation={setInflation}
+            />
+          </div>
+          <div>
+            <CalculatorSummary summary={summary} formatCurrency={formatCurrency} />
+          </div>
+        </div>
+
+        {/* Sección inferior: Gráficos y Tabla */}
+        <div className="mt-8">
+          <CalculatorCharts
+            lineChartData={lineChartData}
+            pieChartData={pieChartData}
+            formatCurrency={formatCurrency}
+            showPieChart={true}
           />
         </div>
-        <div>
-          <CalculatorSummary summary={summary} formatCurrency={formatCurrency} />
+
+        <div className="mt-8">
+          <AmortizationTable
+            annualData={annualSimData}
+            monthlyData={monthlySimData}
+            tableView={tableView}
+            setTableView={setTableView}
+            formatCurrency={formatCurrency}
+            inflation={inflation}
+            contributionFrequency={contributionFrequency}
+          />
         </div>
       </div>
-
-      <div className="mb-8">
-        <CalculatorCharts
-          lineChartData={lineChartData}
-          pieChartData={pieChartData}
-          formatCurrency={formatCurrency}
-          showPieChart={true}
-        />
-      </div>
-
-      <div className="mb-6">
-        <AmortizationTable
-          annualData={annualSimData}
-          monthlyData={monthlySimData}
-          tableView={tableView}
-          setTableView={setTableView}
-          formatCurrency={formatCurrency}
-          inflation={inflation}
-          contributionFrequency={contributionFrequency}
-        />
-      </div>
-    </div>
+    </>
   )
 }
