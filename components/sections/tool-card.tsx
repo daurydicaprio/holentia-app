@@ -5,7 +5,7 @@ import { ChevronRight } from "lucide-react"
 import type { CardData } from "@/types"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useTheme } from "next-themes"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 
 interface ToolCardProps {
   card: CardData
@@ -17,6 +17,7 @@ export default function ToolCard({ card, index }: ToolCardProps) {
   const { triggerHapticFeedback } = useHapticFeedback()
   const { theme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const cardRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -82,10 +83,42 @@ export default function ToolCard({ card, index }: ToolCardProps) {
     }
   }
 
+  // Efecto para manejar la animación 3D al mover el mouse
+  useEffect(() => {
+    const card = cardRef.current
+    if (!card || !isAvailable) return
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = card.getBoundingClientRect()
+      const x = e.clientX - rect.left
+      const y = e.clientY - rect.top
+      const centerX = rect.width / 2
+      const centerY = rect.height / 2
+
+      const rotateX = (y - centerY) / 20
+      const rotateY = (centerX - x) / 20
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`
+    }
+
+    const handleMouseLeave = () => {
+      card.style.transform = "perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)"
+    }
+
+    card.addEventListener("mousemove", handleMouseMove)
+    card.addEventListener("mouseleave", handleMouseLeave)
+
+    return () => {
+      card.removeEventListener("mousemove", handleMouseMove)
+      card.removeEventListener("mouseleave", handleMouseLeave)
+    }
+  }, [isAvailable, mounted])
+
   if (!mounted) return null
 
   const CardContent = () => (
     <div
+      ref={cardRef}
       style={{
         position: "relative",
         padding: "1.5rem",
@@ -103,27 +136,6 @@ export default function ToolCard({ card, index }: ToolCardProps) {
       }}
       className={`animate-fadeIn hover:shadow-xl hover:-translate-y-2 hover:scale-[1.03] ${!isAvailable ? "card-coming-soon" : ""}`}
       onTouchStart={handleCardPress}
-      onMouseMove={(e) => {
-        if (isAvailable) {
-          const card = e.currentTarget
-          const rect = card.getBoundingClientRect()
-          const x = e.clientX - rect.left
-          const y = e.clientY - rect.top
-
-          const centerX = rect.width / 2
-          const centerY = rect.height / 2
-
-          const rotateX = (y - centerY) / 20
-          const rotateY = (centerX - x) / 20
-
-          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`
-        }
-      }}
-      onMouseLeave={(e) => {
-        if (isAvailable) {
-          e.currentTarget.style.transform = "perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)"
-        }
-      }}
     >
       <div style={{ paddingRight: "1.5rem" }}>
         <span

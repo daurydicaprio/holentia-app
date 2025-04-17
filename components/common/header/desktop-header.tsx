@@ -52,11 +52,7 @@ export default function DesktopHeader() {
 
   if (!mounted) {
     // Renderizar un placeholder mientras se monta para evitar parpadeos
-    return (
-      <div className="absolute top-4 right-16 z-50">
-        <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-800"></div>
-      </div>
-    )
+    return null
   }
 
   return (

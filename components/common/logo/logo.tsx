@@ -22,15 +22,15 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
   }, [])
 
   const sizeClasses = {
-    sm: "w-14 h-14 text-xs",
-    md: "w-24 h-24 text-lg",
+    sm: "w-10 h-10 text-xs",
+    md: "w-20 h-20 text-base",
     lg: "w-32 h-32 sm:w-36 sm:h-36 text-lg sm:text-2xl",
   }
 
   // Tamaños del aura
   const auraSizes = {
-    sm: { width: "3.75rem", height: "3.75rem" },
-    md: { width: "8.5rem", height: "8.5rem" },
+    sm: { width: "2.75rem", height: "2.75rem" },
+    md: { width: "5.5rem", height: "5.5rem" },
     lg: { width: "9.5rem", height: "9.5rem", smWidth: "11.5rem", smHeight: "11.5rem" },
   }
 
