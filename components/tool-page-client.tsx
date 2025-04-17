@@ -175,17 +175,7 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
           ></div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
-          {toolContent ? (
-            toolContent
-          ) : (
-            <div className="p-8 border border-dashed border-gray-300 dark:border-gray-600 rounded-md text-center">
-              <p className="text-gray-500 dark:text-gray-400">
-                Contenido de la herramienta pendiente de implementación
-              </p>
-            </div>
-          )}
-        </div>
+        {toolContent}
       </div>
 
       <Footer section={section} />

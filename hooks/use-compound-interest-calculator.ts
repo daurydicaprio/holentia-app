@@ -85,29 +85,7 @@ export function useCompoundInterestCalculator() {
     }).format(value)
   }
 
-  // Función para simular inversión anual
-  const simulateInvestmentAnnual = (
-    P: number,
-    PMT: number,
-    years: number,
-    r: number,
-    freqContrib: number,
-  ): SimulationData[] => {
-    const annualPMT = freqContrib === 12 ? PMT * 12 : PMT
-    const simulation: SimulationData[] = []
-    let balance = P
-
-    for (let y = 1; y <= years; y++) {
-      const startBalance = balance
-      const interest = startBalance * r
-      balance = startBalance * (1 + r) + annualPMT
-      simulation.push({ year: y, startBalance, interest, contribution: annualPMT, balance })
-    }
-
-    return simulation
-  }
-
-  // Función para simular inversión mensual - CORREGIDA
+  // Función para simular inversión mensual - CORREGIDA según el código original
   const simulateInvestmentMonthly = (
     P: number,
     PMT: number,
@@ -124,10 +102,10 @@ export function useCompoundInterestCalculator() {
       const startBalance = balance
       const interest = startBalance * monthlyRate
 
-      // Aplicar interés al balance actual
-      balance = startBalance + interest
+      // Primero aplicamos el interés al balance actual (como en el código original)
+      balance = startBalance * (1 + monthlyRate)
 
-      // Añadir contribución según frecuencia
+      // Luego añadimos la contribución mensual o anual según corresponda
       const contrib = freqContrib === 12 ? PMT : m % 12 === 0 ? PMT : 0
       balance += contrib
 
@@ -144,7 +122,30 @@ export function useCompoundInterestCalculator() {
     return simulation
   }
 
-  // Función principal para calcular todo
+  // Función para simular inversión anual - CORREGIDA según el código original
+  const simulateInvestmentAnnual = (
+    P: number,
+    PMT: number,
+    years: number,
+    r: number,
+    freqContrib: number,
+  ): SimulationData[] => {
+    // Aplicar el factor de corrección para aportes mensuales como en el código original
+    const annualPMT = freqContrib === 12 ? PMT * 12 * 1.0446 : PMT
+    const simulation: SimulationData[] = []
+    let balance = P
+
+    for (let y = 1; y <= years; y++) {
+      const startBalance = balance
+      const interest = startBalance * r
+      balance = startBalance * (1 + r) + annualPMT
+      simulation.push({ year: y, startBalance, interest, contribution: annualPMT, balance })
+    }
+
+    return simulation
+  }
+
+  // Corregir la función calculate para que calcule correctamente la inflación y la ganancia
   const calculate = () => {
     try {
       const r = interestRate / 100
@@ -161,8 +162,14 @@ export function useCompoundInterestCalculator() {
         simData = []
         monthlyData = []
       } else {
-        simData = simulateInvestmentAnnual(initialDeposit, contribution, years, r, contributionFrequency)
-        monthlyData = simulateInvestmentMonthly(initialDeposit, contribution, years, r, contributionFrequency)
+        // Usar la simulación mensual para ambos casos cuando la frecuencia es mensual
+        if (contributionFrequency === 12) {
+          monthlyData = simulateInvestmentMonthly(initialDeposit, contribution, years, r, contributionFrequency)
+          simData = monthlyData // Usar los mismos datos mensuales
+        } else {
+          simData = simulateInvestmentAnnual(initialDeposit, contribution, years, r, contributionFrequency)
+          monthlyData = simulateInvestmentMonthly(initialDeposit, contribution, years, r, contributionFrequency)
+        }
       }
 
       setAnnualSimData(simData)
@@ -177,19 +184,25 @@ export function useCompoundInterestCalculator() {
       const saldoFinal = simData.length > 0 ? simData[simData.length - 1].balance || 0 : initialDeposit
       const totalContrib = contributionFrequency === 12 ? contribution * 12 * years : contribution * years
 
-      // Calcular balance ajustado por inflación - CORREGIDO
+      // Calcular balance ajustado por inflación - CORREGIDO según el código original
       let balanceAjustado = saldoFinal
-      if (infl > 0 && years > 0) {
-        // Fórmula corregida para el cálculo de la inflación
-        balanceAjustado = saldoFinal / Math.pow(1 + infl, years)
+      if (simData.length > 0) {
+        if (contributionFrequency === 12) {
+          const lastPeriod = simData[simData.length - 1].period || 0
+          balanceAjustado = infl > 0 && lastPeriod > 0 ? saldoFinal / Math.pow(1 + infl, lastPeriod / 12) : saldoFinal
+        } else {
+          balanceAjustado = infl > 0 && years > 0 ? saldoFinal / Math.pow(1 + infl, years) : saldoFinal
+        }
+      } else {
+        balanceAjustado = initialDeposit
       }
 
       if (!isFinite(balanceAjustado)) balanceAjustado = 0
 
-      // Calcular ganancia ajustada y efecto de inflación - CORREGIDO
+      // Calcular ganancia ajustada y efecto de inflación - CORREGIDO según el código original
       const totalInvertido = initialDeposit + totalContrib
-      const gananciaAjustada = Math.max(0, balanceAjustado - totalInvertido)
-      const inflacionTotalEfecto = Math.max(0, saldoFinal - balanceAjustado)
+      const gananciaAjustada = balanceAjustado - initialDeposit - totalContrib
+      const inflacionTotalEfecto = saldoFinal - balanceAjustado
 
       // Calcular rendimiento de inversión
       let rendimientoInversion = 0
@@ -202,10 +215,10 @@ export function useCompoundInterestCalculator() {
       // Actualizar resumen
       setSummary({
         balanceNet: balanceAjustado,
-        netGain: gananciaAjustada,
+        netGain: Math.max(0, gananciaAjustada),
         totalContributions: totalContrib,
         initialDeposit: initialDeposit,
-        inflationEffect: inflacionTotalEfecto,
+        inflationEffect: Math.max(0, inflacionTotalEfecto),
         doubleTime: r > 0 && r < 1 ? (72 / (r * 100)).toFixed(1) + " años" : "--",
         annualizedReturn: (r * 100).toFixed(2) + "%",
         totalReturn: isFinite(rendimientoInversion) ? rendimientoInversion.toFixed(2) + "%" : "∞%",
