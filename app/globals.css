@@ -21,32 +21,44 @@
   --card-gap: 20px;
   --main-v-gap: 20px;
 
-  /* Colores Mente */
-  --color-mente-active: #1976d2;
+  /* Colores Mente - Ajustados para mejor contraste */
+  --color-mente-active: #1565c0; /* Azul más oscuro para mejor contraste */
   --color-mente-active-dark: #0d47a1;
+  --color-mente-active-light: #42a5f5;
+  --color-mente-active-lighter: #90caf9;
+  --color-mente-active-darkest: #0a3880;
   --color-mente-text-active: #ffffff;
-  --color-mente-glass-bg: rgba(25, 118, 210, 0.4);
+  --color-mente-glass-bg: rgba(21, 101, 192, 0.4);
   --color-mente-glass-border: rgba(144, 202, 249, 0.5);
   --color-mente-text-card: #ffffff;
   --color-mente-text-category: #e3f2fd;
+  --color-mente-accent: #7b1fa2; /* Púrpura como acento */
 
-  /* Colores Cuerpo */
-  --color-cuerpo-active: #ffa000;
+  /* Colores Cuerpo - Ajustados para mejor contraste */
+  --color-cuerpo-active: #ef6c00; /* Naranja más oscuro para mejor contraste */
   --color-cuerpo-active-dark: #e65100;
+  --color-cuerpo-active-light: #ff9800;
+  --color-cuerpo-active-lighter: #ffcc80;
+  --color-cuerpo-active-darkest: #bf360c;
   --color-cuerpo-text-active: #212121;
-  --color-cuerpo-glass-bg: rgba(255, 160, 0, 0.4);
+  --color-cuerpo-glass-bg: rgba(239, 108, 0, 0.4);
   --color-cuerpo-glass-border: rgba(255, 224, 130, 0.6);
-  --color-cuerpo-text-card: #3e2723;
-  --color-cuerpo-text-category: #795548;
+  --color-cuerpo-text-card: #212121; /* Oscurecido para mejor contraste */
+  --color-cuerpo-text-category: #4e342e; /* Oscurecido para mejor contraste */
+  --color-cuerpo-accent: #ff5722; /* Coral como acento */
 
-  /* Colores Finanzas */
-  --color-finanzas-active: #388e3c;
+  /* Colores Finanzas - Ajustados para mejor contraste */
+  --color-finanzas-active: #2e7d32; /* Verde más oscuro para mejor contraste */
   --color-finanzas-active-dark: #1b5e20;
+  --color-finanzas-active-light: #4caf50;
+  --color-finanzas-active-lighter: #a5d6a7;
+  --color-finanzas-active-darkest: #1a4314;
   --color-finanzas-text-active: #ffffff;
-  --color-finanzas-glass-bg: rgba(56, 142, 60, 0.4);
+  --color-finanzas-glass-bg: rgba(46, 125, 50, 0.4);
   --color-finanzas-glass-border: rgba(165, 214, 167, 0.6);
   --color-finanzas-text-card: #ffffff;
   --color-finanzas-text-category: #e8f5e9;
+  --color-finanzas-accent: #00796b; /* Turquesa como acento */
 }
 
 .dark {
@@ -61,20 +73,20 @@
   --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   --card-hover-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
 
-  /* Colores Mente - Modo oscuro */
-  --color-mente-glass-bg: rgba(25, 118, 210, 0.2);
+  /* Colores Mente - Modo oscuro - Ajustados para mejor contraste */
+  --color-mente-glass-bg: rgba(21, 101, 192, 0.2);
   --color-mente-glass-border: rgba(144, 202, 249, 0.3);
   --color-mente-text-card: #e0e0e0;
   --color-mente-text-category: #90caf9;
 
-  /* Colores Cuerpo - Modo oscuro */
-  --color-cuerpo-glass-bg: rgba(255, 160, 0, 0.2);
+  /* Colores Cuerpo - Modo oscuro - Ajustados para mejor contraste */
+  --color-cuerpo-glass-bg: rgba(239, 108, 0, 0.2);
   --color-cuerpo-glass-border: rgba(255, 224, 130, 0.3);
   --color-cuerpo-text-card: #e0e0e0;
   --color-cuerpo-text-category: #ffe082;
 
-  /* Colores Finanzas - Modo oscuro */
-  --color-finanzas-glass-bg: rgba(56, 142, 60, 0.2);
+  /* Colores Finanzas - Modo oscuro - Ajustados para mejor contraste */
+  --color-finanzas-glass-bg: rgba(46, 125, 50, 0.2);
   --color-finanzas-glass-border: rgba(165, 214, 167, 0.3);
   --color-finanzas-text-card: #e0e0e0;
   --color-finanzas-text-category: #a5d6a7;
@@ -98,15 +110,15 @@
   }
 
   .logo-aura-mente {
-    background-color: rgba(59, 130, 246, 0.5);
+    background-color: rgba(21, 101, 192, 0.5);
   }
 
   .logo-aura-cuerpo {
-    background-color: rgba(245, 158, 11, 0.5);
+    background-color: rgba(239, 108, 0, 0.5);
   }
 
   .logo-aura-finanzas {
-    background-color: rgba(34, 197, 94, 0.5);
+    background-color: rgba(46, 125, 50, 0.5);
   }
 
   .card-coming-soon {
@@ -310,13 +322,13 @@
   /* Animación de pulso para el logo */
   @keyframes pulse {
     0% {
-      box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+      box-shadow: 0 0 0 0 rgba(21, 101, 192, 0.4);
     }
     70% {
-      box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+      box-shadow: 0 0 0 10px rgba(21, 101, 192, 0);
     }
     100% {
-      box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+      box-shadow: 0 0 0 0 rgba(21, 101, 192, 0);
     }
   }
 

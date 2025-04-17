@@ -36,13 +36,13 @@ export default function ToolCard({ card, index }: ToolCardProps) {
   let descriptionTextColor = currentTheme === "dark" ? "#a0a0a0" : "#4b5563"
 
   if (category === "mente") {
-    // Colores más vividos para tarjetas activas
+    // Colores más vividos para tarjetas activas con mejor contraste
     if (isAvailable) {
-      bgColor = currentTheme === "dark" ? "rgba(25, 118, 210, 0.35)" : "rgba(25, 118, 210, 0.65)"
+      bgColor = currentTheme === "dark" ? "rgba(21, 101, 192, 0.35)" : "rgba(21, 101, 192, 0.65)"
       borderColor = currentTheme === "dark" ? "rgba(144, 202, 249, 0.5)" : "rgba(144, 202, 249, 0.8)"
       categoryTextColor = currentTheme === "dark" ? "#90caf9" : "#e3f2fd"
     } else {
-      bgColor = currentTheme === "dark" ? "rgba(25, 118, 210, 0.15)" : "rgba(25, 118, 210, 0.3)"
+      bgColor = currentTheme === "dark" ? "rgba(21, 101, 192, 0.15)" : "rgba(21, 101, 192, 0.3)"
       borderColor = currentTheme === "dark" ? "rgba(144, 202, 249, 0.2)" : "rgba(144, 202, 249, 0.4)"
       categoryTextColor = currentTheme === "dark" ? "rgba(144, 202, 249, 0.7)" : "rgba(227, 242, 253, 0.7)"
     }
@@ -50,23 +50,24 @@ export default function ToolCard({ card, index }: ToolCardProps) {
     descriptionTextColor = currentTheme === "dark" ? "#e0e0e0" : "#ffffff"
   } else if (category === "cuerpo") {
     if (isAvailable) {
-      bgColor = currentTheme === "dark" ? "rgba(255, 160, 0, 0.35)" : "rgba(255, 160, 0, 0.65)"
+      bgColor = currentTheme === "dark" ? "rgba(239, 108, 0, 0.35)" : "rgba(239, 108, 0, 0.65)"
       borderColor = currentTheme === "dark" ? "rgba(255, 224, 130, 0.5)" : "rgba(255, 224, 130, 0.8)"
-      categoryTextColor = currentTheme === "dark" ? "#ffe082" : "#795548"
+      categoryTextColor = currentTheme === "dark" ? "#ffe082" : "#4e342e"
     } else {
-      bgColor = currentTheme === "dark" ? "rgba(255, 160, 0, 0.15)" : "rgba(255, 160, 0, 0.3)"
+      bgColor = currentTheme === "dark" ? "rgba(239, 108, 0, 0.15)" : "rgba(239, 108, 0, 0.3)"
       borderColor = currentTheme === "dark" ? "rgba(255, 224, 130, 0.2)" : "rgba(255, 224, 130, 0.4)"
-      categoryTextColor = currentTheme === "dark" ? "rgba(255, 224, 130, 0.7)" : "rgba(121, 85, 72, 0.7)"
+      categoryTextColor = currentTheme === "dark" ? "rgba(255, 224, 130, 0.7)" : "rgba(78, 52, 46, 0.7)"
     }
-    titleTextColor = currentTheme === "dark" ? "#e0e0e0" : "#3e2723"
-    descriptionTextColor = currentTheme === "dark" ? "#e0e0e0" : "#3e2723"
+    // Ajustado para mejor contraste
+    titleTextColor = currentTheme === "dark" ? "#e0e0e0" : "#212121"
+    descriptionTextColor = currentTheme === "dark" ? "#e0e0e0" : "#212121"
   } else if (category === "finanzas") {
     if (isAvailable) {
-      bgColor = currentTheme === "dark" ? "rgba(56, 142, 60, 0.35)" : "rgba(56, 142, 60, 0.65)"
+      bgColor = currentTheme === "dark" ? "rgba(46, 125, 50, 0.35)" : "rgba(46, 125, 50, 0.65)"
       borderColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.5)" : "rgba(165, 214, 167, 0.8)"
       categoryTextColor = currentTheme === "dark" ? "#a5d6a7" : "#e8f5e9"
     } else {
-      bgColor = currentTheme === "dark" ? "rgba(56, 142, 60, 0.15)" : "rgba(56, 142, 60, 0.3)"
+      bgColor = currentTheme === "dark" ? "rgba(46, 125, 50, 0.15)" : "rgba(46, 125, 50, 0.3)"
       borderColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.2)" : "rgba(165, 214, 167, 0.4)"
       categoryTextColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.7)" : "rgba(232, 245, 233, 0.7)"
     }
