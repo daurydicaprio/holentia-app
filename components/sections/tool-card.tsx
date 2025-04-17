@@ -121,30 +121,30 @@ export default function ToolCard({ card, index }: ToolCardProps) {
       ref={cardRef}
       style={{
         position: "relative",
-        padding: "1.5rem",
-        borderRadius: "14px",
+        padding: "1.75rem",
+        borderRadius: "16px",
         border: `1px solid ${borderColor}`,
         backdropFilter: "blur(20px)",
         backgroundColor: isAvailable
-          ? `${bgColor.replace(/[^,]+(?=\))/, "0.7")}`
+          ? `${bgColor.replace(/[^,]+(?=\))/, "0.75")}`
           : `${bgColor.replace(/[^,]+(?=\))/, "0.5")}`,
-        boxShadow: isAvailable ? "0 10px 25px rgba(0, 0, 0, 0.08)" : "0 5px 15px rgba(0, 0, 0, 0.04)",
-        height: "165px",
-        transition: "all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+        boxShadow: isAvailable ? "0 12px 28px rgba(0, 0, 0, 0.1)" : "0 6px 16px rgba(0, 0, 0, 0.05)",
+        height: "175px",
+        transition: "all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
         opacity: isAvailable ? 1 : 0.6,
         animationDelay,
       }}
-      className={`animate-fadeIn hover:shadow-xl hover:-translate-y-2 hover:scale-[1.03] ${!isAvailable ? "card-coming-soon" : ""}`}
+      className={`animate-fadeIn hover:shadow-xl hover:-translate-y-2 hover:scale-[1.05] ${!isAvailable ? "card-coming-soon" : ""}`}
       onTouchStart={handleCardPress}
     >
-      <div style={{ paddingRight: "1.5rem" }}>
+      <div style={{ paddingRight: "1.75rem" }}>
         <span
           style={{
-            fontSize: "0.75rem",
+            fontSize: "0.8rem",
             fontWeight: 500,
             textTransform: "uppercase",
             letterSpacing: "0.05em",
-            opacity: 0.85,
+            opacity: 0.9,
             color: categoryTextColor,
           }}
         >
@@ -152,9 +152,9 @@ export default function ToolCard({ card, index }: ToolCardProps) {
         </span>
         <h3
           style={{
-            fontSize: "1.125rem",
+            fontSize: "1.25rem",
             fontWeight: 600,
-            marginTop: "0.25rem",
+            marginTop: "0.35rem",
             color: titleTextColor,
           }}
         >
@@ -162,9 +162,9 @@ export default function ToolCard({ card, index }: ToolCardProps) {
         </h3>
         <p
           style={{
-            fontSize: "0.875rem",
-            marginTop: "0.25rem",
-            opacity: 0.9,
+            fontSize: "0.9rem",
+            marginTop: "0.35rem",
+            opacity: 0.95,
             color: descriptionTextColor,
           }}
         >
@@ -175,15 +175,15 @@ export default function ToolCard({ card, index }: ToolCardProps) {
         style={{
           position: "absolute",
           top: "50%",
-          right: "1rem",
+          right: "1.25rem",
           transform: "translateY(-50%)",
-          opacity: 0.65,
+          opacity: 0.75,
           color: titleTextColor,
           transition: "transform 0.3s ease",
         }}
         className="group-hover:translate-x-1"
       >
-        <ChevronRight className="h-5 w-5" />
+        <ChevronRight className="h-6 w-6" />
       </div>
     </div>
   )

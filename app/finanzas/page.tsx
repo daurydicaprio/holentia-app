@@ -19,7 +19,7 @@ export default function FinanzasPage() {
 
       <div className="flex-1 flex flex-col items-center w-full max-w-6xl mx-auto">
         <div className="mt-6 mb-2">
-          <Logo section={section} size="md" />
+          <Logo section={section} size="lg" />
         </div>
 
         <SectionTabs />

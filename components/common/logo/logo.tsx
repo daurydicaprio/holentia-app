@@ -21,17 +21,18 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
     setMounted(true)
   }, [])
 
+  // Modificar los tamaños del logo
   const sizeClasses = {
     sm: "w-10 h-10 text-xs",
-    md: "w-20 h-20 text-base",
-    lg: "w-32 h-32 sm:w-36 sm:h-36 text-lg sm:text-2xl",
+    md: "w-24 h-24 text-base",
+    lg: "w-32 h-32 sm:w-40 sm:h-40 text-lg sm:text-2xl",
   }
 
   // Tamaños del aura
   const auraSizes = {
     sm: { width: "2.75rem", height: "2.75rem" },
-    md: { width: "5.5rem", height: "5.5rem" },
-    lg: { width: "9.5rem", height: "9.5rem", smWidth: "11.5rem", smHeight: "11.5rem" },
+    md: { width: "6.5rem", height: "6.5rem" },
+    lg: { width: "9.5rem", height: "9.5rem", smWidth: "12rem", smHeight: "12rem" },
   }
 
   // Definir la animación del aura para que haga un movimiento circular sutil
