@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import Logo from "@/components/common/logo/logo"
 import { ArrowRight } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 
@@ -48,31 +47,28 @@ export default function WelcomeModal() {
       >
         {/* Encabezado con diseño minimalista */}
         <div className="relative bg-gradient-to-r from-blue-500 to-green-500 p-6">
-          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <div className="bg-white dark:bg-gray-800 p-3 rounded-full shadow-lg">
-              <Logo size="sm" />
-            </div>
-          </div>
+          <h2 className="text-center text-2xl font-bold text-white mb-2">HOLENTIA</h2>
+          <div className="w-16 h-1 bg-white mx-auto"></div>
         </div>
 
         {/* Contenido */}
-        <div className="px-6 pt-10 pb-4 mt-8">
-          <h2 className="text-center text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">
-            Bienvenido a HOLENTIA
+        <div className="px-6 pt-6 pb-4">
+          <h2 className="text-center text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">
+            Bienvenido a tu bienestar integral
           </h2>
 
           <p className="text-center text-sm text-gray-600 dark:text-gray-300 mb-6">
-            Descubre herramientas que transformarán tu bienestar integral en tres áreas clave:
+            Descubre herramientas que transformarán tu bienestar en tres áreas clave:
           </p>
 
           <div className="grid grid-cols-3 gap-3 mb-6">
-            <div className="flex flex-col items-center p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800">
+            <div className="flex flex-col items-center p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 transition-transform hover:scale-105">
               <span className="text-blue-600 dark:text-blue-400 font-medium text-sm">Mente</span>
             </div>
-            <div className="flex flex-col items-center p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800">
+            <div className="flex flex-col items-center p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800 transition-transform hover:scale-105">
               <span className="text-amber-600 dark:text-amber-400 font-medium text-sm">Cuerpo</span>
             </div>
-            <div className="flex flex-col items-center p-3 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800">
+            <div className="flex flex-col items-center p-3 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800 transition-transform hover:scale-105">
               <span className="text-green-600 dark:text-green-400 font-medium text-sm">Finanzas</span>
             </div>
           </div>

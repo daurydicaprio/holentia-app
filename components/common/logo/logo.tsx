@@ -135,10 +135,7 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
           backgroundColor: logoBgColor,
           color: logoTextColor,
           border: `1px solid ${logoBorderColor}`,
-          transition: "transform 0.3s ease, box-shadow 0.3s ease",
-          boxShadow: isHovered
-            ? `0 10px 25px rgba(0, 0, 0, 0.15), 0 0 15px ${auraColor}`
-            : "0 10px 25px rgba(0, 0, 0, 0.06)",
+          transition: "transform 0.3s ease",
         }}
       >
         HOLENTIA

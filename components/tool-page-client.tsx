@@ -9,7 +9,7 @@ import Logo from "@/components/common/logo/logo"
 import { ArrowLeft, Coffee } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import MobileFab from "@/components/common/mobile-fab/mobile-fab"
+import ScrollToTop from "@/components/common/scroll-to-top/scroll-to-top"
 import SectionSwipeNavigation from "@/components/sections/section-swipe-navigation"
 import type { CardData } from "@/types"
 import { useTheme } from "next-themes"
@@ -95,7 +95,7 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
             <Link href={`/${section}`}>
               <Button
                 variant="outline"
-                className="flex items-center gap-2 text-sm h-12 px-5 transition-all duration-300 hover:scale-105"
+                className="flex items-center gap-2 text-sm h-10 px-4 transition-all duration-300 hover:scale-105"
                 style={{
                   borderColor: buttonBorderColor,
                   color: buttonTextColor,
@@ -122,7 +122,7 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
             <Link href="/apoyar">
               <Button
                 variant="outline"
-                className="flex items-center gap-2 text-sm h-12 px-5 transition-all duration-300 hover:scale-105"
+                className="flex items-center gap-2 text-sm h-10 px-4 transition-all duration-300 hover:scale-105"
                 style={{
                   borderColor: sectionColor,
                   color: sectionColor,
@@ -135,6 +135,9 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
                       : section === "cuerpo"
                         ? "rgba(255, 160, 0, 0.1)"
                         : "rgba(56, 142, 60, 0.1)"
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = "142,60,0.1)"
                 }}
                 onMouseOut={(e) => {
                   e.currentTarget.style.backgroundColor = "transparent"
@@ -185,7 +188,7 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
       </div>
 
       <Footer section={section} />
-      <MobileFab />
+      <ScrollToTop section={section} />
     </main>
   )
 }

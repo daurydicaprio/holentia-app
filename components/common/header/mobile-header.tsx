@@ -175,49 +175,37 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
                 <DropdownMenuItem asChild>
                   <Link
                     href="/"
-                    className="mobile-menu-item flex items-center gap-2"
+                    className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                     onClick={() => triggerHapticFeedback("light")}
                   >
-                    <span className="w-5 h-5 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
-                      🏠
-                    </span>
-                    <span>Inicio</span>
+                    Inicio
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link
                     href="/mente"
-                    className="mobile-menu-item flex items-center gap-2"
+                    className="px-4 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
                     onClick={() => triggerHapticFeedback("light")}
                   >
-                    <span className="w-5 h-5 flex items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
-                      🧠
-                    </span>
-                    <span>Mente</span>
+                    Mente
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link
                     href="/cuerpo"
-                    className="mobile-menu-item flex items-center gap-2"
+                    className="px-4 py-2 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
                     onClick={() => triggerHapticFeedback("light")}
                   >
-                    <span className="w-5 h-5 flex items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400">
-                      💪
-                    </span>
-                    <span>Cuerpo</span>
+                    Cuerpo
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link
                     href="/finanzas"
-                    className="mobile-menu-item flex items-center gap-2"
+                    className="px-4 py-2 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors"
                     onClick={() => triggerHapticFeedback("light")}
                   >
-                    <span className="w-5 h-5 flex items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
-                      💰
-                    </span>
-                    <span>Finanzas</span>
+                    Finanzas
                   </Link>
                 </DropdownMenuItem>
               </div>
@@ -225,26 +213,20 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
                 <DropdownMenuItem asChild>
                   <Link
                     href="/ayuda"
-                    className="mobile-menu-item flex items-center gap-2"
+                    className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                     onClick={() => triggerHapticFeedback("light")}
                   >
-                    <span className="w-5 h-5 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
-                      ❓
-                    </span>
-                    <span>Ayuda</span>
+                    Ayuda
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link
                     href="/apoyar"
-                    className="mobile-menu-item flex items-center gap-2"
+                    className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                     onClick={() => triggerHapticFeedback("light")}
                     style={{ color: donationTextColor }}
                   >
-                    <span className="w-5 h-5 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
-                      ☕
-                    </span>
-                    <span>Hacer donación</span>
+                    Hacer donación
                   </Link>
                 </DropdownMenuItem>
               </div>
@@ -254,14 +236,9 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
                     triggerHapticFeedback("medium")
                     setTheme(currentTheme === "dark" ? "light" : "dark")
                   }}
-                  className="mobile-menu-item flex items-center justify-between"
+                  className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center justify-between"
                 >
-                  <div className="flex items-center gap-2">
-                    <span className="w-5 h-5 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
-                      {currentTheme === "dark" ? "🌞" : "🌙"}
-                    </span>
-                    <span>Modo {currentTheme === "dark" ? "Claro" : "Oscuro"}</span>
-                  </div>
+                  <span>Modo {currentTheme === "dark" ? "Claro" : "Oscuro"}</span>
                   {currentTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
                 </DropdownMenuItem>
               </div>
