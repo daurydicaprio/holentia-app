@@ -166,53 +166,105 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
-              className="w-56 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
+              className="w-64 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg"
             >
-              <DropdownMenuItem asChild>
-                <Link href="/" className="mobile-menu-item" onClick={() => triggerHapticFeedback("light")}>
-                  Inicio
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/mente" className="mobile-menu-item" onClick={() => triggerHapticFeedback("light")}>
-                  Mente
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/cuerpo" className="mobile-menu-item" onClick={() => triggerHapticFeedback("light")}>
-                  Cuerpo
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/finanzas" className="mobile-menu-item" onClick={() => triggerHapticFeedback("light")}>
-                  Finanzas
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/ayuda" className="mobile-menu-item" onClick={() => triggerHapticFeedback("light")}>
-                  Ayuda
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link
-                  href="/apoyar"
-                  className="mobile-menu-item"
-                  onClick={() => triggerHapticFeedback("light")}
-                  style={{ color: donationTextColor }}
+              <div className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Navegación</h3>
+              </div>
+              <div className="py-1">
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/"
+                    className="mobile-menu-item flex items-center gap-2"
+                    onClick={() => triggerHapticFeedback("light")}
+                  >
+                    <span className="w-5 h-5 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
+                      🏠
+                    </span>
+                    <span>Inicio</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/mente"
+                    className="mobile-menu-item flex items-center gap-2"
+                    onClick={() => triggerHapticFeedback("light")}
+                  >
+                    <span className="w-5 h-5 flex items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                      🧠
+                    </span>
+                    <span>Mente</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/cuerpo"
+                    className="mobile-menu-item flex items-center gap-2"
+                    onClick={() => triggerHapticFeedback("light")}
+                  >
+                    <span className="w-5 h-5 flex items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400">
+                      💪
+                    </span>
+                    <span>Cuerpo</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/finanzas"
+                    className="mobile-menu-item flex items-center gap-2"
+                    onClick={() => triggerHapticFeedback("light")}
+                  >
+                    <span className="w-5 h-5 flex items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+                      💰
+                    </span>
+                    <span>Finanzas</span>
+                  </Link>
+                </DropdownMenuItem>
+              </div>
+              <div className="py-1 border-t border-gray-200 dark:border-gray-700">
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/ayuda"
+                    className="mobile-menu-item flex items-center gap-2"
+                    onClick={() => triggerHapticFeedback("light")}
+                  >
+                    <span className="w-5 h-5 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
+                      ❓
+                    </span>
+                    <span>Ayuda</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/apoyar"
+                    className="mobile-menu-item flex items-center gap-2"
+                    onClick={() => triggerHapticFeedback("light")}
+                    style={{ color: donationTextColor }}
+                  >
+                    <span className="w-5 h-5 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
+                      ☕
+                    </span>
+                    <span>Hacer donación</span>
+                  </Link>
+                </DropdownMenuItem>
+              </div>
+              <div className="py-1 border-t border-gray-200 dark:border-gray-700">
+                <DropdownMenuItem
+                  onClick={() => {
+                    triggerHapticFeedback("medium")
+                    setTheme(currentTheme === "dark" ? "light" : "dark")
+                  }}
+                  className="mobile-menu-item flex items-center justify-between"
                 >
-                  Hacer donación
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  triggerHapticFeedback("medium")
-                  setTheme(currentTheme === "dark" ? "light" : "dark")
-                }}
-                className="mobile-menu-item flex items-center justify-between"
-              >
-                <span>Modo {currentTheme === "dark" ? "Claro" : "Oscuro"}</span>
-                {currentTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              </DropdownMenuItem>
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
+                      {currentTheme === "dark" ? "🌞" : "🌙"}
+                    </span>
+                    <span>Modo {currentTheme === "dark" ? "Claro" : "Oscuro"}</span>
+                  </div>
+                  {currentTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                </DropdownMenuItem>
+              </div>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

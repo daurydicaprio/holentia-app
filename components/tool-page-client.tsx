@@ -51,19 +51,23 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
   let sectionColor = "#3B82F6" // Color azul por defecto
   let sectionColorDark = "#1D4ED8" // Color azul oscuro por defecto
   let headerLineColor = "#3B82F6" // Color azul por defecto
+  let headerBgColor = "rgba(59, 130, 246, 0.05)" // Color de fondo azul muy claro
 
   if (section === "mente") {
     sectionColor = "#1976d2" // Color mente
     sectionColorDark = "#0d47a1" // Color mente oscuro
     headerLineColor = "#1976d2" // Color mente
+    headerBgColor = "rgba(25, 118, 210, 0.05)" // Color de fondo mente muy claro
   } else if (section === "cuerpo") {
     sectionColor = "#ffa000" // Color cuerpo
     sectionColorDark = "#e65100" // Color cuerpo oscuro
     headerLineColor = "#ffa000" // Color cuerpo
+    headerBgColor = "rgba(255, 160, 0, 0.05)" // Color de fondo cuerpo muy claro
   } else if (section === "finanzas") {
     sectionColor = "#388e3c" // Color finanzas
     sectionColorDark = "#1b5e20" // Color finanzas oscuro
     headerLineColor = "#388e3c" // Color finanzas
+    headerBgColor = "rgba(56, 142, 60, 0.05)" // Color de fondo finanzas muy claro
   }
 
   // Usar el tema resuelto para evitar parpadeos
@@ -78,71 +82,73 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
       <Header />
       <SectionSwipeNavigation />
 
-      <div className="flex-1 p-4 sm:p-6 max-w-6xl mx-auto w-full">
-        {/* Logo y botones solo visibles en desktop */}
-        {!isMobile && (
-          <>
-            <div className="flex justify-center mb-6">
+      {/* Header especial para herramientas - más alto y con efectos */}
+      {!isMobile && (
+        <div
+          className="w-full py-6 mb-6"
+          style={{
+            backgroundColor: currentTheme === "dark" ? "rgba(30, 30, 30, 0.5)" : headerBgColor,
+            borderBottom: `1px solid ${currentTheme === "dark" ? "rgba(75, 85, 99, 0.2)" : "rgba(229, 231, 235, 0.8)"}`,
+          }}
+        >
+          <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
+            <Link href={`/${section}`}>
+              <Button
+                variant="outline"
+                className="flex items-center gap-2 text-sm h-12 px-5 transition-all duration-300 hover:scale-105"
+                style={{
+                  borderColor: buttonBorderColor,
+                  color: buttonTextColor,
+                  backgroundColor: "transparent",
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.borderColor = sectionColor
+                  e.currentTarget.style.color = sectionColor
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.borderColor = buttonBorderColor
+                  e.currentTarget.style.color = buttonTextColor
+                }}
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Volver a {sectionTitle}
+              </Button>
+            </Link>
+
+            <div className="transform transition-transform hover:scale-110 duration-300">
               <Logo section={section} size="md" />
             </div>
 
-            <div className="flex justify-between items-center mt-4 mb-6 px-4">
-              <Link href={`/${section}`}>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center gap-2 text-sm"
-                  style={{
-                    borderColor: buttonBorderColor,
-                    color: buttonTextColor,
-                    backgroundColor: "transparent",
-                    transition: "all 0.2s ease",
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.borderColor = sectionColor
-                    e.currentTarget.style.color = sectionColor
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.borderColor = buttonBorderColor
-                    e.currentTarget.style.color = buttonTextColor
-                  }}
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                  Volver a {sectionTitle}
-                </Button>
-              </Link>
+            <Link href="/apoyar">
+              <Button
+                variant="outline"
+                className="flex items-center gap-2 text-sm h-12 px-5 transition-all duration-300 hover:scale-105"
+                style={{
+                  borderColor: sectionColor,
+                  color: sectionColor,
+                  backgroundColor: "transparent",
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor =
+                    section === "mente"
+                      ? "rgba(25, 118, 210, 0.1)"
+                      : section === "cuerpo"
+                        ? "rgba(255, 160, 0, 0.1)"
+                        : "rgba(56, 142, 60, 0.1)"
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = "transparent"
+                }}
+              >
+                <Coffee className="h-4 w-4" />
+                Hacer donación
+              </Button>
+            </Link>
+          </div>
+        </div>
+      )}
 
-              <Link href="/apoyar">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center gap-2 text-sm"
-                  style={{
-                    borderColor: sectionColor,
-                    color: sectionColor,
-                    backgroundColor: "transparent",
-                    transition: "all 0.2s ease",
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.backgroundColor =
-                      section === "mente"
-                        ? "rgba(25, 118, 210, 0.1)"
-                        : section === "cuerpo"
-                          ? "rgba(255, 160, 0, 0.1)"
-                          : "rgba(56, 142, 60, 0.1)"
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.backgroundColor = "transparent"
-                  }}
-                >
-                  <Coffee className="h-4 w-4" />
-                  Hacer donación
-                </Button>
-              </Link>
-            </div>
-          </>
-        )}
-
+      <div className="flex-1 p-4 sm:p-6 max-w-6xl mx-auto w-full">
         <div className={`mb-8 text-center ${isMobile ? "mt-4" : ""}`}>
           <h1
             className="text-2xl sm:text-3xl font-bold"

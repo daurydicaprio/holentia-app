@@ -13,6 +13,7 @@ interface LogoProps {
 
 export default function Logo({ section = null, size = "lg" }: LogoProps) {
   const [mounted, setMounted] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
   const { triggerHapticFeedback } = useHapticFeedback()
   const { resolvedTheme } = useTheme()
 
@@ -46,8 +47,28 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
     },
   }
 
+  // Animación para el hover
+  const hoverAnimation = isHovered
+    ? {
+        scale: 1.05,
+        rotate: [0, 2, 0, -2, 0],
+        transition: {
+          duration: 0.5,
+          ease: "easeInOut",
+        },
+      }
+    : {}
+
   const handleLogoClick = () => {
     triggerHapticFeedback("medium")
+  }
+
+  const handleMouseEnter = () => {
+    setIsHovered(true)
+  }
+
+  const handleMouseLeave = () => {
+    setIsHovered(false)
   }
 
   // Determinar el color del aura basado en la sección
@@ -86,7 +107,11 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
   }
 
   const LogoContent = () => (
-    <div className="relative flex items-center justify-center">
+    <div
+      className="relative flex items-center justify-center"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       {section && (
         <motion.div
           animate={auraAnimation}
@@ -96,22 +121,28 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
             width: auraWidth,
             height: auraHeight,
             borderRadius: "9999px",
-            opacity: 0.3,
-            filter: "blur(8px)",
+            opacity: isHovered ? 0.5 : 0.3,
+            filter: `blur(${isHovered ? "12px" : "8px"})`,
             backgroundColor: auraColor,
+            transition: "opacity 0.3s ease, filter 0.3s ease",
           }}
         />
       )}
-      <div
+      <motion.div
+        animate={hoverAnimation}
         className={`${sizeClasses[size]} backdrop-blur-md rounded-full flex items-center justify-center font-bold shadow-lg z-10 relative`}
         style={{
           backgroundColor: logoBgColor,
           color: logoTextColor,
           border: `1px solid ${logoBorderColor}`,
+          transition: "transform 0.3s ease, box-shadow 0.3s ease",
+          boxShadow: isHovered
+            ? `0 10px 25px rgba(0, 0, 0, 0.15), 0 0 15px ${auraColor}`
+            : "0 10px 25px rgba(0, 0, 0, 0.06)",
         }}
       >
         HOLENTIA
-      </div>
+      </motion.div>
     </div>
   )
 

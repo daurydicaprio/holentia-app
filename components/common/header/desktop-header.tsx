@@ -53,7 +53,7 @@ export default function DesktopHeader() {
   if (!mounted) {
     // Renderizar un placeholder mientras se monta para evitar parpadeos
     return (
-      <div className="absolute top-4 right-4 z-50">
+      <div className="absolute top-4 left-4 z-50">
         <div className="h-12 w-12 rounded-full bg-gray-200 dark:bg-gray-800"></div>
       </div>
     )
@@ -62,7 +62,7 @@ export default function DesktopHeader() {
   return (
     <>
       <div className="menu-backdrop"></div>
-      <div className="absolute top-4 right-4 z-50">
+      <div className="absolute top-4 left-4 z-50">
         <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
           <DropdownMenuTrigger asChild>
             <Button
@@ -83,7 +83,7 @@ export default function DesktopHeader() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            align="end"
+            align="start"
             className="w-56 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
           >
             <DropdownMenuItem asChild>
