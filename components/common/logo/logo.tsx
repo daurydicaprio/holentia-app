@@ -23,8 +23,8 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
 
   const sizeClasses = {
     sm: "w-14 h-14 text-xs",
-    md: "w-32 h-32 text-lg",
-    lg: "w-36 h-36 sm:w-44 sm:h-44 text-lg sm:text-2xl",
+    md: "w-24 h-24 text-lg",
+    lg: "w-32 h-32 sm:w-36 sm:h-36 text-lg sm:text-2xl",
   }
 
   // Tamaños del aura
@@ -130,12 +130,13 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
       )}
       <motion.div
         animate={hoverAnimation}
-        className={`${sizeClasses[size]} backdrop-blur-md rounded-full flex items-center justify-center font-bold shadow-lg z-10 relative`}
+        className={`${sizeClasses[size]} backdrop-blur-md rounded-full flex items-center justify-center font-bold z-10 relative`}
         style={{
           backgroundColor: logoBgColor,
           color: logoTextColor,
           border: `1px solid ${logoBorderColor}`,
           transition: "transform 0.3s ease",
+          boxShadow: currentTheme === "dark" ? "0 4px 12px rgba(0, 0, 0, 0.15)" : "0 4px 12px rgba(0, 0, 0, 0.08)",
         }}
       >
         HOLENTIA

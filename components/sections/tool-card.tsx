@@ -25,7 +25,7 @@ export default function ToolCard({ card, index }: ToolCardProps) {
   // Usar el tema resuelto para evitar parpadeos
   const currentTheme = mounted ? resolvedTheme : "light"
 
-  // Determinar los colores basados en la categoría
+  // Determinar los colores basados en la categoría y disponibilidad
   let bgColor = currentTheme === "dark" ? "rgba(30, 30, 30, 0.4)" : "rgba(255, 255, 255, 0.4)"
   let borderColor = currentTheme === "dark" ? "#333333" : "#e5e7eb"
   let categoryTextColor = currentTheme === "dark" ? "#a0a0a0" : "#4b5563"
@@ -33,21 +33,40 @@ export default function ToolCard({ card, index }: ToolCardProps) {
   let descriptionTextColor = currentTheme === "dark" ? "#a0a0a0" : "#4b5563"
 
   if (category === "mente") {
-    bgColor = currentTheme === "dark" ? "rgba(25, 118, 210, 0.2)" : "rgba(25, 118, 210, 0.4)"
-    borderColor = currentTheme === "dark" ? "rgba(144, 202, 249, 0.3)" : "rgba(144, 202, 249, 0.5)"
-    categoryTextColor = currentTheme === "dark" ? "#90caf9" : "#e3f2fd"
+    // Colores más vividos para tarjetas activas
+    if (isAvailable) {
+      bgColor = currentTheme === "dark" ? "rgba(25, 118, 210, 0.35)" : "rgba(25, 118, 210, 0.65)"
+      borderColor = currentTheme === "dark" ? "rgba(144, 202, 249, 0.5)" : "rgba(144, 202, 249, 0.8)"
+      categoryTextColor = currentTheme === "dark" ? "#90caf9" : "#e3f2fd"
+    } else {
+      bgColor = currentTheme === "dark" ? "rgba(25, 118, 210, 0.15)" : "rgba(25, 118, 210, 0.3)"
+      borderColor = currentTheme === "dark" ? "rgba(144, 202, 249, 0.2)" : "rgba(144, 202, 249, 0.4)"
+      categoryTextColor = currentTheme === "dark" ? "rgba(144, 202, 249, 0.7)" : "rgba(227, 242, 253, 0.7)"
+    }
     titleTextColor = currentTheme === "dark" ? "#e0e0e0" : "#ffffff"
     descriptionTextColor = currentTheme === "dark" ? "#e0e0e0" : "#ffffff"
   } else if (category === "cuerpo") {
-    bgColor = currentTheme === "dark" ? "rgba(255, 160, 0, 0.2)" : "rgba(255, 160, 0, 0.4)"
-    borderColor = currentTheme === "dark" ? "rgba(255, 224, 130, 0.3)" : "rgba(255, 224, 130, 0.6)"
-    categoryTextColor = currentTheme === "dark" ? "#ffe082" : "#795548"
+    if (isAvailable) {
+      bgColor = currentTheme === "dark" ? "rgba(255, 160, 0, 0.35)" : "rgba(255, 160, 0, 0.65)"
+      borderColor = currentTheme === "dark" ? "rgba(255, 224, 130, 0.5)" : "rgba(255, 224, 130, 0.8)"
+      categoryTextColor = currentTheme === "dark" ? "#ffe082" : "#795548"
+    } else {
+      bgColor = currentTheme === "dark" ? "rgba(255, 160, 0, 0.15)" : "rgba(255, 160, 0, 0.3)"
+      borderColor = currentTheme === "dark" ? "rgba(255, 224, 130, 0.2)" : "rgba(255, 224, 130, 0.4)"
+      categoryTextColor = currentTheme === "dark" ? "rgba(255, 224, 130, 0.7)" : "rgba(121, 85, 72, 0.7)"
+    }
     titleTextColor = currentTheme === "dark" ? "#e0e0e0" : "#3e2723"
     descriptionTextColor = currentTheme === "dark" ? "#e0e0e0" : "#3e2723"
   } else if (category === "finanzas") {
-    bgColor = currentTheme === "dark" ? "rgba(56, 142, 60, 0.2)" : "rgba(56, 142, 60, 0.4)"
-    borderColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.3)" : "rgba(165, 214, 167, 0.6)"
-    categoryTextColor = currentTheme === "dark" ? "#a5d6a7" : "#e8f5e9"
+    if (isAvailable) {
+      bgColor = currentTheme === "dark" ? "rgba(56, 142, 60, 0.35)" : "rgba(56, 142, 60, 0.65)"
+      borderColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.5)" : "rgba(165, 214, 167, 0.8)"
+      categoryTextColor = currentTheme === "dark" ? "#a5d6a7" : "#e8f5e9"
+    } else {
+      bgColor = currentTheme === "dark" ? "rgba(56, 142, 60, 0.15)" : "rgba(56, 142, 60, 0.3)"
+      borderColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.2)" : "rgba(165, 214, 167, 0.4)"
+      categoryTextColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.7)" : "rgba(232, 245, 233, 0.7)"
+    }
     titleTextColor = currentTheme === "dark" ? "#e0e0e0" : "#ffffff"
     descriptionTextColor = currentTheme === "dark" ? "#e0e0e0" : "#ffffff"
   }
@@ -72,16 +91,39 @@ export default function ToolCard({ card, index }: ToolCardProps) {
         padding: "1.5rem",
         borderRadius: "14px",
         border: `1px solid ${borderColor}`,
-        backdropFilter: "blur(14px)",
-        backgroundColor: bgColor,
-        boxShadow: "0 10px 25px rgba(0, 0, 0, 0.06)",
+        backdropFilter: "blur(20px)",
+        backgroundColor: isAvailable
+          ? `${bgColor.replace(/[^,]+(?=\))/, "0.7")}`
+          : `${bgColor.replace(/[^,]+(?=\))/, "0.5")}`,
+        boxShadow: isAvailable ? "0 10px 25px rgba(0, 0, 0, 0.08)" : "0 5px 15px rgba(0, 0, 0, 0.04)",
         height: "165px",
-        transition: "all 0.3s ease",
-        opacity: isAvailable ? 1 : 0.5,
+        transition: "all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+        opacity: isAvailable ? 1 : 0.6,
         animationDelay,
       }}
-      className={`animate-fadeIn hover:shadow-lg hover:-translate-y-1 hover:scale-[1.02] ${!isAvailable ? "card-coming-soon" : ""}`}
+      className={`animate-fadeIn hover:shadow-xl hover:-translate-y-2 hover:scale-[1.03] ${!isAvailable ? "card-coming-soon" : ""}`}
       onTouchStart={handleCardPress}
+      onMouseMove={(e) => {
+        if (isAvailable) {
+          const card = e.currentTarget
+          const rect = card.getBoundingClientRect()
+          const x = e.clientX - rect.left
+          const y = e.clientY - rect.top
+
+          const centerX = rect.width / 2
+          const centerY = rect.height / 2
+
+          const rotateX = (y - centerY) / 20
+          const rotateY = (centerX - x) / 20
+
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (isAvailable) {
+          e.currentTarget.style.transform = "perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)"
+        }
+      }}
     >
       <div style={{ paddingRight: "1.5rem" }}>
         <span

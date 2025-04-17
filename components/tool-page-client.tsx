@@ -91,62 +91,61 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
             borderBottom: `1px solid ${currentTheme === "dark" ? "rgba(75, 85, 99, 0.2)" : "rgba(229, 231, 235, 0.8)"}`,
           }}
         >
-          <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
-            <Link href={`/${section}`}>
-              <Button
-                variant="outline"
-                className="flex items-center gap-2 text-sm h-10 px-4 transition-all duration-300 hover:scale-105"
-                style={{
-                  borderColor: buttonBorderColor,
-                  color: buttonTextColor,
-                  backgroundColor: "transparent",
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.borderColor = sectionColor
-                  e.currentTarget.style.color = sectionColor
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.borderColor = buttonBorderColor
-                  e.currentTarget.style.color = buttonTextColor
-                }}
-              >
-                <ArrowLeft className="h-4 w-4" />
-                Volver a {sectionTitle}
-              </Button>
-            </Link>
-
-            <div className="transform transition-transform hover:scale-110 duration-300">
+          <div className="max-w-6xl mx-auto px-6 flex flex-col items-center">
+            <div className="transform transition-transform hover:scale-110 duration-300 mb-4">
               <Logo section={section} size="md" />
             </div>
 
-            <Link href="/apoyar">
-              <Button
-                variant="outline"
-                className="flex items-center gap-2 text-sm h-10 px-4 transition-all duration-300 hover:scale-105"
-                style={{
-                  borderColor: sectionColor,
-                  color: sectionColor,
-                  backgroundColor: "transparent",
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor =
-                    section === "mente"
-                      ? "rgba(25, 118, 210, 0.1)"
-                      : section === "cuerpo"
-                        ? "rgba(255, 160, 0, 0.1)"
-                        : "rgba(56, 142, 60, 0.1)"
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = "142,60,0.1)"
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = "transparent"
-                }}
-              >
-                <Coffee className="h-4 w-4" />
-                Hacer donación
-              </Button>
-            </Link>
+            <div className="flex justify-between w-full mt-2 px-8">
+              <Link href={`/${section}`}>
+                <Button
+                  variant="outline"
+                  className="flex items-center gap-2 text-xs h-8 px-3 transition-all duration-300 hover:scale-105"
+                  style={{
+                    borderColor: buttonBorderColor,
+                    color: buttonTextColor,
+                    backgroundColor: "transparent",
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.borderColor = sectionColor
+                    e.currentTarget.style.color = sectionColor
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.borderColor = buttonBorderColor
+                    e.currentTarget.style.color = buttonTextColor
+                  }}
+                >
+                  <ArrowLeft className="h-3 w-3" />
+                  Volver a {sectionTitle}
+                </Button>
+              </Link>
+
+              <Link href="/apoyar">
+                <Button
+                  variant="outline"
+                  className="flex items-center gap-2 text-xs h-8 px-3 transition-all duration-300 hover:scale-105"
+                  style={{
+                    borderColor: sectionColor,
+                    color: sectionColor,
+                    backgroundColor: "transparent",
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.backgroundColor =
+                      section === "mente"
+                        ? "rgba(25, 118, 210, 0.1)"
+                        : section === "cuerpo"
+                          ? "rgba(255, 160, 0, 0.1)"
+                          : "rgba(56, 142, 60, 0.1)"
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.backgroundColor = "transparent"
+                  }}
+                >
+                  <Coffee className="h-3 w-3" />
+                  Hacer donación
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       )}

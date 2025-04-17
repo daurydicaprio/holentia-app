@@ -116,14 +116,13 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
           transition: "background-color 0.3s ease, border-color 0.3s ease",
         }}
       >
-        <div className="flex items-center justify-between h-14 px-4">
+        <div className="flex items-center h-14 px-4 justify-between">
           {isToolPage ? (
             <Button
               variant="ghost"
               size="icon"
               onClick={handleBackClick}
               style={{
-                marginRight: "0.5rem",
                 backgroundColor: "transparent",
               }}
               className="hover:bg-white/30 dark:hover:bg-gray-700/30"

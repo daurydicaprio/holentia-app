@@ -62,7 +62,7 @@ export default function DesktopHeader() {
   return (
     <>
       <div className="menu-backdrop"></div>
-      <div className="absolute top-4 right-16 z-50">
+      <div className="absolute top-4 right-4 z-50">
         <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
           <DropdownMenuTrigger asChild>
             <Button
