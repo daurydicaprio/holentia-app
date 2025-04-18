@@ -1,89 +1,153 @@
 "use client"
 
-import { DollarSign, Calendar, Percent, TrendingUp } from "lucide-react"
+import { DollarSign, Calendar, Percent, TrendingUp, AlertCircle } from "lucide-react"
 import type { SummaryData } from "@/hooks/use-compound-interest-calculator"
 import { useMediaQuery } from "@/hooks/use-media-query"
 
 interface CompoundInterestResultProps {
   summary: SummaryData
   formatCurrency: (value: number) => string
+  inflation: number
 }
 
-export function CompoundInterestResult({ summary, formatCurrency }: CompoundInterestResultProps) {
+export function CompoundInterestResult({ summary, formatCurrency, inflation }: CompoundInterestResultProps) {
   const isMobile = useMediaQuery("(max-width: 768px)")
 
+  // Calcular el balance sin inflación (balance bruto)
+  const grossBalance = summary.balanceNet + summary.inflationEffect
+
+  // Calcular correctamente cuánto valdría el dinero sin invertir después de la inflación
+  const totalInvested = summary.initialDeposit + summary.totalContributions
+
+  // Obtener el número de años de la inversión
+  const years = summary.doubleTime !== "--" ? Number.parseInt(summary.doubleTime) : 5
+
+  const nonInvestedValue = inflation > 0 ? totalInvested / Math.pow(1 + inflation / 100, years) : totalInvested
+
   return (
-    <div
-      className="rounded-xl p-6 shadow-lg"
-      style={{
-        background: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)",
-        color: "#ffffff",
-      }}
-    >
-      <h3 className="text-lg font-medium mb-2 flex items-center gap-2" style={{ color: "#ffffff" }}>
-        <TrendingUp size={20} />
-        <span>Resultado de la Inversión</span>
-      </h3>
+    <div className="space-y-4">
+      <div
+        className="rounded-xl p-6 shadow-lg"
+        style={{
+          background: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)",
+          color: "#ffffff",
+        }}
+      >
+        <h3 className="text-lg font-medium mb-2 flex items-center gap-2" style={{ color: "#ffffff" }}>
+          <TrendingUp size={20} />
+          <span>Resultado de la Inversión</span>
+        </h3>
 
-      <div className="text-3xl font-bold mb-4 flex items-center" style={{ color: "#ffffff" }}>
-        <span className="text-xl mr-2 opacity-90" style={{ color: "#ffffff" }}>
-          Balance final:
-        </span>
-        {formatCurrency(summary.balanceNet)}
-      </div>
-
-      <div className="space-y-4">
-        <div className="text-sm space-y-1" style={{ color: "#ffffff" }}>
-          <p className="leading-relaxed">
-            Con un depósito inicial de <strong>{formatCurrency(summary.initialDeposit)}</strong> y aportaciones totales
-            de <strong>{formatCurrency(summary.totalContributions)}</strong>, tu inversión crecerá hasta{" "}
-            <strong>{formatCurrency(summary.balanceNet)}</strong> con un rendimiento total de{" "}
-            <strong>{summary.totalReturn}</strong>.
-          </p>
+        <div className="text-3xl font-bold mb-4 flex items-center" style={{ color: "#ffffff" }}>
+          <span className="text-xl mr-2 opacity-90" style={{ color: "#ffffff" }}>
+            Balance final:
+          </span>
+          {formatCurrency(summary.balanceNet)}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-white/30">
-          <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm">
-            <div className="flex items-center gap-2 text-xs mb-1" style={{ color: "#ffffff" }}>
-              <DollarSign size={14} />
-              <span>Ganancia neta</span>
-            </div>
-            <div className="font-semibold" style={{ color: "#ffffff" }}>
-              {formatCurrency(summary.netGain)}
-            </div>
+        <div className="space-y-4">
+          <div className="text-sm space-y-1" style={{ color: "#ffffff" }}>
+            <p className="leading-relaxed">
+              Con un depósito inicial de <strong>{formatCurrency(summary.initialDeposit)}</strong> y aportaciones
+              totales de <strong>{formatCurrency(summary.totalContributions)}</strong>, tu inversión crecerá hasta{" "}
+              <strong>{formatCurrency(summary.balanceNet)}</strong> con un rendimiento total de{" "}
+              <strong>{summary.totalReturn}</strong>.
+              {inflation > 0 && (
+                <>
+                  {" "}
+                  Este resultado ya considera una inflación del <strong>{inflation.toFixed(2)}%</strong> anual.
+                </>
+              )}
+            </p>
           </div>
 
-          <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm">
-            <div className="flex items-center gap-2 text-xs mb-1" style={{ color: "#ffffff" }}>
-              <Percent size={14} />
-              <span>Retorno anualizado</span>
-            </div>
-            <div className="font-semibold" style={{ color: "#ffffff" }}>
-              {summary.annualizedReturn}
-            </div>
-          </div>
-
-          {isMobile ? (
-            <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm group hover:bg-red-500/30 transition-colors">
-              <div className="flex items-center gap-2 text-xs mb-1" style={{ color: "#ffffff" }}>
-                <Percent size={14} />
-                <span>Inflación</span>
-              </div>
-              <div className="font-semibold" style={{ color: "#ffffff" }}>
-                {formatCurrency(summary.inflationEffect)}
-              </div>
-            </div>
-          ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-white/30">
             <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm">
               <div className="flex items-center gap-2 text-xs mb-1" style={{ color: "#ffffff" }}>
-                <Calendar size={14} />
-                <span>Tiempo en duplicar</span>
+                <DollarSign size={14} />
+                <span>Ganancia neta</span>
               </div>
               <div className="font-semibold" style={{ color: "#ffffff" }}>
-                {summary.doubleTime}
+                {formatCurrency(summary.netGain)}
               </div>
             </div>
-          )}
+
+            <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm">
+              <div className="flex items-center gap-2 text-xs mb-1" style={{ color: "#ffffff" }}>
+                <DollarSign size={14} />
+                <span>Aportes totales</span>
+              </div>
+              <div className="font-semibold" style={{ color: "#ffffff" }}>
+                {formatCurrency(summary.totalContributions)}
+              </div>
+            </div>
+
+            {isMobile ? (
+              <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm group hover:bg-red-500/30 transition-colors">
+                <div className="flex items-center gap-2 text-xs mb-1" style={{ color: "#ffffff" }}>
+                  <Percent size={14} />
+                  <span>Inflación</span>
+                </div>
+                <div className="font-semibold" style={{ color: "#ffffff" }}>
+                  {formatCurrency(summary.inflationEffect)}
+                </div>
+              </div>
+            ) : (
+              <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm">
+                <div className="flex items-center gap-2 text-xs mb-1" style={{ color: "#ffffff" }}>
+                  <Calendar size={14} />
+                  <span>Tiempo en duplicar</span>
+                </div>
+                <div className="font-semibold" style={{ color: "#ffffff" }}>
+                  {summary.doubleTime}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Nueva sección sobre el impacto de la inflación y no invertir */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700 shadow-sm">
+        <div className="flex items-start gap-3">
+          <div className="mt-1 text-amber-500 dark:text-amber-400 flex-shrink-0">
+            <AlertCircle size={20} />
+          </div>
+          <div className="w-full">
+            <h4 className="text-base font-medium text-gray-800 dark:text-gray-200 mb-2">
+              El impacto de invertir vs. no invertir
+            </h4>
+            <div className="space-y-3 text-sm text-gray-600 dark:text-gray-300">
+              <p className="break-words">
+                Si no invirtieras tu dinero, el valor real de tus <strong>{formatCurrency(totalInvested)}</strong> se
+                reduciría a aproximadamente <strong>{formatCurrency(nonInvestedValue)}</strong> debido a la inflación.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
+                <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg">
+                  <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                    Sin inflación, tu inversión valdría:
+                  </div>
+                  <div className="text-lg font-bold text-[#388e3c]">{formatCurrency(grossBalance)}</div>
+                </div>
+
+                <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg">
+                  <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                    Con inflación, tu inversión valdría:
+                  </div>
+                  <div className="text-lg font-bold text-[#388e3c]">{formatCurrency(summary.balanceNet)}</div>
+                  <div className="text-xs text-red-500 dark:text-red-400 mt-1">
+                    Pérdida por inflación: {formatCurrency(summary.inflationEffect)}
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-xs italic mt-2">
+                * Los cálculos consideran una inflación anual del {inflation.toFixed(2)}% durante el período de
+                inversión.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

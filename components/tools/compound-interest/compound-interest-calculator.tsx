@@ -3,11 +3,11 @@
 import { useState } from "react"
 import { useCompoundInterestCalculator } from "@/hooks/use-compound-interest-calculator"
 import { CalculatorInputs } from "./calculator-inputs"
-import { CalculatorSummary } from "./calculator-summary"
 import { CalculatorCharts } from "./calculator-charts"
 import { AmortizationTable } from "./amortization-table"
 import { MobileTabsNavigation } from "./mobile-tabs-navigation"
 import { useMediaQuery } from "@/hooks/use-media-query"
+import { CompoundInterestResult } from "./compound-interest-result"
 
 export function CompoundInterestCalculator() {
   const {
@@ -63,7 +63,7 @@ export function CompoundInterestCalculator() {
                 setInflation={setInflation}
               />
               <div className="mt-6">
-                <CalculatorSummary summary={summary} formatCurrency={formatCurrency} showDetailedCards={false} />
+                <CompoundInterestResult summary={summary} formatCurrency={formatCurrency} inflation={inflation} />
               </div>
 
               {/* Pestañas móviles dentro del recuadro */}
@@ -112,7 +112,7 @@ export function CompoundInterestCalculator() {
             />
           </div>
           <div>
-            <CalculatorSummary summary={summary} formatCurrency={formatCurrency} />
+            <CompoundInterestResult summary={summary} formatCurrency={formatCurrency} inflation={inflation} />
           </div>
         </div>
 
