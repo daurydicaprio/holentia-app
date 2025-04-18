@@ -1,10 +1,12 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import type { ChartData, PieChartData } from "@/hooks/use-compound-interest-calculator"
 import { useTheme } from "next-themes"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import Chart from "chart.js/auto"
+import { motion } from "framer-motion"
+import { Info } from "lucide-react"
 
 interface CalculatorChartsProps {
   lineChartData: ChartData
@@ -20,19 +22,25 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
   const pieChartInstance = useRef<Chart | null>(null)
   const { resolvedTheme } = useTheme()
   const isMobile = useMediaQuery("(max-width: 768px)")
+  const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
 
-  // Colores para los gráficos
+  // Colores para los gráficos - Mejorados para mejor contraste
   const chartColors = {
-    line: "#388e3c",
-    deposit: "#2e7d32",
-    contribution: "#1b5e20",
-    interest: "#81c784",
-    grid: resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)",
+    line: resolvedTheme === "dark" ? "#4caf50" : "#2e7d32", // Más brillante en modo oscuro
+    deposit: resolvedTheme === "dark" ? "#388e3c" : "#2e7d32",
+    contribution: resolvedTheme === "dark" ? "#1b5e20" : "#1b5e20",
+    interest: resolvedTheme === "dark" ? "#a5d6a7" : "#81c784",
+    grid: resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.1)", // Más visible en modo oscuro
     text: resolvedTheme === "dark" ? "#e0e0e0" : "#1E3A2E",
+    tooltipBg: resolvedTheme === "dark" ? "rgba(30, 30, 30, 0.9)" : "rgba(255, 255, 255, 0.9)",
+    tooltipBorder: resolvedTheme === "dark" ? "#4caf50" : "#2e7d32",
   }
 
   // Colores más distinguibles para el gráfico de donut
-  const donutColors = ["#2e7d32", "#1b5e20", "#81c784", "#c8e6c9"]
+  const donutColors =
+    resolvedTheme === "dark"
+      ? ["#388e3c", "#1b5e20", "#a5d6a7", "#e8f5e9"]
+      : ["#2e7d32", "#1b5e20", "#81c784", "#c8e6c9"]
 
   // Crear/actualizar gráfico de línea
   useEffect(() => {
@@ -49,6 +57,19 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
     const ctx = lineChartRef.current.getContext("2d")
     if (!ctx) return
 
+    // Registrar plugin personalizado para animación
+    Chart.register({
+      id: "customAnimation",
+      beforeDraw: (chart) => {
+        const ctx = chart.ctx
+        ctx.save()
+        ctx.globalCompositeOperation = "destination-over"
+        ctx.fillStyle = resolvedTheme === "dark" ? "rgba(30, 30, 30, 0.1)" : "rgba(255, 255, 255, 0.1)"
+        ctx.fillRect(0, 0, chart.width, chart.height)
+        ctx.restore()
+      },
+    })
+
     lineChartInstance.current = new Chart(ctx, {
       type: "bar",
       data: {
@@ -60,14 +81,21 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             data: lineChartData.lineData,
             borderColor: chartColors.line,
             backgroundColor: "transparent",
-            borderWidth: 2,
+            borderWidth: 3,
             fill: false,
-            tension: 0.1,
-            pointRadius: 0,
-            pointHoverRadius: 4,
+            tension: 0.2,
+            pointRadius: 4,
+            pointHoverRadius: 6,
             pointBackgroundColor: chartColors.line,
+            pointBorderColor: resolvedTheme === "dark" ? "#121212" : "#ffffff",
+            pointBorderWidth: 2,
             order: 0,
             yAxisID: "y",
+            // Añadir sombra a la línea para mejor visibilidad
+            borderShadowColor: resolvedTheme === "dark" ? "rgba(76, 175, 80, 0.5)" : "rgba(46, 125, 50, 0.3)",
+            shadowOffsetX: 0,
+            shadowOffsetY: 4,
+            shadowBlur: 6,
           },
           {
             type: "bar",
@@ -77,6 +105,8 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             stack: "stack1",
             order: 1,
             yAxisID: "y",
+            borderRadius: 4,
+            hoverBackgroundColor: resolvedTheme === "dark" ? "#4caf50" : "#388e3c",
           },
           {
             type: "bar",
@@ -86,64 +116,112 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             stack: "stack1",
             order: 2,
             yAxisID: "y",
+            borderRadius: 4,
+            hoverBackgroundColor: resolvedTheme === "dark" ? "#c8e6c9" : "#a5d6a7",
           },
         ],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        animation: {
+          duration: 2000,
+          easing: "easeOutQuart",
+        },
         scales: {
           x: {
             stacked: true,
-            grid: { display: false },
-            ticks: {
-              font: { weight: "bold" },
-              color: chartColors.text,
+            grid: {
+              display: false,
+              drawBorder: true,
+              color: chartColors.grid,
             },
-            title: { display: false },
+            ticks: {
+              font: { weight: "bold", size: 11 },
+              color: chartColors.text,
+              maxRotation: 45,
+              minRotation: 45,
+            },
+            title: {
+              display: true,
+              text: "Año",
+              color: chartColors.text,
+              font: { weight: "bold", size: 12 },
+              padding: { top: 10 },
+            },
           },
           y: {
             stacked: true,
             grid: {
               display: true,
               color: chartColors.grid,
+              drawBorder: true,
             },
             ticks: {
-              font: { weight: "bold" },
+              font: { weight: "bold", size: 11 },
               color: chartColors.text,
               callback: (value) => formatCurrency(value as number).replace(".00", ""),
             },
+            title: {
+              display: true,
+              text: "Valor en pesos",
+              color: chartColors.text,
+              font: { weight: "bold", size: 12 },
+              padding: { bottom: 10 },
+            },
           },
         },
-        interaction: { mode: "index", intersect: false },
+        interaction: {
+          mode: "index",
+          intersect: false,
+        },
         plugins: {
           tooltip: {
+            backgroundColor: chartColors.tooltipBg,
+            titleColor: chartColors.text,
+            bodyColor: chartColors.text,
+            borderColor: chartColors.tooltipBorder,
+            borderWidth: 1,
+            padding: 12,
+            cornerRadius: 8,
+            displayColors: true,
+            boxWidth: 10,
+            boxHeight: 10,
+            boxPadding: 3,
+            usePointStyle: true,
             callbacks: {
-              label: (c) => `${c.dataset.label || ""}: ${formatCurrency(c.parsed.y)}`,
+              title: (items) => `Año: ${items[0].label}`,
+              label: (c) => {
+                const label = c.dataset.label || ""
+                const value = formatCurrency(c.parsed.y)
+                return `${label}: ${value}`
+              },
+              footer: (items) => {
+                const item = items[0]
+                const index = item.dataIndex
+                const capitalValue = lineChartData.capitalData[index]
+                const interestValue = lineChartData.interestData[index]
+                const totalValue = capitalValue + interestValue
+                const lineValue = lineChartData.lineData[index]
+
+                return [
+                  `Total acumulado: ${formatCurrency(totalValue)}`,
+                  `Ajustado por inflación: ${formatCurrency(lineValue)}`,
+                ]
+              },
             },
           },
           legend: {
             display: true,
             position: "top",
+            align: "center",
             labels: {
-              usePointStyle: false,
+              usePointStyle: true,
               boxWidth: 15,
               boxHeight: 15,
-              font: { size: 13, weight: "bold" },
+              padding: 20,
+              font: { size: 12, weight: "bold" },
               color: chartColors.text,
-              padding: 15,
-              generateLabels: (chart) => {
-                const labels = Chart.defaults.plugins.legend.labels.generateLabels(chart)
-                // Modificar el tipo de símbolo para el dataset de línea
-                labels.forEach((label) => {
-                  if (label.text === "Balance final ajustado") {
-                    label.lineWidth = 2
-                    label.pointStyle = false
-                    label.lineDash = []
-                  }
-                })
-                return labels
-              },
             },
           },
           title: {
@@ -168,7 +246,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
         lineChartInstance.current.destroy()
       }
     }
-  }, [lineChartData, resolvedTheme])
+  }, [lineChartData, resolvedTheme, formatCurrency])
 
   // Crear/actualizar gráfico de pastel
   useEffect(() => {
@@ -195,33 +273,89 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             backgroundColor: donutColors,
             borderColor: resolvedTheme === "dark" ? "#1e1e1e" : "#ffffff",
             borderWidth: 2,
+            hoverBackgroundColor: donutColors.map((color) => {
+              // Hacer el color un poco más brillante en hover
+              return color.replace(/\d+(?=\))/, (match) => {
+                const value = Number.parseInt(match)
+                return Math.min(value + 10, 255).toString()
+              })
+            }),
+            hoverBorderWidth: 3,
+            hoverOffset: 10,
           },
         ],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        cutout: "50%",
+        cutout: "60%",
+        animation: {
+          animateRotate: true,
+          animateScale: true,
+          duration: 2000,
+          easing: "easeOutQuart",
+        },
+        layout: {
+          padding: 20,
+        },
         plugins: {
           tooltip: {
+            backgroundColor: chartColors.tooltipBg,
+            titleColor: chartColors.text,
+            bodyColor: chartColors.text,
+            borderColor: chartColors.tooltipBorder,
+            borderWidth: 1,
+            padding: 12,
+            cornerRadius: 8,
+            displayColors: true,
+            boxWidth: 10,
+            boxHeight: 10,
+            boxPadding: 3,
+            usePointStyle: true,
             callbacks: {
-              label: (c) => `${c.label || ""}: ${formatCurrency(c.raw as number)}`,
+              title: (items) => items[0].label || "",
+              label: (c) => {
+                const value = formatCurrency(c.raw as number)
+                const percentage = (((c.raw as number) / pieChartData.data.reduce((a, b) => a + b, 0)) * 100).toFixed(1)
+                return `${value} (${percentage}%)`
+              },
             },
           },
           legend: {
             display: true,
-            position: "left",
+            position: "right",
             align: "center",
             labels: {
-              font: { size: 12 },
+              font: { size: 12, weight: "bold" },
               color: chartColors.text,
-              padding: 15,
+              padding: 20,
               usePointStyle: true,
+              generateLabels: (chart) => {
+                const data = chart.data
+                if (data.labels && data.datasets.length) {
+                  return data.labels.map((label, i) => {
+                    const dataset = data.datasets[0]
+                    const value = dataset.data[i] as number
+                    const total = dataset.data.reduce((acc, val) => acc + (val as number), 0)
+                    const percentage = ((value / total) * 100).toFixed(1)
+
+                    return {
+                      text: `${label}: ${percentage}%`,
+                      fillStyle: donutColors[i],
+                      strokeStyle: donutColors[i],
+                      lineWidth: 0,
+                      hidden: false,
+                      index: i,
+                    }
+                  })
+                }
+                return []
+              },
             },
           },
           title: {
             display: true,
-            text: "Inversión total",
+            text: "Distribución de la inversión",
             color: chartColors.line,
             font: {
               size: 18,
@@ -241,32 +375,88 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
         pieChartInstance.current.destroy()
       }
     }
-  }, [pieChartData, resolvedTheme, showPieChart])
+  }, [pieChartData, resolvedTheme, showPieChart, formatCurrency])
+
+  // Tooltips informativos para los gráficos
+  const chartTooltips = {
+    line: "Este gráfico muestra cómo crece tu inversión a lo largo del tiempo. Las barras representan el capital inicial y los intereses acumulados, mientras que la línea muestra el balance ajustado por inflación.",
+    pie: "Este gráfico muestra la distribución de tu inversión entre capital inicial, aportaciones e intereses generados. También muestra el impacto de la inflación si está configurada.",
+  }
 
   return (
     <div className="space-y-8">
       {/* Gráfico de línea */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-sm border border-gray-200 dark:border-gray-700">
-        <h2 className="text-xl font-bold text-center text-[#388e3c] mb-6">
-          Composición de la inversión
-          <span className="block w-16 h-1 bg-[#388e3c] mx-auto mt-2"></span>
-        </h2>
-        <div className="h-[250px] sm:h-[300px]">
+      <motion.div
+        className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-sm border border-gray-200 dark:border-gray-700"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-bold text-center text-[#388e3c]">
+            Composición de la inversión
+            <span className="block w-16 h-1 bg-[#388e3c] mx-auto mt-2"></span>
+          </h2>
+
+          <div className="relative">
+            <button
+              className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+              onMouseEnter={() => setActiveTooltip("line")}
+              onMouseLeave={() => setActiveTooltip(null)}
+              aria-label="Información sobre el gráfico de línea"
+            >
+              <Info size={18} />
+            </button>
+
+            {activeTooltip === "line" && (
+              <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
+                {chartTooltips.line}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="h-[300px] sm:h-[400px]">
           <canvas ref={lineChartRef}></canvas>
         </div>
-      </div>
+      </motion.div>
 
       {/* Gráfico de pastel - solo mostrar en escritorio o si showPieChart es true */}
       {showPieChart && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-sm border border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-bold text-center text-[#388e3c] mb-6">
-            Inversión total
-            <span className="block w-16 h-1 bg-[#388e3c] mx-auto mt-2"></span>
-          </h2>
+        <motion.div
+          className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-sm border border-gray-200 dark:border-gray-700"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold text-center text-[#388e3c]">
+              Distribución de la inversión
+              <span className="block w-16 h-1 bg-[#388e3c] mx-auto mt-2"></span>
+            </h2>
+
+            <div className="relative">
+              <button
+                className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                onMouseEnter={() => setActiveTooltip("pie")}
+                onMouseLeave={() => setActiveTooltip(null)}
+                aria-label="Información sobre el gráfico de distribución"
+              >
+                <Info size={18} />
+              </button>
+
+              {activeTooltip === "pie" && (
+                <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
+                  {chartTooltips.pie}
+                </div>
+              )}
+            </div>
+          </div>
+
           <div className="h-[300px] sm:h-[400px]">
             <canvas ref={pieChartRef}></canvas>
           </div>
-        </div>
+        </motion.div>
       )}
     </div>
   )
