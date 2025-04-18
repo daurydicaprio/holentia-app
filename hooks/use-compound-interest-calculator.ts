@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 
 export interface SimulationData {
   year: number
@@ -86,67 +86,185 @@ export function useCompoundInterestCalculator() {
   }
 
   // Función para simular inversión mensual - CORREGIDA según el código original
-  const simulateInvestmentMonthly = (
-    P: number,
-    PMT: number,
-    years: number,
-    r: number,
-    freqContrib: number,
-  ): SimulationData[] => {
-    const simulation: SimulationData[] = []
-    const totalMonths = years * 12
-    let balance = P
-    const monthlyRate = r / 12
+  const simulateInvestmentMonthly = useCallback(
+    (P: number, PMT: number, years: number, r: number, freqContrib: number): SimulationData[] => {
+      const simulation: SimulationData[] = []
+      const totalMonths = years * 12
+      let balance = P
+      const monthlyRate = r / 12
 
-    for (let m = 1; m <= totalMonths; m++) {
-      const startBalance = balance
-      const interest = startBalance * monthlyRate
+      for (let m = 1; m <= totalMonths; m++) {
+        const startBalance = balance
+        const interest = startBalance * monthlyRate
 
-      // Primero aplicamos el interés al balance actual (como en el código original)
-      balance = startBalance * (1 + monthlyRate)
+        // Primero aplicamos el interés al balance actual (como en el código original)
+        balance = startBalance * (1 + monthlyRate)
 
-      // Luego añadimos la contribución mensual o anual según corresponda
-      const contrib = freqContrib === 12 ? PMT : m % 12 === 0 ? PMT : 0
-      balance += contrib
+        // Luego añadimos la contribución mensual o anual según corresponda
+        const contrib = freqContrib === 12 ? PMT : m % 12 === 0 ? PMT : 0
+        balance += contrib
 
-      simulation.push({
-        period: m,
-        year: Math.ceil(m / 12),
-        startBalance,
-        interest,
-        contribution: contrib,
-        balance,
-      })
-    }
+        simulation.push({
+          period: m,
+          year: Math.ceil(m / 12),
+          startBalance,
+          interest,
+          contribution: contrib,
+          balance,
+        })
+      }
 
-    return simulation
-  }
+      return simulation
+    },
+    [],
+  )
 
   // Función para simular inversión anual - CORREGIDA según el código original
-  const simulateInvestmentAnnual = (
-    P: number,
-    PMT: number,
-    years: number,
-    r: number,
-    freqContrib: number,
-  ): SimulationData[] => {
-    // Aplicar el factor de corrección para aportes mensuales como en el código original
-    const annualPMT = freqContrib === 12 ? PMT * 12 * 1.0446 : PMT
-    const simulation: SimulationData[] = []
-    let balance = P
+  const simulateInvestmentAnnual = useCallback(
+    (P: number, PMT: number, years: number, r: number, freqContrib: number): SimulationData[] => {
+      // Aplicar el factor de corrección para aportes mensuales como en el código original
+      const annualPMT = freqContrib === 12 ? PMT * 12 * 1.0446 : PMT
+      const simulation: SimulationData[] = []
+      let balance = P
 
-    for (let y = 1; y <= years; y++) {
-      const startBalance = balance
-      const interest = startBalance * r
-      balance = startBalance * (1 + r) + annualPMT
-      simulation.push({ year: y, startBalance, interest, contribution: annualPMT, balance })
-    }
+      for (let y = 1; y <= years; y++) {
+        const startBalance = balance
+        const interest = startBalance * r
+        balance = startBalance * (1 + r) + annualPMT
+        simulation.push({ year: y, startBalance, interest, contribution: annualPMT, balance })
+      }
 
-    return simulation
-  }
+      return simulation
+    },
+    [],
+  )
+
+  // Preparar datos para gráficos
+  const prepareChartData = useCallback(
+    (simData: SimulationData[], monthlyData: SimulationData[]) => {
+      try {
+        // Preparar datos para gráfico de línea
+        let annualDataForChart: SimulationData[] = []
+        const currentYear = new Date().getFullYear()
+
+        if (years > 0) {
+          // Usar los datos anuales directamente
+          annualDataForChart = [...simData]
+        }
+
+        // Preparar datos para gráfico de línea
+        const labels: string[] = []
+        const lineData: number[] = []
+        const capitalData: number[] = []
+        const interestData: number[] = []
+
+        const factorG1 = contributionFrequency === 12 ? 12 : 1
+        let datosValidosG1 = true
+
+        if (annualDataForChart && annualDataForChart.length > 0) {
+          annualDataForChart.forEach((item) => {
+            if (
+              typeof item.year !== "number" ||
+              isNaN(item.year) ||
+              typeof item.balance !== "number" ||
+              !isFinite(item.balance)
+            ) {
+              datosValidosG1 = false
+              return
+            }
+
+            labels.push((currentYear + item.year - 1).toString())
+
+            // Calcular balance ajustado por inflación
+            let bAjust = item.balance
+            if (inflation > 0) {
+              bAjust = item.balance / Math.pow(1 + inflation / 100, item.year)
+            }
+
+            if (!isFinite(bAjust)) {
+              datosValidosG1 = false
+              bAjust = 0
+            }
+            lineData.push(bAjust)
+
+            // Calcular capital acumulado (depósito inicial + contribuciones)
+            let capAcum = initialDeposit + contribution * factorG1 * item.year
+            if (!isFinite(capAcum)) {
+              datosValidosG1 = false
+              capAcum = 0
+            }
+            capitalData.push(capAcum)
+
+            // Calcular interés acumulado (balance ajustado - capital acumulado)
+            let intAcum = bAjust - capAcum
+            if (!isFinite(intAcum)) {
+              datosValidosG1 = false
+              intAcum = 0
+            }
+            interestData.push(Math.max(0, intAcum))
+          })
+        } else {
+          datosValidosG1 = false
+        }
+
+        if (datosValidosG1 && labels.length > 0) {
+          setLineChartData({
+            labels,
+            lineData,
+            capitalData,
+            interestData,
+          })
+        } else {
+          setLineChartData({
+            labels: [],
+            lineData: [],
+            capitalData: [],
+            interestData: [],
+          })
+        }
+
+        // Preparar datos para gráfico de pastel
+        const depositoVal = Math.max(0, isNaN(initialDeposit) ? 0 : initialDeposit)
+        const totalContribVal = Math.max(0, isNaN(summary.totalContributions) ? 0 : summary.totalContributions)
+        const totalGainVal = Math.max(0, isNaN(summary.netGain) ? 0 : summary.netGain)
+        const inflacionTotalVal = Math.max(0, isNaN(summary.inflationEffect) ? 0 : summary.inflationEffect)
+
+        const dataDoughnut = [depositoVal, totalContribVal, totalGainVal]
+        const labelsDoughnut = ["Inversión inicial", "Contribuciones", "Ganancia"]
+        const bgColors = ["#2e7d32", "#1b5e20", "#81c784"]
+
+        if (inflation > 0) {
+          dataDoughnut.push(inflacionTotalVal)
+          labelsDoughnut.push("Inflación")
+          bgColors.push("#c8e6c9")
+        }
+
+        const filteredDataPie: number[] = []
+        const filteredLabelsPie: string[] = []
+        const filteredBgColorsPie: string[] = []
+
+        dataDoughnut.forEach((value, index) => {
+          if (value > 0.001) {
+            filteredDataPie.push(value)
+            filteredLabelsPie.push(labelsDoughnut[index])
+            filteredBgColorsPie.push(bgColors[index])
+          }
+        })
+
+        setPieChartData({
+          data: filteredDataPie,
+          labels: filteredLabelsPie,
+          colors: filteredBgColorsPie,
+        })
+      } catch (error) {
+        console.error("Error preparando datos de gráficos:", error)
+      }
+    },
+    [contributionFrequency, inflation, initialDeposit, contribution, summary, years],
+  )
 
   // Corregir la función calculate para que calcule correctamente la inflación y la ganancia
-  const calculate = () => {
+  const calculate = useCallback(() => {
     try {
       const r = interestRate / 100
       const infl = inflation / 100
@@ -238,133 +356,23 @@ export function useCompoundInterestCalculator() {
     } catch (error) {
       console.error("Error en la función calcular():", error)
     }
-  }
-
-  // Función para preparar datos de gráficos
-  const prepareChartData = (simData: SimulationData[], monthlyData: SimulationData[]) => {
-    try {
-      // Preparar datos para gráfico de línea
-      let annualDataForChart: SimulationData[] = []
-      const currentYear = new Date().getFullYear()
-
-      if (years > 0) {
-        // Usar los datos anuales directamente
-        annualDataForChart = [...simData]
-      }
-
-      // Preparar datos para gráfico de línea
-      const labels: string[] = []
-      const lineData: number[] = []
-      const capitalData: number[] = []
-      const interestData: number[] = []
-
-      const factorG1 = contributionFrequency === 12 ? 12 : 1
-      let datosValidosG1 = true
-
-      if (annualDataForChart && annualDataForChart.length > 0) {
-        annualDataForChart.forEach((item) => {
-          if (
-            typeof item.year !== "number" ||
-            isNaN(item.year) ||
-            typeof item.balance !== "number" ||
-            !isFinite(item.balance)
-          ) {
-            datosValidosG1 = false
-            return
-          }
-
-          labels.push((currentYear + item.year - 1).toString())
-
-          // Calcular balance ajustado por inflación
-          let bAjust = item.balance
-          if (inflation > 0) {
-            bAjust = item.balance / Math.pow(1 + inflation / 100, item.year)
-          }
-
-          if (!isFinite(bAjust)) {
-            datosValidosG1 = false
-            bAjust = 0
-          }
-          lineData.push(bAjust)
-
-          // Calcular capital acumulado (depósito inicial + contribuciones)
-          let capAcum = initialDeposit + contribution * factorG1 * item.year
-          if (!isFinite(capAcum)) {
-            datosValidosG1 = false
-            capAcum = 0
-          }
-          capitalData.push(capAcum)
-
-          // Calcular interés acumulado (balance ajustado - capital acumulado)
-          let intAcum = bAjust - capAcum
-          if (!isFinite(intAcum)) {
-            datosValidosG1 = false
-            intAcum = 0
-          }
-          interestData.push(Math.max(0, intAcum))
-        })
-      } else {
-        datosValidosG1 = false
-      }
-
-      if (datosValidosG1 && labels.length > 0) {
-        setLineChartData({
-          labels,
-          lineData,
-          capitalData,
-          interestData,
-        })
-      } else {
-        setLineChartData({
-          labels: [],
-          lineData: [],
-          capitalData: [],
-          interestData: [],
-        })
-      }
-
-      // Preparar datos para gráfico de pastel
-      const depositoVal = Math.max(0, isNaN(initialDeposit) ? 0 : initialDeposit)
-      const totalContribVal = Math.max(0, isNaN(summary.totalContributions) ? 0 : summary.totalContributions)
-      const totalGainVal = Math.max(0, isNaN(summary.netGain) ? 0 : summary.netGain)
-      const inflacionTotalVal = Math.max(0, isNaN(summary.inflationEffect) ? 0 : summary.inflationEffect)
-
-      const dataDoughnut = [depositoVal, totalContribVal, totalGainVal]
-      const labelsDoughnut = ["Inversión inicial", "Contribuciones", "Ganancia"]
-      const bgColors = ["#2e7d32", "#1b5e20", "#81c784"]
-
-      if (inflation > 0) {
-        dataDoughnut.push(inflacionTotalVal)
-        labelsDoughnut.push("Inflación")
-        bgColors.push("#c8e6c9")
-      }
-
-      const filteredDataPie: number[] = []
-      const filteredLabelsPie: string[] = []
-      const filteredBgColorsPie: string[] = []
-
-      dataDoughnut.forEach((value, index) => {
-        if (value > 0.001) {
-          filteredDataPie.push(value)
-          filteredLabelsPie.push(labelsDoughnut[index])
-          filteredBgColorsPie.push(bgColors[index])
-        }
-      })
-
-      setPieChartData({
-        data: filteredDataPie,
-        labels: filteredLabelsPie,
-        colors: filteredBgColorsPie,
-      })
-    } catch (error) {
-      console.error("Error preparando datos de gráficos:", error)
-    }
-  }
+  }, [
+    interestRate,
+    inflation,
+    contributionFrequency,
+    years,
+    initialDeposit,
+    contribution,
+    tableView,
+    simulateInvestmentMonthly,
+    simulateInvestmentAnnual,
+    prepareChartData,
+  ])
 
   // Efecto para recalcular cuando cambian los inputs
   useEffect(() => {
     calculate()
-  }, [initialDeposit, contribution, contributionFrequency, years, interestRate, inflation])
+  }, [initialDeposit, contribution, contributionFrequency, years, interestRate, inflation, calculate])
 
   return {
     // Inputs
