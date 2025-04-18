@@ -392,7 +392,7 @@ export function useCompoundInterestCalculator() {
   // Efecto para recalcular cuando cambian los inputs
   useEffect(() => {
     calculate()
-  }, [initialDeposit, contribution, contributionFrequency, years, interestRate, inflation])
+  }, [initialDeposit, contribution, contributionFrequency, years, interestRate, inflation, calculate])
 
   return {
     // Inputs
