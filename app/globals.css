@@ -10,6 +10,9 @@
   --color-white: #ffffff;
   --color-border-light: #dee2e6;
 
+  /* Variable radius para bordes redondeados */
+  --radius: 0.5rem;
+
   /* Efectos */
   --blur-intensity-menu: 10px;
   --blur-intensity-card: 14px;
@@ -352,5 +355,34 @@
   .backdrop-blur-enhanced {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Animaciones para componentes personalizados */
+  .animate-in {
+    animation: fadeIn 0.3s ease forwards;
+  }
+
+  .fade-in-0 {
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards;
+  }
+
+  .zoom-in-95 {
+    transform: scale(0.95);
+    animation: zoomIn 0.3s ease forwards;
+  }
+
+  @keyframes zoomIn {
+    to {
+      transform: scale(1);
+    }
+  }
+
+  .slide-in-from-left-1\/2 {
+    transform: translateX(-50%);
+  }
+
+  .slide-in-from-top-\[48\%\] {
+    transform: translateY(-48%);
   }
 }

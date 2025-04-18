@@ -35,7 +35,31 @@ export interface PieChartData {
   colors: string[]
 }
 
-export function useCompoundInterestCalculator() {
+export interface useCompoundInterestCalculatorResult {
+  initialDeposit: number
+  setInitialDeposit: (value: number) => void
+  contribution: number
+  setContribution: (value: number) => void
+  contributionFrequency: number
+  setContributionFrequency: (value: number) => void
+  years: number
+  setYears: (value: number) => void
+  interestRate: number
+  setInterestRate: (value: number) => void
+  inflation: number
+  setInflation: (value: number) => void
+  summary: SummaryData
+  annualSimData: SimulationData[]
+  monthlySimData: SimulationData[]
+  tableView: "annual" | "monthly"
+  setTableView: (view: "annual" | "monthly") => void
+  lineChartData: ChartData
+  pieChartData: PieChartData
+  formatCurrency: (value: number) => string
+  calculate: () => void
+}
+
+export function useCompoundInterestCalculator(): useCompoundInterestCalculatorResult {
   // Inputs con valores iniciales en cero, excepto años (5) y frecuencia (mensual)
   const [initialDeposit, setInitialDeposit] = useState<number>(0)
   const [contribution, setContribution] = useState<number>(0)
