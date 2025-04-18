@@ -32,6 +32,34 @@ export default function WelcomeModal() {
     }
   }, [])
 
+  // Modificar el componente para ocultar el botón de menú cuando el modal está abierto
+
+  // Añadir un efecto para ocultar el botón de menú principal
+  useEffect(() => {
+    // Función para ocultar/mostrar el botón de menú principal
+    const toggleMainMenuButton = (shouldHide: boolean) => {
+      const mainMenuButtons = document.querySelectorAll(".main-menu-button-container")
+      mainMenuButtons.forEach((button) => {
+        if (shouldHide) {
+          ;(button as HTMLElement).style.display = "none"
+        } else {
+          ;(button as HTMLElement).style.display = ""
+        }
+      })
+    }
+
+    if (isOpen) {
+      toggleMainMenuButton(true)
+    } else {
+      toggleMainMenuButton(false)
+    }
+
+    return () => {
+      // Asegurarse de que el botón se muestre cuando el componente se desmonte
+      toggleMainMenuButton(false)
+    }
+  }, [isOpen])
+
   useEffect(() => {
     // Manejar clic fuera del modal para cerrarlo
     const handleClickOutside = (event: MouseEvent) => {
@@ -73,7 +101,7 @@ export default function WelcomeModal() {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-md"
+      className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/70 backdrop-blur-md"
       onClick={handleClose} // Cerrar al hacer clic en cualquier parte
     >
       <div

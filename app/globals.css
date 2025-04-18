@@ -183,10 +183,15 @@
     inset: 0;
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(5px);
-    z-index: 90;
+    z-index: 199;
     opacity: 0;
     pointer-events: none;
     transition: opacity 300ms;
+  }
+
+  .main-menu-backdrop.active {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   /* Estilos para el backdrop del menú móvil */
@@ -408,11 +413,66 @@
     }
   }
 
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .slide-in-from-left-1\/2 {
     transform: translateX(-50%);
   }
 
   .slide-in-from-top-\[48\%\] {
     transform: translateY(-48%);
+  }
+
+  /* Estilos específicos para el menú móvil en herramientas */
+  .tool-mobile-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2000;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  }
+
+  .tool-mobile-menu.open {
+    transform: translateX(0);
+  }
+
+  .tool-mobile-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* Asegurar que el botón de menú siempre esté por encima */
+  .main-menu-button-container {
+    z-index: 2000 !important;
+  }
+
+  /* Asegurar que el menú desplegable siempre esté por encima */
+  .main-menu-dropdown {
+    z-index: 2001 !important;
+  }
+
+  /* Asegurar que el backdrop siempre esté por debajo del menú pero por encima de otros elementos */
+  .main-menu-backdrop {
+    z-index: 1999 !important;
   }
 }

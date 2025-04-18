@@ -1,3 +1,5 @@
+// Vamos a simplificar completamente el componente para que sea más parecido a la versión que funcionaba antes
+
 "use client"
 
 import { useState, useEffect, useRef } from "react"
@@ -15,8 +17,7 @@ export default function MainMenuButton() {
   const pathname = usePathname()
   const [mounted, setMounted] = useState(false)
   const { triggerHapticFeedback } = useHapticFeedback()
-  const menuRef = useRef<HTMLDivElement>(null)
-  const menuContentRef = useRef<HTMLDivElement>(null)
+  const menuRef = useRef(null)
 
   useEffect(() => {
     setMounted(true)
@@ -26,82 +27,18 @@ export default function MainMenuButton() {
   const pathParts = pathname.split("/").filter(Boolean)
   const section = pathParts.length > 0 ? pathParts[0] : null
 
-  // Crear el backdrop manualmente
-  useEffect(() => {
-    // Crear el backdrop si no existe
-    let backdrop = document.querySelector(".main-menu-backdrop") as HTMLDivElement
-    if (!backdrop) {
-      backdrop = document.createElement("div")
-      backdrop.className = "main-menu-backdrop"
-      backdrop.style.position = "fixed"
-      backdrop.style.inset = "0"
-      backdrop.style.backgroundColor = "rgba(0, 0, 0, 0.5)"
-      backdrop.style.backdropFilter = "blur(5px)"
-      backdrop.style.zIndex = "199"
-      backdrop.style.opacity = "0"
-      backdrop.style.pointerEvents = "none"
-      backdrop.style.transition = "opacity 300ms"
-      document.body.appendChild(backdrop)
-    }
-
-    // Manejar el estado del backdrop
-    if (isMenuOpen) {
-      backdrop.style.opacity = "1"
-      backdrop.style.pointerEvents = "auto"
-      document.body.style.overflow = "hidden" // Prevenir scroll
-    } else {
-      backdrop.style.opacity = "0"
-      backdrop.style.pointerEvents = "none"
-      document.body.style.overflow = "" // Restaurar scroll
-    }
-
-    // Función para cerrar el menú al hacer clic en el backdrop
-    const handleBackdropClick = (e: MouseEvent) => {
-      if (isMenuOpen) {
-        setIsMenuOpen(false)
-      }
-    }
-
-    // Función para cerrar el menú con la tecla Escape
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isMenuOpen) {
-        setIsMenuOpen(false)
-      }
-    }
-
-    // Limpiar los event listeners anteriores antes de añadir nuevos
-    backdrop.removeEventListener("click", handleBackdropClick)
-    document.removeEventListener("keydown", handleEscape)
-
-    // Solo añadir event listeners cuando el menú está abierto
-    if (isMenuOpen) {
-      backdrop.addEventListener("click", handleBackdropClick)
-      document.addEventListener("keydown", handleEscape)
-    }
-
-    return () => {
-      // Siempre limpiar los event listeners al desmontar
-      backdrop.removeEventListener("click", handleBackdropClick)
-      document.removeEventListener("keydown", handleEscape)
-      // Asegurar que el scroll se restaure
-      document.body.style.overflow = ""
-    }
-  }, [isMenuOpen])
-
   // Determinar el color del texto para el botón de donación
-  let donationTextColor = "var(--color-mente-active)" // Color azul por defecto
+  let donationTextColor = "#3B82F6" // Color azul por defecto
   if (section === "mente") {
-    donationTextColor = "var(--color-mente-active)" // Color mente
+    donationTextColor = "#1976d2" // Color mente
   } else if (section === "cuerpo") {
-    donationTextColor = "var(--color-cuerpo-active)" // Color cuerpo
+    donationTextColor = "#ffa000" // Color cuerpo
   } else if (section === "finanzas") {
-    donationTextColor = "var(--color-finanzas-active)" // Color finanzas
+    donationTextColor = "#388e3c" // Color finanzas
   }
 
   // Usar el tema resuelto para evitar parpadeos
   const currentTheme = mounted ? resolvedTheme : "light"
-
-  // Asegurarse de que el botón tenga un fondo visible
   const buttonBgColor = currentTheme === "dark" ? "#1e1e1e" : "#ffffff"
   const buttonBorderColor = currentTheme === "dark" ? "#333333" : "#e5e7eb"
 
@@ -121,7 +58,7 @@ export default function MainMenuButton() {
   }
 
   return (
-    <div ref={menuRef} className="relative z-[200]">
+    <div ref={menuRef} className="relative z-[2000] main-menu-button-container">
       <Button
         variant="outline"
         size="icon"
@@ -134,6 +71,7 @@ export default function MainMenuButton() {
           border: `1.5px solid ${buttonBorderColor}`,
           transition: "all 0.2s ease",
           position: "relative",
+          zIndex: 1000,
         }}
         className="active:scale-95 transition-transform hover:bg-gray-100 dark:hover:bg-gray-800"
         onClick={handleMenuToggle}
@@ -147,10 +85,10 @@ export default function MainMenuButton() {
 
       {isMenuOpen && (
         <div
-          ref={menuContentRef}
-          className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-[201]"
+          className="absolute right-0 top-[60px] w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg"
           style={{
             animation: "fadeIn 0.2s ease-out",
+            zIndex: 2001,
           }}
         >
           <div className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">
@@ -217,6 +155,15 @@ export default function MainMenuButton() {
             </button>
           </div>
         </div>
+      )}
+
+      {/* Backdrop simple para cerrar el menú al hacer clic fuera */}
+      {isMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+          style={{ zIndex: 1999 }}
+          onClick={() => setIsMenuOpen(false)}
+        ></div>
       )}
     </div>
   )

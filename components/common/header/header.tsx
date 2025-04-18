@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
-import MobileHeader from "./mobile-header"
 import { sectionsData } from "@/lib/data"
 
 export default function Header() {
@@ -51,9 +50,9 @@ export default function Header() {
 
   if (!mounted) return null
 
-  // Solo mostrar el header móvil en páginas de herramientas cuando estamos en dispositivo móvil
+  // Ya no necesitamos mostrar el header móvil aquí, ya que lo manejamos directamente en tool-page-client.tsx
   if (isMobile && isToolPage) {
-    return <MobileHeader section={section} />
+    return null
   }
 
   // En todos los demás casos, no mostramos nada aquí ya que el botón de menú estará en el contenedor principal
