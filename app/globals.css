@@ -177,25 +177,22 @@
     background-image: linear-gradient(to right, var(--color-finanzas-active), var(--color-finanzas-active-dark));
   }
 
-  /* Asegurar que el backdrop del menú funcione correctamente */
-
   .menu-backdrop {
     position: fixed;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(4px);
+    background-color: rgba(0, 0, 0, 0.5); /* Oscurecido un poco más para mejor visibilidad */
+    backdrop-filter: blur(5px); /* Aumentado ligeramente */
     z-index: 40;
     opacity: 0;
     pointer-events: none;
     transition-property: opacity;
     transition-duration: 300ms;
-    visibility: hidden;
+    display: block; /* Asegurar que siempre se muestra */
   }
 
   .menu-backdrop.active {
     opacity: 1;
     pointer-events: auto;
-    visibility: visible;
   }
 
   .tool-header-line {

@@ -55,19 +55,17 @@ export function InvestmentImpactSection({ summary, formatCurrency, inflation, ye
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-              {/* Recuadro corregido: Si no inviertes tu dinero */}
+              {/* Recuadro: Si no inviertes tu dinero - CORREGIDO */}
               <div className="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
                 <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-                  Si no inviertes tu dinero tendrías:
+                  Si no inviertes tu dinero:
                 </div>
-                <div className="text-lg font-bold text-gray-800 dark:text-gray-200">
-                  {formatCurrency(totalInvested)}
+                <div className="text-lg font-bold text-red-500 dark:text-red-400">
+                  {formatCurrency(nonInvestedValue)}
                 </div>
-                {inflation > 0 && (
-                  <div className="text-xs text-red-500 dark:text-red-400 mt-1">
-                    Valor real: {formatCurrency(nonInvestedValue)}
-                  </div>
-                )}
+                <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">
+                  Total que ahorraste: {formatCurrency(totalInvested)}
+                </div>
               </div>
 
               <div className="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700">

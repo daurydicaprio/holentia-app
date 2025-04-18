@@ -189,19 +189,20 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             labels: {
               usePointStyle: true,
               pointStyle: (context) => {
-                // Usar línea para el dataset de balance final ajustado
+                // Usar círculos para todos excepto la línea
                 const datasetIndex = context.datasetIndex
                 if (datasetIndex === 0) {
-                  return "line"
+                  return "rectRounded" // Rectángulo con bordes redondeados para la línea
                 }
-                return "rect"
+                return "circle" // Círculos para el resto
               },
-              boxWidth: 40, // Ancho más grande para la línea
-              boxHeight: 3, // Altura más pequeña para la línea
-              padding: 20, // Más espacio alrededor de la leyenda
-              font: { size: 12, weight: "bold" },
+              boxWidth: 40, // Ancho para la línea
+              boxHeight: (datasetIndex) => (datasetIndex === 0 ? 3 : 10), // Altura más pequeña para la línea, normal para círculos
+              padding: 40, // Aumentado para más espacio entre elementos de leyenda
+              font: { size: 14, weight: "bold" }, // Tamaño de fuente aumentado
               color: chartColors.text,
             },
+            margin: 20, // Margen para pegar más la leyenda al gráfico
           },
           title: {
             display: false, // Ocultar título dentro del gráfico
@@ -265,7 +266,12 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
           easing: "easeOutQuart",
         },
         layout: {
-          padding: 10, // Reducir el padding para que esté más pegado
+          padding: {
+            left: 20, // Aumentar padding izquierdo
+            right: 10,
+            top: 10,
+            bottom: 10,
+          },
         },
         plugins: {
           tooltip: {
@@ -296,12 +302,10 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             position: "left", // Mantener a la izquierda
             align: "center",
             labels: {
-              font: { size: 14, weight: "bold" }, // Aumentar tamaño de fuente
+              font: { size: 13, weight: "bold" }, // Aumentar tamaño de fuente
               color: chartColors.text,
-              padding: 25, // Aumentar padding para mayor separación
+              padding: 25, // Aumentar padding entre elementos
               usePointStyle: true,
-              boxWidth: 16, // Aumentar tamaño de los símbolos
-              boxHeight: 16, // Aumentar tamaño de los símbolos
               generateLabels: (chart) => {
                 const data = chart.data
                 if (data.labels && data.datasets.length && data.datasets[0].data) {
@@ -312,7 +316,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
                     const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : "0.0"
 
                     return {
-                      text: `${label}: ${percentage}%`,
+                      text: `${label}: ${percentage}% (${formatCurrency(value)})`, // Añadir valor monetario
                       fillStyle: donutColors[i % donutColors.length],
                       strokeStyle: donutColors[i % donutColors.length],
                       lineWidth: 0,
@@ -324,6 +328,8 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
                 return []
               },
             },
+            maxWidth: 300, // Limitar ancho máximo para evitar que se extienda demasiado
+            maxHeight: 250, // Limitar altura máxima
           },
           title: {
             display: false, // Ocultar título dentro del gráfico

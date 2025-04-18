@@ -1,8 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 
@@ -16,15 +14,17 @@ export default function WelcomeModal() {
 
     // Verificar si es la primera visita
     if (typeof window !== "undefined") {
+      // Para forzar que aparezca el modal (solo para pruebas)
+      localStorage.removeItem("holentia-visited")
+
       const hasVisited = localStorage.getItem("holentia-visited")
 
       if (!hasVisited) {
         // Pequeño retraso para asegurar que el componente esté montado
         const timer = setTimeout(() => {
           setIsOpen(true)
-          // Comentamos esta línea para que el modal se muestre en cada visita durante el desarrollo
-          // localStorage.setItem("holentia-visited", "true")
-        }, 500)
+          localStorage.setItem("holentia-visited", "true")
+        }, 1000)
 
         return () => clearTimeout(timer)
       }
@@ -34,22 +34,19 @@ export default function WelcomeModal() {
   const handleClose = () => {
     triggerHapticFeedback("medium")
     setIsOpen(false)
-    // Guardar en localStorage solo cuando el usuario cierra el modal
-    if (typeof window !== "undefined") {
-      localStorage.setItem("holentia-visited", "true")
-    }
   }
 
   if (!mounted) return null
 
+  if (!isOpen) return null
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent
-        className="sm:max-w-md p-0 overflow-hidden border-0 shadow-xl bg-white dark:bg-gray-900 z-50"
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm">
+      <div
+        className="bg-white dark:bg-gray-900 rounded-lg shadow-2xl w-[95vw] max-w-md overflow-hidden"
         style={{
-          width: "95vw",
-          maxWidth: "500px",
-          borderRadius: "16px",
+          transform: "translateY(0)",
+          animation: "fadeIn 0.3s ease-out",
         }}
       >
         {/* Encabezado con diseño minimalista */}
@@ -81,18 +78,18 @@ export default function WelcomeModal() {
           </div>
         </div>
 
-        <DialogFooter className="px-6 pb-6 pt-0">
-          <Button
+        <div className="px-6 pb-6 pt-0">
+          <button
             onClick={handleClose}
-            className="w-full py-2 relative group transition-all duration-300 bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white border-0"
+            className="w-full py-2 relative group transition-all duration-300 bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white border-0 rounded-md"
           >
             <span className="relative z-10 flex items-center justify-center gap-2 group-hover:gap-3 transition-all duration-300">
               Comenzar a explorar
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </span>
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </button>
+        </div>
+      </div>
+    </div>
   )
 }
