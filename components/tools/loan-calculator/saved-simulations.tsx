@@ -3,7 +3,8 @@
 import type React from "react"
 import { useState } from "react"
 import type { LoanSimulation } from "@/hooks/use-loan-calculator"
-import { X, Edit2 } from "lucide-react"
+import { Edit2, Save, Trash2 } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
 
 interface SavedSimulationsProps {
   simulations: LoanSimulation[]
@@ -16,6 +17,14 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
   const [editingId, setEditingId] = useState<number | null>(null)
   const [editingName, setEditingName] = useState<string>("")
 
+  // Colores de la sección finanzas
+  const headerBgColor = "rgba(76, 175, 80, 0.2)" // finanzas-light con opacidad
+  const headerBgColorDark = "rgba(46, 125, 50, 0.2)" // finanzas-DEFAULT con opacidad
+  const iconColor = "#2e7d32" // finanzas-DEFAULT
+  const iconColorDark = "#a5d6a7" // finanzas-light
+  const editButtonHoverBgColor = "rgba(76, 175, 80, 0.1)" // finanzas-light con opacidad
+  const editButtonHoverBgColorDark = "rgba(46, 125, 50, 0.2)" // finanzas-DEFAULT con opacidad
+
   // Manejar clic en el nombre para editar
   const handleNameClick = (simulation: LoanSimulation) => {
     setEditingId(simulation.id)
@@ -25,7 +34,7 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
   // Guardar el nombre editado
   const saveNameChange = () => {
     if (editingId !== null) {
-      onUpdateName(editingId, editingName.trim())
+      onUpdateName(editingId, editingName.trim() || `Opción ${simulations.findIndex((s) => s.id === editingId) + 1}`)
       setEditingId(null)
     }
   }
@@ -43,14 +52,23 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200">Simulaciones Guardadas</h3>
-      <div className="grid grid-cols-1 gap-4">
-        {simulations.map((simulation) => (
-          <div
+      <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200 flex items-center gap-2">
+        <Save size={18} style={{ color: iconColor }} />
+        Simulaciones Guardadas
+      </h3>
+
+      <AnimatePresence>
+        {simulations.map((simulation, index) => (
+          <motion.div
             key={simulation.id}
             className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, height: 0, marginTop: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.1 }}
+            layout
           >
-            <div className="bg-[#388e3c]/10 dark:bg-[#388e3c]/20 px-4 py-3 flex justify-between items-center">
+            <div style={{ backgroundColor: headerBgColor }} className="px-4 py-3 flex justify-between items-center">
               {editingId === simulation.id ? (
                 <input
                   type="text"
@@ -58,7 +76,7 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
                   onChange={(e) => setEditingName(e.target.value)}
                   onBlur={saveNameChange}
                   onKeyDown={handleKeyDown}
-                  className="font-medium text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 border border-[#388e3c] rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#388e3c]"
+                  className="font-medium text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 border border-finanzas-DEFAULT rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-finanzas-DEFAULT"
                   autoFocus
                   maxLength={25}
                 />
@@ -67,7 +85,8 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
                   <h3 className="font-medium text-gray-800 dark:text-gray-200">{simulation.name}</h3>
                   <button
                     onClick={() => handleNameClick(simulation)}
-                    className="ml-2 text-[#388e3c] hover:text-[#1b5e20]"
+                    className="ml-2 p-1 rounded-full hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors"
+                    style={{ color: iconColor }}
                     aria-label="Editar nombre"
                   >
                     <Edit2 size={14} />
@@ -76,15 +95,15 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
               )}
               <button
                 onClick={() => onRemove(simulation.id)}
-                className="text-red-500 hover:text-red-700 dark:hover:text-red-400"
+                className="text-red-500 hover:text-red-700 dark:hover:text-red-400 p-1 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                 aria-label="Eliminar simulación"
               >
-                <X size={18} />
+                <Trash2 size={16} />
               </button>
             </div>
 
             <div className="p-4">
-              <div className="grid grid-cols-2 gap-2 text-sm">
+              <div className="grid grid-cols-2 gap-3 text-sm">
                 <div className="flex justify-between py-1 border-b border-gray-100 dark:border-gray-700">
                   <span className="text-gray-600 dark:text-gray-400">Monto:</span>
                   <span className="font-medium text-gray-800 dark:text-gray-200">
@@ -123,9 +142,9 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </AnimatePresence>
     </div>
   )
 }

@@ -9,6 +9,7 @@ import { AmortizationTable } from "./amortization-table"
 import { LoanDisclaimer } from "./disclaimer"
 import { LoanCalculatorTabs } from "./loan-calculator-tabs"
 import { useMediaQuery } from "@/hooks/use-media-query"
+import { motion } from "framer-motion"
 
 export function LoanCalculator() {
   const {
@@ -39,7 +40,7 @@ export function LoanCalculator() {
       setAmortizationData(result.amortizationData)
       setIsInitialized(true)
     }
-  }, [isInitialized])
+  }, [isInitialized, generateAmortizationTable, loanAmount, interestRate, loanTerm])
 
   // Función para manejar el cálculo
   const handleCalculate = (amount: number, rate: number, term: number) => {
@@ -70,29 +71,58 @@ export function LoanCalculator() {
     setActiveTab(tab)
   }
 
+  // Variantes para animaciones
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+      },
+    },
+  }
+
   // Renderizado condicional basado en el tamaño de pantalla
   if (isMobile) {
     return (
-      <div className="bg-white dark:bg-gray-900 rounded-lg">
+      <motion.div
+        className="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden"
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
         <LoanCalculatorTabs
           activeTab={activeTab}
           onTabChange={handleTabChange}
           hasSimulations={savedSimulations.length > 0}
         />
 
-        <div className="p-4">
+        <div className="p-5">
           {activeTab === "calculator" && (
-            <>
-              <LoanCalculatorForm
-                onCalculate={handleCalculate}
-                onSaveSimulation={handleSaveSimulation}
-                onResetForm={handleResetForm}
-                disableSave={savedSimulations.length >= 3}
-                loanAmount={loanAmount}
-                interestRate={interestRate}
-                loanTerm={loanTerm}
-              />
-              <div className="mt-6">
+            <motion.div variants={containerVariants}>
+              <motion.div variants={itemVariants}>
+                <LoanCalculatorForm
+                  onCalculate={handleCalculate}
+                  onSaveSimulation={handleSaveSimulation}
+                  onResetForm={handleResetForm}
+                  disableSave={savedSimulations.length >= 3}
+                  loanAmount={loanAmount}
+                  interestRate={interestRate}
+                  loanTerm={loanTerm}
+                />
+              </motion.div>
+              <motion.div className="mt-6" variants={itemVariants}>
                 <LoanResult
                   monthlyPayment={monthlyPayment}
                   loanAmount={loanAmount}
@@ -100,34 +130,45 @@ export function LoanCalculator() {
                   loanTerm={loanTerm}
                   formatCurrency={formatCurrency}
                 />
-              </div>
-              <div className="mt-6">
+              </motion.div>
+              <motion.div className="mt-6" variants={itemVariants}>
                 <LoanDisclaimer />
-              </div>
-            </>
+              </motion.div>
+            </motion.div>
           )}
 
           {activeTab === "simulations" && (
-            <SavedSimulations
-              simulations={savedSimulations}
-              onRemove={removeSimulation}
-              onUpdateName={updateSimulationName}
-              formatCurrency={formatCurrency}
-            />
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
+              <SavedSimulations
+                simulations={savedSimulations}
+                onRemove={removeSimulation}
+                onUpdateName={updateSimulationName}
+                formatCurrency={formatCurrency}
+              />
+            </motion.div>
           )}
 
-          {activeTab === "table" && <AmortizationTable data={amortizationData} formatCurrency={formatCurrency} />}
+          {activeTab === "table" && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
+              <AmortizationTable data={amortizationData} formatCurrency={formatCurrency} />
+            </motion.div>
+          )}
         </div>
-      </div>
+      </motion.div>
     )
   }
 
   // Versión de escritorio (sin pestañas)
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg">
+    <motion.div
+      className="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       <div className="p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
+          <motion.div variants={itemVariants}>
             <LoanCalculatorForm
               onCalculate={handleCalculate}
               onSaveSimulation={handleSaveSimulation}
@@ -140,8 +181,8 @@ export function LoanCalculator() {
             <div className="mt-6">
               <LoanDisclaimer />
             </div>
-          </div>
-          <div>
+          </motion.div>
+          <motion.div variants={itemVariants}>
             <LoanResult
               monthlyPayment={monthlyPayment}
               loanAmount={loanAmount}
@@ -160,14 +201,14 @@ export function LoanCalculator() {
                 />
               </div>
             )}
-          </div>
+          </motion.div>
         </div>
 
-        <div className="mt-8">
+        <motion.div className="mt-8" variants={itemVariants}>
           <h3 className="text-lg font-medium mb-4 text-gray-800 dark:text-gray-200">Tabla de Amortización</h3>
           <AmortizationTable data={amortizationData} formatCurrency={formatCurrency} />
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   )
 }
