@@ -16,6 +16,7 @@ export default function MainMenuButton() {
   const [mounted, setMounted] = useState(false)
   const { triggerHapticFeedback } = useHapticFeedback()
   const menuRef = useRef<HTMLDivElement>(null)
+  const menuContentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -27,26 +28,36 @@ export default function MainMenuButton() {
 
   // Crear el backdrop manualmente
   useEffect(() => {
-    // Buscar el backdrop existente o crear uno nuevo
-    let backdrop = document.querySelector(".menu-backdrop") as HTMLDivElement
+    // Crear el backdrop si no existe
+    let backdrop = document.querySelector(".main-menu-backdrop") as HTMLDivElement
     if (!backdrop) {
       backdrop = document.createElement("div")
-      backdrop.className = "menu-backdrop"
+      backdrop.className = "main-menu-backdrop"
+      backdrop.style.position = "fixed"
+      backdrop.style.inset = "0"
+      backdrop.style.backgroundColor = "rgba(0, 0, 0, 0.5)"
+      backdrop.style.backdropFilter = "blur(5px)"
+      backdrop.style.zIndex = "199"
+      backdrop.style.opacity = "0"
+      backdrop.style.pointerEvents = "none"
+      backdrop.style.transition = "opacity 300ms"
       document.body.appendChild(backdrop)
     }
 
     // Manejar el estado del backdrop
     if (isMenuOpen) {
-      backdrop.classList.add("active")
+      backdrop.style.opacity = "1"
+      backdrop.style.pointerEvents = "auto"
       document.body.style.overflow = "hidden" // Prevenir scroll
     } else {
-      backdrop.classList.remove("active")
+      backdrop.style.opacity = "0"
+      backdrop.style.pointerEvents = "none"
       document.body.style.overflow = "" // Restaurar scroll
     }
 
-    // Función para cerrar el menú al hacer clic fuera
-    const handleClickOutside = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node) && isMenuOpen) {
+    // Función para cerrar el menú al hacer clic en el backdrop
+    const handleBackdropClick = (e: MouseEvent) => {
+      if (isMenuOpen) {
         setIsMenuOpen(false)
       }
     }
@@ -59,22 +70,21 @@ export default function MainMenuButton() {
     }
 
     // Limpiar los event listeners anteriores antes de añadir nuevos
-    document.removeEventListener("mousedown", handleClickOutside)
+    backdrop.removeEventListener("click", handleBackdropClick)
     document.removeEventListener("keydown", handleEscape)
 
     // Solo añadir event listeners cuando el menú está abierto
     if (isMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside)
+      backdrop.addEventListener("click", handleBackdropClick)
       document.addEventListener("keydown", handleEscape)
     }
 
     return () => {
       // Siempre limpiar los event listeners al desmontar
-      document.removeEventListener("mousedown", handleClickOutside)
+      backdrop.removeEventListener("click", handleBackdropClick)
       document.removeEventListener("keydown", handleEscape)
-      // Asegurar que el scroll se restaure y el backdrop se oculte
+      // Asegurar que el scroll se restaure
       document.body.style.overflow = ""
-      backdrop.classList.remove("active")
     }
   }, [isMenuOpen])
 
@@ -100,12 +110,18 @@ export default function MainMenuButton() {
     setIsMenuOpen(!isMenuOpen)
   }
 
+  // Función para cerrar el menú después de hacer clic en un enlace
+  const handleLinkClick = () => {
+    triggerHapticFeedback("light")
+    setIsMenuOpen(false)
+  }
+
   if (!mounted) {
     return null
   }
 
   return (
-    <div ref={menuRef}>
+    <div ref={menuRef} className="relative z-[200]">
       <Button
         variant="outline"
         size="icon"
@@ -117,7 +133,6 @@ export default function MainMenuButton() {
           boxShadow: "0 2px 5px rgba(0, 0, 0, 0.08)",
           border: `1.5px solid ${buttonBorderColor}`,
           transition: "all 0.2s ease",
-          zIndex: 50,
           position: "relative",
         }}
         className="active:scale-95 transition-transform hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -132,7 +147,8 @@ export default function MainMenuButton() {
 
       {isMenuOpen && (
         <div
-          className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-[60]"
+          ref={menuContentRef}
+          className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-[201]"
           style={{
             animation: "fadeIn 0.2s ease-out",
           }}
@@ -144,40 +160,28 @@ export default function MainMenuButton() {
             <Link
               href="/"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              onClick={() => {
-                triggerHapticFeedback("light")
-                setIsMenuOpen(false)
-              }}
+              onClick={handleLinkClick}
             >
               Inicio
             </Link>
             <Link
               href="/mente"
               className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-              onClick={() => {
-                triggerHapticFeedback("light")
-                setIsMenuOpen(false)
-              }}
+              onClick={handleLinkClick}
             >
               Mente
             </Link>
             <Link
               href="/cuerpo"
               className="block px-4 py-2 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
-              onClick={() => {
-                triggerHapticFeedback("light")
-                setIsMenuOpen(false)
-              }}
+              onClick={handleLinkClick}
             >
               Cuerpo
             </Link>
             <Link
               href="/finanzas"
               className="block px-4 py-2 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors"
-              onClick={() => {
-                triggerHapticFeedback("light")
-                setIsMenuOpen(false)
-              }}
+              onClick={handleLinkClick}
             >
               Finanzas
             </Link>
@@ -186,10 +190,7 @@ export default function MainMenuButton() {
             <Link
               href="/ayuda"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              onClick={() => {
-                triggerHapticFeedback("light")
-                setIsMenuOpen(false)
-              }}
+              onClick={handleLinkClick}
             >
               Ayuda
             </Link>
@@ -197,10 +198,7 @@ export default function MainMenuButton() {
               href="/apoyar"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               style={{ color: donationTextColor }}
-              onClick={() => {
-                triggerHapticFeedback("light")
-                setIsMenuOpen(false)
-              }}
+              onClick={handleLinkClick}
             >
               Hacer donación
             </Link>

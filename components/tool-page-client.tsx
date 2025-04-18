@@ -90,11 +90,12 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
           style={{
             backgroundColor: currentTheme === "dark" ? "rgba(30, 30, 30, 0.5)" : headerBgColor,
             borderBottom: `1px solid ${currentTheme === "dark" ? "rgba(75, 85, 99, 0.2)" : "rgba(229, 231, 235, 0.8)"}`,
+            zIndex: 40,
           }}
         >
           <div className="max-w-6xl mx-auto px-6 relative">
             {/* Botón de menú posicionado en la esquina superior derecha, alineado con el borde superior del logo */}
-            <div className="absolute right-6 top-0 z-10">
+            <div className="absolute right-6 top-0 z-[200]">
               <MainMenuButton />
             </div>
 

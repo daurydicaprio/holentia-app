@@ -177,17 +177,41 @@
     background-image: linear-gradient(to right, var(--color-finanzas-active), var(--color-finanzas-active-dark));
   }
 
+  /* Estilos para el backdrop del menú principal */
+  .main-menu-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 90;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 300ms;
+  }
+
+  /* Estilos para el backdrop del menú móvil */
+  .mobile-menu-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 80;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 300ms;
+  }
+
+  /* Estilos para el backdrop del menú (compatibilidad con versiones anteriores) */
   .menu-backdrop {
     position: fixed;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Oscurecido un poco más para mejor visibilidad */
-    backdrop-filter: blur(5px); /* Aumentado ligeramente */
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
     z-index: 40;
     opacity: 0;
     pointer-events: none;
-    transition-property: opacity;
-    transition-duration: 300ms;
-    display: block; /* Asegurar que siempre se muestra */
+    transition: opacity 300ms;
+    display: block;
   }
 
   .menu-backdrop.active {

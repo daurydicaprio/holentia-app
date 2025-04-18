@@ -75,15 +75,31 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
 
   // Efecto para manejar el backdrop del menú
   useEffect(() => {
-    const backdrop = document.querySelector(".menu-backdrop")
-    if (backdrop) {
-      if (isMenuOpen) {
-        backdrop.classList.add("active")
-        document.body.style.overflow = "hidden" // Prevenir scroll
-      } else {
-        backdrop.classList.remove("active")
-        document.body.style.overflow = "" // Restaurar scroll
-      }
+    const backdrop = document.querySelector(".mobile-menu-backdrop") as HTMLDivElement
+    if (!backdrop) {
+      const newBackdrop = document.createElement("div")
+      newBackdrop.className = "mobile-menu-backdrop"
+      newBackdrop.style.position = "fixed"
+      newBackdrop.style.inset = "0"
+      newBackdrop.style.backgroundColor = "rgba(0, 0, 0, 0.5)"
+      newBackdrop.style.backdropFilter = "blur(5px)"
+      newBackdrop.style.zIndex = "80"
+      newBackdrop.style.opacity = "0"
+      newBackdrop.style.pointerEvents = "none"
+      newBackdrop.style.transition = "opacity 300ms"
+      document.body.appendChild(newBackdrop)
+    }
+
+    const currentBackdrop = document.querySelector(".mobile-menu-backdrop") as HTMLDivElement
+
+    if (isMenuOpen) {
+      currentBackdrop.style.opacity = "1"
+      currentBackdrop.style.pointerEvents = "auto"
+      document.body.style.overflow = "hidden" // Prevenir scroll
+    } else {
+      currentBackdrop.style.opacity = "0"
+      currentBackdrop.style.pointerEvents = "none"
+      document.body.style.overflow = "" // Restaurar scroll
     }
 
     // Función para cerrar el menú con la tecla Escape
@@ -93,21 +109,29 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
       }
     }
 
+    // Función para cerrar el menú al hacer clic en el backdrop
+    const handleBackdropClick = () => {
+      if (isMenuOpen) {
+        setIsMenuOpen(false)
+      }
+    }
+
+    // Limpiar los event listeners anteriores
+    currentBackdrop.removeEventListener("click", handleBackdropClick)
+    document.removeEventListener("keydown", handleEscape)
+
     // Solo añadir event listeners cuando el menú está abierto
     if (isMenuOpen) {
+      currentBackdrop.addEventListener("click", handleBackdropClick)
       document.addEventListener("keydown", handleEscape)
-    } else {
-      document.removeEventListener("keydown", handleEscape)
     }
 
     return () => {
       // Limpiar los event listeners al desmontar
+      currentBackdrop.removeEventListener("click", handleBackdropClick)
       document.removeEventListener("keydown", handleEscape)
       // Asegurar que el scroll se restaure
       document.body.style.overflow = ""
-      if (backdrop) {
-        backdrop.classList.remove("active")
-      }
     }
   }, [isMenuOpen])
 
@@ -134,286 +158,280 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
   // Si estamos en una página de herramienta, mantener el diseño original
   if (isToolPage) {
     return (
-      <>
-        <div className="menu-backdrop"></div>
-        <header
-          style={{
-            position: "sticky",
-            top: 0,
-            zIndex: 50,
-            backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)", // Añadir soporte para Safari
-            backgroundColor: headerBgColor,
-            borderBottom: `1px solid ${headerBorderColor}`,
-            width: "100%",
-            transition: "background-color 0.3s ease, border-color 0.3s ease",
-          }}
-        >
-          <div className="flex items-center justify-between h-16 px-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleBackClick}
-              style={{
-                backgroundColor: "transparent",
-                height: "44px",
-                width: "44px",
-              }}
-              className="hover:bg-white/30 dark:hover:bg-gray-700/30 active:scale-90 active:bg-white/50 dark:active:bg-gray-700/50 transition-all duration-200"
-            >
-              <ChevronLeft className="h-6 w-6" />
-              <span className="sr-only">Volver</span>
-            </Button>
-
-            <Link
-              href="/"
-              className="font-bold text-xl hover:bg-white/60 dark:hover:bg-gray-700/60 active:bg-white/80 dark:active:bg-gray-700/80 transition-all duration-200 active:scale-95"
-              onClick={() => triggerHapticFeedback("light")}
-              style={{
-                backgroundColor: currentTheme === "dark" ? "rgba(30, 30, 30, 0.4)" : "rgba(255, 255, 255, 0.4)",
-                padding: "0.5rem 1.25rem",
-                borderRadius: "0.5rem",
-                transition: "all 0.2s ease",
-              }}
-            >
-              HOLENTIA
-            </Link>
-
-            <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="hover:bg-white/30 dark:hover:bg-gray-700/30 active:bg-white/50 dark:active:bg-gray-700/50 active:scale-90 transition-all duration-200"
-                  onClick={handleMenuToggle}
-                  style={{
-                    backgroundColor: "transparent",
-                    height: "44px",
-                    width: "44px",
-                  }}
-                >
-                  <Menu className="h-6 w-6" />
-                  <span className="sr-only">Menú</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                className="w-64 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg"
-              >
-                <div className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">
-                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Navegación</h3>
-                </div>
-                <div className="py-1">
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href="/"
-                      className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                      onClick={() => triggerHapticFeedback("light")}
-                    >
-                      Inicio
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href="/mente"
-                      className="px-4 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-                      onClick={() => triggerHapticFeedback("light")}
-                    >
-                      Mente
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href="/cuerpo"
-                      className="px-4 py-2 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
-                      onClick={() => triggerHapticFeedback("light")}
-                    >
-                      Cuerpo
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href="/finanzas"
-                      className="px-4 py-2 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors"
-                      onClick={() => triggerHapticFeedback("light")}
-                    >
-                      Finanzas
-                    </Link>
-                  </DropdownMenuItem>
-                </div>
-                <div className="py-1 border-t border-gray-200 dark:border-gray-700">
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href="/ayuda"
-                      className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                      onClick={() => triggerHapticFeedback("light")}
-                    >
-                      Ayuda
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href="/apoyar"
-                      className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                      onClick={() => triggerHapticFeedback("light")}
-                      style={{ color: donationTextColor }}
-                    >
-                      Hacer donación
-                    </Link>
-                  </DropdownMenuItem>
-                </div>
-                <div className="py-1 border-t border-gray-200 dark:border-gray-700">
-                  <DropdownMenuItem
-                    onClick={() => {
-                      triggerHapticFeedback("medium")
-                      setTheme(currentTheme === "dark" ? "light" : "dark")
-                    }}
-                    className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center justify-between"
-                  >
-                    <span>Modo {currentTheme === "dark" ? "Claro" : "Oscuro"}</span>
-                    {currentTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                  </DropdownMenuItem>
-                </div>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </header>
-      </>
-    )
-  }
-
-  // Para home o secciones, usar el nuevo diseño con el botón de menú a la derecha
-  return (
-    <>
-      <div className="menu-backdrop"></div>
       <header
         style={{
           position: "sticky",
           top: 0,
           zIndex: 50,
           backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)", // Añadir soporte para Safari
           backgroundColor: headerBgColor,
           borderBottom: `1px solid ${headerBorderColor}`,
           width: "100%",
           transition: "background-color 0.3s ease, border-color 0.3s ease",
         }}
       >
-        <div className="flex items-center justify-between h-14 px-4">
-          <div className="flex-1"></div>
+        <div className="flex items-center justify-between h-16 px-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleBackClick}
+            style={{
+              backgroundColor: "transparent",
+              height: "44px",
+              width: "44px",
+            }}
+            className="hover:bg-white/30 dark:hover:bg-gray-700/30 active:scale-90 active:bg-white/50 dark:active:bg-gray-700/50 transition-all duration-200"
+          >
+            <ChevronLeft className="h-6 w-6" />
+            <span className="sr-only">Volver</span>
+          </Button>
 
           <Link
             href="/"
-            className="font-bold text-lg hover:bg-white/60 dark:hover:bg-gray-700/60 active:bg-white/80 dark:active:bg-gray-700/80 transition-all duration-200 active:scale-95"
+            className="font-bold text-xl hover:bg-white/60 dark:hover:bg-gray-700/60 active:bg-white/80 dark:active:bg-gray-700/80 transition-all duration-200 active:scale-95"
             onClick={() => triggerHapticFeedback("light")}
             style={{
               backgroundColor: currentTheme === "dark" ? "rgba(30, 30, 30, 0.4)" : "rgba(255, 255, 255, 0.4)",
-              padding: "0.375rem 1rem",
-              borderRadius: "0.375rem",
-              transition: "background-color 0.3s ease",
+              padding: "0.5rem 1.25rem",
+              borderRadius: "0.5rem",
+              transition: "all 0.2s ease",
             }}
           >
             HOLENTIA
           </Link>
 
-          <div className="flex-1 flex justify-end">
-            <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="hover:bg-white/30 dark:hover:bg-gray-700/30 active:bg-white/50 dark:active:bg-gray-700/50 active:scale-95 transition-transform"
-                  onClick={handleMenuToggle}
-                  style={{
-                    backgroundColor: "transparent",
-                  }}
-                >
-                  <Menu className="h-5 w-5" />
-                  <span className="sr-only">Menú</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                className="w-64 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg"
+          <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hover:bg-white/30 dark:hover:bg-gray-700/30 active:bg-white/50 dark:active:bg-gray-700/50 active:scale-90 transition-all duration-200"
+                onClick={handleMenuToggle}
+                style={{
+                  backgroundColor: "transparent",
+                  height: "44px",
+                  width: "44px",
+                }}
               >
-                <div className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">
-                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Navegación</h3>
-                </div>
-                <div className="py-1">
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href="/"
-                      className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                      onClick={() => triggerHapticFeedback("light")}
-                    >
-                      Inicio
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href="/mente"
-                      className="px-4 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-                      onClick={() => triggerHapticFeedback("light")}
-                    >
-                      Mente
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href="/cuerpo"
-                      className="px-4 py-2 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
-                      onClick={() => triggerHapticFeedback("light")}
-                    >
-                      Cuerpo
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href="/finanzas"
-                      className="px-4 py-2 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors"
-                      onClick={() => triggerHapticFeedback("light")}
-                    >
-                      Finanzas
-                    </Link>
-                  </DropdownMenuItem>
-                </div>
-                <div className="py-1 border-t border-gray-200 dark:border-gray-700">
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href="/ayuda"
-                      className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                      onClick={() => triggerHapticFeedback("light")}
-                    >
-                      Ayuda
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href="/apoyar"
-                      className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                      onClick={() => triggerHapticFeedback("light")}
-                      style={{ color: donationTextColor }}
-                    >
-                      Hacer donación
-                    </Link>
-                  </DropdownMenuItem>
-                </div>
-                <div className="py-1 border-t border-gray-200 dark:border-gray-700">
-                  <DropdownMenuItem
-                    onClick={() => {
-                      triggerHapticFeedback("medium")
-                      setTheme(currentTheme === "dark" ? "light" : "dark")
-                    }}
-                    className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center justify-between"
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Menú</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              className="w-64 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-[85]"
+            >
+              <div className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Navegación</h3>
+              </div>
+              <div className="py-1">
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/"
+                    className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    onClick={() => triggerHapticFeedback("light")}
                   >
-                    <span>Modo {currentTheme === "dark" ? "Claro" : "Oscuro"}</span>
-                    {currentTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                  </DropdownMenuItem>
-                </div>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+                    Inicio
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/mente"
+                    className="px-4 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                    onClick={() => triggerHapticFeedback("light")}
+                  >
+                    Mente
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/cuerpo"
+                    className="px-4 py-2 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
+                    onClick={() => triggerHapticFeedback("light")}
+                  >
+                    Cuerpo
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/finanzas"
+                    className="px-4 py-2 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors"
+                    onClick={() => triggerHapticFeedback("light")}
+                  >
+                    Finanzas
+                  </Link>
+                </DropdownMenuItem>
+              </div>
+              <div className="py-1 border-t border-gray-200 dark:border-gray-700">
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/ayuda"
+                    className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    onClick={() => triggerHapticFeedback("light")}
+                  >
+                    Ayuda
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/apoyar"
+                    className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    onClick={() => triggerHapticFeedback("light")}
+                    style={{ color: donationTextColor }}
+                  >
+                    Hacer donación
+                  </Link>
+                </DropdownMenuItem>
+              </div>
+              <div className="py-1 border-t border-gray-200 dark:border-gray-700">
+                <DropdownMenuItem
+                  onClick={() => {
+                    triggerHapticFeedback("medium")
+                    setTheme(currentTheme === "dark" ? "light" : "dark")
+                  }}
+                  className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center justify-between"
+                >
+                  <span>Modo {currentTheme === "dark" ? "Claro" : "Oscuro"}</span>
+                  {currentTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                </DropdownMenuItem>
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
-    </>
+    )
+  }
+
+  // Para home o secciones, usar el nuevo diseño con el botón de menú a la derecha
+  return (
+    <header
+      style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 50,
+        backdropFilter: "blur(12px)",
+        backgroundColor: headerBgColor,
+        borderBottom: `1px solid ${headerBorderColor}`,
+        width: "100%",
+        transition: "background-color 0.3s ease, border-color 0.3s ease",
+      }}
+    >
+      <div className="flex items-center justify-between h-14 px-4">
+        <div className="flex-1"></div>
+
+        <Link
+          href="/"
+          className="font-bold text-lg hover:bg-white/60 dark:hover:bg-gray-700/60 active:bg-white/80 dark:active:bg-gray-700/80 transition-all duration-200 active:scale-95"
+          onClick={() => triggerHapticFeedback("light")}
+          style={{
+            backgroundColor: currentTheme === "dark" ? "rgba(30, 30, 30, 0.4)" : "rgba(255, 255, 255, 0.4)",
+            padding: "0.375rem 1rem",
+            borderRadius: "0.375rem",
+            transition: "background-color 0.3s ease",
+          }}
+        >
+          HOLENTIA
+        </Link>
+
+        <div className="flex-1 flex justify-end">
+          <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hover:bg-white/30 dark:hover:bg-gray-700/30 active:bg-white/50 dark:active:bg-gray-700/50 active:scale-95 transition-transform"
+                onClick={handleMenuToggle}
+                style={{
+                  backgroundColor: "transparent",
+                }}
+              >
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Menú</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              className="w-64 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-[85]"
+            >
+              <div className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Navegación</h3>
+              </div>
+              <div className="py-1">
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/"
+                    className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    onClick={() => triggerHapticFeedback("light")}
+                  >
+                    Inicio
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/mente"
+                    className="px-4 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                    onClick={() => triggerHapticFeedback("light")}
+                  >
+                    Mente
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/cuerpo"
+                    className="px-4 py-2 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
+                    onClick={() => triggerHapticFeedback("light")}
+                  >
+                    Cuerpo
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/finanzas"
+                    className="px-4 py-2 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors"
+                    onClick={() => triggerHapticFeedback("light")}
+                  >
+                    Finanzas
+                  </Link>
+                </DropdownMenuItem>
+              </div>
+              <div className="py-1 border-t border-gray-200 dark:border-gray-700">
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/ayuda"
+                    className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    onClick={() => triggerHapticFeedback("light")}
+                  >
+                    Ayuda
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/apoyar"
+                    className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    onClick={() => triggerHapticFeedback("light")}
+                    style={{ color: donationTextColor }}
+                  >
+                    Hacer donación
+                  </Link>
+                </DropdownMenuItem>
+              </div>
+              <div className="py-1 border-t border-gray-200 dark:border-gray-700">
+                <DropdownMenuItem
+                  onClick={() => {
+                    triggerHapticFeedback("medium")
+                    setTheme(currentTheme === "dark" ? "light" : "dark")
+                  }}
+                  className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center justify-between"
+                >
+                  <span>Modo {currentTheme === "dark" ? "Claro" : "Oscuro"}</span>
+                  {currentTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                </DropdownMenuItem>
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+    </header>
   )
 }
