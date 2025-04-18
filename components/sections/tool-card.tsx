@@ -126,7 +126,7 @@ export default function ToolCard({ card, index }: ToolCardProps) {
       ref={cardRef}
       style={{
         position: "relative",
-        padding: "1.75rem",
+        padding: "1.5rem",
         borderRadius: "16px",
         border: `1px solid ${borderColor}`,
         backdropFilter: "blur(20px)",
@@ -134,8 +134,10 @@ export default function ToolCard({ card, index }: ToolCardProps) {
           ? `${bgColor.replace(/[^,]+(?=\))/, "0.75")}`
           : `${bgColor.replace(/[^,]+(?=\))/, "0.5")}`,
         boxShadow: isAvailable ? "0 12px 28px rgba(0, 0, 0, 0.1)" : "0 6px 16px rgba(0, 0, 0, 0.05)",
-        minHeight: "175px",
-        height: "auto",
+        height: "180px", // Altura fija para todas las tarjetas
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
         transition: "all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
         opacity: isAvailable ? 1 : 0.6,
         animationDelay,
@@ -146,7 +148,7 @@ export default function ToolCard({ card, index }: ToolCardProps) {
       <div style={{ paddingRight: "1.75rem" }}>
         <span
           style={{
-            fontSize: isMobile ? "0.8rem" : "0.75rem",
+            fontSize: isMobile ? "0.8rem" : "0.7rem", // Reducido para escritorio
             fontWeight: 500,
             textTransform: "uppercase",
             letterSpacing: "0.05em",
@@ -158,7 +160,7 @@ export default function ToolCard({ card, index }: ToolCardProps) {
         </span>
         <h3
           style={{
-            fontSize: isMobile ? "1.25rem" : "1.125rem",
+            fontSize: isMobile ? "1.25rem" : "1rem", // Reducido para escritorio
             fontWeight: 600,
             marginTop: "0.35rem",
             color: titleTextColor,
@@ -168,7 +170,7 @@ export default function ToolCard({ card, index }: ToolCardProps) {
         </h3>
         <p
           style={{
-            fontSize: isMobile ? "0.9rem" : "0.85rem",
+            fontSize: isMobile ? "0.9rem" : "0.8rem", // Reducido para escritorio
             marginTop: "0.35rem",
             opacity: 0.95,
             color: descriptionTextColor,

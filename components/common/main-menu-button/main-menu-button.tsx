@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Menu } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -70,18 +70,22 @@ export default function MainMenuButton() {
             variant="outline"
             size="icon"
             style={{
-              height: "44px",
-              width: "44px",
+              height: "48px", // Ligeramente más grande
+              width: "48px", // Ligeramente más grande
               borderRadius: "9999px",
               backgroundColor: buttonBgColor,
-              boxShadow: "0 4px 8px -1px rgba(0, 0, 0, 0.12), 0 2px 6px -1px rgba(0, 0, 0, 0.08)",
-              border: `1px solid ${buttonBorderColor}`,
+              boxShadow: "0 2px 5px rgba(0, 0, 0, 0.08)", // Sombra menos preponderante
+              border: `1.5px solid ${buttonBorderColor}`, // Borde más fijo
               transition: "all 0.2s ease",
             }}
             className="active:scale-95 transition-transform hover:bg-gray-100 dark:hover:bg-gray-800"
             onClick={handleMenuToggle}
           >
-            <Menu className="h-5 w-5" />
+            {isMenuOpen ? (
+              <X className="h-6 w-6 transition-transform duration-300" />
+            ) : (
+              <Menu className="h-6 w-6 transition-transform duration-300" />
+            )}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent

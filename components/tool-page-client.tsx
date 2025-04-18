@@ -92,20 +92,21 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
             borderBottom: `1px solid ${currentTheme === "dark" ? "rgba(75, 85, 99, 0.2)" : "rgba(229, 231, 235, 0.8)"}`,
           }}
         >
-          <div className="max-w-6xl mx-auto px-6 flex flex-col items-center relative">
-            {/* Contenedor para el logo y el botón de menú */}
-            <div className="w-full flex justify-center items-center mb-4 relative">
+          <div className="max-w-6xl mx-auto px-6 relative">
+            {/* Botón de menú en la esquina superior derecha, alineado con el centro del botón "Hacer donación" */}
+            <div className="absolute top-1/2 right-6 z-10 -translate-y-1/2">
+              <MainMenuButton />
+            </div>
+
+            {/* Logo centrado */}
+            <div className="flex justify-center mb-4">
               <div className="transform transition-transform hover:scale-110 duration-300">
                 <Logo section={section} size="md" />
               </div>
-
-              {/* Botón de menú posicionado a la derecha del logo */}
-              <div className="absolute right-0 top-1/2 transform -translate-y-1/2">
-                <MainMenuButton />
-              </div>
             </div>
 
-            <div className="flex justify-between w-full mt-2 px-8">
+            {/* Botones alineados en los extremos */}
+            <div className="flex justify-between items-center w-full px-8">
               <Link href={`/${section}`}>
                 <Button
                   variant="outline"

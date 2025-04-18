@@ -13,13 +13,15 @@ export default function Home() {
       <Header />
       <SectionSwipeNavigation />
 
-      <div className="flex-1 flex flex-col items-center justify-center max-w-6xl w-full mx-auto relative">
-        {/* Botón de menú en la esquina superior derecha */}
-        <div className="absolute top-0 right-0 z-10">
-          <MainMenuButton />
-        </div>
+      <div className="flex-1 flex flex-col items-center justify-center max-w-6xl w-full mx-auto">
+        <div className="relative w-full flex justify-center mb-8">
+          <Logo size="lg" />
 
-        <Logo size="lg" />
+          {/* Botón de menú posicionado con más espacio respecto al logo */}
+          <div className="absolute right-0 sm:right-4 md:right-12 lg:right-20 top-4">
+            <MainMenuButton />
+          </div>
+        </div>
 
         <SectionTabs />
 
