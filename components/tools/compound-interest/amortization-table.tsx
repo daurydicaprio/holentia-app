@@ -60,7 +60,7 @@ export function AmortizationTable({
     return balance / Math.pow(1 + infl, years)
   }
 
-  // Asegurar que los bordes de la tabla sean visibles
+  // Asegurar que los bordes de la tabla sean visibles y redondeados
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-sm border border-gray-200 dark:border-gray-700">
       <h2 className="text-xl font-bold text-center text-[#388e3c] mb-6">
@@ -68,11 +68,11 @@ export function AmortizationTable({
         <span className="block w-16 h-1 bg-[#388e3c] mx-auto mt-2"></span>
       </h2>
 
-      {/* Botones para cambiar vista */}
-      <div className="flex justify-center mb-4 space-x-2">
+      {/* Botones para cambiar vista - Aumentados en ancho */}
+      <div className="flex justify-center mb-4 space-x-4">
         <button
           onClick={() => setTableView("annual")}
-          className={`px-4 py-2 rounded-md transition-colors ${
+          className={`px-6 py-2 rounded-md transition-colors min-w-[120px] ${
             tableView === "annual"
               ? "bg-[#388e3c] text-white shadow-sm"
               : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
@@ -83,7 +83,7 @@ export function AmortizationTable({
         <button
           onClick={() => setTableView("monthly")}
           disabled={contributionFrequency !== 12}
-          className={`px-4 py-2 rounded-md transition-colors ${
+          className={`px-6 py-2 rounded-md transition-colors min-w-[120px] ${
             tableView === "monthly"
               ? "bg-[#388e3c] text-white shadow-sm"
               : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
@@ -93,66 +93,91 @@ export function AmortizationTable({
         </button>
       </div>
 
-      {/* Tabla */}
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr>
-              <th className="p-3 text-left bg-[#388e3c]/20 dark:bg-[#388e3c]/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700 rounded-tl-md">
-                {tableView === "annual" ? "Año" : "Mes"}
-              </th>
-              <th className="p-3 text-left bg-[#388e3c]/20 dark:bg-[#388e3c]/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700">
-                Capital inicial
-              </th>
-              <th className="p-3 text-left bg-[#388e3c]/20 dark:bg-[#388e3c]/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700">
-                Interés acumulado
-              </th>
-              <th className="p-3 text-left bg-[#388e3c]/20 dark:bg-[#388e3c]/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700">
-                Balance final
-              </th>
-              <th className="p-3 text-left bg-[#388e3c]/20 dark:bg-[#388e3c]/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700 rounded-tr-md">
-                Balance ajustado
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentData.length > 0 ? (
-              currentData.map((row, index) => {
-                const actualIndex = startIndex + index
-                const accumulatedInterest = calculateAccumulatedInterest(dataToShow, actualIndex)
-                const period = tableView === "annual" ? row.year : (row.period as number)
-                const adjustedBalance = calculateAdjustedBalance(row.balance, period)
-
-                return (
-                  <tr
-                    key={period}
-                    className={`${
-                      index % 2 === 0 ? "bg-white dark:bg-gray-900" : "bg-gray-50 dark:bg-gray-800/50"
-                    } hover:bg-[#388e3c]/5 dark:hover:bg-[#388e3c]/10`}
-                  >
-                    <td className="p-3 border border-gray-200 dark:border-gray-700">{period}</td>
-                    <td className="p-3 border border-gray-200 dark:border-gray-700">
-                      {formatCurrency(row.startBalance)}
-                    </td>
-                    <td className="p-3 border border-gray-200 dark:border-gray-700">
-                      {formatCurrency(accumulatedInterest)}
-                    </td>
-                    <td className="p-3 border border-gray-200 dark:border-gray-700">{formatCurrency(row.balance)}</td>
-                    <td className="p-3 border border-gray-200 dark:border-gray-700">
-                      {formatCurrency(adjustedBalance)}
-                    </td>
-                  </tr>
-                )
-              })
-            ) : (
+      {/* Tabla con bordes redondeados */}
+      <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead>
               <tr>
-                <td colSpan={5} className="p-4 text-center text-gray-500 dark:text-gray-400">
-                  No hay datos para mostrar.
-                </td>
+                <th className="p-3 text-left bg-[#388e3c]/20 dark:bg-[#388e3c]/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700 rounded-tl-md">
+                  {tableView === "annual" ? "Año" : "Mes"}
+                </th>
+                <th className="p-3 text-left bg-[#388e3c]/20 dark:bg-[#388e3c]/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700">
+                  Capital inicial
+                </th>
+                <th className="p-3 text-left bg-[#388e3c]/20 dark:bg-[#388e3c]/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700">
+                  Interés acumulado
+                </th>
+                <th className="p-3 text-left bg-[#388e3c]/20 dark:bg-[#388e3c]/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700">
+                  Balance final
+                </th>
+                <th className="p-3 text-left bg-[#388e3c]/20 dark:bg-[#388e3c]/30 text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700 rounded-tr-md">
+                  Balance ajustado
+                </th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {currentData.length > 0 ? (
+                currentData.map((row, index) => {
+                  const actualIndex = startIndex + index
+                  const accumulatedInterest = calculateAccumulatedInterest(dataToShow, actualIndex)
+                  const period = tableView === "annual" ? row.year : (row.period as number)
+                  const adjustedBalance = calculateAdjustedBalance(row.balance, period)
+
+                  return (
+                    <tr
+                      key={period}
+                      className={`${
+                        index % 2 === 0 ? "bg-white dark:bg-gray-900" : "bg-gray-50 dark:bg-gray-800/50"
+                      } hover:bg-[#388e3c]/5 dark:hover:bg-[#388e3c]/10`}
+                    >
+                      <td className="p-3 border border-gray-200 dark:border-gray-700">{period}</td>
+                      <td className="p-3 border border-gray-200 dark:border-gray-700">
+                        {formatCurrency(row.startBalance)}
+                      </td>
+                      <td className="p-3 border border-gray-200 dark:border-gray-700">
+                        {formatCurrency(accumulatedInterest)}
+                      </td>
+                      <td className="p-3 border border-gray-200 dark:border-gray-700">{formatCurrency(row.balance)}</td>
+                      <td className="p-3 border border-gray-200 dark:border-gray-700">
+                        {formatCurrency(adjustedBalance)}
+                      </td>
+                    </tr>
+                  )
+                })
+              ) : (
+                <tr>
+                  <td colSpan={5} className="p-4 text-center text-gray-500 dark:text-gray-400">
+                    No hay datos para mostrar.
+                  </td>
+                </tr>
+              )}
+              {/* Última fila con bordes redondeados en las esquinas inferiores */}
+              {currentData.length > 0 && (
+                <tr className="bg-[#388e3c]/10 dark:bg-[#388e3c]/20 font-medium">
+                  <td className="p-3 text-sm border border-gray-200 dark:border-gray-700 rounded-bl-md">Total</td>
+                  <td className="p-3 text-sm border border-gray-200 dark:border-gray-700">
+                    {formatCurrency(dataToShow[0]?.startBalance || 0)}
+                  </td>
+                  <td className="p-3 text-sm border border-gray-200 dark:border-gray-700">
+                    {formatCurrency(dataToShow.reduce((sum, row) => sum + (row.interest || 0), 0))}
+                  </td>
+                  <td className="p-3 text-sm border border-gray-200 dark:border-gray-700">
+                    {formatCurrency(dataToShow[dataToShow.length - 1]?.balance || 0)}
+                  </td>
+                  <td className="p-3 text-sm border border-gray-200 dark:border-gray-700 rounded-br-md">
+                    {formatCurrency(
+                      calculateAdjustedBalance(
+                        dataToShow[dataToShow.length - 1]?.balance || 0,
+                        tableView === "annual" ? dataToShow.length : dataToShow.length * 12,
+                      ),
+                    )}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Paginación */}

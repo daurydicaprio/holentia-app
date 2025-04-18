@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { ArrowRight } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 
@@ -8,6 +8,7 @@ export default function WelcomeModal() {
   const [isOpen, setIsOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const { triggerHapticFeedback } = useHapticFeedback()
+  const modalRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -31,6 +32,36 @@ export default function WelcomeModal() {
     }
   }, [])
 
+  useEffect(() => {
+    // Manejar clic fuera del modal para cerrarlo
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        handleClose()
+      }
+    }
+
+    // Manejar tecla Escape para cerrar el modal
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleClose()
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+      document.addEventListener("keydown", handleEscapeKey)
+      // Prevenir scroll del body cuando el modal está abierto
+      document.body.style.overflow = "hidden"
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("keydown", handleEscapeKey)
+      // Restaurar scroll cuando el componente se desmonta o el modal se cierra
+      document.body.style.overflow = ""
+    }
+  }, [isOpen])
+
   const handleClose = () => {
     triggerHapticFeedback("medium")
     setIsOpen(false)
@@ -41,13 +72,18 @@ export default function WelcomeModal() {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm">
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-md"
+      onClick={handleClose} // Cerrar al hacer clic en cualquier parte
+    >
       <div
+        ref={modalRef}
         className="bg-white dark:bg-gray-900 rounded-lg shadow-2xl w-[95vw] max-w-md overflow-hidden"
         style={{
           transform: "translateY(0)",
           animation: "fadeIn 0.3s ease-out",
         }}
+        onClick={(e) => e.stopPropagation()} // Evitar que los clics dentro del modal lo cierren
       >
         {/* Encabezado con diseño minimalista */}
         <div className="relative bg-gradient-to-r from-blue-500 to-green-500 p-6">
