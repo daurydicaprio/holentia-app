@@ -1,5 +1,4 @@
 "use client"
-
 import { AlertCircle, TrendingUp, ArrowRight, Coins, Clock, AlertTriangle } from "lucide-react"
 import type { SummaryData } from "@/hooks/use-compound-interest-calculator"
 
