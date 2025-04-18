@@ -1,8 +1,8 @@
 "use client"
 
-import type React from "react"
-
-import { useMediaQuery } from "@/hooks/use-media-query"
+import { useState } from "react"
+import { motion } from "framer-motion"
+import { DollarSign, Percent, Calendar, HelpCircle } from "lucide-react"
 
 interface CalculatorInputsProps {
   initialDeposit: number
@@ -33,141 +33,288 @@ export function CalculatorInputs({
   inflation,
   setInflation,
 }: CalculatorInputsProps) {
-  const isMobile = useMediaQuery("(max-width: 768px)")
+  const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
 
-  // Manejadores de cambio que permiten valores vacíos
-  const handleInitialDepositChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setInitialDeposit(value === "" ? 0 : Number(value))
+  // Función para manejar cambios en inputs numéricos
+  const handleNumberChange = (setter: (value: number) => void, value: string) => {
+    const numValue = Number.parseFloat(value)
+    if (!isNaN(numValue)) {
+      setter(numValue)
+    } else {
+      setter(0)
+    }
   }
 
-  const handleContributionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setContribution(value === "" ? 0 : Number(value))
+  // Tooltips informativos
+  const tooltips = {
+    initialDeposit: "Cantidad inicial que invertirás al comenzar.",
+    contribution: "Cantidad que aportarás regularmente a tu inversión.",
+    contributionFrequency: "Frecuencia con la que realizarás tus aportaciones.",
+    years: "Duración total de tu inversión en años.",
+    interestRate: "Tasa de interés anual esperada para tu inversión.",
+    inflation: "Tasa de inflación anual estimada. Afecta al poder adquisitivo de tu dinero con el tiempo.",
   }
 
-  const handleYearsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setYears(value === "" ? 0 : Number(value))
-  }
-
-  const handleInterestRateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setInterestRate(value === "" ? 0 : Number(value))
-  }
-
-  const handleInflationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setInflation(value === "" ? 0 : Number(value))
-  }
-
-  // Asegurar que los bordes del componente de inputs sean visibles
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700 shadow-sm">
-      <h3 className="text-lg font-semibold text-[#388e3c] mb-4">Datos de la inversión</h3>
+    <motion.div
+      className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-sm border border-gray-200 dark:border-gray-700"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <h2 className="text-xl font-bold text-[#388e3c] mb-6 text-center">
+        Parámetros de la inversión
+        <span className="block w-16 h-1 bg-[#388e3c] mx-auto mt-2"></span>
+      </h2>
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         {/* Depósito inicial */}
-        <div className="input-field">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Depósito inicial</label>
-          <div className="flex rounded-md overflow-hidden shadow-sm">
-            <span className="inline-flex items-center px-3 bg-[#388e3c] text-white font-medium border border-[#388e3c]">
-              $
-            </span>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label htmlFor="initialDeposit" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Depósito inicial
+            </label>
+            <div className="relative">
+              <button
+                className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                onMouseEnter={() => setActiveTooltip("initialDeposit")}
+                onMouseLeave={() => setActiveTooltip(null)}
+                aria-label="Información sobre depósito inicial"
+              >
+                <HelpCircle size={16} />
+              </button>
+              {activeTooltip === "initialDeposit" && (
+                <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
+                  {tooltips.initialDeposit}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <DollarSign size={16} className="text-gray-400" />
+            </div>
             <input
               type="number"
+              id="initialDeposit"
               value={initialDeposit || ""}
-              onChange={handleInitialDepositChange}
+              onChange={(e) => handleNumberChange(setInitialDeposit, e.target.value)}
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              placeholder="0"
               min="0"
-              className="flex-1 block w-full min-w-0 p-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#388e3c] focus:border-[#388e3c]"
-              placeholder="Ingresa tu depósito inicial"
+              step="1000"
             />
           </div>
         </div>
 
-        {/* Fila horizontal para Aporte y Frecuencia - Siempre en horizontal incluso en móvil */}
-        <div className="grid grid-cols-3 gap-4">
-          <div className="col-span-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Aporte</label>
-            <div className="flex rounded-md overflow-hidden shadow-sm">
-              <span className="inline-flex items-center px-3 bg-[#388e3c] text-white font-medium border border-[#388e3c]">
-                $
-              </span>
-              <input
-                type="number"
-                value={contribution || ""}
-                onChange={handleContributionChange}
-                min="0"
-                className="flex-1 block w-full min-w-0 p-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#388e3c] focus:border-[#388e3c]"
-                placeholder="Aporte periódico"
-              />
+        {/* Aportación periódica */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label htmlFor="contribution" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Aportación periódica
+            </label>
+            <div className="relative">
+              <button
+                className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                onMouseEnter={() => setActiveTooltip("contribution")}
+                onMouseLeave={() => setActiveTooltip(null)}
+                aria-label="Información sobre aportación periódica"
+              >
+                <HelpCircle size={16} />
+              </button>
+              {activeTooltip === "contribution" && (
+                <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
+                  {tooltips.contribution}
+                </div>
+              )}
             </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Frecuencia</label>
-            <select
-              value={contributionFrequency}
-              onChange={(e) => setContributionFrequency(Number(e.target.value))}
-              className="w-full p-2.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#388e3c] focus:border-[#388e3c] shadow-sm"
-            >
-              <option value={1}>Anual</option>
-              <option value={12}>Mensual</option>
-            </select>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <DollarSign size={16} className="text-gray-400" />
+            </div>
+            <input
+              type="number"
+              id="contribution"
+              value={contribution || ""}
+              onChange={(e) => handleNumberChange(setContribution, e.target.value)}
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              placeholder="0"
+              min="0"
+              step="100"
+            />
           </div>
         </div>
 
-        {/* Parte inferior del recuadro: Años, Tasa de interés e Inflación - Siempre en horizontal incluso en móvil */}
-        <div className="grid grid-cols-3 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Años</label>
-            <div className="flex rounded-md overflow-hidden shadow-sm">
-              <span className="inline-flex items-center px-3 bg-[#388e3c] text-white font-medium border border-[#388e3c]">
-                <span className="text-lg">⏳</span>
-              </span>
-              <input
-                type="number"
-                value={years || ""}
-                onChange={handleYearsChange}
-                className="flex-1 block w-full min-w-0 p-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#388e3c] focus:border-[#388e3c]"
-                placeholder="Años"
-                max={99}
-              />
+        {/* Frecuencia de aportación */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label
+              htmlFor="contributionFrequency"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
+              Frecuencia de aportación
+            </label>
+            <div className="relative">
+              <button
+                className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                onMouseEnter={() => setActiveTooltip("contributionFrequency")}
+                onMouseLeave={() => setActiveTooltip(null)}
+                aria-label="Información sobre frecuencia de aportación"
+              >
+                <HelpCircle size={16} />
+              </button>
+              {activeTooltip === "contributionFrequency" && (
+                <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
+                  {tooltips.contributionFrequency}
+                </div>
+              )}
             </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tasa de interés</label>
-            <div className="flex rounded-md overflow-hidden shadow-sm">
-              <span className="inline-flex items-center px-3 bg-[#388e3c] text-white font-medium border border-[#388e3c]">
-                %
-              </span>
-              <input
-                type="number"
-                value={interestRate || ""}
-                onChange={handleInterestRateChange}
-                className="flex-1 block w-full min-w-0 p-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#388e3c] focus:border-[#388e3c]"
-                placeholder="Tasa de interés"
-                max={99}
-              />
+          <div className="flex space-x-2">
+            <button
+              onClick={() => setContributionFrequency(12)}
+              className={`flex-1 py-2 px-4 rounded-md transition-colors ${
+                contributionFrequency === 12
+                  ? "bg-green-600 text-white"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+              }`}
+            >
+              Mensual
+            </button>
+            <button
+              onClick={() => setContributionFrequency(1)}
+              className={`flex-1 py-2 px-4 rounded-md transition-colors ${
+                contributionFrequency === 1
+                  ? "bg-green-600 text-white"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+              }`}
+            >
+              Anual
+            </button>
+          </div>
+        </div>
+
+        {/* Años */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label htmlFor="years" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Años
+            </label>
+            <div className="relative">
+              <button
+                className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                onMouseEnter={() => setActiveTooltip("years")}
+                onMouseLeave={() => setActiveTooltip(null)}
+                aria-label="Información sobre años"
+              >
+                <HelpCircle size={16} />
+              </button>
+              {activeTooltip === "years" && (
+                <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
+                  {tooltips.years}
+                </div>
+              )}
             </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Inflación</label>
-            <div className="flex rounded-md overflow-hidden shadow-sm">
-              <span className="inline-flex items-center px-3 bg-[#388e3c] text-white font-medium border border-[#388e3c]">
-                %
-              </span>
-              <input
-                type="number"
-                value={inflation || ""}
-                onChange={handleInflationChange}
-                className="flex-1 block w-full min-w-0 p-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#388e3c] focus:border-[#388e3c]"
-                placeholder="Inflación"
-                max={99}
-              />
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Calendar size={16} className="text-gray-400" />
             </div>
+            <input
+              type="number"
+              id="years"
+              value={years || ""}
+              onChange={(e) => handleNumberChange(setYears, e.target.value)}
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              placeholder="5"
+              min="1"
+              max="100"
+              step="1"
+            />
+          </div>
+        </div>
+
+        {/* Tasa de interés */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label htmlFor="interestRate" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Tasa de interés anual
+            </label>
+            <div className="relative">
+              <button
+                className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                onMouseEnter={() => setActiveTooltip("interestRate")}
+                onMouseLeave={() => setActiveTooltip(null)}
+                aria-label="Información sobre tasa de interés"
+              >
+                <HelpCircle size={16} />
+              </button>
+              {activeTooltip === "interestRate" && (
+                <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
+                  {tooltips.interestRate}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Percent size={16} className="text-gray-400" />
+            </div>
+            <input
+              type="number"
+              id="interestRate"
+              value={interestRate || ""}
+              onChange={(e) => handleNumberChange(setInterestRate, e.target.value)}
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              placeholder="0"
+              min="0"
+              max="100"
+              step="0.1"
+            />
+          </div>
+        </div>
+
+        {/* Inflación */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label htmlFor="inflation" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Inflación anual
+            </label>
+            <div className="relative">
+              <button
+                className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                onMouseEnter={() => setActiveTooltip("inflation")}
+                onMouseLeave={() => setActiveTooltip(null)}
+                aria-label="Información sobre inflación"
+              >
+                <HelpCircle size={16} />
+              </button>
+              {activeTooltip === "inflation" && (
+                <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
+                  {tooltips.inflation}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Percent size={16} className="text-gray-400" />
+            </div>
+            <input
+              type="number"
+              id="inflation"
+              value={inflation || ""}
+              onChange={(e) => handleNumberChange(setInflation, e.target.value)}
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              placeholder="0"
+              min="0"
+              max="100"
+              step="0.1"
+            />
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }
