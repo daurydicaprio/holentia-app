@@ -93,8 +93,8 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
           }}
         >
           <div className="max-w-6xl mx-auto px-6 relative">
-            {/* Botón de menú en la esquina superior derecha, alineado con el centro del botón "Hacer donación" */}
-            <div className="absolute top-1/2 right-6 z-10 -translate-y-1/2">
+            {/* Botón de menú posicionado en la esquina superior derecha, alineado con el borde superior del logo */}
+            <div className="absolute right-6 top-0 z-10">
               <MainMenuButton />
             </div>
 
