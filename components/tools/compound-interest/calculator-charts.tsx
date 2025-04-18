@@ -383,6 +383,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
     pie: "Este gráfico muestra la distribución de tu inversión entre capital inicial, aportaciones e intereses generados. También muestra el impacto de la inflación si está configurada.",
   }
 
+  // Asegurar que los bordes de los gráficos sean visibles
   return (
     <div className="space-y-8">
       {/* Gráfico de línea */}

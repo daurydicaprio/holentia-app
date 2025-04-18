@@ -116,6 +116,7 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
             top: 0,
             zIndex: 50,
             backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)", // Añadir soporte para Safari
             backgroundColor: headerBgColor,
             borderBottom: `1px solid ${headerBorderColor}`,
             width: "100%",

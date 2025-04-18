@@ -143,8 +143,8 @@ export function InvestmentImpactSection({ summary, formatCurrency, inflation, ye
                 <li className="flex items-start gap-2">
                   <ArrowRight size={16} className="mt-1 flex-shrink-0 text-[#388e3c]" />
                   <span>
-                    Históricamente, la inflación promedio en México ha sido del 4-5% anual, erosionando el valor del
-                    dinero no invertido.
+                    Históricamente, la inflación promedio en Latinoamérica ha sido del 3-5% anual, erosionando el valor
+                    del dinero no invertido.
                   </span>
                 </li>
                 <li className="flex items-start gap-2">

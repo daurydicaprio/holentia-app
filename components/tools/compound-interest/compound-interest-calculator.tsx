@@ -43,10 +43,11 @@ export function CompoundInterestCalculator() {
     setActiveTab(tab)
   }
 
+  // Asegurar que la versión móvil también tenga bordes visibles
   // Renderizado para móvil con pestañas
   if (isMobile) {
     return (
-      <div className="bg-white dark:bg-gray-900 rounded-lg">
+      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="p-4">
           {activeTab === "calculator" && (
             <>
@@ -91,9 +92,9 @@ export function CompoundInterestCalculator() {
     )
   }
 
-  // Renderizado para escritorio (sin pestañas)
+  // Asegurar que los bordes de los recuadros sean visibles
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg">
+    <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
       <div className="p-6">
         {/* Sección superior: Inputs y Resumen */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -116,7 +117,7 @@ export function CompoundInterestCalculator() {
           <div>
             {/* Solo mostrar el resultado principal sin la sección de impacto */}
             <div
-              className="rounded-xl p-6 shadow-lg"
+              className="rounded-xl p-6 shadow-lg border border-[#1b5e20]/20"
               style={{
                 background: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)",
                 color: "#ffffff",

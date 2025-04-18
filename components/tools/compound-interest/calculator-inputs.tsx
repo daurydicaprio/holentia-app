@@ -61,8 +61,9 @@ export function CalculatorInputs({
     setInflation(value === "" ? 0 : Number(value))
   }
 
+  // Asegurar que los bordes del componente de inputs sean visibles
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
+    <div className="bg-white dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700 shadow-sm">
       <h3 className="text-lg font-semibold text-[#388e3c] mb-4">Datos de la inversión</h3>
 
       <div className="space-y-5">

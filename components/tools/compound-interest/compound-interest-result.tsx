@@ -27,7 +27,7 @@ export function CompoundInterestResult({ summary, formatCurrency, inflation }: C
   return (
     <div className="space-y-4">
       <div
-        className="rounded-xl p-6 shadow-lg"
+        className="rounded-xl p-6 shadow-lg border border-[#1b5e20]/20"
         style={{
           background: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)",
           color: "#ffffff",

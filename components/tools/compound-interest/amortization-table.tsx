@@ -60,6 +60,7 @@ export function AmortizationTable({
     return balance / Math.pow(1 + infl, years)
   }
 
+  // Asegurar que los bordes de la tabla sean visibles
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-sm border border-gray-200 dark:border-gray-700">
       <h2 className="text-xl font-bold text-center text-[#388e3c] mb-6">
