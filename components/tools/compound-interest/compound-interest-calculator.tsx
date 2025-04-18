@@ -43,13 +43,6 @@ export function CompoundInterestCalculator() {
     setActiveTab(tab)
   }
 
-  // Calcular el balance sin inflación (balance bruto)
-  const grossBalance = summary.balanceNet + summary.inflationEffect
-
-  // Calcular correctamente cuánto valdría el dinero sin invertir después de la inflación
-  const totalInvested = summary.initialDeposit + summary.totalContributions
-  const nonInvestedValue = inflation > 0 ? totalInvested / Math.pow(1 + inflation / 100, years) : totalInvested
-
   // Renderizado para móvil con pestañas
   if (isMobile) {
     return (
@@ -75,17 +68,14 @@ export function CompoundInterestCalculator() {
                 <CompoundInterestResult summary={summary} formatCurrency={formatCurrency} inflation={inflation} />
               </div>
 
-              {/* Añadir el recuadro "Si no inviertes tu dinero" en la versión móvil */}
-              <div className="mt-6 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-                  Si no inviertes tu dinero:
-                </div>
-                <div className="text-lg font-bold text-red-500 dark:text-red-400">
-                  {formatCurrency(nonInvestedValue)}
-                </div>
-                <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">
-                  Total que ahorraste: {formatCurrency(totalInvested)}
-                </div>
+              {/* Añadir la sección de impacto en la versión móvil */}
+              <div className="mt-6">
+                <InvestmentImpactSection
+                  summary={summary}
+                  formatCurrency={formatCurrency}
+                  inflation={inflation}
+                  years={years}
+                />
               </div>
 
               {/* Pestañas móviles dentro del recuadro */}
