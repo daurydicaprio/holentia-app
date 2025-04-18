@@ -1,6 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import type React from "react"
+
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { DollarSign, Percent, Calendar, HelpCircle } from "lucide-react"
 
@@ -35,7 +37,87 @@ export function CalculatorInputs({
 }: CalculatorInputsProps) {
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
 
-  // Función para manejar cambios en inputs numéricos
+  // Estados para los valores formateados
+  const [formattedInitialDeposit, setFormattedInitialDeposit] = useState<string>("")
+  const [formattedContribution, setFormattedContribution] = useState<string>("")
+
+  // Función para formatear números con comas y puntos
+  const formatNumberWithCommas = (value: number): string => {
+    if (isNaN(value)) return ""
+
+    // Formatear el número con comas y dos decimales
+    return new Intl.NumberFormat("es-MX", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    }).format(value)
+  }
+
+  // Función para quitar el formato y convertir a número
+  const parseFormattedNumber = (formattedValue: string): number => {
+    // Eliminar todas las comas y convertir a número
+    const numericValue = Number.parseFloat(formattedValue.replace(/,/g, ""))
+    return isNaN(numericValue) ? 0 : numericValue
+  }
+
+  // Actualizar los valores formateados cuando cambian los valores numéricos
+  useEffect(() => {
+    setFormattedInitialDeposit(formatNumberWithCommas(initialDeposit))
+  }, [initialDeposit])
+
+  useEffect(() => {
+    setFormattedContribution(formatNumberWithCommas(contribution))
+  }, [contribution])
+
+  // Manejar cambios en el depósito inicial formateado
+  const handleInitialDepositChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value
+
+    // Permitir campo vacío
+    if (!inputValue) {
+      setFormattedInitialDeposit("")
+      setInitialDeposit(0)
+      return
+    }
+
+    // Eliminar caracteres no numéricos excepto comas y puntos
+    const cleanedValue = inputValue.replace(/[^\d.,]/g, "")
+
+    // Convertir a número y actualizar el estado numérico
+    const numericValue = parseFormattedNumber(cleanedValue)
+    setInitialDeposit(numericValue)
+
+    // Actualizar el valor formateado en el input
+    setFormattedInitialDeposit(cleanedValue)
+  }
+
+  // Manejar cambios en la aportación periódica formateada
+  const handleContributionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value
+
+    // Permitir campo vacío
+    if (!inputValue) {
+      setFormattedContribution("")
+      setContribution(0)
+      return
+    }
+
+    // Eliminar caracteres no numéricos excepto comas y puntos
+    const cleanedValue = inputValue.replace(/[^\d.,]/g, "")
+
+    // Convertir a número y actualizar el estado numérico
+    const numericValue = parseFormattedNumber(cleanedValue)
+    setContribution(numericValue)
+
+    // Actualizar el valor formateado en el input
+    setFormattedContribution(cleanedValue)
+  }
+
+  // Manejar el evento de pérdida de foco para formatear correctamente
+  const handleBlur = (setter: (value: string) => void, value: number) => {
+    setter(formatNumberWithCommas(value))
+  }
+
+  // Función para manejar cambios en inputs numéricos (para años, tasa de interés e inflación)
   const handleNumberChange = (setter: (value: number) => void, value: string) => {
     const numValue = Number.parseFloat(value)
     if (!isNaN(numValue)) {
@@ -95,14 +177,13 @@ export function CalculatorInputs({
               <DollarSign size={16} className="text-gray-400" />
             </div>
             <input
-              type="number"
+              type="text"
               id="initialDeposit"
-              value={initialDeposit || ""}
-              onChange={(e) => handleNumberChange(setInitialDeposit, e.target.value)}
+              value={formattedInitialDeposit}
+              onChange={handleInitialDepositChange}
+              onBlur={() => handleBlur(setFormattedInitialDeposit, initialDeposit)}
               className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               placeholder="0"
-              min="0"
-              step="1000"
             />
           </div>
         </div>
@@ -134,14 +215,13 @@ export function CalculatorInputs({
               <DollarSign size={16} className="text-gray-400" />
             </div>
             <input
-              type="number"
+              type="text"
               id="contribution"
-              value={contribution || ""}
-              onChange={(e) => handleNumberChange(setContribution, e.target.value)}
+              value={formattedContribution}
+              onChange={handleContributionChange}
+              onBlur={() => handleBlur(setFormattedContribution, contribution)}
               className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               placeholder="0"
-              min="0"
-              step="100"
             />
           </div>
         </div>
@@ -176,7 +256,7 @@ export function CalculatorInputs({
               onClick={() => setContributionFrequency(12)}
               className={`flex-1 py-2 px-4 rounded-md transition-colors ${
                 contributionFrequency === 12
-                  ? "bg-green-600 text-white"
+                  ? "bg-green-600 text-white shadow-sm"
                   : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
             >
@@ -186,7 +266,7 @@ export function CalculatorInputs({
               onClick={() => setContributionFrequency(1)}
               className={`flex-1 py-2 px-4 rounded-md transition-colors ${
                 contributionFrequency === 1
-                  ? "bg-green-600 text-white"
+                  ? "bg-green-600 text-white shadow-sm"
                   : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
             >
