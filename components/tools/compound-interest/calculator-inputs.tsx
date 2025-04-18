@@ -195,123 +195,123 @@ export function CalculatorInputs({
           </div>
         </div>
 
-        {/* Años */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <label htmlFor="years" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Años
-            </label>
+        {/* Años, Tasa de interés e Inflación en la misma línea */}
+        <div className="grid grid-cols-3 gap-4">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label htmlFor="years" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Años
+              </label>
+              <div className="relative">
+                <button
+                  className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                  onMouseEnter={() => setActiveTooltip("years")}
+                  onMouseLeave={() => setActiveTooltip(null)}
+                  aria-label="Información sobre años"
+                >
+                  <HelpCircle size={16} />
+                </button>
+                {activeTooltip === "years" && (
+                  <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
+                    {tooltips.years}
+                  </div>
+                )}
+              </div>
+            </div>
             <div className="relative">
-              <button
-                className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
-                onMouseEnter={() => setActiveTooltip("years")}
-                onMouseLeave={() => setActiveTooltip(null)}
-                aria-label="Información sobre años"
-              >
-                <HelpCircle size={16} />
-              </button>
-              {activeTooltip === "years" && (
-                <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
-                  {tooltips.years}
-                </div>
-              )}
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Calendar size={16} className="text-gray-400" />
+              </div>
+              <input
+                type="number"
+                id="years"
+                value={years || ""}
+                onChange={(e) => handleNumberChange(setYears, e.target.value)}
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                placeholder="5"
+                min="1"
+                max="100"
+                step="1"
+              />
             </div>
           </div>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Calendar size={16} className="text-gray-400" />
-            </div>
-            <input
-              type="number"
-              id="years"
-              value={years || ""}
-              onChange={(e) => handleNumberChange(setYears, e.target.value)}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              placeholder="5"
-              min="1"
-              max="100"
-              step="1"
-            />
-          </div>
-        </div>
 
-        {/* Tasa de interés */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <label htmlFor="interestRate" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Tasa de interés anual
-            </label>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label htmlFor="interestRate" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Tasa de interés
+              </label>
+              <div className="relative">
+                <button
+                  className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                  onMouseEnter={() => setActiveTooltip("interestRate")}
+                  onMouseLeave={() => setActiveTooltip(null)}
+                  aria-label="Información sobre tasa de interés"
+                >
+                  <HelpCircle size={16} />
+                </button>
+                {activeTooltip === "interestRate" && (
+                  <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
+                    {tooltips.interestRate}
+                  </div>
+                )}
+              </div>
+            </div>
             <div className="relative">
-              <button
-                className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
-                onMouseEnter={() => setActiveTooltip("interestRate")}
-                onMouseLeave={() => setActiveTooltip(null)}
-                aria-label="Información sobre tasa de interés"
-              >
-                <HelpCircle size={16} />
-              </button>
-              {activeTooltip === "interestRate" && (
-                <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
-                  {tooltips.interestRate}
-                </div>
-              )}
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Percent size={16} className="text-gray-400" />
+              </div>
+              <input
+                type="number"
+                id="interestRate"
+                value={interestRate || ""}
+                onChange={(e) => handleNumberChange(setInterestRate, e.target.value)}
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                placeholder="0"
+                min="0"
+                max="100"
+                step="0.1"
+              />
             </div>
           </div>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Percent size={16} className="text-gray-400" />
-            </div>
-            <input
-              type="number"
-              id="interestRate"
-              value={interestRate || ""}
-              onChange={(e) => handleNumberChange(setInterestRate, e.target.value)}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              placeholder="0"
-              min="0"
-              max="100"
-              step="0.1"
-            />
-          </div>
-        </div>
 
-        {/* Inflación */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <label htmlFor="inflation" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Inflación anual
-            </label>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label htmlFor="inflation" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Inflación
+              </label>
+              <div className="relative">
+                <button
+                  className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                  onMouseEnter={() => setActiveTooltip("inflation")}
+                  onMouseLeave={() => setActiveTooltip(null)}
+                  aria-label="Información sobre inflación"
+                >
+                  <HelpCircle size={16} />
+                </button>
+                {activeTooltip === "inflation" && (
+                  <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
+                    {tooltips.inflation}
+                  </div>
+                )}
+              </div>
+            </div>
             <div className="relative">
-              <button
-                className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
-                onMouseEnter={() => setActiveTooltip("inflation")}
-                onMouseLeave={() => setActiveTooltip(null)}
-                aria-label="Información sobre inflación"
-              >
-                <HelpCircle size={16} />
-              </button>
-              {activeTooltip === "inflation" && (
-                <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
-                  {tooltips.inflation}
-                </div>
-              )}
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Percent size={16} className="text-gray-400" />
+              </div>
+              <input
+                type="number"
+                id="inflation"
+                value={inflation || ""}
+                onChange={(e) => handleNumberChange(setInflation, e.target.value)}
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                placeholder="0"
+                min="0"
+                max="100"
+                step="0.1"
+              />
             </div>
-          </div>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Percent size={16} className="text-gray-400" />
-            </div>
-            <input
-              type="number"
-              id="inflation"
-              value={inflation || ""}
-              onChange={(e) => handleNumberChange(setInflation, e.target.value)}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              placeholder="0"
-              min="0"
-              max="100"
-              step="0.1"
-            />
           </div>
         </div>
       </div>

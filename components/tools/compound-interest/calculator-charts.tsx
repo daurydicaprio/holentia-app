@@ -6,7 +6,6 @@ import { useTheme } from "next-themes"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import Chart from "chart.js/auto"
 import { motion } from "framer-motion"
-import { Info } from "lucide-react"
 
 interface CalculatorChartsProps {
   lineChartData: ChartData
@@ -26,11 +25,11 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
 
   // Colores para los gráficos - Mejorados para mejor contraste
   const chartColors = {
-    line: resolvedTheme === "dark" ? "#4caf50" : "#2e7d32", // Más brillante en modo oscuro
+    line: resolvedTheme === "dark" ? "#81c784" : "#66bb6a", // Verde más claro para la línea
     deposit: resolvedTheme === "dark" ? "#388e3c" : "#2e7d32",
     contribution: resolvedTheme === "dark" ? "#1b5e20" : "#1b5e20",
     interest: resolvedTheme === "dark" ? "#a5d6a7" : "#81c784",
-    grid: resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.1)", // Más visible en modo oscuro
+    grid: resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.1)",
     text: resolvedTheme === "dark" ? "#e0e0e0" : "#1E3A2E",
     tooltipBg: resolvedTheme === "dark" ? "rgba(30, 30, 30, 0.9)" : "rgba(255, 255, 255, 0.9)",
     tooltipBorder: resolvedTheme === "dark" ? "#4caf50" : "#2e7d32",
@@ -91,11 +90,9 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             pointBorderWidth: 2,
             order: 0,
             yAxisID: "y",
-            // Añadir sombra a la línea para mejor visibilidad
-            borderShadowColor: resolvedTheme === "dark" ? "rgba(76, 175, 80, 0.5)" : "rgba(46, 125, 50, 0.3)",
-            shadowOffsetX: 0,
-            shadowOffsetY: 4,
-            shadowBlur: 6,
+            // Añadir estas propiedades para asegurar que se muestre como línea en la leyenda
+            pointStyle: "line",
+            showLine: true,
           },
           {
             type: "bar",
@@ -133,29 +130,23 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             stacked: true,
             grid: {
               display: false,
-              drawBorder: true,
-              color: chartColors.grid,
+              drawBorder: false,
             },
             ticks: {
               font: { weight: "bold", size: 11 },
               color: chartColors.text,
-              maxRotation: 45,
-              minRotation: 45,
+              maxRotation: 0, // Sin inclinación
+              minRotation: 0, // Sin inclinación
             },
             title: {
-              display: true,
-              text: "Año",
-              color: chartColors.text,
-              font: { weight: "bold", size: 12 },
-              padding: { top: 10 },
+              display: false, // Ocultar título del eje X
             },
           },
           y: {
             stacked: true,
             grid: {
-              display: true,
-              color: chartColors.grid,
-              drawBorder: true,
+              display: false, // Quitar líneas de fondo
+              drawBorder: false,
             },
             ticks: {
               font: { weight: "bold", size: 11 },
@@ -163,11 +154,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
               callback: (value) => formatCurrency(value as number).replace(".00", ""),
             },
             title: {
-              display: true,
-              text: "Valor en pesos",
-              color: chartColors.text,
-              font: { weight: "bold", size: 12 },
-              padding: { bottom: 10 },
+              display: false, // Ocultar título del eje Y
             },
           },
         },
@@ -216,7 +203,12 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             position: "top",
             align: "center",
             labels: {
-              usePointStyle: true,
+              usePointStyle: (context) => {
+                // Usar línea para el dataset de balance final ajustado
+                const datasetIndex = context.datasetIndex
+                return datasetIndex !== 0 // Solo usar pointStyle para los datasets que no son la línea
+              },
+              pointStyle: "circle",
               boxWidth: 15,
               boxHeight: 15,
               padding: 20,
@@ -225,17 +217,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             },
           },
           title: {
-            display: true,
-            text: "Composición de la inversión",
-            color: chartColors.line,
-            font: {
-              size: 18,
-              weight: "bold",
-            },
-            padding: {
-              top: 10,
-              bottom: 30,
-            },
+            display: false, // Ocultar título dentro del gráfico
           },
         },
       },
@@ -296,7 +278,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
           easing: "easeOutQuart",
         },
         layout: {
-          padding: 20,
+          padding: 10, // Reducir el padding para que esté más pegado
         },
         plugins: {
           tooltip: {
@@ -323,12 +305,12 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
           },
           legend: {
             display: true,
-            position: "right",
+            position: "left", // Cambiar a la izquierda
             align: "center",
             labels: {
               font: { size: 12, weight: "bold" },
               color: chartColors.text,
-              padding: 20,
+              padding: 15, // Reducir el padding
               usePointStyle: true,
               generateLabels: (chart) => {
                 const data = chart.data
@@ -354,17 +336,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             },
           },
           title: {
-            display: true,
-            text: "Distribución de la inversión",
-            color: chartColors.line,
-            font: {
-              size: 18,
-              weight: "bold",
-            },
-            padding: {
-              top: 10,
-              bottom: 30,
-            },
+            display: false, // Ocultar título dentro del gráfico
           },
         },
       },
@@ -393,31 +365,12 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-[#388e3c] w-full text-center">
-            Composición de la inversión
-            <span className="block w-16 h-1 bg-[#388e3c] mx-auto mt-2"></span>
-          </h2>
+        <h2 className="text-xl font-bold text-[#388e3c] w-full text-center mb-6">
+          Composición de la inversión
+          <span className="block w-16 h-1 bg-[#388e3c] mx-auto mt-2"></span>
+        </h2>
 
-          <div className="relative">
-            <button
-              className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
-              onMouseEnter={() => setActiveTooltip("line")}
-              onMouseLeave={() => setActiveTooltip(null)}
-              aria-label="Información sobre el gráfico de línea"
-            >
-              <Info size={18} />
-            </button>
-
-            {activeTooltip === "line" && (
-              <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
-                {chartTooltips.line}
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="h-[300px] sm:h-[400px]">
+        <div className="h-[300px] sm:h-[400px] flex items-center justify-center">
           <canvas ref={lineChartRef}></canvas>
         </div>
       </motion.div>
@@ -430,31 +383,12 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-[#388e3c] w-full text-center">
-              Distribución de la inversión
-              <span className="block w-16 h-1 bg-[#388e3c] mx-auto mt-2"></span>
-            </h2>
+          <h2 className="text-xl font-bold text-[#388e3c] w-full text-center mb-6">
+            Distribución de la inversión
+            <span className="block w-16 h-1 bg-[#388e3c] mx-auto mt-2"></span>
+          </h2>
 
-            <div className="relative">
-              <button
-                className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
-                onMouseEnter={() => setActiveTooltip("pie")}
-                onMouseLeave={() => setActiveTooltip(null)}
-                aria-label="Información sobre el gráfico de distribución"
-              >
-                <Info size={18} />
-              </button>
-
-              {activeTooltip === "pie" && (
-                <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
-                  {chartTooltips.pie}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="h-[300px] sm:h-[400px]">
+          <div className="h-[300px] sm:h-[400px] flex items-center justify-center">
             <canvas ref={pieChartRef}></canvas>
           </div>
         </motion.div>
