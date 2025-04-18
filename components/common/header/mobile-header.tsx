@@ -55,18 +55,22 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
   let headerBorderColor = currentTheme === "dark" ? "#333333" : "#e5e7eb"
   let donationTextColor = "#3B82F6" // Color azul por defecto
 
+  // Actualizar los colores de fondo del header para que usen las variables CSS
+
   if (toolSection === "mente") {
-    headerBgColor = currentTheme === "dark" ? "rgba(25, 118, 210, 0.2)" : "rgba(25, 118, 210, 0.4)"
-    headerBorderColor = currentTheme === "dark" ? "rgba(144, 202, 249, 0.3)" : "rgba(144, 202, 249, 0.5)"
-    donationTextColor = "#1976d2" // Color mente
+    headerBgColor = currentTheme === "dark" ? "var(--color-mente-glass-bg)" : "var(--color-mente-glass-bg)"
+    headerBorderColor = currentTheme === "dark" ? "var(--color-mente-glass-border)" : "var(--color-mente-glass-border)"
+    donationTextColor = "var(--color-mente-active)" // Color mente
   } else if (toolSection === "cuerpo") {
-    headerBgColor = currentTheme === "dark" ? "rgba(255, 160, 0, 0.2)" : "rgba(255, 160, 0, 0.4)"
-    headerBorderColor = currentTheme === "dark" ? "rgba(255, 224, 130, 0.3)" : "rgba(255, 224, 130, 0.6)"
-    donationTextColor = "#ffa000" // Color cuerpo
+    headerBgColor = currentTheme === "dark" ? "var(--color-cuerpo-glass-bg)" : "var(--color-cuerpo-glass-bg)"
+    headerBorderColor =
+      currentTheme === "dark" ? "var(--color-cuerpo-glass-border)" : "var(--color-cuerpo-glass-border)"
+    donationTextColor = "var(--color-cuerpo-active)" // Color cuerpo
   } else if (toolSection === "finanzas") {
-    headerBgColor = currentTheme === "dark" ? "rgba(56, 142, 60, 0.2)" : "rgba(56, 142, 60, 0.4)"
-    headerBorderColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.3)" : "rgba(165, 214, 167, 0.6)"
-    donationTextColor = "#388e3c" // Color finanzas
+    headerBgColor = currentTheme === "dark" ? "var(--color-finanzas-glass-bg)" : "var(--color-finanzas-glass-bg)"
+    headerBorderColor =
+      currentTheme === "dark" ? "var(--color-finanzas-glass-border)" : "var(--color-finanzas-glass-border)"
+    donationTextColor = "var(--color-finanzas-active)" // Color finanzas
   }
 
   // Efecto para manejar el backdrop del menú

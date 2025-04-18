@@ -35,43 +35,45 @@ export default function ToolCard({ card, index }: ToolCardProps) {
   let titleTextColor = currentTheme === "dark" ? "#e0e0e0" : "#1f2937"
   let descriptionTextColor = currentTheme === "dark" ? "#a0a0a0" : "#4b5563"
 
+  // Actualizar los colores de fondo de las tarjetas para mente con mejor contraste
+
   if (category === "mente") {
     // Colores más vividos para tarjetas activas con mejor contraste
     if (isAvailable) {
-      bgColor = currentTheme === "dark" ? "rgba(21, 101, 192, 0.35)" : "rgba(21, 101, 192, 0.65)"
-      borderColor = currentTheme === "dark" ? "rgba(144, 202, 249, 0.5)" : "rgba(144, 202, 249, 0.8)"
-      categoryTextColor = currentTheme === "dark" ? "#90caf9" : "#e3f2fd"
+      bgColor = currentTheme === "dark" ? "rgba(21, 101, 192, 0.4)" : "rgba(21, 101, 192, 0.75)"
+      borderColor = currentTheme === "dark" ? "rgba(144, 202, 249, 0.6)" : "rgba(144, 202, 249, 0.9)"
+      categoryTextColor = currentTheme === "dark" ? "#90caf9" : "#ffffff"
     } else {
-      bgColor = currentTheme === "dark" ? "rgba(21, 101, 192, 0.15)" : "rgba(21, 101, 192, 0.3)"
-      borderColor = currentTheme === "dark" ? "rgba(144, 202, 249, 0.2)" : "rgba(144, 202, 249, 0.4)"
-      categoryTextColor = currentTheme === "dark" ? "rgba(144, 202, 249, 0.7)" : "rgba(227, 242, 253, 0.7)"
+      bgColor = currentTheme === "dark" ? "rgba(21, 101, 192, 0.2)" : "rgba(21, 101, 192, 0.35)"
+      borderColor = currentTheme === "dark" ? "rgba(144, 202, 249, 0.3)" : "rgba(144, 202, 249, 0.5)"
+      categoryTextColor = currentTheme === "dark" ? "rgba(144, 202, 249, 0.8)" : "rgba(255, 255, 255, 0.8)"
     }
-    titleTextColor = currentTheme === "dark" ? "#e0e0e0" : "#ffffff"
+    titleTextColor = currentTheme === "dark" ? "#ffffff" : "#ffffff"
     descriptionTextColor = currentTheme === "dark" ? "#e0e0e0" : "#ffffff"
   } else if (category === "cuerpo") {
     if (isAvailable) {
-      bgColor = currentTheme === "dark" ? "rgba(239, 108, 0, 0.35)" : "rgba(239, 108, 0, 0.65)"
-      borderColor = currentTheme === "dark" ? "rgba(255, 224, 130, 0.5)" : "rgba(255, 224, 130, 0.8)"
-      categoryTextColor = currentTheme === "dark" ? "#ffe082" : "#4e342e"
+      bgColor = currentTheme === "dark" ? "rgba(239, 108, 0, 0.4)" : "rgba(239, 108, 0, 0.75)"
+      borderColor = currentTheme === "dark" ? "rgba(255, 224, 130, 0.6)" : "rgba(255, 224, 130, 0.9)"
+      categoryTextColor = currentTheme === "dark" ? "#ffe082" : "#000000"
     } else {
-      bgColor = currentTheme === "dark" ? "rgba(239, 108, 0, 0.15)" : "rgba(239, 108, 0, 0.3)"
-      borderColor = currentTheme === "dark" ? "rgba(255, 224, 130, 0.2)" : "rgba(255, 224, 130, 0.4)"
-      categoryTextColor = currentTheme === "dark" ? "rgba(255, 224, 130, 0.7)" : "rgba(78, 52, 46, 0.7)"
+      bgColor = currentTheme === "dark" ? "rgba(239, 108, 0, 0.2)" : "rgba(239, 108, 0, 0.35)"
+      borderColor = currentTheme === "dark" ? "rgba(255, 224, 130, 0.3)" : "rgba(255, 224, 130, 0.5)"
+      categoryTextColor = currentTheme === "dark" ? "rgba(255, 224, 130, 0.8)" : "rgba(0, 0, 0, 0.8)"
     }
     // Ajustado para mejor contraste
-    titleTextColor = currentTheme === "dark" ? "#e0e0e0" : "#212121"
-    descriptionTextColor = currentTheme === "dark" ? "#e0e0e0" : "#212121"
+    titleTextColor = currentTheme === "dark" ? "#ffffff" : "#000000"
+    descriptionTextColor = currentTheme === "dark" ? "#e0e0e0" : "#000000"
   } else if (category === "finanzas") {
     if (isAvailable) {
-      bgColor = currentTheme === "dark" ? "rgba(46, 125, 50, 0.35)" : "rgba(46, 125, 50, 0.65)"
-      borderColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.5)" : "rgba(165, 214, 167, 0.8)"
-      categoryTextColor = currentTheme === "dark" ? "#a5d6a7" : "#e8f5e9"
+      bgColor = currentTheme === "dark" ? "rgba(46, 125, 50, 0.4)" : "rgba(46, 125, 50, 0.75)"
+      borderColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.6)" : "rgba(165, 214, 167, 0.9)"
+      categoryTextColor = currentTheme === "dark" ? "#a5d6a7" : "#ffffff"
     } else {
-      bgColor = currentTheme === "dark" ? "rgba(46, 125, 50, 0.15)" : "rgba(46, 125, 50, 0.3)"
-      borderColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.2)" : "rgba(165, 214, 167, 0.4)"
-      categoryTextColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.7)" : "rgba(232, 245, 233, 0.7)"
+      bgColor = currentTheme === "dark" ? "rgba(46, 125, 50, 0.2)" : "rgba(46, 125, 50, 0.35)"
+      borderColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.3)" : "rgba(165, 214, 167, 0.5)"
+      categoryTextColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.8)" : "rgba(255, 255, 255, 0.8)"
     }
-    titleTextColor = currentTheme === "dark" ? "#e0e0e0" : "#ffffff"
+    titleTextColor = currentTheme === "dark" ? "#ffffff" : "#ffffff"
     descriptionTextColor = currentTheme === "dark" ? "#e0e0e0" : "#ffffff"
   }
 

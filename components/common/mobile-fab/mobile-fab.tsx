@@ -21,15 +21,17 @@ export default function MobileFab() {
   let buttonBgColor = "#4b5563" // Color gris por defecto
   let buttonHoverBgColor = "#374151" // Color gris oscuro por defecto
 
+  // Reemplazar los colores hexadecimales directos con variables CSS para mayor consistencia
+
   if (section === "mente") {
-    buttonBgColor = "#1976d2" // Color mente
-    buttonHoverBgColor = "#0d47a1" // Color mente oscuro
+    buttonBgColor = "var(--color-mente-active)" // Color mente
+    buttonHoverBgColor = "var(--color-mente-active-dark)" // Color mente oscuro
   } else if (section === "cuerpo") {
-    buttonBgColor = "#ffa000" // Color cuerpo
-    buttonHoverBgColor = "#e65100" // Color cuerpo oscuro
+    buttonBgColor = "var(--color-cuerpo-active)" // Color cuerpo
+    buttonHoverBgColor = "var(--color-cuerpo-active-dark)" // Color cuerpo oscuro
   } else if (section === "finanzas") {
-    buttonBgColor = "#388e3c" // Color finanzas
-    buttonHoverBgColor = "#1b5e20" // Color finanzas oscuro
+    buttonBgColor = "var(--color-finanzas-active)" // Color finanzas
+    buttonHoverBgColor = "var(--color-finanzas-active-dark)" // Color finanzas oscuro
   }
 
   useEffect(() => {

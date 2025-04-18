@@ -9,11 +9,11 @@ export default function SectionHeader({ section }: SectionHeaderProps) {
   let highlightGradient = "linear-gradient(to right, #3B82F6, #1D4ED8)" // Gradiente azul por defecto
 
   if (section.id === "mente") {
-    highlightGradient = "linear-gradient(to right, #1976d2, #0d47a1)" // Gradiente mente
+    highlightGradient = "linear-gradient(to right, var(--color-mente-active), var(--color-mente-active-dark))" // Gradiente mente
   } else if (section.id === "cuerpo") {
-    highlightGradient = "linear-gradient(to right, #ffa000, #e65100)" // Gradiente cuerpo
+    highlightGradient = "linear-gradient(to right, var(--color-cuerpo-active), var(--color-cuerpo-active-dark))" // Gradiente cuerpo
   } else if (section.id === "finanzas") {
-    highlightGradient = "linear-gradient(to right, #388e3c, #1b5e20)" // Gradiente finanzas
+    highlightGradient = "linear-gradient(to right, var(--color-finanzas-active), var(--color-finanzas-active-dark))" // Gradiente finanzas
   }
 
   return (

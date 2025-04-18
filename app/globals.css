@@ -28,8 +28,8 @@
   --color-mente-active-lighter: #90caf9;
   --color-mente-active-darkest: #0a3880;
   --color-mente-text-active: #ffffff;
-  --color-mente-glass-bg: rgba(21, 101, 192, 0.4);
-  --color-mente-glass-border: rgba(144, 202, 249, 0.5);
+  --color-mente-glass-bg: rgba(21, 101, 192, 0.45); /* Ajustado para más visibilidad */
+  --color-mente-glass-border: rgba(144, 202, 249, 0.55); /* Ajustado para más visibilidad */
   --color-mente-text-card: #ffffff;
   --color-mente-text-category: #e3f2fd;
   --color-mente-accent: #7b1fa2; /* Púrpura como acento */
@@ -40,11 +40,11 @@
   --color-cuerpo-active-light: #ff9800;
   --color-cuerpo-active-lighter: #ffcc80;
   --color-cuerpo-active-darkest: #bf360c;
-  --color-cuerpo-text-active: #212121;
-  --color-cuerpo-glass-bg: rgba(239, 108, 0, 0.4);
-  --color-cuerpo-glass-border: rgba(255, 224, 130, 0.6);
-  --color-cuerpo-text-card: #212121; /* Oscurecido para mejor contraste */
-  --color-cuerpo-text-category: #4e342e; /* Oscurecido para mejor contraste */
+  --color-cuerpo-text-active: #000000; /* Cambiado a negro para mejor contraste */
+  --color-cuerpo-glass-bg: rgba(239, 108, 0, 0.45); /* Ajustado para más visibilidad */
+  --color-cuerpo-glass-border: rgba(255, 224, 130, 0.65); /* Ajustado para más visibilidad */
+  --color-cuerpo-text-card: #000000; /* Oscurecido para mejor contraste */
+  --color-cuerpo-text-category: #000000; /* Oscurecido para mejor contraste */
   --color-cuerpo-accent: #ff5722; /* Coral como acento */
 
   /* Colores Finanzas - Ajustados para mejor contraste */
@@ -54,8 +54,8 @@
   --color-finanzas-active-lighter: #a5d6a7;
   --color-finanzas-active-darkest: #1a4314;
   --color-finanzas-text-active: #ffffff;
-  --color-finanzas-glass-bg: rgba(46, 125, 50, 0.4);
-  --color-finanzas-glass-border: rgba(165, 214, 167, 0.6);
+  --color-finanzas-glass-bg: rgba(46, 125, 50, 0.45); /* Ajustado para más visibilidad */
+  --color-finanzas-glass-border: rgba(165, 214, 167, 0.65); /* Ajustado para más visibilidad */
   --color-finanzas-text-card: #ffffff;
   --color-finanzas-text-category: #e8f5e9;
   --color-finanzas-accent: #00796b; /* Turquesa como acento */
@@ -74,21 +74,21 @@
   --card-hover-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
 
   /* Colores Mente - Modo oscuro - Ajustados para mejor contraste */
-  --color-mente-glass-bg: rgba(21, 101, 192, 0.2);
-  --color-mente-glass-border: rgba(144, 202, 249, 0.3);
-  --color-mente-text-card: #e0e0e0;
+  --color-mente-glass-bg: rgba(21, 101, 192, 0.25); /* Más visible */
+  --color-mente-glass-border: rgba(144, 202, 249, 0.4); /* Más visible */
+  --color-mente-text-card: #ffffff; /* Blanco puro para mejor contraste */
   --color-mente-text-category: #90caf9;
 
   /* Colores Cuerpo - Modo oscuro - Ajustados para mejor contraste */
-  --color-cuerpo-glass-bg: rgba(239, 108, 0, 0.2);
-  --color-cuerpo-glass-border: rgba(255, 224, 130, 0.3);
-  --color-cuerpo-text-card: #e0e0e0;
+  --color-cuerpo-glass-bg: rgba(239, 108, 0, 0.25); /* Más visible */
+  --color-cuerpo-glass-border: rgba(255, 224, 130, 0.4); /* Más visible */
+  --color-cuerpo-text-card: #ffffff; /* Cambiado a blanco para mejor contraste en modo oscuro */
   --color-cuerpo-text-category: #ffe082;
 
   /* Colores Finanzas - Modo oscuro - Ajustados para mejor contraste */
-  --color-finanzas-glass-bg: rgba(46, 125, 50, 0.2);
-  --color-finanzas-glass-border: rgba(165, 214, 167, 0.3);
-  --color-finanzas-text-card: #e0e0e0;
+  --color-finanzas-glass-bg: rgba(46, 125, 50, 0.25); /* Más visible */
+  --color-finanzas-glass-border: rgba(165, 214, 167, 0.4); /* Más visible */
+  --color-finanzas-text-card: #ffffff; /* Blanco puro para mejor contraste */
   --color-finanzas-text-category: #a5d6a7;
 }
 

@@ -22,11 +22,11 @@ export default function ToolsGrid({ cards, section }: ToolsGridProps) {
   let buttonTextClass = "text-gray-600 hover:text-gray-800"
 
   if (section === "mente") {
-    buttonTextClass = "text-mente-DEFAULT hover:text-mente-dark"
+    buttonTextClass = "text-mente-DEFAULT hover:text-mente-darkest"
   } else if (section === "cuerpo") {
-    buttonTextClass = "text-cuerpo-DEFAULT hover:text-cuerpo-dark"
+    buttonTextClass = "text-cuerpo-DEFAULT hover:text-cuerpo-darkest"
   } else if (section === "finanzas") {
-    buttonTextClass = "text-finanzas-DEFAULT hover:text-finanzas-dark"
+    buttonTextClass = "text-finanzas-DEFAULT hover:text-finanzas-darkest"
   }
 
   return (

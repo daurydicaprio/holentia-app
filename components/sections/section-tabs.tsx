@@ -55,9 +55,9 @@ export default function SectionTabs() {
   }
 
   // Colores específicos para cada sección
-  const menteColor = "#1976d2"
-  const cuerpoColor = "#ffa000"
-  const finanzasColor = "#388e3c"
+  const menteColor = "var(--color-mente-active)"
+  const cuerpoColor = "var(--color-cuerpo-active)"
+  const finanzasColor = "var(--color-finanzas-active)"
 
   return (
     <div className="flex gap-4 justify-center flex-wrap mt-6">

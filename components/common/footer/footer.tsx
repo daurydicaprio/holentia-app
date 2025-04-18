@@ -12,14 +12,14 @@ export default function Footer({ section }: FooterProps) {
   let linkHoverColor = "#1D4ED8" // Color azul oscuro por defecto
 
   if (section === "mente") {
-    linkColor = "#1976d2" // Color mente
-    linkHoverColor = "#0d47a1" // Color mente oscuro
+    linkColor = "var(--color-mente-active)" // Color mente
+    linkHoverColor = "var(--color-mente-active-dark)" // Color mente oscuro
   } else if (section === "cuerpo") {
-    linkColor = "#ffa000" // Color cuerpo
-    linkHoverColor = "#e65100" // Color cuerpo oscuro
+    linkColor = "var(--color-cuerpo-active)" // Color cuerpo
+    linkHoverColor = "var(--color-cuerpo-active-dark)" // Color cuerpo oscuro
   } else if (section === "finanzas") {
-    linkColor = "#388e3c" // Color finanzas
-    linkHoverColor = "#1b5e20" // Color finanzas oscuro
+    linkColor = "var(--color-finanzas-active)" // Color finanzas
+    linkHoverColor = "var(--color-finanzas-active-dark)" // Color finanzas oscuro
   }
 
   return (
