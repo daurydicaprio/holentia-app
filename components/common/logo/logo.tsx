@@ -21,10 +21,10 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
     setMounted(true)
   }, [])
 
-  // Modificar los tamaños del logo
+  // Modificar los tamaños del logo para que el tamaño "md" tenga letras más pequeñas
   const sizeClasses = {
     sm: "w-10 h-10 text-xs",
-    md: "w-24 h-24 text-base",
+    md: "w-24 h-24 text-sm", // Cambiado de text-base a text-sm para reducir el tamaño del texto
     lg: "w-32 h-32 sm:w-40 sm:h-40 text-lg sm:text-2xl",
   }
 
