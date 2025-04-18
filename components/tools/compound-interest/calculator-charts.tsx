@@ -51,23 +51,10 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
     }
 
     // Verificar si hay datos para mostrar
-    if (!lineChartData || lineChartData.labels.length === 0) return
+    if (!lineChartData || !lineChartData.labels || lineChartData.labels.length === 0) return
 
     const ctx = lineChartRef.current.getContext("2d")
     if (!ctx) return
-
-    // Registrar plugin personalizado para animación
-    Chart.register({
-      id: "customAnimation",
-      beforeDraw: (chart) => {
-        const ctx = chart.ctx
-        ctx.save()
-        ctx.globalCompositeOperation = "destination-over"
-        ctx.fillStyle = resolvedTheme === "dark" ? "rgba(30, 30, 30, 0.1)" : "rgba(255, 255, 255, 0.1)"
-        ctx.fillRect(0, 0, chart.width, chart.height)
-        ctx.restore()
-      },
-    })
 
     lineChartInstance.current = new Chart(ctx, {
       type: "bar",
@@ -77,27 +64,24 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
           {
             type: "line",
             label: "Balance final ajustado",
-            data: lineChartData.lineData,
+            data: lineChartData.lineData || [],
             borderColor: chartColors.line,
             backgroundColor: "transparent",
             borderWidth: 3,
             fill: false,
             tension: 0.2,
-            pointRadius: 4,
-            pointHoverRadius: 6,
+            pointRadius: 6, // Puntos más grandes
+            pointHoverRadius: 8,
             pointBackgroundColor: chartColors.line,
             pointBorderColor: resolvedTheme === "dark" ? "#121212" : "#ffffff",
             pointBorderWidth: 2,
             order: 0,
             yAxisID: "y",
-            // Añadir estas propiedades para asegurar que se muestre como línea en la leyenda
-            pointStyle: "line",
-            showLine: true,
           },
           {
             type: "bar",
             label: "Capital inicial",
-            data: lineChartData.capitalData,
+            data: lineChartData.capitalData || [],
             backgroundColor: chartColors.deposit,
             stack: "stack1",
             order: 1,
@@ -108,7 +92,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
           {
             type: "bar",
             label: "Interés acumulado",
-            data: lineChartData.interestData,
+            data: lineChartData.interestData || [],
             backgroundColor: chartColors.interest,
             stack: "stack1",
             order: 2,
@@ -186,10 +170,10 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
               footer: (items) => {
                 const item = items[0]
                 const index = item.dataIndex
-                const capitalValue = lineChartData.capitalData[index]
-                const interestValue = lineChartData.interestData[index]
+                const capitalValue = lineChartData.capitalData?.[index] || 0
+                const interestValue = lineChartData.interestData?.[index] || 0
                 const totalValue = capitalValue + interestValue
-                const lineValue = lineChartData.lineData[index]
+                const lineValue = lineChartData.lineData?.[index] || 0
 
                 return [
                   `Total acumulado: ${formatCurrency(totalValue)}`,
@@ -203,15 +187,18 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             position: "top",
             align: "center",
             labels: {
-              usePointStyle: (context) => {
+              usePointStyle: true,
+              pointStyle: (context) => {
                 // Usar línea para el dataset de balance final ajustado
                 const datasetIndex = context.datasetIndex
-                return datasetIndex !== 0 // Solo usar pointStyle para los datasets que no son la línea
+                if (datasetIndex === 0) {
+                  return "line"
+                }
+                return "rect"
               },
-              pointStyle: "circle",
-              boxWidth: 15,
-              boxHeight: 15,
-              padding: 20,
+              boxWidth: 40, // Ancho más grande para la línea
+              boxHeight: 3, // Altura más pequeña para la línea
+              padding: 20, // Más espacio alrededor de la leyenda
               font: { size: 12, weight: "bold" },
               color: chartColors.text,
             },
@@ -240,7 +227,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
     }
 
     // Verificar si hay datos para mostrar
-    if (!pieChartData || pieChartData.data.length === 0) return
+    if (!pieChartData || !pieChartData.data || pieChartData.data.length === 0) return
 
     const ctx = pieChartRef.current.getContext("2d")
     if (!ctx) return
@@ -248,14 +235,14 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
     pieChartInstance.current = new Chart(ctx, {
       type: "doughnut",
       data: {
-        labels: pieChartData.labels,
+        labels: pieChartData.labels || [],
         datasets: [
           {
-            data: pieChartData.data,
-            backgroundColor: donutColors,
+            data: pieChartData.data || [],
+            backgroundColor: donutColors.slice(0, pieChartData.data.length),
             borderColor: resolvedTheme === "dark" ? "#1e1e1e" : "#ffffff",
             borderWidth: 2,
-            hoverBackgroundColor: donutColors.map((color) => {
+            hoverBackgroundColor: donutColors.slice(0, pieChartData.data.length).map((color) => {
               // Hacer el color un poco más brillante en hover
               return color.replace(/\d+(?=\))/, (match) => {
                 const value = Number.parseInt(match)
@@ -298,33 +285,36 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
               title: (items) => items[0].label || "",
               label: (c) => {
                 const value = formatCurrency(c.raw as number)
-                const percentage = (((c.raw as number) / pieChartData.data.reduce((a, b) => a + b, 0)) * 100).toFixed(1)
+                const total = pieChartData.data.reduce((a, b) => a + b, 0)
+                const percentage = total > 0 ? (((c.raw as number) / total) * 100).toFixed(1) : "0.0"
                 return `${value} (${percentage}%)`
               },
             },
           },
           legend: {
             display: true,
-            position: "left", // Cambiar a la izquierda
+            position: "left", // Mantener a la izquierda
             align: "center",
             labels: {
-              font: { size: 12, weight: "bold" },
+              font: { size: 14, weight: "bold" }, // Aumentar tamaño de fuente
               color: chartColors.text,
-              padding: 15, // Reducir el padding
+              padding: 25, // Aumentar padding para mayor separación
               usePointStyle: true,
+              boxWidth: 16, // Aumentar tamaño de los símbolos
+              boxHeight: 16, // Aumentar tamaño de los símbolos
               generateLabels: (chart) => {
                 const data = chart.data
-                if (data.labels && data.datasets.length) {
+                if (data.labels && data.datasets.length && data.datasets[0].data) {
                   return data.labels.map((label, i) => {
                     const dataset = data.datasets[0]
-                    const value = dataset.data[i] as number
-                    const total = dataset.data.reduce((acc, val) => acc + (val as number), 0)
-                    const percentage = ((value / total) * 100).toFixed(1)
+                    const value = (dataset.data[i] as number) || 0
+                    const total = dataset.data.reduce((acc, val) => acc + ((val as number) || 0), 0)
+                    const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : "0.0"
 
                     return {
                       text: `${label}: ${percentage}%`,
-                      fillStyle: donutColors[i],
-                      strokeStyle: donutColors[i],
+                      fillStyle: donutColors[i % donutColors.length],
+                      strokeStyle: donutColors[i % donutColors.length],
                       lineWidth: 0,
                       hidden: false,
                       index: i,

@@ -22,7 +22,8 @@ export default function WelcomeModal() {
         // Pequeño retraso para asegurar que el componente esté montado
         const timer = setTimeout(() => {
           setIsOpen(true)
-          localStorage.setItem("holentia-visited", "true")
+          // Comentamos esta línea para que el modal se muestre en cada visita durante el desarrollo
+          // localStorage.setItem("holentia-visited", "true")
         }, 500)
 
         return () => clearTimeout(timer)
@@ -33,6 +34,10 @@ export default function WelcomeModal() {
   const handleClose = () => {
     triggerHapticFeedback("medium")
     setIsOpen(false)
+    // Guardar en localStorage solo cuando el usuario cierra el modal
+    if (typeof window !== "undefined") {
+      localStorage.setItem("holentia-visited", "true")
+    }
   }
 
   if (!mounted) return null
@@ -40,7 +45,7 @@ export default function WelcomeModal() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent
-        className="sm:max-w-md p-0 overflow-hidden border-0 shadow-xl bg-white dark:bg-gray-900"
+        className="sm:max-w-md p-0 overflow-hidden border-0 shadow-xl bg-white dark:bg-gray-900 z-50"
         style={{
           width: "95vw",
           maxWidth: "500px",

@@ -49,6 +49,8 @@ export default function MainMenuButton() {
 
   // Usar el tema resuelto para evitar parpadeos
   const currentTheme = mounted ? resolvedTheme : "light"
+
+  // Asegurarse de que el botón tenga un fondo visible
   const buttonBgColor = currentTheme === "dark" ? "#1e1e1e" : "#ffffff"
   const buttonBorderColor = currentTheme === "dark" ? "#333333" : "#e5e7eb"
 
@@ -63,9 +65,10 @@ export default function MainMenuButton() {
 
   return (
     <>
-      <div className="menu-backdrop"></div>
+      <div className={`menu-backdrop ${isMenuOpen ? "active" : ""}`}></div>
       <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
         <DropdownMenuTrigger asChild>
+          {/* Asegurarse de que el botón tenga un tamaño adecuado y sea visible */}
           <Button
             variant="outline"
             size="icon"
@@ -77,6 +80,7 @@ export default function MainMenuButton() {
               boxShadow: "0 2px 5px rgba(0, 0, 0, 0.08)", // Sombra menos preponderante
               border: `1.5px solid ${buttonBorderColor}`, // Borde más fijo
               transition: "all 0.2s ease",
+              zIndex: 50, // Asegurar que esté por encima de otros elementos
             }}
             className="active:scale-95 transition-transform hover:bg-gray-100 dark:hover:bg-gray-800"
             onClick={handleMenuToggle}
@@ -90,7 +94,7 @@ export default function MainMenuButton() {
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
-          className="w-56 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg"
+          className="w-56 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-50"
         >
           <div className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">
             <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Navegación</h3>

@@ -177,6 +177,8 @@
     background-image: linear-gradient(to right, var(--color-finanzas-active), var(--color-finanzas-active-dark));
   }
 
+  /* Asegurar que el backdrop del menú funcione correctamente */
+
   .menu-backdrop {
     position: fixed;
     inset: 0;
@@ -187,11 +189,13 @@
     pointer-events: none;
     transition-property: opacity;
     transition-duration: 300ms;
+    visibility: hidden;
   }
 
   .menu-backdrop.active {
     opacity: 1;
     pointer-events: auto;
+    visibility: visible;
   }
 
   .tool-header-line {
