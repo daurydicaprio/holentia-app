@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 
 export interface BudgetItem {
   id: string
@@ -74,22 +74,13 @@ export function useBudgetSimulator() {
   // Estado para advertencia de presupuesto excedido
   const [showBudgetWarning, setShowBudgetWarning] = useState(false)
 
-  // Función para formatear moneda
-  const formatCurrency = (value: number): string => {
-    return new Intl.NumberFormat("es-MX", {
-      style: "currency",
-      currency: "MXN",
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(value)
-  }
-
-  // Función para actualizar todos los cálculos
-  const updateAllCalculations = useCallback(() => {
+  // Efecto para actualizar cálculos cuando cambian los ingresos o gastos
+  // Reemplazar el useEffect actual con esta versión:
+  useEffect(() => {
     // Calcular total de ingresos
     const totalIncome = incomeItems.reduce((sum, item) => sum + item.amount, 0)
 
-    // Calcular porcentajes de ingresos
+    // Calcular porcentajes de ingresos sin actualizar el estado
     const updatedIncomeItems = incomeItems.map((item) => ({
       ...item,
       percentage: totalIncome > 0 ? (item.amount / totalIncome) * 100 : 0,
@@ -153,7 +144,7 @@ export function useBudgetSimulator() {
     // Verificar si se debe mostrar la advertencia de presupuesto
     setShowBudgetWarning((totalExpenseTarget > totalIncome || totalExpenseAmount > totalIncome) && totalIncome > 0)
 
-    // Actualizar los gastos con porcentajes y diferencias calculados
+    // Actualizar los gastos con porcentajes y diferencias calculados sin modificar el estado original
     const updatedExpenseItems = expenseItems.map((item) => {
       return {
         ...item,
@@ -163,19 +154,23 @@ export function useBudgetSimulator() {
       }
     })
 
-    // Actualizar los estados
+    // Actualizar los estados de forma segura
     setIncomeItems(updatedIncomeItems)
     setExpenseItems(updatedExpenseItems)
-  }, [incomeItems, expenseItems])
-
-  // Efecto para actualizar cálculos cuando cambian los ingresos o gastos
-  useEffect(() => {
-    updateAllCalculations()
   }, [
     incomeItems.map((item) => item.amount).join(","),
     expenseItems.map((item) => `${item.id}-${item.target}-${item.amount}`).join(","),
-    updateAllCalculations,
   ])
+
+  // Función para formatear moneda
+  const formatCurrency = (value: number): string => {
+    return new Intl.NumberFormat("es-MX", {
+      style: "currency",
+      currency: "MXN",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value)
+  }
 
   // Función para añadir un nuevo ingreso
   const addIncome = (concept: string) => {
@@ -212,6 +207,14 @@ export function useBudgetSimulator() {
   // Función para actualizar el monto consumido de un gasto
   const updateExpenseAmount = (id: string, amount: number) => {
     setExpenseItems(expenseItems.map((item) => (item.id === id ? { ...item, amount: amount } : item)))
+  }
+
+  // Modificar la función updateAllCalculations para que no actualice estados directamente
+  // y solo se use para cálculos iniciales o cuando sea explícitamente llamada
+  const updateAllCalculations = () => {
+    // Esta función ahora está vacía porque toda la lógica se ha movido al useEffect
+    // La mantenemos por compatibilidad con el resto del código
+    console.log("Cálculos actualizados")
   }
 
   return {

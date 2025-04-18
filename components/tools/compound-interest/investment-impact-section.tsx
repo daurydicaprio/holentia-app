@@ -1,5 +1,6 @@
 "use client"
-import { AlertCircle, TrendingUp, ArrowRight, Coins, Clock, AlertTriangle } from "lucide-react"
+
+import { AlertCircle, TrendingUp, ArrowRight, AlertTriangle } from "lucide-react"
 import type { SummaryData } from "@/hooks/use-compound-interest-calculator"
 
 interface InvestmentImpactSectionProps {
@@ -40,128 +41,76 @@ export function InvestmentImpactSection({ summary, formatCurrency, inflation, ye
 
       <div className="p-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Columna izquierda */}
-          <div className="space-y-6">
-            <div className="bg-gray-50 dark:bg-gray-700/50 p-5 rounded-lg">
-              <h4 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
-                <TrendingUp size={18} className="text-[#388e3c]" />
-                Impacto de la inflación en tu dinero
-              </h4>
+          {/* Columna izquierda - Impacto de la inflación */}
+          <div className="bg-gray-50 dark:bg-gray-700/50 p-5 rounded-lg">
+            <h4 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
+              <TrendingUp size={18} className="text-[#388e3c]" />
+              Impacto de la inflación en tu dinero
+            </h4>
 
-              <p className="text-gray-600 dark:text-gray-300 mb-4">
-                Si no invirtieras tu dinero, el valor real de tus <strong>{formatCurrency(totalInvested)}</strong> se
-                reduciría a aproximadamente <strong>{formatCurrency(nonInvestedValue)}</strong> en {years} años debido a
-                la inflación del {inflation.toFixed(2)}% anual.
-              </p>
+            <p className="text-gray-600 dark:text-gray-300 mb-4">
+              Si no invirtieras tu dinero, el valor real de tus <strong>{formatCurrency(totalInvested)}</strong> se
+              reduciría a aproximadamente <strong>{formatCurrency(nonInvestedValue)}</strong> en {years} años debido a
+              la inflación del {inflation.toFixed(2)}% anual.
+            </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                <div className="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-                    Sin inflación, tu inversión valdría:
-                  </div>
-                  <div className="text-lg font-bold text-[#388e3c]">{formatCurrency(grossBalance)}</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+              <div className="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
+                <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                  Sin inflación, tu inversión valdría:
                 </div>
-
-                <div className="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-                    Con inflación, tu inversión valdría:
-                  </div>
-                  <div className="text-lg font-bold text-[#388e3c]">{formatCurrency(summary.balanceNet)}</div>
-                  <div className="text-xs text-red-500 dark:text-red-400 mt-1">
-                    Pérdida por inflación: {formatCurrency(summary.inflationEffect)}
-                  </div>
-                </div>
+                <div className="text-lg font-bold text-[#388e3c]">{formatCurrency(grossBalance)}</div>
               </div>
-            </div>
 
-            <div className="bg-gray-50 dark:bg-gray-700/50 p-5 rounded-lg">
-              <h4 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
-                <Coins size={18} className="text-[#388e3c]" />
-                Costo de oportunidad
-              </h4>
-
-              <p className="text-gray-600 dark:text-gray-300 mb-4">
-                Al no invertir, no solo pierdes por la inflación, sino también por el rendimiento que podrías obtener.
-                Con esta inversión, ganarías <strong>{formatCurrency(opportunityCost)}</strong> adicionales a tu capital
-                inicial.
-              </p>
-
-              <div className="flex items-center gap-3 mt-4">
-                <div className="w-full h-4 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-[#388e3c]"
-                    style={{ width: `${Math.min((opportunityCost / summary.balanceNet) * 100, 100)}%` }}
-                  ></div>
+              <div className="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
+                <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                  Con inflación, tu inversión valdría:
                 </div>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
-                  {((opportunityCost / summary.balanceNet) * 100).toFixed(1)}% de ganancia
-                </span>
+                <div className="text-lg font-bold text-[#388e3c]">{formatCurrency(summary.balanceNet)}</div>
+                <div className="text-xs text-red-500 dark:text-red-400 mt-1">
+                  Pérdida por inflación: {formatCurrency(summary.inflationEffect)}
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Columna derecha */}
-          <div className="space-y-6">
-            <div className="bg-gray-50 dark:bg-gray-700/50 p-5 rounded-lg">
-              <h4 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
-                <Clock size={18} className="text-[#388e3c]" />
-                El poder del interés compuesto
-              </h4>
+          {/* Columna derecha - Datos importantes */}
+          <div className="bg-gray-50 dark:bg-gray-700/50 p-5 rounded-lg">
+            <h4 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
+              <AlertTriangle size={18} className="text-amber-500" />
+              Datos importantes
+            </h4>
 
-              <p className="text-gray-600 dark:text-gray-300 mb-4">
-                Con una tasa de interés del {annualReturn.toFixed(2)}%, tu dinero se duplicaría aproximadamente cada{" "}
-                {timeToDouble(annualReturn)} años según la "Regla del 72". Esto demuestra cómo el tiempo es un factor
-                crucial en las inversiones.
-              </p>
-
-              <div className="grid grid-cols-3 gap-2 mt-4">
-                <div className="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 text-center">
-                  <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">A 3%</div>
-                  <div className="text-sm font-bold text-[#388e3c]">{timeToDouble(3)} años</div>
-                </div>
-
-                <div className="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 text-center">
-                  <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">A 6%</div>
-                  <div className="text-sm font-bold text-[#388e3c]">{timeToDouble(6)} años</div>
-                </div>
-
-                <div className="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 text-center">
-                  <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">A 9%</div>
-                  <div className="text-sm font-bold text-[#388e3c]">{timeToDouble(9)} años</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gray-50 dark:bg-gray-700/50 p-5 rounded-lg">
-              <h4 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
-                <AlertTriangle size={18} className="text-amber-500" />
-                Datos importantes
-              </h4>
-
-              <ul className="space-y-2 text-gray-600 dark:text-gray-300">
-                <li className="flex items-start gap-2">
-                  <ArrowRight size={16} className="mt-1 flex-shrink-0 text-[#388e3c]" />
-                  <span>
-                    Históricamente, la inflación promedio en Latinoamérica ha sido del 3-5% anual, erosionando el valor
-                    del dinero no invertido.
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <ArrowRight size={16} className="mt-1 flex-shrink-0 text-[#388e3c]" />
-                  <span>
-                    Invertir regularmente pequeñas cantidades suele ser más efectivo que grandes inversiones ocasionales
-                    debido al costo promedio en dólares.
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <ArrowRight size={16} className="mt-1 flex-shrink-0 text-[#388e3c]" />
-                  <span>
-                    El mercado de valores ha generado un rendimiento promedio anual de aproximadamente 10% a largo
-                    plazo, superando significativamente la inflación.
-                  </span>
-                </li>
-              </ul>
-            </div>
+            <ul className="space-y-2 text-gray-600 dark:text-gray-300">
+              <li className="flex items-start gap-2">
+                <ArrowRight size={16} className="mt-1 flex-shrink-0 text-[#388e3c]" />
+                <span>
+                  Históricamente, la inflación promedio en Latinoamérica ha sido del 3-5% anual, erosionando el valor
+                  del dinero no invertido.
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <ArrowRight size={16} className="mt-1 flex-shrink-0 text-[#388e3c]" />
+                <span>
+                  Invertir regularmente pequeñas cantidades suele ser más efectivo que grandes inversiones ocasionales
+                  debido al costo promedio en dólares.
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <ArrowRight size={16} className="mt-1 flex-shrink-0 text-[#388e3c]" />
+                <span>
+                  El mercado de valores ha generado un rendimiento promedio anual de aproximadamente 10% a largo plazo,
+                  superando significativamente la inflación.
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <ArrowRight size={16} className="mt-1 flex-shrink-0 text-[#388e3c]" />
+                <span>
+                  Al invertir, no solo proteges tu dinero de la inflación, sino que también lo haces crecer con el
+                  tiempo gracias al interés compuesto.
+                </span>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
