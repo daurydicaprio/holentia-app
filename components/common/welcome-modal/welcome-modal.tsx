@@ -15,16 +15,18 @@ export default function WelcomeModal() {
     setMounted(true)
 
     // Verificar si es la primera visita
-    const hasVisited = localStorage.getItem("holentia-visited")
+    if (typeof window !== "undefined") {
+      const hasVisited = localStorage.getItem("holentia-visited")
 
-    if (!hasVisited) {
-      // Pequeño retraso para asegurar que el componente esté montado
-      const timer = setTimeout(() => {
-        setIsOpen(true)
-        localStorage.setItem("holentia-visited", "true")
-      }, 500)
+      if (!hasVisited) {
+        // Pequeño retraso para asegurar que el componente esté montado
+        const timer = setTimeout(() => {
+          setIsOpen(true)
+          localStorage.setItem("holentia-visited", "true")
+        }, 500)
 
-      return () => clearTimeout(timer)
+        return () => clearTimeout(timer)
+      }
     }
   }, [])
 
