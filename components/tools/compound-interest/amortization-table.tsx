@@ -23,7 +23,8 @@ export function AmortizationTable({
   contributionFrequency,
 }: AmortizationTableProps) {
   const [currentPage, setCurrentPage] = useState(1)
-  const rowsPerPage = 10
+  // Ajustar el número de filas por página según la vista
+  const rowsPerPage = tableView === "annual" ? 10 : 12
 
   // Determinar qué datos mostrar según la vista
   const dataToShow = tableView === "annual" ? annualData : monthlyData

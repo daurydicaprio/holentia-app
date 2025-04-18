@@ -2,6 +2,7 @@
 
 import { DollarSign, Calendar, Percent, TrendingUp } from "lucide-react"
 import type { SummaryData } from "@/hooks/use-compound-interest-calculator"
+import { useMediaQuery } from "@/hooks/use-media-query"
 
 interface CompoundInterestResultProps {
   summary: SummaryData
@@ -9,6 +10,8 @@ interface CompoundInterestResultProps {
 }
 
 export function CompoundInterestResult({ summary, formatCurrency }: CompoundInterestResultProps) {
+  const isMobile = useMediaQuery("(max-width: 768px)")
+
   return (
     <div
       className="rounded-xl p-6 shadow-lg"
@@ -60,15 +63,27 @@ export function CompoundInterestResult({ summary, formatCurrency }: CompoundInte
             </div>
           </div>
 
-          <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm">
-            <div className="flex items-center gap-2 text-xs mb-1" style={{ color: "#ffffff" }}>
-              <Calendar size={14} />
-              <span>Tiempo en duplicar</span>
+          {isMobile ? (
+            <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm group hover:bg-red-500/30 transition-colors">
+              <div className="flex items-center gap-2 text-xs mb-1" style={{ color: "#ffffff" }}>
+                <Percent size={14} />
+                <span>Inflación</span>
+              </div>
+              <div className="font-semibold" style={{ color: "#ffffff" }}>
+                {formatCurrency(summary.inflationEffect)}
+              </div>
             </div>
-            <div className="font-semibold" style={{ color: "#ffffff" }}>
-              {summary.doubleTime}
+          ) : (
+            <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm">
+              <div className="flex items-center gap-2 text-xs mb-1" style={{ color: "#ffffff" }}>
+                <Calendar size={14} />
+                <span>Tiempo en duplicar</span>
+              </div>
+              <div className="font-semibold" style={{ color: "#ffffff" }}>
+                {summary.doubleTime}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
