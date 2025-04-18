@@ -195,6 +195,11 @@
     pointer-events: auto;
   }
 
+  /* Asegurar que el backdrop no interfiera con otros elementos cuando está inactivo */
+  .menu-backdrop:not(.active) {
+    z-index: -1;
+  }
+
   .tool-header-line {
     height: 0.175rem;
     width: 4rem;

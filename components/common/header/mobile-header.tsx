@@ -79,7 +79,33 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
     if (backdrop) {
       if (isMenuOpen) {
         backdrop.classList.add("active")
+        document.body.style.overflow = "hidden" // Prevenir scroll
       } else {
+        backdrop.classList.remove("active")
+        document.body.style.overflow = "" // Restaurar scroll
+      }
+    }
+
+    // Función para cerrar el menú con la tecla Escape
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isMenuOpen) {
+        setIsMenuOpen(false)
+      }
+    }
+
+    // Solo añadir event listeners cuando el menú está abierto
+    if (isMenuOpen) {
+      document.addEventListener("keydown", handleEscape)
+    } else {
+      document.removeEventListener("keydown", handleEscape)
+    }
+
+    return () => {
+      // Limpiar los event listeners al desmontar
+      document.removeEventListener("keydown", handleEscape)
+      // Asegurar que el scroll se restaure
+      document.body.style.overflow = ""
+      if (backdrop) {
         backdrop.classList.remove("active")
       }
     }

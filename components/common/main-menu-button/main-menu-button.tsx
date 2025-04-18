@@ -27,7 +27,7 @@ export default function MainMenuButton() {
 
   // Crear el backdrop manualmente
   useEffect(() => {
-    // Crear el backdrop si no existe
+    // Buscar el backdrop existente o crear uno nuevo
     let backdrop = document.querySelector(".menu-backdrop") as HTMLDivElement
     if (!backdrop) {
       backdrop = document.createElement("div")
@@ -58,6 +58,10 @@ export default function MainMenuButton() {
       }
     }
 
+    // Limpiar los event listeners anteriores antes de añadir nuevos
+    document.removeEventListener("mousedown", handleClickOutside)
+    document.removeEventListener("keydown", handleEscape)
+
     // Solo añadir event listeners cuando el menú está abierto
     if (isMenuOpen) {
       document.addEventListener("mousedown", handleClickOutside)
@@ -68,8 +72,9 @@ export default function MainMenuButton() {
       // Siempre limpiar los event listeners al desmontar
       document.removeEventListener("mousedown", handleClickOutside)
       document.removeEventListener("keydown", handleEscape)
-      // Asegurar que el scroll se restaure
+      // Asegurar que el scroll se restaure y el backdrop se oculte
       document.body.style.overflow = ""
+      backdrop.classList.remove("active")
     }
   }, [isMenuOpen])
 
