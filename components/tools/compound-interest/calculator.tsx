@@ -101,25 +101,6 @@ const CompoundInterestCalculator = () => {
         <h2 className="text-lg font-semibold text-[#388e3c] mb-2">Resultado:</h2>
         <p className="text-gray-700 dark:text-gray-300">Valor futuro estimado: ${futureValue}</p>
       </div>
-
-      {isMobile && (
-        <div className="grid grid-cols-1 gap-4 mt-6">
-          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-semibold text-[#388e3c] mb-2">Costo de oportunidad</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              El dinero no invertido pierde valor con el tiempo debido a la inflación. Al invertir, no solo generas
-              rendimientos, sino que también proteges tu capital de la pérdida de poder adquisitivo.
-            </p>
-          </div>
-          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-semibold text-[#388e3c] mb-2">El poder del interés compuesto</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              El interés compuesto hace que tus inversiones crezcan exponencialmente con el tiempo. Cuanto antes
-              comiences a invertir y más tiempo mantengas tu inversión, mayor será el efecto multiplicador.
-            </p>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
