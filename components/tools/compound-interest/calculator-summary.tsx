@@ -1,22 +1,24 @@
 "use client"
 
 import type { SummaryData } from "@/hooks/use-compound-interest-calculator"
+import { CompoundInterestResult } from "./compound-interest-result"
 
 interface CalculatorSummaryProps {
   summary: SummaryData
   formatCurrency: (value: number) => string
+  showDetailedCards?: boolean
 }
 
-export function CalculatorSummary({ summary, formatCurrency }: CalculatorSummaryProps) {
+export function CalculatorSummary({ summary, formatCurrency, showDetailedCards = true }: CalculatorSummaryProps) {
+  // Si no queremos mostrar las tarjetas detalladas, solo mostramos el resultado principal
+  if (!showDetailedCards) {
+    return <CompoundInterestResult summary={summary} formatCurrency={formatCurrency} />
+  }
+
   return (
     <div className="space-y-5">
       {/* Resumen principal */}
-      <div className="bg-[#388e3c] hover:bg-[#2e7d32] transition-colors text-white rounded-lg p-5 shadow-md">
-        <div className="text-center">
-          <div className="text-2xl sm:text-3xl font-bold mb-1">{formatCurrency(summary.balanceNet)}</div>
-          <div className="text-sm text-gray-100">Balance neto</div>
-        </div>
-      </div>
+      <CompoundInterestResult summary={summary} formatCurrency={formatCurrency} />
 
       {/* Resumen detallado */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">

@@ -41,9 +41,6 @@ export function CompoundInterestCalculator() {
     setActiveTab(tab)
   }
 
-  // Modificar el componente para que las pestañas móviles estén dentro del recuadro de la aplicación
-  // justo después del resumen
-
   // Renderizado para móvil con pestañas
   if (isMobile) {
     return (
@@ -66,7 +63,7 @@ export function CompoundInterestCalculator() {
                 setInflation={setInflation}
               />
               <div className="mt-6">
-                <CalculatorSummary summary={summary} formatCurrency={formatCurrency} />
+                <CalculatorSummary summary={summary} formatCurrency={formatCurrency} showDetailedCards={false} />
               </div>
 
               {/* Pestañas móviles dentro del recuadro */}
