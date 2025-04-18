@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
-import DesktopHeader from "./desktop-header"
 import MobileHeader from "./mobile-header"
 import { sectionsData } from "@/lib/data"
 
@@ -57,6 +56,6 @@ export default function Header() {
     return <MobileHeader section={section} />
   }
 
-  // En todos los demás casos, mostrar el header de escritorio
-  return <DesktopHeader />
+  // En todos los demás casos, no mostramos nada aquí ya que el botón de menú estará en el contenedor principal
+  return null
 }

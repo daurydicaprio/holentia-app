@@ -5,6 +5,7 @@ import SectionTabs from "@/components/sections/section-tabs"
 import WelcomeModal from "@/components/common/welcome-modal/welcome-modal"
 import MobileFab from "@/components/common/mobile-fab/mobile-fab"
 import SectionSwipeNavigation from "@/components/sections/section-swipe-navigation"
+import MainMenuButton from "@/components/common/main-menu-button/main-menu-button"
 
 export default function Home() {
   return (
@@ -12,7 +13,12 @@ export default function Home() {
       <Header />
       <SectionSwipeNavigation />
 
-      <div className="flex-1 flex flex-col items-center justify-center max-w-6xl w-full mx-auto">
+      <div className="flex-1 flex flex-col items-center justify-center max-w-6xl w-full mx-auto relative">
+        {/* Botón de menú en la esquina superior derecha */}
+        <div className="absolute top-0 right-0 z-10">
+          <MainMenuButton />
+        </div>
+
         <Logo size="lg" />
 
         <SectionTabs />

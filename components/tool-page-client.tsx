@@ -13,6 +13,7 @@ import ScrollToTop from "@/components/common/scroll-to-top/scroll-to-top"
 import SectionSwipeNavigation from "@/components/sections/section-swipe-navigation"
 import type { CardData } from "@/types"
 import { useTheme } from "next-themes"
+import MainMenuButton from "@/components/common/main-menu-button/main-menu-button"
 
 interface ToolPageClientProps {
   params: {
@@ -85,15 +86,23 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
       {/* Header especial para herramientas - más alto y con efectos */}
       {!isMobile && (
         <div
-          className="w-full py-6 mb-6"
+          className="w-full py-6 mb-6 relative"
           style={{
             backgroundColor: currentTheme === "dark" ? "rgba(30, 30, 30, 0.5)" : headerBgColor,
             borderBottom: `1px solid ${currentTheme === "dark" ? "rgba(75, 85, 99, 0.2)" : "rgba(229, 231, 235, 0.8)"}`,
           }}
         >
-          <div className="max-w-6xl mx-auto px-6 flex flex-col items-center">
-            <div className="transform transition-transform hover:scale-110 duration-300 mb-4">
-              <Logo section={section} size="md" />
+          <div className="max-w-6xl mx-auto px-6 flex flex-col items-center relative">
+            {/* Contenedor para el logo y el botón de menú */}
+            <div className="w-full flex justify-center items-center mb-4 relative">
+              <div className="transform transition-transform hover:scale-110 duration-300">
+                <Logo section={section} size="md" />
+              </div>
+
+              {/* Botón de menú posicionado a la derecha del logo */}
+              <div className="absolute right-0 top-1/2 transform -translate-y-1/2">
+                <MainMenuButton />
+              </div>
             </div>
 
             <div className="flex justify-between w-full mt-2 px-8">
