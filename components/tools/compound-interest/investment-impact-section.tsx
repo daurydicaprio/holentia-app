@@ -54,7 +54,7 @@ export function InvestmentImpactSection({ summary, formatCurrency, inflation, ye
               la inflación del {inflation.toFixed(2)}% anual.
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+            <div className="grid grid-cols-1 gap-4 mt-4">
               {/* Recuadro: Si no inviertes tu dinero - CORREGIDO */}
               <div className="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
                 <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">

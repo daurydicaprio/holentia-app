@@ -9,7 +9,7 @@ import { MobileTabsNavigation } from "./mobile-tabs-navigation"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { CompoundInterestResult } from "./compound-interest-result"
 import { InvestmentImpactSection } from "./investment-impact-section"
-import { TrendingUp, DollarSign, Calendar } from "lucide-react"
+import { TrendingUp, DollarSign, Calendar, AlertCircle, ArrowRight } from "lucide-react"
 
 export function CompoundInterestCalculator() {
   const {
@@ -37,6 +37,11 @@ export function CompoundInterestCalculator() {
 
   const [activeTab, setActiveTab] = useState<string>("calculator")
   const isMobile = useMediaQuery("(max-width: 768px)")
+
+  // Calcular valores para la sección de impacto
+  const totalInvested = summary.initialDeposit + summary.totalContributions
+  const nonInvestedValue = inflation > 0 ? totalInvested / Math.pow(1 + inflation / 100, years) : totalInvested
+  const grossBalance = summary.balanceNet + summary.inflationEffect
 
   // Función para cambiar de pestaña
   const handleTabChange = (tab: string) => {
@@ -68,14 +73,52 @@ export function CompoundInterestCalculator() {
                 <CompoundInterestResult summary={summary} formatCurrency={formatCurrency} inflation={inflation} />
               </div>
 
-              {/* Añadir la sección de impacto en la versión móvil */}
+              {/* Sección de impacto optimizada para móvil */}
               <div className="mt-6">
-                <InvestmentImpactSection
-                  summary={summary}
-                  formatCurrency={formatCurrency}
-                  inflation={inflation}
-                  years={years}
-                />
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700 shadow-sm">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="mt-1 text-[#388e3c] dark:text-[#6a9c77] flex-shrink-0">
+                      <AlertCircle size={20} />
+                    </div>
+                    <div className="w-full">
+                      <h4 className="text-base font-medium text-gray-800 dark:text-gray-200">
+                        El impacto de invertir vs. no invertir
+                      </h4>
+                    </div>
+                  </div>
+
+                  {/* Recuadro "Si no inviertes tu dinero" */}
+                  <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg mb-3">
+                    <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                      Si no inviertes tu dinero:
+                    </div>
+                    <div className="text-lg font-bold text-red-500 dark:text-red-400">
+                      {formatCurrency(nonInvestedValue)}
+                    </div>
+                    <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">
+                      Total que ahorraste: {formatCurrency(totalInvested)}
+                    </div>
+                  </div>
+
+                  {/* Comparación de inversión con/sin inflación */}
+                  <div className="grid grid-cols-1 gap-3 mb-3">
+                    <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg">
+                      <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                        Con inflación, tu inversión valdría:
+                      </div>
+                      <div className="text-lg font-bold text-[#388e3c]">{formatCurrency(summary.balanceNet)}</div>
+                    </div>
+                  </div>
+
+                  {/* Dato importante */}
+                  <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 mt-3">
+                    <ArrowRight size={14} className="mt-1 flex-shrink-0 text-[#388e3c]" />
+                    <span>
+                      Al invertir, no solo proteges tu dinero de la inflación, sino que también lo haces crecer con el
+                      tiempo gracias al interés compuesto.
+                    </span>
+                  </div>
+                </div>
               </div>
 
               {/* Pestañas móviles dentro del recuadro */}
@@ -196,7 +239,7 @@ export function CompoundInterestCalculator() {
           </div>
         </div>
 
-        {/* Nueva sección de impacto que ocupa toda la línea */}
+        {/* Sección de impacto que ocupa toda la línea */}
         <div className="mt-6 mb-8">
           <InvestmentImpactSection
             summary={summary}

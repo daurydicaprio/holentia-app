@@ -58,15 +58,18 @@ export default function MainMenuButton() {
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside)
-    document.addEventListener("keydown", handleEscape)
+    // Solo añadir event listeners cuando el menú está abierto
+    if (isMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+      document.addEventListener("keydown", handleEscape)
+    }
 
     return () => {
+      // Siempre limpiar los event listeners al desmontar
       document.removeEventListener("mousedown", handleClickOutside)
       document.removeEventListener("keydown", handleEscape)
-      if (!isMenuOpen) {
-        document.body.style.overflow = "" // Restaurar scroll al desmontar
-      }
+      // Asegurar que el scroll se restaure
+      document.body.style.overflow = ""
     }
   }, [isMenuOpen])
 
@@ -136,28 +139,40 @@ export default function MainMenuButton() {
             <Link
               href="/"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={() => {
+                triggerHapticFeedback("light")
+                setIsMenuOpen(false)
+              }}
             >
               Inicio
             </Link>
             <Link
               href="/mente"
               className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={() => {
+                triggerHapticFeedback("light")
+                setIsMenuOpen(false)
+              }}
             >
               Mente
             </Link>
             <Link
               href="/cuerpo"
               className="block px-4 py-2 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={() => {
+                triggerHapticFeedback("light")
+                setIsMenuOpen(false)
+              }}
             >
               Cuerpo
             </Link>
             <Link
               href="/finanzas"
               className="block px-4 py-2 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={() => {
+                triggerHapticFeedback("light")
+                setIsMenuOpen(false)
+              }}
             >
               Finanzas
             </Link>
@@ -166,7 +181,10 @@ export default function MainMenuButton() {
             <Link
               href="/ayuda"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={() => {
+                triggerHapticFeedback("light")
+                setIsMenuOpen(false)
+              }}
             >
               Ayuda
             </Link>
@@ -174,7 +192,10 @@ export default function MainMenuButton() {
               href="/apoyar"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               style={{ color: donationTextColor }}
-              onClick={() => setIsMenuOpen(false)}
+              onClick={() => {
+                triggerHapticFeedback("light")
+                setIsMenuOpen(false)
+              }}
             >
               Hacer donación
             </Link>
