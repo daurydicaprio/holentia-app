@@ -223,11 +223,31 @@ export function useCompoundInterestCalculator() {
           })
         }
 
-        // Preparar datos para gráfico de pastel
+        // Preparar datos para gráfico de pastel - Obtener valores directamente de los parámetros en lugar de summary
+        const lastSimData = simData.length > 0 ? simData[simData.length - 1] : null
+        const saldoFinal = lastSimData ? lastSimData.balance : initialDeposit
+        const totalContrib = contributionFrequency === 12 ? contribution * 12 * years : contribution * years
+
+        // Calcular balance ajustado por inflación
+        let balanceAjustado = saldoFinal
+        if (lastSimData) {
+          const infl = inflation / 100
+          if (contributionFrequency === 12) {
+            const lastPeriod = lastSimData.period || 0
+            balanceAjustado = infl > 0 && lastPeriod > 0 ? saldoFinal / Math.pow(1 + infl, lastPeriod / 12) : saldoFinal
+          } else {
+            balanceAjustado = infl > 0 && years > 0 ? saldoFinal / Math.pow(1 + infl, years) : saldoFinal
+          }
+        }
+
+        const totalInvertido = initialDeposit + totalContrib
+        const gananciaAjustada = balanceAjustado - initialDeposit - totalContrib
+        const inflacionTotalEfecto = saldoFinal - balanceAjustado
+
         const depositoVal = Math.max(0, isNaN(initialDeposit) ? 0 : initialDeposit)
-        const totalContribVal = Math.max(0, isNaN(summary.totalContributions) ? 0 : summary.totalContributions)
-        const totalGainVal = Math.max(0, isNaN(summary.netGain) ? 0 : summary.netGain)
-        const inflacionTotalVal = Math.max(0, isNaN(summary.inflationEffect) ? 0 : summary.inflationEffect)
+        const totalContribVal = Math.max(0, isNaN(totalContrib) ? 0 : totalContrib)
+        const totalGainVal = Math.max(0, isNaN(gananciaAjustada) ? 0 : gananciaAjustada)
+        const inflacionTotalVal = Math.max(0, isNaN(inflacionTotalEfecto) ? 0 : inflacionTotalEfecto)
 
         const dataDoughnut = [depositoVal, totalContribVal, totalGainVal]
         const labelsDoughnut = ["Inversión inicial", "Contribuciones", "Ganancia"]
@@ -260,7 +280,7 @@ export function useCompoundInterestCalculator() {
         console.error("Error preparando datos de gráficos:", error)
       }
     },
-    [contributionFrequency, inflation, initialDeposit, contribution, summary, years],
+    [contributionFrequency, inflation, initialDeposit, contribution, years],
   )
 
   // Corregir la función calculate para que calcule correctamente la inflación y la ganancia
@@ -372,7 +392,7 @@ export function useCompoundInterestCalculator() {
   // Efecto para recalcular cuando cambian los inputs
   useEffect(() => {
     calculate()
-  }, [initialDeposit, contribution, contributionFrequency, years, interestRate, inflation, calculate])
+  }, [initialDeposit, contribution, contributionFrequency, years, interestRate, inflation])
 
   return {
     // Inputs
