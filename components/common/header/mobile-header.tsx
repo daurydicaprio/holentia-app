@@ -53,23 +53,29 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
   let headerBgColor = currentTheme === "dark" ? "rgba(30, 30, 30, 0.8)" : "rgba(255, 255, 255, 0.8)"
   let headerBorderColor = currentTheme === "dark" ? "#333333" : "#e5e7eb"
   let donationTextColor = "#3B82F6" // Color azul por defecto
+  let headerGradient = "none"
 
-  // Actualizar los colores de fondo del header para que usen las variables CSS
-
-  if (toolSection === "mente") {
-    headerBgColor = currentTheme === "dark" ? "var(--color-mente-glass-bg)" : "var(--color-mente-glass-bg)"
-    headerBorderColor = currentTheme === "dark" ? "var(--color-mente-glass-border)" : "var(--color-mente-glass-border)"
-    donationTextColor = "var(--color-mente-active)" // Color mente
-  } else if (toolSection === "cuerpo") {
-    headerBgColor = currentTheme === "dark" ? "var(--color-cuerpo-glass-bg)" : "var(--color-cuerpo-glass-bg)"
-    headerBorderColor =
-      currentTheme === "dark" ? "var(--color-cuerpo-glass-border)" : "var(--color-cuerpo-glass-border)"
-    donationTextColor = "var(--color-cuerpo-active)" // Color cuerpo
-  } else if (toolSection === "finanzas") {
-    headerBgColor = currentTheme === "dark" ? "var(--color-finanzas-glass-bg)" : "var(--color-finanzas-glass-bg)"
-    headerBorderColor =
-      currentTheme === "dark" ? "var(--color-finanzas-glass-border)" : "var(--color-finanzas-glass-border)"
-    donationTextColor = "var(--color-finanzas-active)" // Color finanzas
+  // Actualizar los colores y gradientes para el header móvil en páginas de herramientas
+  if (isToolPage) {
+    if (toolSection === "mente") {
+      // Azul para mente con mayor opacidad (60%)
+      headerBgColor = currentTheme === "dark" ? "rgba(21, 101, 192, 0.6)" : "rgba(21, 101, 192, 0.6)"
+      headerBorderColor = currentTheme === "dark" ? "rgba(144, 202, 249, 0.6)" : "rgba(144, 202, 249, 0.6)"
+      headerGradient = "linear-gradient(to bottom, rgba(21, 101, 192, 0.6), rgba(13, 71, 161, 0.6))"
+      donationTextColor = "#1976d2" // Color mente
+    } else if (toolSection === "cuerpo") {
+      // Ámbar para cuerpo con mayor opacidad (60%)
+      headerBgColor = currentTheme === "dark" ? "rgba(239, 108, 0, 0.6)" : "rgba(239, 108, 0, 0.6)"
+      headerBorderColor = currentTheme === "dark" ? "rgba(255, 224, 130, 0.6)" : "rgba(255, 224, 130, 0.6)"
+      headerGradient = "linear-gradient(to bottom, rgba(239, 108, 0, 0.6), rgba(230, 81, 0, 0.6))"
+      donationTextColor = "#ffa000" // Color cuerpo
+    } else if (toolSection === "finanzas") {
+      // Verde para finanzas con mayor opacidad (60%)
+      headerBgColor = currentTheme === "dark" ? "rgba(46, 125, 50, 0.6)" : "rgba(46, 125, 50, 0.6)"
+      headerBorderColor = currentTheme === "dark" ? "rgba(165, 214, 167, 0.6)" : "rgba(165, 214, 167, 0.6)"
+      headerGradient = "linear-gradient(to bottom, rgba(46, 125, 50, 0.6), rgba(27, 94, 32, 0.6))"
+      donationTextColor = "#388e3c" // Color finanzas
+    }
   }
 
   // Efecto para manejar el backdrop del menú
@@ -165,6 +171,7 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)", // Añadir soporte para Safari
           backgroundColor: headerBgColor,
+          backgroundImage: headerGradient,
           borderBottom: `1px solid ${headerBorderColor}`,
           width: "100%",
           transition: "background-color 0.3s ease, border-color 0.3s ease",
@@ -176,11 +183,12 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
             size="icon"
             onClick={handleBackClick}
             style={{
-              backgroundColor: "transparent",
+              backgroundColor: "rgba(255, 255, 255, 0.2)",
               height: "44px",
               width: "44px",
+              color: currentTheme === "dark" ? "#ffffff" : "#ffffff",
             }}
-            className="hover:bg-white/30 dark:hover:bg-gray-700/30 active:scale-90 active:bg-white/50 dark:active:bg-gray-700/50 transition-all duration-200"
+            className="hover:bg-white/30 dark:hover:bg-white/30 active:scale-90 active:bg-white/50 dark:active:bg-white/50 transition-all duration-200"
           >
             <ChevronLeft className="h-6 w-6" />
             <span className="sr-only">Volver</span>
@@ -188,13 +196,15 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
 
           <Link
             href="/"
-            className="font-bold text-xl hover:bg-white/60 dark:hover:bg-gray-700/60 active:bg-white/80 dark:active:bg-gray-700/80 transition-all duration-200 active:scale-95"
+            className="font-bold text-xl hover:bg-white/60 dark:hover:bg-white/60 active:bg-white/80 dark:active:bg-white/80 transition-all duration-200 active:scale-95"
             onClick={() => triggerHapticFeedback("light")}
             style={{
-              backgroundColor: currentTheme === "dark" ? "rgba(30, 30, 30, 0.4)" : "rgba(255, 255, 255, 0.4)",
+              backgroundColor: "rgba(255, 255, 255, 0.25)",
               padding: "0.5rem 1.25rem",
               borderRadius: "0.5rem",
               transition: "all 0.2s ease",
+              color: currentTheme === "dark" ? "#ffffff" : "#ffffff",
+              textShadow: "0 1px 2px rgba(0, 0, 0, 0.1)",
             }}
           >
             HOLENTIA
@@ -204,13 +214,14 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="hover:bg-white/30 dark:hover:bg-gray-700/30 active:bg-white/50 dark:active:bg-gray-700/50 active:scale-90 transition-all duration-200"
+              className="hover:bg-white/30 dark:hover:bg-white/30 active:bg-white/50 dark:active:bg-white/50 active:scale-90 transition-all duration-200"
               onClick={handleMenuToggle}
               style={{
-                backgroundColor: "transparent",
+                backgroundColor: "rgba(255, 255, 255, 0.2)",
                 height: "44px",
                 width: "44px",
                 zIndex: 1000,
+                color: currentTheme === "dark" ? "#ffffff" : "#ffffff",
               }}
             >
               <Menu className="h-6 w-6" />

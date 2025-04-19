@@ -14,6 +14,7 @@ import SectionSwipeNavigation from "@/components/sections/section-swipe-navigati
 import type { CardData } from "@/types"
 import { useTheme } from "next-themes"
 import MainMenuButton from "@/components/common/main-menu-button/main-menu-button"
+import MobileHeader from "@/components/common/header/mobile-header"
 
 interface ToolPageClientProps {
   params: {
@@ -85,52 +86,7 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
       <SectionSwipeNavigation />
 
       {/* Header móvil personalizado para herramientas */}
-      {isMobile && toolData && (
-        <div className="w-full sticky top-0 z-50" style={{ zIndex: 1000 }}>
-          <div
-            className="flex items-center justify-between h-16 px-4"
-            style={{
-              backdropFilter: "blur(12px)",
-              WebkitBackdropFilter: "blur(12px)",
-              backgroundColor: currentTheme === "dark" ? "rgba(30, 30, 30, 0.8)" : "rgba(255, 255, 255, 0.8)",
-              borderBottom: `1px solid ${currentTheme === "dark" ? "#333333" : "#e5e7eb"}`,
-            }}
-          >
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => (window.location.href = `/${section}`)}
-              style={{
-                backgroundColor: "transparent",
-                height: "44px",
-                width: "44px",
-                zIndex: 1000,
-              }}
-              className="hover:bg-white/30 dark:hover:bg-gray-700/30 active:scale-90 active:bg-white/50 dark:active:bg-gray-700/50 transition-all duration-200"
-            >
-              <ArrowLeft className="h-6 w-6" />
-              <span className="sr-only">Volver</span>
-            </Button>
-
-            <Link
-              href="/"
-              className="font-bold text-xl hover:bg-white/60 dark:hover:bg-gray-700/60 active:bg-white/80 dark:active:bg-gray-700/80 transition-all duration-200 active:scale-95"
-              style={{
-                backgroundColor: currentTheme === "dark" ? "rgba(30, 30, 30, 0.4)" : "rgba(255, 255, 255, 0.4)",
-                padding: "0.5rem 1.25rem",
-                borderRadius: "0.5rem",
-                transition: "all 0.2s ease",
-              }}
-            >
-              HOLENTIA
-            </Link>
-
-            <div className="relative" style={{ zIndex: 1000 }}>
-              <MainMenuButton />
-            </div>
-          </div>
-        </div>
-      )}
+      {isMobile && toolData && <MobileHeader section={section} />}
 
       {/* Header especial para herramientas - más alto y con efectos */}
       {!isMobile && (
