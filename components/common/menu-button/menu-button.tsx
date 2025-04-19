@@ -63,12 +63,12 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
   // Prevenir scroll cuando el menú está abierto
   useEffect(() => {
     if (isMenuOpen) {
-      document.body.style.overflow = "hidden"
+      document.body.classList.add("overflow-hidden")
     } else {
-      document.body.style.overflow = ""
+      document.body.classList.remove("overflow-hidden")
     }
     return () => {
-      document.body.style.overflow = ""
+      document.body.classList.remove("overflow-hidden")
     }
   }, [isMenuOpen])
 
@@ -181,9 +181,7 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-black/60 backdrop-blur-md"
-              style={{ zIndex: 40 }}
+              className="menu-backdrop-overlay"
               onClick={() => setIsMenuOpen(false)}
             />
 
@@ -193,9 +191,9 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="absolute right-0 top-12 w-64 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg overflow-hidden"
+              className="absolute right-0 top-12 w-64 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg overflow-hidden menu-content"
               style={{
-                zIndex: 50,
+                zIndex: 2001,
                 backdropFilter: "blur(20px)",
                 WebkitBackdropFilter: "blur(20px)",
                 backgroundColor: isDark ? "rgba(30, 30, 30, 0.95)" : "rgba(255, 255, 255, 0.95)",

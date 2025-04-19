@@ -96,7 +96,7 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
   if (isMobile && isToolPage) {
     return (
       <header
-        className="sticky top-0 z-50 w-full"
+        className="sticky top-0 z-40 w-full"
         style={{
           backgroundColor: headerBgColor,
           backdropFilter: "blur(8px)",
