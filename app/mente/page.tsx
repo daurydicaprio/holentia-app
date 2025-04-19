@@ -7,7 +7,7 @@ import SectionHeader from "@/components/sections/section-header"
 import ToolsGrid from "@/components/sections/tools-grid"
 import MobileFab from "@/components/common/mobile-fab/mobile-fab"
 import SectionSwipeNavigation from "@/components/sections/section-swipe-navigation"
-import MainMenuButton from "@/components/common/main-menu-button/main-menu-button"
+import MenuButton from "@/components/common/menu-button/menu-button"
 
 export default function MentePage() {
   const section = "mente"
@@ -26,7 +26,7 @@ export default function MentePage() {
 
           {/* Botón de menú alineado con el borde de las tarjetas */}
           <div className="absolute top-6 right-0 sm:right-4 md:right-6">
-            <MainMenuButton section={section} />
+            <MenuButton section={section} />
           </div>
         </div>
 

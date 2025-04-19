@@ -5,7 +5,7 @@ import SectionTabs from "@/components/sections/section-tabs"
 import WelcomeModal from "@/components/common/welcome-modal/welcome-modal"
 import MobileFab from "@/components/common/mobile-fab/mobile-fab"
 import SectionSwipeNavigation from "@/components/sections/section-swipe-navigation"
-import MainMenuButton from "@/components/common/main-menu-button/main-menu-button"
+import MenuButton from "@/components/common/menu-button/menu-button"
 
 export default function Home() {
   return (
@@ -19,7 +19,7 @@ export default function Home() {
 
           {/* Botón de menú posicionado con más espacio respecto al logo */}
           <div className="absolute right-0 sm:right-4 md:right-12 lg:right-20 top-4">
-            <MainMenuButton />
+            <MenuButton />
           </div>
         </div>
 
