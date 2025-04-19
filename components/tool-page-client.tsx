@@ -3,13 +3,19 @@
 import type React from "react"
 
 import { useState, useEffect } from "react"
-import Header from "@/components/common/header/header"
+import Link from "next/link"
+import { ChevronLeft, Coffee } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import Footer from "@/components/common/footer/footer"
 import ScrollToTop from "@/components/common/scroll-to-top/scroll-to-top"
 import SectionSwipeNavigation from "@/components/sections/section-swipe-navigation"
 import type { CardData } from "@/types"
 import { useTheme } from "next-themes"
 import { motion } from "framer-motion"
+import { useMediaQuery } from "@/hooks/use-media-query"
+import UnifiedHeader from "@/components/common/header/unified-header"
+import { useRouter } from "next/navigation"
+import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 
 interface ToolPageClientProps {
   params: {
@@ -24,6 +30,9 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
   const { section } = params
   const [mounted, setMounted] = useState(false)
   const { resolvedTheme } = useTheme()
+  const isMobile = useMediaQuery("(max-width: 768px)")
+  const router = useRouter()
+  const { triggerHapticFeedback } = useHapticFeedback()
 
   useEffect(() => {
     setMounted(true)
@@ -46,51 +55,114 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
 
   // Usar el tema resuelto para evitar parpadeos
   const currentTheme = mounted ? resolvedTheme : "light"
+  const isDark = currentTheme === "dark"
+
+  const handleBackClick = () => {
+    triggerHapticFeedback("medium")
+    router.push(`/${section}`)
+  }
 
   if (!mounted) return null
 
   return (
     <main className="min-h-screen flex flex-col">
-      <Header />
+      {/* Usar el header unificado para herramientas */}
+      <UnifiedHeader section={section} />
       <SectionSwipeNavigation />
 
       <div className="flex-1 p-4 sm:p-6 max-w-6xl mx-auto w-full">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="mb-8 text-center"
-        >
-          <h1
-            className="text-2xl sm:text-3xl font-bold"
-            style={{
-              color: sectionColor,
-              marginBottom: "0.5rem",
-            }}
+        {/* En móvil, no mostramos el título de nuevo porque ya está en el header */}
+        {!isMobile && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="mb-8 text-center"
           >
-            {toolData.title}
-          </h1>
-          <p
-            className="text-gray-600 dark:text-gray-300 mt-2"
-            style={{
-              marginBottom: "0.75rem",
-            }}
-          >
-            {toolData.description}
-          </p>
-          <div
-            style={{
-              height: "0.175rem",
-              width: "4rem",
-              marginLeft: "auto",
-              marginRight: "auto",
-              marginTop: "0.25rem",
-              marginBottom: "1.5rem",
-              borderRadius: "9999px",
-              backgroundColor: headerLineColor,
-            }}
-          ></div>
-        </motion.div>
+            <h1
+              className="text-2xl sm:text-3xl font-bold"
+              style={{
+                color: sectionColor,
+                marginBottom: "0.5rem",
+              }}
+            >
+              {toolData.title}
+            </h1>
+            <p
+              className="text-gray-600 dark:text-gray-300 mt-2"
+              style={{
+                marginBottom: "0.75rem",
+              }}
+            >
+              {toolData.description}
+            </p>
+            <div
+              style={{
+                height: "0.175rem",
+                width: "4rem",
+                marginLeft: "auto",
+                marginRight: "auto",
+                marginTop: "0.25rem",
+                marginBottom: "1.5rem",
+                borderRadius: "9999px",
+                backgroundColor: headerLineColor,
+              }}
+            ></div>
+          </motion.div>
+        )}
+
+        {/* En móvil, añadimos un poco de espacio superior */}
+        {isMobile && <div className="h-4"></div>}
+
+        {/* Botones en extremos opuestos del recuadro de la herramienta (solo en escritorio) */}
+        {!isMobile && (
+          <div className="flex justify-between items-center mb-6">
+            <Button
+              variant="outline"
+              className="flex items-center gap-2 text-sm h-10 px-5 transition-all duration-300 hover:scale-105"
+              style={{
+                borderColor: sectionColor,
+                color: sectionColor,
+                backgroundColor: isDark ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.6)",
+                backdropFilter: "blur(4px)",
+                fontWeight: 500,
+              }}
+              onClick={handleBackClick}
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = isDark ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.8)"
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = isDark ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.6)"
+              }}
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Volver a {section.charAt(0).toUpperCase() + section.slice(1)}
+            </Button>
+
+            <Link href="/apoyar">
+              <Button
+                variant="outline"
+                className="flex items-center gap-2 text-sm h-10 px-5 transition-all duration-300 hover:scale-105"
+                style={{
+                  borderColor: sectionColor,
+                  color: sectionColor,
+                  backgroundColor: isDark ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.6)",
+                  backdropFilter: "blur(4px)",
+                  fontWeight: 500,
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = isDark ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.8)"
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = isDark ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.6)"
+                }}
+              >
+                <Coffee className="h-4 w-4" />
+                Hacer donación
+              </Button>
+            </Link>
+          </div>
+        )}
 
         {toolContent}
       </div>

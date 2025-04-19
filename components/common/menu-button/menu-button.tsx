@@ -10,9 +10,10 @@ import { motion, AnimatePresence } from "framer-motion"
 
 interface MenuButtonProps {
   section?: string | null
+  isSquare?: boolean
 }
 
-export default function MenuButton({ section }: MenuButtonProps) {
+export default function MenuButton({ section, isSquare = false }: MenuButtonProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { setTheme, resolvedTheme } = useTheme()
   const pathname = usePathname()
@@ -111,22 +112,26 @@ export default function MenuButton({ section }: MenuButtonProps) {
   // Estilos para el botón según el contexto
   const buttonStyle = {
     backgroundColor: isToolPage
-      ? "rgba(255, 255, 255, 0.2)"
+      ? "rgba(255, 255, 255, 0.3)"
       : isDark
         ? "rgba(30, 30, 30, 0.7)"
         : "rgba(255, 255, 255, 0.7)",
     color: isToolPage ? "#ffffff" : isDark ? "#ffffff" : "#333333",
     boxShadow: isMenuOpen ? `0 0 0 2px ${accentColor}, 0 4px 8px rgba(0, 0, 0, 0.1)` : "0 2px 5px rgba(0, 0, 0, 0.05)",
-    border: `1px solid ${isMenuOpen ? accentColor : "transparent"}`,
+    border: `1px solid ${isMenuOpen ? accentColor : isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.1)"}`,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: isSquare ? "8px" : "9999px", // Cuadrado con bordes redondeados o círculo
+    width: "40px",
+    height: "40px",
   }
 
   return (
     <div ref={menuRef} className="relative z-50">
       <button
         ref={buttonRef}
-        className={`flex items-center justify-center rounded-full w-10 h-10 transition-all duration-300 ${
-          isMenuOpen ? "scale-110" : "hover:scale-105"
-        } active:scale-95`}
+        className={`transition-all duration-300 ${isMenuOpen ? "scale-110" : "hover:scale-105"} active:scale-95`}
         style={buttonStyle}
         onClick={handleMenuToggle}
         aria-expanded={isMenuOpen}
@@ -140,6 +145,7 @@ export default function MenuButton({ section }: MenuButtonProps) {
               animate={{ rotate: 0, opacity: 1 }}
               exit={{ rotate: 90, opacity: 0 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
+              className="flex items-center justify-center w-full h-full"
             >
               <X className="h-5 w-5" />
             </motion.div>
@@ -150,6 +156,7 @@ export default function MenuButton({ section }: MenuButtonProps) {
               animate={{ rotate: 0, opacity: 1 }}
               exit={{ rotate: -90, opacity: 0 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
+              className="flex items-center justify-center w-full h-full"
             >
               <Menu className="h-5 w-5" />
             </motion.div>

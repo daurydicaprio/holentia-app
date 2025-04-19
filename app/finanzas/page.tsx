@@ -1,5 +1,4 @@
 import { sectionsData } from "@/lib/data"
-import Header from "@/components/common/header/header"
 import Footer from "@/components/common/footer/footer"
 import Logo from "@/components/common/logo/logo"
 import SectionTabs from "@/components/sections/section-tabs"
@@ -15,7 +14,6 @@ export default function FinanzasPage() {
 
   return (
     <main className="min-h-screen flex flex-col items-center p-4 sm:p-6">
-      <Header />
       <SectionSwipeNavigation />
 
       <div className="flex-1 flex flex-col items-center w-full max-w-6xl mx-auto">

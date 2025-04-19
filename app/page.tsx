@@ -1,5 +1,4 @@
 import Logo from "@/components/common/logo/logo"
-import Header from "@/components/common/header/header"
 import Footer from "@/components/common/footer/footer"
 import SectionTabs from "@/components/sections/section-tabs"
 import WelcomeModal from "@/components/common/welcome-modal/welcome-modal"
@@ -10,7 +9,6 @@ import MenuButton from "@/components/common/menu-button/menu-button"
 export default function Home() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
-      <Header />
       <SectionSwipeNavigation />
 
       <div className="flex-1 flex flex-col items-center justify-center max-w-6xl w-full mx-auto">

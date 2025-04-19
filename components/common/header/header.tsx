@@ -36,5 +36,6 @@ export default function Header() {
 
   if (!mounted) return null
 
+  // Renderizar el header unificado solo una vez
   return <UnifiedHeader section={section} />
 }
