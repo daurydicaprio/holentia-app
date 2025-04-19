@@ -96,7 +96,7 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
   if (isMobile && isToolPage) {
     return (
       <header
-        className="sticky top-0 z-50 w-full"
+        className="sticky top-0 z-40 w-full"
         style={{
           backgroundColor: headerBgColor,
           backdropFilter: "blur(8px)",
@@ -124,10 +124,8 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
             <span className="font-bold text-lg text-white">HOLENTIA</span>
           </Link>
 
-          {/* Botón menú con z-index elevado */}
-          <div className="relative z-[200]">
-            <MenuButton section={toolSection} isSquare={true} isCompact={true} />
-          </div>
+          {/* Botón menú */}
+          <MenuButton section={toolSection} isSquare={true} isCompact={true} />
         </div>
       </header>
     )
