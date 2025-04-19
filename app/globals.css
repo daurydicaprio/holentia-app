@@ -535,26 +535,27 @@ button[aria-label="Cerrar menú"] {
   pointer-events: auto !important;
 }
 
-/* Asegurar que el backdrop del menú siempre esté por encima de todo */
-.menu-backdrop-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 2000;
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+/* Añadir reglas CSS específicas para asegurar que el menú móvil funcione correctamente */
+/* Añadir al final del archivo: */
+
+/* Asegurar que el menú móvil siempre esté por encima de otros elementos */
+.relative.z-50 {
+  isolation: isolate;
 }
 
-/* Asegurar que el contenido del menú siempre esté por encima del backdrop */
-.menu-content {
-  z-index: 2001;
+/* Asegurar que el backdrop del menú no interfiera con la interacción del menú */
+.fixed.inset-0.bg-black\/60.backdrop-blur-md {
+  pointer-events: auto;
+}
+
+/* Asegurar que el menú desplegable siempre esté visible */
+.absolute.right-0.top-12.w-64 {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Aumentar la especificidad para el botón de menú en herramientas móviles */
+.relative.z-\[200\] button {
   position: relative;
-}
-
-/* Prevenir scroll cuando el menú está abierto */
-.overflow-hidden {
-  overflow: hidden !important;
-  position: fixed;
-  width: 100%;
-  height: 100%;
+  z-index: 200;
 }
