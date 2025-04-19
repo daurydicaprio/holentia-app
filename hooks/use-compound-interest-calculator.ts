@@ -35,6 +35,22 @@ export interface PieChartData {
   colors: string[]
 }
 
+// Añadir la interfaz para las simulaciones guardadas después de la interfaz PieChartData
+export interface SavedSimulation {
+  id: number
+  name: string
+  initialDeposit: number
+  contribution: number
+  contributionFrequency: number
+  years: number
+  interestRate: number
+  inflation: number
+  balanceNet: number
+  netGain: number
+  totalContributions: number
+  totalReturn: string
+}
+
 export interface useCompoundInterestCalculatorResult {
   initialDeposit: number
   setInitialDeposit: (value: number) => void
@@ -57,6 +73,10 @@ export interface useCompoundInterestCalculatorResult {
   pieChartData: PieChartData
   formatCurrency: (value: number) => string
   calculate: () => void
+  savedSimulations: SavedSimulation[]
+  saveSimulation: () => { success: boolean; message?: string }
+  removeSimulation: (id: number) => void
+  updateSimulationName: (id: number, name: string) => void
 }
 
 export function useCompoundInterestCalculator(): useCompoundInterestCalculatorResult {
@@ -67,6 +87,9 @@ export function useCompoundInterestCalculator(): useCompoundInterestCalculatorRe
   const [years, setYears] = useState<number>(5)
   const [interestRate, setInterestRate] = useState<number>(0)
   const [inflation, setInflation] = useState<number>(0)
+
+  // Estado para las simulaciones guardadas
+  const [savedSimulations, setSavedSimulations] = useState<SavedSimulation[]>([])
 
   // Resultados
   const [summary, setSummary] = useState<SummaryData>({
@@ -385,6 +408,55 @@ export function useCompoundInterestCalculator(): useCompoundInterestCalculatorRe
     }
   }
 
+  // Función para guardar una simulación
+  const saveSimulation = () => {
+    if (savedSimulations.length >= 3) {
+      return { success: false, message: "Ya has guardado el máximo de 3 simulaciones." }
+    }
+
+    if (initialDeposit <= 0 && contribution <= 0) {
+      return {
+        success: false,
+        message: "Por favor, ingresa al menos un valor para depósito inicial o aportación periódica.",
+      }
+    }
+
+    // Crear objeto con los datos de la simulación
+    const simulation: SavedSimulation = {
+      id: Date.now(),
+      name: `Opción ${savedSimulations.length + 1}`,
+      initialDeposit,
+      contribution,
+      contributionFrequency,
+      years,
+      interestRate,
+      inflation,
+      balanceNet: summary.balanceNet,
+      netGain: summary.netGain,
+      totalContributions: summary.totalContributions,
+      totalReturn: summary.totalReturn,
+    }
+
+    // Agregar la simulación al arreglo
+    setSavedSimulations([...savedSimulations, simulation])
+
+    return { success: true }
+  }
+
+  // Función para eliminar una simulación guardada
+  const removeSimulation = (simulationId: number) => {
+    setSavedSimulations(savedSimulations.filter((sim) => sim.id !== simulationId))
+  }
+
+  // Función para actualizar el nombre de una simulación
+  const updateSimulationName = (simulationId: number, newName: string) => {
+    setSavedSimulations(
+      savedSimulations.map((sim) =>
+        sim.id === simulationId ? { ...sim, name: newName || `Opción ${savedSimulations.indexOf(sim) + 1}` } : sim,
+      ),
+    )
+  }
+
   // Efecto para recalcular cuando cambian los inputs
   useEffect(() => {
     calculate()
@@ -417,5 +489,11 @@ export function useCompoundInterestCalculator(): useCompoundInterestCalculatorRe
     // Funciones
     formatCurrency,
     calculate,
+
+    // Simulaciones guardadas
+    savedSimulations,
+    saveSimulation,
+    removeSimulation,
+    updateSimulationName,
   }
 }

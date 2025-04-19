@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { DollarSign, Percent, Calendar, HelpCircle } from "lucide-react"
+import { DollarSign, Percent, Calendar, HelpCircle, Save } from "lucide-react"
 
 interface CalculatorInputsProps {
   initialDeposit: number
@@ -19,6 +19,8 @@ interface CalculatorInputsProps {
   setInterestRate: (value: number) => void
   inflation: number
   setInflation: (value: number) => void
+  onSaveSimulation?: () => void
+  disableSave?: boolean
 }
 
 export function CalculatorInputs({
@@ -34,6 +36,8 @@ export function CalculatorInputs({
   setInterestRate,
   inflation,
   setInflation,
+  onSaveSimulation,
+  disableSave = false,
 }: CalculatorInputsProps) {
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
 
@@ -403,6 +407,23 @@ export function CalculatorInputs({
           </div>
         </div>
       </div>
+
+      {/* Botón para guardar simulación */}
+      {onSaveSimulation && (
+        <div className="mt-6 flex justify-center">
+          <button
+            onClick={onSaveSimulation}
+            disabled={disableSave}
+            className={`px-4 py-2 rounded-md text-white font-medium transition-colors flex items-center gap-2 ${
+              disableSave ? "opacity-50 cursor-not-allowed bg-gray-400" : "bg-[#388e3c] hover:bg-[#1b5e20]"
+            }`}
+            data-interactive="true"
+          >
+            <Save size={16} />
+            <span>Guardar Simulación</span>
+          </button>
+        </div>
+      )}
     </motion.div>
   )
 }

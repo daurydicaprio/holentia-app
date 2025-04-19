@@ -11,6 +11,7 @@ import { CompoundInterestResult } from "./compound-interest-result"
 import { InvestmentImpactSection } from "./investment-impact-section"
 import { TrendingUp, DollarSign, Calendar, AlertCircle, ArrowRight } from "lucide-react"
 import TabSwipeNavigation from "@/components/common/tab-swipe-navigation"
+import { SavedSimulations } from "./saved-simulations"
 
 export function CompoundInterestCalculator() {
   const {
@@ -34,10 +35,22 @@ export function CompoundInterestCalculator() {
     lineChartData,
     pieChartData,
     formatCurrency,
+    savedSimulations,
+    saveSimulation,
+    removeSimulation,
+    updateSimulationName,
   } = useCompoundInterestCalculator()
 
   const [activeTab, setActiveTab] = useState<string>("calculator")
   const isMobile = useMediaQuery("(max-width: 768px)")
+
+  // Función para manejar el guardado de simulaciones
+  const handleSaveSimulation = () => {
+    const result = saveSimulation()
+    if (!result.success && result.message) {
+      alert(result.message)
+    }
+  }
 
   // Calcular valores para la sección de impacto
   const totalInvested = summary.initialDeposit + summary.totalContributions
@@ -50,7 +63,7 @@ export function CompoundInterestCalculator() {
   }
 
   // Definir las pestañas disponibles para la navegación por swipe
-  const availableTabs = ["calculator", "charts"]
+  const availableTabs = ["calculator", "simulations", "charts"]
 
   // Renderizado para móvil con pestañas
   if (isMobile) {
@@ -75,6 +88,8 @@ export function CompoundInterestCalculator() {
                 setInterestRate={setInterestRate}
                 inflation={inflation}
                 setInflation={setInflation}
+                onSaveSimulation={handleSaveSimulation}
+                disableSave={savedSimulations.length >= 3}
               />
               <div className="mt-6">
                 <CompoundInterestResult summary={summary} formatCurrency={formatCurrency} inflation={inflation} />
@@ -133,6 +148,20 @@ export function CompoundInterestCalculator() {
             </>
           )}
 
+          {activeTab === "simulations" && (
+            <>
+              <SavedSimulations
+                simulations={savedSimulations}
+                onRemove={removeSimulation}
+                onUpdateName={updateSimulationName}
+                formatCurrency={formatCurrency}
+              />
+
+              {/* Pestañas móviles dentro del recuadro */}
+              <MobileTabsNavigation activeTab={activeTab} onTabChange={handleTabChange} />
+            </>
+          )}
+
           {activeTab === "charts" && (
             <>
               <CalculatorCharts
@@ -150,6 +179,8 @@ export function CompoundInterestCalculator() {
       </div>
     )
   }
+
+  const monthlyData = monthlySimData // Assign monthlySimData to monthlyData
 
   // Asegurar que los bordes de los recuadros sean visibles
   return (
@@ -171,6 +202,8 @@ export function CompoundInterestCalculator() {
               setInterestRate={setInterestRate}
               inflation={inflation}
               setInflation={setInflation}
+              onSaveSimulation={handleSaveSimulation}
+              disableSave={savedSimulations.length >= 3}
             />
           </div>
           <div>
@@ -246,6 +279,18 @@ export function CompoundInterestCalculator() {
           </div>
         </div>
 
+        {/* Sección de simulaciones guardadas */}
+        {savedSimulations.length > 0 && (
+          <div className="mt-6 mb-8">
+            <SavedSimulations
+              simulations={savedSimulations}
+              onRemove={removeSimulation}
+              onUpdateName={updateSimulationName}
+              formatCurrency={formatCurrency}
+            />
+          </div>
+        )}
+
         {/* Sección de impacto que ocupa toda la línea */}
         <div className="mt-6 mb-8">
           <InvestmentImpactSection
@@ -269,7 +314,7 @@ export function CompoundInterestCalculator() {
         <div className="mt-8">
           <AmortizationTable
             annualData={annualSimData}
-            monthlyData={monthlySimData}
+            monthlyData={monthlyData}
             tableView={tableView}
             setTableView={setTableView}
             formatCurrency={formatCurrency}
