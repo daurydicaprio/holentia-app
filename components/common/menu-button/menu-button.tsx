@@ -22,18 +22,9 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
   const { triggerHapticFeedback } = useHapticFeedback()
   const menuRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
-  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     setMounted(true)
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-    checkMobile()
-    window.addEventListener("resize", checkMobile)
-    return () => {
-      window.removeEventListener("resize", checkMobile)
-    }
   }, [])
 
   // Determinar colores basados en la sección
@@ -95,6 +86,20 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
     }
   }, [isMenuOpen])
 
+  // Cerrar el menú al hacer clic fuera
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node) && isMenuOpen) {
+        setIsMenuOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [isMenuOpen])
+
   // Determinar si una sección está activa
   const isActive = (path: string) => {
     if (path === "/") {
@@ -127,156 +132,6 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
     .trim()
     .replace(/\s+/g, " ")
 
-  // Renderizar un menú de pantalla completa para móviles
-  if (isMobile) {
-    return (
-      <div className="relative z-[500]">
-        {/* Botón de menú */}
-        <button
-          ref={buttonRef}
-          className={buttonClasses}
-          onClick={handleMenuToggle}
-          aria-expanded={isMenuOpen}
-          aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
-          style={{
-            boxShadow: isMenuOpen
-              ? `0 0 0 2px ${accentColor}, 0 4px 8px rgba(0, 0, 0, 0.1)`
-              : "0 2px 5px rgba(0, 0, 0, 0.05)",
-          }}
-        >
-          <AnimatePresence mode="wait">
-            {isMenuOpen ? (
-              <motion.div
-                key="close"
-                initial={{ rotate: -90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 90, opacity: 0 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-                className="flex items-center justify-center w-full h-full"
-              >
-                <X className="h-5 w-5" />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="menu"
-                initial={{ rotate: 90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: -90, opacity: 0 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-                className="flex items-center justify-center w-full h-full"
-              >
-                <Menu className="h-5 w-5" />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </button>
-
-        {/* Menú de pantalla completa para móviles */}
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-black/90 backdrop-blur-md z-[400] flex flex-col"
-              style={{ touchAction: "none" }}
-            >
-              <div className="flex justify-end p-4">
-                <button
-                  onClick={() => setIsMenuOpen(false)}
-                  className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-
-              <div className="flex-1 flex flex-col items-center justify-center gap-6 p-6 overflow-auto">
-                <Link
-                  href="/"
-                  className="w-full text-center text-xl font-medium text-white py-3 px-6 rounded-lg hover:bg-white/10 active:bg-white/20 transition-colors"
-                  onClick={handleLinkClick}
-                >
-                  Inicio
-                </Link>
-
-                <Link
-                  href="/mente"
-                  className={`w-full text-center text-xl font-medium py-3 px-6 rounded-lg transition-colors ${
-                    isActive("/mente")
-                      ? "bg-[#1976d2]/30 text-white"
-                      : "text-white hover:bg-white/10 active:bg-white/20"
-                  }`}
-                  onClick={handleLinkClick}
-                >
-                  Mente
-                </Link>
-
-                <Link
-                  href="/cuerpo"
-                  className={`w-full text-center text-xl font-medium py-3 px-6 rounded-lg transition-colors ${
-                    isActive("/cuerpo")
-                      ? "bg-[#ffa000]/30 text-white"
-                      : "text-white hover:bg-white/10 active:bg-white/20"
-                  }`}
-                  onClick={handleLinkClick}
-                >
-                  Cuerpo
-                </Link>
-
-                <Link
-                  href="/finanzas"
-                  className={`w-full text-center text-xl font-medium py-3 px-6 rounded-lg transition-colors ${
-                    isActive("/finanzas")
-                      ? "bg-[#388e3c]/30 text-white"
-                      : "text-white hover:bg-white/10 active:bg-white/20"
-                  }`}
-                  onClick={handleLinkClick}
-                >
-                  Finanzas
-                </Link>
-
-                <div className="w-full h-px bg-white/20 my-2"></div>
-
-                <Link
-                  href="/ayuda"
-                  className="w-full text-center text-lg text-white py-3 px-6 rounded-lg hover:bg-white/10 active:bg-white/20 transition-colors"
-                  onClick={handleLinkClick}
-                >
-                  Ayuda
-                </Link>
-
-                <Link
-                  href="/apoyar"
-                  className="w-full text-center text-lg font-medium py-3 px-6 rounded-lg transition-colors"
-                  style={{ backgroundColor: `${accentColor}40`, color: "white" }}
-                  onClick={handleLinkClick}
-                >
-                  Hacer donación
-                </Link>
-
-                <button
-                  onClick={() => {
-                    triggerHapticFeedback("medium")
-                    setTheme(isDark ? "light" : "dark")
-                    setIsMenuOpen(false)
-                  }}
-                  className="w-full flex items-center justify-between text-white py-3 px-6 rounded-lg hover:bg-white/10 active:bg-white/20 transition-colors"
-                >
-                  <span>Modo {isDark ? "Claro" : "Oscuro"}</span>
-                  <div className="bg-white/20 p-2 rounded-full">
-                    {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-                  </div>
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    )
-  }
-
-  // Versión de escritorio (menú desplegable)
   return (
     <div ref={menuRef} className="relative z-50">
       <button
