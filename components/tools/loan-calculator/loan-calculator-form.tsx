@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import { useState, useEffect } from "react"
 import { Slider } from "@/components/ui/slider"
 import { Input } from "@/components/ui/input"
 import { RefreshCw, Save } from "lucide-react"
@@ -15,6 +16,21 @@ interface LoanCalculatorFormProps {
   loanTerm: number
 }
 
+// Función para formatear números con comas y decimales
+const formatNumber = (value: number): string => {
+  return new Intl.NumberFormat("es-MX", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value)
+}
+
+// Función para eliminar formato y convertir a número
+const parseFormattedNumber = (formattedValue: string): number => {
+  // Eliminar todas las comas y convertir a número
+  const numericValue = formattedValue.replace(/,/g, "")
+  return Number.parseFloat(numericValue)
+}
+
 export function LoanCalculatorForm({
   onCalculate,
   onSaveSimulation,
@@ -24,11 +40,43 @@ export function LoanCalculatorForm({
   interestRate,
   loanTerm,
 }: LoanCalculatorFormProps) {
+  // Estado para el valor formateado del monto del préstamo
+  const [formattedLoanAmount, setFormattedLoanAmount] = useState<string>(formatNumber(loanAmount))
+
+  // Actualizar el valor formateado cuando cambia loanAmount desde props
+  useEffect(() => {
+    setFormattedLoanAmount(formatNumber(loanAmount))
+  }, [loanAmount])
+
   // Manejar cambios en los inputs
   const handleLoanAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number.parseFloat(e.target.value)
-    const newValue = isNaN(value) ? 0 : value
-    onCalculate(newValue, interestRate, loanTerm)
+    const inputValue = e.target.value
+
+    // Si el input está vacío, establecer a 0
+    if (!inputValue.trim()) {
+      onCalculate(0, interestRate, loanTerm)
+      setFormattedLoanAmount("")
+      return
+    }
+
+    try {
+      // Intentar parsear el valor numérico
+      const numericValue = parseFormattedNumber(inputValue)
+
+      if (!isNaN(numericValue)) {
+        onCalculate(numericValue, interestRate, loanTerm)
+        // Actualizar el valor formateado solo si es un número válido
+        setFormattedLoanAmount(formatNumber(numericValue))
+      }
+    } catch (error) {
+      // Si hay un error al parsear, no actualizar
+      console.error("Error parsing number:", error)
+    }
+  }
+
+  const handleLoanAmountBlur = () => {
+    // Al perder el foco, asegurarse de que el formato sea correcto
+    setFormattedLoanAmount(formatNumber(loanAmount))
   }
 
   const handleLoanAmountSliderChange = (value: number[]) => {
@@ -73,11 +121,10 @@ export function LoanCalculatorForm({
           <div className="grid grid-cols-1 gap-2">
             <Input
               id="loan-amount"
-              type="number"
-              min="1"
-              step="1000"
-              value={loanAmount}
+              type="text"
+              value={formattedLoanAmount}
               onChange={handleLoanAmountChange}
+              onBlur={handleLoanAmountBlur}
               className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-finanzas-DEFAULT focus:border-finanzas-DEFAULT"
             />
             <Slider
@@ -86,7 +133,7 @@ export function LoanCalculatorForm({
               step={1000}
               value={[loanAmount]}
               onValueChange={handleLoanAmountSliderChange}
-              className="py-2"
+              className="py-2 loan-calculator-slider"
             />
           </div>
         </div>
@@ -117,7 +164,7 @@ export function LoanCalculatorForm({
               step={0.25}
               value={[interestRate]}
               onValueChange={handleInterestRateSliderChange}
-              className="py-2"
+              className="py-2 loan-calculator-slider"
             />
           </div>
         </div>
@@ -149,7 +196,7 @@ export function LoanCalculatorForm({
               step={1}
               value={[loanTerm]}
               onValueChange={handleLoanTermSliderChange}
-              className="py-2"
+              className="py-2 loan-calculator-slider"
             />
           </div>
         </div>
