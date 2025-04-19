@@ -114,10 +114,11 @@ export default function MainMenuButton() {
   const menuVariants = {
     hidden: {
       opacity: 0,
-      scale: 0.95,
-      y: -10,
+      scale: 0.92,
+      y: -15,
+      x: 20,
       transition: {
-        duration: 0.2,
+        duration: 0.25,
         ease: [0.4, 0.0, 0.2, 1], // Curva de aceleración personalizada
       },
     },
@@ -125,9 +126,25 @@ export default function MainMenuButton() {
       opacity: 1,
       scale: 1,
       y: 0,
+      x: 0,
       transition: {
-        duration: 0.25,
-        ease: [0.0, 0.0, 0.2, 1], // Curva de desaceleración personalizada
+        duration: 0.3,
+        ease: [0.0, 0.0, 0.2, 1.1], // Curva de desaceleración con ligero rebote
+        staggerChildren: 0.05, // Añadir animación escalonada para los hijos
+        delayChildren: 0.05, // Pequeño retraso antes de animar los hijos
+      },
+    },
+  }
+
+  // Variantes para los elementos del menú
+  const menuItemVariants = {
+    hidden: { opacity: 0, x: 20 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.3,
+        ease: "easeOut",
       },
     },
   }
@@ -137,14 +154,14 @@ export default function MainMenuButton() {
     hidden: {
       opacity: 0,
       transition: {
-        duration: 0.2,
+        duration: 0.25,
         ease: [0.4, 0.0, 0.2, 1], // Curva de aceleración personalizada
       },
     },
     visible: {
       opacity: 1,
       transition: {
-        duration: 0.25,
+        duration: 0.3,
         ease: [0.0, 0.0, 0.2, 1], // Curva de desaceleración personalizada
       },
     },
@@ -270,102 +287,121 @@ export default function MainMenuButton() {
               className="absolute right-0 top-[60px] w-72 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg overflow-hidden"
               style={{
                 zIndex: 2001,
-                backdropFilter: "blur(16px)", // Aumentado para mejor efecto
-                WebkitBackdropFilter: "blur(16px)", // Aumentado para mejor efecto
+                backdropFilter: "blur(20px)", // Aumentado para mejor efecto
+                WebkitBackdropFilter: "blur(20px)", // Aumentado para mejor efecto
                 backgroundColor: menuBgColor,
-                boxShadow: "0 10px 25px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05)", // Sombra mejorada
+                boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05)", // Sombra mejorada
+                transformOrigin: "top right", // Origen de la animación desde la esquina superior derecha
               }}
             >
-              <div className="py-3 px-5 border-b border-gray-200 dark:border-gray-700">
+              <motion.div
+                className="py-3 px-5 border-b border-gray-200 dark:border-gray-700"
+                variants={menuItemVariants}
+              >
                 <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Navegación</h3>
-              </div>
+              </motion.div>
               <div className="py-2">
-                <Link
-                  href="/"
-                  className={`block px-5 py-3 transition-all duration-200 ${
-                    isActive("/")
-                      ? `font-medium bg-gray-100 dark:bg-gray-700`
-                      : `hover:bg-gray-100 dark:hover:bg-gray-700`
-                  }`}
-                  onClick={handleLinkClick}
-                >
-                  <div className="flex items-center">
-                    <span className="flex-grow">Inicio</span>
-                    {isActive("/") && (
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                        className="w-1.5 h-1.5 rounded-full bg-gray-500 dark:bg-gray-400"
-                      />
-                    )}
-                  </div>
-                </Link>
-                <Link
-                  href="/mente"
-                  className={`block px-5 py-3 transition-all duration-200 ${
-                    isActive("/mente")
-                      ? `font-medium text-[#1976d2] bg-blue-50 dark:bg-blue-900/20`
-                      : `hover:bg-blue-50 dark:hover:bg-blue-900/20`
-                  }`}
-                  onClick={handleLinkClick}
-                >
-                  <div className="flex items-center">
-                    <span className="flex-grow">Mente</span>
-                    {isActive("/mente") && (
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                        className="w-1.5 h-1.5 rounded-full bg-[#1976d2]"
-                      />
-                    )}
-                  </div>
-                </Link>
-                <Link
-                  href="/cuerpo"
-                  className={`block px-5 py-3 transition-all duration-200 ${
-                    isActive("/cuerpo")
-                      ? `font-medium text-[#ffa000] bg-amber-50 dark:bg-amber-900/20`
-                      : `hover:bg-amber-50 dark:hover:bg-amber-900/20`
-                  }`}
-                  onClick={handleLinkClick}
-                >
-                  <div className="flex items-center">
-                    <span className="flex-grow">Cuerpo</span>
-                    {isActive("/cuerpo") && (
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                        className="w-1.5 h-1.5 rounded-full bg-[#ffa000]"
-                      />
-                    )}
-                  </div>
-                </Link>
-                <Link
-                  href="/finanzas"
-                  className={`block px-5 py-3 transition-all duration-200 ${
-                    isActive("/finanzas")
-                      ? `font-medium text-[#388e3c] bg-green-50 dark:bg-green-900/20`
-                      : `hover:bg-green-50 dark:hover:bg-green-900/20`
-                  }`}
-                  onClick={handleLinkClick}
-                >
-                  <div className="flex items-center">
-                    <span className="flex-grow">Finanzas</span>
-                    {isActive("/finanzas") && (
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                        className="w-1.5 h-1.5 rounded-full bg-[#388e3c]"
-                      />
-                    )}
-                  </div>
-                </Link>
+                <motion.div variants={menuItemVariants}>
+                  <Link
+                    href="/"
+                    className={`block px-5 py-3 transition-all duration-200 ${
+                      isActive("/")
+                        ? `font-medium bg-gray-100 dark:bg-gray-700`
+                        : `hover:bg-gray-100 dark:hover:bg-gray-700`
+                    }`}
+                    onClick={handleLinkClick}
+                  >
+                    <div className="flex items-center">
+                      <span className="flex-grow">Inicio</span>
+                      {isActive("/") && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                          className="w-2 h-2 rounded-full bg-gray-500 dark:bg-gray-400"
+                        />
+                      )}
+                    </div>
+                  </Link>
+                </motion.div>
+
+                <motion.div variants={menuItemVariants}>
+                  <Link
+                    href="/mente"
+                    className={`block px-5 py-3 transition-all duration-200 ${
+                      isActive("/mente")
+                        ? `font-medium text-[#1976d2] bg-blue-50 dark:bg-blue-900/20`
+                        : `hover:bg-blue-50 dark:hover:bg-blue-900/20`
+                    }`}
+                    onClick={handleLinkClick}
+                  >
+                    <div className="flex items-center">
+                      <span className="flex-grow">Mente</span>
+                      {isActive("/mente") && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                          className="w-2 h-2 rounded-full bg-[#1976d2]"
+                        />
+                      )}
+                    </div>
+                  </Link>
+                </motion.div>
+
+                <motion.div variants={menuItemVariants}>
+                  <Link
+                    href="/cuerpo"
+                    className={`block px-5 py-3 transition-all duration-200 ${
+                      isActive("/cuerpo")
+                        ? `font-medium text-[#ffa000] bg-amber-50 dark:bg-amber-900/20`
+                        : `hover:bg-amber-50 dark:hover:bg-amber-900/20`
+                    }`}
+                    onClick={handleLinkClick}
+                  >
+                    <div className="flex items-center">
+                      <span className="flex-grow">Cuerpo</span>
+                      {isActive("/cuerpo") && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                          className="w-2 h-2 rounded-full bg-[#ffa000]"
+                        />
+                      )}
+                    </div>
+                  </Link>
+                </motion.div>
+
+                <motion.div variants={menuItemVariants}>
+                  <Link
+                    href="/finanzas"
+                    className={`block px-5 py-3 transition-all duration-200 ${
+                      isActive("/finanzas")
+                        ? `font-medium text-[#388e3c] bg-green-50 dark:bg-green-900/20`
+                        : `hover:bg-green-50 dark:hover:bg-green-900/20`
+                    }`}
+                    onClick={handleLinkClick}
+                  >
+                    <div className="flex items-center">
+                      <span className="flex-grow">Finanzas</span>
+                      {isActive("/finanzas") && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                          className="w-2 h-2 rounded-full bg-[#388e3c]"
+                        />
+                      )}
+                    </div>
+                  </Link>
+                </motion.div>
               </div>
-              <div className="py-2 border-t border-gray-200 dark:border-gray-700 mt-1">
+
+              <motion.div
+                className="py-2 border-t border-gray-200 dark:border-gray-700 mt-1"
+                variants={menuItemVariants}
+              >
                 <Link
                   href="/ayuda"
                   className="block px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
@@ -385,8 +421,12 @@ export default function MainMenuButton() {
                     <span className="flex-grow">Hacer donación</span>
                   </div>
                 </Link>
-              </div>
-              <div className="py-2 border-t border-gray-200 dark:border-gray-700 mt-1">
+              </motion.div>
+
+              <motion.div
+                className="py-2 border-t border-gray-200 dark:border-gray-700 mt-1"
+                variants={menuItemVariants}
+              >
                 <button
                   onClick={() => {
                     triggerHapticFeedback("medium")
@@ -407,7 +447,7 @@ export default function MainMenuButton() {
                     </motion.div>
                   </div>
                 </button>
-              </div>
+              </motion.div>
             </motion.div>
 
             {/* Backdrop mejorado */}
@@ -419,9 +459,9 @@ export default function MainMenuButton() {
               className="fixed inset-0"
               style={{
                 zIndex: 1999,
-                backdropFilter: "blur(8px)",
-                WebkitBackdropFilter: "blur(8px)",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                backdropFilter: "blur(12px)", // Aumentado para mejor efecto
+                WebkitBackdropFilter: "blur(12px)", // Aumentado para mejor efecto
+                backgroundColor: "rgba(0, 0, 0, 0.6)", // Más oscuro para mejor contraste
               }}
               onClick={() => setIsMenuOpen(false)}
             />
