@@ -10,6 +10,7 @@ import { useMediaQuery } from "@/hooks/use-media-query"
 import { CompoundInterestResult } from "./compound-interest-result"
 import { InvestmentImpactSection } from "./investment-impact-section"
 import { TrendingUp, DollarSign, Calendar, AlertCircle, ArrowRight } from "lucide-react"
+import TabSwipeNavigation from "@/components/common/tab-swipe-navigation"
 
 export function CompoundInterestCalculator() {
   const {
@@ -48,11 +49,17 @@ export function CompoundInterestCalculator() {
     setActiveTab(tab)
   }
 
+  // Definir las pestañas disponibles para la navegación por swipe
+  const availableTabs = ["calculator", "charts"]
+
   // Renderizado para móvil con pestañas
   if (isMobile) {
     return (
       <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="p-4">
+          {/* Añadir navegación por swipe para las pestañas */}
+          <TabSwipeNavigation activeTab={activeTab} tabs={availableTabs} onTabChange={handleTabChange} />
+
           {activeTab === "calculator" && (
             <>
               <CalculatorInputs

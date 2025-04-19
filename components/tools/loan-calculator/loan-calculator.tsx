@@ -10,6 +10,7 @@ import { LoanDisclaimer } from "./disclaimer"
 import { LoanCalculatorTabs } from "./loan-calculator-tabs"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { motion } from "framer-motion"
+import TabSwipeNavigation from "@/components/common/tab-swipe-navigation"
 
 export function LoanCalculator() {
   const {
@@ -71,6 +72,11 @@ export function LoanCalculator() {
     setActiveTab(tab)
   }
 
+  // Definir las pestañas disponibles para la navegación por swipe
+  const availableTabs = ["calculator", "simulations", "table"].filter(
+    (tab) => tab !== "simulations" || savedSimulations.length > 0,
+  )
+
   // Variantes para animaciones
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -107,6 +113,9 @@ export function LoanCalculator() {
           onTabChange={handleTabChange}
           hasSimulations={savedSimulations.length > 0}
         />
+
+        {/* Añadir navegación por swipe para las pestañas */}
+        <TabSwipeNavigation activeTab={activeTab} tabs={availableTabs} onTabChange={handleTabChange} />
 
         <div className="p-5">
           {activeTab === "calculator" && (
