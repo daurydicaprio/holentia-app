@@ -48,11 +48,11 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
     },
   }
 
-  // Animación para el hover
+  // Animación para el hover - más sutil
   const hoverAnimation = isHovered
     ? {
-        scale: 1.05,
-        rotate: [0, 2, 0, -2, 0],
+        scale: 1.03,
+        rotate: [0, 1, 0, -1, 0],
         transition: {
           duration: 0.5,
           ease: "easeInOut",
@@ -72,14 +72,14 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
     setIsHovered(false)
   }
 
-  // Determinar el color del aura basado en la sección
+  // Determinar el color del aura basado en la sección - más sutil
   let auraColor = "transparent"
   if (section === "mente") {
-    auraColor = "rgba(59, 130, 246, 0.5)" // Color azul para mente
+    auraColor = "rgba(59, 130, 246, 0.4)" // Color azul para mente, más sutil
   } else if (section === "cuerpo") {
-    auraColor = "rgba(245, 158, 11, 0.5)" // Color ámbar para cuerpo
+    auraColor = "rgba(245, 158, 11, 0.4)" // Color ámbar para cuerpo, más sutil
   } else if (section === "finanzas") {
-    auraColor = "rgba(34, 197, 94, 0.5)" // Color verde para finanzas
+    auraColor = "rgba(34, 197, 94, 0.4)" // Color verde para finanzas, más sutil
   }
 
   // Determinar el tamaño del aura basado en el tamaño del logo
@@ -122,8 +122,8 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
             width: auraWidth,
             height: auraHeight,
             borderRadius: "9999px",
-            opacity: isHovered ? 0.5 : 0.3,
-            filter: `blur(${isHovered ? "12px" : "8px"})`,
+            opacity: isHovered ? 0.45 : 0.25, // Más sutil
+            filter: `blur(${isHovered ? "10px" : "8px"})`, // Más sutil
             backgroundColor: auraColor,
             transition: "opacity 0.3s ease, filter 0.3s ease",
           }}

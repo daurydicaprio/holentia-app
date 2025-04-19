@@ -53,29 +53,32 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
   let sectionColor = "#3B82F6" // Color azul por defecto
   let sectionColorDark = "#1D4ED8" // Color azul oscuro por defecto
   let headerLineColor = "#3B82F6" // Color azul por defecto
-  let headerBgColor = "rgba(59, 130, 246, 0.05)" // Color de fondo azul muy claro
+  let headerBgGradient = "linear-gradient(to bottom, rgba(59, 130, 246, 0.08), rgba(29, 78, 216, 0.05))"
 
   if (section === "mente") {
     sectionColor = "#1976d2" // Color mente
     sectionColorDark = "#0d47a1" // Color mente oscuro
     headerLineColor = "#1976d2" // Color mente
-    headerBgColor = "rgba(25, 118, 210, 0.05)" // Color de fondo mente muy claro
+    headerBgGradient = "linear-gradient(to bottom, rgba(25, 118, 210, 0.08), rgba(13, 71, 161, 0.05))"
   } else if (section === "cuerpo") {
     sectionColor = "#ffa000" // Color cuerpo
     sectionColorDark = "#e65100" // Color cuerpo oscuro
     headerLineColor = "#ffa000" // Color cuerpo
-    headerBgColor = "rgba(255, 160, 0, 0.05)" // Color de fondo cuerpo muy claro
+    headerBgGradient = "linear-gradient(to bottom, rgba(255, 160, 0, 0.08), rgba(230, 81, 0, 0.05))"
   } else if (section === "finanzas") {
     sectionColor = "#388e3c" // Color finanzas
     sectionColorDark = "#1b5e20" // Color finanzas oscuro
     headerLineColor = "#388e3c" // Color finanzas
-    headerBgColor = "rgba(56, 142, 60, 0.05)" // Color de fondo finanzas muy claro
+    headerBgGradient = "linear-gradient(to bottom, rgba(56, 142, 60, 0.08), rgba(27, 94, 32, 0.05))"
   }
 
   // Usar el tema resuelto para evitar parpadeos
   const currentTheme = mounted ? resolvedTheme : "light"
   const buttonBorderColor = currentTheme === "dark" ? "#333333" : "#e5e7eb"
   const buttonTextColor = currentTheme === "dark" ? "#e0e0e0" : "#4b5563"
+
+  // Determinar el fondo del header basado en el tema
+  const headerBackground = currentTheme === "dark" ? "rgba(30, 30, 30, 0.7)" : "rgba(255, 255, 255, 0.7)"
 
   if (!mounted) return null
 
@@ -91,26 +94,31 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
       {/* Header especial para herramientas - más alto y con efectos */}
       {!isMobile && (
         <div
-          className="w-full py-6 mb-6 relative"
+          className="w-full py-8 mb-6 relative"
           style={{
-            backgroundColor: currentTheme === "dark" ? "rgba(30, 30, 30, 0.5)" : headerBgColor,
+            background: headerBgGradient,
             borderBottom: `1px solid ${currentTheme === "dark" ? "rgba(75, 85, 99, 0.2)" : "rgba(229, 231, 235, 0.8)"}`,
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
             zIndex: 40,
             position: "relative",
           }}
         >
           <div className="max-w-6xl mx-auto px-6 relative">
-            {/* Botón de menú posicionado en la esquina superior derecha, alineado con el borde superior del logo */}
-            {/* Asegurémonos de que el contenedor del botón de menú tenga un z-index muy alto */}
+            {/* Botón de menú posicionado en la esquina superior derecha */}
             <div className="absolute right-6 top-0 main-menu-button-container" style={{ zIndex: 1000 }}>
               <MainMenuButton />
             </div>
 
-            {/* Logo centrado */}
-            <div className="flex justify-center mb-4">
-              <div className="transform transition-transform hover:scale-110 duration-300">
+            {/* Logo centrado con línea decorativa debajo */}
+            <div className="flex flex-col items-center mb-6">
+              <div className="transform transition-transform hover:scale-105 duration-300">
                 <Logo section={section} size="md" />
               </div>
+              <div
+                className="mt-3 h-0.5 w-16 rounded-full"
+                style={{ backgroundColor: headerLineColor, opacity: 0.8 }}
+              ></div>
             </div>
 
             {/* Botones alineados en los extremos */}
@@ -118,22 +126,29 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
               <Link href={`/${section}`}>
                 <Button
                   variant="outline"
-                  className="flex items-center gap-2 text-xs h-8 px-3 transition-all duration-300 hover:scale-105"
+                  className="flex items-center gap-2 text-sm h-9 px-4 transition-all duration-300 hover:scale-105"
                   style={{
                     borderColor: buttonBorderColor,
                     color: buttonTextColor,
-                    backgroundColor: "transparent",
+                    backgroundColor: currentTheme === "dark" ? "rgba(30, 30, 30, 0.5)" : "rgba(255, 255, 255, 0.5)",
+                    backdropFilter: "blur(4px)",
                   }}
                   onMouseOver={(e) => {
                     e.currentTarget.style.borderColor = sectionColor
                     e.currentTarget.style.color = sectionColor
+                    e.currentTarget.style.backgroundColor =
+                      currentTheme === "dark"
+                        ? `rgba(${sectionColor.replace(/[^\d,]/g, "")}, 0.2)`
+                        : `rgba(${sectionColor.replace(/[^\d,]/g, "")}, 0.1)`
                   }}
                   onMouseOut={(e) => {
                     e.currentTarget.style.borderColor = buttonBorderColor
                     e.currentTarget.style.color = buttonTextColor
+                    e.currentTarget.style.backgroundColor =
+                      currentTheme === "dark" ? "rgba(30, 30, 30, 0.5)" : "rgba(255, 255, 255, 0.5)"
                   }}
                 >
-                  <ArrowLeft className="h-3 w-3" />
+                  <ArrowLeft className="h-4 w-4" />
                   Volver a {sectionTitle}
                 </Button>
               </Link>
@@ -141,25 +156,30 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
               <Link href="/apoyar">
                 <Button
                   variant="outline"
-                  className="flex items-center gap-2 text-xs h-8 px-3 transition-all duration-300 hover:scale-105"
+                  className="flex items-center gap-2 text-sm h-9 px-4 transition-all duration-300 hover:scale-105"
                   style={{
                     borderColor: sectionColor,
                     color: sectionColor,
-                    backgroundColor: "transparent",
+                    backgroundColor:
+                      currentTheme === "dark"
+                        ? `rgba(${sectionColor.replace(/[^\d,]/g, "")}, 0.15)`
+                        : `rgba(${sectionColor.replace(/[^\d,]/g, "")}, 0.08)`,
+                    backdropFilter: "blur(4px)",
                   }}
                   onMouseOver={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      section === "mente"
-                        ? "rgba(25, 118, 210, 0.1)"
-                        : section === "cuerpo"
-                          ? "rgba(255, 160, 0, 0.1)"
-                          : "rgba(56, 142, 60, 0.1)"
+                      currentTheme === "dark"
+                        ? `rgba(${sectionColor.replace(/[^\d,]/g, "")}, 0.25)`
+                        : `rgba(${sectionColor.replace(/[^\d,]/g, "")}, 0.15)`
                   }}
                   onMouseOut={(e) => {
-                    e.currentTarget.style.backgroundColor = "transparent"
+                    e.currentTarget.style.backgroundColor =
+                      currentTheme === "dark"
+                        ? `rgba(${sectionColor.replace(/[^\d,]/g, "")}, 0.15)`
+                        : `rgba(${sectionColor.replace(/[^\d,]/g, "")}, 0.08)`
                   }}
                 >
-                  <Coffee className="h-3 w-3" />
+                  <Coffee className="h-4 w-4" />
                   Hacer donación
                 </Button>
               </Link>

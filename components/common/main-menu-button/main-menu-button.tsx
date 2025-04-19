@@ -1,5 +1,3 @@
-// Vamos a simplificar completamente el componente para que sea más parecido a la versión que funcionaba antes
-
 "use client"
 
 import { useState, useEffect, useRef } from "react"
@@ -29,17 +27,26 @@ export default function MainMenuButton() {
 
   // Determinar el color del texto para el botón de donación
   let donationTextColor = "#3B82F6" // Color azul por defecto
+  let buttonAccentColor = "#3B82F6" // Color azul por defecto
+  let buttonHoverBgColor = "rgba(59, 130, 246, 0.1)" // Color de fondo hover azul
+
   if (section === "mente") {
     donationTextColor = "#1976d2" // Color mente
+    buttonAccentColor = "#1976d2" // Color mente
+    buttonHoverBgColor = "rgba(25, 118, 210, 0.1)" // Color de fondo hover mente
   } else if (section === "cuerpo") {
     donationTextColor = "#ffa000" // Color cuerpo
+    buttonAccentColor = "#ffa000" // Color cuerpo
+    buttonHoverBgColor = "rgba(255, 160, 0, 0.1)" // Color de fondo hover cuerpo
   } else if (section === "finanzas") {
     donationTextColor = "#388e3c" // Color finanzas
+    buttonAccentColor = "#388e3c" // Color finanzas
+    buttonHoverBgColor = "rgba(56, 142, 60, 0.1)" // Color de fondo hover finanzas
   }
 
   // Usar el tema resuelto para evitar parpadeos
   const currentTheme = mounted ? resolvedTheme : "light"
-  const buttonBgColor = currentTheme === "dark" ? "#1e1e1e" : "#ffffff"
+  const buttonBgColor = currentTheme === "dark" ? "rgba(30, 30, 30, 0.7)" : "rgba(255, 255, 255, 0.7)"
   const buttonBorderColor = currentTheme === "dark" ? "#333333" : "#e5e7eb"
 
   const handleMenuToggle = () => {
@@ -69,12 +76,24 @@ export default function MainMenuButton() {
           backgroundColor: buttonBgColor,
           boxShadow: "0 2px 5px rgba(0, 0, 0, 0.08)",
           border: `1.5px solid ${buttonBorderColor}`,
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
           transition: "all 0.2s ease",
           position: "relative",
           zIndex: 1000,
         }}
         className="active:scale-95 transition-transform hover:bg-gray-100 dark:hover:bg-gray-800"
         onClick={handleMenuToggle}
+        onMouseOver={(e) => {
+          e.currentTarget.style.borderColor = buttonAccentColor
+          e.currentTarget.style.backgroundColor = buttonHoverBgColor
+          e.currentTarget.style.transform = "scale(1.05)"
+        }}
+        onMouseOut={(e) => {
+          e.currentTarget.style.borderColor = buttonBorderColor
+          e.currentTarget.style.backgroundColor = buttonBgColor
+          e.currentTarget.style.transform = "scale(1)"
+        }}
       >
         {isMenuOpen ? (
           <X className="h-6 w-6 transition-transform duration-300" />
@@ -89,6 +108,8 @@ export default function MainMenuButton() {
           style={{
             animation: "fadeIn 0.2s ease-out",
             zIndex: 2001,
+            backdropFilter: "blur(10px)",
+            WebkitBackdropFilter: "blur(10px)",
           }}
         >
           <div className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">
