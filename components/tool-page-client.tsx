@@ -110,15 +110,11 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
               <MainMenuButton />
             </div>
 
-            {/* Logo centrado con línea decorativa debajo */}
+            {/* Logo centrado */}
             <div className="flex flex-col items-center mb-6">
               <div className="transform transition-transform hover:scale-105 duration-300">
                 <Logo section={section} size="md" />
               </div>
-              <div
-                className="mt-3 h-0.5 w-16 rounded-full"
-                style={{ backgroundColor: headerLineColor, opacity: 0.8 }}
-              ></div>
             </div>
 
             {/* Botones alineados en los extremos */}
@@ -137,9 +133,7 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
                     e.currentTarget.style.borderColor = sectionColor
                     e.currentTarget.style.color = sectionColor
                     e.currentTarget.style.backgroundColor =
-                      currentTheme === "dark"
-                        ? `rgba(${sectionColor.replace(/[^\d,]/g, "")}, 0.2)`
-                        : `rgba(${sectionColor.replace(/[^\d,]/g, "")}, 0.1)`
+                      currentTheme === "dark" ? `rgba(30, 30, 30, 0.7)` : `rgba(255, 255, 255, 0.7)`
                   }}
                   onMouseOut={(e) => {
                     e.currentTarget.style.borderColor = buttonBorderColor
@@ -160,23 +154,16 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
                   style={{
                     borderColor: sectionColor,
                     color: sectionColor,
-                    backgroundColor:
-                      currentTheme === "dark"
-                        ? `rgba(${sectionColor.replace(/[^\d,]/g, "")}, 0.15)`
-                        : `rgba(${sectionColor.replace(/[^\d,]/g, "")}, 0.08)`,
+                    backgroundColor: currentTheme === "dark" ? `rgba(0, 0, 0, 0.15)` : `rgba(255, 255, 255, 0.5)`,
                     backdropFilter: "blur(4px)",
                   }}
                   onMouseOver={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      currentTheme === "dark"
-                        ? `rgba(${sectionColor.replace(/[^\d,]/g, "")}, 0.25)`
-                        : `rgba(${sectionColor.replace(/[^\d,]/g, "")}, 0.15)`
+                      currentTheme === "dark" ? `rgba(0, 0, 0, 0.25)` : `rgba(255, 255, 255, 0.7)`
                   }}
                   onMouseOut={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      currentTheme === "dark"
-                        ? `rgba(${sectionColor.replace(/[^\d,]/g, "")}, 0.15)`
-                        : `rgba(${sectionColor.replace(/[^\d,]/g, "")}, 0.08)`
+                      currentTheme === "dark" ? `rgba(0, 0, 0, 0.15)` : `rgba(255, 255, 255, 0.5)`
                   }}
                 >
                   <Coffee className="h-4 w-4" />
