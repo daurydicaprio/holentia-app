@@ -18,7 +18,7 @@ export default function Home() {
           <Logo size="lg" />
 
           {/* Botón de menú posicionado con más espacio respecto al logo */}
-          <div className="absolute right-0 sm:right-4 md:right-12 lg:right-20 top-4 main-menu-button-container">
+          <div className="absolute right-0 sm:right-4 md:right-12 lg:right-20 top-4">
             <MainMenuButton />
           </div>
         </div>

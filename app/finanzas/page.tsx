@@ -25,8 +25,8 @@ export default function FinanzasPage() {
           </div>
 
           {/* Botón de menú alineado con el borde de las tarjetas */}
-          <div className="absolute top-6 right-0 sm:right-4 md:right-6 main-menu-button-container">
-            <MainMenuButton />
+          <div className="absolute top-6 right-0 sm:right-4 md:right-6">
+            <MainMenuButton section={section} />
           </div>
         </div>
 

@@ -494,3 +494,43 @@
     transform-origin: center;
   }
 }
+
+/* Añadir al final del archivo para asegurar que estas reglas tengan prioridad */
+
+/* Estilos críticos para asegurar que el menú siempre sea visible */
+.menu-visible {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  z-index: 9999 !important;
+}
+
+.menu-backdrop-visible {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  z-index: 9998 !important;
+}
+
+/* Asegurar que los botones de menú siempre estén visibles y funcionales */
+button[aria-label="Abrir menú"],
+button[aria-label="Cerrar menú"] {
+  z-index: 9000 !important;
+  position: relative !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Asegurar que los contenedores de botones de menú siempre estén visibles */
+.main-menu-button-container {
+  z-index: 9000 !important;
+  position: relative !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}

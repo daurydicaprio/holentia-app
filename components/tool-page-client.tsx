@@ -29,7 +29,7 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
   const { section } = params
   const [isMobile, setIsMobile] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const { theme, resolvedTheme } = useTheme()
+  const { resolvedTheme } = useTheme()
 
   useEffect(() => {
     setMounted(true)
@@ -51,34 +51,28 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
 
   // Determinar los colores basados en la sección
   let sectionColor = "#3B82F6" // Color azul por defecto
-  let sectionColorDark = "#1D4ED8" // Color azul oscuro por defecto
   let headerLineColor = "#3B82F6" // Color azul por defecto
   let headerBgGradient = "linear-gradient(to bottom, rgba(59, 130, 246, 0.08), rgba(29, 78, 216, 0.05))"
 
   if (section === "mente") {
     sectionColor = "#1976d2" // Color mente
-    sectionColorDark = "#0d47a1" // Color mente oscuro
     headerLineColor = "#1976d2" // Color mente
     headerBgGradient = "linear-gradient(to bottom, rgba(25, 118, 210, 0.08), rgba(13, 71, 161, 0.05))"
   } else if (section === "cuerpo") {
     sectionColor = "#ffa000" // Color cuerpo
-    sectionColorDark = "#e65100" // Color cuerpo oscuro
     headerLineColor = "#ffa000" // Color cuerpo
     headerBgGradient = "linear-gradient(to bottom, rgba(255, 160, 0, 0.08), rgba(230, 81, 0, 0.05))"
   } else if (section === "finanzas") {
     sectionColor = "#388e3c" // Color finanzas
-    sectionColorDark = "#1b5e20" // Color finanzas oscuro
     headerLineColor = "#388e3c" // Color finanzas
     headerBgGradient = "linear-gradient(to bottom, rgba(56, 142, 60, 0.08), rgba(27, 94, 32, 0.05))"
   }
 
   // Usar el tema resuelto para evitar parpadeos
   const currentTheme = mounted ? resolvedTheme : "light"
-  const buttonBorderColor = currentTheme === "dark" ? "#333333" : "#e5e7eb"
-  const buttonTextColor = currentTheme === "dark" ? "#e0e0e0" : "#4b5563"
-
-  // Determinar el fondo del header basado en el tema
-  const headerBackground = currentTheme === "dark" ? "rgba(30, 30, 30, 0.7)" : "rgba(255, 255, 255, 0.7)"
+  const isDark = currentTheme === "dark"
+  const buttonBorderColor = isDark ? "#333333" : "#e5e7eb"
+  const buttonTextColor = isDark ? "#e0e0e0" : "#4b5563"
 
   if (!mounted) return null
 
@@ -97,7 +91,7 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
           className="w-full py-8 mb-6 relative"
           style={{
             background: headerBgGradient,
-            borderBottom: `1px solid ${currentTheme === "dark" ? "rgba(75, 85, 99, 0.2)" : "rgba(229, 231, 235, 0.8)"}`,
+            borderBottom: `1px solid ${isDark ? "rgba(75, 85, 99, 0.2)" : "rgba(229, 231, 235, 0.8)"}`,
             backdropFilter: "blur(8px)",
             WebkitBackdropFilter: "blur(8px)",
             zIndex: 40,
@@ -106,8 +100,8 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
         >
           <div className="max-w-6xl mx-auto px-6 relative">
             {/* Botón de menú posicionado en la esquina superior derecha */}
-            <div className="absolute right-6 top-0 main-menu-button-container" style={{ zIndex: 1000 }}>
-              <MainMenuButton />
+            <div className="absolute right-6 top-0" style={{ zIndex: 50 }}>
+              <MainMenuButton variant="tool" section={section} />
             </div>
 
             {/* Logo centrado */}
@@ -126,20 +120,22 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
                   style={{
                     borderColor: buttonBorderColor,
                     color: buttonTextColor,
-                    backgroundColor: currentTheme === "dark" ? "rgba(30, 30, 30, 0.5)" : "rgba(255, 255, 255, 0.5)",
+                    backgroundColor: isDark ? "rgba(30, 30, 30, 0.5)" : "rgba(255, 255, 255, 0.5)",
                     backdropFilter: "blur(4px)",
                   }}
                   onMouseOver={(e) => {
                     e.currentTarget.style.borderColor = sectionColor
                     e.currentTarget.style.color = sectionColor
-                    e.currentTarget.style.backgroundColor =
-                      currentTheme === "dark" ? `rgba(30, 30, 30, 0.7)` : `rgba(255, 255, 255, 0.7)`
+                    e.currentTarget.style.backgroundColor = isDark
+                      ? `rgba(30, 30, 30, 0.7)`
+                      : `rgba(255, 255, 255, 0.7)`
                   }}
                   onMouseOut={(e) => {
                     e.currentTarget.style.borderColor = buttonBorderColor
                     e.currentTarget.style.color = buttonTextColor
-                    e.currentTarget.style.backgroundColor =
-                      currentTheme === "dark" ? "rgba(30, 30, 30, 0.5)" : "rgba(255, 255, 255, 0.5)"
+                    e.currentTarget.style.backgroundColor = isDark
+                      ? "rgba(30, 30, 30, 0.5)"
+                      : "rgba(255, 255, 255, 0.5)"
                   }}
                 >
                   <ArrowLeft className="h-4 w-4" />
@@ -154,16 +150,14 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
                   style={{
                     borderColor: sectionColor,
                     color: sectionColor,
-                    backgroundColor: currentTheme === "dark" ? `rgba(0, 0, 0, 0.15)` : `rgba(255, 255, 255, 0.5)`,
+                    backgroundColor: isDark ? `rgba(0, 0, 0, 0.15)` : `rgba(255, 255, 255, 0.5)`,
                     backdropFilter: "blur(4px)",
                   }}
                   onMouseOver={(e) => {
-                    e.currentTarget.style.backgroundColor =
-                      currentTheme === "dark" ? `rgba(0, 0, 0, 0.25)` : `rgba(255, 255, 255, 0.7)`
+                    e.currentTarget.style.backgroundColor = isDark ? `rgba(0, 0, 0, 0.25)` : `rgba(255, 255, 255, 0.7)`
                   }}
                   onMouseOut={(e) => {
-                    e.currentTarget.style.backgroundColor =
-                      currentTheme === "dark" ? `rgba(0, 0, 0, 0.15)` : `rgba(255, 255, 255, 0.5)`
+                    e.currentTarget.style.backgroundColor = isDark ? `rgba(0, 0, 0, 0.15)` : `rgba(255, 255, 255, 0.5)`
                   }}
                 >
                   <Coffee className="h-4 w-4" />
