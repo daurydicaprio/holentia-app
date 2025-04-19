@@ -11,9 +11,10 @@ import { motion, AnimatePresence } from "framer-motion"
 interface MenuButtonProps {
   section?: string | null
   isSquare?: boolean
+  isCompact?: boolean
 }
 
-export default function MenuButton({ section, isSquare = false }: MenuButtonProps) {
+export default function MenuButton({ section, isSquare = false, isCompact = false }: MenuButtonProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { setTheme, resolvedTheme } = useTheme()
   const pathname = usePathname()
@@ -111,20 +112,28 @@ export default function MenuButton({ section, isSquare = false }: MenuButtonProp
 
   // Estilos para el botón según el contexto
   const buttonStyle = {
-    backgroundColor: isToolPage
-      ? "rgba(255, 255, 255, 0.3)"
-      : isDark
-        ? "rgba(30, 30, 30, 0.7)"
-        : "rgba(255, 255, 255, 0.7)",
-    color: isToolPage ? "#ffffff" : isDark ? "#ffffff" : "#333333",
-    boxShadow: isMenuOpen ? `0 0 0 2px ${accentColor}, 0 4px 8px rgba(0, 0, 0, 0.1)` : "0 2px 5px rgba(0, 0, 0, 0.05)",
-    border: `1px solid ${isMenuOpen ? accentColor : isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.1)"}`,
+    backgroundColor: isCompact
+      ? "transparent"
+      : isToolPage
+        ? "rgba(255, 255, 255, 0.3)"
+        : isDark
+          ? "rgba(30, 30, 30, 0.7)"
+          : "rgba(255, 255, 255, 0.7)",
+    color: isCompact ? "#ffffff" : isToolPage ? "#ffffff" : isDark ? "#ffffff" : "#333333",
+    boxShadow: isCompact
+      ? "none"
+      : isMenuOpen
+        ? `0 0 0 2px ${accentColor}, 0 4px 8px rgba(0, 0, 0, 0.1)`
+        : "0 2px 5px rgba(0, 0, 0, 0.05)",
+    border: isCompact
+      ? "none"
+      : `1px solid ${isMenuOpen ? accentColor : isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.1)"}`,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: isSquare ? "8px" : "9999px", // Cuadrado con bordes redondeados o círculo
-    width: "40px",
-    height: "40px",
+    width: isCompact ? "36px" : "40px",
+    height: isCompact ? "36px" : "40px",
   }
 
   return (

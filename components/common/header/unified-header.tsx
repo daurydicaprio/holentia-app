@@ -9,6 +9,7 @@ import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { sectionsData } from "@/lib/data"
 import MenuButton from "@/components/common/menu-button/menu-button"
 import Logo from "@/components/common/logo/logo"
+import Link from "next/link"
 
 interface UnifiedHeaderProps {
   section?: string | null
@@ -62,14 +63,18 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
 
   // Determinar los estilos basados en la sección
   let sectionColor = "#3B82F6" // Color azul por defecto
+  let headerBgColor = "rgba(59, 130, 246, 0.4)" // Color azul con 40% de transparencia
 
   // Actualizar los colores basados en la sección
   if (toolSection === "mente") {
     sectionColor = "#1976d2" // Color mente
+    headerBgColor = "rgba(25, 118, 210, 0.4)" // Color mente con 40% de transparencia
   } else if (toolSection === "cuerpo") {
     sectionColor = "#ffa000" // Color cuerpo
+    headerBgColor = "rgba(255, 160, 0, 0.4)" // Color cuerpo con 40% de transparencia
   } else if (toolSection === "finanzas") {
     sectionColor = "#388e3c" // Color finanzas
+    headerBgColor = "rgba(56, 142, 60, 0.4)" // Color finanzas con 40% de transparencia
   }
 
   const handleBackClick = () => {
@@ -87,37 +92,37 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
 
   if (!mounted) return null
 
-  // Header para páginas de herramientas en móvil
+  // Header compacto para páginas de herramientas en móvil
   if (isMobile && isToolPage) {
     return (
-      <div className="relative">
-        {/* Barra superior con botones en extremos opuestos */}
-        <div className="flex justify-between items-center px-4 py-3">
+      <header
+        className="sticky top-0 z-50 w-full"
+        style={{
+          backgroundColor: headerBgColor,
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
+        }}
+      >
+        <div className="flex items-center justify-between px-3 py-2">
+          {/* Botón volver */}
           <Button
-            variant="outline"
-            size="sm"
+            variant="ghost"
+            size="icon"
             onClick={handleBackClick}
-            style={{
-              backgroundColor: "rgba(255, 255, 255, 0.3)",
-              borderColor: isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.1)",
-              color: isDark ? "#ffffff" : "#333333",
-              height: "40px",
-              width: "40px",
-              borderRadius: "8px", // Cuadrado con bordes redondeados
-            }}
-            className="flex items-center justify-center hover:bg-white/40 active:scale-95"
+            className="h-9 w-9 p-0 flex items-center justify-center text-white hover:bg-white/20 active:bg-white/30"
           >
             <ChevronLeft className="h-5 w-5" />
           </Button>
 
-          <MenuButton section={toolSection} isSquare={true} />
-        </div>
+          {/* Logo adaptado */}
+          <Link href="/" className="flex items-center justify-center" onClick={() => triggerHapticFeedback("light")}>
+            <span className="font-bold text-lg text-white">HOLENTIA</span>
+          </Link>
 
-        {/* Logo centrado debajo de la barra de navegación */}
-        <div className="flex justify-center mb-4">
-          <Logo section={toolSection} size="md" />
+          {/* Botón menú */}
+          <MenuButton section={toolSection} isSquare={true} isCompact={true} />
         </div>
-      </div>
+      </header>
     )
   }
 
