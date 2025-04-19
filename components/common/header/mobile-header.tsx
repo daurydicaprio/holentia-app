@@ -234,6 +234,10 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
                 style={{
                   animation: "fadeIn 0.2s ease-out",
                   zIndex: 1001,
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
+                  backgroundColor: currentTheme === "dark" ? "rgba(30, 30, 30, 0.85)" : "rgba(255, 255, 255, 0.85)",
+                  boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05)",
                 }}
               >
                 <div className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">
@@ -322,7 +326,7 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
 
             {isMenuOpen && (
               <div
-                className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+                className="fixed inset-0 bg-black/60 backdrop-blur-md"
                 style={{ zIndex: 999 }}
                 onClick={() => setIsMenuOpen(false)}
               ></div>
@@ -388,6 +392,10 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
                 style={{
                   animation: "fadeIn 0.2s ease-out",
                   zIndex: 1001,
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
+                  backgroundColor: currentTheme === "dark" ? "rgba(30, 30, 30, 0.85)" : "rgba(255, 255, 255, 0.85)",
+                  boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05)",
                 }}
               >
                 <div className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">
@@ -476,7 +484,7 @@ export default function MobileHeader({ section }: MobileHeaderProps) {
 
             {isMenuOpen && (
               <div
-                className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+                className="fixed inset-0 bg-black/60 backdrop-blur-md"
                 style={{ zIndex: 999 }}
                 onClick={() => setIsMenuOpen(false)}
               ></div>
