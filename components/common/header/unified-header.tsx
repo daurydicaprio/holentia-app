@@ -63,18 +63,18 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
 
   // Determinar los estilos basados en la sección
   let sectionColor = "#3B82F6" // Color azul por defecto
-  let headerBgColor = "rgba(59, 130, 246, 0.4)" // Color azul con 40% de transparencia
+  let headerBgColor = "rgba(59, 130, 246, 0.7)" // Color azul con 70% de opacidad para mejor contraste
 
   // Actualizar los colores basados en la sección
   if (toolSection === "mente") {
     sectionColor = "#1976d2" // Color mente
-    headerBgColor = "rgba(25, 118, 210, 0.4)" // Color mente con 40% de transparencia
+    headerBgColor = "rgba(25, 118, 210, 0.7)" // Color mente con 70% de opacidad
   } else if (toolSection === "cuerpo") {
     sectionColor = "#ffa000" // Color cuerpo
-    headerBgColor = "rgba(255, 160, 0, 0.4)" // Color cuerpo con 40% de transparencia
+    headerBgColor = "rgba(255, 160, 0, 0.7)" // Color cuerpo con 70% de opacidad
   } else if (toolSection === "finanzas") {
     sectionColor = "#388e3c" // Color finanzas
-    headerBgColor = "rgba(56, 142, 60, 0.4)" // Color finanzas con 40% de transparencia
+    headerBgColor = "rgba(56, 142, 60, 0.7)" // Color finanzas con 70% de opacidad
   }
 
   const handleBackClick = () => {
@@ -101,21 +101,26 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
           backgroundColor: headerBgColor,
           backdropFilter: "blur(8px)",
           WebkitBackdropFilter: "blur(8px)",
+          boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
         }}
       >
         <div className="flex items-center justify-between px-3 py-2">
-          {/* Botón volver */}
+          {/* Botón volver con efecto hover */}
           <Button
             variant="ghost"
             size="icon"
             onClick={handleBackClick}
-            className="h-9 w-9 p-0 flex items-center justify-center text-white hover:bg-white/20 active:bg-white/30"
+            className="h-9 w-9 p-0 flex items-center justify-center text-white hover:bg-white/20 active:bg-white/30 transition-colors"
           >
             <ChevronLeft className="h-5 w-5" />
           </Button>
 
-          {/* Logo adaptado */}
-          <Link href="/" className="flex items-center justify-center" onClick={() => triggerHapticFeedback("light")}>
+          {/* Logo adaptado con recuadro y efectos */}
+          <Link
+            href="/"
+            className="flex items-center justify-center px-3 py-1 rounded-md bg-white/20 hover:bg-white/30 active:bg-white/40 transition-all duration-200 active:scale-95"
+            onClick={() => triggerHapticFeedback("light")}
+          >
             <span className="font-bold text-lg text-white">HOLENTIA</span>
           </Link>
 
@@ -131,18 +136,18 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
     return null
   }
 
-  // Header para páginas de herramientas en escritorio - ahora sin fondo
+  // Header para páginas de herramientas en escritorio - ahora con margen reducido
   if (isToolPage) {
     return (
-      <div className="w-full py-6 mb-6 relative">
+      <div className="w-full py-4 mb-2 relative">
         <div className="max-w-6xl mx-auto px-6 relative">
           {/* Botón de menú posicionado en la esquina superior derecha */}
           <div className="absolute right-6 top-0" style={{ zIndex: 50 }}>
             <MenuButton section={toolSection} />
           </div>
 
-          {/* Logo centrado */}
-          <div className="flex flex-col items-center mb-6">
+          {/* Logo centrado con margen reducido */}
+          <div className="flex flex-col items-center mb-2">
             <div className="transform transition-transform hover:scale-105 duration-300">
               <Logo section={toolSection} size="md" />
             </div>

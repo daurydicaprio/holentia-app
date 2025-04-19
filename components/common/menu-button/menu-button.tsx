@@ -110,41 +110,41 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
 
   if (!mounted) return null
 
-  // Estilos para el botón según el contexto
-  const buttonStyle = {
-    backgroundColor: isCompact
-      ? "transparent"
-      : isToolPage
-        ? "rgba(255, 255, 255, 0.3)"
-        : isDark
-          ? "rgba(30, 30, 30, 0.7)"
-          : "rgba(255, 255, 255, 0.7)",
-    color: isCompact ? "#ffffff" : isToolPage ? "#ffffff" : isDark ? "#ffffff" : "#333333",
-    boxShadow: isCompact
-      ? "none"
-      : isMenuOpen
-        ? `0 0 0 2px ${accentColor}, 0 4px 8px rgba(0, 0, 0, 0.1)`
-        : "0 2px 5px rgba(0, 0, 0, 0.05)",
-    border: isCompact
-      ? "none"
-      : `1px solid ${isMenuOpen ? accentColor : isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.1)"}`,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: isSquare ? "8px" : "9999px", // Cuadrado con bordes redondeados o círculo
-    width: isCompact ? "36px" : "40px",
-    height: isCompact ? "36px" : "40px",
-  }
+  // Clases para el botón según el contexto
+  const buttonClasses = `
+    flex items-center justify-center
+    transition-all duration-200
+    ${isMenuOpen ? "scale-110" : "hover:scale-105"}
+    active:scale-95
+    ${
+      isCompact
+        ? "bg-white/20 hover:bg-white/30 active:bg-white/40 text-white"
+        : isToolPage
+          ? "bg-white/30 hover:bg-white/40 active:bg-white/50 text-white"
+          : isDark
+            ? "bg-gray-800/70 hover:bg-gray-800/90 text-white"
+            : "bg-white/70 hover:bg-white/90 text-gray-800"
+    }
+    ${isSquare ? "rounded-md" : "rounded-full"}
+    ${isCompact ? "w-9 h-9" : "w-10 h-10"}
+    ${isMenuOpen ? `ring-2 ring-${section || "blue"}-400` : ""}
+  `
+    .trim()
+    .replace(/\s+/g, " ")
 
   return (
     <div ref={menuRef} className="relative z-50">
       <button
         ref={buttonRef}
-        className={`transition-all duration-300 ${isMenuOpen ? "scale-110" : "hover:scale-105"} active:scale-95`}
-        style={buttonStyle}
+        className={buttonClasses}
         onClick={handleMenuToggle}
         aria-expanded={isMenuOpen}
         aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
+        style={{
+          boxShadow: isMenuOpen
+            ? `0 0 0 2px ${accentColor}, 0 4px 8px rgba(0, 0, 0, 0.1)`
+            : "0 2px 5px rgba(0, 0, 0, 0.05)",
+        }}
       >
         <AnimatePresence mode="wait">
           {isMenuOpen ? (

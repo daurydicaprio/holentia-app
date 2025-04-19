@@ -77,21 +77,21 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="mb-8 text-center"
+            className="mb-6 text-center"
           >
             <h1
               className="text-2xl sm:text-3xl font-bold"
               style={{
                 color: sectionColor,
-                marginBottom: "0.5rem",
+                marginBottom: "0.25rem",
               }}
             >
               {toolData.title}
             </h1>
             <p
-              className="text-gray-600 dark:text-gray-300 mt-2"
+              className="text-gray-600 dark:text-gray-300 mt-1"
               style={{
-                marginBottom: "0.75rem",
+                marginBottom: "0.5rem",
               }}
             >
               {toolData.description}
@@ -103,7 +103,7 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
                 marginLeft: "auto",
                 marginRight: "auto",
                 marginTop: "0.25rem",
-                marginBottom: "1.5rem",
+                marginBottom: "1rem",
                 borderRadius: "9999px",
                 backgroundColor: headerLineColor,
               }}
@@ -112,14 +112,14 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
         )}
 
         {/* En móvil, añadimos un poco de espacio superior */}
-        {isMobile && <div className="h-4"></div>}
+        {isMobile && <div className="h-2"></div>}
 
         {/* Botones en extremos opuestos del recuadro de la herramienta (solo en escritorio) */}
         {!isMobile && (
           <div className="flex justify-between items-center mb-6">
             <Button
               variant="outline"
-              className="flex items-center gap-2 text-sm h-10 px-5 transition-all duration-300 hover:scale-105"
+              className="flex items-center gap-2 text-sm h-10 px-5 transition-all duration-300 hover:scale-105 hover:bg-gray-100 dark:hover:bg-gray-800"
               style={{
                 borderColor: sectionColor,
                 color: sectionColor,
@@ -128,12 +128,6 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
                 fontWeight: 500,
               }}
               onClick={handleBackClick}
-              onMouseOver={(e) => {
-                e.currentTarget.style.backgroundColor = isDark ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.8)"
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.backgroundColor = isDark ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.6)"
-              }}
             >
               <ChevronLeft className="h-4 w-4" />
               Volver a {section.charAt(0).toUpperCase() + section.slice(1)}
@@ -142,19 +136,13 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
             <Link href="/apoyar">
               <Button
                 variant="outline"
-                className="flex items-center gap-2 text-sm h-10 px-5 transition-all duration-300 hover:scale-105"
+                className="flex items-center gap-2 text-sm h-10 px-5 transition-all duration-300 hover:scale-105 hover:bg-gray-100 dark:hover:bg-gray-800"
                 style={{
                   borderColor: sectionColor,
                   color: sectionColor,
                   backgroundColor: isDark ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.6)",
                   backdropFilter: "blur(4px)",
                   fontWeight: 500,
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = isDark ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.8)"
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = isDark ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.6)"
                 }}
               >
                 <Coffee className="h-4 w-4" />
