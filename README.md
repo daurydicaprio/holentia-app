@@ -28,6 +28,7 @@ holentia/
 │   │   ├── logo/             # Componente de logo con efectos
 │   │   ├── mobile-fab/       # Botón flotante para móviles
 │   │   ├── scroll-to-top/    # Botón para volver arriba
+│   │   ├── tab-swipe-navigation/ # Navegación por gestos para pestañas
 │   │   └── welcome-modal/    # Modal de bienvenida
 │   ├── sections/             # Componentes específicos por sección
 │   │   ├── section-header.tsx # Encabezado de sección
@@ -64,10 +65,13 @@ holentia/
 - **Efecto Aura**: Efecto visual detrás del logo según la sección
 - **Modal de Bienvenida**: Mensaje introductorio en la primera visita
 - **Feedback Háptico**: Vibraciones sutiles en acciones en dispositivos móviles
-- **Navegación por Gestos**: Deslizar para cambiar entre secciones en móviles
+- **Navegación por Gestos**: Deslizar para cambiar entre secciones y pestañas en móviles
 - **Animaciones y Transiciones**: Efectos visuales para mejorar la experiencia de usuario
 - **Tarjetas Interactivas**: Efectos 3D y animaciones en tarjetas de herramientas
 - **Adaptación Contextual**: Colores y estilos adaptados según la sección actual
+- **Formateo Numérico**: Visualización de números con separadores de miles para mejor legibilidad
+- **Guardado de Simulaciones**: Capacidad para guardar y comparar diferentes escenarios en calculadoras
+- **Optimización Táctil**: Mejoras específicas para la interacción en dispositivos táctiles
 
 ## Tecnologías Utilizadas
 
@@ -93,8 +97,39 @@ Actualmente, las siguientes herramientas están disponibles:
 
 - **Finanzas**:
   - **Crear presupuesto personal**: Herramienta para gestionar ingresos y gastos
-  - **Calculadora de interés compuesto**: Visualización del crecimiento de ahorros
-  - **Calculadora de préstamo**: Estrategia para eliminar deudas
+  - **Calculadora de interés compuesto**: Visualización del crecimiento de ahorros con capacidad para guardar simulaciones
+  - **Calculadora de préstamo**: Estrategia para eliminar deudas con capacidad para guardar simulaciones
+
+### Calculadora de Interés Compuesto
+
+La calculadora de interés compuesto permite a los usuarios:
+
+- Calcular el crecimiento de sus inversiones a lo largo del tiempo
+- Visualizar el impacto del interés compuesto mediante gráficos
+- Ajustar parámetros como depósito inicial, aportaciones periódicas, tasa de interés, etc.
+- Considerar el impacto de la inflación en los resultados
+- Guardar hasta 3 simulaciones diferentes para comparar escenarios
+- Personalizar el nombre de cada simulación guardada
+- Ver detalles como balance final, ganancia neta, aportes totales y rendimiento
+
+### Calculadora de Préstamos
+
+La calculadora de préstamos permite a los usuarios:
+
+- Calcular pagos mensuales, intereses totales y tiempo de pago
+- Visualizar la amortización del préstamo mediante tablas y gráficos
+- Ajustar parámetros como monto del préstamo, tasa de interés, plazo, etc.
+- Guardar hasta 3 simulaciones diferentes para comparar escenarios
+- Personalizar el nombre de cada simulación guardada
+
+### Simulador de Presupuesto Personal
+
+El simulador de presupuesto personal permite a los usuarios:
+
+- Crear un presupuesto detallado con ingresos y gastos
+- Categorizar conceptos para mejor organización
+- Visualizar el balance y distribución del presupuesto
+- Recibir consejos personalizados basados en su situación financiera
 
 ## Directrices de Diseño
 
@@ -157,7 +192,7 @@ Cada sección tiene su propia paleta de colores:
 Para herramientas complejas, la versión móvil implementa un sistema de pestañas que:
 
 1. **Divide la Funcionalidad**:
-   - Organiza el contenido en pestañas lógicas (entrada, resultados, gráficos, etc.)
+   - Organiza el contenido en pestañas lógicas (entrada, resultados, gráficos, simulaciones, etc.)
    - Simplifica la interfaz mostrando sólo lo necesario en cada momento
 
 2. **Mantiene la Coherencia**:
@@ -168,6 +203,24 @@ Para herramientas complejas, la versión móvil implementa un sistema de pestañ
    - Botones y elementos interactivos de tamaño adecuado (mínimo 44px)
    - Espaciado suficiente entre elementos para evitar errores táctiles
    - Feedback visual y háptico al interactuar
+   - Atributo `data-interactive="true"` en elementos interactivos para mejorar la navegación por gestos
+
+### Navegación por Gestos
+
+La aplicación implementa un sistema de navegación por gestos que:
+
+1. **Facilita la Navegación entre Secciones**:
+   - Permite deslizar horizontalmente para cambiar entre las secciones principales (mente, cuerpo, finanzas)
+   - Proporciona feedback visual durante el deslizamiento
+
+2. **Optimiza la Navegación en Herramientas**:
+   - Desactiva la navegación por gestos entre secciones cuando se está en una herramienta
+   - Implementa navegación por gestos entre pestañas dentro de las herramientas
+   - Detecta elementos interactivos para evitar conflictos con sliders y otros controles
+
+3. **Mejora la Experiencia Móvil**:
+   - Proporciona una alternativa intuitiva a la navegación por botones
+   - Mantiene coherencia con patrones de diseño móvil modernos
 
 ## Patrones de Implementación
 
@@ -178,8 +231,8 @@ Se utilizan hooks personalizados para separar la lógica de la interfaz:
 - **useHapticFeedback**: Proporciona feedback táctil en dispositivos móviles
 - **useMediaQuery**: Detecta el tamaño de pantalla para adaptación responsive
 - **useBudgetSimulator**: Lógica para el simulador de presupuesto
-- **useCompoundInterestCalculator**: Lógica para la calculadora de interés compuesto
-- **useLoanCalculator**: Lógica para la calculadora de préstamos
+- **useCompoundInterestCalculator**: Lógica para la calculadora de interés compuesto, incluyendo guardado de simulaciones
+- **useLoanCalculator**: Lógica para la calculadora de préstamos, incluyendo guardado de simulaciones
 
 ### Componentes Contextuales
 
@@ -194,6 +247,13 @@ Los componentes adaptan su apariencia según el contexto:
 - **Desktop**: Pestañas en la parte superior y menú desplegable
 - **Mobile**: Navegación por gestos entre secciones y menú hamburguesa
 - **Herramientas**: Botón de retorno a sección y navegación contextual
+- **Pestañas en Móvil**: Sistema de pestañas con navegación por gestos para herramientas complejas
+
+### Formateo Numérico
+
+- **Separadores de Miles**: Visualización de números con comas para mejor legibilidad
+- **Formateo en Tiempo Real**: Actualización del formato mientras el usuario escribe
+- **Consistencia**: Aplicado en todos los campos numéricos relevantes
 
 ## Cómo Añadir Nuevas Herramientas
 
@@ -217,6 +277,7 @@ Para añadir una nueva herramienta:
    - Implementar sistema de pestañas para la versión móvil
    - Asegurar que todos los elementos son accesibles
    - Probar en diferentes tamaños de pantalla
+   - Añadir atributo `data-interactive="true"` a elementos interactivos
 
 ## Directrices de Adaptación de Herramientas
 
@@ -251,7 +312,7 @@ Para adaptar herramientas existentes (HTML, CSS, JavaScript) a HOLENTIA, se debe
 Para herramientas complejas, la versión móvil debe implementarse con un sistema de pestañas que:
 
 1. **Divida la Funcionalidad**:
-   - Organice el contenido en pestañas lógicas (entrada, resultados, gráficos, etc.)
+   - Organice el contenido en pestañas lógicas (entrada, resultados, gráficos, simulaciones, etc.)
    - Simplifique la interfaz mostrando sólo lo necesario en cada momento
 
 2. **Mantenga la Coherencia**:
@@ -263,6 +324,15 @@ Para herramientas complejas, la versión móvil debe implementarse con un sistem
    - Botones y elementos interactivos de tamaño adecuado
    - Espaciado suficiente entre elementos para evitar errores táctiles
    - Feedback visual y háptico al interactuar
+   - Atributos `data-interactive="true"` en elementos interactivos
+
+## Mejoras Implementadas
+
+- **Navegación por Gestos Mejorada**: Optimización para evitar conflictos con elementos interactivos
+- **Formateo Numérico**: Implementación de separadores de miles en campos numéricos
+- **Guardado de Simulaciones**: Capacidad para guardar y comparar diferentes escenarios en calculadoras
+- **Optimización Táctil**: Mejoras específicas para la interacción en dispositivos táctiles
+- **Accesibilidad Mejorada**: Etiquetas ARIA y mejoras para lectores de pantalla
 
 ## Mejoras Planificadas
 
@@ -270,11 +340,13 @@ Para herramientas complejas, la versión móvil debe implementarse con un sistem
 - **Función de exportar presupuesto**: Permitir guardar y compartir presupuestos
 - **Sistema de metas financieras**: Seguimiento de objetivos económicos
 - **Mejoras de accesibilidad**: Optimización para lectores de pantalla y navegación por teclado
-- **Sistema de pestañas para móviles**: Mejorar la navegación en dispositivos pequeños
 - **Gráficos a la calculadora de préstamos**: Visualización de amortización
 - **Función de guardar presupuesto**: Persistencia de datos
 - **Tema personalizable**: Opciones de personalización visual
 - **Modo de alto contraste**: Mejora de accesibilidad
+- **Exportación de datos**: Permitir exportar simulaciones en formatos como CSV o PDF
+- **Presets de inversión**: Configuraciones predefinidas para diferentes tipos de inversión
+- **Notificaciones**: Sistema de notificaciones para acciones importantes
 
 ## Desarrollo
 
@@ -302,6 +374,7 @@ Para contribuir al proyecto:
 4. Optimizar para dispositivos móviles y escritorio
 5. Implementar feedback háptico en interacciones importantes
 6. Probar en diferentes navegadores y dispositivos
+7. Añadir atributo `data-interactive="true"` a elementos interactivos
 
 ## Licencia
 
