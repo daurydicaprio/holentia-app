@@ -376,32 +376,56 @@ export function useCompoundInterestCalculator(): useCompoundInterestCalculatorRe
       const totalGainVal = Math.max(0, isNaN(summary.netGain) ? 0 : summary.netGain)
       const inflacionTotalVal = Math.max(0, isNaN(summary.inflationEffect) ? 0 : summary.inflationEffect)
 
-      const dataDoughnut = [depositoVal, totalContribVal, totalGainVal]
-      const labelsDoughnut = ["Inversión inicial", "Contribuciones", "Ganancia"]
-      const bgColors = ["#2e7d32", "#1b5e20", "#81c784"]
+      // Definir colores específicos para cada categoría
+      const colorInicial = "#2e7d32" // Verde oscuro
+      const colorContribuciones = "#1b5e20" // Verde más oscuro
+      const colorGanancias = "#81c784" // Verde claro
+      const colorInflacion = "#c8e6c9" // Verde muy claro
 
-      if (inflation > 0) {
-        dataDoughnut.push(inflacionTotalVal)
-        labelsDoughnut.push("Inflación")
-        bgColors.push("#c8e6c9")
+      // Crear arrays para los datos del gráfico de pastel
+      const dataDoughnut: number[] = []
+      const labelsDoughnut: string[] = []
+      const bgColors: string[] = []
+
+      // Añadir depósito inicial si es mayor que cero
+      if (depositoVal > 0) {
+        dataDoughnut.push(depositoVal)
+        labelsDoughnut.push("Inversión inicial")
+        bgColors.push(colorInicial)
       }
 
-      const filteredDataPie: number[] = []
-      const filteredLabelsPie: string[] = []
-      const filteredBgColorsPie: string[] = []
+      // Añadir contribuciones si son mayores que cero
+      if (totalContribVal > 0) {
+        dataDoughnut.push(totalContribVal)
+        labelsDoughnut.push("Contribuciones")
+        bgColors.push(colorContribuciones)
+      }
 
-      dataDoughnut.forEach((value, index) => {
-        if (value > 0.001) {
-          filteredDataPie.push(value)
-          filteredLabelsPie.push(labelsDoughnut[index])
-          filteredBgColorsPie.push(bgColors[index])
-        }
+      // Añadir ganancia si es mayor que cero
+      if (totalGainVal > 0) {
+        dataDoughnut.push(totalGainVal)
+        labelsDoughnut.push("Ganancia")
+        bgColors.push(colorGanancias)
+      }
+
+      // Añadir inflación si es relevante
+      if (inflation > 0 && inflacionTotalVal > 0) {
+        dataDoughnut.push(inflacionTotalVal)
+        labelsDoughnut.push("Inflación")
+        bgColors.push(colorInflacion)
+      }
+
+      // Actualizar el estado con los datos del gráfico de pastel
+      setPieChartData({
+        data: dataDoughnut,
+        labels: labelsDoughnut,
+        colors: bgColors,
       })
 
-      setPieChartData({
-        data: filteredDataPie,
-        labels: filteredLabelsPie,
-        colors: filteredBgColorsPie,
+      console.log("Datos del gráfico de pastel:", {
+        data: dataDoughnut,
+        labels: labelsDoughnut,
+        colors: bgColors,
       })
     } catch (error) {
       console.error("Error preparando datos de gráficos:", error)

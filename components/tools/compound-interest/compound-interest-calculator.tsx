@@ -180,8 +180,6 @@ export function CompoundInterestCalculator() {
     )
   }
 
-  const monthlyData = monthlySimData // Assign monthlySimData to monthlyData
-
   // Asegurar que los bordes de los recuadros sean visibles
   return (
     <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
@@ -314,7 +312,7 @@ export function CompoundInterestCalculator() {
         <div className="mt-8">
           <AmortizationTable
             annualData={annualSimData}
-            monthlyData={monthlyData}
+            monthlyData={monthlySimData}
             tableView={tableView}
             setTableView={setTableView}
             formatCurrency={formatCurrency}

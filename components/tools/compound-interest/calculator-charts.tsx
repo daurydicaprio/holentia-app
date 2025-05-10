@@ -35,12 +35,6 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
     tooltipBorder: resolvedTheme === "dark" ? "#4caf50" : "#2e7d32",
   }
 
-  // Colores más distinguibles para el gráfico de donut
-  const donutColors =
-    resolvedTheme === "dark"
-      ? ["#388e3c", "#1b5e20", "#a5d6a7", "#e8f5e9"]
-      : ["#2e7d32", "#1b5e20", "#81c784", "#c8e6c9"]
-
   // Crear/actualizar gráfico de línea
   useEffect(() => {
     if (!lineChartRef.current) return
@@ -228,26 +222,71 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
     }
 
     // Verificar si hay datos para mostrar
-    if (!pieChartData || !pieChartData.data || pieChartData.data.length === 0) return
+    if (!pieChartData || !pieChartData.data || pieChartData.data.length === 0) {
+      console.log("No hay datos para el gráfico de pastel")
+      return
+    }
+
+    console.log("Datos del gráfico de pastel en el componente:", pieChartData)
 
     const ctx = pieChartRef.current.getContext("2d")
     if (!ctx) return
 
+    // Definir colores específicos para el modo oscuro y claro
+    const getColors = () => {
+      if (resolvedTheme === "dark") {
+        return [
+          "#4caf50", // Verde para inversión inicial
+          "#2e7d32", // Verde oscuro para contribuciones
+          "#a5d6a7", // Verde claro para ganancias
+          "#e8f5e9", // Verde muy claro para inflación
+        ]
+      } else {
+        return [
+          "#2e7d32", // Verde oscuro para inversión inicial
+          "#1b5e20", // Verde más oscuro para contribuciones
+          "#81c784", // Verde claro para ganancias
+          "#c8e6c9", // Verde muy claro para inflación
+        ]
+      }
+    }
+
+    // Asignar colores según las etiquetas
+    const getColorForLabel = (label: string) => {
+      const colors = getColors()
+      if (label.includes("inicial")) return colors[0]
+      if (label.includes("Contribuciones")) return colors[1]
+      if (label.includes("Ganancia")) return colors[2]
+      if (label.includes("Inflación")) return colors[3]
+      return colors[0] // Color por defecto
+    }
+
+    // Asignar colores basados en las etiquetas
+    const backgroundColors = pieChartData.labels.map(getColorForLabel)
+
     pieChartInstance.current = new Chart(ctx, {
       type: "doughnut",
       data: {
-        labels: pieChartData.labels || [],
+        labels: pieChartData.labels,
         datasets: [
           {
-            data: pieChartData.data || [],
-            backgroundColor: donutColors.slice(0, pieChartData.data.length),
-            borderColor: resolvedTheme === "dark" ? "#1e1e1e" : "#ffffff",
+            data: pieChartData.data,
+            backgroundColor: backgroundColors,
+            borderColor: resolvedTheme === "dark" ? "#2d2d2d" : "#ffffff",
             borderWidth: 2,
-            hoverBackgroundColor: donutColors.slice(0, pieChartData.data.length).map((color) => {
+            hoverBackgroundColor: backgroundColors.map((color) => {
               // Hacer el color un poco más brillante en hover
-              return color.replace(/\d+(?=\))/, (match) => {
-                const value = Number.parseInt(match)
-                return Math.min(value + 10, 255).toString()
+              return color.replace(/#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i, (match, r, g, b) => {
+                const rInt = Number.parseInt(r, 16)
+                const gInt = Number.parseInt(g, 16)
+                const bInt = Number.parseInt(b, 16)
+                return `#${Math.min(rInt + 20, 255)
+                  .toString(16)
+                  .padStart(2, "0")}${Math.min(gInt + 20, 255)
+                  .toString(16)
+                  .padStart(2, "0")}${Math.min(bInt + 20, 255)
+                  .toString(16)
+                  .padStart(2, "0")}`
               })
             }),
             hoverBorderWidth: 3,
@@ -317,8 +356,8 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
 
                     return {
                       text: `${label}: ${percentage}% (${formatCurrency(value)})`, // Añadir valor monetario
-                      fillStyle: donutColors[i % donutColors.length],
-                      strokeStyle: donutColors[i % donutColors.length],
+                      fillStyle: backgroundColors[i],
+                      strokeStyle: backgroundColors[i],
                       lineWidth: 0,
                       hidden: false,
                       index: i,
