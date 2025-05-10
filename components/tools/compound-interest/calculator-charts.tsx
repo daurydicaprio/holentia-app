@@ -212,13 +212,15 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
     }
   }, [lineChartData, resolvedTheme, formatCurrency])
 
-  // Crear/actualizar gráfico de pastel
+  // Crear/actualizar gráfico de pastel - Implementación completamente nueva
   useEffect(() => {
+    // Solo ejecutar si el gráfico debe mostrarse y el canvas existe
     if (!pieChartRef.current || !showPieChart) return
 
     // Destruir gráfico existente si hay uno
     if (pieChartInstance.current) {
       pieChartInstance.current.destroy()
+      pieChartInstance.current = null
     }
 
     // Verificar si hay datos para mostrar
@@ -229,6 +231,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
 
     console.log("Datos del gráfico de pastel en el componente:", pieChartData)
 
+    // Obtener el contexto del canvas
     const ctx = pieChartRef.current.getContext("2d")
     if (!ctx) return
 
@@ -261,134 +264,104 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
       return colors[0] // Color por defecto
     }
 
-    // Asignar colores basados en las etiquetas
-    const backgroundColors = pieChartData.labels.map(getColorForLabel)
+    // Asignar colores basados en las etiquetas si no se proporcionaron
+    const backgroundColors =
+      pieChartData.colors && pieChartData.colors.length > 0
+        ? pieChartData.colors
+        : pieChartData.labels.map(getColorForLabel)
 
-    pieChartInstance.current = new Chart(ctx, {
-      type: "doughnut",
-      data: {
-        labels: pieChartData.labels,
-        datasets: [
-          {
-            data: pieChartData.data,
-            backgroundColor: backgroundColors,
-            borderColor: resolvedTheme === "dark" ? "#2d2d2d" : "#ffffff",
-            borderWidth: 2,
-            hoverBackgroundColor: backgroundColors.map((color) => {
-              // Hacer el color un poco más brillante en hover
-              return color.replace(/#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i, (match, r, g, b) => {
-                const rInt = Number.parseInt(r, 16)
-                const gInt = Number.parseInt(g, 16)
-                const bInt = Number.parseInt(b, 16)
-                return `#${Math.min(rInt + 20, 255)
-                  .toString(16)
-                  .padStart(2, "0")}${Math.min(gInt + 20, 255)
-                  .toString(16)
-                  .padStart(2, "0")}${Math.min(bInt + 20, 255)
-                  .toString(16)
-                  .padStart(2, "0")}`
-              })
-            }),
-            hoverBorderWidth: 3,
-            hoverOffset: 10,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: "60%",
-        animation: {
-          animateRotate: true,
-          animateScale: true,
-          duration: 2000,
-          easing: "easeOutQuart",
+    // Crear el gráfico de pastel
+    try {
+      pieChartInstance.current = new Chart(ctx, {
+        type: "doughnut",
+        data: {
+          labels: pieChartData.labels,
+          datasets: [
+            {
+              data: pieChartData.data,
+              backgroundColor: backgroundColors,
+              borderColor: resolvedTheme === "dark" ? "#2d2d2d" : "#ffffff",
+              borderWidth: 2,
+              hoverOffset: 10,
+            },
+          ],
         },
-        layout: {
-          padding: {
-            left: 20, // Aumentar padding izquierdo
-            right: 10,
-            top: 10,
-            bottom: 10,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: "60%",
+          animation: {
+            animateRotate: true,
+            animateScale: true,
+            duration: 2000,
+            easing: "easeOutQuart",
           },
-        },
-        plugins: {
-          tooltip: {
-            backgroundColor: chartColors.tooltipBg,
-            titleColor: chartColors.text,
-            bodyColor: chartColors.text,
-            borderColor: chartColors.tooltipBorder,
-            borderWidth: 1,
-            padding: 12,
-            cornerRadius: 8,
-            displayColors: true,
-            boxWidth: 10,
-            boxHeight: 10,
-            boxPadding: 3,
-            usePointStyle: true,
-            callbacks: {
-              title: (items) => items[0].label || "",
-              label: (c) => {
-                const value = formatCurrency(c.raw as number)
-                const total = pieChartData.data.reduce((a, b) => a + b, 0)
-                const percentage = total > 0 ? (((c.raw as number) / total) * 100).toFixed(1) : "0.0"
-                return `${value} (${percentage}%)`
+          plugins: {
+            tooltip: {
+              backgroundColor: chartColors.tooltipBg,
+              titleColor: chartColors.text,
+              bodyColor: chartColors.text,
+              borderColor: chartColors.tooltipBorder,
+              borderWidth: 1,
+              padding: 12,
+              cornerRadius: 8,
+              displayColors: true,
+              callbacks: {
+                title: (items) => items[0].label || "",
+                label: (c) => {
+                  const value = formatCurrency(c.raw as number)
+                  const total = pieChartData.data.reduce((a, b) => a + b, 0)
+                  const percentage = total > 0 ? (((c.raw as number) / total) * 100).toFixed(1) : "0.0"
+                  return `${value} (${percentage}%)`
+                },
+              },
+            },
+            legend: {
+              display: true,
+              position: "left",
+              align: "center",
+              labels: {
+                font: { size: 13, weight: "bold" },
+                color: chartColors.text,
+                padding: 25,
+                usePointStyle: true,
+                generateLabels: (chart) => {
+                  const data = chart.data
+                  if (data.labels && data.datasets.length && data.datasets[0].data) {
+                    return data.labels.map((label, i) => {
+                      const dataset = data.datasets[0]
+                      const value = (dataset.data[i] as number) || 0
+                      const total = dataset.data.reduce((acc, val) => acc + ((val as number) || 0), 0)
+                      const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : "0.0"
+
+                      return {
+                        text: `${label}: ${percentage}% (${formatCurrency(value)})`, // Añadir valor monetario
+                        fillStyle: backgroundColors[i],
+                        strokeStyle: backgroundColors[i],
+                        lineWidth: 0,
+                        hidden: false,
+                        index: i,
+                      }
+                    })
+                  }
+                  return []
+                },
               },
             },
           },
-          legend: {
-            display: true,
-            position: "left", // Mantener a la izquierda
-            align: "center",
-            labels: {
-              font: { size: 13, weight: "bold" }, // Aumentar tamaño de fuente
-              color: chartColors.text,
-              padding: 25, // Aumentar padding entre elementos
-              usePointStyle: true,
-              generateLabels: (chart) => {
-                const data = chart.data
-                if (data.labels && data.datasets.length && data.datasets[0].data) {
-                  return data.labels.map((label, i) => {
-                    const dataset = data.datasets[0]
-                    const value = (dataset.data[i] as number) || 0
-                    const total = dataset.data.reduce((acc, val) => acc + ((val as number) || 0), 0)
-                    const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : "0.0"
-
-                    return {
-                      text: `${label}: ${percentage}% (${formatCurrency(value)})`, // Añadir valor monetario
-                      fillStyle: backgroundColors[i],
-                      strokeStyle: backgroundColors[i],
-                      lineWidth: 0,
-                      hidden: false,
-                      index: i,
-                    }
-                  })
-                }
-                return []
-              },
-            },
-            maxWidth: 300, // Limitar ancho máximo para evitar que se extienda demasiado
-            maxHeight: 250, // Limitar altura máxima
-          },
-          title: {
-            display: false, // Ocultar título dentro del gráfico
-          },
         },
-      },
-    })
+      })
+    } catch (error) {
+      console.error("Error al crear el gráfico de pastel:", error)
+    }
 
     return () => {
       if (pieChartInstance.current) {
         pieChartInstance.current.destroy()
+        pieChartInstance.current = null
       }
     }
   }, [pieChartData, resolvedTheme, showPieChart, formatCurrency])
-
-  // Tooltips informativos para los gráficos
-  const chartTooltips = {
-    line: "Este gráfico muestra cómo crece tu inversión a lo largo del tiempo. Las barras representan el capital inicial y los intereses acumulados, mientras que la línea muestra el balance ajustado por inflación.",
-    pie: "Este gráfico muestra la distribución de tu inversión entre capital inicial, aportaciones e intereses generados. También muestra el impacto de la inflación si está configurada.",
-  }
 
   // Asegurar que los bordes de los gráficos sean visibles
   return (

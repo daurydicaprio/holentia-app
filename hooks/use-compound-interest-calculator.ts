@@ -370,11 +370,60 @@ export function useCompoundInterestCalculator(): useCompoundInterestCalculatorRe
         })
       }
 
-      // Preparar datos para gráfico de pastel
-      const depositoVal = Math.max(0, isNaN(initialDeposit) ? 0 : initialDeposit)
-      const totalContribVal = Math.max(0, isNaN(summary.totalContributions) ? 0 : summary.totalContributions)
-      const totalGainVal = Math.max(0, isNaN(summary.netGain) ? 0 : summary.netGain)
-      const inflacionTotalVal = Math.max(0, isNaN(summary.inflationEffect) ? 0 : summary.inflationEffect)
+      // Preparar datos para gráfico de pastel - SIMPLIFICADO para mayor claridad
+      const pieData = []
+      const pieLabels = []
+
+      // Añadir inversión inicial si es mayor que cero
+      if (initialDeposit > 0) {
+        pieData.push(initialDeposit)
+        pieLabels.push("Inversión inicial")
+      }
+
+      // Añadir contribuciones si son mayores que cero
+      const totalContrib = summary.totalContributions
+      if (totalContrib > 0) {
+        pieData.push(totalContrib)
+        pieLabels.push("Contribuciones")
+      }
+
+      // Añadir ganancia si es mayor que cero
+      const netGain = summary.netGain
+      if (netGain > 0) {
+        pieData.push(netGain)
+        pieLabels.push("Ganancia")
+      }
+
+      // Añadir inflación si es relevante
+      const inflationEffect = summary.inflationEffect
+      if (inflation > 0 && inflationEffect > 0) {
+        pieData.push(inflationEffect)
+        pieLabels.push("Inflación")
+      }
+
+      // Si no hay datos pero hay contribuciones o inflación, mostrar datos estimados
+      if (pieData.length === 0 && (contribution > 0 || inflation > 0)) {
+        // Si hay contribuciones, mostrarlas
+        if (contribution > 0) {
+          const estimatedContrib = contribution * (contributionFrequency === 12 ? 12 : 1) * years
+          pieData.push(estimatedContrib)
+          pieLabels.push("Contribuciones estimadas")
+        }
+
+        // Si hay inflación, mostrar un valor estimado
+        if (inflation > 0) {
+          // Valor estimado para mostrar el efecto de la inflación
+          const estimatedInflation =
+            contribution > 0
+              ? contribution * (contributionFrequency === 12 ? 12 : 1) * years * (inflation / 100)
+              : 1000 * (inflation / 100)
+
+          if (estimatedInflation > 0) {
+            pieData.push(estimatedInflation)
+            pieLabels.push("Inflación estimada")
+          }
+        }
+      }
 
       // Definir colores específicos para cada categoría
       const colorInicial = "#2e7d32" // Verde oscuro
@@ -382,50 +431,26 @@ export function useCompoundInterestCalculator(): useCompoundInterestCalculatorRe
       const colorGanancias = "#81c784" // Verde claro
       const colorInflacion = "#c8e6c9" // Verde muy claro
 
-      // Crear arrays para los datos del gráfico de pastel
-      const dataDoughnut: number[] = []
-      const labelsDoughnut: string[] = []
-      const bgColors: string[] = []
-
-      // Añadir depósito inicial si es mayor que cero
-      if (depositoVal > 0) {
-        dataDoughnut.push(depositoVal)
-        labelsDoughnut.push("Inversión inicial")
-        bgColors.push(colorInicial)
-      }
-
-      // Añadir contribuciones si son mayores que cero
-      if (totalContribVal > 0) {
-        dataDoughnut.push(totalContribVal)
-        labelsDoughnut.push("Contribuciones")
-        bgColors.push(colorContribuciones)
-      }
-
-      // Añadir ganancia si es mayor que cero
-      if (totalGainVal > 0) {
-        dataDoughnut.push(totalGainVal)
-        labelsDoughnut.push("Ganancia")
-        bgColors.push(colorGanancias)
-      }
-
-      // Añadir inflación si es relevante
-      if (inflation > 0 && inflacionTotalVal > 0) {
-        dataDoughnut.push(inflacionTotalVal)
-        labelsDoughnut.push("Inflación")
-        bgColors.push(colorInflacion)
-      }
+      // Asignar colores según las etiquetas
+      const pieColors = pieLabels.map((label) => {
+        if (label.includes("inicial")) return colorInicial
+        if (label.includes("Contribuciones")) return colorContribuciones
+        if (label.includes("Ganancia")) return colorGanancias
+        if (label.includes("Inflación")) return colorInflacion
+        return colorContribuciones // Color por defecto
+      })
 
       // Actualizar el estado con los datos del gráfico de pastel
       setPieChartData({
-        data: dataDoughnut,
-        labels: labelsDoughnut,
-        colors: bgColors,
+        data: pieData,
+        labels: pieLabels,
+        colors: pieColors,
       })
 
       console.log("Datos del gráfico de pastel:", {
-        data: dataDoughnut,
-        labels: labelsDoughnut,
-        colors: bgColors,
+        data: pieData,
+        labels: pieLabels,
+        colors: pieColors,
       })
     } catch (error) {
       console.error("Error preparando datos de gráficos:", error)
