@@ -1,4 +1,4 @@
-export type SectionType = "mente" | "cuerpo" | "finanzas"
+export type SectionType = "mente" | "cuerpo" | "finanzas" | "relaciones"
 
 export interface CardData {
   id: string

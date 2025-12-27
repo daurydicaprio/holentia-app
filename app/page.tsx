@@ -1,7 +1,6 @@
 import Logo from "@/components/common/logo/logo"
 import Footer from "@/components/common/footer/footer"
 import SectionTabs from "@/components/sections/section-tabs"
-import WelcomeModal from "@/components/common/welcome-modal/welcome-modal"
 import MobileFab from "@/components/common/mobile-fab/mobile-fab"
 import SectionSwipeNavigation from "@/components/sections/section-swipe-navigation"
 import MenuButton from "@/components/common/menu-button/menu-button"
@@ -23,17 +22,21 @@ export default function Home() {
 
         <SectionTabs />
 
-        <div className="mt-12 text-center max-w-lg">
-          <h1 className="text-2xl sm:text-3xl font-bold mb-4">Bienvenido a HOLENTIA</h1>
-          <p className="text-gray-600 dark:text-gray-300">
-            Selecciona una sección para explorar herramientas que te ayudarán a mejorar tu bienestar integral.
+        <div className="mt-12 text-center max-w-2xl px-4">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-4 text-balance">Tu camino hacia el bienestar integral</h1>
+          <p className="text-gray-600 dark:text-gray-300 mb-6 text-pretty leading-relaxed">
+            <span className="font-semibold text-gray-800 dark:text-gray-200">HOLENTIA</span> te acompaña en tu
+            desarrollo personal con herramientas prácticas diseñadas para mejorar tu mente, relaciones, cuerpo y
+            finanzas. Explora las secciones y descubre cómo transformar tu bienestar.
+          </p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 text-pretty">
+            Selecciona una sección para comenzar tu viaje hacia una vida más equilibrada y plena.
           </p>
         </div>
       </div>
 
       <Footer />
       <MobileFab />
-      <WelcomeModal />
     </main>
   )
 }

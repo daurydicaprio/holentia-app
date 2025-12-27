@@ -34,6 +34,9 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
   if (section === "mente") {
     accentColor = "#1976d2" // Color mente
     accentColorDark = "#0d47a1" // Color mente oscuro
+  } else if (section === "relaciones") {
+    accentColor = "#7c3aed" // Color relaciones
+    accentColorDark = "#5b21b6" // Color relaciones oscuro
   } else if (section === "cuerpo") {
     accentColor = "#ffa000" // Color cuerpo
     accentColorDark = "#e65100" // Color cuerpo oscuro
@@ -239,6 +242,21 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
                 </Link>
 
                 <Link
+                  href="/relaciones"
+                  className={`block px-5 py-3 transition-all duration-200 ${
+                    isActive("/relaciones")
+                      ? `font-medium text-[#7c3aed] bg-purple-50 dark:bg-purple-900/20`
+                      : `hover:bg-purple-50 dark:hover:bg-purple-900/20`
+                  }`}
+                  onClick={handleLinkClick}
+                >
+                  <div className="flex items-center">
+                    <span className="flex-grow">Relaciones</span>
+                    {isActive("/relaciones") && <div className="w-2 h-2 rounded-full bg-[#7c3aed]" />}
+                  </div>
+                </Link>
+
+                <Link
                   href="/cuerpo"
                   className={`block px-5 py-3 transition-all duration-200 ${
                     isActive("/cuerpo")
@@ -271,6 +289,15 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
 
               <div className="py-2 border-t border-gray-200 dark:border-gray-700 mt-1">
                 <Link
+                  href="/que-es-holentia"
+                  className="block px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
+                  onClick={handleLinkClick}
+                >
+                  <div className="flex items-center">
+                    <span className="flex-grow">¿Qué es Holentia?</span>
+                  </div>
+                </Link>
+                <Link
                   href="/ayuda"
                   className="block px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
                   onClick={handleLinkClick}
@@ -287,6 +314,27 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
                 >
                   <div className="flex items-center">
                     <span className="flex-grow">Hacer donación</span>
+                  </div>
+                </Link>
+              </div>
+
+              <div className="py-2 border-t border-gray-200 dark:border-gray-700 mt-1">
+                <Link
+                  href="/aviso-legal"
+                  className="block px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 text-sm"
+                  onClick={handleLinkClick}
+                >
+                  <div className="flex items-center">
+                    <span className="flex-grow">Aviso legal</span>
+                  </div>
+                </Link>
+                <Link
+                  href="/politica-cookies"
+                  className="block px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 text-sm"
+                  onClick={handleLinkClick}
+                >
+                  <div className="flex items-center">
+                    <span className="flex-grow">Política de cookies</span>
                   </div>
                 </Link>
               </div>

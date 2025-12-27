@@ -135,6 +135,19 @@
   --color-finanzas-text-card: #ffffff;
   --color-finanzas-text-category: #e8f5e9;
   --color-finanzas-accent: #00796b; /* Turquesa como acento */
+
+  /* Colores Relaciones - Nueva sección con color violeta/púrpura */
+  --color-relaciones-active: #7c3aed; /* Violeta para relaciones */
+  --color-relaciones-active-dark: #5b21b6;
+  --color-relaciones-active-light: #a78bfa;
+  --color-relaciones-active-lighter: #c4b5fd;
+  --color-relaciones-active-darkest: #4c1d95;
+  --color-relaciones-text-active: #ffffff;
+  --color-relaciones-glass-bg: rgba(124, 58, 237, 0.45);
+  --color-relaciones-glass-border: rgba(196, 181, 253, 0.55);
+  --color-relaciones-text-card: #ffffff;
+  --color-relaciones-text-category: #ede9fe;
+  --color-relaciones-accent: #ec4899; /* Rosa como acento */
 }
 
 .dark {
@@ -166,6 +179,12 @@
   --color-finanzas-glass-border: rgba(165, 214, 167, 0.4); /* Más visible */
   --color-finanzas-text-card: #ffffff; /* Blanco puro para mejor contraste */
   --color-finanzas-text-category: #a5d6a7;
+
+  /* Colores Relaciones - Modo oscuro */
+  --color-relaciones-glass-bg: rgba(124, 58, 237, 0.25);
+  --color-relaciones-glass-border: rgba(196, 181, 253, 0.4);
+  --color-relaciones-text-card: #ffffff;
+  --color-relaciones-text-category: #c4b5fd;
 }
 
 /* Estilos personalizados para los sliders */
@@ -174,11 +193,20 @@
 }
 
 .slider-track-active {
-  @apply bg-finanzas-DEFAULT dark:bg-finanzas-light;
+  background-color: var(--color-finanzas-active);
+}
+
+.dark .slider-track-active {
+  background-color: var(--color-finanzas-active-light);
 }
 
 .slider-thumb {
-  @apply bg-white border-2 border-finanzas-DEFAULT dark:border-finanzas-light;
+  background-color: white;
+  border: 2px solid var(--color-finanzas-active);
+}
+
+.dark .slider-thumb {
+  border-color: var(--color-finanzas-active-light);
 }
 
 /* Estilos para los colores de sección */
@@ -206,6 +234,15 @@
   color: var(--color-finanzas-active-light);
 }
 
+/* Añadir estilos de utilidad para relaciones */
+.text-relaciones-DEFAULT {
+  color: var(--color-relaciones-active);
+}
+
+.text-relaciones-light {
+  color: var(--color-relaciones-active-light);
+}
+
 .bg-mente-DEFAULT {
   background-color: var(--color-mente-active);
 }
@@ -228,6 +265,14 @@
 
 .bg-finanzas-light {
   background-color: var(--color-finanzas-active-light);
+}
+
+.bg-relaciones-DEFAULT {
+  background-color: var(--color-relaciones-active);
+}
+
+.bg-relaciones-light {
+  background-color: var(--color-relaciones-active-light);
 }
 
 .border-mente-DEFAULT {
@@ -254,6 +299,14 @@
   border-color: var(--color-finanzas-active-light);
 }
 
+.border-relaciones-DEFAULT {
+  border-color: var(--color-relaciones-active);
+}
+
+.border-relaciones-light {
+  border-color: var(--color-relaciones-active-light);
+}
+
 .focus\:ring-mente-DEFAULT:focus {
   --tw-ring-color: var(--color-mente-active);
 }
@@ -266,6 +319,10 @@
   --tw-ring-color: var(--color-finanzas-active);
 }
 
+.focus\:ring-relaciones-DEFAULT:focus {
+  --tw-ring-color: var(--color-relaciones-active);
+}
+
 .focus\:border-mente-DEFAULT:focus {
   border-color: var(--color-mente-active);
 }
@@ -276,6 +333,10 @@
 
 .focus\:border-finanzas-DEFAULT:focus {
   border-color: var(--color-finanzas-active);
+}
+
+.focus\:border-relaciones-DEFAULT:focus {
+  border-color: var(--color-relaciones-active);
 }
 
 /* Estilos específicos para los sliders de la calculadora de préstamos */
@@ -338,6 +399,11 @@
     background-color: rgba(46, 125, 50, 0.5);
   }
 
+  /* Añadir aura para relaciones */
+  .logo-aura-relaciones {
+    background-color: rgba(124, 58, 237, 0.5);
+  }
+
   .card-coming-soon {
     position: relative;
     transition-property: all;
@@ -389,6 +455,11 @@
 
   .section-title-highlight-finanzas {
     background-image: linear-gradient(to right, var(--color-finanzas-active), var(--color-finanzas-active-dark));
+  }
+
+  /* Añadir gradiente para relaciones */
+  .section-title-highlight-relaciones {
+    background-image: linear-gradient(to right, var(--color-relaciones-active), var(--color-relaciones-active-dark));
   }
 
   /* Estilos para el backdrop del menú principal */
@@ -466,6 +537,11 @@
     background-color: var(--color-finanzas-active);
   }
 
+  /* Añadir línea de header para relaciones */
+  .tool-header-line-relaciones {
+    background-color: var(--color-relaciones-active);
+  }
+
   .section-tab {
     position: relative;
     padding-left: 1rem;
@@ -514,6 +590,11 @@
 
   .section-tab-finanzas::after {
     background-color: var(--color-finanzas-active);
+  }
+
+  /* Añadir indicador de tab para relaciones */
+  .section-tab-relaciones::after {
+    background-color: var(--color-relaciones-active);
   }
 
   .section-tab-active {

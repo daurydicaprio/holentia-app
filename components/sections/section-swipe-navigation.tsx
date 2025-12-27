@@ -9,6 +9,7 @@ export default function SectionSwipeNavigation() {
   const [touchStart, setTouchStart] = useState<number | null>(null)
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
   const [isMobile, setIsMobile] = useState(false)
+  const [isToolPage, setIsToolPage] = useState(false)
 
   // Configuración de sensibilidad del swipe
   const minSwipeDistance = 50
@@ -16,22 +17,22 @@ export default function SectionSwipeNavigation() {
   // Verificar si estamos dentro de una herramienta
   const isInsideTool = useCallback(() => {
     // Lista de rutas de herramientas conocidas
-    const toolRoutes = ["/calculadora-prestamo", "/calculadora-interes-compuesto", "/crear-presupuesto-personal"]
+    const toolRoutes = [
+      "/calculadora-prestamo",
+      "/calculadora-interes-compuesto",
+      "/crear-presupuesto-personal",
+      "/diario-guiado",
+      "/test-lenguajes-amor",
+      "/calculadora-hidratacion",
+    ]
 
     // Verificar si la ruta actual comienza con alguna de las rutas de herramientas
     return toolRoutes.some((route) => pathname.startsWith(route))
   }, [pathname])
 
-  const [isToolPage, setIsToolPage] = useState(isInsideTool())
-
   useEffect(() => {
     setIsToolPage(isInsideTool())
   }, [isInsideTool])
-
-  // Si estamos dentro de una herramienta, no activar la navegación por swipe
-  if (isToolPage) {
-    return null
-  }
 
   useEffect(() => {
     const checkMobile = () => {
@@ -72,8 +73,7 @@ export default function SectionSwipeNavigation() {
       const pathParts = pathname.split("/").filter(Boolean)
       const currentSection = pathParts.length > 0 ? pathParts[0] : null
 
-      // Orden de las secciones
-      const sections = ["mente", "cuerpo", "finanzas"]
+      const sections = ["mente", "relaciones", "cuerpo", "finanzas"]
 
       if (!currentSection || !sections.includes(currentSection)) {
         // Si no estamos en una sección, ir a la primera sección con swipe izquierdo
@@ -104,6 +104,11 @@ export default function SectionSwipeNavigation() {
       document.removeEventListener("touchend", handleTouchEnd)
     }
   }, [touchStart, touchEnd, pathname, router, isMobile])
+
+  // Si estamos dentro de una herramienta, no activar la navegación por swipe
+  if (isToolPage) {
+    return null
+  }
 
   // Este componente no renderiza nada visible, solo añade la funcionalidad de swipe
   return null

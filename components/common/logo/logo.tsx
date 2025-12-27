@@ -80,6 +80,8 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
     auraColor = "rgba(245, 158, 11, 0.4)" // Color ámbar para cuerpo, más sutil
   } else if (section === "finanzas") {
     auraColor = "rgba(34, 197, 94, 0.4)" // Color verde para finanzas, más sutil
+  } else if (section === "relaciones") {
+    auraColor = "rgba(124, 58, 237, 0.4)" // Color violeta para relaciones, más sutil
   }
 
   // Determinar el tamaño del aura basado en el tamaño del logo

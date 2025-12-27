@@ -20,7 +20,7 @@ export default function SectionTabs() {
     const pathParts = pathname.split("/").filter(Boolean)
     const section = pathParts[0]
 
-    if (section && ["mente", "cuerpo", "finanzas"].includes(section)) {
+    if (section && ["mente", "cuerpo", "finanzas", "relaciones"].includes(section)) {
       setActiveTab(section)
     } else {
       setActiveTab(null)
@@ -56,6 +56,7 @@ export default function SectionTabs() {
 
   // Colores específicos para cada sección
   const menteColor = "var(--color-mente-active)"
+  const relacionesColor = "var(--color-relaciones-active)"
   const cuerpoColor = "var(--color-cuerpo-active)"
   const finanzasColor = "var(--color-finanzas-active)"
 
@@ -93,6 +94,43 @@ export default function SectionTabs() {
             height: "3px",
             borderRadius: "9999px",
             backgroundColor: menteColor,
+            transition: "width 0.3s ease",
+          }}
+        />
+      </Link>
+
+      <Link
+        href="/relaciones"
+        onClick={handleTabClick}
+        style={{
+          ...baseTabStyle,
+          ...(activeTab === "relaciones" ? { ...activeTabStyle, color: relacionesColor } : {}),
+        }}
+        onMouseOver={(e) => {
+          if (activeTab !== "relaciones") {
+            e.currentTarget.style.opacity = "0.9"
+            e.currentTarget.style.color = relacionesColor
+          }
+        }}
+        onMouseOut={(e) => {
+          if (activeTab !== "relaciones") {
+            e.currentTarget.style.opacity = "0.7"
+            e.currentTarget.style.color = theme === "dark" ? "#a0a0a0" : "#4b5563"
+          }
+        }}
+      >
+        <span>Relaciones</span>
+        <div
+          style={{
+            content: '""',
+            position: "absolute",
+            bottom: "-4px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: activeTab === "relaciones" ? "2rem" : "0",
+            height: "3px",
+            borderRadius: "9999px",
+            backgroundColor: relacionesColor,
             transition: "width 0.3s ease",
           }}
         />

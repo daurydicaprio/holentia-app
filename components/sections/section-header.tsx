@@ -14,6 +14,8 @@ export default function SectionHeader({ section }: SectionHeaderProps) {
     highlightGradient = "linear-gradient(to right, var(--color-cuerpo-active), var(--color-cuerpo-active-dark))" // Gradiente cuerpo
   } else if (section.id === "finanzas") {
     highlightGradient = "linear-gradient(to right, var(--color-finanzas-active), var(--color-finanzas-active-dark))" // Gradiente finanzas
+  } else if (section.id === "relaciones") {
+    highlightGradient = "linear-gradient(to right, var(--color-relaciones-active), var(--color-relaciones-active-dark))" // Gradiente relaciones
   }
 
   return (

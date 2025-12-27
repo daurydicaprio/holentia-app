@@ -35,6 +35,9 @@ export default function ScrollToTop({ section }: ScrollToTopProps) {
   } else if (currentSection === "finanzas") {
     buttonBgColor = "#388e3c" // Color finanzas
     buttonHoverBgColor = "#1b5e20" // Color finanzas oscuro
+  } else if (currentSection === "relaciones") {
+    buttonBgColor = "#7c3aed" // Color relaciones
+    buttonHoverBgColor = "#5b21b6" // Color relaciones oscuro
   }
 
   useEffect(() => {
