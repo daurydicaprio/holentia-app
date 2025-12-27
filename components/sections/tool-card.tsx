@@ -50,6 +50,18 @@ export default function ToolCard({ card, index }: ToolCardProps) {
     }
     titleTextColor = currentTheme === "dark" ? "#ffffff" : "#ffffff"
     descriptionTextColor = currentTheme === "dark" ? "#e0e0e0" : "#ffffff"
+  } else if (category === "relaciones") {
+    if (isAvailable) {
+      bgColor = currentTheme === "dark" ? "rgba(124, 58, 237, 0.4)" : "rgba(124, 58, 237, 0.75)"
+      borderColor = currentTheme === "dark" ? "rgba(196, 181, 253, 0.6)" : "rgba(196, 181, 253, 0.9)"
+      categoryTextColor = currentTheme === "dark" ? "#c4b5fd" : "#ffffff"
+    } else {
+      bgColor = currentTheme === "dark" ? "rgba(124, 58, 237, 0.2)" : "rgba(124, 58, 237, 0.35)"
+      borderColor = currentTheme === "dark" ? "rgba(196, 181, 253, 0.3)" : "rgba(196, 181, 253, 0.5)"
+      categoryTextColor = currentTheme === "dark" ? "rgba(196, 181, 253, 0.8)" : "rgba(255, 255, 255, 0.8)"
+    }
+    titleTextColor = currentTheme === "dark" ? "#ffffff" : "#ffffff"
+    descriptionTextColor = currentTheme === "dark" ? "#e0e0e0" : "#ffffff"
   } else if (category === "cuerpo") {
     if (isAvailable) {
       bgColor = currentTheme === "dark" ? "rgba(239, 108, 0, 0.4)" : "rgba(239, 108, 0, 0.75)"
