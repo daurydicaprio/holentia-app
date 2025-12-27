@@ -23,7 +23,10 @@ export default function ApoyarPage() {
         </div>
 
         <div className="flex justify-center mb-12">
-          <Logo size="md" />
+          <div className="relative">
+            <div className="absolute inset-0 bg-pink-500/10 dark:bg-pink-400/5 blur-3xl rounded-full"></div>
+            <Logo size="lg" />
+          </div>
         </div>
 
         {/* Hero section */}

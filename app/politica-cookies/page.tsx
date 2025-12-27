@@ -23,7 +23,10 @@ export default function PoliticaCookiesPage() {
         </div>
 
         <div className="flex justify-center mb-12">
-          <Logo size="md" />
+          <div className="relative">
+            <div className="absolute inset-0 bg-green-500/10 dark:bg-green-400/5 blur-3xl rounded-full"></div>
+            <Logo size="lg" />
+          </div>
         </div>
 
         {/* Title with icon */}

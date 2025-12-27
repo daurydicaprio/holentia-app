@@ -21,6 +21,8 @@ holentia/
 │   ├── que-es-holentia/      # Página informativa sobre Holentia
 │   ├── aviso-legal/          # Página con el aviso legal
 │   ├── politica-cookies/     # Página con la política de cookies
+│   ├── ayuda/                # Centro de ayuda con FAQs
+│   ├── apoyar/               # Página de donaciones y apoyo
 │   ├── layout.tsx            # Layout principal de la aplicación
 │   └── page.tsx              # Página principal (home)
 ├── components/               # Componentes reutilizables
@@ -42,9 +44,9 @@ holentia/
 │   │   ├── budget-simulator/  # Simulador de presupuesto
 │   │   ├── compound-interest/ # Calculadora de interés compuesto
 │   │   ├── loan-calculator/   # Calculadora de préstamos
-│   │   ├── guided-journal/    # Diario guiado
-│   │   ├── love-languages-test/ # Test de lenguajes del amor
-│   │   └── hydration-calculator/ # Calculadora de hidratación
+│   │   ├── guided-journal/    # Diario guiado (Mente)
+│   │   ├── love-languages-test/ # Test de lenguajes del amor (Relaciones)
+│   │   └── hydration-calculator/ # Calculadora de hidratación (Cuerpo)
 │   ├── ui/                   # Componentes de interfaz (botones, tarjetas, etc.)
 │   └── tool-page-client.tsx  # Componente base para páginas de herramientas
 ├── hooks/                    # Custom hooks
@@ -77,6 +79,7 @@ holentia/
 - **Guardado de Simulaciones**: Capacidad para guardar y comparar diferentes escenarios en calculadoras
 - **Optimización Táctil**: Mejoras específicas para la interacción en dispositivos táctiles
 - **Privacidad Total**: No se recopilan datos personales, todo se procesa localmente
+- **Diseño Minimalista**: Interfaz limpia, moderna y atractiva con gradientes sutiles
 
 ## Tecnologías Utilizadas
 
@@ -109,15 +112,18 @@ La aplicación está dividida en cuatro secciones principales, cada una con su p
 - **Calculadora de Hidratación**: Calcula tu ingesta diaria de agua recomendada según tu peso, actividad y clima
 
 ### Finanzas
-- **Crear presupuesto personal**: Herramienta para gestionar ingresos y gastos
-- **Calculadora de interés compuesto**: Visualización del crecimiento de ahorros con capacidad para guardar simulaciones
-- **Calculadora de préstamo**: Estrategia para eliminar deudas con capacidad para guardar simulaciones
+- **Crear presupuesto personal**: Herramienta para gestionar ingresos y gastos con visualización de datos
+- **Calculadora de interés compuesto**: Visualización del crecimiento de ahorros con capacidad para guardar y comparar simulaciones
+- **Calculadora de préstamo**: Estrategia para eliminar deudas con capacidad para guardar y comparar simulaciones
 
 ## Páginas Informativas
 
-- **¿Qué es Holentia?**: Información detallada sobre la misión, valores y características de la plataforma
-- **Aviso Legal**: Términos de uso, propiedad intelectual y responsabilidades
-- **Política de Cookies**: Explicación detallada del uso de cookies (mínimo) y privacidad
+- **Home**: Página de inicio con introducción elegante y acceso directo a las secciones
+- **¿Qué es Holentia?**: Información detallada sobre la misión, valores y características de la plataforma con diseño atractivo y moderno
+- **Aviso Legal**: Términos de uso, propiedad intelectual y responsabilidades con presentación clara y profesional
+- **Política de Cookies**: Explicación detallada del uso mínimo de cookies y compromiso con la privacidad
+- **Ayuda**: Centro de ayuda con FAQs interactivos y guías de usuario
+- **Apoyar**: Página de donaciones con opciones para contribuir al proyecto
 
 ## Directrices de Diseño
 
@@ -146,14 +152,17 @@ Cada sección tiene su propia paleta de colores:
 #### Tarjetas
 - Bordes redondeados, efectos de vidrio y sombras sutiles
 - Animaciones de hover con elevación
+- Gradientes sutiles para profundidad visual
 
 #### Botones
 - Colores según sección, con feedback táctil
 - Efectos de hover y active states
+- Gradientes para botones destacados
 
 #### Tipografía
 - Jerarquía clara con tamaños consistentes
 - Uso de text-balance y text-pretty para mejor legibilidad
+- Gradientes de texto para títulos destacados
 
 ## Privacidad y Datos
 
@@ -164,6 +173,7 @@ Cada sección tiene su propia paleta de colores:
 - No creamos perfiles de usuario
 - Los datos de herramientas se guardan solo en localStorage del navegador
 - No hay servidores backend que almacenen información personal
+- Solo usamos cookies técnicas esenciales (preferencias de tema)
 
 ## Desarrollo
 
@@ -193,10 +203,13 @@ Para contribuir al proyecto:
 6. Probar en diferentes navegadores y dispositivos
 7. Añadir atributo `data-interactive="true"` a elementos interactivos
 8. Respetar la privacidad del usuario: no añadir tracking ni recopilación de datos
+9. Mantener diseño minimalista y coherente con la esencia de la aplicación
+10. Usar gradientes sutiles y efectos visuales con moderación
 
 ## Licencia
 
 Este proyecto es propiedad de Daury DiCaprio. Todos los derechos reservados.
-```
 
-```typescriptreact file="" isHidden
+---
+
+**Última actualización**: Diciembre 2024
