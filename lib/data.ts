@@ -264,6 +264,14 @@ export const sectionsData: Record<string, SectionData> = {
         category: "finanzas",
       },
       {
+        id: "calculadora-consumo-electrico",
+        title: "Calculadora consumo eléctrico",
+        description: "Estima tu factura por kWh y ahorra.",
+        slug: "calculadora-consumo-electrico",
+        isAvailable: true,
+        category: "finanzas",
+      },
+      {
         id: "test-perfil-riesgo",
         title: "Test de perfíl de riesgo",
         description: "Aprende a ver como inviertes.",
