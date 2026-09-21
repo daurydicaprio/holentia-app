@@ -24,7 +24,7 @@ Objetivo: usuario anticipa total a pagar + subsidio gobierno estimado (~45% ref.
 - [x] Añadir slug a `section-swipe-navigation.tsx` toolRoutes
 - [x] Verificar `tsc + build` — `next build OK, ruta /calculadora-consumo-electrico 2.72 kB` (errores TS preexistentes en todo el proyecto, build los ignora por config)
 - [ ] Preview `dev.holentia.com` tras push a `dev`
-Fórmula: `total = 127.83 + min(kwh,200)*6.17 + min(max(kwh-200,0),100)*8.71 + max(kwh-300,0)*13.04`, `subsidio_est = total*0.819`, `sin_subsidio_est = total+subsidio_est`.
+Fórmula: si `kwh < 700`: `total = 127.83 + min(kwh,200)*6.17 + min(max(kwh-200,0),100)*8.71 + max(kwh-300,0)*13.04`, `subsidio_est = total*0.819` (±RD$100 por picos de generación y consumo), `sin_subsidio_est = total+subsidio_est`. Si `kwh >= 700`: `total = 127.83 + kwh*13.04` sin tramos ni subsidio.
 
 ## Fase 1 — Seguridad e higiene
 - [ ] `pnpm install` (hoy no existe `node_modules`)
