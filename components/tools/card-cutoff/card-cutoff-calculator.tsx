@@ -239,15 +239,15 @@ export function CardCutoffCalculator() {
             <p className="text-sm mt-1">y te cuento cuándo pagarías cada compra.</p>
           </div>
         ) : (
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-            <p className="text-lg leading-relaxed mb-6">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
+            <p className="text-lg sm:text-xl leading-relaxed mb-8">
               Si compras el <strong className="capitalize">{formatLong(result.purchase)}</strong>, entras al corte
               del <strong className="capitalize">{formatLong(result.cutoff)}</strong> y pagas el{" "}
               <strong className="text-[#388e3c] dark:text-[#81c784] capitalize">{formatLong(result.due)}</strong>.
             </p>
 
             {/* Timeline */}
-            <div className="relative pl-16 space-y-8 mb-8 mt-2">
+            <div className="relative pl-16 space-y-10 mb-10 mt-2">
               <div className="absolute left-[23px] top-3 bottom-3 w-0.5 bg-[#388e3c]/25 dark:bg-[#388e3c]/40" />
               {steps.map((step, i) => (
                 <div key={step.label} className="relative">
@@ -261,12 +261,12 @@ export function CardCutoffCalculator() {
                   >
                     <step.icon className="h-6 w-6" />
                   </div>
-                  <div className="bg-gray-50 dark:bg-gray-700/40 rounded-xl px-4 py-3">
-                    <div className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  <div className="bg-gray-50 dark:bg-gray-700/40 rounded-xl px-5 py-4">
+                    <div className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
                       {step.label}
                     </div>
                     <div className="font-bold text-lg capitalize leading-snug">{formatLong(step.date)}</div>
-                    <div className="text-sm text-[#388e3c] dark:text-[#81c784] font-medium mt-1">{step.note}</div>
+                    <div className="text-sm text-[#388e3c] dark:text-[#81c784] font-medium mt-2">{step.note}</div>
                   </div>
                 </div>
               ))}
@@ -274,7 +274,7 @@ export function CardCutoffCalculator() {
 
             {/* Héroe: días gratis */}
             <div
-              className="rounded-xl p-5 text-white flex items-center justify-between gap-4 flex-wrap"
+              className="rounded-xl p-6 sm:p-7 text-white flex items-center justify-between gap-6 flex-wrap"
               style={{ background: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)" }}
             >
               <div>
@@ -288,12 +288,12 @@ export function CardCutoffCalculator() {
             </div>
 
             {result.isIdeal && (
-              <div className="mt-4 p-3 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-sm text-green-800 dark:text-green-200 text-center font-medium">
+              <div className="mt-5 p-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-sm text-green-800 dark:text-green-200 text-center font-medium">
                 Compra ideal: entras justo al inicio del ciclo.
               </div>
             )}
 
-            <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 mt-4">
+            <div className="flex items-start gap-3 text-xs text-gray-600 dark:text-gray-300 mt-6 leading-relaxed">
               <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
               <span>
                 Vence el día {dueDay} del mes siguiente al corte. Si tu banco usa días de gracia fijos, verifícalo en

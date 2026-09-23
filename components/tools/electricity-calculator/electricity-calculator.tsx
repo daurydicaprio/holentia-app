@@ -113,12 +113,7 @@ export function ElectricityCalculator() {
     <div className="grid lg:grid-cols-5 gap-6">
       {/* Controles */}
       <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg h-fit">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="p-2 rounded-lg bg-[#388e3c]/10 dark:bg-[#388e3c]/20">
-            <Zap className="h-6 w-6 text-[#388e3c] dark:text-[#81c784]" />
-          </div>
-          <h2 className="text-xl font-bold">Tu consumo</h2>
-        </div>
+        <h2 className="text-xl font-bold mb-1">Tu consumo</h2>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">Mueve el medidor y mira tu factura al instante.</p>
 
         <div className="text-center mb-2">
@@ -194,20 +189,20 @@ export function ElectricityCalculator() {
               CALCULO DE LA FACTURA
             </div>
             <div className="p-5 sm:p-6 font-mono text-sm tabular-nums">
-              <div className="flex justify-between py-1">
+              <div className="flex justify-between py-1.5">
                 <span>Cargo fijo</span>
                 <span>RD$ {CARGO_FIJO.toFixed(2)}</span>
               </div>
-              <div className="border-t border-dashed border-gray-300 dark:border-gray-600 my-2" />
-              <div className="text-gray-500 dark:text-gray-400 text-xs mb-1">Energía</div>
+              <div className="border-t border-dashed border-gray-300 dark:border-gray-600 my-3" />
+              <div className="text-gray-500 dark:text-gray-400 text-xs mb-2">Energía</div>
               {rows.map((row) => (
-                <div key={row.label} className="flex justify-between py-1 gap-2">
+                <div key={row.label} className="flex justify-between py-1.5 gap-3">
                   <span className="truncate">{row.label}</span>
                   <span className="whitespace-nowrap">RD$ {row.value.toLocaleString("es-DO", { minimumFractionDigits: 2 })}</span>
                 </div>
               ))}
-              <div className="border-t border-dashed border-gray-300 dark:border-gray-600 my-2" />
-              <div className="flex justify-between py-1 font-sans font-semibold">
+              <div className="border-t border-dashed border-gray-300 dark:border-gray-600 my-3" />
+              <div className="flex justify-between py-1.5 font-sans font-semibold">
                 <span>Promedio por kWh</span>
                 <span>{formatRD(result.promedio)}</span>
               </div>

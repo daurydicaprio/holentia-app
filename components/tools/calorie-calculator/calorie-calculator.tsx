@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { Flame, Trash2, Info, Minus, Equal, Plus } from "lucide-react"
+import Link from "next/link"
+import { Flame, Trash2, Info, Minus, Equal, Plus, Salad, Footprints, Dumbbell, BedDouble, Scale } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
@@ -14,9 +15,9 @@ const ACTIVITY: Record<string, { label: string; factor: number }> = {
 }
 
 const GOALS = [
-  { id: "lose", label: "Bajar", hint: "−20% aprox.", icon: Minus },
-  { id: "maintain", label: "Mantener", hint: "tu gasto total", icon: Equal },
-  { id: "gain", label: "Subir", hint: "+10% aprox.", icon: Plus },
+  { id: "lose", label: "Bajar grasa", hint: "−20% aprox.", icon: Minus },
+  { id: "maintain", label: "Mantener mi cuerpo actual", hint: "tu gasto total", icon: Equal },
+  { id: "gain", label: "Subir masa muscular", hint: "+10% aprox.", icon: Plus },
 ] as const
 
 type GoalId = (typeof GOALS)[number]["id"]
@@ -272,6 +273,98 @@ export function CalorieCalculator() {
             </span>
           </div>
         </div>
+      </div>
+
+      {/* Guía: la mesa de 4 patas */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
+        <h2 className="text-xl font-bold mb-1">La mesa de 4 patas</h2>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+          Bajar grasa, mantenerte o subir músculo se sostiene en 4 patas. Si una falla, la mesa cojea.
+        </p>
+
+        <div className="grid sm:grid-cols-2 gap-4">
+          <div className="bg-amber-50 dark:bg-amber-900/15 rounded-xl p-5">
+            <div className="flex items-center gap-2 mb-2">
+              <Salad className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+              <h3 className="font-bold">1. Alimentación</h3>
+            </div>
+            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+              Lo ideal es <strong>llegar a tus calorías</strong> sin obsesionarte con la proteína: desde{" "}
+              <strong>0.8 g por kg</strong> tu cuerpo se adapta y construye músculo (la evidencia muestra poco
+              beneficio extra por encima de ~1.6 g/kg). Apunta a que <strong>la mitad o más de tus calorías venga de
+              vegetales</strong>: ahí están los micronutrientes y la fibra que hacen que la proteína trabaje mejor,
+              cuidan tu metabolismo y tu descanso. Ejemplos: arroz con habichuelas y ensalada, avena con frutas,
+              víveres con vegetales.
+            </p>
+          </div>
+
+          <div className="bg-amber-50 dark:bg-amber-900/15 rounded-xl p-5">
+            <div className="flex items-center gap-2 mb-2">
+              <Footprints className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+              <h3 className="font-bold">2. Actividad física</h3>
+            </div>
+            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+              Todo lo que te mueve en el día <strong>sin ser ejercicio</strong>: caminar al colmado, subir escaleras,
+              limpiar, jugar con tus hijos. Suma cientos de calorías diarias y es lo que más diferencia a quien
+              mantiene su peso sin sufrir. Ejemplo: 8,000–10,000 pasos al día.
+            </p>
+          </div>
+
+          <div className="bg-amber-50 dark:bg-amber-900/15 rounded-xl p-5">
+            <div className="flex items-center gap-2 mb-2">
+              <Dumbbell className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+              <h3 className="font-bold">3. Ejercicio físico</h3>
+            </div>
+            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+              El estímulo que le dice al cuerpo <strong>qué hacer con las calorías</strong>: fuerza 2–3 veces por
+              semana para cuidar el músculo (bajes o subas), más algo de cardio para el corazón. Ejemplo: sentadillas,
+              flexiones y caminata rápida.
+            </p>
+          </div>
+
+          <div className="bg-amber-50 dark:bg-amber-900/15 rounded-xl p-5">
+            <div className="flex items-center gap-2 mb-2">
+              <BedDouble className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+              <h3 className="font-bold">4. Descanso, hidratación y estrés</h3>
+            </div>
+            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+              Dormir <strong>7–9 horas</strong> regula el hambre (poco sueño sube la grelina y baja la leptina) y el
+              estrés crónico eleva el cortisol, que frena tu progreso. Toma agua durante el día — usa nuestra{" "}
+              <Link
+                href="/calculadora-hidratacion"
+                className="font-semibold text-amber-700 dark:text-amber-300 underline underline-offset-2"
+              >
+                calculadora de hidratación
+              </Link>{" "}
+              — y baja revoluciones antes de dormir.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-4 bg-gray-50 dark:bg-gray-700/40 rounded-xl p-5 flex items-start gap-3">
+          <Scale className="h-5 w-5 mt-0.5 flex-shrink-0 text-amber-600 dark:text-amber-400" />
+          <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+            <strong>La báscula manda, con paciencia:</strong> encontrar tus calorías toma tiempo y práctica. Pésate en
+            las mismas condiciones y mira la tendencia semanal: si subes más de <strong>0.5 kg en una semana</strong>,
+            recorta un poco; si quieres bajar y no te mueves en 2–3 semanas, ajusta igual de a poco. Sin prisas: el
+            peso se ganó en meses o años casi sin darte cuenta, y bajar grasa o subir músculo lleva el mismo camino
+            lento.
+          </p>
+        </div>
+
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-4 leading-relaxed">
+          Esto es orientación general con base científica, no un plan médico. Para un plan a tu medida, visita a un
+          nutricionista o profesional del área. Sigo hablando de todo esto en mi proyecto{" "}
+          <a
+            href="https://alimentacionsabia.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-amber-700 dark:text-amber-300 underline underline-offset-2"
+          >
+            alimentacionsabia.com (Daury Diet)
+          </a>
+          .
+        </p>
       </div>
     </div>
   )
