@@ -100,6 +100,9 @@ function WhySection({ result, dueDay }: { result: WhySectionData; dueDay: string
   const pctA = Math.min(100, Math.max(0, (result.daysToCutoff / total) * 100))
   const pctSug = Math.min(100, Math.max(0, ((result.graceDays - 3) / total) * 100))
 
+  const pctSugClamped = Math.min(88, Math.max(12, pctSug))
+  const sugAlignRight = pctSug > 78
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
       <h2 className="text-xl font-bold mb-1">El ciclo de tu tarjeta</h2>
@@ -107,87 +110,103 @@ function WhySection({ result, dueDay }: { result: WhySectionData; dueDay: string
         Cada mes se repite lo mismo: un periodo para comprar y un periodo para pagar.
       </p>
 
-      {/* No esperes al último día */}
-      <div className="p-4 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-sm text-amber-800 dark:text-amber-200 leading-relaxed mb-8">
-        <strong>Puedes pagar el último día sin problema</strong>, pero te sugerimos pagar{" "}
-        <strong>2 o 3 días antes</strong>: un fin de semana, un feriado o un atraso del banco te puede generar mora.
-        Marca el <strong className="capitalize">{formatLong(result.suggestedPay)}</strong> en tu calendario.
+      {/* Alerta: fecha sugerida */}
+      <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-sm text-amber-800 dark:text-amber-200 leading-relaxed mb-10">
+        <strong className="capitalize">Paga el {formatLong(result.suggestedPay)}</strong>: 2 o 3 días antes del
+        vencimiento para evitar moras por feriados o atrasos del banco.
       </div>
 
-      {/* Gráfico único: tu ciclo */}
-      <div className="mt-2">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="flex-1 h-px bg-[#388e3c]/40" />
-          <span className="text-sm font-bold text-[#388e3c] dark:text-[#81c784] whitespace-nowrap">
-            Tu ciclo · {result.graceDays} días gratis
-          </span>
-          <div className="flex-1 h-px bg-[#388e3c]/40" />
-        </div>
+      {/* KPI principal, aislado */}
+      <div className="flex justify-center mb-12">
+        <span className="px-5 py-2 rounded-full bg-[#388e3c]/10 dark:bg-[#388e3c]/20 text-[#1b5e20] dark:text-[#a5d6a7] font-bold text-sm sm:text-base whitespace-nowrap">
+          Tu ciclo: {result.graceDays} días gratis
+        </span>
+      </div>
 
-        <div className="pt-1 pb-14">
-          <div className="relative">
-            <div className="relative h-2.5 rounded-full bg-gray-200 dark:bg-gray-600">
-              <div
-                className="absolute h-full rounded-full"
-                style={{ background: "linear-gradient(90deg, #81c784, #1b5e20)", left: "0%", width: "100%" }}
-              />
-              {[
-                { left: 0, name: "Compra", date: result.purchase, align: "left" as const },
-                { left: pctA, name: "Corte", date: result.cutoff, align: "center" as const },
-                { left: 100, name: "Vence", date: result.due, align: "right" as const },
-              ].map((pt) => (
-                <div key={pt.name} className="absolute top-0 h-full" style={{ left: `${pt.left}%` }}>
-                  <div className="absolute -top-2.5 w-0.5 h-2.5 bg-[#388e3c] -translate-x-1/2" />
-                  <div
-                    className={`absolute -top-10 whitespace-nowrap text-[11px] leading-tight ${
-                      pt.align === "left"
-                        ? "left-0 text-left"
-                        : pt.align === "right"
-                          ? "right-0 text-right"
-                          : "-translate-x-1/2 text-center"
-                    }`}
-                  >
-                    <div className="font-bold">{pt.name}</div>
-                    <div className="capitalize text-gray-500 dark:text-gray-400">{formatShort(pt.date)}</div>
-                  </div>
-                  <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-[#388e3c]" />
-                </div>
-              ))}
-              <div className="absolute top-0 h-full" style={{ left: `${pctSug}%` }} title="Pago sugerido">
-                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-[#81c784] border-2 border-[#1b5e20]" />
-              </div>
-            </div>
+      {/* Etiquetas de hitos */}
+      <div className="relative h-11">
+        {[
+          { left: 0, name: "Compra", date: result.purchase, align: "left" as const },
+          { left: pctA, name: "Corte", date: result.cutoff, align: "center" as const },
+          { left: 100, name: "Vence", date: result.due, align: "right" as const },
+        ].map((pt) => (
+          <div
+            key={pt.name}
+            className={`absolute top-0 whitespace-nowrap text-[11px] leading-tight ${
+              pt.align === "left"
+                ? "left-0 text-left"
+                : pt.align === "right"
+                  ? "right-0 text-right"
+                  : "-translate-x-1/2 text-center"
+            }`}
+            style={pt.align === "center" ? { left: `${pt.left}%` } : undefined}
+          >
+            <div className="font-bold">{pt.name}</div>
+            <div className="capitalize text-gray-500 dark:text-gray-400">{formatShort(pt.date)}</div>
           </div>
-        </div>
-
-        <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 flex-wrap gap-1">
-          <span>
-            Compra → corte: <strong>{result.daysToCutoff} días</strong>
-          </span>
-          <span>
-            Corte → pago: <strong>{result.graceDays - result.daysToCutoff} días</strong>
-          </span>
-        </div>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-          El punto claro es el pago sugerido (
-          <span className="capitalize">{formatShort(result.suggestedPay)}</span>, 3 días antes). Se repite todos
-          los meses.
-        </p>
+        ))}
       </div>
 
-      <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 mt-6">
-        <Bell className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
-        <span>
-          Para no olvidarlo: pon un recordatorio en tu teléfono o calendario, o apunta la fecha en un lugar visible
-          de la casa.
-        </span>
+      {/* Barra limpia con 3 hitos */}
+      <div className="relative h-2.5 rounded-full bg-gray-200 dark:bg-gray-600">
+        <div
+          className="absolute h-full rounded-full"
+          style={{ background: "linear-gradient(90deg, #81c784, #1b5e20)", left: "0%", width: "100%" }}
+        />
+        {[0, pctA, 100].map((left) => (
+          <div
+            key={left}
+            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-[#388e3c]"
+            style={{ left: `${left}%` }}
+          />
+        ))}
       </div>
 
-      <div className="flex items-start gap-3 text-xs text-gray-500 dark:text-gray-400 mt-5 leading-relaxed">
-        <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
-        <span>
-          Vence el día {dueDay} del mes siguiente al corte. Estimación educativa, todo queda en tu navegador.
-        </span>
+      {/* Pago sugerido: badge explícito bajo la línea */}
+      <div className="relative h-12 mt-1">
+        <div className="absolute top-0 flex flex-col items-center" style={{ left: `${pctSugClamped}%` }}>
+          <div className="w-0.5 h-2.5 bg-[#1b5e20] dark:bg-[#81c784]" />
+          <span
+            className={`mt-1 px-3 py-1 rounded-full bg-[#1b5e20] text-white text-[11px] font-bold whitespace-nowrap ${
+              sugAlignRight ? "-translate-x-full" : "-translate-x-1/2"
+            }`}
+          >
+            Pago sugerido: <span className="capitalize">{formatShort(result.suggestedPay)}</span>
+          </span>
+        </div>
+      </div>
+
+      {/* Tramos integrados */}
+      <div className="grid grid-cols-2 gap-3 mt-2">
+        <div className="rounded-xl bg-[#388e3c]/10 dark:bg-[#388e3c]/20 px-4 py-3 text-center">
+          <div className="text-xl font-bold text-[#1b5e20] dark:text-[#a5d6a7] tabular-nums">
+            {result.daysToCutoff} días
+          </div>
+          <div className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">para comprar</div>
+        </div>
+        <div className="rounded-xl bg-[#388e3c]/10 dark:bg-[#388e3c]/20 px-4 py-3 text-center">
+          <div className="text-xl font-bold text-[#1b5e20] dark:text-[#a5d6a7] tabular-nums">
+            {result.graceDays - result.daysToCutoff} días
+          </div>
+          <div className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">para pagar</div>
+        </div>
+      </div>
+
+      {/* Pie: 2 ítems */}
+      <div className="grid sm:grid-cols-2 gap-3 mt-6 text-xs leading-relaxed">
+        <div className="flex items-start gap-2 text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/40 rounded-xl px-4 py-3">
+          <Bell className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
+          <span>
+            <strong>Recordatorio:</strong> agenda el{" "}
+            <strong className="capitalize">{formatShort(result.suggestedPay)}</strong> en tu calendario.
+          </span>
+        </div>
+        <div className="flex items-start gap-2 text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/40 rounded-xl px-4 py-3">
+          <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
+          <span>
+            <strong>Estimación:</strong> vence el día {dueDay} del mes siguiente. Nada sale de tu navegador.
+          </span>
+        </div>
       </div>
     </div>
   )
