@@ -32,10 +32,6 @@ function parseISO(iso: string): Date | null {
   return new Date(parts[0], parts[1] - 1, parts[2])
 }
 
-function formatShort(d: Date): string {
-  return d.toLocaleDateString("es-ES", { day: "numeric", month: "short" })
-}
-
 function formatLong(d: Date): string {
   return d.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" })
 }
@@ -197,21 +193,24 @@ export function CardCutoffCalculator() {
               className={inputClass}
               data-interactive="true"
             />
-            <div className="flex gap-2 mt-2">
-              {[
-                { label: "Hoy", offset: 0 },
-                { label: "Mañana", offset: 1 },
-                { label: "En 15 días", offset: 15 },
-              ].map((chip) => (
-                <button
-                  key={chip.label}
-                  onClick={() => setQuickDate(chip.offset)}
-                  className="px-3 py-1.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784] font-medium transition-colors"
-                  data-interactive="true"
-                >
-                  {chip.label}
-                </button>
-              ))}
+            <div className="mt-3">
+              <span className="block text-xs text-gray-500 dark:text-gray-400 mb-2">Atajos de fecha</span>
+              <div className="flex gap-2 flex-wrap">
+                {[
+                  { label: "Hoy", offset: 0 },
+                  { label: "Mañana", offset: 1 },
+                  { label: "En 15 días", offset: 15 },
+                ].map((chip) => (
+                  <button
+                    key={chip.label}
+                    onClick={() => setQuickDate(chip.offset)}
+                    className="px-3 py-1.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784] font-medium transition-colors"
+                    data-interactive="true"
+                  >
+                    {chip.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -248,29 +247,27 @@ export function CardCutoffCalculator() {
             </p>
 
             {/* Timeline */}
-            <div className="relative pl-10 space-y-6 mb-6">
-              <div className="absolute left-[19px] top-2 bottom-2 w-0.5 bg-[#388e3c]/25 dark:bg-[#388e3c]/40" />
+            <div className="relative pl-16 space-y-8 mb-8 mt-2">
+              <div className="absolute left-[23px] top-3 bottom-3 w-0.5 bg-[#388e3c]/25 dark:bg-[#388e3c]/40" />
               {steps.map((step, i) => (
                 <div key={step.label} className="relative">
                   <div
-                    className={`absolute -left-10 w-10 h-10 rounded-full flex items-center justify-center ${
+                    className={`absolute -left-16 w-12 h-12 rounded-full flex items-center justify-center shadow-sm ${
                       i === steps.length - 1
                         ? "text-white"
                         : "bg-[#388e3c]/10 dark:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784]"
                     }`}
                     style={i === steps.length - 1 ? { background: "linear-gradient(135deg, #2e7d32, #1b5e20)" } : undefined}
                   >
-                    <step.icon className="h-5 w-5" />
+                    <step.icon className="h-6 w-6" />
                   </div>
-                  <div className="flex items-baseline justify-between gap-2 flex-wrap">
-                    <span className="font-semibold">
-                      {step.label} · <span className="capitalize">{formatLong(step.date)}</span>
-                    </span>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">{step.note}</span>
+                  <div className="bg-gray-50 dark:bg-gray-700/40 rounded-xl px-4 py-3">
+                    <div className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                      {step.label}
+                    </div>
+                    <div className="font-bold text-lg capitalize leading-snug">{formatLong(step.date)}</div>
+                    <div className="text-sm text-[#388e3c] dark:text-[#81c784] font-medium mt-1">{step.note}</div>
                   </div>
-                  {i === 0 && (
-                    <span className="text-xs text-gray-500 dark:text-gray-400">({formatShort(step.date)})</span>
-                  )}
                 </div>
               ))}
             </div>

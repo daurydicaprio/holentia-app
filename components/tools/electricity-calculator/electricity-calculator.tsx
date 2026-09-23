@@ -193,7 +193,7 @@ export function ElectricityCalculator() {
             <div className="bg-sky-200 dark:bg-sky-900/60 px-4 py-2 text-center font-bold tracking-wide text-sm">
               CALCULO DE LA FACTURA
             </div>
-            <div className="p-5 font-mono text-sm">
+            <div className="p-5 sm:p-6 font-mono text-sm tabular-nums">
               <div className="flex justify-between py-1">
                 <span>Cargo fijo</span>
                 <span>RD$ {CARGO_FIJO.toFixed(2)}</span>
@@ -224,9 +224,13 @@ export function ElectricityCalculator() {
                 <span>{formatRD(result.sinSubsidio)}</span>
               </div>
             </div>
-            <div className="bg-yellow-300 dark:bg-yellow-500/90 px-5 py-3 flex justify-between items-center font-bold text-gray-900">
-              <span className="text-sm">VALOR TOTAL A PAGAR EN RD$</span>
-              <span className="text-2xl">{formatRD(result.total)}</span>
+            <div className="bg-yellow-300 dark:bg-yellow-500/90 px-5 sm:px-6 py-4 flex justify-between items-center gap-3 font-bold text-gray-900 tabular-nums">
+              <span className="text-sm leading-tight">
+                VALOR TOTAL
+                <br />
+                A PAGAR EN RD$
+              </span>
+              <span className="text-2xl sm:text-3xl whitespace-nowrap">{formatRD(result.total)}</span>
             </div>
             <div className="px-5 py-3 flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800">
               <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />

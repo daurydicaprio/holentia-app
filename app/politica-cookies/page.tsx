@@ -144,6 +144,10 @@ export default function PoliticaCookiesPage() {
                       key: "holentia:tarjeta-corte-vencimiento:draft:v1",
                       desc: "Tu tarjeta guardada (días de corte y vencimiento)",
                     },
+                    {
+                      key: "holentia:calculadora-hidratacion:draft:v1",
+                      desc: "Borrador de la calculadora de hidratación",
+                    },
                   ].map((item) => (
                     <div
                       key={item.key}

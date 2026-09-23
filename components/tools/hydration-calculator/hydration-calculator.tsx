@@ -1,13 +1,24 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Droplets, Activity, Sun, Thermometer } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
+import { Droplets, Activity, Sun, Thermometer, Trash2 } from "lucide-react"
+import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
+
+const DRAFT_KEY = draftKey("calculadora-hidratacion")
+
+interface HydrationDraft {
+  weight?: string
+  activityLevel?: string
+  climate?: string
+}
 
 export function HydrationCalculator() {
   const [weight, setWeight] = useState<string>("")
   const [activityLevel, setActivityLevel] = useState<string>("sedentary")
   const [climate, setClimate] = useState<string>("temperate")
   const [result, setResult] = useState<number | null>(null)
+  const [savedFlash, setSavedFlash] = useState(false)
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const calculateHydration = () => {
     const weightNum = Number.parseFloat(weight)
@@ -37,6 +48,41 @@ export function HydrationCalculator() {
     baseHydration *= climateAdjustments[climate] || 1
 
     setResult(Math.round(baseHydration))
+  }
+
+  // Restaurar borrador (Tipo D) solo en cliente
+  useEffect(() => {
+    const draft = storageGet<HydrationDraft>(DRAFT_KEY, {})
+    if (draft.weight !== undefined) setWeight(draft.weight)
+    if (draft.activityLevel !== undefined) setActivityLevel(draft.activityLevel)
+    if (draft.climate !== undefined) setClimate(draft.climate)
+  }, [])
+
+  // Autoguardado con debounce 500ms (se salta el primer render)
+  const firstSave = useRef(true)
+  useEffect(() => {
+    if (firstSave.current) {
+      firstSave.current = false
+      return
+    }
+    if (saveTimer.current) clearTimeout(saveTimer.current)
+    saveTimer.current = setTimeout(() => {
+      if (storageSet(DRAFT_KEY, { weight, activityLevel, climate })) {
+        setSavedFlash(true)
+        setTimeout(() => setSavedFlash(false), 1500)
+      }
+    }, 500)
+    return () => {
+      if (saveTimer.current) clearTimeout(saveTimer.current)
+    }
+  }, [weight, activityLevel, climate])
+
+  const clearData = () => {
+    setWeight("")
+    setActivityLevel("sedentary")
+    setClimate("temperate")
+    setResult(null)
+    storageRemove(DRAFT_KEY)
   }
 
   useEffect(() => {
@@ -90,6 +136,20 @@ export function HydrationCalculator() {
               <option value="hot">Caluroso (más de 30°C)</option>
             </select>
           </div>
+        </div>
+
+        <div className="flex items-center justify-between mt-6">
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            {savedFlash ? "Guardado local ✓" : "Se guarda en tu navegador"}
+          </span>
+          <button
+            onClick={clearData}
+            className="flex items-center gap-1 text-xs text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors"
+            data-interactive="true"
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+            Borrar mis datos
+          </button>
         </div>
       </div>
 
