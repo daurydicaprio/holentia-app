@@ -25,6 +25,8 @@ export default function SectionSwipeNavigation() {
       "/test-lenguajes-amor",
       "/calculadora-hidratacion",
       "/calculadora-consumo-electrico",
+      "/calculadora-calorias",
+      "/tarjeta-corte-vencimiento",
     ]
 
     // Verificar si la ruta actual comienza con alguna de las rutas de herramientas

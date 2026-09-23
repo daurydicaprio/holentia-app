@@ -136,6 +136,14 @@ export default function PoliticaCookiesPage() {
                       key: "holentia:calculadora-consumo-electrico:draft:v1",
                       desc: "Borrador de la calculadora de consumo eléctrico",
                     },
+                    {
+                      key: "holentia:calculadora-calorias:draft:v1",
+                      desc: "Borrador de la calculadora de calorías",
+                    },
+                    {
+                      key: "holentia:tarjeta-corte-vencimiento:draft:v1",
+                      desc: "Tu tarjeta guardada (días de corte y vencimiento)",
+                    },
                   ].map((item) => (
                     <div
                       key={item.key}

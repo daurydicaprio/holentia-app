@@ -110,12 +110,14 @@ La aplicación está dividida en cuatro secciones principales, cada una con su p
 
 ### Cuerpo
 - **Calculadora de Hidratación**: Calcula tu ingesta diaria de agua recomendada según tu peso, actividad y clima
+- **Calculadora de Calorías**: Estima tus calorías diarias para mantener, bajar o subir de peso
 
 ### Finanzas
 - **Crear presupuesto personal**: Herramienta para gestionar ingresos y gastos con visualización de datos
 - **Calculadora de interés compuesto**: Visualización del crecimiento de ahorros con capacidad para guardar y comparar simulaciones
 - **Calculadora de préstamo**: Estrategia para eliminar deudas con capacidad para guardar y comparar simulaciones
 - **Calculadora consumo eléctrico**: Estima tu factura por kWh (tarifa RD) con subsidio aproximado
+- **Corte y vencimiento tarjeta**: Descubre a qué corte entra tu compra y cuándo la pagas
 
 ## Páginas Informativas
 
