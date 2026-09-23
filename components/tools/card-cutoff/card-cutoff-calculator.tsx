@@ -79,104 +79,126 @@ function diffDays(from: Date, to: Date): number {
   return Math.round((to.getTime() - from.getTime()) / 86400000)
 }
 
-function MultiPurchaseSimulator({
-  purchases,
-  cutoffDay,
-  dueDay,
-  onAdd,
-  onChange,
-  onRemove,
-}: {
-  purchases: string[]
-  cutoffDay: string
-  dueDay: string
-  onAdd: () => void
-  onChange: (i: number, iso: string) => void
-  onRemove: (i: number) => void
-}) {
-  const c = Number.parseInt(cutoffDay, 10)
-  const p = Number.parseInt(dueDay, 10)
-  const cycles = purchases.map((iso) => ({ iso, cycle: computeCycle(iso, c, p) }))
-  const valid = cycles.filter((r) => r.cycle !== null) as { iso: string; cycle: Cycle }[]
+interface WhySectionData {
+  cutoff: Date
+  due: Date
+  suggestedPay: Date
+  bestDay: Date
+  daysToCutoff: number
+  graceDays: number
+  bestGrace: number
+  bankDays: number
+}
 
-  let min = Infinity
-  let max = -Infinity
-  valid.forEach(({ cycle }) => {
-    min = Math.min(min, cycle.purchase.getTime())
-    max = Math.max(max, cycle.due.getTime())
-  })
-  const span = Math.max(max - min, 1)
+/** Tarjeta aparte: explicación, gráfico, regla y tus compras de ejemplo. */
+function WhySection({
+  result,
+  dueDay,
+  extraCycles,
+}: {
+  result: WhySectionData
+  dueDay: string
+  extraCycles: { iso: string; cycle: Cycle }[]
+}) {
+  const total = Math.max(result.graceDays, 1)
+  const pctA = Math.min(100, Math.max(0, (result.daysToCutoff / total) * 100))
+  const pctSug = Math.min(100, Math.max(0, ((result.graceDays - 3) / total) * 100))
 
   return (
-    <div className="mt-8">
-      <h3 className="font-bold mb-1">Ponlo a prueba con varias compras</h3>
-      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
-        La regla es simple: <strong>todo lo que compres después de que la tarjeta corte entra al corte siguiente y se
-        paga en la fecha límite siguiente</strong>. Agrega hasta 5 compras y míralo con tus fechas:
+    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
+      <h2 className="text-xl font-bold mb-1">¿Por qué tienes hasta {result.bestGrace} días?</h2>
+      <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+        Tus días gratis son la suma de dos tramos: de la compra al corte, más del corte al vencimiento.
       </p>
 
-      {valid.length > 0 && (
-        <div className="space-y-4 mb-4">
-          {cycles.map(({ iso, cycle }, i) => {
-            if (!cycle) return null
-            const left = ((cycle.purchase.getTime() - min) / span) * 100
-            const width = Math.max(((cycle.due.getTime() - cycle.purchase.getTime()) / span) * 100, 2)
-            const cutLeft = ((cycle.cutoff.getTime() - min) / span) * 100
-            return (
-              <div key={`${iso}-${i}`} className="bg-gray-50 dark:bg-gray-700/40 rounded-xl p-4">
-                <div className="flex items-center gap-2 mb-3 flex-wrap">
-                  <input
-                    type="date"
-                    value={iso}
-                    onChange={(e) => onChange(i, e.target.value)}
-                    className="text-sm p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-[#388e3c] focus:border-transparent"
-                    data-interactive="true"
-                    aria-label={`Fecha de la compra ${i + 1}`}
-                  />
-                  <button
-                    onClick={() => onRemove(i)}
-                    className="text-xs text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors"
-                    data-interactive="true"
-                  >
-                    Quitar
-                  </button>
-                </div>
-                <div className="relative h-2.5 rounded-full bg-gray-200 dark:bg-gray-600 mb-2">
-                  <div
-                    className="absolute h-full rounded-full"
-                    style={{ left: `${left}%`, width: `${width}%`, background: "linear-gradient(90deg, #81c784, #1b5e20)" }}
-                  />
-                  <div
-                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-white dark:bg-gray-800 border-[3px] border-[#388e3c]"
-                    style={{ left: `${cutLeft}%` }}
-                    title="Corte"
-                  />
-                </div>
-                <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 flex-wrap gap-1">
-                  <span className="capitalize">
-                    Compra {formatLong(cycle.purchase)} → corte {formatLong(cycle.cutoff)}
-                  </span>
-                  <span>
-                    paga <strong className="capitalize">{formatLong(cycle.due)}</strong> ({cycle.graceDays} días)
-                  </span>
-                </div>
-              </div>
-            )
-          })}
+      {/* No esperes al último día */}
+      <div className="p-4 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-sm text-amber-800 dark:text-amber-200 leading-relaxed mb-8">
+        <strong>Puedes pagar el último día sin problema</strong>, pero te sugerimos pagar{" "}
+        <strong>2 o 3 días antes</strong>: un fin de semana, un feriado o un atraso del banco te puede generar mora.
+        Marca el <strong className="capitalize">{formatLong(result.suggestedPay)}</strong> en tu calendario.
+      </div>
+
+      {/* Gráfico de tu compra */}
+      <div className="relative h-3 rounded-full overflow-visible flex mb-2">
+        <div className="h-full rounded-l-full bg-[#81c784]" style={{ width: `${pctA}%` }} />
+        <div className="h-full rounded-r-full bg-[#1b5e20]" style={{ width: `${100 - pctA}%` }} />
+        {[
+          { left: 0, label: "Compra" },
+          { left: pctA, label: "Corte" },
+          { left: pctSug, label: "Sugerido" },
+          { left: 100, label: "Vence" },
+        ].map((dot) => (
+          <div
+            key={dot.label}
+            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-[#388e3c]"
+            style={{ left: `${dot.left}%` }}
+            title={dot.label}
+          />
+        ))}
+      </div>
+      <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 flex-wrap gap-1">
+        <span>
+          Compra → corte: <strong>{result.daysToCutoff} días</strong>
+        </span>
+        <span>
+          Corte → pago: <strong>{result.graceDays - result.daysToCutoff} días</strong>
+        </span>
+      </div>
+
+      {/* La regla, directa */}
+      <div className="mt-8 rounded-xl p-6 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 border border-[#388e3c]/20">
+        <p className="leading-relaxed">
+          Si compras entre el <strong className="capitalize">{formatLong(result.bestDay)}</strong> y el{" "}
+          <strong className="capitalize">{formatLong(result.cutoff)}</strong>,{" "}
+          <strong>
+            absolutamente todo lo que compres no lo pagas hasta el{" "}
+            <span className="capitalize">{formatLong(result.due)}</span>
+          </strong>
+          .
+        </p>
+      </div>
+
+      {/* Tus compras de ejemplo */}
+      {extraCycles.length > 0 && (
+        <div className="mt-6 space-y-2">
+          {extraCycles.map(({ iso, cycle }, i) => (
+            <div
+              key={`${iso}-${i}`}
+              className="flex justify-between items-center gap-2 flex-wrap bg-gray-50 dark:bg-gray-700/40 rounded-lg px-4 py-3 text-sm"
+            >
+              <span className="capitalize text-gray-600 dark:text-gray-300">
+                Compra del {formatLong(cycle.purchase)}
+              </span>
+              <span>
+                paga el <strong className="capitalize">{formatLong(cycle.due)}</strong>{" "}
+                <span className="text-gray-500 dark:text-gray-400">({cycle.graceDays} días)</span>
+              </span>
+            </div>
+          ))}
         </div>
       )}
 
-      {purchases.length < 5 ? (
-        <button
-          onClick={onAdd}
-          className="w-full py-2.5 rounded-lg border-2 border-dashed border-[#388e3c]/40 text-[#388e3c] dark:text-[#81c784] font-medium text-sm hover:bg-[#388e3c]/5 transition-colors"
-          data-interactive="true"
-        >
-          + Agregar compra ({purchases.length}/5)
-        </button>
-      ) : (
-        <p className="text-xs text-gray-500 dark:text-gray-400 text-center">Máximo 5 compras de ejemplo.</p>
-      )}
+      {/* Tu banco */}
+      <div className="mt-6 p-4 rounded-lg bg-gray-50 dark:bg-gray-700/40 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+        Tu banco te da <strong>{result.bankDays} días</strong> entre el corte y el vencimiento. Algunos bancos dan 20
+        días, otros 25 y otros 27: <strong>conoce bien esa fecha en tu estado de cuenta</strong>, porque es la que
+        manda para no pagar mora.
+      </div>
+
+      <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 mt-5">
+        <Bell className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
+        <span>
+          Para no olvidarlo: pon un recordatorio en tu teléfono o calendario, o apunta la fecha en un lugar visible
+          de la casa.
+        </span>
+      </div>
+
+      <div className="flex items-start gap-3 text-xs text-gray-500 dark:text-gray-400 mt-5 leading-relaxed">
+        <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
+        <span>
+          Vence el día {dueDay} del mes siguiente al corte. Estimación educativa, todo queda en tu navegador.
+        </span>
+      </div>
     </div>
   )
 }
@@ -274,7 +296,17 @@ export function CardCutoffCalculator() {
       ]
     : []
 
+  const extraCycles = useMemo(() => {
+    if (!configured) return []
+    const c = Number.parseInt(cutoffDay, 10)
+    const p = Number.parseInt(dueDay, 10)
+    return extraPurchases
+      .map((iso) => ({ iso, cycle: computeCycle(iso, c, p) }))
+      .filter((r): r is { iso: string; cycle: Cycle } => r.cycle !== null)
+  }, [configured, cutoffDay, dueDay, extraPurchases])
+
   return (
+    <>
     <div className="grid lg:grid-cols-5 gap-6">
       {/* Columna izquierda: tu tarjeta + fecha */}
       <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg h-fit">
@@ -344,6 +376,56 @@ export function CardCutoffCalculator() {
               </div>
             </div>
           </div>
+
+          {/* Compras de ejemplo (opcional) */}
+          <div className="mt-6 pt-5 border-t border-gray-100 dark:border-gray-700">
+            <span className="block text-sm font-medium mb-1">Compras de ejemplo</span>
+            <span className="block text-xs text-gray-500 dark:text-gray-400 mb-3">
+              Opcional: agrega fechas y mira abajo cuándo se paga cada una.
+            </span>
+            {extraPurchases.length > 0 && (
+              <div className="space-y-2 mb-3">
+                {extraPurchases.map((iso, i) => (
+                  <div key={`${iso}-${i}`} className="flex items-center gap-2">
+                    <input
+                      type="date"
+                      value={iso}
+                      onChange={(e) =>
+                        setExtraPurchases(extraPurchases.map((p, j) => (j === i ? e.target.value : p)))
+                      }
+                      className="flex-1 min-w-0 text-sm p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-[#388e3c] focus:border-transparent"
+                      data-interactive="true"
+                      aria-label={`Compra de ejemplo ${i + 1}`}
+                    />
+                    <button
+                      onClick={() => {
+                        setExtraPurchases(extraPurchases.filter((_, j) => j !== i))
+                        triggerHapticFeedback("light")
+                      }}
+                      className="text-xs text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors flex-shrink-0"
+                      data-interactive="true"
+                    >
+                      Quitar
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {extraPurchases.length < 5 ? (
+              <button
+                onClick={() => {
+                  setExtraPurchases([...extraPurchases, todayISO])
+                  triggerHapticFeedback("light")
+                }}
+                className="w-full py-2 rounded-lg border-2 border-dashed border-[#388e3c]/40 text-[#388e3c] dark:text-[#81c784] font-medium text-sm hover:bg-[#388e3c]/5 transition-colors"
+                data-interactive="true"
+              >
+                + Agregar compra ({extraPurchases.length}/5)
+              </button>
+            ) : (
+              <p className="text-xs text-gray-500 dark:text-gray-400 text-center">Máximo 5 compras.</p>
+            )}
+          </div>
         </div>
 
         <div className="flex items-center justify-between mt-6">
@@ -409,103 +491,15 @@ export function CardCutoffCalculator() {
 
             {/* Héroe: días gratis */}
             <div
-              className="rounded-xl p-6 sm:p-7 text-white flex items-center justify-between gap-6 flex-wrap"
+              className="rounded-xl p-8 text-white"
               style={{ background: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)" }}
             >
-              <div>
-                <div className="text-sm opacity-90">Financiamiento gratis</div>
-                <div className="text-4xl font-bold">{result.graceDays} días</div>
-              </div>
-              <div className="text-sm opacity-90 max-w-[220px]">
+              <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Financiamiento gratis</div>
+              <div className="text-6xl font-bold tabular-nums">{result.graceDays} días</div>
+              <div className="border-t border-white/25 mt-5 pt-4 text-sm opacity-90 leading-relaxed">
                 Comprando el <span className="capitalize font-semibold">{formatLong(result.bestDay)}</span> tendrías
                 hasta {result.bestGrace} días.
               </div>
-            </div>
-
-            {/* No esperes al último día */}
-            <div className="mt-5 p-4 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-sm text-amber-800 dark:text-amber-200 leading-relaxed">
-              <strong>Puedes pagar el último día sin problema</strong>, pero te sugerimos pagar{" "}
-              <strong>2 o 3 días antes</strong>: un fin de semana, un feriado o un atraso del banco te puede generar
-              mora. Marca el <strong className="capitalize">{formatLong(result.suggestedPay)}</strong> en tu
-              calendario.
-            </div>
-
-            {/* Gráfico: de dónde salen tus días */}
-            <div className="mt-6">
-              <h3 className="font-bold mb-1">¿Por qué tienes hasta {result.bestGrace} días?</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Tus días gratis son la suma de dos tramos: de la compra al corte, más del corte al vencimiento.
-              </p>
-              {(() => {
-                const total = Math.max(result.graceDays, 1)
-                const pctA = Math.min(100, Math.max(0, (result.daysToCutoff / total) * 100))
-                const pctSug = Math.min(100, Math.max(0, ((result.graceDays - 3) / total) * 100))
-                return (
-                  <div>
-                    <div className="relative h-3 rounded-full overflow-visible flex">
-                      <div className="h-full rounded-l-full bg-[#81c784]" style={{ width: `${pctA}%` }} />
-                      <div className="h-full rounded-r-full bg-[#1b5e20]" style={{ width: `${100 - pctA}%` }} />
-                      {[
-                        { left: 0, label: "Compra" },
-                        { left: pctA, label: "Corte" },
-                        { left: pctSug, label: "Sugerido" },
-                        { left: 100, label: "Vence" },
-                      ].map((dot) => (
-                        <div
-                          key={dot.label}
-                          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-[#388e3c]"
-                          style={{ left: `${dot.left}%` }}
-                          title={dot.label}
-                        />
-                      ))}
-                    </div>
-                    <div className="flex justify-between mt-2 text-xs text-gray-600 dark:text-gray-400">
-                      <span>
-                        Compra → corte: <strong>{result.daysToCutoff} días</strong>
-                      </span>
-                      <span>
-                        Corte → pago: <strong>{result.graceDays - result.daysToCutoff} días</strong>
-                      </span>
-                    </div>
-                    <div className="flex justify-between mt-1 text-xs text-gray-500 dark:text-gray-400">
-                      <span className="capitalize">{formatLong(result.purchase)}</span>
-                      <span className="capitalize">{formatLong(result.due)}</span>
-                    </div>
-                  </div>
-                )
-              })()}
-              <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 mt-4">
-                <Bell className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
-                <span>
-                  Comprando justo después de un corte puedes llegar hasta {result.bestGrace} días. Para no olvidarlo:
-                  pon un recordatorio en tu teléfono o calendario, o apunta la fecha en un lugar visible de la casa.
-                </span>
-              </div>
-            </div>
-
-            {/* Simulador: varias compras */}
-            <MultiPurchaseSimulator
-              purchases={extraPurchases}
-              cutoffDay={cutoffDay}
-              dueDay={dueDay}
-              onAdd={() => {
-                if (extraPurchases.length < 5) {
-                  setExtraPurchases([...extraPurchases, todayISO])
-                  triggerHapticFeedback("light")
-                }
-              }}
-              onChange={(i, iso) => setExtraPurchases(extraPurchases.map((p, j) => (j === i ? iso : p)))}
-              onRemove={(i) => {
-                setExtraPurchases(extraPurchases.filter((_, j) => j !== i))
-                triggerHapticFeedback("light")
-              }}
-            />
-
-            {/* Tu banco */}
-            <div className="mt-6 p-4 rounded-lg bg-gray-50 dark:bg-gray-700/40 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-              Tu banco te da <strong>{result.bankDays} días</strong> entre el corte y el vencimiento. Algunos bancos
-              dan 20 días, otros 25 y otros 27: <strong>conoce bien esa fecha en tu estado de cuenta</strong>, porque
-              es la que manda para no pagar mora.
             </div>
 
             {result.isIdeal && (
@@ -513,16 +507,16 @@ export function CardCutoffCalculator() {
                 Compra ideal: entras justo al inicio del ciclo.
               </div>
             )}
-
-            <div className="flex items-start gap-3 text-xs text-gray-600 dark:text-gray-300 mt-6 leading-relaxed">
-              <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
-              <span>
-                Vence el día {dueDay} del mes siguiente al corte. Estimación educativa, todo queda en tu navegador.
-              </span>
-            </div>
           </div>
         )}
       </div>
     </div>
+
+    {result && (
+      <div className="mt-6">
+        <WhySection result={result} dueDay={dueDay} extraCycles={extraCycles} />
+      </div>
+    )}
+    </>
   )
 }
