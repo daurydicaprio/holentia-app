@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import Link from "next/link"
 import { Flame, Trash2, Info, Minus, Equal, Plus, Salad, Footprints, Dumbbell, BedDouble, Scale } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
@@ -266,7 +265,7 @@ export function CalorieCalculator() {
               <div className="text-xs opacity-80 mt-4">Metabolismo base: {result.bmr.toLocaleString("es-ES")} kcal</div>
             </div>
           )}
-          <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 mt-3 px-1">
+          <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 mt-6 mb-2 px-1">
             <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-amber-600" />
             <span>
               Estimación educativa (Mifflin-St Jeor). No es plan médico. Todo queda en tu navegador.
@@ -282,74 +281,66 @@ export function CalorieCalculator() {
           Bajar grasa, mantenerte o subir músculo se sostiene en 4 patas. Si una falla, la mesa cojea.
         </p>
 
-        <div className="grid sm:grid-cols-2 gap-4">
-          <div className="bg-amber-50 dark:bg-amber-900/15 rounded-xl p-5">
-            <div className="flex items-center gap-2 mb-2">
-              <Salad className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-              <h3 className="font-bold">1. Alimentación</h3>
+        <div className="grid sm:grid-cols-2 gap-3">
+          {[
+            {
+              icon: Salad,
+              title: "Alimentación",
+              text: "Llega a tus calorías sin obsesionarte: desde 0.8 g de proteína por kg es suficiente, y que la mitad o más venga de vegetales (fibra y micronutrientes).",
+            },
+            {
+              icon: Footprints,
+              title: "Actividad física",
+              text: "Muévete en el día sin que sea ejercicio: caminar, escaleras, jugar. Apunta a 8,000–10,000 pasos.",
+            },
+            {
+              icon: Dumbbell,
+              title: "Ejercicio físico",
+              text: "Fuerza 2–3 veces por semana para cuidar el músculo, más algo de cardio para el corazón.",
+            },
+            {
+              icon: BedDouble,
+              title: "Descanso e hidratación",
+              text: "Duerme 7–9 horas, toma agua — usa la calculadora de hidratación — y controla el estrés.",
+            },
+          ].map((leg) => (
+            <div key={leg.title} className="bg-amber-50 dark:bg-amber-900/15 rounded-xl px-4 py-3 flex items-start gap-3">
+              <leg.icon className="h-5 w-5 mt-0.5 flex-shrink-0 text-amber-600 dark:text-amber-400" />
+              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                <strong>{leg.title}:</strong> {leg.text}
+              </p>
             </div>
-            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-              Lo ideal es <strong>llegar a tus calorías</strong> sin obsesionarte con la proteína: desde{" "}
-              <strong>0.8 g por kg</strong> tu cuerpo se adapta y construye músculo (la evidencia muestra poco
-              beneficio extra por encima de ~1.6 g/kg). Apunta a que <strong>la mitad o más de tus calorías venga de
-              vegetales</strong>: ahí están los micronutrientes y la fibra que hacen que la proteína trabaje mejor,
-              cuidan tu metabolismo y tu descanso. Ejemplos: arroz con habichuelas y ensalada, avena con frutas,
-              víveres con vegetales.
-            </p>
-          </div>
-
-          <div className="bg-amber-50 dark:bg-amber-900/15 rounded-xl p-5">
-            <div className="flex items-center gap-2 mb-2">
-              <Footprints className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-              <h3 className="font-bold">2. Actividad física</h3>
-            </div>
-            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-              Todo lo que te mueve en el día <strong>sin ser ejercicio</strong>: caminar al colmado, subir escaleras,
-              limpiar, jugar con tus hijos. Suma cientos de calorías diarias y es lo que más diferencia a quien
-              mantiene su peso sin sufrir. Ejemplo: 8,000–10,000 pasos al día.
-            </p>
-          </div>
-
-          <div className="bg-amber-50 dark:bg-amber-900/15 rounded-xl p-5">
-            <div className="flex items-center gap-2 mb-2">
-              <Dumbbell className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-              <h3 className="font-bold">3. Ejercicio físico</h3>
-            </div>
-            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-              El estímulo que le dice al cuerpo <strong>qué hacer con las calorías</strong>: fuerza 2–3 veces por
-              semana para cuidar el músculo (bajes o subas), más algo de cardio para el corazón. Ejemplo: sentadillas,
-              flexiones y caminata rápida.
-            </p>
-          </div>
-
-          <div className="bg-amber-50 dark:bg-amber-900/15 rounded-xl p-5">
-            <div className="flex items-center gap-2 mb-2">
-              <BedDouble className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-              <h3 className="font-bold">4. Descanso, hidratación y estrés</h3>
-            </div>
-            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-              Dormir <strong>7–9 horas</strong> regula el hambre (poco sueño sube la grelina y baja la leptina) y el
-              estrés crónico eleva el cortisol, que frena tu progreso. Toma agua durante el día — usa nuestra{" "}
-              <Link
-                href="/calculadora-hidratacion"
-                className="font-semibold text-amber-700 dark:text-amber-300 underline underline-offset-2"
-              >
-                calculadora de hidratación
-              </Link>{" "}
-              — y baja revoluciones antes de dormir.
-            </p>
-          </div>
+          ))}
         </div>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mt-4">
+          ¿Quieres profundizar? Sigo este tema en{" "}
+          <a
+            href="https://alimentacionsabia.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-amber-700 dark:text-amber-300 underline underline-offset-2"
+          >
+            alimentacionsabia.com (Daury Diet)
+          </a>
+          .
+        </p>
 
-        <div className="mt-4 bg-gray-50 dark:bg-gray-700/40 rounded-xl p-5 flex items-start gap-3">
-          <Scale className="h-5 w-5 mt-0.5 flex-shrink-0 text-amber-600 dark:text-amber-400" />
-          <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-            <strong>La báscula manda, con paciencia:</strong> encontrar tus calorías toma tiempo y práctica. Pésate en
-            las mismas condiciones y mira la tendencia semanal: si subes más de <strong>0.5 kg en una semana</strong>,
-            recorta un poco; si quieres bajar y no te mueves en 2–3 semanas, ajusta igual de a poco. Sin prisas: el
-            peso se ganó en meses o años casi sin darte cuenta, y bajar grasa o subir músculo lleva el mismo camino
-            lento.
-          </p>
+        <div className="mt-4 bg-gray-50 dark:bg-gray-700/40 rounded-xl p-5 sm:p-6 flex items-start gap-3">
+          <Scale className="h-5 w-5 mt-1 flex-shrink-0 text-amber-600 dark:text-amber-400" />
+          <div className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed space-y-2">
+            <p>
+              <strong>La báscula manda.</strong> Encontrar tus calorías adecuadas a tu objetivo toma tiempo y paciencia:
+              pésate siempre en las mismas condiciones y mira la tendencia de la semana, no el día.
+            </p>
+            <p>
+              Si subes más de <strong>0.5 kg en una semana</strong>, recorta un poco tus calorías. Si quieres bajar y
+              en 2–3 semanas no te mueves, ajusta igual de a poco, sin prisas.
+            </p>
+            <p>
+              Piensa en esto: el peso se ganó en meses o años, casi sin darte cuenta. Bajar grasa o subir músculo
+              lleva el mismo camino lento, y eso está bien.
+            </p>
+          </div>
         </div>
 
         <p className="text-xs text-gray-500 dark:text-gray-400 mt-4 leading-relaxed">
