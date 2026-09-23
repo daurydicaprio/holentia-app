@@ -123,40 +123,49 @@ function WhySection({
         Marca el <strong className="capitalize">{formatLong(result.suggestedPay)}</strong> en tu calendario.
       </div>
 
-      {/* Línea única con zonas */}
-      <div className="pt-14">
-        <div className="relative">
-          {/* Zonas delimitadas con línea intermitente */}
-          <div className="absolute -top-9 left-0 flex flex-col items-start" style={{ width: `${pctA}%` }}>
-            <span className="text-[11px] font-bold text-[#388e3c] dark:text-[#81c784] whitespace-nowrap">
-              Compra → corte · {result.daysToCutoff} días
-            </span>
-            <div className="w-full border-t-2 border-dashed border-[#388e3c]/60 mt-1" />
+      {/* Zonas con estilos distintos */}
+      <div className="grid sm:grid-cols-2 gap-3 mb-6">
+        <div className="rounded-xl bg-[#388e3c]/10 dark:bg-[#388e3c]/20 px-4 py-3">
+          <div className="text-xs font-bold text-[#388e3c] dark:text-[#81c784]">
+            Compra → corte · {result.daysToCutoff} días
           </div>
-          <div
-            className="absolute -top-9 flex flex-col items-end"
-            style={{ left: `${pctA}%`, width: `${100 - pctA}%` }}
-          >
-            <span className="text-[11px] font-bold text-[#388e3c] dark:text-[#81c784] whitespace-nowrap">
-              Corte → vence · {result.graceDays - result.daysToCutoff} días
-            </span>
-            <div className="w-full border-t-2 border-dashed border-[#388e3c]/60 mt-1" />
+          <div className="border-t-2 border-dashed border-[#388e3c]/60 mt-2" />
+          <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">Esta es tu fecha de corte</div>
+        </div>
+        <div className="rounded-xl bg-[#1b5e20] px-4 py-3 text-white">
+          <div className="text-xs font-bold opacity-90">
+            Corte → vence · {result.graceDays - result.daysToCutoff} días
           </div>
+          <div className="border-t-2 border-dashed border-white/50 mt-2" />
+          <div className="text-xs opacity-80 mt-2">Del corte hasta tu fecha límite</div>
+        </div>
+      </div>
 
-          <div className="relative h-2.5 rounded-full bg-gray-200 dark:bg-gray-600 mt-2">
+      {/* Línea única: puntos con texto abajo */}
+      <div className="pb-16">
+        <div className="relative">
+          <div className="relative h-2.5 rounded-full bg-gray-200 dark:bg-gray-600">
             <div
               className="absolute h-full rounded-full"
               style={{ background: "linear-gradient(90deg, #81c784, #1b5e20)", left: "0%", width: "100%" }}
             />
             {[
-              { left: 0, name: "Compra", date: result.purchase, extra: false },
-              { left: pctA, name: "Corte", date: result.cutoff, extra: false },
-              { left: pctSug, name: "Sugerido", date: result.suggestedPay, extra: false },
-              { left: 100, name: "Vence", date: result.due, extra: false },
+              { left: 0, name: "Compra", date: result.purchase, align: "left" as const },
+              { left: pctA, name: "Corte", date: result.cutoff, align: "center" as const },
+              { left: pctSug, name: "Sugerido", date: result.suggestedPay, align: "center" as const },
+              { left: 100, name: "Vence", date: result.due, align: "right" as const },
             ].map((pt) => (
               <div key={pt.name} className="absolute top-0 h-full" style={{ left: `${pt.left}%` }}>
-                <div className="absolute -top-3 w-0.5 h-3 bg-[#388e3c] -translate-x-1/2" />
-                <div className="absolute -top-11 -translate-x-1/2 whitespace-nowrap text-[11px] leading-tight text-center">
+                <div className="absolute top-full mt-1 w-0.5 h-3 bg-[#388e3c] -translate-x-1/2" />
+                <div
+                  className={`absolute top-full mt-4 whitespace-nowrap text-[11px] leading-tight ${
+                    pt.align === "left"
+                      ? "left-0 text-left"
+                      : pt.align === "right"
+                        ? "right-0 text-right"
+                        : "-translate-x-1/2 text-center"
+                  }`}
+                >
                   <div className="font-bold">{pt.name}</div>
                   <div className="capitalize text-gray-500 dark:text-gray-400">{formatShort(pt.date)}</div>
                 </div>
@@ -183,25 +192,26 @@ function WhySection({
         </div>
       </div>
       {extraCycles.length > 0 && (
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
           <span className="inline-block w-2.5 h-2.5 rounded-full bg-amber-400 border border-amber-600 mr-1 align-middle" />
           Puntos ámbar: tus compras de ejemplo. Todo lo que caiga después del corte entra al corte siguiente.
         </p>
       )}
 
-      {/* La regla, llamativa */}
-      <div
-        className="mt-8 rounded-xl p-6 text-white text-center"
-        style={{ background: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)" }}
-      >
-        <div className="text-sm opacity-90 mb-2">Desde el</div>
-        <div className="text-xl sm:text-2xl font-bold capitalize">{formatLong(result.bestDay)}</div>
-        <div className="text-3xl font-bold my-1">↓</div>
-        <div className="text-sm opacity-90 mb-2">hasta el</div>
-        <div className="text-xl sm:text-2xl font-bold capitalize">{formatLong(result.cutoff)}</div>
-        <div className="border-t border-white/25 mt-5 pt-4 text-base font-semibold">
-          → te toca pagar el <span className="capitalize">{formatLong(result.due)}</span>
+      {/* La regla, sencilla */}
+      <p className="mt-8 leading-relaxed text-center">
+        Todo lo que compres entre el <strong className="capitalize">{formatLong(result.bestDay)}</strong> y el{" "}
+        <strong className="capitalize">{formatLong(result.cutoff)}</strong> lo pagas en la misma fecha límite.
+      </p>
+
+      {/* Tu pago, en grande y aparte */}
+      <div className="mt-4 rounded-xl p-7 sm:p-8 text-white text-center bg-[#1b5e20] dark:bg-[#144a19] shadow-lg">
+        <div className="text-xs uppercase tracking-widest opacity-80">
+          Rango de corte: <span className="capitalize">{formatShort(result.bestDay)}</span> →{" "}
+          <span className="capitalize">{formatShort(result.cutoff)}</span>
         </div>
+        <div className="text-sm opacity-90 mt-4 mb-1">Te toca pagar el</div>
+        <div className="text-3xl sm:text-4xl font-bold capitalize leading-tight">{formatLong(result.due)}</div>
       </div>
 
       <p className="text-center text-sm mt-5 text-amber-700 dark:text-amber-300">
@@ -529,22 +539,33 @@ export function CardCutoffCalculator() {
               .
             </p>
 
-            {/* Timeline */}
-            <div className="relative pl-16 space-y-10 mb-10 mt-2">
-              <div className="absolute left-[23px] top-3 bottom-3 w-0.5 bg-[#388e3c]/25 dark:bg-[#388e3c]/40" />
+            {/* Timeline: conectores solo entre iconos */}
+            <div className="mb-10 mt-2">
               {steps.map((step, i) => (
-                <div key={step.label} className="relative">
-                  <div
-                    className={`absolute -left-16 w-12 h-12 rounded-full flex items-center justify-center shadow-sm ${
-                      i === steps.length - 1
-                        ? "text-white"
-                        : "bg-[#388e3c]/10 dark:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784]"
-                    }`}
-                    style={i === steps.length - 1 ? { background: "linear-gradient(135deg, #2e7d32, #1b5e20)" } : undefined}
-                  >
-                    <step.icon className="h-6 w-6" />
+                <div key={step.label} className="flex gap-4">
+                  <div className="flex flex-col items-center w-12 flex-shrink-0">
+                    {i === 0 ? (
+                      <div className="h-3" />
+                    ) : (
+                      <div className="flex-1 min-h-[14px] w-0.5 bg-[#388e3c]/25 dark:bg-[#388e3c]/40" />
+                    )}
+                    <div
+                      className={`w-12 h-12 rounded-full flex items-center justify-center shadow-sm flex-shrink-0 ${
+                        i === steps.length - 1
+                          ? "text-white"
+                          : "bg-[#388e3c]/10 dark:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784]"
+                      }`}
+                      style={i === steps.length - 1 ? { background: "linear-gradient(135deg, #2e7d32, #1b5e20)" } : undefined}
+                    >
+                      <step.icon className="h-6 w-6" />
+                    </div>
+                    {i === steps.length - 1 ? (
+                      <div className="h-3" />
+                    ) : (
+                      <div className="flex-1 min-h-[14px] w-0.5 bg-[#388e3c]/25 dark:bg-[#388e3c]/40" />
+                    )}
                   </div>
-                  <div className="bg-gray-50 dark:bg-gray-700/40 rounded-xl px-5 py-4">
+                  <div className="flex-1 bg-gray-50 dark:bg-gray-700/40 rounded-xl px-5 py-4 my-1">
                     <div className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
                       {step.label}
                     </div>
