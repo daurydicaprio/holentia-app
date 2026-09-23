@@ -78,7 +78,8 @@ Canónicos: mente `#1976d2`, relaciones `#7c3aed`, cuerpo `#ffa000`, finanzas `#
 - [ ] `tracker-gastos-hormiga Tipo D`
 - [ ] `test-perfil-riesgo Tipo E` hacer/ver/imprimir, sin persistencia
 - [x] `calculadora de calorías` (cuerpo, Tipo D, Mifflin-St Jeor + 3 objetivos)
-- [x] `tarjeta-corte-vencimiento` (finanzas, Tipo D, corte/vencimiento + días gratis + mejor compra)
+- [x] `tarjeta-corte-vencimiento` (finanzas, Tipo D, corte/vencimiento + días gratis + mejor compra + simulador 5 compras)
+- [ ] Futuro: `calculadora de interés de tarjeta` (tasa default 60% anual ajustable por país)
 - [ ] Merge `dev → main`, verificar `curl -sI https://holentia.com 200` + `vercel inspect holentia.com` nuevo ID
 
 ## Fase 6 — Mayores diferidos (solo con Fase 0-4 verde)

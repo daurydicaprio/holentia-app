@@ -10,6 +10,45 @@ const DRAFT_KEY = draftKey("tarjeta-corte-vencimiento")
 interface CardDraft {
   cutoffDay?: string
   dueDay?: string
+  purchases?: string[]
+}
+
+interface Cycle {
+  purchase: Date
+  cutoff: Date
+  due: Date
+  suggestedPay: Date
+  daysToCutoff: number
+  graceDays: number
+}
+
+/** Ciclo al que pertenece una compra: corte, vencimiento y pago sugerido. */
+function computeCycle(purchaseISO: string, c: number, p: number): Cycle | null {
+  const purchase = parseISO(purchaseISO)
+  if (!purchase) return null
+
+  const thisMonthCutoff = clampDay(purchase.getFullYear(), purchase.getMonth(), c)
+  let cutoff = thisMonthCutoff
+  if (purchase.getTime() > thisMonthCutoff.getTime()) {
+    const next = new Date(purchase.getFullYear(), purchase.getMonth() + 1, 1)
+    cutoff = clampDay(next.getFullYear(), next.getMonth(), c)
+  }
+
+  // Vencimiento: día P del mes siguiente al corte
+  const due = clampDay(cutoff.getFullYear(), cutoff.getMonth() + 1, p)
+
+  // Pago sugerido: 3 días antes del vencimiento
+  const suggestedPay = new Date(due)
+  suggestedPay.setDate(suggestedPay.getDate() - 3)
+
+  return {
+    purchase,
+    cutoff,
+    due,
+    suggestedPay,
+    daysToCutoff: diffDays(purchase, cutoff),
+    graceDays: diffDays(purchase, due),
+  }
 }
 
 function daysInMonth(year: number, month: number): number {
@@ -40,12 +79,115 @@ function diffDays(from: Date, to: Date): number {
   return Math.round((to.getTime() - from.getTime()) / 86400000)
 }
 
+function MultiPurchaseSimulator({
+  purchases,
+  cutoffDay,
+  dueDay,
+  onAdd,
+  onChange,
+  onRemove,
+}: {
+  purchases: string[]
+  cutoffDay: string
+  dueDay: string
+  onAdd: () => void
+  onChange: (i: number, iso: string) => void
+  onRemove: (i: number) => void
+}) {
+  const c = Number.parseInt(cutoffDay, 10)
+  const p = Number.parseInt(dueDay, 10)
+  const cycles = purchases.map((iso) => ({ iso, cycle: computeCycle(iso, c, p) }))
+  const valid = cycles.filter((r) => r.cycle !== null) as { iso: string; cycle: Cycle }[]
+
+  let min = Infinity
+  let max = -Infinity
+  valid.forEach(({ cycle }) => {
+    min = Math.min(min, cycle.purchase.getTime())
+    max = Math.max(max, cycle.due.getTime())
+  })
+  const span = Math.max(max - min, 1)
+
+  return (
+    <div className="mt-8">
+      <h3 className="font-bold mb-1">Ponlo a prueba con varias compras</h3>
+      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
+        La regla es simple: <strong>todo lo que compres después de que la tarjeta corte entra al corte siguiente y se
+        paga en la fecha límite siguiente</strong>. Agrega hasta 5 compras y míralo con tus fechas:
+      </p>
+
+      {valid.length > 0 && (
+        <div className="space-y-4 mb-4">
+          {cycles.map(({ iso, cycle }, i) => {
+            if (!cycle) return null
+            const left = ((cycle.purchase.getTime() - min) / span) * 100
+            const width = Math.max(((cycle.due.getTime() - cycle.purchase.getTime()) / span) * 100, 2)
+            const cutLeft = ((cycle.cutoff.getTime() - min) / span) * 100
+            return (
+              <div key={`${iso}-${i}`} className="bg-gray-50 dark:bg-gray-700/40 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-3 flex-wrap">
+                  <input
+                    type="date"
+                    value={iso}
+                    onChange={(e) => onChange(i, e.target.value)}
+                    className="text-sm p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-[#388e3c] focus:border-transparent"
+                    data-interactive="true"
+                    aria-label={`Fecha de la compra ${i + 1}`}
+                  />
+                  <button
+                    onClick={() => onRemove(i)}
+                    className="text-xs text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors"
+                    data-interactive="true"
+                  >
+                    Quitar
+                  </button>
+                </div>
+                <div className="relative h-2.5 rounded-full bg-gray-200 dark:bg-gray-600 mb-2">
+                  <div
+                    className="absolute h-full rounded-full"
+                    style={{ left: `${left}%`, width: `${width}%`, background: "linear-gradient(90deg, #81c784, #1b5e20)" }}
+                  />
+                  <div
+                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-white dark:bg-gray-800 border-[3px] border-[#388e3c]"
+                    style={{ left: `${cutLeft}%` }}
+                    title="Corte"
+                  />
+                </div>
+                <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 flex-wrap gap-1">
+                  <span className="capitalize">
+                    Compra {formatLong(cycle.purchase)} → corte {formatLong(cycle.cutoff)}
+                  </span>
+                  <span>
+                    paga <strong className="capitalize">{formatLong(cycle.due)}</strong> ({cycle.graceDays} días)
+                  </span>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
+
+      {purchases.length < 5 ? (
+        <button
+          onClick={onAdd}
+          className="w-full py-2.5 rounded-lg border-2 border-dashed border-[#388e3c]/40 text-[#388e3c] dark:text-[#81c784] font-medium text-sm hover:bg-[#388e3c]/5 transition-colors"
+          data-interactive="true"
+        >
+          + Agregar compra ({purchases.length}/5)
+        </button>
+      ) : (
+        <p className="text-xs text-gray-500 dark:text-gray-400 text-center">Máximo 5 compras de ejemplo.</p>
+      )}
+    </div>
+  )
+}
+
 export function CardCutoffCalculator() {
   const { triggerHapticFeedback } = useHapticFeedback()
   const todayISO = useMemo(() => toISODate(new Date()), [])
   const [cutoffDay, setCutoffDay] = useState<string>("")
   const [dueDay, setDueDay] = useState<string>("")
   const [purchaseISO, setPurchaseISO] = useState<string>(todayISO)
+  const [extraPurchases, setExtraPurchases] = useState<string[]>([])
   const [savedFlash, setSavedFlash] = useState(false)
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -54,6 +196,7 @@ export function CardCutoffCalculator() {
     const draft = storageGet<CardDraft>(DRAFT_KEY, {})
     if (draft.cutoffDay !== undefined) setCutoffDay(draft.cutoffDay)
     if (draft.dueDay !== undefined) setDueDay(draft.dueDay)
+    if (draft.purchases !== undefined) setExtraPurchases(draft.purchases.slice(0, 5))
   }, [])
 
   // Autoguardado con debounce 500ms (se salta el primer render)
@@ -65,7 +208,7 @@ export function CardCutoffCalculator() {
     }
     if (saveTimer.current) clearTimeout(saveTimer.current)
     saveTimer.current = setTimeout(() => {
-      if (storageSet(DRAFT_KEY, { cutoffDay, dueDay })) {
+      if (storageSet(DRAFT_KEY, { cutoffDay, dueDay, purchases: extraPurchases })) {
         setSavedFlash(true)
         setTimeout(() => setSavedFlash(false), 1500)
       }
@@ -73,7 +216,7 @@ export function CardCutoffCalculator() {
     return () => {
       if (saveTimer.current) clearTimeout(saveTimer.current)
     }
-  }, [cutoffDay, dueDay])
+  }, [cutoffDay, dueDay, extraPurchases])
 
   const configured = useMemo(() => {
     const c = Number.parseInt(cutoffDay, 10)
@@ -85,40 +228,21 @@ export function CardCutoffCalculator() {
     if (!configured) return null
     const c = Number.parseInt(cutoffDay, 10)
     const p = Number.parseInt(dueDay, 10)
-    const purchase = parseISO(purchaseISO)
-    if (!purchase) return null
-
-    // Corte al que pertenece la compra
-    const thisMonthCutoff = clampDay(purchase.getFullYear(), purchase.getMonth(), c)
-    let cutoff = thisMonthCutoff
-    if (purchase.getTime() > thisMonthCutoff.getTime()) {
-      const next = new Date(purchase.getFullYear(), purchase.getMonth() + 1, 1)
-      cutoff = clampDay(next.getFullYear(), next.getMonth(), c)
-    }
-
-    // Vencimiento: día P del mes siguiente al corte
-    const due = clampDay(cutoff.getFullYear(), cutoff.getMonth() + 1, p)
+    const cycle = computeCycle(purchaseISO, c, p)
+    if (!cycle) return null
 
     // Mejor compra: día siguiente al corte anterior
-    const prevCutoff = new Date(cutoff)
+    const prevCutoff = new Date(cycle.cutoff)
     prevCutoff.setMonth(prevCutoff.getMonth() - 1)
     const bestDay = new Date(prevCutoff)
     bestDay.setDate(bestDay.getDate() + 1)
 
-    // Pago sugerido: 3 días antes del vencimiento
-    const suggestedPay = new Date(due)
-    suggestedPay.setDate(suggestedPay.getDate() - 3)
-
     return {
-      purchase,
-      cutoff,
-      due,
+      ...cycle,
       bestDay,
-      suggestedPay,
-      daysToCutoff: diffDays(purchase, cutoff),
-      graceDays: diffDays(purchase, due),
-      bestGrace: Math.round((due.getTime() - bestDay.getTime()) / 86400000),
-      isIdeal: diffDays(purchase, cutoff) > 0 && diffDays(prevCutoff, purchase) <= 3,
+      bestGrace: Math.round((cycle.due.getTime() - bestDay.getTime()) / 86400000),
+      bankDays: diffDays(cycle.cutoff, cycle.due),
+      isIdeal: cycle.daysToCutoff > 0 && diffDays(prevCutoff, cycle.purchase) <= 3,
     }
   }, [configured, cutoffDay, dueDay, purchaseISO])
 
@@ -133,6 +257,7 @@ export function CardCutoffCalculator() {
     setCutoffDay("")
     setDueDay("")
     setPurchaseISO(todayISO)
+    setExtraPurchases([])
     storageRemove(DRAFT_KEY)
     triggerHapticFeedback("medium")
   }
@@ -247,9 +372,13 @@ export function CardCutoffCalculator() {
         ) : (
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
             <p className="text-base leading-relaxed mb-8 text-gray-700 dark:text-gray-200">
-              Si compras el <strong className="capitalize">{formatLong(result.purchase)}</strong>, entras al corte
-              del <strong className="capitalize">{formatLong(result.cutoff)}</strong> y pagas el{" "}
-              <strong className="text-[#388e3c] dark:text-[#81c784] capitalize">{formatLong(result.due)}</strong>.
+              Tu tarjeta corta el <strong className="capitalize">{formatLong(result.cutoff)}</strong> y tienes hasta
+              el <strong className="capitalize">{formatLong(result.due)}</strong> para pagar, pero te sugerimos
+              encarecidamente pagar <strong>2 o 3 días antes</strong>, o sea el{" "}
+              <strong className="text-[#388e3c] dark:text-[#81c784] capitalize">
+                {formatLong(result.suggestedPay)}
+              </strong>
+              .
             </p>
 
             {/* Timeline */}
@@ -354,6 +483,31 @@ export function CardCutoffCalculator() {
               </div>
             </div>
 
+            {/* Simulador: varias compras */}
+            <MultiPurchaseSimulator
+              purchases={extraPurchases}
+              cutoffDay={cutoffDay}
+              dueDay={dueDay}
+              onAdd={() => {
+                if (extraPurchases.length < 5) {
+                  setExtraPurchases([...extraPurchases, todayISO])
+                  triggerHapticFeedback("light")
+                }
+              }}
+              onChange={(i, iso) => setExtraPurchases(extraPurchases.map((p, j) => (j === i ? iso : p)))}
+              onRemove={(i) => {
+                setExtraPurchases(extraPurchases.filter((_, j) => j !== i))
+                triggerHapticFeedback("light")
+              }}
+            />
+
+            {/* Tu banco */}
+            <div className="mt-6 p-4 rounded-lg bg-gray-50 dark:bg-gray-700/40 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+              Tu banco te da <strong>{result.bankDays} días</strong> entre el corte y el vencimiento. Algunos bancos
+              dan 20 días, otros 25 y otros 27: <strong>conoce bien esa fecha en tu estado de cuenta</strong>, porque
+              es la que manda para no pagar mora.
+            </div>
+
             {result.isIdeal && (
               <div className="mt-5 p-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-sm text-green-800 dark:text-green-200 text-center font-medium">
                 Compra ideal: entras justo al inicio del ciclo.
@@ -363,8 +517,7 @@ export function CardCutoffCalculator() {
             <div className="flex items-start gap-3 text-xs text-gray-600 dark:text-gray-300 mt-6 leading-relaxed">
               <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
               <span>
-                Vence el día {dueDay} del mes siguiente al corte. Si tu banco usa días de gracia fijos, verifícalo en
-                tu estado de cuenta. Estimación educativa, todo queda en tu navegador.
+                Vence el día {dueDay} del mes siguiente al corte. Estimación educativa, todo queda en tu navegador.
               </span>
             </div>
           </div>
