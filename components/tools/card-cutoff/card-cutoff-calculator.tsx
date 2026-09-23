@@ -75,11 +75,16 @@ function formatLong(d: Date): string {
   return d.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" })
 }
 
+function formatShort(d: Date): string {
+  return d.toLocaleDateString("es-ES", { day: "numeric", month: "short" })
+}
+
 function diffDays(from: Date, to: Date): number {
   return Math.round((to.getTime() - from.getTime()) / 86400000)
 }
 
 interface WhySectionData {
+  purchase: Date
   cutoff: Date
   due: Date
   suggestedPay: Date
@@ -118,25 +123,62 @@ function WhySection({
         Marca el <strong className="capitalize">{formatLong(result.suggestedPay)}</strong> en tu calendario.
       </div>
 
-      {/* Gráfico de tu compra */}
-      <div className="relative h-3 rounded-full overflow-visible flex mb-2">
-        <div className="h-full rounded-l-full bg-[#81c784]" style={{ width: `${pctA}%` }} />
-        <div className="h-full rounded-r-full bg-[#1b5e20]" style={{ width: `${100 - pctA}%` }} />
-        {[
-          { left: 0, label: "Compra" },
-          { left: pctA, label: "Corte" },
-          { left: pctSug, label: "Sugerido" },
-          { left: 100, label: "Vence" },
-        ].map((dot) => (
-          <div
-            key={dot.label}
-            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-[#388e3c]"
-            style={{ left: `${dot.left}%` }}
-            title={dot.label}
-          />
-        ))}
+      {/* Carril 1: el ciclo de tu banco */}
+      <div className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+        El ciclo de tu banco · {result.bankDays} días
       </div>
-      <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 flex-wrap gap-1">
+      <div className="pt-12 mb-7">
+        <div className="relative h-2.5 rounded-full bg-[#1b5e20]">
+          {[
+            { left: 0, name: "Corte", date: result.cutoff },
+            { left: 100, name: "Vence", date: result.due },
+          ].map((pt) => (
+            <div key={pt.name} className="absolute top-0 h-full" style={{ left: `${pt.left}%` }}>
+              <div
+                className={`absolute -top-3 w-0.5 h-3 bg-[#388e3c] ${pt.left === 0 ? "left-0" : "right-0"}`}
+              />
+              <div
+                className={`absolute -top-11 whitespace-nowrap text-[11px] leading-tight ${
+                  pt.left === 0 ? "left-0 text-left" : "right-0 text-right"
+                }`}
+              >
+                <div className="font-bold">{pt.name}</div>
+                <div className="capitalize text-gray-500 dark:text-gray-400">{formatShort(pt.date)}</div>
+              </div>
+              <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-[#388e3c]" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Carril 2: tu compra */}
+      <div className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+        Tu compra · {result.graceDays} días gratis
+      </div>
+      <div className="pt-12">
+        <div className="relative h-2.5 rounded-full bg-gray-200 dark:bg-gray-600">
+          <div
+            className="absolute h-full rounded-full"
+            style={{ background: "linear-gradient(90deg, #81c784, #1b5e20)", left: "0%", width: "100%" }}
+          />
+          {[
+            { left: 0, name: "Compra", date: result.purchase },
+            { left: pctA, name: "Corte", date: result.cutoff },
+            { left: pctSug, name: "Sugerido", date: result.suggestedPay },
+            { left: 100, name: "Vence", date: result.due },
+          ].map((pt) => (
+            <div key={pt.name} className="absolute top-0 h-full" style={{ left: `${pt.left}%` }}>
+              <div className="absolute -top-3 w-0.5 h-3 bg-[#388e3c] -translate-x-1/2" />
+              <div className="absolute -top-11 -translate-x-1/2 whitespace-nowrap text-[11px] leading-tight text-center">
+                <div className="font-bold">{pt.name}</div>
+                <div className="capitalize text-gray-500 dark:text-gray-400">{formatShort(pt.date)}</div>
+              </div>
+              <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-[#388e3c]" />
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="flex justify-between mt-3 text-xs text-gray-600 dark:text-gray-400 flex-wrap gap-1">
         <span>
           Compra → corte: <strong>{result.daysToCutoff} días</strong>
         </span>
@@ -145,18 +187,31 @@ function WhySection({
         </span>
       </div>
 
-      {/* La regla, directa */}
-      <div className="mt-8 rounded-xl p-6 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 border border-[#388e3c]/20">
-        <p className="leading-relaxed">
-          Si compras entre el <strong className="capitalize">{formatLong(result.bestDay)}</strong> y el{" "}
-          <strong className="capitalize">{formatLong(result.cutoff)}</strong>,{" "}
-          <strong>
-            absolutamente todo lo que compres no lo pagas hasta el{" "}
-            <span className="capitalize">{formatLong(result.due)}</span>
-          </strong>
-          .
-        </p>
-      </div>
+      {/* La regla, en viñetas */}
+      <ul className="mt-8 space-y-3">
+        <li className="flex items-start gap-3 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 border border-[#388e3c]/20 rounded-xl px-5 py-4">
+          <span className="mt-2 w-2 h-2 rounded-full bg-[#388e3c] flex-shrink-0" />
+          <span className="leading-relaxed">
+            Todo lo que compres entre el <strong className="capitalize">{formatLong(result.bestDay)}</strong> y el{" "}
+            <strong className="capitalize">{formatLong(result.cutoff)}</strong> lo pagas el{" "}
+            <strong className="capitalize">{formatLong(result.due)}</strong>.
+          </span>
+        </li>
+        <li className="flex items-start gap-3 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 border border-[#388e3c]/20 rounded-xl px-5 py-4">
+          <span className="mt-2 w-2 h-2 rounded-full bg-[#388e3c] flex-shrink-0" />
+          <span className="leading-relaxed">
+            Paga sugerido: <strong className="capitalize">{formatLong(result.suggestedPay)}</strong>, 3 días antes
+            del vencimiento.
+          </span>
+        </li>
+        <li className="flex items-start gap-3 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 border border-[#388e3c]/20 rounded-xl px-5 py-4">
+          <span className="mt-2 w-2 h-2 rounded-full bg-[#388e3c] flex-shrink-0" />
+          <span className="leading-relaxed">
+            Tu banco te da <strong>{result.bankDays} días</strong> entre corte y pago. Algunos dan 20, otros 25 y
+            otros 27: revisa tu estado de cuenta, esa fecha manda.
+          </span>
+        </li>
+      </ul>
 
       {/* Tus compras de ejemplo */}
       {extraCycles.length > 0 && (
@@ -178,14 +233,7 @@ function WhySection({
         </div>
       )}
 
-      {/* Tu banco */}
-      <div className="mt-6 p-4 rounded-lg bg-gray-50 dark:bg-gray-700/40 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-        Tu banco te da <strong>{result.bankDays} días</strong> entre el corte y el vencimiento. Algunos bancos dan 20
-        días, otros 25 y otros 27: <strong>conoce bien esa fecha en tu estado de cuenta</strong>, porque es la que
-        manda para no pagar mora.
-      </div>
-
-      <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 mt-5">
+      <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 mt-6">
         <Bell className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
         <span>
           Para no olvidarlo: pon un recordatorio en tu teléfono o calendario, o apunta la fecha en un lugar visible
@@ -290,7 +338,17 @@ export function CardCutoffCalculator() {
   const steps = result
     ? [
         { icon: ShoppingBag, label: "Compras", date: result.purchase, note: "tu compra" },
-        { icon: Scissors, label: "Corte", date: result.cutoff, note: result.daysToCutoff === 0 ? "hoy" : `en ${result.daysToCutoff} días` },
+        {
+          icon: Scissors,
+          label: "Corte",
+          date: result.cutoff,
+          note:
+            result.daysToCutoff === 0
+              ? "¡hoy mismo!"
+              : result.daysToCutoff <= 7
+                ? `en ${result.daysToCutoff} días (este mes)`
+                : `en ${result.daysToCutoff} días (próximo)`,
+        },
         { icon: BellRing, label: "Paga (sugerido)", date: result.suggestedPay, note: "3 días antes" },
         { icon: Wallet, label: "Vence", date: result.due, note: `${result.graceDays} días gratis` },
       ]
@@ -453,10 +511,31 @@ export function CardCutoffCalculator() {
           </div>
         ) : (
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
+            {/* Héroe primero: días gratis */}
+            <div
+              className="rounded-xl p-8 text-white mb-8"
+              style={{ background: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)" }}
+            >
+              <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Financiamiento gratis</div>
+              <div className="text-6xl font-bold tabular-nums">{result.graceDays} días</div>
+              <div className="border-t border-white/25 mt-5 pt-4 text-sm opacity-90 leading-relaxed">
+                Comprando el <span className="capitalize font-semibold">{formatLong(result.bestDay)}</span> tendrías
+                hasta {result.bestGrace} días.
+              </div>
+            </div>
+
             <p className="text-base leading-relaxed mb-8 text-gray-700 dark:text-gray-200">
-              Tu tarjeta corta el <strong className="capitalize">{formatLong(result.cutoff)}</strong> y tienes hasta
-              el <strong className="capitalize">{formatLong(result.due)}</strong> para pagar, pero te sugerimos
-              encarecidamente pagar <strong>2 o 3 días antes</strong>, o sea el{" "}
+              Tu tarjeta corta el <strong className="capitalize">{formatLong(result.cutoff)}</strong>
+              {result.daysToCutoff === 0 ? (
+                <>, <strong>¡justo hoy!</strong> Esta compra entra al corte de hoy</>
+              ) : result.daysToCutoff <= 7 ? (
+                <>, que es <strong>en {result.daysToCutoff} días (este mes)</strong>. Esta compra todavía lo alcanza</>
+              ) : (
+                <>, que es <strong>en {result.daysToCutoff} días (el próximo corte)</strong>. Por eso tienes tantos
+                días gratis</>
+              )}{" "}
+              y tienes hasta el <strong className="capitalize">{formatLong(result.due)}</strong> para pagar, pero te
+              sugerimos encarecidamente pagar <strong>2 o 3 días antes</strong>, o sea el{" "}
               <strong className="text-[#388e3c] dark:text-[#81c784] capitalize">
                 {formatLong(result.suggestedPay)}
               </strong>
@@ -487,19 +566,6 @@ export function CardCutoffCalculator() {
                   </div>
                 </div>
               ))}
-            </div>
-
-            {/* Héroe: días gratis */}
-            <div
-              className="rounded-xl p-8 text-white"
-              style={{ background: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)" }}
-            >
-              <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Financiamiento gratis</div>
-              <div className="text-6xl font-bold tabular-nums">{result.graceDays} días</div>
-              <div className="border-t border-white/25 mt-5 pt-4 text-sm opacity-90 leading-relaxed">
-                Comprando el <span className="capitalize font-semibold">{formatLong(result.bestDay)}</span> tendrías
-                hasta {result.bestGrace} días.
-              </div>
             </div>
 
             {result.isIdeal && (
