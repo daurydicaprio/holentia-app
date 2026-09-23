@@ -84,7 +84,6 @@ function diffDays(from: Date, to: Date): number {
 }
 
 interface WhySectionData {
-  purchase: Date
   cutoff: Date
   due: Date
   suggestedPay: Date
@@ -92,28 +91,78 @@ interface WhySectionData {
   daysToCutoff: number
   graceDays: number
   bestGrace: number
-  bankDays: number
 }
 
-/** Tarjeta aparte: explicación, gráfico, regla y tus compras de ejemplo. */
-function WhySection({
-  result,
-  dueDay,
-  extraCycles,
+function addMonths(d: Date, n: number): Date {
+  return new Date(d.getFullYear(), d.getMonth() + n, d.getDate())
+}
+
+/** Fila del ciclo: periodo de compras + periodo de pago, con fechas reales. */
+function CycleRow({
+  tag,
+  buyDays,
+  payDays,
+  cutDate,
+  dueDate,
 }: {
-  result: WhySectionData
-  dueDay: string
-  extraCycles: { iso: string; cycle: Cycle }[]
+  tag: string
+  buyDays: number
+  payDays: number
+  cutDate: Date
+  dueDate: Date
 }) {
-  const total = Math.max(result.graceDays, 1)
-  const pctA = Math.min(100, Math.max(0, (result.daysToCutoff / total) * 100))
-  const pctSug = Math.min(100, Math.max(0, ((result.graceDays - 3) / total) * 100))
+  const total = Math.max(buyDays + payDays, 1)
+  const pctBuy = (buyDays / total) * 100
+  return (
+    <div>
+      <div className="flex justify-between items-end text-[11px] font-bold mb-1 gap-2">
+        <span className="leading-tight">
+          Fecha de corte
+          <span className="block font-medium capitalize text-gray-500 dark:text-gray-400">
+            {formatShort(cutDate)}
+          </span>
+          <span className="inline-block text-[#388e3c] text-sm leading-none">↓</span>
+        </span>
+        <span className="text-right leading-tight">
+          Fecha límite de pago
+          <span className="block font-medium capitalize text-gray-500 dark:text-gray-400">
+            {formatShort(dueDate)}
+          </span>
+          <span className="inline-block text-[#388e3c] text-sm leading-none">↓</span>
+        </span>
+      </div>
+      <div className="relative flex h-12 rounded-xl overflow-hidden text-center">
+        <div
+          className="h-full flex flex-col items-center justify-center bg-[#388e3c]/15 dark:bg-[#388e3c]/25 text-[#1b5e20] dark:text-[#a5d6a7]"
+          style={{ width: `${pctBuy}%` }}
+        >
+          <span className="text-sm font-bold leading-none">{buyDays} DÍAS</span>
+          <span className="text-[10px] leading-tight opacity-80">Periodo de compras</span>
+        </div>
+        <div className="w-0 border-l-2 border-dashed border-[#388e3c]" />
+        <div
+          className="h-full flex flex-col items-center justify-center bg-amber-200 dark:bg-amber-400/80 text-amber-900"
+          style={{ width: `${100 - pctBuy}%` }}
+        >
+          <span className="text-sm font-bold leading-none">{payDays} DÍAS</span>
+          <span className="text-[10px] leading-tight opacity-80">Periodo de pago</span>
+        </div>
+      </div>
+      <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{tag}</div>
+    </div>
+  )
+}
+
+/** Tarjeta aparte: explicación, ciclo y pago. */
+function WhySection({ result, dueDay }: { result: WhySectionData; dueDay: string }) {
+  const nextCutoff = addMonths(result.cutoff, 1)
+  const nextDue = addMonths(result.due, 1)
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
-      <h2 className="text-xl font-bold mb-1">¿Por qué tienes hasta {result.bestGrace} días?</h2>
+      <h2 className="text-xl font-bold mb-1">El ciclo de tu tarjeta</h2>
       <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-        Tus días gratis son la suma de dos tramos: de la compra al corte, más del corte al vencimiento.
+        Cada mes se repite lo mismo: un periodo para comprar y un periodo para pagar.
       </p>
 
       {/* No esperes al último día */}
@@ -123,80 +172,25 @@ function WhySection({
         Marca el <strong className="capitalize">{formatLong(result.suggestedPay)}</strong> en tu calendario.
       </div>
 
-      {/* Zonas con estilos distintos */}
-      <div className="grid sm:grid-cols-2 gap-3 mb-6">
-        <div className="rounded-xl bg-[#388e3c]/10 dark:bg-[#388e3c]/20 px-4 py-3">
-          <div className="text-xs font-bold text-[#388e3c] dark:text-[#81c784]">
-            Compra → corte · {result.daysToCutoff} días
-          </div>
-          <div className="border-t-2 border-dashed border-[#388e3c]/60 mt-2" />
-          <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">Esta es tu fecha de corte</div>
-        </div>
-        <div className="rounded-xl bg-[#1b5e20] px-4 py-3 text-white">
-          <div className="text-xs font-bold opacity-90">
-            Corte → vence · {result.graceDays - result.daysToCutoff} días
-          </div>
-          <div className="border-t-2 border-dashed border-white/50 mt-2" />
-          <div className="text-xs opacity-80 mt-2">Del corte hasta tu fecha límite</div>
-        </div>
-      </div>
+      {/* Este ciclo */}
+      <CycleRow
+        tag="Este ciclo"
+        buyDays={result.daysToCutoff}
+        payDays={result.graceDays - result.daysToCutoff}
+        cutDate={result.cutoff}
+        dueDate={result.due}
+      />
 
-      {/* Línea única: puntos con texto abajo */}
-      <div className="pb-16">
-        <div className="relative">
-          <div className="relative h-2.5 rounded-full bg-gray-200 dark:bg-gray-600">
-            <div
-              className="absolute h-full rounded-full"
-              style={{ background: "linear-gradient(90deg, #81c784, #1b5e20)", left: "0%", width: "100%" }}
-            />
-            {[
-              { left: 0, name: "Compra", date: result.purchase, align: "left" as const },
-              { left: pctA, name: "Corte", date: result.cutoff, align: "center" as const },
-              { left: pctSug, name: "Sugerido", date: result.suggestedPay, align: "center" as const },
-              { left: 100, name: "Vence", date: result.due, align: "right" as const },
-            ].map((pt) => (
-              <div key={pt.name} className="absolute top-0 h-full" style={{ left: `${pt.left}%` }}>
-                <div className="absolute top-full mt-1 w-0.5 h-3 bg-[#388e3c] -translate-x-1/2" />
-                <div
-                  className={`absolute top-full mt-4 whitespace-nowrap text-[11px] leading-tight ${
-                    pt.align === "left"
-                      ? "left-0 text-left"
-                      : pt.align === "right"
-                        ? "right-0 text-right"
-                        : "-translate-x-1/2 text-center"
-                  }`}
-                >
-                  <div className="font-bold">{pt.name}</div>
-                  <div className="capitalize text-gray-500 dark:text-gray-400">{formatShort(pt.date)}</div>
-                </div>
-                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-[#388e3c]" />
-              </div>
-            ))}
-            {/* Tus compras de ejemplo como puntos ámbar */}
-            {extraCycles.map(({ iso, cycle }, i) => {
-              const span = Math.max(result.due.getTime() - result.purchase.getTime(), 1)
-              const left = Math.min(
-                100,
-                Math.max(0, ((cycle.purchase.getTime() - result.purchase.getTime()) / span) * 100),
-              )
-              return (
-                <div key={`${iso}-${i}`} className="absolute top-0 h-full" style={{ left: `${left}%` }}>
-                  <div
-                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-amber-400 border-2 border-amber-600"
-                    title={`Compra ${formatShort(cycle.purchase)} → paga ${formatShort(cycle.due)}`}
-                  />
-                </div>
-              )
-            })}
-          </div>
-        </div>
+      {/* Próximo ciclo */}
+      <div className="mt-6">
+        <CycleRow
+          tag="Próximo ciclo · se repite todos los meses"
+          buyDays={diffDays(result.cutoff, nextCutoff)}
+          payDays={diffDays(nextCutoff, nextDue)}
+          cutDate={nextCutoff}
+          dueDate={nextDue}
+        />
       </div>
-      {extraCycles.length > 0 && (
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-          <span className="inline-block w-2.5 h-2.5 rounded-full bg-amber-400 border border-amber-600 mr-1 align-middle" />
-          Puntos ámbar: tus compras de ejemplo. Todo lo que caiga después del corte entra al corte siguiente.
-        </p>
-      )}
 
       {/* La regla, sencilla */}
       <p className="mt-8 leading-relaxed text-center">
@@ -213,11 +207,6 @@ function WhySection({
         <div className="text-sm opacity-90 mt-4 mb-1">Te toca pagar el</div>
         <div className="text-3xl sm:text-4xl font-bold capitalize leading-tight">{formatLong(result.due)}</div>
       </div>
-
-      <p className="text-center text-sm mt-5 text-amber-700 dark:text-amber-300">
-        Tu banco te da <strong className="underline underline-offset-2">{result.bankDays} días</strong> entre corte y
-        pago (algunos 20, otros 25, otros 27): conócelo en tu estado de cuenta.
-      </p>
 
       <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 mt-6">
         <Bell className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
@@ -243,7 +232,6 @@ export function CardCutoffCalculator() {
   const [cutoffDay, setCutoffDay] = useState<string>("")
   const [dueDay, setDueDay] = useState<string>("")
   const [purchaseISO, setPurchaseISO] = useState<string>(todayISO)
-  const [extraPurchases, setExtraPurchases] = useState<string[]>([])
   const [savedFlash, setSavedFlash] = useState(false)
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -252,7 +240,6 @@ export function CardCutoffCalculator() {
     const draft = storageGet<CardDraft>(DRAFT_KEY, {})
     if (draft.cutoffDay !== undefined) setCutoffDay(draft.cutoffDay)
     if (draft.dueDay !== undefined) setDueDay(draft.dueDay)
-    if (draft.purchases !== undefined) setExtraPurchases(draft.purchases.slice(0, 5))
   }, [])
 
   // Autoguardado con debounce 500ms (se salta el primer render)
@@ -264,7 +251,7 @@ export function CardCutoffCalculator() {
     }
     if (saveTimer.current) clearTimeout(saveTimer.current)
     saveTimer.current = setTimeout(() => {
-      if (storageSet(DRAFT_KEY, { cutoffDay, dueDay, purchases: extraPurchases })) {
+      if (storageSet(DRAFT_KEY, { cutoffDay, dueDay })) {
         setSavedFlash(true)
         setTimeout(() => setSavedFlash(false), 1500)
       }
@@ -272,7 +259,7 @@ export function CardCutoffCalculator() {
     return () => {
       if (saveTimer.current) clearTimeout(saveTimer.current)
     }
-  }, [cutoffDay, dueDay, extraPurchases])
+  }, [cutoffDay, dueDay])
 
   const configured = useMemo(() => {
     const c = Number.parseInt(cutoffDay, 10)
@@ -305,7 +292,6 @@ export function CardCutoffCalculator() {
       bestDay,
       bestGrace: Math.round((cycle.due.getTime() - bestDay.getTime()) / 86400000),
       bankDays: diffDays(cycle.cutoff, cycle.due),
-      isIdeal: !isPast && cycle.daysToCutoff > 0 && diffDays(prevCutoff, cycle.purchase) <= 3,
     }
   }, [configured, cutoffDay, dueDay, purchaseISO, todayISO])
 
@@ -320,7 +306,6 @@ export function CardCutoffCalculator() {
     setCutoffDay("")
     setDueDay("")
     setPurchaseISO(todayISO)
-    setExtraPurchases([])
     storageRemove(DRAFT_KEY)
     triggerHapticFeedback("medium")
   }
@@ -346,15 +331,6 @@ export function CardCutoffCalculator() {
         { icon: Wallet, label: "Vence", date: result.due, note: `${result.graceDays} días gratis` },
       ]
     : []
-
-  const extraCycles = useMemo(() => {
-    if (!configured) return []
-    const c = Number.parseInt(cutoffDay, 10)
-    const p = Number.parseInt(dueDay, 10)
-    return extraPurchases
-      .map((iso) => ({ iso, cycle: computeCycle(iso, c, p) }))
-      .filter((r): r is { iso: string; cycle: Cycle } => r.cycle !== null)
-  }, [configured, cutoffDay, dueDay, extraPurchases])
 
   return (
     <>
@@ -428,55 +404,6 @@ export function CardCutoffCalculator() {
             </div>
           </div>
 
-          {/* Compras de ejemplo (opcional) */}
-          <div className="mt-6 pt-5 border-t border-gray-100 dark:border-gray-700">
-            <span className="block text-sm font-medium mb-1">Compras de ejemplo</span>
-            <span className="block text-xs text-gray-500 dark:text-gray-400 mb-3">
-              Opcional: agrega fechas y mira abajo cuándo se paga cada una.
-            </span>
-            {extraPurchases.length > 0 && (
-              <div className="space-y-2 mb-3">
-                {extraPurchases.map((iso, i) => (
-                  <div key={`${iso}-${i}`} className="flex items-center gap-2">
-                    <input
-                      type="date"
-                      value={iso}
-                      onChange={(e) =>
-                        setExtraPurchases(extraPurchases.map((p, j) => (j === i ? e.target.value : p)))
-                      }
-                      className="flex-1 min-w-0 text-sm p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-[#388e3c] focus:border-transparent"
-                      data-interactive="true"
-                      aria-label={`Compra de ejemplo ${i + 1}`}
-                    />
-                    <button
-                      onClick={() => {
-                        setExtraPurchases(extraPurchases.filter((_, j) => j !== i))
-                        triggerHapticFeedback("light")
-                      }}
-                      className="text-xs text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors flex-shrink-0"
-                      data-interactive="true"
-                    >
-                      Quitar
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-            {extraPurchases.length < 5 ? (
-              <button
-                onClick={() => {
-                  setExtraPurchases([...extraPurchases, todayISO])
-                  triggerHapticFeedback("light")
-                }}
-                className="w-full py-2 rounded-lg border-2 border-dashed border-[#388e3c]/40 text-[#388e3c] dark:text-[#81c784] font-medium text-sm hover:bg-[#388e3c]/5 transition-colors"
-                data-interactive="true"
-              >
-                + Agregar compra ({extraPurchases.length}/5)
-              </button>
-            ) : (
-              <p className="text-xs text-gray-500 dark:text-gray-400 text-center">Máximo 5 compras.</p>
-            )}
-          </div>
         </div>
 
         <div className="flex items-center justify-between mt-6">
@@ -540,14 +467,14 @@ export function CardCutoffCalculator() {
             </p>
 
             {/* Timeline: conectores solo entre iconos */}
-            <div className="mb-10 mt-2">
+            <div className="mb-10 mt-2 space-y-5">
               {steps.map((step, i) => (
                 <div key={step.label} className="flex gap-4">
                   <div className="flex flex-col items-center w-12 flex-shrink-0">
                     {i === 0 ? (
-                      <div className="h-3" />
+                      <div className="h-2" />
                     ) : (
-                      <div className="flex-1 min-h-[14px] w-0.5 bg-[#388e3c]/25 dark:bg-[#388e3c]/40" />
+                      <div className="flex-1 min-h-[22px] w-0.5 bg-[#388e3c]/25 dark:bg-[#388e3c]/40" />
                     )}
                     <div
                       className={`w-12 h-12 rounded-full flex items-center justify-center shadow-sm flex-shrink-0 ${
@@ -560,12 +487,12 @@ export function CardCutoffCalculator() {
                       <step.icon className="h-6 w-6" />
                     </div>
                     {i === steps.length - 1 ? (
-                      <div className="h-3" />
+                      <div className="h-2" />
                     ) : (
-                      <div className="flex-1 min-h-[14px] w-0.5 bg-[#388e3c]/25 dark:bg-[#388e3c]/40" />
+                      <div className="flex-1 min-h-[22px] w-0.5 bg-[#388e3c]/25 dark:bg-[#388e3c]/40" />
                     )}
                   </div>
-                  <div className="flex-1 bg-gray-50 dark:bg-gray-700/40 rounded-xl px-5 py-4 my-1">
+                  <div className="flex-1 bg-gray-50 dark:bg-gray-700/40 rounded-xl px-5 py-4 my-2 shadow-sm">
                     <div className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
                       {step.label}
                     </div>
@@ -576,11 +503,6 @@ export function CardCutoffCalculator() {
               ))}
             </div>
 
-            {result.isIdeal && (
-              <div className="mt-5 p-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-sm text-green-800 dark:text-green-200 text-center font-medium">
-                Compra ideal: entras justo al inicio del ciclo.
-              </div>
-            )}
           </div>
         )}
       </div>
@@ -588,7 +510,7 @@ export function CardCutoffCalculator() {
 
     {result && (
       <div className="mt-6">
-        <WhySection result={result} dueDay={dueDay} extraCycles={extraCycles} />
+        <WhySection result={result} dueDay={dueDay} />
       </div>
     )}
     </>
