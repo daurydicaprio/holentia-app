@@ -55,16 +55,14 @@ Canónicos: mente `#1976d2`, relaciones `#7c3aed`, cuerpo `#ffa000`, finanzas `#
 - [x] Nota: vars `globals #1565c0/#ef6c00/#2e7d32` se dejan — fueron oscurecidas a propósito para contraste en cards; los hex inline de headers usan canónicos. No tocar sin revisión visual.
 - [x] `tsc 0 errores + next build OK`
 
-## Fase 3 — Local privado
-- [ ] Crear `lib/storage.ts`: `get/set/remove`, keys `holentia:{slug}:{draft|simulations}:v1`, `try/catch QuotaExceeded`, `window guard`, `debounce 500ms`
-- [ ] Taxonomía por herramienta:
-  - [ ] `E efímero` sin guardar (ej `test-perfil-riesgo`, `test-lenguajes-amor`)
-  - [ ] `D draft` 1 slot autosave silencioso + `Guardado local ✓`
-  - [ ] `S snapshots` 2-3 con botón Guardar-Nombrar-Borrar
-- [ ] Aplicar: `budget D`, `compound D+S 3`, `préstamo D+S 3`, `diario D (ya existe, namespacing v1)`
-- [ ] Botón `Borrar mis datos` por tool + global en Ayuda
-- [ ] Actualizar `politica-cookies` con lista de claves + `README privacidad`
-- [ ] Cero fetch/analytics/env nuevos
+## Fase 3 — Local privado — HECHA
+- [x] `lib/storage.ts`: `storageGet/Set/Remove/ClearAll`, keys `holentia:{slug}:{draft|simulations|entries}:v1`, `try/catch`, `window guard`
+- [x] Taxonomía: `E efímero` (perfil-riesgo, test-amor) / `D draft` autosave 500ms + `Guardado local ✓` / `S snapshots` máx 3
+- [x] `budget D` (borrador ingresos/gastos + botón borrar) · `compound D+S` (inputs + sims persistentes + `clearCompoundData`) · `préstamo D+S` (inputs + sims persistentes + `clearLoanSimulations`, Restablecer intacto) · `diario D` (clave `v1` con migración legada + Borrar todo) · `consumo eléctrico D` (migrado a helper)
+- [x] `alert()` sustituidos por banner inline en compound/préstamo
+- [x] Botón `Borrar mis datos`/`Borrar todas`/`Borrar todo` por tool + `ClearAllData` global en Ayuda
+- [x] `politica-cookies` lista las 7 claves + `README` privacidad y catálogo (7 tools)
+- [x] Cero fetch/analytics/env nuevos — `vercel env ls` vacío
 
 ## Fase 4 — Plantilla + móvil + muertos
 - [ ] Borrar muertos: `header.tsx`, `desktop-header.tsx` (retorna null), `mobile-header.tsx`, `main-menu-button.tsx` (duplicado + `w-${menuWidth}:202` roto). Solo `UnifiedHeader + MenuButton`

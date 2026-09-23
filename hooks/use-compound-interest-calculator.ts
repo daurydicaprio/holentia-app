@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
+import { draftKey, simulationsKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
 export interface SimulationData {
   year: number
@@ -77,6 +78,19 @@ export interface useCompoundInterestCalculatorResult {
   saveSimulation: () => { success: boolean; message?: string }
   removeSimulation: (id: number) => void
   updateSimulationName: (id: number, name: string) => void
+  clearCompoundData: () => void
+}
+
+const COMPOUND_DRAFT_KEY = draftKey("calculadora-interes-compuesto")
+const COMPOUND_SIMS_KEY = simulationsKey("calculadora-interes-compuesto")
+
+interface CompoundDraft {
+  initialDeposit?: number
+  contribution?: number
+  contributionFrequency?: number
+  years?: number
+  interestRate?: number
+  inflation?: number
 }
 
 export function useCompoundInterestCalculator(): useCompoundInterestCalculatorResult {
@@ -88,8 +102,59 @@ export function useCompoundInterestCalculator(): useCompoundInterestCalculatorRe
   const [interestRate, setInterestRate] = useState<number>(0)
   const [inflation, setInflation] = useState<number>(0)
 
-  // Estado para las simulaciones guardadas
+  // Estado para las simulaciones guardadas (Tipo S, máx 3, persistentes)
   const [savedSimulations, setSavedSimulations] = useState<SavedSimulation[]>([])
+
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const restored = useRef(false)
+
+  // Restaurar borrador + simulaciones solo en cliente (evita hydration mismatch)
+  useEffect(() => {
+    if (restored.current) return
+    restored.current = true
+    const draft = storageGet<CompoundDraft>(COMPOUND_DRAFT_KEY, {})
+    if (draft.initialDeposit !== undefined) setInitialDeposit(draft.initialDeposit)
+    if (draft.contribution !== undefined) setContribution(draft.contribution)
+    if (draft.contributionFrequency !== undefined) setContributionFrequency(draft.contributionFrequency)
+    if (draft.years !== undefined) setYears(draft.years)
+    if (draft.interestRate !== undefined) setInterestRate(draft.interestRate)
+    if (draft.inflation !== undefined) setInflation(draft.inflation)
+    setSavedSimulations(storageGet<SavedSimulation[]>(COMPOUND_SIMS_KEY, []))
+  }, [])
+
+  // Autoguardado del borrador (Tipo D) con debounce 500ms
+  // (se salta el primer render para no pisar lo restaurado)
+  const firstDraftSave = useRef(true)
+  useEffect(() => {
+    if (firstDraftSave.current) {
+      firstDraftSave.current = false
+      return
+    }
+    if (saveTimer.current) clearTimeout(saveTimer.current)
+    saveTimer.current = setTimeout(() => {
+      storageSet(COMPOUND_DRAFT_KEY, {
+        initialDeposit,
+        contribution,
+        contributionFrequency,
+        years,
+        interestRate,
+        inflation,
+      })
+    }, 500)
+    return () => {
+      if (saveTimer.current) clearTimeout(saveTimer.current)
+    }
+  }, [initialDeposit, contribution, contributionFrequency, years, interestRate, inflation])
+
+  // Persistir simulaciones (Tipo S) en cada cambio
+  const firstSimsSave = useRef(true)
+  useEffect(() => {
+    if (firstSimsSave.current) {
+      firstSimsSave.current = false
+      return
+    }
+    storageSet(COMPOUND_SIMS_KEY, savedSimulations)
+  }, [savedSimulations])
 
   // Resultados
   const [summary, setSummary] = useState<SummaryData>({
@@ -501,6 +566,19 @@ export function useCompoundInterestCalculator(): useCompoundInterestCalculatorRe
     )
   }
 
+  // Borra borrador + simulaciones y restaura valores iniciales
+  const clearCompoundData = () => {
+    storageRemove(COMPOUND_DRAFT_KEY)
+    storageRemove(COMPOUND_SIMS_KEY)
+    setSavedSimulations([])
+    setInitialDeposit(0)
+    setContribution(0)
+    setContributionFrequency(12)
+    setYears(5)
+    setInterestRate(0)
+    setInflation(0)
+  }
+
   // Efecto para recalcular cuando cambian los inputs
   useEffect(() => {
     calculate()
@@ -539,5 +617,6 @@ export function useCompoundInterestCalculator(): useCompoundInterestCalculatorRe
     saveSimulation,
     removeSimulation,
     updateSimulationName,
+    clearCompoundData,
   }
 }

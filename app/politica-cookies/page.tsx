@@ -107,13 +107,58 @@ export default function PoliticaCookiesPage() {
                       <span className="text-xs text-gray-500 dark:text-gray-500">Persistente (localStorage)</span>
                     </div>
                   </div>
+                  {[
+                    {
+                      key: "holentia:diario-guiado:entries:v1",
+                      desc: "Tus entradas del Diario Guiado",
+                    },
+                    {
+                      key: "holentia:crear-presupuesto-personal:draft:v1",
+                      desc: "Borrador de tu presupuesto personal",
+                    },
+                    {
+                      key: "holentia:calculadora-interes-compuesto:draft:v1",
+                      desc: "Borrador de la calculadora de interés compuesto",
+                    },
+                    {
+                      key: "holentia:calculadora-interes-compuesto:simulations:v1",
+                      desc: "Tus simulaciones guardadas de interés compuesto (máx. 3)",
+                    },
+                    {
+                      key: "holentia:calculadora-prestamo:draft:v1",
+                      desc: "Borrador de la calculadora de préstamo",
+                    },
+                    {
+                      key: "holentia:calculadora-prestamo:simulations:v1",
+                      desc: "Tus simulaciones guardadas de préstamo (máx. 3)",
+                    },
+                    {
+                      key: "holentia:calculadora-consumo-electrico:draft:v1",
+                      desc: "Borrador de la calculadora de consumo eléctrico",
+                    },
+                  ].map((item) => (
+                    <div
+                      key={item.key}
+                      className="flex items-start gap-3 p-4 rounded-xl bg-gray-50 dark:bg-gray-900/50"
+                    >
+                      <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <code className="text-sm font-mono text-blue-600 dark:text-blue-400 break-all">
+                          {item.key}
+                        </code>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{item.desc}</p>
+                        <span className="text-xs text-gray-500 dark:text-gray-500">Persistente (localStorage)</span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
               <div className="bg-amber-50 dark:bg-amber-900/20 p-5 rounded-2xl border-l-4 border-amber-500">
                 <p className="text-sm text-amber-800 dark:text-amber-200 leading-relaxed">
-                  <strong>Importante:</strong> Estas cookies se almacenan únicamente en el almacenamiento local de tu
-                  navegador y nunca se envían a ningún servidor externo.
+                  <strong>Importante:</strong> Todo esto vive únicamente en el almacenamiento local de tu navegador y
+                  nunca se envía a ningún servidor. Puedes borrarlo cuando quieras: cada herramienta tiene su botón
+                  «Borrar mis datos» y en la página de Ayuda hay un botón para borrarlo todo de una vez.
                 </p>
               </div>
             </div>

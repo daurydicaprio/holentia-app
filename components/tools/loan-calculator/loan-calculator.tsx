@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useLoanCalculator } from "@/hooks/use-loan-calculator"
+import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 import { LoanCalculatorForm } from "./loan-calculator-form"
 import { LoanResult } from "./loan-result"
 import { SavedSimulations } from "./saved-simulations"
@@ -21,6 +22,7 @@ export function LoanCalculator() {
     saveSimulation,
     removeSimulation,
     updateSimulationName,
+    clearLoanSimulations,
   } = useLoanCalculator()
 
   const [loanAmount, setLoanAmount] = useState<number>(100000)
@@ -32,6 +34,38 @@ export function LoanCalculator() {
   const [isInitialized, setIsInitialized] = useState<boolean>(false)
 
   const isMobile = useMediaQuery("(max-width: 768px)")
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const restoredDraft = useRef(false)
+  const firstDraftSave = useRef(true)
+  const LOAN_DRAFT_KEY = draftKey("calculadora-prestamo")
+
+  // Restaurar borrador (Tipo D) solo en cliente
+  useEffect(() => {
+    if (restoredDraft.current) return
+    restoredDraft.current = true
+    const draft = storageGet<{ loanAmount?: number; interestRate?: number; loanTerm?: number }>(
+      LOAN_DRAFT_KEY,
+      {},
+    )
+    if (draft.loanAmount !== undefined) setLoanAmount(draft.loanAmount)
+    if (draft.interestRate !== undefined) setInterestRate(draft.interestRate)
+    if (draft.loanTerm !== undefined) setLoanTerm(draft.loanTerm)
+  }, [LOAN_DRAFT_KEY])
+
+  // Autoguardado del borrador con debounce 500ms (se salta el primer render)
+  useEffect(() => {
+    if (firstDraftSave.current) {
+      firstDraftSave.current = false
+      return
+    }
+    if (saveTimer.current) clearTimeout(saveTimer.current)
+    saveTimer.current = setTimeout(() => {
+      storageSet(LOAN_DRAFT_KEY, { loanAmount, interestRate, loanTerm })
+    }, 500)
+    return () => {
+      if (saveTimer.current) clearTimeout(saveTimer.current)
+    }
+  }, [LOAN_DRAFT_KEY, loanAmount, interestRate, loanTerm])
 
   // Inicializar cálculos al montar el componente
   useEffect(() => {
@@ -68,6 +102,13 @@ export function LoanCalculator() {
 
   // Función para resetear el formulario
   const handleResetForm = () => {
+    handleCalculate(100000, 24, 12)
+  }
+
+  // Borra borrador local + simulaciones y restaura el formulario
+  const handleClearAllData = () => {
+    storageRemove(LOAN_DRAFT_KEY)
+    clearLoanSimulations()
     handleCalculate(100000, 24, 12)
   }
 
@@ -137,6 +178,7 @@ export function LoanCalculator() {
                   onCalculate={handleCalculate}
                   onSaveSimulation={handleSaveSimulation}
                   onResetForm={handleResetForm}
+                  onClearData={handleClearAllData}
                   disableSave={savedSimulations.length >= 3}
                   loanAmount={loanAmount}
                   interestRate={interestRate}
@@ -202,6 +244,7 @@ export function LoanCalculator() {
               onCalculate={handleCalculate}
               onSaveSimulation={handleSaveSimulation}
               onResetForm={handleResetForm}
+              onClearData={handleClearAllData}
               disableSave={savedSimulations.length >= 3}
               loanAmount={loanAmount}
               interestRate={interestRate}

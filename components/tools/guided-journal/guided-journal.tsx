@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Calendar, Save, Trash2, Edit2, X } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
+import { storageGet, storageSet, storageRemove } from "@/lib/storage"
 
 interface JournalEntry {
   id: string
@@ -14,13 +15,28 @@ interface JournalEntry {
   tomorrow: string
 }
 
+const JOURNAL_KEY = "holentia:diario-guiado:entries:v1"
+const JOURNAL_KEY_LEGACY = "holentia-journal-entries"
+
+function loadEntries(): JournalEntry[] {
+  // Migra la clave legada una sola vez
+  const legacy = storageGet<JournalEntry[]>(JOURNAL_KEY_LEGACY, [])
+  if (legacy.length > 0) {
+    storageSet(JOURNAL_KEY, legacy)
+    storageRemove(JOURNAL_KEY_LEGACY)
+    return legacy
+  }
+  return storageGet<JournalEntry[]>(JOURNAL_KEY, [])
+}
+
+function persistEntries(entries: JournalEntry[]) {
+  storageSet(JOURNAL_KEY, entries)
+}
+
 export function GuidedJournal() {
   const { triggerHapticFeedback } = useHapticFeedback()
   const [entries, setEntries] = useState<JournalEntry[]>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("holentia-journal-entries")
-      return saved ? JSON.parse(saved) : []
-    }
+    if (typeof window !== "undefined") return loadEntries()
     return []
   })
 
@@ -63,7 +79,7 @@ export function GuidedJournal() {
     }
 
     setEntries(updatedEntries)
-    localStorage.setItem("holentia-journal-entries", JSON.stringify(updatedEntries))
+    persistEntries(updatedEntries)
     setCurrentEntry({ mood: "", gratitude: "", challenges: "", achievements: "", tomorrow: "" })
     setEditingId(null)
     triggerHapticFeedback("medium")
@@ -72,7 +88,13 @@ export function GuidedJournal() {
   const deleteEntry = (id: string) => {
     const updatedEntries = entries.filter((e) => e.id !== id)
     setEntries(updatedEntries)
-    localStorage.setItem("holentia-journal-entries", JSON.stringify(updatedEntries))
+    persistEntries(updatedEntries)
+    triggerHapticFeedback("medium")
+  }
+
+  const clearAllEntries = () => {
+    setEntries([])
+    persistEntries([])
     triggerHapticFeedback("medium")
   }
 
@@ -177,7 +199,15 @@ export function GuidedJournal() {
       {/* Lista de entradas */}
       {entries.length > 0 && (
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-          <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-6">Entradas anteriores</h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-400">Entradas anteriores</h2>
+            <button
+              onClick={clearAllEntries}
+              className="text-xs text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors"
+            >
+              Borrar todo
+            </button>
+          </div>
           <div className="space-y-4">
             {entries.map((entry) => (
               <div

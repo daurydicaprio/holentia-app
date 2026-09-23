@@ -29,6 +29,7 @@ export function BudgetSimulator() {
     updateIncomeAmount,
     updateExpenseTarget,
     updateExpenseAmount,
+    clearBudgetData,
   } = useBudgetSimulator()
 
   const [activeTab, setActiveTab] = useState<string>("income")
@@ -186,6 +187,13 @@ export function BudgetSimulator() {
                 }}
               ></div>
             </div>
+
+            <button
+              onClick={clearBudgetData}
+              className="text-xs text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors mx-auto"
+            >
+              Borrar mis datos
+            </button>
           </div>
         </div>
 
@@ -233,6 +241,12 @@ export function BudgetSimulator() {
 
           <div className="lg:col-span-1">
             <BudgetTips />
+            <button
+              onClick={clearBudgetData}
+              className="mt-4 text-xs text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors"
+            >
+              Borrar mis datos
+            </button>
           </div>
         </div>
       </div>

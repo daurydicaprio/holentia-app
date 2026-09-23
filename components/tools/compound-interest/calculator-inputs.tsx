@@ -21,6 +21,7 @@ interface CalculatorInputsProps {
   setInflation: (value: number) => void
   onSaveSimulation?: () => void
   disableSave?: boolean
+  onClearData?: () => void
 }
 
 export function CalculatorInputs({
@@ -38,6 +39,7 @@ export function CalculatorInputs({
   setInflation,
   onSaveSimulation,
   disableSave = false,
+  onClearData,
 }: CalculatorInputsProps) {
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
 
@@ -410,7 +412,7 @@ export function CalculatorInputs({
 
       {/* Botón para guardar simulación */}
       {onSaveSimulation && (
-        <div className="mt-6 flex justify-center">
+        <div className="mt-6 flex flex-col items-center gap-3">
           <button
             onClick={onSaveSimulation}
             disabled={disableSave}
@@ -422,6 +424,15 @@ export function CalculatorInputs({
             <Save size={16} />
             <span>Guardar Simulación</span>
           </button>
+          {onClearData && (
+            <button
+              onClick={onClearData}
+              className="text-xs text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors"
+              data-interactive="true"
+            >
+              Borrar mis datos
+            </button>
+          )}
         </div>
       )}
     </motion.div>

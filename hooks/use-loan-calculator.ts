@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
+import { simulationsKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
 // Tipos para las simulaciones guardadas
 export interface LoanSimulation {
@@ -14,9 +15,30 @@ export interface LoanSimulation {
   totalInterest: number
 }
 
+const LOAN_SIMS_KEY = simulationsKey("calculadora-prestamo")
+
 export function useLoanCalculator() {
-  // Estado para las simulaciones guardadas
+  // Estado para las simulaciones guardadas (Tipo S, máx 3, persistentes)
   const [savedSimulations, setSavedSimulations] = useState<LoanSimulation[]>([])
+
+  const restored = useRef(false)
+  const firstSimsSave = useRef(true)
+
+  // Restaurar simulaciones solo en cliente (evita hydration mismatch)
+  useEffect(() => {
+    if (restored.current) return
+    restored.current = true
+    setSavedSimulations(storageGet<LoanSimulation[]>(LOAN_SIMS_KEY, []))
+  }, [])
+
+  // Persistir simulaciones en cada cambio (se salta el primer render)
+  useEffect(() => {
+    if (firstSimsSave.current) {
+      firstSimsSave.current = false
+      return
+    }
+    storageSet(LOAN_SIMS_KEY, savedSimulations)
+  }, [savedSimulations])
 
   // Función para formatear moneda
   const formatCurrency = (value: number): string => {
@@ -123,6 +145,12 @@ export function useLoanCalculator() {
     )
   }
 
+  // Borra las simulaciones guardadas en memoria y en local
+  const clearLoanSimulations = () => {
+    storageRemove(LOAN_SIMS_KEY)
+    setSavedSimulations([])
+  }
+
   return {
     savedSimulations,
     formatCurrency,
@@ -131,5 +159,6 @@ export function useLoanCalculator() {
     saveSimulation,
     removeSimulation,
     updateSimulationName,
+    clearLoanSimulations,
   }
 }

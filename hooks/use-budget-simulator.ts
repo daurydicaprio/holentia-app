@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
+import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
 export interface BudgetItem {
   id: string
@@ -40,18 +41,41 @@ export interface TopExpense {
   percentage: number
 }
 
+const BUDGET_DRAFT_KEY = draftKey("crear-presupuesto-personal")
+
+const DEFAULT_INCOME: BudgetItem[] = [
+  { id: "income-1", concept: "Salario principal", amount: 0 },
+  { id: "income-2", concept: "Ingresos extra", amount: 0 },
+]
+
+const DEFAULT_EXPENSES: ExpenseItem[] = [
+  { id: "expense-1", concept: "Ahorro fijo", target: 0, amount: 0 },
+  { id: "expense-2", concept: "Vivienda", target: 0, amount: 0 },
+  { id: "expense-3", concept: "Alimentación", target: 0, amount: 0 },
+]
+
+interface BudgetDraft {
+  incomeItems?: BudgetItem[]
+  expenseItems?: ExpenseItem[]
+}
+
 export function useBudgetSimulator() {
   // Estado para ingresos y gastos
-  const [incomeItems, setIncomeItems] = useState<BudgetItem[]>([
-    { id: "income-1", concept: "Salario principal", amount: 0 },
-    { id: "income-2", concept: "Ingresos extra", amount: 0 },
-  ])
+  const [incomeItems, setIncomeItems] = useState<BudgetItem[]>(DEFAULT_INCOME)
 
-  const [expenseItems, setExpenseItems] = useState<ExpenseItem[]>([
-    { id: "expense-1", concept: "Ahorro fijo", target: 0, amount: 0 },
-    { id: "expense-2", concept: "Vivienda", target: 0, amount: 0 },
-    { id: "expense-3", concept: "Alimentación", target: 0, amount: 0 },
-  ])
+  const [expenseItems, setExpenseItems] = useState<ExpenseItem[]>(DEFAULT_EXPENSES)
+
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const restored = useRef(false)
+
+  // Restaurar borrador solo en cliente (evita hydration mismatch)
+  useEffect(() => {
+    if (restored.current) return
+    restored.current = true
+    const draft = storageGet<BudgetDraft>(BUDGET_DRAFT_KEY, {})
+    if (draft.incomeItems && draft.incomeItems.length > 0) setIncomeItems(draft.incomeItems)
+    if (draft.expenseItems && draft.expenseItems.length > 0) setExpenseItems(draft.expenseItems)
+  }, [])
 
   // Estado para el resumen
   const [summary, setSummary] = useState<BudgetSummary>({
@@ -209,6 +233,30 @@ export function useBudgetSimulator() {
     setExpenseItems(expenseItems.map((item) => (item.id === id ? { ...item, amount: amount } : item)))
   }
 
+  // Autoguardado del borrador (Tipo D) con debounce 500ms
+  // (se salta el primer render para no pisar lo restaurado)
+  const firstSave = useRef(true)
+  useEffect(() => {
+    if (firstSave.current) {
+      firstSave.current = false
+      return
+    }
+    if (saveTimer.current) clearTimeout(saveTimer.current)
+    saveTimer.current = setTimeout(() => {
+      storageSet(BUDGET_DRAFT_KEY, { incomeItems, expenseItems })
+    }, 500)
+    return () => {
+      if (saveTimer.current) clearTimeout(saveTimer.current)
+    }
+  }, [incomeItems, expenseItems])
+
+  // Borra el borrador local y restaura valores iniciales
+  const clearBudgetData = () => {
+    storageRemove(BUDGET_DRAFT_KEY)
+    setIncomeItems(DEFAULT_INCOME)
+    setExpenseItems(DEFAULT_EXPENSES)
+  }
+
   // Modificar la función updateAllCalculations para que no actualice estados directamente
   // y solo se use para cálculos iniciales o cuando sea explícitamente llamada
   const updateAllCalculations = () => {
@@ -231,5 +279,6 @@ export function useBudgetSimulator() {
     updateExpenseTarget,
     updateExpenseAmount,
     updateAllCalculations,
+    clearBudgetData,
   }
 }

@@ -3,6 +3,7 @@ import { ArrowLeft, HelpCircle, MessageCircle, Book, Lightbulb, Search, Mail, Ex
 import Logo from "@/components/common/logo/logo"
 import Footer from "@/components/common/footer/footer"
 import MenuButton from "@/components/common/menu-button/menu-button"
+import { ClearAllData } from "@/components/common/clear-all-data/clear-all-data"
 
 export default function AyudaPage() {
   return (
@@ -133,6 +134,9 @@ export default function AyudaPage() {
             ))}
           </div>
         </div>
+
+        {/* Privacidad: borrado local */}
+        <ClearAllData />
 
         {/* Contact section */}
         <div className="relative overflow-hidden rounded-3xl p-8 md:p-12 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 border border-indigo-200/50 dark:border-indigo-700/30">

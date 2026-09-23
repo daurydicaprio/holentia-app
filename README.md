@@ -115,6 +115,7 @@ La aplicación está dividida en cuatro secciones principales, cada una con su p
 - **Crear presupuesto personal**: Herramienta para gestionar ingresos y gastos con visualización de datos
 - **Calculadora de interés compuesto**: Visualización del crecimiento de ahorros con capacidad para guardar y comparar simulaciones
 - **Calculadora de préstamo**: Estrategia para eliminar deudas con capacidad para guardar y comparar simulaciones
+- **Calculadora consumo eléctrico**: Estima tu factura por kWh (tarifa RD) con subsidio aproximado
 
 ## Páginas Informativas
 
@@ -171,7 +172,8 @@ Cada sección tiene su propia paleta de colores:
 - No utilizamos cookies de seguimiento o análisis
 - No compartimos información con terceros
 - No creamos perfiles de usuario
-- Los datos de herramientas se guardan solo en localStorage del navegador
+- Los datos de herramientas se guardan solo en localStorage del navegador, bajo claves `holentia:{herramienta}:{draft|simulations|entries}:v1`
+- Cada herramienta tiene botón «Borrar mis datos» y Ayuda permite borrarlo todo
 - No hay servidores backend que almacenen información personal
 - Solo usamos cookies técnicas esenciales (preferencias de tema)
 

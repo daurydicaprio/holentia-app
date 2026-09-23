@@ -10,6 +10,7 @@ interface LoanCalculatorFormProps {
   onCalculate: (loanAmount: number, interestRate: number, loanTerm: number) => void
   onSaveSimulation: () => void
   onResetForm: () => void
+  onClearData?: () => void
   disableSave: boolean
   loanAmount: number
   interestRate: number
@@ -50,6 +51,7 @@ export function LoanCalculatorForm({
   onCalculate,
   onSaveSimulation,
   onResetForm,
+  onClearData,
   disableSave,
   loanAmount,
   interestRate,
@@ -349,6 +351,17 @@ export function LoanCalculatorForm({
           <span>Restablecer</span>
         </button>
       </div>
+      {onClearData && (
+        <div className="flex justify-center">
+          <button
+            onClick={onClearData}
+            className="text-xs text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors"
+            data-interactive="true"
+          >
+            Borrar mis datos
+          </button>
+        </div>
+      )}
     </div>
   )
 }

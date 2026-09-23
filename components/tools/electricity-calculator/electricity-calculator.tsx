@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { Zap, Trash2, Info } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
+import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
 // Tarifa residencial RD actual subsidiada — réplica factura usuario.
 // Cargo fijo base fija, tramos 0-200 / 201-300 / 301+.
@@ -19,7 +20,7 @@ const UMBRAL_SIN_TRAMOS = 700
 const SUBSIDY_FACTOR = 0.819
 const SUBSIDY_PCT_REF = 45.0
 
-const DRAFT_KEY = "holentia:calculadora-consumo-electrico:draft:v1"
+const DRAFT_KEY = draftKey("calculadora-consumo-electrico")
 
 function formatRD(value: number): string {
   return new Intl.NumberFormat("es-DO", {
@@ -38,27 +39,17 @@ export function ElectricityCalculator() {
 
   // Cargar borrador local (Tipo D, 1 slot, silencioso)
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(DRAFT_KEY)
-      if (raw) {
-        const parsed = JSON.parse(raw) as { kwh?: string }
-        if (typeof parsed.kwh === "string") setKwhInput(parsed.kwh)
-      }
-    } catch {
-      // storage no disponible o corrupto: seguir sin borrador
-    }
+    const parsed = storageGet<{ kwh?: string }>(DRAFT_KEY, {})
+    if (typeof parsed.kwh === "string") setKwhInput(parsed.kwh)
   }, [])
 
   // Autoguardado con debounce 500ms
   useEffect(() => {
     if (saveTimer.current) clearTimeout(saveTimer.current)
     saveTimer.current = setTimeout(() => {
-      try {
-        localStorage.setItem(DRAFT_KEY, JSON.stringify({ kwh: kwhInput }))
+      if (storageSet(DRAFT_KEY, { kwh: kwhInput })) {
         setSavedFlash(true)
         setTimeout(() => setSavedFlash(false), 1500)
-      } catch {
-        // quota o privado: no bloquear
       }
     }, 500)
     return () => {
@@ -95,11 +86,7 @@ export function ElectricityCalculator() {
 
   const clearData = () => {
     setKwhInput("")
-    try {
-      localStorage.removeItem(DRAFT_KEY)
-    } catch {
-      // ignorar
-    }
+    storageRemove(DRAFT_KEY)
     triggerHapticFeedback("medium")
   }
 

@@ -39,6 +39,7 @@ export function CompoundInterestCalculator() {
     saveSimulation,
     removeSimulation,
     updateSimulationName,
+    clearCompoundData,
   } = useCompoundInterestCalculator()
 
   const [activeTab, setActiveTab] = useState<string>("calculator")
@@ -101,6 +102,7 @@ export function CompoundInterestCalculator() {
                 setInflation={setInflation}
                 onSaveSimulation={handleSaveSimulation}
                 disableSave={savedSimulations.length >= 3}
+                onClearData={clearCompoundData}
               />
               <div className="mt-6">
                 <CompoundInterestResult summary={summary} formatCurrency={formatCurrency} inflation={inflation} />
@@ -221,6 +223,7 @@ export function CompoundInterestCalculator() {
               setInflation={setInflation}
               onSaveSimulation={handleSaveSimulation}
               disableSave={savedSimulations.length >= 3}
+              onClearData={clearCompoundData}
             />
           </div>
           <div>

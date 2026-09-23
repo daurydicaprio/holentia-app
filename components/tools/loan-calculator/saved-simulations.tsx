@@ -50,12 +50,24 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
     return null
   }
 
+  const clearAll = () => {
+    simulations.forEach((simulation) => onRemove(simulation.id))
+  }
+
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200 flex items-center gap-2">
-        <Save size={18} style={{ color: iconColor }} />
-        Simulaciones Guardadas
-      </h3>
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200 flex items-center gap-2">
+          <Save size={18} style={{ color: iconColor }} />
+          Simulaciones Guardadas
+        </h3>
+        <button
+          onClick={clearAll}
+          className="text-xs text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors"
+        >
+          Borrar todas
+        </button>
+      </div>
 
       <AnimatePresence>
         {simulations.map((simulation, index) => (
