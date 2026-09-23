@@ -119,7 +119,7 @@ export default function ToolCard({ card, index }: ToolCardProps) {
     }
 
     const handleMouseLeave = () => {
-      card.style.transform = "perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)"
+      card.style.transform = ""
     }
 
     card.addEventListener("mousemove", handleMouseMove)
@@ -150,11 +150,13 @@ export default function ToolCard({ card, index }: ToolCardProps) {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        transition: "all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+        transition: "box-shadow 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.35s ease",
+        willChange: "transform",
+        transformStyle: "preserve-3d",
         opacity: isAvailable ? 1 : 0.6,
         animationDelay,
       }}
-      className={`animate-fadeIn hover:shadow-xl hover:-translate-y-2 hover:scale-[1.05] ${!isAvailable ? "card-coming-soon" : ""}`}
+      className={`animate-fadeIn hover:shadow-xl ${!isAvailable ? "card-coming-soon" : ""}`}
       onTouchStart={handleCardPress}
     >
       <div style={{ paddingRight: "1.75rem" }}>
