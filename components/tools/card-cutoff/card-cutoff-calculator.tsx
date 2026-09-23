@@ -97,15 +97,16 @@ function WhySection({
   result,
   dueDay,
   cycleBadge,
+  isPast,
 }: {
   result: WhySectionData
   dueDay: string
   cycleBadge: { extra: number } | null
+  isPast: boolean
 }) {
   const total = Math.max(result.graceDays, 1)
   const pctCut = Math.min(100, Math.max(0, (result.daysToCutoff / total) * 100))
   const pctSug = Math.min(94, Math.max(6, ((result.graceDays - 3) / total) * 100))
-  const pctSugClamped = Math.min(88, Math.max(12, pctSug))
   const sugRight = pctSug > 72
   const sameDay = result.daysToCutoff === 0
 
@@ -115,6 +116,18 @@ function WhySection({
       <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
         Cada mes se repite lo mismo: un periodo para comprar y un periodo para pagar.
       </p>
+
+      {/* Contexto: ciclo anterior */}
+      {isPast && (
+        <div className="mb-6 p-3 rounded-lg bg-gray-100 dark:bg-gray-700/50 text-xs text-gray-600 dark:text-gray-300 leading-relaxed flex items-start gap-2">
+          <Info className="h-4 w-4 mt-0 flex-shrink-0" />
+          <span>
+            Viendo el ciclo de tu compra del <strong className="capitalize">{formatShort(result.purchase)}</strong>:
+            cortó el <strong className="capitalize">{formatShort(result.cutoff)}</strong> y vence el{" "}
+            <strong className="capitalize">{formatShort(result.due)}</strong>.
+          </span>
+        </div>
+      )}
 
       {/* Alerta: fecha sugerida */}
       <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-sm text-amber-800 dark:text-amber-200 leading-relaxed mb-8">
@@ -179,9 +192,9 @@ function WhySection({
         />
       </div>
 
-      {/* Pago sugerido: badge anclado al nodo con conector vertical */}
+      {/* Pago sugerido: badge anclado al mismo punto con conector vertical */}
       <div className="relative h-12 mt-0.5">
-        <div className="absolute top-0 flex flex-col items-center" style={{ left: `${pctSugClamped}%` }}>
+        <div className="absolute top-0 flex flex-col items-center" style={{ left: `${pctSug}%` }}>
           <div className="w-0.5 h-5 bg-[#1b5e20] dark:bg-[#81c784]" />
           <span
             className={`mt-1 px-3 py-1 rounded-full bg-[#1b5e20] text-white text-[11px] font-bold whitespace-nowrap ${
@@ -437,26 +450,15 @@ export function CardCutoffCalculator() {
           </div>
         ) : (
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
-            {/* Banner de estado: ciclo anterior o sugerencia de espera */}
-            {result.isPast ? (
+            {/* Sugerencia de espera (solo ciclo vigente) */}
+            {!result.isPast && result.waitTip && (
               <div className="mb-6 p-4 rounded-xl bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-800 text-sm text-sky-800 dark:text-sky-200 leading-relaxed flex items-start gap-2">
-                <Info className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                <Lightbulb className="h-4 w-4 mt-0.5 flex-shrink-0" />
                 <span>
-                  Compra en ciclo anterior: cortó el{" "}
-                  <strong className="capitalize">{formatLong(result.cutoff)}</strong> y vence el{" "}
-                  <strong className="capitalize">{formatLong(result.due)}</strong>.
+                  Si esperas al <strong className="capitalize">{formatLong(result.waitTip.date)}</strong> para esta
+                  compra, ganas <strong>{result.waitTip.extra} días gratis adicionales</strong>.
                 </span>
               </div>
-            ) : (
-              result.waitTip && (
-                <div className="mb-6 p-4 rounded-xl bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-800 text-sm text-sky-800 dark:text-sky-200 leading-relaxed flex items-start gap-2">
-                  <Lightbulb className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                  <span>
-                    Si esperas al <strong className="capitalize">{formatLong(result.waitTip.date)}</strong> para esta
-                    compra, ganas <strong>{result.waitTip.extra} días gratis adicionales</strong>.
-                  </span>
-                </div>
-              )
             )}
 
             {/* Héroe: días gratis reales de esta compra */}
@@ -531,7 +533,7 @@ export function CardCutoffCalculator() {
 
     {result && (
       <div className="mt-6">
-        <WhySection result={result} dueDay={dueDay} cycleBadge={cycleBadge} />
+        <WhySection result={result} dueDay={dueDay} cycleBadge={cycleBadge} isPast={result.isPast} />
       </div>
     )}
     </>
