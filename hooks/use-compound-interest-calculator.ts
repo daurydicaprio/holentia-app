@@ -447,11 +447,6 @@ export function useCompoundInterestCalculator(): useCompoundInterestCalculatorRe
         colors: pieColors,
       })
 
-      console.log("Datos del gráfico de pastel:", {
-        data: pieData,
-        labels: pieLabels,
-        colors: pieColors,
-      })
     } catch (error) {
       console.error("Error preparando datos de gráficos:", error)
     }

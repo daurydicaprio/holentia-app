@@ -42,13 +42,16 @@ export function CompoundInterestCalculator() {
   } = useCompoundInterestCalculator()
 
   const [activeTab, setActiveTab] = useState<string>("calculator")
+  const [saveError, setSaveError] = useState<string | null>(null)
   const isMobile = useMediaQuery("(max-width: 768px)")
 
   // Función para manejar el guardado de simulaciones
   const handleSaveSimulation = () => {
     const result = saveSimulation()
     if (!result.success && result.message) {
-      alert(result.message)
+      setSaveError(result.message)
+    } else {
+      setSaveError(null)
     }
   }
 
@@ -70,6 +73,14 @@ export function CompoundInterestCalculator() {
     return (
       <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="p-4">
+          {saveError && (
+            <div className="mb-4 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-sm text-red-700 dark:text-red-300 flex items-center justify-between gap-2">
+              <span>{saveError}</span>
+              <button onClick={() => setSaveError(null)} className="font-bold" aria-label="Cerrar aviso">
+                ×
+              </button>
+            </div>
+          )}
           {/* Añadir navegación por swipe para las pestañas */}
           <TabSwipeNavigation activeTab={activeTab} tabs={availableTabs} onTabChange={handleTabChange} />
 
@@ -184,6 +195,14 @@ export function CompoundInterestCalculator() {
   return (
     <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
       <div className="p-6">
+        {saveError && (
+          <div className="mb-4 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-sm text-red-700 dark:text-red-300 flex items-center justify-between gap-2">
+            <span>{saveError}</span>
+            <button onClick={() => setSaveError(null)} className="font-bold" aria-label="Cerrar aviso">
+              ×
+            </button>
+          </div>
+        )}
         {/* Sección superior: Inputs y Resumen */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <div>

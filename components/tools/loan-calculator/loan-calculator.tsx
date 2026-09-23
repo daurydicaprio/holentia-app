@@ -54,11 +54,15 @@ export function LoanCalculator() {
     setAmortizationData(amortizationData)
   }
 
+  const [saveError, setSaveError] = useState<string | null>(null)
+
   // Función para guardar una simulación
   const handleSaveSimulation = () => {
     const result = saveSimulation(loanAmount, interestRate, loanTerm)
     if (!result.success) {
-      alert(result.message)
+      setSaveError(result.message ?? "No se pudo guardar la simulación.")
+    } else {
+      setSaveError(null)
     }
   }
 
@@ -118,6 +122,14 @@ export function LoanCalculator() {
         <TabSwipeNavigation activeTab={activeTab} tabs={availableTabs} onTabChange={handleTabChange} />
 
         <div className="p-5">
+          {saveError && (
+            <div className="mb-4 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-sm text-red-700 dark:text-red-300 flex items-center justify-between gap-2">
+              <span>{saveError}</span>
+              <button onClick={() => setSaveError(null)} className="font-bold" aria-label="Cerrar aviso">
+                ×
+              </button>
+            </div>
+          )}
           {activeTab === "calculator" && (
             <motion.div variants={containerVariants}>
               <motion.div variants={itemVariants}>
@@ -176,6 +188,14 @@ export function LoanCalculator() {
       variants={containerVariants}
     >
       <div className="p-6">
+        {saveError && (
+          <div className="mb-4 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-sm text-red-700 dark:text-red-300 flex items-center justify-between gap-2">
+            <span>{saveError}</span>
+            <button onClick={() => setSaveError(null)} className="font-bold" aria-label="Cerrar aviso">
+              ×
+            </button>
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <motion.div variants={itemVariants}>
             <LoanCalculatorForm

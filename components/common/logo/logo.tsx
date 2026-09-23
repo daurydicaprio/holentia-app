@@ -42,7 +42,7 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
     scale: [0.99, 1.01, 0.99],
     transition: {
       duration: 10,
-      ease: "easeInOut",
+      ease: "easeInOut" as const,
       repeat: Number.POSITIVE_INFINITY,
       repeatType: "loop" as const,
     },
@@ -55,7 +55,7 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
         rotate: [0, 1, 0, -1, 0],
         transition: {
           duration: 0.5,
-          ease: "easeInOut",
+          ease: "easeInOut" as const,
         },
       }
     : {}

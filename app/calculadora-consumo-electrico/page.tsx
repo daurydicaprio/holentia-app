@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation"
 import { sectionsData } from "@/lib/data"
 import ToolPageClient from "@/components/tool-page-client"
 import { ElectricityCalculator } from "@/components/tools/electricity-calculator/electricity-calculator"
@@ -7,6 +8,8 @@ export default function CalculadoraConsumoElectricoPage() {
   const toolSlug = "calculadora-consumo-electrico"
 
   const toolData = sectionsData[section].cards.find((card) => card.slug === toolSlug)
+
+  if (!toolData) notFound()
 
   const toolPageParams = {
     section,

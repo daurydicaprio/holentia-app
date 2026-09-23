@@ -108,7 +108,9 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             stacked: true,
             grid: {
               display: false,
-              drawBorder: false,
+            },
+            border: {
+              display: false,
             },
             ticks: {
               font: { weight: "bold", size: 11 },
@@ -124,7 +126,9 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             stacked: true,
             grid: {
               display: false, // Quitar líneas de fondo
-              drawBorder: false,
+            },
+            border: {
+              display: false,
             },
             ticks: {
               font: { weight: "bold", size: 11 },
@@ -158,7 +162,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
               title: (items) => `Año: ${items[0].label}`,
               label: (c) => {
                 const label = c.dataset.label || ""
-                const value = formatCurrency(c.parsed.y)
+                const value = formatCurrency(c.parsed.y ?? 0)
                 return `${label}: ${value}`
               },
               footer: (items) => {
@@ -182,21 +186,13 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             align: "center",
             labels: {
               usePointStyle: true,
-              pointStyle: (context) => {
-                // Usar círculos para todos excepto la línea
-                const datasetIndex = context.datasetIndex
-                if (datasetIndex === 0) {
-                  return "rectRounded" // Rectángulo con bordes redondeados para la línea
-                }
-                return "circle" // Círculos para el resto
-              },
-              boxWidth: 40, // Ancho para la línea
-              boxHeight: (datasetIndex) => (datasetIndex === 0 ? 3 : 10), // Altura más pequeña para la línea, normal para círculos
-              padding: 40, // Aumentado para más espacio entre elementos de leyenda
+              pointStyle: "circle",
+              boxWidth: 10,
+              boxHeight: 10,
+              padding: 20,
               font: { size: 14, weight: "bold" }, // Tamaño de fuente aumentado
               color: chartColors.text,
             },
-            margin: 20, // Margen para pegar más la leyenda al gráfico
           },
           title: {
             display: false, // Ocultar título dentro del gráfico
@@ -225,11 +221,8 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
 
     // Verificar si hay datos para mostrar
     if (!pieChartData || !pieChartData.data || pieChartData.data.length === 0) {
-      console.log("No hay datos para el gráfico de pastel")
       return
     }
-
-    console.log("Datos del gráfico de pastel en el componente:", pieChartData)
 
     // Obtener el contexto del canvas
     const ctx = pieChartRef.current.getContext("2d")
@@ -331,7 +324,10 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
                     return data.labels.map((label, i) => {
                       const dataset = data.datasets[0]
                       const value = (dataset.data[i] as number) || 0
-                      const total = dataset.data.reduce((acc, val) => acc + ((val as number) || 0), 0)
+                      const total = dataset.data.reduce<number>(
+                        (acc, val) => acc + ((val as number) || 0),
+                        0,
+                      )
                       const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : "0.0"
 
                       return {

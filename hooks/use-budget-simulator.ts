@@ -212,9 +212,7 @@ export function useBudgetSimulator() {
   // Modificar la función updateAllCalculations para que no actualice estados directamente
   // y solo se use para cálculos iniciales o cuando sea explícitamente llamada
   const updateAllCalculations = () => {
-    // Esta función ahora está vacía porque toda la lógica se ha movido al useEffect
-    // La mantenemos por compatibilidad con el resto del código
-    console.log("Cálculos actualizados")
+    // Toda la lógica vive en el useEffect; se mantiene por compatibilidad
   }
 
   return {

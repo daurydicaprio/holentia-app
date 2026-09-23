@@ -78,6 +78,7 @@ Canónicos: mente `#1976d2`, relaciones `#7c3aed`, cuerpo `#ffa000`, finanzas `#
 - [ ] `planificador-ahorros Tipo S` reutilizando hooks compound/budget
 - [ ] `tracker-gastos-hormiga Tipo D`
 - [ ] `test-perfil-riesgo Tipo E` hacer/ver/imprimir, sin persistencia
+- [ ] Backlog pedido: `calculadora de calorías` (cuerpo, Tipo D) + `fecha de corte y vencimiento tarjeta de crédito` (finanzas, Tipo D/E a definir)
 - [ ] Merge `dev → main`, verificar `curl -sI https://holentia.com 200` + `vercel inspect holentia.com` nuevo ID
 
 ## Fase 6 — Mayores diferidos (solo con Fase 0-4 verde)

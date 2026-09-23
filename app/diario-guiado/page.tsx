@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation"
 import { sectionsData } from "@/lib/data"
 import ToolPageClient from "@/components/tool-page-client"
 import { GuidedJournal } from "@/components/tools/guided-journal/guided-journal"
@@ -7,6 +8,8 @@ export default function DiarioGuiadoPage() {
   const toolSlug = "diario-guiado"
 
   const toolData = sectionsData[section].cards.find((card) => card.slug === toolSlug)
+
+  if (!toolData) notFound()
 
   const toolPageParams = {
     section,

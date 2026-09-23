@@ -2,10 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { Droplets, Activity, Sun, Thermometer } from "lucide-react"
-import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 
 export function HydrationCalculator() {
-  const { triggerHapticFeedback } = useHapticFeedback()
   const [weight, setWeight] = useState<string>("")
   const [activityLevel, setActivityLevel] = useState<string>("sedentary")
   const [climate, setClimate] = useState<string>("temperate")
@@ -39,7 +37,6 @@ export function HydrationCalculator() {
     baseHydration *= climateAdjustments[climate] || 1
 
     setResult(Math.round(baseHydration))
-    triggerHapticFeedback("medium")
   }
 
   useEffect(() => {

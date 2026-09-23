@@ -43,10 +43,10 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
   let isToolPage = false
   let toolSection = section
 
-  if (!["mente", "cuerpo", "finanzas"].includes(firstPart)) {
+  if (!["mente", "cuerpo", "finanzas"].includes(firstPart ?? "")) {
     // Podría ser una herramienta, buscar en todas las secciones
     for (const [sectionId, sectionData] of Object.entries(sectionsData)) {
-      const toolExists = sectionData.cards.some((card) => card.slug === firstPart)
+      const toolExists = sectionData.cards.some((card) => card.slug === (firstPart ?? ""))
       if (toolExists) {
         isToolPage = true
         toolSection = sectionId
