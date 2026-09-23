@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { CreditCard, Trash2, Info, ShoppingBag, Scissors, Wallet, BellRing } from "lucide-react"
+import { CreditCard, Trash2, Info, ShoppingBag, Scissors, Wallet, BellRing, Lightbulb } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
@@ -105,6 +105,7 @@ function WhySection({
   const total = Math.max(result.graceDays, 1)
   const pctCut = Math.min(100, Math.max(0, (result.daysToCutoff / total) * 100))
   const pctSug = Math.min(94, Math.max(6, ((result.graceDays - 3) / total) * 100))
+  const pctSugClamped = Math.min(88, Math.max(12, pctSug))
   const sugRight = pctSug > 72
   const sameDay = result.daysToCutoff === 0
 
@@ -170,12 +171,18 @@ function WhySection({
           />
         )}
         <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-slate-500" style={{ left: "100%" }} />
+        {/* Nodo físico del pago sugerido sobre la barra */}
+        <div
+          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-[#1b5e20] border-[3px] border-white dark:border-gray-800 shadow"
+          style={{ left: `${pctSug}%` }}
+          title={`Pago sugerido: ${formatShort(result.suggestedPay)}`}
+        />
       </div>
 
-      {/* Pago sugerido conectado a su punto */}
+      {/* Pago sugerido: badge anclado al nodo con conector vertical */}
       <div className="relative h-12 mt-0.5">
-        <div className="absolute top-0 flex flex-col items-center" style={{ left: `${pctSug}%` }}>
-          <div className="w-0.5 h-2.5 bg-[#1b5e20] dark:bg-[#81c784]" />
+        <div className="absolute top-0 flex flex-col items-center" style={{ left: `${pctSugClamped}%` }}>
+          <div className="w-0.5 h-5 bg-[#1b5e20] dark:bg-[#81c784]" />
           <span
             className={`mt-1 px-3 py-1 rounded-full bg-[#1b5e20] text-white text-[11px] font-bold whitespace-nowrap ${
               sugRight ? "-translate-x-full" : "-translate-x-1/2"
@@ -259,12 +266,11 @@ export function CardCutoffCalculator() {
     const c = Number.parseInt(cutoffDay, 10)
     const p = Number.parseInt(dueDay, 10)
 
-    // Si la fecha ingresada ya pasó, el ciclo vigente es el de hoy,
-    // no el de esa fecha vieja.
+    // El ciclo siempre se calcula desde la fecha ingresada,
+    // aunque ya haya pasado: son sus días gratis reales.
     const isPast = purchaseISO < todayISO
-    const cycle = computeCycle(isPast ? todayISO : purchaseISO, c, p)
+    const cycle = computeCycle(purchaseISO, c, p)
     if (!cycle) return null
-    const pastCycle = isPast ? computeCycle(purchaseISO, c, p) : null
 
     // Tip educativo: ¿qué gana esperando al día siguiente del corte?
     let waitTip: { date: Date; extra: number } | null = null
@@ -281,7 +287,6 @@ export function CardCutoffCalculator() {
     return {
       ...cycle,
       isPast,
-      pastCycle,
       waitTip,
     }
   }, [configured, cutoffDay, dueDay, purchaseISO, todayISO])
@@ -432,7 +437,29 @@ export function CardCutoffCalculator() {
           </div>
         ) : (
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
-            {/* Héroe primero: días gratis */}
+            {/* Banner de estado: ciclo anterior o sugerencia de espera */}
+            {result.isPast ? (
+              <div className="mb-6 p-4 rounded-xl bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-800 text-sm text-sky-800 dark:text-sky-200 leading-relaxed flex items-start gap-2">
+                <Info className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                <span>
+                  Compra en ciclo anterior: cortó el{" "}
+                  <strong className="capitalize">{formatLong(result.cutoff)}</strong> y vence el{" "}
+                  <strong className="capitalize">{formatLong(result.due)}</strong>.
+                </span>
+              </div>
+            ) : (
+              result.waitTip && (
+                <div className="mb-6 p-4 rounded-xl bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-800 text-sm text-sky-800 dark:text-sky-200 leading-relaxed flex items-start gap-2">
+                  <Lightbulb className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                  <span>
+                    Si esperas al <strong className="capitalize">{formatLong(result.waitTip.date)}</strong> para esta
+                    compra, ganas <strong>{result.waitTip.extra} días gratis adicionales</strong>.
+                  </span>
+                </div>
+              )
+            )}
+
+            {/* Héroe: días gratis reales de esta compra */}
             <div
               className="rounded-xl p-8 text-white mb-8"
               style={{ background: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)" }}
@@ -440,15 +467,6 @@ export function CardCutoffCalculator() {
               <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Financiamiento gratis</div>
               <div className="text-6xl font-bold tabular-nums">{result.graceDays} días</div>
             </div>
-
-            {result.isPast && result.pastCycle && (
-              <div className="mb-4 p-3 rounded-lg bg-gray-100 dark:bg-gray-700/50 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
-                Esa compra del <strong className="capitalize">{formatLong(result.pastCycle.purchase)}</strong> ya entró
-                al corte del <strong className="capitalize">{formatLong(result.pastCycle.cutoff)}</strong> y se paga
-                el <strong className="capitalize">{formatLong(result.pastCycle.due)}</strong>. Abajo ves tu ciclo
-                vigente a hoy:
-              </div>
-            )}
             <p className="text-base leading-relaxed mb-8 text-gray-700 dark:text-gray-200">
               Tu tarjeta corta el <strong className="capitalize">{formatLong(result.cutoff)}</strong>
               {result.daysToCutoff === 0 ? (
@@ -505,14 +523,6 @@ export function CardCutoffCalculator() {
                 </div>
               ))}
             </div>
-
-            {result.waitTip && (
-              <div className="p-4 rounded-xl bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-800 text-sm text-sky-800 dark:text-sky-200 leading-relaxed">
-                <strong>Tip:</strong> si esperas al{" "}
-                <strong className="capitalize">{formatLong(result.waitTip.date)}</strong> para esta compra, ganas{" "}
-                <strong>{result.waitTip.extra} días gratis adicionales</strong>.
-              </div>
-            )}
 
           </div>
         )}
