@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { CreditCard, Trash2, Info, CalendarCheck, CalendarClock } from "lucide-react"
+import { CreditCard, Trash2, Info, ShoppingBag, Scissors, Wallet } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
@@ -26,18 +26,21 @@ function toISODate(d: Date): string {
   return `${d.getFullYear()}-${m}-${day}`
 }
 
-function formatLong(iso: string): string {
-  const [y, m, d] = iso.split("-").map(Number)
-  return new Date(y, m - 1, d).toLocaleDateString("es-ES", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-  })
+function parseISO(iso: string): Date | null {
+  const parts = iso.split("-").map(Number)
+  if (parts.length !== 3 || parts.some((n) => isNaN(n))) return null
+  return new Date(parts[0], parts[1] - 1, parts[2])
 }
 
-function diffDays(fromISO: string, to: Date): number {
-  const [y, m, d] = fromISO.split("-").map(Number)
-  const from = new Date(y, m - 1, d)
+function formatShort(d: Date): string {
+  return d.toLocaleDateString("es-ES", { day: "numeric", month: "short" })
+}
+
+function formatLong(d: Date): string {
+  return d.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" })
+}
+
+function diffDays(from: Date, to: Date): number {
   return Math.round((to.getTime() - from.getTime()) / 86400000)
 }
 
@@ -76,46 +79,54 @@ export function CardCutoffCalculator() {
     }
   }, [cutoffDay, dueDay])
 
-  const result = useMemo(() => {
+  const configured = useMemo(() => {
     const c = Number.parseInt(cutoffDay, 10)
     const p = Number.parseInt(dueDay, 10)
-    if (isNaN(c) || c < 1 || c > 31 || isNaN(p) || p < 1 || p > 31) return null
-    const parts = purchaseISO.split("-").map(Number)
-    if (parts.length !== 3 || parts.some((n) => isNaN(n))) return null
-    const [py, pm1, pd] = parts
-    const pm = pm1 - 1
+    return !isNaN(c) && c >= 1 && c <= 31 && !isNaN(p) && p >= 1 && p <= 31
+  }, [cutoffDay, dueDay])
+
+  const result = useMemo(() => {
+    if (!configured) return null
+    const c = Number.parseInt(cutoffDay, 10)
+    const p = Number.parseInt(dueDay, 10)
+    const purchase = parseISO(purchaseISO)
+    if (!purchase) return null
 
     // Corte al que pertenece la compra
-    const thisMonthCutoff = clampDay(py, pm, c)
-    const purchase = new Date(py, pm, pd)
+    const thisMonthCutoff = clampDay(purchase.getFullYear(), purchase.getMonth(), c)
     let cutoff = thisMonthCutoff
     if (purchase.getTime() > thisMonthCutoff.getTime()) {
-      const next = new Date(py, pm + 1, 1) // rollover de año automático
+      const next = new Date(purchase.getFullYear(), purchase.getMonth() + 1, 1)
       cutoff = clampDay(next.getFullYear(), next.getMonth(), c)
     }
 
     // Vencimiento: día P del mes siguiente al corte
     const due = clampDay(cutoff.getFullYear(), cutoff.getMonth() + 1, p)
 
-    const daysToCutoff = diffDays(purchaseISO, cutoff)
-    const graceDays = diffDays(purchaseISO, due)
-    // Mejor compra: día siguiente al corte anterior (entra al mismo corte y vence igual)
+    // Mejor compra: día siguiente al corte anterior
     const prevCutoff = new Date(cutoff)
     prevCutoff.setMonth(prevCutoff.getMonth() - 1)
     const bestDay = new Date(prevCutoff)
     bestDay.setDate(bestDay.getDate() + 1)
-    const bestGrace = Math.round((due.getTime() - bestDay.getTime()) / 86400000)
 
     return {
-      cutoffISO: toISODate(cutoff),
-      dueISO: toISODate(due),
-      daysToCutoff,
-      graceDays,
-      bestDayISO: toISODate(bestDay),
-      bestGrace,
-      isIdeal: daysToCutoff > 0 && diffDays(toISODate(prevCutoff), purchase) <= 3,
+      purchase,
+      cutoff,
+      due,
+      bestDay,
+      daysToCutoff: diffDays(purchase, cutoff),
+      graceDays: diffDays(purchase, due),
+      bestGrace: Math.round((due.getTime() - bestDay.getTime()) / 86400000),
+      isIdeal: diffDays(purchase, cutoff) > 0 && diffDays(prevCutoff, purchase) <= 3,
     }
-  }, [cutoffDay, dueDay, purchaseISO])
+  }, [configured, cutoffDay, dueDay, purchaseISO])
+
+  const setQuickDate = (offsetDays: number) => {
+    const d = new Date()
+    d.setDate(d.getDate() + offsetDays)
+    setPurchaseISO(toISODate(d))
+    triggerHapticFeedback("light")
+  }
 
   const clearData = () => {
     setCutoffDay("")
@@ -128,16 +139,27 @@ export function CardCutoffCalculator() {
   const inputClass =
     "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-[#388e3c] focus:border-transparent"
 
-  return (
-    <div className="space-y-6">
-      {/* Entrada */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-        <h2 className="text-2xl font-bold text-[#388e3c] dark:text-[#81c784] mb-2">Corte y pago de tu tarjeta</h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-          Configura tu tarjeta una vez y consulta cualquier compra: sabrás a qué corte entra y cuándo la pagas.
-        </p>
+  const steps = result
+    ? [
+        { icon: ShoppingBag, label: "Compras", date: result.purchase, note: "tu compra" },
+        { icon: Scissors, label: "Corte", date: result.cutoff, note: result.daysToCutoff === 0 ? "hoy" : `en ${result.daysToCutoff} días` },
+        { icon: Wallet, label: "Pagas", date: result.due, note: `${result.graceDays} días gratis` },
+      ]
+    : []
 
-        <div className="grid sm:grid-cols-2 gap-4">
+  return (
+    <div className="grid lg:grid-cols-5 gap-6">
+      {/* Columna izquierda: tu tarjeta + fecha */}
+      <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg h-fit">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="p-2 rounded-lg bg-[#388e3c]/10 dark:bg-[#388e3c]/20">
+            <CreditCard className="h-6 w-6 text-[#388e3c] dark:text-[#81c784]" />
+          </div>
+          <h2 className="text-xl font-bold">Tu tarjeta</h2>
+        </div>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">Configúrala una vez, consúltala siempre.</p>
+
+        <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-2">Día de corte (1-31)</label>
             <input
@@ -166,22 +188,37 @@ export function CardCutoffCalculator() {
               data-interactive="true"
             />
           </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">¿Cuándo compras?</label>
+            <input
+              type="date"
+              value={purchaseISO}
+              onChange={(e) => setPurchaseISO(e.target.value)}
+              className={inputClass}
+              data-interactive="true"
+            />
+            <div className="flex gap-2 mt-2">
+              {[
+                { label: "Hoy", offset: 0 },
+                { label: "Mañana", offset: 1 },
+                { label: "En 15 días", offset: 15 },
+              ].map((chip) => (
+                <button
+                  key={chip.label}
+                  onClick={() => setQuickDate(chip.offset)}
+                  className="px-3 py-1.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784] font-medium transition-colors"
+                  data-interactive="true"
+                >
+                  {chip.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div className="mt-4">
-          <label className="block text-sm font-medium mb-2">Fecha de la compra</label>
-          <input
-            type="date"
-            value={purchaseISO}
-            onChange={(e) => setPurchaseISO(e.target.value)}
-            className={inputClass}
-            data-interactive="true"
-          />
-        </div>
-
-        <div className="flex items-center justify-between mt-4">
+        <div className="flex items-center justify-between mt-6">
           <span className="text-xs text-gray-500 dark:text-gray-400">
-            {savedFlash ? "Guardado local ✓" : "Tu tarjeta se guarda solo en tu navegador"}
+            {savedFlash ? "Guardado local ✓" : "Se guarda en tu navegador"}
           </span>
           <button
             onClick={clearData}
@@ -194,59 +231,81 @@ export function CardCutoffCalculator() {
         </div>
       </div>
 
-      {/* Resultado */}
-      {result && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-          <div className="flex items-center justify-center mb-4">
-            <CreditCard className="h-12 w-12 text-[#388e3c] dark:text-[#81c784]" />
+      {/* Columna derecha: la historia de tu compra */}
+      <div className="lg:col-span-3">
+        {!result ? (
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-10 shadow-lg text-center text-gray-500 dark:text-gray-400">
+            <CreditCard className="h-12 w-12 mx-auto mb-4 opacity-40" />
+            <p className="font-medium">Escribe tu día de corte y vencimiento</p>
+            <p className="text-sm mt-1">y te cuento cuándo pagarías cada compra.</p>
           </div>
+        ) : (
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+            <p className="text-lg leading-relaxed mb-6">
+              Si compras el <strong className="capitalize">{formatLong(result.purchase)}</strong>, entras al corte
+              del <strong className="capitalize">{formatLong(result.cutoff)}</strong> y pagas el{" "}
+              <strong className="text-[#388e3c] dark:text-[#81c784] capitalize">{formatLong(result.due)}</strong>.
+            </p>
 
-          {result.isIdeal && (
-            <div className="mb-4 p-3 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-sm text-green-800 dark:text-green-200 text-center font-medium">
-              Compra ideal: entras justo al inicio del ciclo y aprovechas el máximo de días gratis.
+            {/* Timeline */}
+            <div className="relative pl-10 space-y-6 mb-6">
+              <div className="absolute left-[19px] top-2 bottom-2 w-0.5 bg-[#388e3c]/25 dark:bg-[#388e3c]/40" />
+              {steps.map((step, i) => (
+                <div key={step.label} className="relative">
+                  <div
+                    className={`absolute -left-10 w-10 h-10 rounded-full flex items-center justify-center ${
+                      i === steps.length - 1
+                        ? "text-white"
+                        : "bg-[#388e3c]/10 dark:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784]"
+                    }`}
+                    style={i === steps.length - 1 ? { background: "linear-gradient(135deg, #2e7d32, #1b5e20)" } : undefined}
+                  >
+                    <step.icon className="h-5 w-5" />
+                  </div>
+                  <div className="flex items-baseline justify-between gap-2 flex-wrap">
+                    <span className="font-semibold">
+                      {step.label} · <span className="capitalize">{formatLong(step.date)}</span>
+                    </span>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">{step.note}</span>
+                  </div>
+                  {i === 0 && (
+                    <span className="text-xs text-gray-500 dark:text-gray-400">({formatShort(step.date)})</span>
+                  )}
+                </div>
+              ))}
             </div>
-          )}
 
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
-              <div className="flex items-center gap-2 mb-1">
-                <CalendarClock className="h-4 w-4 text-[#388e3c] dark:text-[#81c784]" />
-                <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
-                  Corte que te toca {result.daysToCutoff === 0 ? "(hoy)" : `(en ${result.daysToCutoff} días)`}
-                </span>
+            {/* Héroe: días gratis */}
+            <div
+              className="rounded-xl p-5 text-white flex items-center justify-between gap-4 flex-wrap"
+              style={{ background: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)" }}
+            >
+              <div>
+                <div className="text-sm opacity-90">Financiamiento gratis</div>
+                <div className="text-4xl font-bold">{result.graceDays} días</div>
               </div>
-              <div className="font-bold capitalize">{formatLong(result.cutoffISO)}</div>
-            </div>
-            <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
-              <div className="flex items-center gap-2 mb-1">
-                <CalendarCheck className="h-4 w-4 text-[#388e3c] dark:text-[#81c784]" />
-                <span className="text-xs font-medium text-gray-500 dark:text-gray-400">Fecha límite de pago</span>
+              <div className="text-sm opacity-90 max-w-[220px]">
+                Comprando el <span className="capitalize font-semibold">{formatLong(result.bestDay)}</span> tendrías
+                hasta {result.bestGrace} días.
               </div>
-              <div className="font-bold capitalize">{formatLong(result.dueISO)}</div>
+            </div>
+
+            {result.isIdeal && (
+              <div className="mt-4 p-3 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-sm text-green-800 dark:text-green-200 text-center font-medium">
+                Compra ideal: entras justo al inicio del ciclo.
+              </div>
+            )}
+
+            <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 mt-4">
+              <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
+              <span>
+                Vence el día {dueDay} del mes siguiente al corte. Si tu banco usa días de gracia fijos, verifícalo en
+                tu estado de cuenta. Estimación educativa, todo queda en tu navegador.
+              </span>
             </div>
           </div>
-
-          <div
-            className="mt-4 rounded-xl p-5 text-white"
-            style={{ background: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)" }}
-          >
-            <div className="text-sm opacity-90 mb-1">Días de financiamiento gratis para esta compra</div>
-            <div className="text-3xl font-bold">{result.graceDays} días</div>
-            <div className="text-sm opacity-90 mt-2 capitalize">
-              Comprando el {formatLong(result.bestDayISO)} tendrías hasta {result.bestGrace} días.
-            </div>
-          </div>
-
-          <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 mt-4">
-            <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
-            <span>
-              Cálculo estándar: el vencimiento es el día {dueDay || "P"} del mes siguiente al corte. Si tu banco usa
-              días de gracia fijos en vez de día de pago, cuéntanos y lo ajustamos. Estimación educativa, verifica
-              con tu estado de cuenta. Todo se guarda solo en tu navegador.
-            </span>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }

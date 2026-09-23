@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { Zap, Trash2, Info } from "lucide-react"
+import { Trash2, Info, Zap } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
@@ -43,8 +43,13 @@ export function ElectricityCalculator() {
     if (typeof parsed.kwh === "string") setKwhInput(parsed.kwh)
   }, [])
 
-  // Autoguardado con debounce 500ms
+  // Autoguardado con debounce 500ms (se salta el primer render)
+  const firstSave = useRef(true)
   useEffect(() => {
+    if (firstSave.current) {
+      firstSave.current = false
+      return
+    }
     if (saveTimer.current) clearTimeout(saveTimer.current)
     saveTimer.current = setTimeout(() => {
       if (storageSet(DRAFT_KEY, { kwh: kwhInput })) {
@@ -59,7 +64,7 @@ export function ElectricityCalculator() {
 
   const kwh = useMemo(() => {
     const n = Number.parseFloat(kwhInput)
-    return isNaN(n) || n < 0 ? 0 : n
+    return isNaN(n) || n < 0 ? 0 : Math.floor(n)
   }, [kwhInput])
 
   const result = useMemo(() => {
@@ -90,18 +95,52 @@ export function ElectricityCalculator() {
     triggerHapticFeedback("medium")
   }
 
-  return (
-    <div className="space-y-6">
-      {/* Entrada */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-        <h2 className="text-2xl font-bold text-[#388e3c] dark:text-[#81c784] mb-2">
-          Estima tu factura eléctrica
-        </h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-          Escribe tu consumo en kWh y ve de antemano un aproximado, igual que tu factura.
-        </p>
+  const rows = result
+    ? result.sinTramos
+      ? [{ label: `${result.t3kwh.toLocaleString("es-DO")} kWh x RD$ ${TRAMO3_PRECIO.toFixed(2)} (tasa plena)`, value: result.t3 }]
+      : [
+          { label: `${result.t1kwh.toLocaleString("es-DO")} kWh x RD$ ${TRAMO1_PRECIO.toFixed(2)}`, value: result.t1 },
+          ...(result.t2kwh > 0
+            ? [{ label: `${result.t2kwh.toLocaleString("es-DO")} kWh x RD$ ${TRAMO2_PRECIO.toFixed(2)}`, value: result.t2 }]
+            : []),
+          ...(result.t3kwh > 0
+            ? [{ label: `${result.t3kwh.toLocaleString("es-DO")} kWh x RD$ ${TRAMO3_PRECIO.toFixed(2)}`, value: result.t3 }]
+            : []),
+        ]
+    : []
 
-        <label className="block text-sm font-medium mb-2">Consumo estimado (kWh)</label>
+  return (
+    <div className="grid lg:grid-cols-5 gap-6">
+      {/* Controles */}
+      <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg h-fit">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="p-2 rounded-lg bg-[#388e3c]/10 dark:bg-[#388e3c]/20">
+            <Zap className="h-6 w-6 text-[#388e3c] dark:text-[#81c784]" />
+          </div>
+          <h2 className="text-xl font-bold">Tu consumo</h2>
+        </div>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">Mueve el medidor y mira tu factura al instante.</p>
+
+        <div className="text-center mb-2">
+          <span className="text-5xl font-bold text-[#388e3c] dark:text-[#81c784]">
+            {kwh > 0 ? kwh.toLocaleString("es-DO") : "—"}
+          </span>
+          <span className="block text-sm text-gray-500 dark:text-gray-400 mt-1">kWh del mes</span>
+        </div>
+
+        <input
+          type="range"
+          min={0}
+          max={1000}
+          step={5}
+          value={Math.min(kwh, 1000)}
+          onChange={(e) => setKwhInput(e.target.value)}
+          className="w-full mt-2"
+          aria-label="Consumo en kWh"
+          data-interactive="true"
+        />
+
+        <label className="block text-sm font-medium mt-4 mb-2">O escribe el número exacto</label>
         <input
           type="number"
           min={0}
@@ -113,20 +152,8 @@ export function ElectricityCalculator() {
           data-interactive="true"
         />
 
-        <input
-          type="range"
-          min={0}
-          max={1000}
-          step={1}
-          value={kwh}
-          onChange={(e) => setKwhInput(e.target.value)}
-          className="w-full mt-4"
-          aria-label="Consumo en kWh"
-          data-interactive="true"
-        />
-
-        <div className="flex flex-wrap gap-2 mt-4">
-          {[100, 200, 300, 445, 700].map((v) => (
+        <div className="flex flex-wrap gap-2 mt-3">
+          {[150, 300, 445, 700].map((v) => (
             <button
               key={v}
               onClick={() => setQuick(v)}
@@ -138,9 +165,9 @@ export function ElectricityCalculator() {
           ))}
         </div>
 
-        <div className="flex items-center justify-between mt-4">
+        <div className="flex items-center justify-between mt-6">
           <span className="text-xs text-gray-500 dark:text-gray-400">
-            {savedFlash ? "Guardado local ✓" : "Se guarda solo en tu navegador"}
+            {savedFlash ? "Guardado local ✓" : "Se guarda en tu navegador"}
           </span>
           <button
             onClick={clearData}
@@ -153,90 +180,64 @@ export function ElectricityCalculator() {
         </div>
       </div>
 
-      {/* Resultado réplica factura */}
-      {result && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-          <div className="flex items-center justify-center mb-4">
-            <Zap className="h-12 w-12 text-[#388e3c] dark:text-[#81c784]" />
+      {/* La factura */}
+      <div className="lg:col-span-3">
+        {!result ? (
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-10 shadow-lg text-center text-gray-500 dark:text-gray-400 h-full flex flex-col items-center justify-center">
+            <Zap className="h-12 w-12 mx-auto mb-4 opacity-40" />
+            <p className="font-medium">Mueve el medidor</p>
+            <p className="text-sm mt-1">y aquí aparece tu factura estimada.</p>
           </div>
-          <h3 className="text-xl font-bold text-center mb-1">Cálculo de la factura</h3>
-          <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-6">
-            Tarifa actual subsidiada · Cargo fijo RD$ {CARGO_FIJO.toFixed(2)} base
-          </p>
-          {result.sinTramos && (
-            <div className="mb-4 p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-sm text-amber-800 dark:text-amber-200 text-center">
-              Desde 700 kWh no aplica subsidio por tramos: se usa la tasa más alta
-              (RD$ {TRAMO3_PRECIO.toFixed(2)}) al total del consumo.
+        ) : (
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border-2 border-gray-900/80 dark:border-gray-100/20">
+            <div className="bg-sky-200 dark:bg-sky-900/60 px-4 py-2 text-center font-bold tracking-wide text-sm">
+              CALCULO DE LA FACTURA
             </div>
-          )}
-
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
-              <span className="text-gray-600 dark:text-gray-300">Cargo fijo</span>
-              <span className="font-semibold">{formatRD(CARGO_FIJO)}</span>
-            </div>
-            {!result.sinTramos && (
-              <div className="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
-                <span className="text-gray-600 dark:text-gray-300">
-                  {result.t1kwh.toLocaleString("es-DO")} kWh x RD$ {TRAMO1_PRECIO.toFixed(2)}
+            <div className="p-5 font-mono text-sm">
+              <div className="flex justify-between py-1">
+                <span>Cargo fijo</span>
+                <span>RD$ {CARGO_FIJO.toFixed(2)}</span>
+              </div>
+              <div className="border-t border-dashed border-gray-300 dark:border-gray-600 my-2" />
+              <div className="text-gray-500 dark:text-gray-400 text-xs mb-1">Energía</div>
+              {rows.map((row) => (
+                <div key={row.label} className="flex justify-between py-1 gap-2">
+                  <span className="truncate">{row.label}</span>
+                  <span className="whitespace-nowrap">RD$ {row.value.toLocaleString("es-DO", { minimumFractionDigits: 2 })}</span>
+                </div>
+              ))}
+              <div className="border-t border-dashed border-gray-300 dark:border-gray-600 my-2" />
+              <div className="flex justify-between py-1 font-sans font-semibold">
+                <span>Promedio por kWh</span>
+                <span>{formatRD(result.promedio)}</span>
+              </div>
+              <div className="flex justify-between py-1 font-sans text-xs text-gray-500 dark:text-gray-400">
+                <span>
+                  {result.sinTramos
+                    ? "Sin subsidio desde 700 kWh"
+                    : `Subsidio gobierno (aprox. ${SUBSIDY_PCT_REF}%)`}
                 </span>
-                <span className="font-semibold">{formatRD(result.t1)}</span>
+                <span>{formatRD(result.subsidio)}</span>
               </div>
-            )}
-            {result.t2kwh > 0 && (
-              <div className="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
-                <span className="text-gray-600 dark:text-gray-300">
-                  {result.t2kwh.toLocaleString("es-DO")} kWh x RD$ {TRAMO2_PRECIO.toFixed(2)}
-                </span>
-                <span className="font-semibold">{formatRD(result.t2)}</span>
+              <div className="flex justify-between py-1 font-sans text-xs text-gray-500 dark:text-gray-400">
+                <span>Importe sin subsidio (est.)</span>
+                <span>{formatRD(result.sinSubsidio)}</span>
               </div>
-            )}
-            {result.t3kwh > 0 && (
-              <div className="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
-                <span className="text-gray-600 dark:text-gray-300">
-                  {result.t3kwh.toLocaleString("es-DO")} kWh x RD$ {TRAMO3_PRECIO.toFixed(2)}
-                </span>
-                <span className="font-semibold">{formatRD(result.t3)}</span>
-              </div>
-            )}
-          </div>
-
-          <div className="mt-6 rounded-xl p-5 text-white" style={{ background: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)" }}>
-            <div className="text-sm opacity-90 mb-1">Valor total a pagar en RD$</div>
-            <div className="text-3xl font-bold">{formatRD(result.total)}</div>
-            <div className="text-sm opacity-90 mt-2">
-              Promedio {formatRD(result.promedio)} por kWh · {kwh.toLocaleString("es-DO")} kWh
+            </div>
+            <div className="bg-yellow-300 dark:bg-yellow-500/90 px-5 py-3 flex justify-between items-center font-bold text-gray-900">
+              <span className="text-sm">VALOR TOTAL A PAGAR EN RD$</span>
+              <span className="text-2xl">{formatRD(result.total)}</span>
+            </div>
+            <div className="px-5 py-3 flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800">
+              <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
+              <span>
+                Estimación con tarifa subsidiada. Puede variar ±RD$ 100 por picos de generación y tu consumo. No
+                incluye mora ni reconexión. Todo queda en tu navegador.
+              </span>
             </div>
           </div>
-
-          <div className="grid sm:grid-cols-2 gap-4 mt-4">
-            <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
-              <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-                {result.sinTramos
-                  ? "Subsidio del gobierno (no aplica desde 700 kWh)"
-                  : `Gobierno te subsidia (aprox. ${SUBSIDY_PCT_REF}% ref.)`}
-              </div>
-              <div className="text-lg font-bold text-[#388e3c] dark:text-[#81c784]">{formatRD(result.subsidio)}</div>
-            </div>
-            <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
-              <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-                Importe sin subsidio (estimado)
-              </div>
-              <div className="text-lg font-bold">{formatRD(result.sinSubsidio)}</div>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 mt-4">
-            <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
-            <span>
-              Estimación con tarifa subsidiada actual. El monto del subsidio puede variar más o menos
-              RD$ 100, ya que depende de los picos de generación y de tu consumo del mes
-              (ref. facturas 397–445 kWh: 44.6–45.5%). Desde 700 kWh no hay subsidio por tramos.
-              No incluye mora, reconexión ni otros cargos. Todo se calcula y guarda solo en tu navegador.
-            </span>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }
