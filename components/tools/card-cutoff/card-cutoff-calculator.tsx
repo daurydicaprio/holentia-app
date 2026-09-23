@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { CreditCard, Trash2, Info, ShoppingBag, Scissors, Wallet } from "lucide-react"
+import { CreditCard, Trash2, Info, ShoppingBag, Scissors, Wallet, BellRing, Bell } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
@@ -105,11 +105,16 @@ export function CardCutoffCalculator() {
     const bestDay = new Date(prevCutoff)
     bestDay.setDate(bestDay.getDate() + 1)
 
+    // Pago sugerido: 3 días antes del vencimiento
+    const suggestedPay = new Date(due)
+    suggestedPay.setDate(suggestedPay.getDate() - 3)
+
     return {
       purchase,
       cutoff,
       due,
       bestDay,
+      suggestedPay,
       daysToCutoff: diffDays(purchase, cutoff),
       graceDays: diffDays(purchase, due),
       bestGrace: Math.round((due.getTime() - bestDay.getTime()) / 86400000),
@@ -139,7 +144,8 @@ export function CardCutoffCalculator() {
     ? [
         { icon: ShoppingBag, label: "Compras", date: result.purchase, note: "tu compra" },
         { icon: Scissors, label: "Corte", date: result.cutoff, note: result.daysToCutoff === 0 ? "hoy" : `en ${result.daysToCutoff} días` },
-        { icon: Wallet, label: "Pagas", date: result.due, note: `${result.graceDays} días gratis` },
+        { icon: BellRing, label: "Paga (sugerido)", date: result.suggestedPay, note: "3 días antes" },
+        { icon: Wallet, label: "Vence", date: result.due, note: `${result.graceDays} días gratis` },
       ]
     : []
 
@@ -240,7 +246,7 @@ export function CardCutoffCalculator() {
           </div>
         ) : (
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
-            <p className="text-lg sm:text-xl leading-relaxed mb-8">
+            <p className="text-base leading-relaxed mb-8 text-gray-700 dark:text-gray-200">
               Si compras el <strong className="capitalize">{formatLong(result.purchase)}</strong>, entras al corte
               del <strong className="capitalize">{formatLong(result.cutoff)}</strong> y pagas el{" "}
               <strong className="text-[#388e3c] dark:text-[#81c784] capitalize">{formatLong(result.due)}</strong>.
@@ -284,6 +290,67 @@ export function CardCutoffCalculator() {
               <div className="text-sm opacity-90 max-w-[220px]">
                 Comprando el <span className="capitalize font-semibold">{formatLong(result.bestDay)}</span> tendrías
                 hasta {result.bestGrace} días.
+              </div>
+            </div>
+
+            {/* No esperes al último día */}
+            <div className="mt-5 p-4 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-sm text-amber-800 dark:text-amber-200 leading-relaxed">
+              <strong>Puedes pagar el último día sin problema</strong>, pero te sugerimos pagar{" "}
+              <strong>2 o 3 días antes</strong>: un fin de semana, un feriado o un atraso del banco te puede generar
+              mora. Marca el <strong className="capitalize">{formatLong(result.suggestedPay)}</strong> en tu
+              calendario.
+            </div>
+
+            {/* Gráfico: de dónde salen tus días */}
+            <div className="mt-6">
+              <h3 className="font-bold mb-1">¿Por qué tienes hasta {result.bestGrace} días?</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                Tus días gratis son la suma de dos tramos: de la compra al corte, más del corte al vencimiento.
+              </p>
+              {(() => {
+                const total = Math.max(result.graceDays, 1)
+                const pctA = Math.min(100, Math.max(0, (result.daysToCutoff / total) * 100))
+                const pctSug = Math.min(100, Math.max(0, ((result.graceDays - 3) / total) * 100))
+                return (
+                  <div>
+                    <div className="relative h-3 rounded-full overflow-visible flex">
+                      <div className="h-full rounded-l-full bg-[#81c784]" style={{ width: `${pctA}%` }} />
+                      <div className="h-full rounded-r-full bg-[#1b5e20]" style={{ width: `${100 - pctA}%` }} />
+                      {[
+                        { left: 0, label: "Compra" },
+                        { left: pctA, label: "Corte" },
+                        { left: pctSug, label: "Sugerido" },
+                        { left: 100, label: "Vence" },
+                      ].map((dot) => (
+                        <div
+                          key={dot.label}
+                          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-[#388e3c]"
+                          style={{ left: `${dot.left}%` }}
+                          title={dot.label}
+                        />
+                      ))}
+                    </div>
+                    <div className="flex justify-between mt-2 text-xs text-gray-600 dark:text-gray-400">
+                      <span>
+                        Compra → corte: <strong>{result.daysToCutoff} días</strong>
+                      </span>
+                      <span>
+                        Corte → pago: <strong>{result.graceDays - result.daysToCutoff} días</strong>
+                      </span>
+                    </div>
+                    <div className="flex justify-between mt-1 text-xs text-gray-500 dark:text-gray-400">
+                      <span className="capitalize">{formatLong(result.purchase)}</span>
+                      <span className="capitalize">{formatLong(result.due)}</span>
+                    </div>
+                  </div>
+                )
+              })()}
+              <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 mt-4">
+                <Bell className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
+                <span>
+                  Comprando justo después de un corte puedes llegar hasta {result.bestGrace} días. Para no olvidarlo:
+                  pon un recordatorio en tu teléfono o calendario, o apunta la fecha en un lugar visible de la casa.
+                </span>
               </div>
             </div>
 
