@@ -84,6 +84,7 @@ function diffDays(from: Date, to: Date): number {
 }
 
 interface WhySectionData {
+  purchase: Date
   cutoff: Date
   due: Date
   suggestedPay: Date
@@ -93,70 +94,11 @@ interface WhySectionData {
   bestGrace: number
 }
 
-function addMonths(d: Date, n: number): Date {
-  return new Date(d.getFullYear(), d.getMonth() + n, d.getDate())
-}
-
-/** Fila del ciclo: periodo de compras + periodo de pago, con fechas reales. */
-function CycleRow({
-  tag,
-  buyDays,
-  payDays,
-  cutDate,
-  dueDate,
-}: {
-  tag: string
-  buyDays: number
-  payDays: number
-  cutDate: Date
-  dueDate: Date
-}) {
-  const total = Math.max(buyDays + payDays, 1)
-  const pctBuy = (buyDays / total) * 100
-  return (
-    <div>
-      <div className="flex justify-between items-end text-[11px] font-bold mb-1 gap-2">
-        <span className="leading-tight">
-          Fecha de corte
-          <span className="block font-medium capitalize text-gray-500 dark:text-gray-400">
-            {formatShort(cutDate)}
-          </span>
-          <span className="inline-block text-[#388e3c] text-sm leading-none">↓</span>
-        </span>
-        <span className="text-right leading-tight">
-          Fecha límite de pago
-          <span className="block font-medium capitalize text-gray-500 dark:text-gray-400">
-            {formatShort(dueDate)}
-          </span>
-          <span className="inline-block text-[#388e3c] text-sm leading-none">↓</span>
-        </span>
-      </div>
-      <div className="relative flex h-12 rounded-xl overflow-hidden text-center">
-        <div
-          className="h-full flex flex-col items-center justify-center bg-[#388e3c]/15 dark:bg-[#388e3c]/25 text-[#1b5e20] dark:text-[#a5d6a7]"
-          style={{ width: `${pctBuy}%` }}
-        >
-          <span className="text-sm font-bold leading-none">{buyDays} DÍAS</span>
-          <span className="text-[10px] leading-tight opacity-80">Periodo de compras</span>
-        </div>
-        <div className="w-0 border-l-2 border-dashed border-[#388e3c]" />
-        <div
-          className="h-full flex flex-col items-center justify-center bg-amber-200 dark:bg-amber-400/80 text-amber-900"
-          style={{ width: `${100 - pctBuy}%` }}
-        >
-          <span className="text-sm font-bold leading-none">{payDays} DÍAS</span>
-          <span className="text-[10px] leading-tight opacity-80">Periodo de pago</span>
-        </div>
-      </div>
-      <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{tag}</div>
-    </div>
-  )
-}
-
-/** Tarjeta aparte: explicación, ciclo y pago. */
+/** Tarjeta aparte: explicación y ciclo. */
 function WhySection({ result, dueDay }: { result: WhySectionData; dueDay: string }) {
-  const nextCutoff = addMonths(result.cutoff, 1)
-  const nextDue = addMonths(result.due, 1)
+  const total = Math.max(result.graceDays, 1)
+  const pctA = Math.min(100, Math.max(0, (result.daysToCutoff / total) * 100))
+  const pctSug = Math.min(100, Math.max(0, ((result.graceDays - 3) / total) * 100))
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
@@ -172,40 +114,65 @@ function WhySection({ result, dueDay }: { result: WhySectionData; dueDay: string
         Marca el <strong className="capitalize">{formatLong(result.suggestedPay)}</strong> en tu calendario.
       </div>
 
-      {/* Este ciclo */}
-      <CycleRow
-        tag="Este ciclo"
-        buyDays={result.daysToCutoff}
-        payDays={result.graceDays - result.daysToCutoff}
-        cutDate={result.cutoff}
-        dueDate={result.due}
-      />
-
-      {/* Próximo ciclo */}
-      <div className="mt-6">
-        <CycleRow
-          tag="Próximo ciclo · se repite todos los meses"
-          buyDays={diffDays(result.cutoff, nextCutoff)}
-          payDays={diffDays(nextCutoff, nextDue)}
-          cutDate={nextCutoff}
-          dueDate={nextDue}
-        />
-      </div>
-
-      {/* La regla, sencilla */}
-      <p className="mt-8 leading-relaxed text-center">
-        Todo lo que compres entre el <strong className="capitalize">{formatLong(result.bestDay)}</strong> y el{" "}
-        <strong className="capitalize">{formatLong(result.cutoff)}</strong> lo pagas en la misma fecha límite.
-      </p>
-
-      {/* Tu pago, en grande y aparte */}
-      <div className="mt-4 rounded-xl p-7 sm:p-8 text-white text-center bg-[#1b5e20] dark:bg-[#144a19] shadow-lg">
-        <div className="text-xs uppercase tracking-widest opacity-80">
-          Rango de corte: <span className="capitalize">{formatShort(result.bestDay)}</span> →{" "}
-          <span className="capitalize">{formatShort(result.cutoff)}</span>
+      {/* Gráfico único: tu ciclo */}
+      <div className="mt-2">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex-1 h-px bg-[#388e3c]/40" />
+          <span className="text-sm font-bold text-[#388e3c] dark:text-[#81c784] whitespace-nowrap">
+            Tu ciclo · {result.graceDays} días gratis
+          </span>
+          <div className="flex-1 h-px bg-[#388e3c]/40" />
         </div>
-        <div className="text-sm opacity-90 mt-4 mb-1">Te toca pagar el</div>
-        <div className="text-3xl sm:text-4xl font-bold capitalize leading-tight">{formatLong(result.due)}</div>
+
+        <div className="pt-1 pb-14">
+          <div className="relative">
+            <div className="relative h-2.5 rounded-full bg-gray-200 dark:bg-gray-600">
+              <div
+                className="absolute h-full rounded-full"
+                style={{ background: "linear-gradient(90deg, #81c784, #1b5e20)", left: "0%", width: "100%" }}
+              />
+              {[
+                { left: 0, name: "Compra", date: result.purchase, align: "left" as const },
+                { left: pctA, name: "Corte", date: result.cutoff, align: "center" as const },
+                { left: 100, name: "Vence", date: result.due, align: "right" as const },
+              ].map((pt) => (
+                <div key={pt.name} className="absolute top-0 h-full" style={{ left: `${pt.left}%` }}>
+                  <div className="absolute -top-2.5 w-0.5 h-2.5 bg-[#388e3c] -translate-x-1/2" />
+                  <div
+                    className={`absolute -top-10 whitespace-nowrap text-[11px] leading-tight ${
+                      pt.align === "left"
+                        ? "left-0 text-left"
+                        : pt.align === "right"
+                          ? "right-0 text-right"
+                          : "-translate-x-1/2 text-center"
+                    }`}
+                  >
+                    <div className="font-bold">{pt.name}</div>
+                    <div className="capitalize text-gray-500 dark:text-gray-400">{formatShort(pt.date)}</div>
+                  </div>
+                  <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-[#388e3c]" />
+                </div>
+              ))}
+              <div className="absolute top-0 h-full" style={{ left: `${pctSug}%` }} title="Pago sugerido">
+                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-[#81c784] border-2 border-[#1b5e20]" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 flex-wrap gap-1">
+          <span>
+            Compra → corte: <strong>{result.daysToCutoff} días</strong>
+          </span>
+          <span>
+            Corte → pago: <strong>{result.graceDays - result.daysToCutoff} días</strong>
+          </span>
+        </div>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+          El punto claro es el pago sugerido (
+          <span className="capitalize">{formatShort(result.suggestedPay)}</span>, 3 días antes). Se repite todos
+          los meses.
+        </p>
       </div>
 
       <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 mt-6">
@@ -383,24 +350,20 @@ export function CardCutoffCalculator() {
               className={inputClass}
               data-interactive="true"
             />
-            <div className="mt-3">
-              <span className="block text-xs text-gray-500 dark:text-gray-400 mb-2">Atajos de fecha</span>
-              <div className="flex gap-2 flex-wrap">
-                {[
-                  { label: "Hoy", offset: 0 },
-                  { label: "Mañana", offset: 1 },
-                  { label: "En 15 días", offset: 15 },
-                ].map((chip) => (
-                  <button
-                    key={chip.label}
-                    onClick={() => setQuickDate(chip.offset)}
-                    className="px-3 py-1.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784] font-medium transition-colors"
-                    data-interactive="true"
-                  >
-                    {chip.label}
-                  </button>
-                ))}
-              </div>
+            <div className="flex gap-2 flex-wrap mt-3">
+              {[
+                { label: "En 5 días", offset: 5 },
+                { label: "En 10 días", offset: 10 },
+              ].map((chip) => (
+                <button
+                  key={chip.label}
+                  onClick={() => setQuickDate(chip.offset)}
+                  className="px-3 py-1.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784] font-medium transition-colors"
+                  data-interactive="true"
+                >
+                  {chip.label}
+                </button>
+              ))}
             </div>
           </div>
 
@@ -466,18 +429,25 @@ export function CardCutoffCalculator() {
               .
             </p>
 
-            {/* Timeline: conectores solo entre iconos */}
+            {/* Timeline: línea continua de centro a centro, iconos centrados */}
             <div className="mb-10 mt-2 space-y-5">
               {steps.map((step, i) => (
-                <div key={step.label} className="flex gap-4">
-                  <div className="flex flex-col items-center w-12 flex-shrink-0">
-                    {i === 0 ? (
-                      <div className="h-2" />
-                    ) : (
-                      <div className="flex-1 min-h-[22px] w-0.5 bg-[#388e3c]/25 dark:bg-[#388e3c]/40" />
-                    )}
+                <div key={step.label} className="flex gap-4 relative">
+                  {i > 0 && (
                     <div
-                      className={`w-12 h-12 rounded-full flex items-center justify-center shadow-sm flex-shrink-0 ${
+                      className="absolute left-[23px] top-0 w-0.5 bg-[#388e3c]/25 dark:bg-[#388e3c]/40"
+                      style={{ height: "calc(50% - 24px)" }}
+                    />
+                  )}
+                  {i < steps.length - 1 && (
+                    <div
+                      className="absolute left-[23px] w-0.5 bg-[#388e3c]/25 dark:bg-[#388e3c]/40"
+                      style={{ top: "calc(50% + 24px)", bottom: 0 }}
+                    />
+                  )}
+                  <div className="w-12 flex-shrink-0 self-stretch flex items-center justify-center">
+                    <div
+                      className={`w-12 h-12 rounded-full flex items-center justify-center shadow-sm ${
                         i === steps.length - 1
                           ? "text-white"
                           : "bg-[#388e3c]/10 dark:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784]"
@@ -486,13 +456,8 @@ export function CardCutoffCalculator() {
                     >
                       <step.icon className="h-6 w-6" />
                     </div>
-                    {i === steps.length - 1 ? (
-                      <div className="h-2" />
-                    ) : (
-                      <div className="flex-1 min-h-[22px] w-0.5 bg-[#388e3c]/25 dark:bg-[#388e3c]/40" />
-                    )}
                   </div>
-                  <div className="flex-1 bg-gray-50 dark:bg-gray-700/40 rounded-xl px-5 py-4 my-2 shadow-sm">
+                  <div className="flex-1 bg-gray-50 dark:bg-gray-700/40 rounded-xl px-5 py-4 shadow-sm">
                     <div className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
                       {step.label}
                     </div>
