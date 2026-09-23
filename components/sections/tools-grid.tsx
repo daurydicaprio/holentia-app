@@ -27,6 +27,8 @@ export default function ToolsGrid({ cards, section }: ToolsGridProps) {
     buttonTextClass = "text-cuerpo-DEFAULT hover:text-cuerpo-darkest"
   } else if (section === "finanzas") {
     buttonTextClass = "text-finanzas-DEFAULT hover:text-finanzas-darkest"
+  } else if (section === "relaciones") {
+    buttonTextClass = "text-relaciones-DEFAULT hover:text-relaciones-darkest"
   }
 
   return (

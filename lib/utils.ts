@@ -15,6 +15,8 @@ export function getSectionColor(section: string | null | undefined) {
       return "cuerpo"
     case "finanzas":
       return "finanzas"
+    case "relaciones":
+      return "relaciones"
     default:
       return null
   }

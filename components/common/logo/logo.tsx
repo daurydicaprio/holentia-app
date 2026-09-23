@@ -75,13 +75,13 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
   // Determinar el color del aura basado en la sección - más sutil
   let auraColor = "transparent"
   if (section === "mente") {
-    auraColor = "rgba(59, 130, 246, 0.4)" // Color azul para mente, más sutil
+    auraColor = "rgba(25, 118, 210, 0.4)" // Mente #1976d2
   } else if (section === "cuerpo") {
-    auraColor = "rgba(245, 158, 11, 0.4)" // Color ámbar para cuerpo, más sutil
+    auraColor = "rgba(255, 160, 0, 0.4)" // Cuerpo #ffa000
   } else if (section === "finanzas") {
-    auraColor = "rgba(34, 197, 94, 0.4)" // Color verde para finanzas, más sutil
+    auraColor = "rgba(56, 142, 60, 0.4)" // Finanzas #388e3c
   } else if (section === "relaciones") {
-    auraColor = "rgba(124, 58, 237, 0.4)" // Color violeta para relaciones, más sutil
+    auraColor = "rgba(124, 58, 237, 0.4)" // Relaciones #7c3aed
   }
 
   // Determinar el tamaño del aura basado en el tamaño del logo

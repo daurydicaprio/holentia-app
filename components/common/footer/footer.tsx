@@ -20,6 +20,9 @@ export default function Footer({ section }: FooterProps) {
   } else if (section === "finanzas") {
     linkColor = "var(--color-finanzas-active)" // Color finanzas
     linkHoverColor = "var(--color-finanzas-active-dark)" // Color finanzas oscuro
+  } else if (section === "relaciones") {
+    linkColor = "var(--color-relaciones-active)" // Color relaciones
+    linkHoverColor = "var(--color-relaciones-active-dark)" // Color relaciones oscuro
   }
 
   return (

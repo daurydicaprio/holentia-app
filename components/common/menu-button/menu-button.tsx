@@ -130,7 +130,6 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
     }
     ${isSquare ? "rounded-md" : "rounded-full"}
     ${isCompact ? "w-9 h-9" : "w-10 h-10"}
-    ${isMenuOpen ? `ring-2 ring-${section || "blue"}-400` : ""}
   `
     .trim()
     .replace(/\s+/g, " ")

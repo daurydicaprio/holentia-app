@@ -51,6 +51,9 @@ export default function ToolPageClient({ params, toolData, toolContent }: ToolPa
   } else if (section === "finanzas") {
     sectionColor = "#388e3c" // Color finanzas
     headerLineColor = "#388e3c" // Color finanzas
+  } else if (section === "relaciones") {
+    sectionColor = "#7c3aed" // Color relaciones
+    headerLineColor = "#7c3aed" // Color relaciones
   }
 
   // Usar el tema resuelto para evitar parpadeos

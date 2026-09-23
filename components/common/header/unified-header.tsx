@@ -75,6 +75,9 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
   } else if (toolSection === "finanzas") {
     sectionColor = "#388e3c" // Color finanzas
     headerBgColor = "rgba(56, 142, 60, 0.7)" // Color finanzas con 70% de opacidad
+  } else if (toolSection === "relaciones") {
+    sectionColor = "#7c3aed" // Color relaciones
+    headerBgColor = "rgba(124, 58, 237, 0.7)" // Color relaciones con 70% de opacidad
   }
 
   const handleBackClick = () => {

@@ -41,18 +41,19 @@ Fórmula: si `kwh < 700`: `total = 127.83 + min(kwh,200)*6.17 + min(max(kwh-200,
 - [ ] Hidratación: no vibrar por tecla (`hydration-calculator.tsx:45-49`), solo al mostrar resultado
 - [ ] Verificación: `pnpm tsc --noEmit` + `pnpm build` + `vercel inspect dev.holentia.com Ready`
 
-## Fase 2 — Consistencia color por sección (prioridad)
+## Fase 2 — Consistencia color por sección (prioridad) — HECHA
 Fuente única: vars `app/globals.css:100-150` + dark `153-188`.
 Canónicos: mente `#1976d2`, relaciones `#7c3aed`, cuerpo `#ffa000`, finanzas `#388e3c`.
-- [ ] `tailwind.config.ts:20-70` añadir `relaciones` + `safelist:98-258`
-- [ ] `lib/utils.ts:8-20` `getSectionColor` retornar `relaciones`
-- [ ] `tool-page-client.tsx:42-54` rama `relaciones`
-- [ ] `unified-header.tsx:65-78` rama `relaciones rgba(124,58,237,0.7)`
-- [ ] `footer.tsx:14-23` rama `relaciones`
-- [ ] `tools-grid.tsx:24-30` rama `relaciones`
-- [ ] `menu-button.tsx:34-46` verificar + quitar `ring-${section}-400:133` dinámico roto
-- [ ] Unificar hex sueltos a canónicos (`logo.tsx:77-85`, `globals #1565c0/#ef6c00/#2e7d32`)
-- [ ] Criterio Done: las 4 secciones idénticas en aura, tabs, gradiente título, cards glass, header móvil, título tool, línea, footer, scrolltop (ver `design.md`)
+- [x] `tailwind.config.ts` color `relaciones` + ~60 entradas safelist
+- [x] `lib/utils.ts` `getSectionColor` retorna `relaciones`
+- [x] `tool-page-client.tsx` rama `relaciones #7c3aed`
+- [x] `unified-header.tsx` rama `relaciones rgba(124,58,237,0.7)`
+- [x] `footer.tsx` rama `relaciones`
+- [x] `tools-grid.tsx` rama `relaciones text-relaciones-DEFAULT`
+- [x] `menu-button.tsx` quitada clase dinámica rota `ring-${section}-400` (el ring open ya sale de `accentColor` en boxShadow)
+- [x] `logo.tsx` aura unificada a RGB canónicos
+- [x] Nota: vars `globals #1565c0/#ef6c00/#2e7d32` se dejan — fueron oscurecidas a propósito para contraste en cards; los hex inline de headers usan canónicos. No tocar sin revisión visual.
+- [x] `tsc 0 errores + next build OK`
 
 ## Fase 3 — Local privado
 - [ ] Crear `lib/storage.ts`: `get/set/remove`, keys `holentia:{slug}:{draft|simulations}:v1`, `try/catch QuotaExceeded`, `window guard`, `debounce 500ms`
