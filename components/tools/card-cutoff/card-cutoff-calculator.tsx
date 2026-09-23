@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { CreditCard, Trash2, Info, ShoppingBag, Scissors, Wallet, BellRing, Bell } from "lucide-react"
+import { CreditCard, Trash2, Info, ShoppingBag, Scissors, Wallet, BellRing } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
@@ -94,119 +94,168 @@ interface WhySectionData {
   bestGrace: number
 }
 
-/** Tarjeta aparte: explicación y ciclo. */
-function WhySection({ result, dueDay }: { result: WhySectionData; dueDay: string }) {
-  const total = Math.max(result.graceDays, 1)
-  const pctA = Math.min(100, Math.max(0, (result.daysToCutoff / total) * 100))
-  const pctSug = Math.min(100, Math.max(0, ((result.graceDays - 3) / total) * 100))
+interface LaneInfo {
+  tag: string
+  start: Date
+  cut: Date
+  due: Date
+  sug: Date
+  buyDays: number
+  payDays: number
+  active: boolean
+}
 
-  const pctSugClamped = Math.min(88, Math.max(12, pctSug))
-  const sugAlignRight = pctSug > 78
+interface DiagramData {
+  lanes: [LaneInfo, LaneInfo]
+  purchase: Date | null
+  active: 0 | 1
+  maxGrace: number
+}
+
+/** Un carril del diagrama: zona compras (verde) + zona pago (acero). */
+function Lane({
+  lane,
+  purchase,
+}: {
+  lane: LaneInfo
+  purchase: { date: Date; pct: number } | null
+}) {
+  const total = Math.max(lane.buyDays + lane.payDays, 1)
+  const pctBuy = (lane.buyDays / total) * 100
+  const sugTotal = Math.max(diffDays(lane.start, lane.due), 1)
+  const pctSug = Math.min(96, Math.max(4, (diffDays(lane.start, lane.sug) / sugTotal) * 100))
+  const sugRight = pctSug > 72
+
+  return (
+    <div
+      className={`rounded-xl p-4 sm:p-5 transition-opacity ${
+        lane.active
+          ? "bg-gray-50 dark:bg-gray-700/40 ring-2 ring-[#388e3c]/40"
+          : "bg-gray-50/60 dark:bg-gray-700/20 opacity-60"
+      }`}
+    >
+      <div className="flex items-center justify-between mb-3 gap-2">
+        <span className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+          {lane.tag}
+        </span>
+        {lane.active && (
+          <span className="text-[11px] font-bold text-[#1b5e20] dark:text-[#a5d6a7] whitespace-nowrap">
+            Tu compra está aquí
+          </span>
+        )}
+      </div>
+
+      {/* Etiquetas */}
+      <div className="relative h-10 mb-1">
+        <div className="absolute top-0 left-0 text-left whitespace-nowrap text-[11px] leading-tight">
+          <div className="font-bold">Corte</div>
+          <div className="capitalize text-gray-500 dark:text-gray-400">{formatShort(lane.cut)}</div>
+        </div>
+        <div className="absolute top-0 right-0 text-right whitespace-nowrap text-[11px] leading-tight">
+          <div className="font-bold">Vence</div>
+          <div className="capitalize text-gray-500 dark:text-gray-400">{formatShort(lane.due)}</div>
+        </div>
+      </div>
+
+      {/* Barra */}
+      <div className="relative h-9 rounded-lg overflow-hidden flex text-center">
+        <div
+          className="h-full flex flex-col items-center justify-center bg-[#388e3c]/20 dark:bg-[#388e3c]/30 text-[#1b5e20] dark:text-[#a5d6a7] overflow-hidden"
+          style={{ width: `${pctBuy}%` }}
+        >
+          <span className="text-xs font-bold leading-none whitespace-nowrap tabular-nums">
+            {lane.buyDays} DÍAS
+          </span>
+          <span className="text-[10px] leading-tight opacity-80 whitespace-nowrap">compras</span>
+        </div>
+        <div className="w-0 border-l-2 border-dashed border-[#388e3c]" />
+        <div
+          className="h-full flex flex-col items-center justify-center bg-slate-500/20 dark:bg-slate-400/15 text-slate-700 dark:text-slate-300 overflow-hidden"
+          style={{ width: `${100 - pctBuy}%` }}
+        >
+          <span className="text-xs font-bold leading-none whitespace-nowrap tabular-nums">
+            {lane.payDays} DÍAS
+          </span>
+          <span className="text-[10px] leading-tight opacity-80 whitespace-nowrap">pago</span>
+        </div>
+        {/* Nodos de corte y vence */}
+        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-white dark:bg-gray-800 border-[3px] border-[#388e3c]" style={{ left: `${pctBuy}%` }} />
+        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-white dark:bg-gray-800 border-[3px] border-slate-500" style={{ left: "100%" }} />
+        {/* Tu compra */}
+        {purchase && (
+          <div
+            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-amber-400 border-2 border-amber-700"
+            style={{ left: `${purchase.pct}%` }}
+            title={`Tu compra: ${formatShort(purchase.date)}`}
+          />
+        )}
+      </div>
+
+      {/* Sugerido conectado verticalmente a su punto */}
+      <div className="relative h-11 mt-0.5">
+        <div className="absolute top-0 flex flex-col items-center" style={{ left: `${pctSug}%` }}>
+          <div className="w-0.5 h-2 bg-[#1b5e20] dark:bg-[#81c784]" />
+          <span
+            className={`mt-0.5 px-2.5 py-0.5 rounded-full bg-[#1b5e20] text-white text-[10px] font-bold whitespace-nowrap ${
+              sugRight ? "-translate-x-full" : "-translate-x-1/2"
+            }`}
+          >
+            Sugerido: <span className="capitalize">{formatShort(lane.sug)}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/** Tarjeta aparte: diagrama educativo de 2 ciclos. */
+function WhySection({
+  result,
+  dueDay,
+  diagram,
+}: {
+  result: WhySectionData
+  dueDay: string
+  diagram: DiagramData
+}) {
+  const purchasePctFor = (lane: LaneInfo): { date: Date; pct: number } | null => {
+    if (!diagram.purchase) return null
+    const t = diagram.purchase.getTime()
+    if (t < lane.start.getTime() || t > lane.due.getTime()) return null
+    const span = Math.max(lane.due.getTime() - lane.start.getTime(), 1)
+    return { date: diagram.purchase, pct: ((t - lane.start.getTime()) / span) * 100 }
+  }
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
       <h2 className="text-xl font-bold mb-1">El ciclo de tu tarjeta</h2>
       <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-        Cada mes se repite lo mismo: un periodo para comprar y un periodo para pagar.
+        Una compra puede pasar al segundo ciclo y generar hasta {diagram.maxGrace} días gratis. Se ilumina el mes
+        donde cae tu fecha.
       </p>
 
       {/* Alerta: fecha sugerida */}
-      <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-sm text-amber-800 dark:text-amber-200 leading-relaxed mb-10">
+      <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-sm text-amber-800 dark:text-amber-200 leading-relaxed mb-8">
         <strong className="capitalize">Paga el {formatLong(result.suggestedPay)}</strong>: 2 o 3 días antes del
         vencimiento para evitar moras por feriados o atrasos del banco.
       </div>
 
-      {/* KPI principal, aislado */}
-      <div className="flex justify-center mb-12">
-        <span className="px-5 py-2 rounded-full bg-[#388e3c]/10 dark:bg-[#388e3c]/20 text-[#1b5e20] dark:text-[#a5d6a7] font-bold text-sm sm:text-base whitespace-nowrap">
-          Tu ciclo: {result.graceDays} días gratis
+      <div className="space-y-5">
+        {diagram.lanes.map((lane, i) => (
+          <Lane key={lane.tag} lane={lane} purchase={diagram.active === i ? purchasePctFor(lane) : null} />
+        ))}
+      </div>
+      <p className="text-xs text-gray-500 dark:text-gray-400 mt-4">
+        <span className="inline-block w-2.5 h-2.5 rounded-full bg-amber-400 border border-amber-700 mr-1 align-middle" />
+        Punto ámbar: tu compra. Verde: periodo de compras · Acero: periodo de pago.
+      </p>
+
+      {/* Pie: solo estimación, ancho completo */}
+      <div className="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/40 rounded-xl px-4 py-3 mt-6 leading-relaxed">
+        <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
+        <span>
+          <strong>Estimación:</strong> vence el día {dueDay} del mes siguiente al corte. Nada sale de tu navegador.
         </span>
-      </div>
-
-      {/* Etiquetas de hitos */}
-      <div className="relative h-11">
-        {[
-          { left: 0, name: "Compra", date: result.purchase, align: "left" as const },
-          { left: pctA, name: "Corte", date: result.cutoff, align: "center" as const },
-          { left: 100, name: "Vence", date: result.due, align: "right" as const },
-        ].map((pt) => (
-          <div
-            key={pt.name}
-            className={`absolute top-0 whitespace-nowrap text-[11px] leading-tight ${
-              pt.align === "left"
-                ? "left-0 text-left"
-                : pt.align === "right"
-                  ? "right-0 text-right"
-                  : "-translate-x-1/2 text-center"
-            }`}
-            style={pt.align === "center" ? { left: `${pt.left}%` } : undefined}
-          >
-            <div className="font-bold">{pt.name}</div>
-            <div className="capitalize text-gray-500 dark:text-gray-400">{formatShort(pt.date)}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* Barra limpia con 3 hitos */}
-      <div className="relative h-2.5 rounded-full bg-gray-200 dark:bg-gray-600">
-        <div
-          className="absolute h-full rounded-full"
-          style={{ background: "linear-gradient(90deg, #81c784, #1b5e20)", left: "0%", width: "100%" }}
-        />
-        {[0, pctA, 100].map((left) => (
-          <div
-            key={left}
-            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-[#388e3c]"
-            style={{ left: `${left}%` }}
-          />
-        ))}
-      </div>
-
-      {/* Pago sugerido: badge explícito bajo la línea */}
-      <div className="relative h-12 mt-1">
-        <div className="absolute top-0 flex flex-col items-center" style={{ left: `${pctSugClamped}%` }}>
-          <div className="w-0.5 h-2.5 bg-[#1b5e20] dark:bg-[#81c784]" />
-          <span
-            className={`mt-1 px-3 py-1 rounded-full bg-[#1b5e20] text-white text-[11px] font-bold whitespace-nowrap ${
-              sugAlignRight ? "-translate-x-full" : "-translate-x-1/2"
-            }`}
-          >
-            Pago sugerido: <span className="capitalize">{formatShort(result.suggestedPay)}</span>
-          </span>
-        </div>
-      </div>
-
-      {/* Tramos integrados */}
-      <div className="grid grid-cols-2 gap-3 mt-2">
-        <div className="rounded-xl bg-[#388e3c]/10 dark:bg-[#388e3c]/20 px-4 py-3 text-center">
-          <div className="text-xl font-bold text-[#1b5e20] dark:text-[#a5d6a7] tabular-nums">
-            {result.daysToCutoff} días
-          </div>
-          <div className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">para comprar</div>
-        </div>
-        <div className="rounded-xl bg-[#388e3c]/10 dark:bg-[#388e3c]/20 px-4 py-3 text-center">
-          <div className="text-xl font-bold text-[#1b5e20] dark:text-[#a5d6a7] tabular-nums">
-            {result.graceDays - result.daysToCutoff} días
-          </div>
-          <div className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">para pagar</div>
-        </div>
-      </div>
-
-      {/* Pie: 2 ítems */}
-      <div className="grid sm:grid-cols-2 gap-3 mt-6 text-xs leading-relaxed">
-        <div className="flex items-start gap-2 text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/40 rounded-xl px-4 py-3">
-          <Bell className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
-          <span>
-            <strong>Recordatorio:</strong> agenda el{" "}
-            <strong className="capitalize">{formatShort(result.suggestedPay)}</strong> en tu calendario.
-          </span>
-        </div>
-        <div className="flex items-start gap-2 text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/40 rounded-xl px-4 py-3">
-          <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
-          <span>
-            <strong>Estimación:</strong> vence el día {dueDay} del mes siguiente. Nada sale de tu navegador.
-          </span>
-        </div>
       </div>
     </div>
   )
@@ -271,15 +320,85 @@ export function CardCutoffCalculator() {
     const bestDay = new Date(prevCutoff)
     bestDay.setDate(bestDay.getDate() + 1)
 
+    // Tip educativo: ¿qué gana esperando al día siguiente del corte?
+    let waitTip: { date: Date; extra: number } | null = null
+    if (cycle.daysToCutoff > 0) {
+      const waitDate = new Date(cycle.cutoff)
+      waitDate.setDate(waitDate.getDate() + 1)
+      const waitCycle = computeCycle(toISODate(waitDate), c, p)
+      if (waitCycle) {
+        const extra = waitCycle.graceDays - cycle.graceDays
+        if (extra > 0) waitTip = { date: waitDate, extra }
+      }
+    }
+
     return {
       ...cycle,
       isPast,
       pastCycle,
       bestDay,
       bestGrace: Math.round((cycle.due.getTime() - bestDay.getTime()) / 86400000),
-      bankDays: diffDays(cycle.cutoff, cycle.due),
+      waitTip,
     }
   }, [configured, cutoffDay, dueDay, purchaseISO, todayISO])
+
+  // Diagrama educativo: Mes 1 = ciclo vigente hoy, Mes 2 = siguiente.
+  // Se ilumina el carril donde cae la fecha ingresada.
+  const diagram = useMemo(() => {
+    if (!configured) return null
+    const c = Number.parseInt(cutoffDay, 10)
+    const p = Number.parseInt(dueDay, 10)
+    const todayC = computeCycle(todayISO, c, p)
+    if (!todayC) return null
+
+    const cutA = todayC.cutoff
+    const dueA = todayC.due
+    const prevA = clampDay(cutA.getFullYear(), cutA.getMonth() - 1, c)
+    const startA = new Date(prevA)
+    startA.setDate(startA.getDate() + 1)
+    const cutB = clampDay(cutA.getFullYear(), cutA.getMonth() + 1, c)
+    const dueB = clampDay(cutB.getFullYear(), cutB.getMonth() + 1, p)
+    const startB = new Date(cutA)
+    startB.setDate(startB.getDate() + 1)
+
+    const sugA = new Date(dueA)
+    sugA.setDate(sugA.getDate() - 3)
+    const sugB = new Date(dueB)
+    sugB.setDate(sugB.getDate() - 3)
+
+    const purchase = parseISO(purchaseISO)
+    const inRange =
+      purchase !== null && purchase.getTime() >= startA.getTime() && purchase.getTime() <= dueB.getTime()
+    const active: 0 | 1 = purchase !== null && purchase.getTime() > cutA.getTime() ? 1 : 0
+
+    const lane = (
+      tag: string,
+      start: Date,
+      cut: Date,
+      due: Date,
+      sug: Date,
+      isActive: boolean,
+    ): LaneInfo => ({
+      tag,
+      start,
+      cut,
+      due,
+      sug,
+      buyDays: diffDays(start, cut),
+      payDays: diffDays(cut, due),
+      active: isActive,
+    })
+
+    return {
+      lanes: [
+        lane("Mes 1", startA, cutA, dueA, sugA, active === 0),
+        lane("Mes 2", startB, cutB, dueB, sugB, active === 1),
+      ] as [LaneInfo, LaneInfo],
+      purchase: inRange ? purchase : null,
+      active,
+      maxGrace: diffDays(startB, dueB),
+    }
+  }, [configured, cutoffDay, dueDay, todayISO, purchaseISO])
 
   const setQuickDate = (offsetDays: number) => {
     const d = new Date()
@@ -487,14 +606,22 @@ export function CardCutoffCalculator() {
               ))}
             </div>
 
+            {result.waitTip && (
+              <div className="p-4 rounded-xl bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-800 text-sm text-sky-800 dark:text-sky-200 leading-relaxed">
+                <strong>Tip:</strong> si esperas al{" "}
+                <strong className="capitalize">{formatLong(result.waitTip.date)}</strong> para esta compra, ganas{" "}
+                <strong>{result.waitTip.extra} días gratis adicionales</strong>.
+              </div>
+            )}
+
           </div>
         )}
       </div>
     </div>
 
-    {result && (
+    {result && diagram && (
       <div className="mt-6">
-        <WhySection result={result} dueDay={dueDay} />
+        <WhySection result={result} dueDay={dueDay} diagram={diagram} />
       </div>
     )}
     </>
