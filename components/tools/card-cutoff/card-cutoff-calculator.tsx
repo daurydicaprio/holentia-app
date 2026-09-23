@@ -123,115 +123,91 @@ function WhySection({
         Marca el <strong className="capitalize">{formatLong(result.suggestedPay)}</strong> en tu calendario.
       </div>
 
-      {/* Carril 1: el ciclo de tu banco */}
-      <div className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
-        El ciclo de tu banco · {result.bankDays} días
-      </div>
-      <div className="pt-12 mb-7">
-        <div className="relative h-2.5 rounded-full bg-[#1b5e20]">
-          {[
-            { left: 0, name: "Corte", date: result.cutoff },
-            { left: 100, name: "Vence", date: result.due },
-          ].map((pt) => (
-            <div key={pt.name} className="absolute top-0 h-full" style={{ left: `${pt.left}%` }}>
-              <div
-                className={`absolute -top-3 w-0.5 h-3 bg-[#388e3c] ${pt.left === 0 ? "left-0" : "right-0"}`}
-              />
-              <div
-                className={`absolute -top-11 whitespace-nowrap text-[11px] leading-tight ${
-                  pt.left === 0 ? "left-0 text-left" : "right-0 text-right"
-                }`}
-              >
-                <div className="font-bold">{pt.name}</div>
-                <div className="capitalize text-gray-500 dark:text-gray-400">{formatShort(pt.date)}</div>
-              </div>
-              <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-[#388e3c]" />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Carril 2: tu compra */}
-      <div className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
-        Tu compra · {result.graceDays} días gratis
-      </div>
-      <div className="pt-12">
-        <div className="relative h-2.5 rounded-full bg-gray-200 dark:bg-gray-600">
+      {/* Línea única con zonas */}
+      <div className="pt-14">
+        <div className="relative">
+          {/* Zonas delimitadas con línea intermitente */}
+          <div className="absolute -top-9 left-0 flex flex-col items-start" style={{ width: `${pctA}%` }}>
+            <span className="text-[11px] font-bold text-[#388e3c] dark:text-[#81c784] whitespace-nowrap">
+              Compra → corte · {result.daysToCutoff} días
+            </span>
+            <div className="w-full border-t-2 border-dashed border-[#388e3c]/60 mt-1" />
+          </div>
           <div
-            className="absolute h-full rounded-full"
-            style={{ background: "linear-gradient(90deg, #81c784, #1b5e20)", left: "0%", width: "100%" }}
-          />
-          {[
-            { left: 0, name: "Compra", date: result.purchase },
-            { left: pctA, name: "Corte", date: result.cutoff },
-            { left: pctSug, name: "Sugerido", date: result.suggestedPay },
-            { left: 100, name: "Vence", date: result.due },
-          ].map((pt) => (
-            <div key={pt.name} className="absolute top-0 h-full" style={{ left: `${pt.left}%` }}>
-              <div className="absolute -top-3 w-0.5 h-3 bg-[#388e3c] -translate-x-1/2" />
-              <div className="absolute -top-11 -translate-x-1/2 whitespace-nowrap text-[11px] leading-tight text-center">
-                <div className="font-bold">{pt.name}</div>
-                <div className="capitalize text-gray-500 dark:text-gray-400">{formatShort(pt.date)}</div>
-              </div>
-              <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-[#388e3c]" />
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="flex justify-between mt-3 text-xs text-gray-600 dark:text-gray-400 flex-wrap gap-1">
-        <span>
-          Compra → corte: <strong>{result.daysToCutoff} días</strong>
-        </span>
-        <span>
-          Corte → pago: <strong>{result.graceDays - result.daysToCutoff} días</strong>
-        </span>
-      </div>
+            className="absolute -top-9 flex flex-col items-end"
+            style={{ left: `${pctA}%`, width: `${100 - pctA}%` }}
+          >
+            <span className="text-[11px] font-bold text-[#388e3c] dark:text-[#81c784] whitespace-nowrap">
+              Corte → vence · {result.graceDays - result.daysToCutoff} días
+            </span>
+            <div className="w-full border-t-2 border-dashed border-[#388e3c]/60 mt-1" />
+          </div>
 
-      {/* La regla, en viñetas */}
-      <ul className="mt-8 space-y-3">
-        <li className="flex items-start gap-3 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 border border-[#388e3c]/20 rounded-xl px-5 py-4">
-          <span className="mt-2 w-2 h-2 rounded-full bg-[#388e3c] flex-shrink-0" />
-          <span className="leading-relaxed">
-            Todo lo que compres entre el <strong className="capitalize">{formatLong(result.bestDay)}</strong> y el{" "}
-            <strong className="capitalize">{formatLong(result.cutoff)}</strong> lo pagas el{" "}
-            <strong className="capitalize">{formatLong(result.due)}</strong>.
-          </span>
-        </li>
-        <li className="flex items-start gap-3 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 border border-[#388e3c]/20 rounded-xl px-5 py-4">
-          <span className="mt-2 w-2 h-2 rounded-full bg-[#388e3c] flex-shrink-0" />
-          <span className="leading-relaxed">
-            Paga sugerido: <strong className="capitalize">{formatLong(result.suggestedPay)}</strong>, 3 días antes
-            del vencimiento.
-          </span>
-        </li>
-        <li className="flex items-start gap-3 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 border border-[#388e3c]/20 rounded-xl px-5 py-4">
-          <span className="mt-2 w-2 h-2 rounded-full bg-[#388e3c] flex-shrink-0" />
-          <span className="leading-relaxed">
-            Tu banco te da <strong>{result.bankDays} días</strong> entre corte y pago. Algunos dan 20, otros 25 y
-            otros 27: revisa tu estado de cuenta, esa fecha manda.
-          </span>
-        </li>
-      </ul>
-
-      {/* Tus compras de ejemplo */}
-      {extraCycles.length > 0 && (
-        <div className="mt-6 space-y-2">
-          {extraCycles.map(({ iso, cycle }, i) => (
+          <div className="relative h-2.5 rounded-full bg-gray-200 dark:bg-gray-600 mt-2">
             <div
-              key={`${iso}-${i}`}
-              className="flex justify-between items-center gap-2 flex-wrap bg-gray-50 dark:bg-gray-700/40 rounded-lg px-4 py-3 text-sm"
-            >
-              <span className="capitalize text-gray-600 dark:text-gray-300">
-                Compra del {formatLong(cycle.purchase)}
-              </span>
-              <span>
-                paga el <strong className="capitalize">{formatLong(cycle.due)}</strong>{" "}
-                <span className="text-gray-500 dark:text-gray-400">({cycle.graceDays} días)</span>
-              </span>
-            </div>
-          ))}
+              className="absolute h-full rounded-full"
+              style={{ background: "linear-gradient(90deg, #81c784, #1b5e20)", left: "0%", width: "100%" }}
+            />
+            {[
+              { left: 0, name: "Compra", date: result.purchase, extra: false },
+              { left: pctA, name: "Corte", date: result.cutoff, extra: false },
+              { left: pctSug, name: "Sugerido", date: result.suggestedPay, extra: false },
+              { left: 100, name: "Vence", date: result.due, extra: false },
+            ].map((pt) => (
+              <div key={pt.name} className="absolute top-0 h-full" style={{ left: `${pt.left}%` }}>
+                <div className="absolute -top-3 w-0.5 h-3 bg-[#388e3c] -translate-x-1/2" />
+                <div className="absolute -top-11 -translate-x-1/2 whitespace-nowrap text-[11px] leading-tight text-center">
+                  <div className="font-bold">{pt.name}</div>
+                  <div className="capitalize text-gray-500 dark:text-gray-400">{formatShort(pt.date)}</div>
+                </div>
+                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-[#388e3c]" />
+              </div>
+            ))}
+            {/* Tus compras de ejemplo como puntos ámbar */}
+            {extraCycles.map(({ iso, cycle }, i) => {
+              const span = Math.max(result.due.getTime() - result.purchase.getTime(), 1)
+              const left = Math.min(
+                100,
+                Math.max(0, ((cycle.purchase.getTime() - result.purchase.getTime()) / span) * 100),
+              )
+              return (
+                <div key={`${iso}-${i}`} className="absolute top-0 h-full" style={{ left: `${left}%` }}>
+                  <div
+                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-amber-400 border-2 border-amber-600"
+                    title={`Compra ${formatShort(cycle.purchase)} → paga ${formatShort(cycle.due)}`}
+                  />
+                </div>
+              )
+            })}
+          </div>
         </div>
+      </div>
+      {extraCycles.length > 0 && (
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">
+          <span className="inline-block w-2.5 h-2.5 rounded-full bg-amber-400 border border-amber-600 mr-1 align-middle" />
+          Puntos ámbar: tus compras de ejemplo. Todo lo que caiga después del corte entra al corte siguiente.
+        </p>
       )}
+
+      {/* La regla, llamativa */}
+      <div
+        className="mt-8 rounded-xl p-6 text-white text-center"
+        style={{ background: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)" }}
+      >
+        <div className="text-sm opacity-90 mb-2">Desde el</div>
+        <div className="text-xl sm:text-2xl font-bold capitalize">{formatLong(result.bestDay)}</div>
+        <div className="text-3xl font-bold my-1">↓</div>
+        <div className="text-sm opacity-90 mb-2">hasta el</div>
+        <div className="text-xl sm:text-2xl font-bold capitalize">{formatLong(result.cutoff)}</div>
+        <div className="border-t border-white/25 mt-5 pt-4 text-base font-semibold">
+          → te toca pagar el <span className="capitalize">{formatLong(result.due)}</span>
+        </div>
+      </div>
+
+      <p className="text-center text-sm mt-5 text-amber-700 dark:text-amber-300">
+        Tu banco te da <strong className="underline underline-offset-2">{result.bankDays} días</strong> entre corte y
+        pago (algunos 20, otros 25, otros 27): conócelo en tu estado de cuenta.
+      </p>
 
       <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 mt-6">
         <Bell className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
@@ -298,8 +274,13 @@ export function CardCutoffCalculator() {
     if (!configured) return null
     const c = Number.parseInt(cutoffDay, 10)
     const p = Number.parseInt(dueDay, 10)
-    const cycle = computeCycle(purchaseISO, c, p)
+
+    // Si la fecha ingresada ya pasó, el ciclo vigente es el de hoy,
+    // no el de esa fecha vieja.
+    const isPast = purchaseISO < todayISO
+    const cycle = computeCycle(isPast ? todayISO : purchaseISO, c, p)
     if (!cycle) return null
+    const pastCycle = isPast ? computeCycle(purchaseISO, c, p) : null
 
     // Mejor compra: día siguiente al corte anterior
     const prevCutoff = new Date(cycle.cutoff)
@@ -309,12 +290,14 @@ export function CardCutoffCalculator() {
 
     return {
       ...cycle,
+      isPast,
+      pastCycle,
       bestDay,
       bestGrace: Math.round((cycle.due.getTime() - bestDay.getTime()) / 86400000),
       bankDays: diffDays(cycle.cutoff, cycle.due),
-      isIdeal: cycle.daysToCutoff > 0 && diffDays(prevCutoff, cycle.purchase) <= 3,
+      isIdeal: !isPast && cycle.daysToCutoff > 0 && diffDays(prevCutoff, cycle.purchase) <= 3,
     }
-  }, [configured, cutoffDay, dueDay, purchaseISO])
+  }, [configured, cutoffDay, dueDay, purchaseISO, todayISO])
 
   const setQuickDate = (offsetDays: number) => {
     const d = new Date()
@@ -518,12 +501,16 @@ export function CardCutoffCalculator() {
             >
               <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Financiamiento gratis</div>
               <div className="text-6xl font-bold tabular-nums">{result.graceDays} días</div>
-              <div className="border-t border-white/25 mt-5 pt-4 text-sm opacity-90 leading-relaxed">
-                Comprando el <span className="capitalize font-semibold">{formatLong(result.bestDay)}</span> tendrías
-                hasta {result.bestGrace} días.
-              </div>
             </div>
 
+            {result.isPast && result.pastCycle && (
+              <div className="mb-4 p-3 rounded-lg bg-gray-100 dark:bg-gray-700/50 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                Esa compra del <strong className="capitalize">{formatLong(result.pastCycle.purchase)}</strong> ya entró
+                al corte del <strong className="capitalize">{formatLong(result.pastCycle.cutoff)}</strong> y se paga
+                el <strong className="capitalize">{formatLong(result.pastCycle.due)}</strong>. Abajo ves tu ciclo
+                vigente a hoy:
+              </div>
+            )}
             <p className="text-base leading-relaxed mb-8 text-gray-700 dark:text-gray-200">
               Tu tarjeta corta el <strong className="capitalize">{formatLong(result.cutoff)}</strong>
               {result.daysToCutoff === 0 ? (
