@@ -31,21 +31,25 @@ interface HydrationDraft {
   climate?: string
 }
 
-const ACTIVITY: Record<string, { label: string; short: string; factor: number; icon: typeof Sofa }> = {
-  sedentary: { label: "Sedentario (poco o ningún ejercicio)", short: "Sedentario", factor: 1, icon: Sofa },
-  light: { label: "Ligero (ejercicio 1-3 días/semana)", short: "Ligero", factor: 1.2, icon: Footprints },
-  moderate: { label: "Moderado (ejercicio 3-5 días/semana)", short: "Moderado", factor: 1.4, icon: Dumbbell },
-  intense: { label: "Intenso (ejercicio 6-7 días/semana)", short: "Intenso", factor: 1.6, icon: Zap },
+// Ajustes aditivos por ml (EFSA/NASEM): no se multiplican entre sí.
+const ACTIVITY: Record<string, { label: string; short: string; adj: number; icon: typeof Sofa }> = {
+  sedentary: { label: "Sedentario (poco o ningún ejercicio)", short: "Sedentario", adj: 0, icon: Sofa },
+  light: { label: "Ligero (ejercicio 1-3 días/semana)", short: "Ligero", adj: 300, icon: Footprints },
+  moderate: { label: "Moderado (ejercicio 3-5 días/semana)", short: "Moderado", adj: 600, icon: Dumbbell },
+  intense: { label: "Intenso (ejercicio 6-7 días/semana)", short: "Intenso", adj: 1000, icon: Zap },
 }
 
-const CLIMATE: Record<string, { label: string; short: string; factor: number; icon: typeof Snowflake }> = {
-  cold: { label: "Frío (menos de 10°C promedio)", short: "Frío", factor: 0.9, icon: Snowflake },
-  temperate: { label: "Templado (10-25°C)", short: "Templado", factor: 1, icon: CloudSun },
-  warm: { label: "Cálido (25-30°C)", short: "Cálido", factor: 1.1, icon: Sun },
-  hot: { label: "Caluroso (más de 30°C)", short: "Caluroso", factor: 1.3, icon: Flame },
+const CLIMATE: Record<string, { label: string; short: string; adj: number; icon: typeof Snowflake }> = {
+  cold: { label: "Frío (menos de 10°C promedio)", short: "Frío", adj: -200, icon: Snowflake },
+  temperate: { label: "Templado (10-25°C)", short: "Templado", adj: 0, icon: CloudSun },
+  warm: { label: "Cálido (25-30°C)", short: "Cálido", adj: 350, icon: Sun },
+  hot: { label: "Caluroso (más de 30°C)", short: "Caluroso", adj: 700, icon: Flame },
 }
 
-// Reparto del total a lo largo del día (sum = 1).
+// 20% del agua total viene de los alimentos: el resto (80%) es agua potable directa.
+const FOOD_FACTOR = 0.8
+
+// Reparto del agua directa a lo largo del día (sum = 1).
 const DAY_PLAN = [
   { icon: Sunrise, label: "Al despertar", time: "7:00", pct: 0.15 },
   { icon: Croissant, label: "Media mañana", time: "10:00", pct: 0.15 },
@@ -92,12 +96,14 @@ export function HydrationCalculator() {
   const result = useMemo(() => {
     const w = Number.parseFloat(weight)
     if (isNaN(w) || w <= 0) return null
-    // Fórmula base: 35 ml por kg de peso corporal, ajustado por actividad y clima.
+    // Base 35 ml/kg + ajustes aditivos por actividad y clima (EFSA/NASEM).
     const base = w * 35
-    const actFactor = ACTIVITY[activityLevel]?.factor ?? 1
-    const cliFactor = CLIMATE[climate]?.factor ?? 1
-    const total = Math.round(base * actFactor * cliFactor)
-    return { total, actFactor, cliFactor, weight: w }
+    const actAdj = ACTIVITY[activityLevel]?.adj ?? 0
+    const cliAdj = CLIMATE[climate]?.adj ?? 0
+    const total = Math.max(Math.round(base + actAdj + cliAdj), 0)
+    // Agua potable directa: el 20% restante lo aportan los alimentos sólidos.
+    const direct = Math.round(total * FOOD_FACTOR)
+    return { total, direct, weight: w }
   }, [weight, activityLevel, climate])
 
   const pickActivity = (id: string) => {
@@ -128,9 +134,9 @@ export function HydrationCalculator() {
         : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-amber-300 dark:hover:border-amber-700"
     }`
 
-  const glasses = result ? Math.round(result.total / 250) : 0
-  const bottles = result ? Math.round(result.total / 500) : 0
-  const liters = result ? (result.total / 1000).toFixed(1) : "0"
+  const glasses = result ? Math.round(result.direct / 250) : 0
+  const bottles = result ? Math.round(result.direct / 500) : 0
+  const liters = result ? (result.direct / 1000).toFixed(1) : "0"
 
   return (
     <div className="space-y-6">
@@ -217,8 +223,10 @@ export function HydrationCalculator() {
           ) : (
             <div className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl p-8 shadow-lg text-white text-center h-full flex flex-col justify-center">
               <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Tu hidratación diaria</div>
-              <div className="text-6xl font-bold tabular-nums">{result.total.toLocaleString("es-ES")}</div>
-              <div className="text-lg opacity-90 mt-1">ml de agua al día</div>
+              <div className="text-6xl font-bold tabular-nums">{result.direct.toLocaleString("es-ES")}</div>
+              <div className="text-lg opacity-90 mt-1">
+                ml a beber al día · agua total {result.total.toLocaleString("es-ES")} ml
+              </div>
 
               <div className="grid grid-cols-3 gap-2 mt-6 text-center">
                 <div className="bg-white text-amber-900 font-bold shadow-md border border-white rounded-lg py-2 px-1 text-sm">
@@ -235,8 +243,9 @@ export function HydrationCalculator() {
                 </div>
               </div>
 
-              <div className="text-xs opacity-85 mt-4 font-medium tabular-nums">
-                {result.weight} kg × 35 ml × {result.actFactor} actividad × {result.cliFactor} clima
+              <div className="text-xs opacity-85 mt-4 font-medium">
+                Basado en tu peso (35 ml/kg) + ajustes por actividad y clima. Incluye el descuento del 20%
+                aportado por alimentos sólidos.
               </div>
 
               <div className="border-t border-white/25 mt-4 pt-3 text-[11px] leading-relaxed opacity-90">
@@ -262,14 +271,14 @@ export function HydrationCalculator() {
             <div className="text-center sm:text-left flex-1">
               <h2 className="text-xl font-bold">Tu plan de hoy</h2>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                {glasses} vasos de 250 ml, uno cada ~2–3 horas. Reparte el total en 5 momentos.
+                {glasses} vasos de 250 ml, uno cada ~2–3 horas. Reparte tu agua directa en 5 momentos.
               </p>
             </div>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
             {DAY_PLAN.map((step) => {
-              const ml = Math.round((result.total * step.pct) / 25) * 25
+              const ml = Math.round((result.direct * step.pct) / 25) * 25
               return (
                 <div
                   key={step.label}
