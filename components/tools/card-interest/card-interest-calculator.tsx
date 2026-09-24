@@ -13,12 +13,13 @@ interface CardDraft {
   balance?: string
   rate?: string
   payment?: string
+  cardName?: string
+  cardLast4?: string
 }
 
-function formatRD(value: number): string {
+/** Formato numérico sin símbolo de moneda. */
+function formatAmount(value: number): string {
   return new Intl.NumberFormat("es-DO", {
-    style: "currency",
-    currency: "DOP",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(value)
@@ -75,6 +76,8 @@ export function CardInterestCalculator() {
   const [balanceInput, setBalanceInput] = useState<string>("")
   const [rateInput, setRateInput] = useState<string>(String(DEFAULT_RATE))
   const [paymentInput, setPaymentInput] = useState<string>("")
+  const [cardName, setCardName] = useState<string>("")
+  const [cardLast4, setCardLast4] = useState<string>("")
   const [savedFlash, setSavedFlash] = useState(false)
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -84,6 +87,8 @@ export function CardInterestCalculator() {
     if (typeof parsed.balance === "string") setBalanceInput(parsed.balance)
     if (typeof parsed.rate === "string") setRateInput(parsed.rate)
     if (typeof parsed.payment === "string") setPaymentInput(parsed.payment)
+    if (typeof parsed.cardName === "string") setCardName(parsed.cardName)
+    if (typeof parsed.cardLast4 === "string") setCardLast4(parsed.cardLast4)
   }, [])
 
   // Autoguardado con debounce 500ms (se salta el primer render)
@@ -95,7 +100,15 @@ export function CardInterestCalculator() {
     }
     if (saveTimer.current) clearTimeout(saveTimer.current)
     saveTimer.current = setTimeout(() => {
-      if (storageSet(DRAFT_KEY, { balance: balanceInput, rate: rateInput, payment: paymentInput })) {
+      if (
+        storageSet(DRAFT_KEY, {
+          balance: balanceInput,
+          rate: rateInput,
+          payment: paymentInput,
+          cardName,
+          cardLast4,
+        })
+      ) {
         setSavedFlash(true)
         setTimeout(() => setSavedFlash(false), 1500)
       }
@@ -103,7 +116,7 @@ export function CardInterestCalculator() {
     return () => {
       if (saveTimer.current) clearTimeout(saveTimer.current)
     }
-  }, [balanceInput, rateInput, paymentInput])
+  }, [balanceInput, rateInput, paymentInput, cardName, cardLast4])
 
   const balance = useMemo(() => {
     const n = Number.parseFloat(balanceInput)
@@ -125,21 +138,19 @@ export function CardInterestCalculator() {
     return simulatePayoff(balance, annualRate, payment)
   }, [balanceInput, paymentInput, balance, annualRate, payment])
 
-  const setQuickPayment = (pct: number) => {
-    if (balance <= 0) return
-    setPaymentInput(String(Math.round(balance * pct)))
-    triggerHapticFeedback("light")
-  }
-
-  const setQuickRate = (rate: number) => {
-    setRateInput(String(rate))
-    triggerHapticFeedback("light")
-  }
+  const cardTitle = useMemo(() => {
+    const name = cardName.trim() || "Tu tarjeta"
+    const last4 = cardLast4.replace(/\D/g, "").slice(-4)
+    if (!last4) return name
+    return `${name} ····${last4}`
+  }, [cardName, cardLast4])
 
   const clearData = () => {
     setBalanceInput("")
     setRateInput(String(DEFAULT_RATE))
     setPaymentInput("")
+    setCardName("")
+    setCardLast4("")
     storageRemove(DRAFT_KEY)
     triggerHapticFeedback("medium")
   }
@@ -164,6 +175,33 @@ export function CardInterestCalculator() {
         </p>
 
         <div className="space-y-4">
+          <div className="grid grid-cols-3 gap-3">
+            <div className="col-span-2">
+              <label className="block text-sm font-medium mb-2">Nombre de la tarjeta</label>
+              <input
+                type="text"
+                value={cardName}
+                onChange={(e) => setCardName(e.target.value)}
+                placeholder="Ej: Visa-BHD"
+                className={inputClass}
+                data-interactive="true"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Terminación</label>
+              <input
+                type="text"
+                inputMode="numeric"
+                value={cardLast4}
+                onChange={(e) => setCardLast4(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                placeholder="1234"
+                maxLength={4}
+                className={inputClass}
+                data-interactive="true"
+              />
+            </div>
+          </div>
+
           <div>
             <label className="block text-sm font-medium mb-2">Saldo de la tarjeta</label>
             <input
@@ -176,21 +214,6 @@ export function CardInterestCalculator() {
               className={inputClass}
               data-interactive="true"
             />
-            <div className="flex flex-wrap gap-2 mt-3">
-              {[10000, 25000, 50000, 100000].map((v) => (
-                <button
-                  key={v}
-                  onClick={() => {
-                    setBalanceInput(String(v))
-                    triggerHapticFeedback("light")
-                  }}
-                  className="px-3 py-1.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784] font-medium transition-colors"
-                  data-interactive="true"
-                >
-                  {formatRD(v)}
-                </button>
-              ))}
-            </div>
           </div>
 
           <div>
@@ -207,29 +230,7 @@ export function CardInterestCalculator() {
               className={inputClass}
               data-interactive="true"
             />
-            <div className="flex flex-wrap gap-2 mt-3">
-              {[
-                { label: "Promo 0%", rate: 0 },
-                { label: "36%", rate: 36 },
-                { label: "48%", rate: 48 },
-                { label: "60% típico", rate: 60 },
-                { label: "72%", rate: 72 },
-                { label: "96%", rate: 96 },
-              ].map((chip) => (
-                <button
-                  key={chip.rate}
-                  onClick={() => setQuickRate(chip.rate)}
-                  className={`px-3 py-1.5 text-sm rounded-md font-medium transition-colors ${
-                    Number(rateInput) === chip.rate
-                      ? "bg-[#388e3c] text-white"
-                      : "bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784]"
-                  }`}
-                  data-interactive="true"
-                >
-                  {chip.label}
-                </button>
-              ))}
-            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5">Por defecto 60%, típico en tarjetas.</p>
           </div>
 
           <div>
@@ -244,22 +245,6 @@ export function CardInterestCalculator() {
               className={inputClass}
               data-interactive="true"
             />
-            <div className="flex flex-wrap gap-2 mt-3">
-              {[
-                { label: "Mínimo 2%", pct: 0.02 },
-                { label: "5%", pct: 0.05 },
-                { label: "10%", pct: 0.1 },
-              ].map((chip) => (
-                <button
-                  key={chip.pct}
-                  onClick={() => setQuickPayment(chip.pct)}
-                  className="px-3 py-1.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784] font-medium transition-colors"
-                  data-interactive="true"
-                >
-                  {chip.label} del saldo
-                </button>
-              ))}
-            </div>
           </div>
         </div>
 
@@ -303,10 +288,10 @@ export function CardInterestCalculator() {
                     <AlertTriangle className="h-5 w-5" />
                     <div className="text-sm uppercase tracking-widest opacity-90">Con ese pago no bajas el saldo</div>
                   </div>
-                  <div className="text-4xl sm:text-5xl font-bold tabular-nums mb-3">{formatRD(result.monthlyInterest)}</div>
+                  <div className="text-4xl sm:text-5xl font-bold tabular-nums mb-3">{formatAmount(result.monthlyInterest)}</div>
                   <p className="text-sm opacity-90 max-w-md mx-auto leading-relaxed">
-                    Este mes se genera solo en intereses {formatRD(result.monthlyInterest)}. Con tu pago de{" "}
-                    {formatRD(payment)} no abonas capital: la deuda no baja.
+                    Este mes se genera solo en intereses {formatAmount(result.monthlyInterest)}. Con tu pago de{" "}
+                    {formatAmount(payment)} no abonas capital: la deuda no baja.
                   </p>
                 </>
               ) : (
@@ -314,21 +299,22 @@ export function CardInterestCalculator() {
                   <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Liquidas en</div>
                   <div className="text-6xl font-bold tabular-nums">{result.months}</div>
                   <div className="text-lg opacity-90 mt-1">{result.months === 1 ? "mes" : "meses"}</div>
+                  <div className="text-sm opacity-80 mt-1">{cardTitle}</div>
 
                   <div className="grid grid-cols-3 gap-3 mt-6 max-w-lg mx-auto">
                     <div className="rounded-lg bg-white/15 px-2 py-3">
-                      <div className="text-lg sm:text-xl font-bold tabular-nums">{formatRD(result.totalInterest)}</div>
+                      <div className="text-lg sm:text-xl font-bold tabular-nums">{formatAmount(result.totalInterest)}</div>
                       <div className="text-[11px] opacity-90 mt-1 leading-tight">Interés total</div>
                     </div>
                     <div className="rounded-lg bg-white/15 px-2 py-3">
-                      <div className="text-lg sm:text-xl font-bold tabular-nums">{formatRD(result.totalPaid)}</div>
+                      <div className="text-lg sm:text-xl font-bold tabular-nums">{formatAmount(result.totalPaid)}</div>
                       <div className="text-[11px] opacity-90 mt-1 leading-tight">Total pagado</div>
                     </div>
                     <div className="rounded-lg bg-white/15 px-2 py-3">
-                      <div className="text-lg sm:text-xl font-bold tabular-nums">
+                      <div className="text-lg sm:text-xl font-bold tabular-nums text-[#ffee58]">
                         {balance > 0 ? `+${Math.round((result.totalInterest / balance) * 100)}%` : "—"}
                       </div>
-                      <div className="text-[11px] opacity-90 mt-1 leading-tight">Costo extra</div>
+                      <div className="text-[11px] opacity-90 mt-1 leading-tight text-[#ffee58]">Costo extra</div>
                     </div>
                   </div>
                 </>
@@ -349,17 +335,17 @@ export function CardInterestCalculator() {
                 </div>
                 <div className="flex justify-between py-1">
                   <span className="text-gray-600 dark:text-gray-400">Interés del primer mes</span>
-                  <span className="text-red-600 dark:text-red-400">{formatRD(result.monthlyInterest)}</span>
+                  <span className="text-red-600 dark:text-red-400">{formatAmount(result.monthlyInterest)}</span>
                 </div>
                 <div className="border-t border-dashed border-gray-300 dark:border-gray-600 my-2" />
                 <div className="flex justify-between py-1 font-sans font-semibold">
                   <span>Pago mensual</span>
-                  <span>{formatRD(payment)}</span>
+                  <span>{formatAmount(payment)}</span>
                 </div>
                 <div className="flex justify-between py-1 font-sans text-xs text-gray-500 dark:text-gray-400">
                   <span>Abono al capital (1er mes)</span>
                   <span>
-                    {result.neverPaysOff ? formatRD(0) : formatRD(Math.max(payment - result.monthlyInterest, 0))}
+                    {result.neverPaysOff ? formatAmount(0) : formatAmount(Math.max(payment - result.monthlyInterest, 0))}
                   </span>
                 </div>
               </div>
@@ -368,7 +354,7 @@ export function CardInterestCalculator() {
                 <div className="mt-4 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-4 flex items-start gap-3">
                   <Lightbulb className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-amber-800 dark:text-amber-200 leading-relaxed">
-                    Pagar solo el mínimo (≈2% del saldo, {formatRD(result.minPayment)}) tarda años y multiplica el
+                    Pagar solo el mínimo (≈2% del saldo, {formatAmount(result.minPayment)}) tarda años y multiplica el
                     interés. Un pago mayor liquida antes y ahorra dinero.
                   </p>
                 </div>
