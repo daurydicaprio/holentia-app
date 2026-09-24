@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { CreditCard, Trash2, Info, ShoppingBag, Scissors, Wallet, BellRing, Lightbulb } from "lucide-react"
+import { CreditCard, Trash2, Info, ShoppingBag, Scissors, Wallet, BellRing } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
@@ -104,17 +104,27 @@ function WhySection({
   cycleBadge: { extra: number } | null
   isPast: boolean
 }) {
-  const total = Math.max(result.graceDays, 1)
-  const pctCut = Math.min(100, Math.max(0, (result.daysToCutoff / total) * 100))
-  const pctSug = Math.min(94, Math.max(6, ((result.graceDays - 3) / total) * 100))
-  const sugRight = pctSug > 72
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const domStart = result.purchase < today ? result.purchase : today
+  const domEnd = result.due > today ? result.due : today
+  const span = Math.max(domEnd.getTime() - domStart.getTime(), 1)
+  const pos = (d: Date) => Math.min(100, Math.max(0, ((d.getTime() - domStart.getTime()) / span) * 100))
+  const pctBuy = pos(result.purchase)
+  const pctCut = pos(result.cutoff)
+  const pctSug = pos(result.suggestedPay)
+  const pctDue = pos(result.due)
+  const pctToday = pos(today)
   const sameDay = result.daysToCutoff === 0
+  const sugRight = pctSug > 72
+  const daysToDue = Math.round((result.due.getTime() - today.getTime()) / 86400000)
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
       <h2 className="text-xl font-bold mb-1">El ciclo de tu tarjeta</h2>
       <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-        Cada mes se repite lo mismo: un periodo para comprar y un periodo para pagar.
+        Cada mes se repite lo mismo: un periodo para comprar y un periodo para pagar. Todo lo que consumes entre un
+        corte y el siguiente salta al próximo mes: entra al nuevo corte y se paga en su fecha límite.
       </p>
 
       {/* Contexto: ciclo anterior */}
@@ -130,9 +140,14 @@ function WhySection({
       )}
 
       {/* Alerta: fecha sugerida */}
-      <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-sm text-amber-800 dark:text-amber-200 leading-relaxed mb-8">
-        <strong className="capitalize">Paga el {formatLong(result.suggestedPay)}</strong>: 2 o 3 días antes del
-        vencimiento para evitar moras por feriados o atrasos del banco.
+      <div className="flex items-center gap-3 p-4 sm:p-5 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 leading-relaxed mb-8">
+        <span className="flex items-center justify-center w-10 h-10 rounded-full bg-amber-400 text-amber-950 font-bold text-lg flex-shrink-0">
+          !
+        </span>
+        <p className="text-sm">
+          Paga el <strong>{formatLong(result.suggestedPay)}</strong>: 2 o 3 días antes del vencimiento para evitar
+          moras por feriados o atrasos del banco.
+        </p>
       </div>
 
       {/* Badge de salto de ciclo */}
@@ -146,7 +161,12 @@ function WhySection({
 
       {/* Hitos sobre la línea */}
       <div className="relative h-12">
-        <div className="absolute top-0 left-0 text-left whitespace-nowrap text-[11px] leading-tight">
+        <div
+          className={`absolute top-0 whitespace-nowrap text-[11px] leading-tight ${
+            pctBuy <= 12 ? "left-0 text-left" : pctBuy >= 88 ? "right-0 text-right" : "-translate-x-1/2 text-center"
+          }`}
+          style={pctBuy > 12 && pctBuy < 88 ? { left: `${pctBuy}%` } : undefined}
+        >
           <div className="inline-block px-2.5 py-1 rounded-full bg-amber-400 text-amber-950 font-bold">
             Tu compra: <span className="capitalize">{formatShort(result.purchase)}</span>
           </div>
@@ -160,44 +180,54 @@ function WhySection({
             <div className="capitalize text-gray-500 dark:text-gray-400">{formatShort(result.cutoff)}</div>
           </div>
         )}
-        <div className="absolute top-0 right-0 text-right whitespace-nowrap text-[11px] leading-tight">
+        <div
+          className={`absolute top-0 whitespace-nowrap text-[11px] leading-tight ${
+            pctDue >= 88 ? "right-0 text-right" : "-translate-x-1/2 text-center"
+          }`}
+          style={pctDue < 88 ? { left: `${pctDue}%` } : undefined}
+        >
           <div className="font-bold">Vence</div>
           <div className="capitalize text-gray-500 dark:text-gray-400">{formatShort(result.due)}</div>
         </div>
       </div>
 
-      {/* Barra delgada en 2 fases */}
+      {/* Barra delgada en 2 fases, dominio incluye el hoy */}
       <div className="relative h-3 rounded-full bg-gray-200 dark:bg-gray-600">
         <div
-          className="absolute h-full rounded-l-full bg-[#388e3c]"
-          style={{ left: "0%", width: `${pctCut}%` }}
+          className="absolute h-full bg-[#388e3c]"
+          style={{ left: `${pctBuy}%`, width: `${Math.max(pctCut - pctBuy, 0)}%` }}
         />
         <div
-          className="absolute h-full rounded-r-full bg-slate-500 dark:bg-slate-400"
-          style={{ left: `${pctCut}%`, width: `${100 - pctCut}%` }}
+          className="absolute h-full bg-slate-500 dark:bg-slate-400"
+          style={{ left: `${pctCut}%`, width: `${Math.max(pctDue - pctCut, 0)}%` }}
         />
-        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-amber-400 border-[3px] border-amber-700" style={{ left: "0%" }} />
+        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-amber-400 border-[3px] border-amber-700" style={{ left: `${pctBuy}%` }} />
         {!sameDay && (
           <div
             className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-[#388e3c]"
             style={{ left: `${pctCut}%` }}
           />
         )}
-        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-slate-500" style={{ left: "100%" }} />
+        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-slate-500" style={{ left: `${pctDue}%` }} />
         {/* Nodo físico del pago sugerido sobre la barra */}
         <div
           className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-[#1b5e20] border-[3px] border-white dark:border-gray-800 shadow"
           style={{ left: `${pctSug}%` }}
           title={`Pago sugerido: ${formatShort(result.suggestedPay)}`}
         />
+        {/* Hoy en tiempo real, parpadeante */}
+        <span className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-4 w-4" style={{ left: `${pctToday}%` }}>
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75" />
+          <span className="relative inline-flex rounded-full h-4 w-4 bg-sky-500 border-[3px] border-white dark:border-gray-800" />
+        </span>
       </div>
 
-      {/* Pago sugerido: badge anclado al mismo punto con conector vertical */}
-      <div className="relative h-12 mt-0.5">
+      {/* Pago sugerido: badge pegado a su nodo con conector grueso */}
+      <div className="relative h-12">
         <div className="absolute top-0 flex flex-col items-center" style={{ left: `${pctSug}%` }}>
-          <div className="w-0.5 h-5 bg-[#1b5e20] dark:bg-[#81c784]" />
+          <div className="w-1 h-4 rounded bg-[#1b5e20] dark:bg-[#81c784]" />
           <span
-            className={`mt-1 px-3 py-1 rounded-full bg-[#1b5e20] text-white text-[11px] font-bold whitespace-nowrap ${
+            className={`px-3 py-1 rounded-full bg-[#1b5e20] text-white text-[11px] font-bold whitespace-nowrap ${
               sugRight ? "-translate-x-full" : "-translate-x-1/2"
             }`}
           >
@@ -205,6 +235,19 @@ function WhySection({
           </span>
         </div>
       </div>
+
+      {/* Hoy en tiempo real */}
+      <p className="text-xs text-gray-600 dark:text-gray-300 mt-1 text-center">
+        <span className="inline-block w-2.5 h-2.5 rounded-full bg-sky-500 mr-1 align-middle" />
+        Hoy {formatShort(today)}:{" "}
+        {daysToDue > 0 ? (
+          <>faltan <strong>{daysToDue} días</strong> para el vencimiento.</>
+        ) : daysToDue === 0 ? (
+          <>el vencimiento es <strong>hoy</strong>.</>
+        ) : (
+          <>ese ciclo venció hace <strong>{Math.abs(daysToDue)} días</strong>.</>
+        )}
+      </p>
 
       {/* Tramos */}
       <div className="grid grid-cols-2 gap-3 mt-1">
@@ -285,22 +328,9 @@ export function CardCutoffCalculator() {
     const cycle = computeCycle(purchaseISO, c, p)
     if (!cycle) return null
 
-    // Tip educativo: ¿qué gana esperando al día siguiente del corte?
-    let waitTip: { date: Date; extra: number } | null = null
-    if (cycle.daysToCutoff > 0) {
-      const waitDate = new Date(cycle.cutoff)
-      waitDate.setDate(waitDate.getDate() + 1)
-      const waitCycle = computeCycle(toISODate(waitDate), c, p)
-      if (waitCycle) {
-        const extra = waitCycle.graceDays - cycle.graceDays
-        if (extra > 0) waitTip = { date: waitDate, extra }
-      }
-    }
-
     return {
       ...cycle,
       isPast,
-      waitTip,
     }
   }, [configured, cutoffDay, dueDay, purchaseISO, todayISO])
 
@@ -450,17 +480,6 @@ export function CardCutoffCalculator() {
           </div>
         ) : (
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
-            {/* Sugerencia de espera (solo ciclo vigente) */}
-            {!result.isPast && result.waitTip && (
-              <div className="mb-6 p-4 rounded-xl bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-800 text-sm text-sky-800 dark:text-sky-200 leading-relaxed flex items-start gap-2">
-                <Lightbulb className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                <span>
-                  Si esperas al <strong className="capitalize">{formatLong(result.waitTip.date)}</strong> para esta
-                  compra, ganas <strong>{result.waitTip.extra} días gratis adicionales</strong>.
-                </span>
-              </div>
-            )}
-
             {/* Héroe: días gratis reales de esta compra */}
             <div
               className="rounded-xl p-8 text-white mb-8"
@@ -487,35 +506,35 @@ export function CardCutoffCalculator() {
               .
             </p>
 
-            {/* Timeline: línea continua de centro a centro, iconos centrados */}
-            <div className="mb-10 mt-2 space-y-5">
+            {/* Timeline: línea continua, iconos opacos centrados, hover animado */}
+            <div className="mb-10 mt-2">
               {steps.map((step, i) => (
-                <div key={step.label} className="flex gap-4 relative">
+                <div key={step.label} className={`flex gap-4 relative group ${i < steps.length - 1 ? "pb-5" : ""}`}>
                   {i > 0 && (
                     <div
-                      className="absolute left-[23px] top-0 w-0.5 bg-[#388e3c]/25 dark:bg-[#388e3c]/40"
+                      className="absolute left-[23px] top-0 w-0.5 bg-[#388e3c]/30 dark:bg-[#388e3c]/50"
                       style={{ height: "calc(50% - 24px)" }}
                     />
                   )}
                   {i < steps.length - 1 && (
                     <div
-                      className="absolute left-[23px] w-0.5 bg-[#388e3c]/25 dark:bg-[#388e3c]/40"
+                      className="absolute left-[23px] w-0.5 bg-[#388e3c]/30 dark:bg-[#388e3c]/50"
                       style={{ top: "calc(50% + 24px)", bottom: 0 }}
                     />
                   )}
                   <div className="w-12 flex-shrink-0 self-stretch flex items-center justify-center">
                     <div
-                      className={`w-12 h-12 rounded-full flex items-center justify-center shadow-sm ${
+                      className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center shadow-sm transition-transform duration-300 group-hover:scale-110 ${
                         i === steps.length - 1
                           ? "text-white"
-                          : "bg-[#388e3c]/10 dark:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784]"
+                          : "bg-white dark:bg-slate-900 text-[#388e3c] dark:text-[#81c784] ring-2 ring-[#388e3c]/20"
                       }`}
                       style={i === steps.length - 1 ? { background: "linear-gradient(135deg, #2e7d32, #1b5e20)" } : undefined}
                     >
                       <step.icon className="h-6 w-6" />
                     </div>
                   </div>
-                  <div className="flex-1 bg-gray-50 dark:bg-gray-700/40 rounded-xl px-5 py-4 shadow-sm">
+                  <div className="flex-1 bg-gray-50 dark:bg-gray-700/40 rounded-xl px-5 py-4 shadow-sm transition-all duration-300 group-hover:-translate-y-0.5 group-hover:shadow-lg">
                     <div className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
                       {step.label}
                     </div>
