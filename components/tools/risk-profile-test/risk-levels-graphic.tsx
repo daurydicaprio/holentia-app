@@ -14,7 +14,7 @@ export const LEVELS: LevelDef[] = [
     name: "Nivel 1 · Conservador",
     short: "Certificados, mercado de valores local y AFI",
     desc:
-      "Poco riesgo: certificados de depósito, mercado de valores local y AFI (fondos de inversión, en pesos o dólares). Le gana a la inflación y es factible desde montos chicos. Es donde la mayoría debe empezar y donde mucha gente se queda — sin perder.",
+      "Poco riesgo: certificados de depósito, mercado de valores local y AFI (fondos de inversión, en pesos o dólares). Le gana a la inflación y es factible desde montos pequeños. Es donde la mayoría debe empezar y donde mucha gente se queda — sin perder.",
     danger: false,
   },
   {
@@ -30,7 +30,7 @@ export const LEVELS: LevelDef[] = [
     name: "Nivel 3 · Acciones individuales",
     short: "Empresas concretas, con conocimiento",
     desc:
-      "Comprar acciones de empresas específicas. Exige leer mercados y noticias: dedica al menos un año de estudio antes de subir. Si tu capital es chico, 7–10 empresas como máximo.",
+      "Comprar acciones de empresas específicas. Exige leer mercados y noticias: dedica al menos un año de estudio antes de subir. Si tu capital es pequeño, 7–10 empresas como máximo.",
     danger: false,
   },
   {

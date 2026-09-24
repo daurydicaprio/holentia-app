@@ -3,7 +3,20 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Gauge, RotateCcw, Trash2, Info, Lightbulb, AlertTriangle, TrendingUp, Calculator, Wallet } from "lucide-react"
+import {
+  Gauge,
+  RotateCcw,
+  Trash2,
+  Info,
+  Lightbulb,
+  AlertTriangle,
+  TrendingUp,
+  Calculator,
+  Wallet,
+  ChevronDown,
+  PiggyBank,
+  ShieldAlert,
+} from "lucide-react"
 import { useTheme } from "next-themes"
 import Chart from "chart.js/auto"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
@@ -22,19 +35,16 @@ interface RiskDraft {
   rate?: string
   monthlyIncome?: string
   fundMultiplier?: number
+  savePct?: string
   savedAt?: string
 }
 
 interface Option {
   text: string
   key: string
-  /** 1 conservador · 2 medio · 3 arriesgado */
   risk?: number
-  /** techo de nivel por conocimiento: 1 | 2 | 3 */
   ceiling?: number
-  /** preselección pastel: A | B | C */
   situation?: "A" | "B" | "C"
-  /** marca "enriquecerme rápido" */
   richQuick?: boolean
 }
 
@@ -163,80 +173,79 @@ const questions: Question[] = [
 interface Slice {
   label: string
   pct: number
-  isFund?: boolean
 }
 
 const sliceColors = ["#2e7d32", "#66bb6a", "#a5d6a7", "#1b5e20", "#81c784", "#c8e6c9"]
 
+/** Distribuciones SOLO de capital a invertir (el fondo de emergencia va aparte). */
 const portfolios: Record<number, Record<"A" | "B" | "C", Slice[]>> = {
   1: {
     A: [
-      { label: "Efectivo / emergencia", pct: 40, isFund: true },
-      { label: "Certificados", pct: 35 },
-      { label: "AFI (pesos o USD)", pct: 25 },
+      { label: "AFI líquido", pct: 55 },
+      { label: "Certificados", pct: 45 },
     ],
     B: [
-      { label: "Colchón emergencia", pct: 20, isFund: true },
-      { label: "Certificados", pct: 40 },
-      { label: "AFI (pesos o USD)", pct: 40 },
+      { label: "Certificados", pct: 50 },
+      { label: "AFI (pesos o USD)", pct: 50 },
     ],
     C: [
-      { label: "Colchón / efectivo", pct: 45, isFund: true },
-      { label: "Certificados cortos", pct: 35 },
-      { label: "AFI líquido", pct: 20 },
+      { label: "AFI líquido", pct: 45 },
+      { label: "Certificados cortos", pct: 55 },
     ],
   },
   2: {
     A: [
-      { label: "Efectivo / emergencia", pct: 50, isFund: true },
-      { label: "ETF global indexado", pct: 50 },
+      { label: "ETF global indexado", pct: 60 },
+      { label: "AFI líquido / estabilidad", pct: 40 },
     ],
     B: [
-      { label: "Colchón emergencia", pct: 10, isFund: true },
-      { label: "ETF global (80–90% stock index)", pct: 75 },
-      { label: "Bonos / estabilidad", pct: 15 },
+      { label: "ETF global indexado", pct: 80 },
+      { label: "Bonos / estabilidad", pct: 20 },
     ],
     C: [
-      { label: "Colchón / efectivo", pct: 30, isFund: true },
-      { label: "ETF global indexado", pct: 60 },
-      { label: "AFI líquido", pct: 10 },
+      { label: "ETF global indexado", pct: 70 },
+      { label: "AFI líquido", pct: 30 },
     ],
   },
   3: {
     A: [
-      { label: "Efectivo / emergencia", pct: 50, isFund: true },
-      { label: "ETF indexado (base)", pct: 40 },
-      { label: "Acciones (máx. 7–10)", pct: 10 },
+      { label: "ETF indexado (base)", pct: 70 },
+      { label: "Acciones (máx. 7–10)", pct: 30 },
     ],
     B: [
-      { label: "ETF indexado (base)", pct: 55 },
+      { label: "ETF indexado (base)", pct: 65 },
       { label: "Acciones (7–10 si < $10k)", pct: 35 },
-      { label: "Colchón", pct: 10, isFund: true },
     ],
     C: [
-      { label: "Colchón / efectivo", pct: 35, isFund: true },
-      { label: "ETF indexado", pct: 45 },
-      { label: "Acciones (pocas)", pct: 20 },
+      { label: "ETF indexado", pct: 75 },
+      { label: "Acciones (pocas)", pct: 25 },
     ],
   },
 }
 
 const situationMeta: Record<"A" | "B" | "C", { title: string; pickIf: string }> = {
   A: {
-    title: "Opción A · Sin colchón",
-    pickIf: "Todavía no tienes fondo de emergencia o tu ingreso es inestable.",
+    title: "Opción A · Prioriza seguridad",
+    pickIf: "Tu ingreso es inestable o apenas construyes colchón: más liquidez, menos riesgo.",
   },
   B: {
     title: "Opción B · Estándar",
-    pickIf: "Ya tienes colchón y tu ingreso es estable.",
+    pickIf: "Ingreso estable y colchón: estructura equilibrada para crecer a largo plazo.",
   },
   C: {
     title: "Opción C · Ingresos variables",
-    pickIf: "Trabajas independiente o tu empleo puede caer pronto.",
+    pickIf: "Independiente o empleo en riesgo: mantén más disponibilidad sin frenar del todo.",
   },
 }
 
-const USD_TO_DOP = 59
+const MIN_DOP = 5000
+const MIN_USD = 3000
+const ABC_DOP = 100000
+const ABC_USD = 3000
+const INSTR_MIN = {
+  DOP: { liquid: 5000, cert: 10000, d30: 10000 },
+  USD: { d30: 200 },
+}
 const RATES = [8, 10, 15]
 
 function formatMoney(value: number, currency: "USD" | "DOP"): string {
@@ -325,7 +334,6 @@ interface ComputedResult {
   knowledgeLocked: boolean
   situation: "A" | "B" | "C"
   richQuick: boolean
-  /** Frase de sugerencia para el héroe */
   reason: string
 }
 
@@ -347,7 +355,6 @@ function computeResult(answers: Record<number, string>): ComputedResult {
   const knowledgeLocked = level > knowledgeCeiling
   if (knowledgeLocked) level = knowledgeCeiling
 
-  // Situación: Q6 C gana; si no, Q5 decide A/B; default B
   const q6 = answers[6]
   const q5 = answers[5]
   let situation: "A" | "B" | "C" = "B"
@@ -391,7 +398,10 @@ export function RiskProfileTest() {
   const [currency, setCurrency] = useState<"USD" | "DOP">("USD")
   const [rateInput, setRateInput] = useState<string>("10")
   const [monthlyIncome, setMonthlyIncome] = useState("")
-  const [fundMultiplier, setFundMultiplier] = useState(2)
+  const [fundMultiplier, setFundMultiplier] = useState(0)
+  const [savePct, setSavePct] = useState("")
+  const [showLevels, setShowLevels] = useState(false)
+  const [showNoFund, setShowNoFund] = useState(false)
   const [savedFlash, setSavedFlash] = useState(false)
   const [restored, setRestored] = useState(false)
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -406,6 +416,7 @@ export function RiskProfileTest() {
       if (typeof draft.rate === "string") setRateInput(draft.rate)
       if (draft.monthlyIncome !== undefined) setMonthlyIncome(draft.monthlyIncome)
       if (typeof draft.fundMultiplier === "number") setFundMultiplier(draft.fundMultiplier)
+      if (typeof draft.savePct === "string") setSavePct(draft.savePct)
       setPhase("result")
       setRestored(true)
     }
@@ -428,10 +439,36 @@ export function RiskProfileTest() {
     return isNaN(n) || n <= 0 ? 0 : n
   }, [monthlyIncome])
 
+  const hasFund = fundMultiplier > 0
   const fundSize = income * fundMultiplier
+  const fundTarget = income * 2
 
-  const capitalUsd = currency === "USD" ? capital : capital / USD_TO_DOP
-  const lowCapital = capital > 0 && capitalUsd < 3000
+  const saveRate = useMemo(() => {
+    const n = Number.parseFloat(savePct)
+    return isNaN(n) || n <= 0 ? 0 : Math.min(n, 100)
+  }, [savePct])
+
+  const monthsToFund = useMemo(() => {
+    if (!hasFund && fundTarget > 0 && saveRate > 0 && income > 0) {
+      const monthlySave = income * (saveRate / 100)
+      if (monthlySave <= 0) return null
+      return Math.ceil(fundTarget / monthlySave)
+    }
+    if (hasFund && fundSize < fundTarget && fundTarget > 0 && saveRate > 0 && income > 0) {
+      const remaining = fundTarget - fundSize
+      const monthlySave = income * (saveRate / 100)
+      if (monthlySave <= 0) return null
+      return Math.ceil(remaining / monthlySave)
+    }
+    return null
+  }, [hasFund, fundSize, fundTarget, saveRate, income])
+
+  const minCapital = currency === "DOP" ? MIN_DOP : MIN_USD
+  const lowCapital = capital > 0 && capital < minCapital
+
+  const showABC =
+    capital > 0 &&
+    (currency === "DOP" ? capital >= ABC_DOP : capital >= ABC_USD)
 
   const effectiveLevel = lowCapital && result ? Math.min(result.level, 2) : (result?.level ?? 1)
 
@@ -442,6 +479,46 @@ export function RiskProfileTest() {
 
   const proj5 = capital > 0 ? capital * Math.pow(1 + selectedRate / 100, 5) : 0
   const proj10 = capital > 0 ? capital * Math.pow(1 + selectedRate / 100, 10) : 0
+
+  const inflationLoss = fundSize > 0 ? fundSize * 0.04 : 0
+  const fundYearReturn = fundSize > 0 ? fundSize * (selectedRate / 100) : 0
+
+  const instruments = useMemo(() => {
+    if (capital <= 0) return [] as { name: string; min: number; note: string }[]
+    if (currency === "USD") {
+      if (capital < INSTR_MIN.USD.d30) return []
+      return [
+        {
+          name: "Fondo a 30 días (USD)",
+          min: INSTR_MIN.USD.d30,
+          note: "Retiro en ventana de ~5 días al mes (ej. 25–30). Sin AFI líquido en dólares.",
+        },
+      ]
+    }
+    const list: { name: string; min: number; note: string }[] = []
+    if (capital >= INSTR_MIN.DOP.liquid) {
+      list.push({
+        name: "AFI líquido",
+        min: INSTR_MIN.DOP.liquid,
+        note: "Retiro lun–vie 9am–3pm (sin feriados). Ideal para colchón.",
+      })
+    }
+    if (capital >= INSTR_MIN.DOP.cert) {
+      list.push({
+        name: "Certificado financiero",
+        min: INSTR_MIN.DOP.cert,
+        note: "App, web o sucursal. Plazos 30/90/180/360. Penalidad si cancelas antes.",
+      })
+    }
+    if (capital >= INSTR_MIN.DOP.d30) {
+      list.push({
+        name: "Fondo a 30 días",
+        min: INSTR_MIN.DOP.d30,
+        note: "Retiro en ventana de ~5 días al mes (ej. 25–30).",
+      })
+    }
+    return list
+  }, [capital, currency])
 
   useEffect(() => {
     if (firstLoad.current) return
@@ -457,6 +534,7 @@ export function RiskProfileTest() {
         rate: rateInput,
         monthlyIncome,
         fundMultiplier,
+        savePct,
         savedAt: new Date().toISOString(),
       }
       if (storageSet(DRAFT_KEY, payload)) {
@@ -467,7 +545,7 @@ export function RiskProfileTest() {
     return () => {
       if (saveTimer.current) clearTimeout(saveTimer.current)
     }
-  }, [phase, answers, capitalInput, currency, rateInput, monthlyIncome, fundMultiplier, result])
+  }, [phase, answers, capitalInput, currency, rateInput, monthlyIncome, fundMultiplier, savePct, result])
 
   const startQuiz = () => {
     setPhase("quiz")
@@ -503,7 +581,10 @@ export function RiskProfileTest() {
     setCurrency("USD")
     setRateInput("10")
     setMonthlyIncome("")
-    setFundMultiplier(2)
+    setFundMultiplier(0)
+    setSavePct("")
+    setShowLevels(false)
+    setShowNoFund(false)
     setRestored(false)
     storageRemove(DRAFT_KEY)
     triggerHapticFeedback("medium")
@@ -513,12 +594,20 @@ export function RiskProfileTest() {
     storageRemove(DRAFT_KEY)
     setCapitalInput("")
     setMonthlyIncome("")
+    setSavePct("")
     triggerHapticFeedback("medium")
     setSavedFlash(false)
   }
 
   const inputClass =
     "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-[#388e3c] focus:border-transparent"
+
+  const chipClass = (active: boolean) =>
+    `px-3 py-1.5 text-sm rounded-md font-medium transition-colors ${
+      active
+        ? "bg-[#388e3c] text-white"
+        : "bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784]"
+    }`
 
   /* ---------- INTRO ---------- */
   if (phase === "intro") {
@@ -637,12 +726,12 @@ export function RiskProfileTest() {
   }
 
   const levelDef = LEVELS[effectiveLevel - 1]
-  const situations: Array<"A" | "B" | "C"> = ["A", "B", "C"]
+  const situations: Array<"A" | "B" | "C"> = showABC ? ["A", "B", "C"] : [result.situation]
   const chosenSlices = portfolios[effectiveLevel]
 
   return (
     <div className="space-y-6">
-      {/* 1 · Héroe: solo perfil + sugerencia + descripción */}
+      {/* 1 · Héroe */}
       <div
         className="rounded-xl p-6 sm:p-8 text-white text-center shadow-lg"
         style={{ background: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)" }}
@@ -658,12 +747,12 @@ export function RiskProfileTest() {
         {lowCapital && (
           <div className="mt-4 inline-flex items-center gap-2 bg-white/15 rounded-full px-4 py-2 text-sm">
             <AlertTriangle className="h-4 w-4" />
-            Capital chico: te conviene el nivel 1–2
+            Capital pequeño ({formatMoney(minCapital, currency)} mínimo): te conviene el nivel 1–2
           </div>
         )}
       </div>
 
-      {/* 2 · Aviso conocimiento (gustó) */}
+      {/* 2 · Aviso conocimiento */}
       {result.knowledgeLocked && (
         <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-5 flex items-start gap-3">
           <Lightbulb className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
@@ -687,87 +776,104 @@ export function RiskProfileTest() {
         </div>
       )}
 
-      {/* 4 · Los 5 niveles — gráfico + lista (4 y 5 en rojo) */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-        <h3 className="font-bold text-gray-800 dark:text-gray-100 mb-1">Los 5 niveles de inversión</h3>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
-          Tu nivel está resaltado en el arco. Solo lo regulado, sin prisa, a largo plazo.
-        </p>
+      {/* 4 · Ver niveles (colapsado) */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+        <button
+          onClick={() => {
+            setShowLevels(!showLevels)
+            triggerHapticFeedback("light")
+          }}
+          className="w-full flex items-center justify-center gap-2 px-6 py-4 text-sm font-semibold text-[#388e3c] hover:bg-[#388e3c]/5 transition-colors"
+          data-interactive="true"
+        >
+          Ver niveles de inversor · Daury
+          <ChevronDown className={`h-4 w-4 transition-transform ${showLevels ? "rotate-180" : ""}`} />
+        </button>
+        {showLevels && (
+          <div className="px-6 pb-6 pt-2 border-t border-gray-200 dark:border-gray-700">
+            <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 text-center mb-1 mt-3">
+              Los 5 niveles de inversión
+            </h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400 text-center mb-5">
+              Tu nivel está resaltado en el arco. Solo lo regulado, sin prisa, a largo plazo.
+            </p>
 
-        <RiskLevelsGraphic activeLevel={effectiveLevel} />
+            <RiskLevelsGraphic activeLevel={effectiveLevel} />
 
-        <ul className="mt-5 space-y-3">
-          {LEVELS.map((lvl) => {
-            const isActive = lvl.n === effectiveLevel
-            return (
-              <li
-                key={lvl.n}
-                className={`rounded-lg border p-3 ${
-                  lvl.danger
-                    ? "border-red-300 dark:border-red-800 bg-red-50 dark:bg-red-900/15"
-                    : isActive
-                      ? "border-[#388e3c] bg-[#388e3c]/5 dark:bg-[#388e3c]/10"
-                      : "border-gray-200 dark:border-gray-700"
-                } ${isActive ? "ring-1 ring-[#388e3c]" : ""}`}
-              >
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span
-                    className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+            <ul className="mt-5 space-y-3">
+              {LEVELS.map((lvl) => {
+                const isActive = lvl.n === effectiveLevel
+                return (
+                  <li
+                    key={lvl.n}
+                    className={`rounded-lg border p-3 ${
                       lvl.danger
-                        ? "bg-red-600 text-white"
+                        ? "border-red-300 dark:border-red-800 bg-red-50 dark:bg-red-900/15"
                         : isActive
-                          ? "bg-[#388e3c] text-white"
-                          : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
-                    }`}
+                          ? "border-[#388e3c] bg-[#388e3c]/5 dark:bg-[#388e3c]/10"
+                          : "border-gray-200 dark:border-gray-700"
+                    } ${isActive ? "ring-1 ring-[#388e3c]" : ""}`}
                   >
-                    {lvl.n}
-                  </span>
-                  <span
-                    className={`text-sm font-semibold ${
-                      lvl.danger ? "text-red-700 dark:text-red-400" : "text-gray-800 dark:text-gray-100"
-                    }`}
-                  >
-                    {lvl.name}
-                  </span>
-                  {isActive && (
-                    <span className="text-[10px] font-bold uppercase bg-[#388e3c] text-white px-2 py-0.5 rounded-full">
-                      Tuyo
-                    </span>
-                  )}
-                  {lvl.danger && (
-                    <span className="text-[10px] font-bold uppercase text-red-600 dark:text-red-400">
-                      No recomendado
-                    </span>
-                  )}
-                </div>
-                <p
-                  className={`text-xs mt-1 leading-relaxed ${
-                    lvl.danger ? "text-red-700 dark:text-red-300" : "text-gray-600 dark:text-gray-400"
-                  }`}
-                >
-                  <strong className={lvl.danger ? "text-red-700 dark:text-red-400" : "text-[#388e3c]"}>
-                    {lvl.short}
-                  </strong>{" "}
-                  — {lvl.desc}
-                </p>
-              </li>
-            )
-          })}
-        </ul>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span
+                        className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                          lvl.danger
+                            ? "bg-red-600 text-white"
+                            : isActive
+                              ? "bg-[#388e3c] text-white"
+                              : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                        }`}
+                      >
+                        {lvl.n}
+                      </span>
+                      <span
+                        className={`text-sm font-semibold ${
+                          lvl.danger ? "text-red-700 dark:text-red-400" : "text-gray-800 dark:text-gray-100"
+                        }`}
+                      >
+                        {lvl.name}
+                      </span>
+                      {isActive && (
+                        <span className="text-[10px] font-bold uppercase bg-[#388e3c] text-white px-2 py-0.5 rounded-full">
+                          Tuyo
+                        </span>
+                      )}
+                      {lvl.danger && (
+                        <span className="text-[10px] font-bold uppercase text-red-600 dark:text-red-400">
+                          No recomendado
+                        </span>
+                      )}
+                    </div>
+                    <p
+                      className={`text-xs mt-1 leading-relaxed ${
+                        lvl.danger ? "text-red-700 dark:text-red-300" : "text-gray-600 dark:text-gray-400"
+                      }`}
+                    >
+                      <strong className={lvl.danger ? "text-red-700 dark:text-red-400" : "text-[#388e3c]"}>
+                        {lvl.short}
+                      </strong>{" "}
+                      — {lvl.desc}
+                    </p>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        )}
       </div>
 
-      {/* 5 · Fondo de emergencia + capital + tasa (inputs de planificación) */}
+      {/* 5 · Tu situación en números */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
         <h3 className="font-bold text-gray-800 dark:text-gray-100 mb-1 flex items-center gap-2">
           <Wallet className="h-5 w-5 text-[#388e3c]" />
           Tu situación en números
         </h3>
         <p className="text-xs text-gray-500 dark:text-gray-400 mb-5">
-          Esto no cambia tu perfil: alimenta los montos del portafolio y la proyección.
+          Planifica qué buscas → organiza tus recursos → ajusta y sostén con constancia. Esto no cambia tu perfil:
+          alimenta los montos.
         </p>
 
         <div className="space-y-5">
-          {/* Sueldo + multiplicador fondo */}
           <div>
             <label className="block text-sm font-medium mb-2">¿Cuánto ganas al mes?</label>
             <input
@@ -782,6 +888,16 @@ export function RiskProfileTest() {
             />
             <div className="flex items-center gap-2 mt-3 flex-wrap">
               <span className="text-xs text-gray-500 dark:text-gray-400">Fondo de emergencia:</span>
+              <button
+                onClick={() => {
+                  setFundMultiplier(0)
+                  triggerHapticFeedback("light")
+                }}
+                className={chipClass(fundMultiplier === 0)}
+                data-interactive="true"
+              >
+                Sin fondo
+              </button>
               {[2, 4, 6].map((m) => (
                 <button
                   key={m}
@@ -789,25 +905,71 @@ export function RiskProfileTest() {
                     setFundMultiplier(m)
                     triggerHapticFeedback("light")
                   }}
-                  className={`px-3 py-1.5 text-sm rounded-md font-medium transition-colors ${
-                    fundMultiplier === m
-                      ? "bg-[#388e3c] text-white"
-                      : "bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784]"
-                  }`}
+                  className={chipClass(fundMultiplier === m)}
                   data-interactive="true"
                 >
                   {m}× sueldo
                 </button>
               ))}
             </div>
-            {fundSize > 0 && (
+            {hasFund && fundSize > 0 && (
               <p className="text-xs text-[#1b5e20] dark:text-[#a5d6a7] mt-2 font-medium">
                 Tu colchón objetivo: {formatMoney(fundSize, currency)} ({fundMultiplier} meses de sueldo)
               </p>
             )}
           </div>
 
-          {/* Capital + moneda */}
+          {/* Educación si no hay fondo */}
+          {!hasFund && (
+            <div className="rounded-lg bg-[#388e3c]/5 dark:bg-[#388e3c]/10 border border-[#388e3c]/30 p-4">
+              <div className="flex items-start gap-2 mb-3">
+                <ShieldAlert className="h-5 w-5 text-[#388e3c] flex-shrink-0 mt-0.5" />
+                <div className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                  <strong className="text-gray-900 dark:text-gray-100">Primero: tu fondo de emergencia.</strong>{" "}
+                  El mínimo sugerido es <strong>2× sueldo</strong>
+                  {income > 0 && (
+                    <>
+                      {" "}
+                      = <strong>{formatMoney(fundTarget, currency)}</strong>
+                    </>
+                  )}
+                  . Sin colchón, invertir no funciona: el dinero debe estar quieto y con constancia; si hay una
+                  emergencia, venderías en el peor momento.
+                </div>
+              </div>
+              <label className="block text-xs font-medium mb-2 text-gray-600 dark:text-gray-400">
+                ¿Qué % de tu sueldo puedes ahorrar al mes?
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min={1}
+                  max={100}
+                  inputMode="numeric"
+                  value={savePct}
+                  onChange={(e) => setSavePct(e.target.value)}
+                  placeholder="Ej: 15"
+                  className={`${inputClass} max-w-[120px]`}
+                  data-interactive="true"
+                />
+                <span className="text-sm text-gray-500 dark:text-gray-400">% de tu sueldo</span>
+              </div>
+              {monthsToFund !== null && monthsToFund > 0 && (
+                <p className="text-xs text-[#1b5e20] dark:text-[#a5d6a7] mt-3 font-medium">
+                  En ~{monthsToFund} {monthsToFund === 1 ? "mes" : "meses"} completas tu colchón de{" "}
+                  {formatMoney(fundTarget, currency)} ahorrando {saveRate}% cada mes.
+                </p>
+              )}
+            </div>
+          )}
+
+          {hasFund && fundSize < fundTarget && saveRate > 0 && monthsToFund !== null && (
+            <p className="text-xs text-[#1b5e20] dark:text-[#a5d6a7] font-medium">
+              Te faltan {formatMoney(fundTarget - fundSize, currency)} para 2× sueldo — ~{monthsToFund}{" "}
+              {monthsToFund === 1 ? "mes" : "meses"} al {saveRate}%.
+            </p>
+          )}
+
           <div>
             <label className="block text-sm font-medium mb-2">¿Cuánto planeas invertir?</label>
             <div className="flex flex-col sm:flex-row gap-3">
@@ -817,7 +979,7 @@ export function RiskProfileTest() {
                 inputMode="decimal"
                 value={capitalInput}
                 onChange={(e) => setCapitalInput(e.target.value)}
-                placeholder="Ej: 4000"
+                placeholder={currency === "DOP" ? "Ej: 25000" : "Ej: 1500"}
                 className={`flex-1 ${inputClass}`}
                 data-interactive="true"
               />
@@ -840,7 +1002,6 @@ export function RiskProfileTest() {
             </div>
           </div>
 
-          {/* Tasa esperada — chips 8/10/15 */}
           <div>
             <label className="block text-sm font-medium mb-2">Tasa anual que esperas (%)</label>
             <div className="flex flex-wrap gap-2">
@@ -872,31 +1033,55 @@ export function RiskProfileTest() {
           <div className="mt-5 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-4 flex items-start gap-3">
             <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
             <p className="text-sm text-red-800 dark:text-red-200 leading-relaxed">
-              Con menos de <strong>$3,000</strong>, quédate en <strong>nivel 1–2</strong>: son menos riesgosos y
-              mueven la aguja. Ejemplo: invertir $1,000 al 15% en un año son solo <strong>$150</strong> — con
-              $3,000–$4,000 la diferencia entre niveles ya se nota.
+              Para invertir en <strong>{currency === "DOP" ? "pesos hace falta al menos RD$5,000" : "dólares, al menos $3,000"}</strong>.
+              Con poco capital quédate en <strong>nivel 1–2</strong>: menos riesgo y mueve la aguja cuando crezca.
             </p>
           </div>
         )}
       </div>
 
-      {/* 6 · Portafolio con montos */}
+      {/* 6 · Cómo distribuir */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
         <h3 className="font-bold text-gray-800 dark:text-gray-100 mb-1">Cómo distribuir tu dinero</h3>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mb-5">
-          Tres formas para tu nivel.
+        <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
           {capital > 0 ? (
             <>
-              {" "}
-              Montos calculados sobre <strong>{formatMoney(capital, currency)}</strong>.
+              Montos sobre <strong>{formatMoney(capital, currency)}</strong>.
+              {!showABC && (
+                <>
+                  {" "}
+                  Con este monto alcanza para <strong>{instruments.length || 1}</strong>{" "}
+                  {instruments.length === 1 ? "instrumento" : "instrumentos"} — no alcanza aún para comparar A/B/C
+                  (desde {formatMoney(currency === "DOP" ? ABC_DOP : ABC_USD, currency)}).
+                </>
+              )}
             </>
           ) : (
-            " Escribe cuánto planeas invertir arriba para ver montos."
-          )}{" "}
-          Tú decides — es tu responsabilidad.
+            "Escribe cuánto planeas invertir arriba para ver montos."
+          )}
         </p>
 
-        <div className="grid sm:grid-cols-3 gap-4">
+        {capital > 0 && instruments.length > 0 && (
+          <div className="mb-5 rounded-lg border border-[#388e3c]/40 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 p-4">
+            <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 mb-2">
+              Instrumentos a los que alcanza tu monto
+            </p>
+            <ul className="space-y-2">
+              {instruments.map((inst) => (
+                <li key={inst.name} className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                  <strong className="text-[#388e3c]">{inst.name}</strong> (mín.{" "}
+                  {formatMoney(inst.min, currency)}) — {inst.note}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div
+          className={
+            showABC ? "grid sm:grid-cols-3 gap-4" : "grid sm:grid-cols-1 max-w-md gap-4"
+          }
+        >
           {situations.map((sit) => {
             const sitSlices = chosenSlices[sit]
             const isRecommended = sit === result.situation
@@ -911,9 +1096,9 @@ export function RiskProfileTest() {
               >
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <h4 className="font-semibold text-sm text-gray-800 dark:text-gray-100 leading-snug">
-                    {situationMeta[sit].title}
+                    {showABC ? situationMeta[sit].title : "Tu distribución sugerida"}
                   </h4>
-                  {isRecommended && (
+                  {(isRecommended || !showABC) && (
                     <span className="text-[10px] font-bold uppercase bg-[#388e3c] text-white px-2 py-0.5 rounded-full whitespace-nowrap">
                       Para ti
                     </span>
@@ -929,14 +1114,7 @@ export function RiskProfileTest() {
                           className="w-2.5 h-2.5 rounded-full flex-shrink-0"
                           style={{ backgroundColor: sliceColors[i % sliceColors.length] }}
                         />
-                        <span className="flex-1">
-                          {s.label}
-                          {s.isFund && fundSize > 0 && (
-                            <span className="block text-[10px] text-gray-400 dark:text-gray-500">
-                              colchón ≈ {formatMoney(fundSize, currency)}
-                            </span>
-                          )}
-                        </span>
+                        <span className="flex-1">{s.label}</span>
                         <span className="text-right tabular-nums">
                           <strong>{s.pct}%</strong>
                           {amount > 0 && (
@@ -950,15 +1128,23 @@ export function RiskProfileTest() {
                   })}
                 </ul>
                 <p className="mt-3 text-[11px] text-gray-500 dark:text-gray-400 leading-snug">
-                  {situationMeta[sit].pickIf}
+                  {showABC ? situationMeta[sit].pickIf : "Estructura simple para tu nivel y moneda."}
                 </p>
               </div>
             )
           })}
         </div>
+
+        <div className="mt-5 rounded-lg border border-[#388e3c]/40 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 p-4 flex items-start gap-3">
+          <PiggyBank className="h-5 w-5 text-[#388e3c] flex-shrink-0 mt-0.5" />
+          <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+            <strong className="text-gray-900 dark:text-gray-100">Tu fondo de emergencia va aparte.</strong> No es
+            parte de este portafolio: se gestiona en la sección siguiente, con instrumentos de alta liquidez.
+          </p>
+        </div>
       </div>
 
-      {/* 7 · Proyección + link compuesto (integrados) */}
+      {/* 7 · Proyección + interés compuesto */}
       {capital > 0 && (
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
           <div className="flex items-center gap-2 mb-1">
@@ -1000,7 +1186,142 @@ export function RiskProfileTest() {
         </div>
       )}
 
-      {/* 8 · Acciones */}
+      {/* 8 · Fondo de emergencia (si aplica o elección) */}
+      {income > 0 && (
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+          <div className="flex items-center gap-2 mb-1">
+            <ShieldAlert className="h-5 w-5 text-[#388e3c]" />
+            <h3 className="font-bold text-gray-800 dark:text-gray-100">Tu fondo de emergencia</h3>
+          </div>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+            Va aparte de tu portafolio. El objetivo mínimo es <strong>2× sueldo</strong>
+            {income > 0 && (
+              <>
+                {" "}
+                = <strong>{formatMoney(fundTarget, currency)}</strong>
+              </>
+            )}
+            .
+          </p>
+
+          {/* Rendimiento vs inflación del colchón */}
+          {hasFund && fundSize > 0 && (
+            <div className="grid sm:grid-cols-2 gap-4 mb-4">
+              <div className="rounded-xl bg-[#388e3c]/10 px-4 py-4 text-center">
+                <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                  Rendimiento 1 año (tasa {selectedRate}%)
+                </div>
+                <div className="text-xl font-bold text-[#1b5e20] dark:text-[#a5d6a7] tabular-nums">
+                  +{formatMoney(fundYearReturn, currency)}
+                </div>
+              </div>
+              <div className="rounded-xl bg-red-50 dark:bg-red-900/20 px-4 py-4 text-center border border-red-200 dark:border-red-800">
+                <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                  Inflación ~4% si lo dejas parado
+                </div>
+                <div className="text-xl font-bold text-red-600 dark:text-red-400 tabular-nums">
+                  −{formatMoney(inflationLoss, currency)}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {!hasFund && (
+            <div className="mb-4 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-4 text-sm text-amber-800 dark:text-amber-200 leading-relaxed">
+              Todavía no tienes colchón. Construye al menos <strong>2× sueldo</strong> antes de mirar portafolios a
+              largo plazo. Si lo dejas en cuenta, la inflación (~3–5% anual) se lo come.
+            </div>
+          )}
+
+          {/* Instrumentos de liquidez para el colchón */}
+          {hasFund && fundSize > 0 && (
+            <div className="mb-4 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+              <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 mb-3">
+                Dónde poner tu colchón (alta liquidez, no es "invertir a largo plazo")
+              </p>
+              <ul className="space-y-3 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                {currency === "DOP" && fundSize >= INSTR_MIN.DOP.liquid && (
+                  <li>
+                    <strong className="text-[#388e3c]">AFI líquido</strong> — mín.{" "}
+                    {formatMoney(INSTR_MIN.DOP.liquid, "DOP")}. Retiro lun–vie 9am–3pm (sin feriados ni festivos).
+                    Para emergencias que aceptan tarjeta o retiros parciales.
+                  </li>
+                )}
+                {fundSize >= INSTR_MIN.DOP.cert && (
+                  <li>
+                    <strong className="text-[#388e3c]">Certificado</strong> — mín.{" "}
+                    {formatMoney(INSTR_MIN.DOP.cert, "DOP")}. App, web o sucursal. Plazos 30/90/180/360 días.
+                    <span className="block mt-1 text-amber-700 dark:text-amber-400">
+                      Cancelar antes de tiempo: <strong>3% anual sobre el capital</strong> (solo los días que
+                      falten). Ej.: RD$10,000 con 1 mes por vencer ≈ <strong>RD$25</strong> + te reajustan los
+                      intereses ya ganados a tasa de ahorro. Un retiro temprano puede comerse tus ganancias.
+                    </span>
+                  </li>
+                )}
+                {fundSize >= INSTR_MIN.DOP.d30 && (
+                  <li>
+                    <strong className="text-[#388e3c]">Fondo a 30 días</strong> — mín.{" "}
+                    {formatMoney(INSTR_MIN.DOP.d30, "DOP")}. Retiro en ventana de ~5 días fijados por el fondo
+                    (ej. del 25 al 30). Penalidad si sacas antes del plazo.
+                  </li>
+                )}
+                {currency === "USD" && fundSize >= INSTR_MIN.USD.d30 && (
+                  <li>
+                    <strong className="text-[#388e3c]">Fondo 30 días (USD)</strong> — mín.{" "}
+                    {formatMoney(INSTR_MIN.USD.d30, "USD")}. En dólares no hay AFI líquido: el mínimo es plazo de
+                    30 días. Penalidad si retiras antes.
+                  </li>
+                )}
+              </ul>
+              <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-3">
+                Sugerencia: parte líquida (si es en pesos) + resto a 30 días o certificado, según tu monto.
+              </p>
+            </div>
+          )}
+
+          {/* Elección: no invertir + inflación + tarjeta */}
+          <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+            <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-2">
+              ¿Prefieres no invertir tu fondo de emergencia?
+            </p>
+            <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed mb-3">
+              Es válido. Pero ten en cuenta:{" "}
+              {fundSize > 0 ? (
+                <>
+                  dejar <strong>{formatMoney(fundSize, currency)}</strong> quietos pierde ~{" "}
+                  <strong className="text-red-600 dark:text-red-400">{formatMoney(inflationLoss, currency)}</strong>{" "}
+                  al año por inflación (~4%).
+                </>
+              ) : (
+                <>el dinero parado pierde ~3–5% al año de poder de compra.</>
+              )}{" "}
+              Pregúntate: <em>¿cuándo fue mi última emergencia? ¿No siempre es una parte, no todo de golpe?</em>
+            </p>
+            <div className="rounded-lg bg-[#388e3c]/5 dark:bg-[#388e3c]/10 border border-[#388e3c]/40 p-4 flex items-center justify-between gap-3 flex-wrap">
+              <div className="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
+                <Info className="h-4 w-4 text-[#388e3c] flex-shrink-0" />
+                <span>
+                  Si pagas con <strong>tarjeta de crédito</strong> (hospital, llantas…): no financies. Saca del
+                  colchón <strong>2–3 días antes del vencimiento</strong>.
+                </span>
+              </div>
+              <Link
+                href="/tarjeta-corte-vencimiento"
+                className="inline-flex items-center gap-2 bg-[#388e3c] hover:bg-[#1b5e20] text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap"
+                data-interactive="true"
+              >
+                Ver corte y vencimiento →
+              </Link>
+            </div>
+            <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-3 leading-relaxed">
+              Si la emergencia pide <strong>efectivo</strong>, retira del fondo <strong>líquido</strong> (horario
+              de oficina). No hace falta tocar inversiones a largo plazo.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* 9 · Acciones */}
       <div className="flex flex-col sm:flex-row gap-3">
         <button
           onClick={startQuiz}
