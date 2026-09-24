@@ -152,6 +152,10 @@ export default function PoliticaCookiesPage() {
                       key: "holentia:calculadora-interes-tarjeta:draft:v1",
                       desc: "Borrador de la calculadora de interés de tarjeta",
                     },
+                    {
+                      key: "holentia:test-perfil-riesgo:draft:v1",
+                      desc: "Tu último test de perfil de riesgo (nivel y fecha)",
+                    },
                   ].map((item) => (
                     <div
                       key={item.key}

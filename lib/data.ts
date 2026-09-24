@@ -297,10 +297,10 @@ export const sectionsData: Record<string, SectionData> = {
       },
       {
         id: "test-perfil-riesgo",
-        title: "Test de perfíl de riesgo",
-        description: "Aprende a ver como inviertes.",
+        title: "Test de perfil de riesgo",
+        description: "Descubre tu nivel para invertir.",
         slug: "test-perfil-riesgo",
-        isAvailable: false,
+        isAvailable: true,
         category: "finanzas",
       },
       {

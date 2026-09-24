@@ -4,9 +4,9 @@
 > Prod `holentia.com → main`. No tocar dominios.
 > Principios: sin DB, sin registro, local-first privado (`holentia:*` en navegador), cero tracking.
 
-## Estado actual (09-Oct-2026) — 10 tools en `dev`
+## Estado actual (09-Oct-2026) — 11 tools en `dev` + `main`
 - [x] Stack: Next 15.5.26 + React 19.3 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores
-- [x] Cobertura: 10 tools (`diario-guiado, test-lenguajes-amor, calculadora-hidratacion, calculadora-calorias, crear-presupuesto-personal, calculadora-interes-compuesto, calculadora-prestamo, calculadora-consumo-electrico, tarjeta-corte-vencimiento, calculadora-interes-tarjeta`)
+- [x] Cobertura: 11 tools (`diario-guiado, test-lenguajes-amor, calculadora-hidratacion, calculadora-calorias, crear-presupuesto-personal, calculadora-interes-compuesto, calculadora-prestamo, calculadora-consumo-electrico, tarjeta-corte-vencimiento, calculadora-interes-tarjeta, test-perfil-riesgo`)
 - [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main`
 - [x] `tsc 0 errores + next build OK` en estricto
 
@@ -45,7 +45,7 @@ Canónicos: mente `#1976d2`, relaciones `#7c3aed`, cuerpo `#ffa000`, finanzas `#
 
 ## Fase 3 — Local privado — HECHA
 - [x] `lib/storage.ts`: `storageGet/Set/Remove/ClearAll`, keys `holentia:{slug}:{draft|simulations|entries}:v1`, `try/catch`, `window guard`
-- [x] Taxonomía: `E efímero` (perfil-riesgo, test-amor) / `D draft` autosave 500ms + `Guardado local ✓` / `S snapshots` máx 3
+- [x] Taxonomía: `E efímero` (test-amor) / `D draft` autosave 500ms + `Guardado local ✓` / `S snapshots` máx 3 · `perfil-riesgo` pasó a **D** (guarda último test + fecha por pedido del autor)
 - [x] `budget D` (borrador ingresos/gastos + botón borrar) · `compound D+S` (inputs + sims persistentes + `clearCompoundData`) · `préstamo D+S` (inputs + sims persistentes + `clearLoanSimulations`, Restablecer intacto) · `diario D` (clave `v1` con migración legada + Borrar todo) · `consumo eléctrico D` (migrado a helper)
 - [x] `alert()` sustituidos por banner inline en compound/préstamo
 - [x] Botón `Borrar mis datos`/`Borrar todas`/`Borrar todo` por tool + `ClearAllData` global en Ayuda
@@ -60,7 +60,7 @@ Muertos borrados, icons opacos, hover tilt único en cards (fix franja), `any[]`
 ## Fase 5 — Finanzas foco + deploy
 - [ ] `planificador-ahorros Tipo S` reutilizando hooks compound/budget
 - [ ] `tracker-gastos-hormiga Tipo D`
-- [ ] `test-perfil-riesgo Tipo E` hacer/ver/imprimir, sin persistencia
+- [x] `test-perfil-riesgo` (finanzas, **Tipo D**, quiz 6 preguntas honestidad, niveles 1–3 con candado de conocimiento, 5 niveles en accordion opinión Daury, 3 pasteles situacionales A/B/C Chart.js, capital+USD/DOP al final, banner &lt;$3k → nivel 1–2, proyección 5–10 años + link interés compuesto, anti-hacerte-rico 20–30 años)
 - [x] `calculadora de calorías` (cuerpo, Tipo D, Mifflin-St Jeor, objetivos Bajar grasa −20% / Mantener / Subir +10%, guía EL EQUILIBRIO ES LA CLAVE + báscula)
 - [x] `tarjeta-corte-vencimiento` (finanzas, Tipo D, timeline, gráfico ciclo, nombre+terminación tarjeta, borradores)
 - [x] Cuerpo reordenado: activas primero (calorías, hidratación)
