@@ -8,9 +8,10 @@ import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 const DRAFT_KEY = draftKey("tarjeta-corte-vencimiento")
 
 interface CardDraft {
+  cardName?: string
+  cardLast4?: string
   cutoffDay?: string
   dueDay?: string
-  purchases?: string[]
 }
 
 interface Cycle {
@@ -222,13 +223,13 @@ function WhySection({
         </span>
       </div>
 
-      {/* Pago sugerido: badge pegado a su nodo con conector grueso */}
-      <div className="relative h-12">
+      {/* Pago sugerido: el stem nace del nodo y baja directo al badge */}
+      <div className="relative h-16">
         <div className="absolute top-0 flex flex-col items-center" style={{ left: `${pctSug}%` }}>
-          <div className="w-1 h-4 rounded bg-[#1b5e20] dark:bg-[#81c784]" />
+          <div className="w-1 h-6 rounded-b bg-[#1b5e20] dark:bg-[#81c784]" />
           <span
-            className={`px-3 py-1 rounded-full bg-[#1b5e20] text-white text-[11px] font-bold whitespace-nowrap ${
-              sugRight ? "-translate-x-full" : "-translate-x-1/2"
+            className={`px-3 py-1 rounded-full bg-[#1b5e20] text-white text-[11px] font-bold whitespace-nowrap shadow ${
+              sugRight ? "-translate-x-[80%]" : "-translate-x-1/2"
             }`}
           >
             Sugerido: <span className="capitalize">{formatShort(result.suggestedPay)}</span>
@@ -279,6 +280,8 @@ function WhySection({
 export function CardCutoffCalculator() {
   const { triggerHapticFeedback } = useHapticFeedback()
   const todayISO = useMemo(() => toISODate(new Date()), [])
+  const [cardName, setCardName] = useState<string>("Mi tarjeta")
+  const [cardLast4, setCardLast4] = useState<string>("0007")
   const [cutoffDay, setCutoffDay] = useState<string>("")
   const [dueDay, setDueDay] = useState<string>("")
   const [purchaseISO, setPurchaseISO] = useState<string>(todayISO)
@@ -288,6 +291,8 @@ export function CardCutoffCalculator() {
   // Restaurar borrador (Tipo D) solo en cliente
   useEffect(() => {
     const draft = storageGet<CardDraft>(DRAFT_KEY, {})
+    if (draft.cardName !== undefined) setCardName(draft.cardName)
+    if (draft.cardLast4 !== undefined) setCardLast4(draft.cardLast4)
     if (draft.cutoffDay !== undefined) setCutoffDay(draft.cutoffDay)
     if (draft.dueDay !== undefined) setDueDay(draft.dueDay)
   }, [])
@@ -301,7 +306,7 @@ export function CardCutoffCalculator() {
     }
     if (saveTimer.current) clearTimeout(saveTimer.current)
     saveTimer.current = setTimeout(() => {
-      if (storageSet(DRAFT_KEY, { cutoffDay, dueDay })) {
+      if (storageSet(DRAFT_KEY, { cardName, cardLast4, cutoffDay, dueDay })) {
         setSavedFlash(true)
         setTimeout(() => setSavedFlash(false), 1500)
       }
@@ -309,7 +314,7 @@ export function CardCutoffCalculator() {
     return () => {
       if (saveTimer.current) clearTimeout(saveTimer.current)
     }
-  }, [cutoffDay, dueDay])
+  }, [cardName, cardLast4, cutoffDay, dueDay])
 
   const configured = useMemo(() => {
     const c = Number.parseInt(cutoffDay, 10)
@@ -356,12 +361,16 @@ export function CardCutoffCalculator() {
   }
 
   const clearData = () => {
+    setCardName("Mi tarjeta")
+    setCardLast4("0007")
     setCutoffDay("")
     setDueDay("")
     setPurchaseISO(todayISO)
     storageRemove(DRAFT_KEY)
     triggerHapticFeedback("medium")
   }
+
+  const cardLabel = `${cardName || "Mi tarjeta"} •• ${cardLast4 || "••••"}`
 
   const inputClass =
     "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-[#388e3c] focus:border-transparent"
@@ -396,9 +405,36 @@ export function CardCutoffCalculator() {
           </div>
           <h2 className="text-xl font-bold">Tu tarjeta</h2>
         </div>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">Configúrala una vez, consúltala siempre.</p>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Configúrala una vez, consúltala siempre.</p>
+        <p className="text-xs font-semibold text-[#388e3c] dark:text-[#81c784] mb-6">{cardLabel}</p>
 
         <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="col-span-2 sm:col-span-1">
+              <label className="block text-sm font-medium mb-2">Nombre</label>
+              <input
+                type="text"
+                value={cardName}
+                onChange={(e) => setCardName(e.target.value)}
+                placeholder="Mi tarjeta"
+                maxLength={24}
+                className={inputClass}
+                data-interactive="true"
+              />
+            </div>
+            <div className="col-span-2 sm:col-span-1">
+              <label className="block text-sm font-medium mb-2">Terminación (opcional)</label>
+              <input
+                type="text"
+                value={cardLast4}
+                onChange={(e) => setCardLast4(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                placeholder="0007"
+                inputMode="numeric"
+                className={inputClass}
+                data-interactive="true"
+              />
+            </div>
+          </div>
           <div>
             <label className="block text-sm font-medium mb-2">Día de corte (1-31)</label>
             <input
@@ -482,29 +518,31 @@ export function CardCutoffCalculator() {
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
             {/* Héroe: días gratis reales de esta compra */}
             <div
-              className="rounded-xl p-8 text-white mb-8"
+              className="rounded-xl p-8 text-white mb-8 text-center"
               style={{ background: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)" }}
             >
+              <div className="text-xs font-semibold uppercase tracking-widest opacity-80 mb-3">{cardLabel}</div>
               <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Financiamiento gratis</div>
               <div className="text-6xl font-bold tabular-nums">{result.graceDays} días</div>
             </div>
-            <p className="text-base leading-relaxed mb-8 text-gray-700 dark:text-gray-200">
-              Tu tarjeta corta el <strong className="capitalize">{formatLong(result.cutoff)}</strong>
-              {result.daysToCutoff === 0 ? (
-                <>, <strong>¡justo hoy!</strong> Esta compra entra al corte de hoy</>
-              ) : result.daysToCutoff <= 7 ? (
-                <>, que es <strong>en {result.daysToCutoff} días (este mes)</strong>. Esta compra todavía lo alcanza</>
-              ) : (
-                <>, que es <strong>en {result.daysToCutoff} días (el próximo corte)</strong>. Por eso tienes tantos
-                días gratis</>
-              )}{" "}
-              y tienes hasta el <strong className="capitalize">{formatLong(result.due)}</strong> para pagar, pero te
-              sugerimos encarecidamente pagar <strong>2 o 3 días antes</strong>, o sea el{" "}
-              <strong className="text-[#388e3c] dark:text-[#81c784] capitalize">
-                {formatLong(result.suggestedPay)}
-              </strong>
-              .
-            </p>
+            <div className="mb-8 text-gray-700 dark:text-gray-200 space-y-3">
+              <p className="text-base leading-relaxed">
+                Tu tarjeta corta el <strong>{formatLong(result.cutoff)}</strong>
+                {result.daysToCutoff === 0 ? (
+                  <> — <strong>¡justo hoy!</strong> Esta compra entra al corte de hoy.</>
+                ) : result.daysToCutoff <= 7 ? (
+                  <> — en <strong>{result.daysToCutoff} días</strong>. Esta compra todavía lo alcanza.</>
+                ) : (
+                  <> — en <strong>{result.daysToCutoff} días</strong>. Al entrar al próximo corte, tienes más días
+                  gratis.</>
+                )}
+              </p>
+              <p className="text-base leading-relaxed">
+                Tienes hasta el <strong>{formatLong(result.due)}</strong> para pagar. Te sugerimos pagar 2 o 3 días
+                antes, o sea el{" "}
+                <strong className="text-[#388e3c] dark:text-[#81c784]">{formatLong(result.suggestedPay)}</strong>.
+              </p>
+            </div>
 
             {/* Timeline: línea continua, iconos opacos centrados, hover animado */}
             <div className="mb-10 mt-2">
@@ -538,7 +576,7 @@ export function CardCutoffCalculator() {
                     <div className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
                       {step.label}
                     </div>
-                    <div className="font-bold text-lg capitalize leading-snug">{formatLong(step.date)}</div>
+                    <div className="font-bold text-lg leading-snug">{formatLong(step.date)}</div>
                     <div className="text-sm text-[#388e3c] dark:text-[#81c784] font-medium mt-2">{step.note}</div>
                   </div>
                 </div>
