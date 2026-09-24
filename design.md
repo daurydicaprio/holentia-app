@@ -92,8 +92,9 @@ Umbral único `useMediaQuery("(max-width:768px)")` (`hooks/use-media-query.ts`).
 ## 6. Datos y tipos
 
 `types/index.ts`: `SectionType mente|cuerpo|finanzas|relaciones`, `CardData {id,title,description,slug,isAvailable,category}`, `SectionData`.
-`lib/data.ts`: 32 cards, 6 disponibles. Nueva card debe traer `slug = ruta app/{slug}` y `category = sección` para heredar color.
-Storage futuro: keys `holentia:{slug}:{draft|simulations}:v1` (ver `plan.md Fase 2`). Hoy solo `holentia-journal-entries` persiste.
+`lib/data.ts`: 35 cards, 9 disponibles (cuerpo: calorías + hidratación primero; finanzas suma consumo eléctrico y tarjeta). Nueva card debe traer `slug = ruta app/{slug}` y `category = sección` para heredar color. Las activas van primero en su sección.
+Storage: helper `lib/storage.ts`, keys `holentia:{slug}:{draft|simulations|entries}:v1` (diario migrado de clave legada). Taxonomía E/D/S por herramienta (ver `plan.md Fase 3`).
+Patrones de layout por tool (todos sobre `ToolPageClient` + color de sección): wizard por pasos (presupuesto), inputs+resultado lado a lado (interés), form+tabla con tabs (préstamo), timeline vertical (tarjeta), factura-papel (luz), objetivo-primero (calorías), responsive simple (hidratación, diario, amor).
 
 ## 7. Prohibido en nuevas herramientas
 

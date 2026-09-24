@@ -46,7 +46,10 @@ holentia/
 │   │   ├── loan-calculator/   # Calculadora de préstamos
 │   │   ├── guided-journal/    # Diario guiado (Mente)
 │   │   ├── love-languages-test/ # Test de lenguajes del amor (Relaciones)
-│   │   └── hydration-calculator/ # Calculadora de hidratación (Cuerpo)
+│   │   ├── hydration-calculator/ # Calculadora de hidratación (Cuerpo)
+│   │   ├── calorie-calculator/  # Calculadora de calorías (Cuerpo)
+│   │   ├── electricity-calculator/ # Consumo eléctrico (Finanzas)
+│   │   └── card-cutoff/         # Corte y vencimiento tarjeta (Finanzas)
 │   ├── ui/                   # Componentes de interfaz (botones, tarjetas, etc.)
 │   └── tool-page-client.tsx  # Componente base para páginas de herramientas
 ├── hooks/                    # Custom hooks
@@ -57,6 +60,7 @@ holentia/
 │   └── use-media-query.ts         # Hook para consultas de medios
 ├── lib/                      # Utilidades y funciones
 │   ├── data.ts               # Datos de secciones y herramientas
+│   ├── storage.ts            # Helper localStorage namespaced holentia:*
 │   └── utils.ts              # Funciones de utilidad
 ├── types/                    # Definiciones de tipos
 │   └── index.ts              # Tipos principales
@@ -216,4 +220,4 @@ Este proyecto es propiedad de Daury DiCaprio. Todos los derechos reservados.
 
 ---
 
-**Última actualización**: Diciembre 2024
+**Última actualización**: Octubre 2026 (9 herramientas, build estricto, local-first)
