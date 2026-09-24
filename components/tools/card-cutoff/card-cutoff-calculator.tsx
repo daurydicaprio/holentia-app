@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { CreditCard, Trash2, Info, ShoppingBag, Scissors, Wallet, BellRing } from "lucide-react"
+import { CreditCard, Trash2, Info, ShoppingBag, Scissors, Wallet, BellRing, Lightbulb } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
@@ -96,11 +96,13 @@ interface WhySectionData {
 /** Tarjeta aparte: un solo ciclo elegante y fluido. */
 function WhySection({
   result,
+  cutoffDay,
   dueDay,
   cycleBadge,
   isPast,
 }: {
   result: WhySectionData
+  cutoffDay: string
   dueDay: string
   cycleBadge: { extra: number } | null
   isPast: boolean
@@ -123,10 +125,22 @@ function WhySection({
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
       <h2 className="text-xl font-bold mb-1">El ciclo de tu tarjeta</h2>
-      <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-        Cada mes se repite lo mismo: un periodo para comprar y un periodo para pagar. Todo lo que consumes entre un
-        corte y el siguiente salta al próximo mes: entra al nuevo corte y se paga en su fecha límite.
+      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
+        Cada mes se repite lo mismo: un periodo para comprar y un periodo para pagar.
       </p>
+
+      {/* Recuadro educativo: cómo funciona el corte */}
+      <div className="mb-6 rounded-xl bg-sky-50 dark:bg-sky-900/15 border border-sky-200 dark:border-sky-800 p-4 sm:p-5">
+        <div className="flex items-center gap-2 mb-2">
+          <Lightbulb className="h-5 w-5 text-sky-600 dark:text-sky-400 flex-shrink-0" />
+          <h3 className="font-bold text-sm text-sky-900 dark:text-sky-200">¿Cómo funciona el corte?</h3>
+        </div>
+        <p className="text-sm text-sky-900/90 dark:text-sky-100/90 leading-relaxed">
+          Todo lo que consumes entre un corte y el siguiente — supermercado, gasolina, internet, lo que sea — entra
+          al mismo grupo y <strong>salta junto al próximo mes</strong>: se suma en el nuevo corte y se paga en su
+          fecha límite. Por eso comprar justo después del corte te da más días gratis.
+        </p>
+      </div>
 
       {/* Contexto: ciclo anterior */}
       {isPast && (
@@ -223,22 +237,18 @@ function WhySection({
         </span>
       </div>
 
-      {/* Pago sugerido: el stem nace del nodo y baja directo al badge */}
+      {/* Pago sugerido: stem y badge centrados exacto sobre el nodo */}
       <div className="relative h-16">
-        <div className="absolute top-0 flex flex-col items-center" style={{ left: `${pctSug}%` }}>
-          <div className="w-1 h-6 rounded-b bg-[#1b5e20] dark:bg-[#81c784]" />
-          <span
-            className={`px-3 py-1 rounded-full bg-[#1b5e20] text-white text-[11px] font-bold whitespace-nowrap shadow ${
-              sugRight ? "-translate-x-[80%]" : "-translate-x-1/2"
-            }`}
-          >
+        <div className="absolute top-0 flex flex-col items-center -translate-x-1/2" style={{ left: `${pctSug}%` }}>
+          <div className="w-1 h-6 bg-[#1b5e20] dark:bg-[#81c784]" />
+          <span className="px-3 py-1 rounded-full bg-[#1b5e20] text-white text-[11px] font-bold whitespace-nowrap shadow">
             Sugerido: <span className="capitalize">{formatShort(result.suggestedPay)}</span>
           </span>
         </div>
       </div>
 
       {/* Hoy en tiempo real */}
-      <p className="text-xs text-gray-600 dark:text-gray-300 mt-1 text-center">
+      <p className="text-xs text-gray-600 dark:text-gray-300 mt-5 text-center">
         <span className="inline-block w-2.5 h-2.5 rounded-full bg-sky-500 mr-1 align-middle" />
         Hoy {formatShort(today)}:{" "}
         {daysToDue > 0 ? (
@@ -251,7 +261,7 @@ function WhySection({
       </p>
 
       {/* Tramos */}
-      <div className="grid grid-cols-2 gap-3 mt-1">
+      <div className="grid grid-cols-2 gap-3 mt-5">
         <div className="rounded-xl bg-[#388e3c]/10 dark:bg-[#388e3c]/20 px-4 py-3 text-center">
           <div className="text-xl font-bold text-[#1b5e20] dark:text-[#a5d6a7] tabular-nums">
             {result.daysToCutoff} días
@@ -266,11 +276,13 @@ function WhySection({
         </div>
       </div>
 
-      {/* Pie: solo estimación, centrado */}
+      {/* Pie útil */}
       <div className="flex items-start justify-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-6 leading-relaxed text-center">
         <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
         <span className="max-w-md">
-          <strong>Estimación:</strong> vence el día {dueDay} del mes siguiente al corte. Nada sale de tu navegador.
+          Esto es una estimación con tu día de corte ({cutoffDay || "—"}) y de pago ({dueDay || "—"}). Cada banco
+          tiene sus reglas y feriados: confirma las fechas exactas en tu estado de cuenta o la app de tu banco antes
+          de pagar. Tus datos no salen de este navegador.
         </span>
       </div>
     </div>
@@ -332,10 +344,14 @@ export function CardCutoffCalculator() {
     const isPast = purchaseISO < todayISO
     const cycle = computeCycle(purchaseISO, c, p)
     if (!cycle) return null
+    const today = parseISO(todayISO) ?? new Date()
 
     return {
       ...cycle,
       isPast,
+      // Posición del corte y del vencimiento respecto a hoy
+      cutoffFromToday: diffDays(today, cycle.cutoff),
+      dueFromToday: diffDays(today, cycle.due),
     }
   }, [configured, cutoffDay, dueDay, purchaseISO, todayISO])
 
@@ -383,14 +399,26 @@ export function CardCutoffCalculator() {
           label: "Corte",
           date: result.cutoff,
           note:
-            result.daysToCutoff === 0
+            result.cutoffFromToday === 0
               ? "¡hoy mismo!"
-              : result.daysToCutoff <= 7
-                ? `en ${result.daysToCutoff} días (este mes)`
-                : `en ${result.daysToCutoff} días (próximo)`,
+              : result.cutoffFromToday < 0
+                ? `hace ${Math.abs(result.cutoffFromToday)} días (ya pasó)`
+                : result.cutoffFromToday <= 7
+                  ? `en ${result.cutoffFromToday} días (este mes)`
+                  : `en ${result.cutoffFromToday} días (próximo)`,
         },
         { icon: BellRing, label: "Paga (sugerido)", date: result.suggestedPay, note: "3 días antes" },
-        { icon: Wallet, label: "Vence", date: result.due, note: `${result.graceDays} días gratis` },
+        {
+          icon: Wallet,
+          label: "Vence",
+          date: result.due,
+          note:
+            result.dueFromToday < 0
+              ? `venció hace ${Math.abs(result.dueFromToday)} días`
+              : result.dueFromToday === 0
+                ? "¡vence hoy!"
+                : `${result.graceDays} días gratis`,
+        },
       ]
     : []
 
@@ -528,19 +556,31 @@ export function CardCutoffCalculator() {
             <div className="mb-8 text-gray-700 dark:text-gray-200 space-y-3">
               <p className="text-base leading-relaxed">
                 Tu tarjeta corta el <strong>{formatLong(result.cutoff)}</strong>
-                {result.daysToCutoff === 0 ? (
+                {result.cutoffFromToday === 0 ? (
                   <> — <strong>¡justo hoy!</strong> Esta compra entra al corte de hoy.</>
-                ) : result.daysToCutoff <= 7 ? (
-                  <> — en <strong>{result.daysToCutoff} días</strong>. Esta compra todavía lo alcanza.</>
+                ) : result.cutoffFromToday < 0 ? (
+                  <> — hace <strong>{Math.abs(result.cutoffFromToday)} días (ya pasó)</strong>. Esta compra ya entró
+                  a ese corte.</>
+                ) : result.cutoffFromToday <= 7 ? (
+                  <> — en <strong>{result.cutoffFromToday} días</strong>. Esta compra todavía lo alcanza.</>
                 ) : (
-                  <> — en <strong>{result.daysToCutoff} días</strong>. Al entrar al próximo corte, tienes más días
+                  <> — en <strong>{result.cutoffFromToday} días (el próximo corte)</strong>. Por eso tienes más días
                   gratis.</>
                 )}
               </p>
               <p className="text-base leading-relaxed">
-                Tienes hasta el <strong>{formatLong(result.due)}</strong> para pagar. Te sugerimos pagar 2 o 3 días
-                antes, o sea el{" "}
-                <strong className="text-[#388e3c] dark:text-[#81c784]">{formatLong(result.suggestedPay)}</strong>.
+                {result.dueFromToday < 0 ? (
+                  <>Ese ciclo <strong>venció el {formatLong(result.due)}</strong>.</>
+                ) : (
+                  <>
+                    Tienes hasta el <strong>{formatLong(result.due)}</strong> para pagar. Te sugerimos pagar 2 o 3
+                    días antes, o sea el{" "}
+                    <strong className="text-[#388e3c] dark:text-[#81c784]">
+                      {formatLong(result.suggestedPay)}
+                    </strong>
+                    .
+                  </>
+                )}
               </p>
             </div>
 
@@ -550,13 +590,13 @@ export function CardCutoffCalculator() {
                 <div key={step.label} className={`flex gap-4 relative group ${i < steps.length - 1 ? "pb-5" : ""}`}>
                   {i > 0 && (
                     <div
-                      className="absolute left-[23px] top-0 w-0.5 bg-[#388e3c]/30 dark:bg-[#388e3c]/50"
+                      className="absolute left-[22px] top-0 w-1 rounded bg-[#388e3c]/40 dark:bg-[#388e3c]/60"
                       style={{ height: "calc(50% - 24px)" }}
                     />
                   )}
                   {i < steps.length - 1 && (
                     <div
-                      className="absolute left-[23px] w-0.5 bg-[#388e3c]/30 dark:bg-[#388e3c]/50"
+                      className="absolute left-[22px] w-1 rounded bg-[#388e3c]/40 dark:bg-[#388e3c]/60"
                       style={{ top: "calc(50% + 24px)", bottom: 0 }}
                     />
                   )}
@@ -590,7 +630,7 @@ export function CardCutoffCalculator() {
 
     {result && (
       <div className="mt-6">
-        <WhySection result={result} dueDay={dueDay} cycleBadge={cycleBadge} isPast={result.isPast} />
+        <WhySection result={result} cutoffDay={cutoffDay} dueDay={dueDay} cycleBadge={cycleBadge} isPast={result.isPast} />
       </div>
     )}
     </>
