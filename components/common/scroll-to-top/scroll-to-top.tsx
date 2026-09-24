@@ -9,10 +9,13 @@ import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 
 interface ScrollToTopProps {
   section?: string | null
+  /** Si es true, solo se muestra en pantallas < 768px (patrón FAB de secciones). */
+  mobileOnly?: boolean
 }
 
-export default function ScrollToTop({ section }: ScrollToTopProps) {
+export default function ScrollToTop({ section, mobileOnly = false }: ScrollToTopProps) {
   const [showButton, setShowButton] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const [mounted, setMounted] = useState(false)
   const pathname = usePathname()
   const { theme, resolvedTheme } = useTheme()
@@ -43,6 +46,10 @@ export default function ScrollToTop({ section }: ScrollToTopProps) {
   useEffect(() => {
     setMounted(true)
 
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+
     const handleScroll = () => {
       if (window.scrollY > 300) {
         setShowButton(true)
@@ -51,9 +58,12 @@ export default function ScrollToTop({ section }: ScrollToTopProps) {
       }
     }
 
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
     window.addEventListener("scroll", handleScroll)
 
     return () => {
+      window.removeEventListener("resize", checkMobile)
       window.removeEventListener("scroll", handleScroll)
     }
   }, [])
@@ -66,7 +76,7 @@ export default function ScrollToTop({ section }: ScrollToTopProps) {
     })
   }
 
-  if (!mounted || !showButton) return null
+  if (!mounted || !showButton || (mobileOnly && !isMobile)) return null
 
   return (
     <Button

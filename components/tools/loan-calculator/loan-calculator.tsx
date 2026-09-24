@@ -12,6 +12,7 @@ import { LoanCalculatorTabs } from "./loan-calculator-tabs"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { motion } from "framer-motion"
 import TabSwipeNavigation from "@/components/common/tab-swipe-navigation"
+import type { AmortizationRow } from "@/types"
 
 export function LoanCalculator() {
   const {
@@ -29,7 +30,7 @@ export function LoanCalculator() {
   const [interestRate, setInterestRate] = useState<number>(24)
   const [loanTerm, setLoanTerm] = useState<number>(12)
   const [monthlyPayment, setMonthlyPayment] = useState<number>(0)
-  const [amortizationData, setAmortizationData] = useState<any[]>([])
+  const [amortizationData, setAmortizationData] = useState<AmortizationRow[]>([])
   const [activeTab, setActiveTab] = useState<string>("calculator")
   const [isInitialized, setIsInitialized] = useState<boolean>(false)
 

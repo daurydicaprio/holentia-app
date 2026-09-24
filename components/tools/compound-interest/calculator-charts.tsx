@@ -100,7 +100,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
         responsive: true,
         maintainAspectRatio: false,
         animation: {
-          duration: 2000,
+          duration: isMobile ? 600 : 2000,
           easing: "easeOutQuart",
         },
         scales: {
@@ -206,7 +206,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
         lineChartInstance.current.destroy()
       }
     }
-  }, [lineChartData, resolvedTheme, formatCurrency])
+  }, [lineChartData, resolvedTheme, formatCurrency, isMobile])
 
   // Crear/actualizar gráfico de pastel - Implementación completamente nueva
   useEffect(() => {
@@ -286,7 +286,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
           animation: {
             animateRotate: true,
             animateScale: true,
-            duration: 2000,
+            duration: isMobile ? 600 : 2000,
             easing: "easeOutQuart",
           },
           plugins: {
@@ -357,7 +357,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
         pieChartInstance.current = null
       }
     }
-  }, [pieChartData, resolvedTheme, showPieChart, formatCurrency])
+  }, [pieChartData, resolvedTheme, showPieChart, formatCurrency, isMobile])
 
   // Asegurar que los bordes de los gráficos sean visibles
   return (

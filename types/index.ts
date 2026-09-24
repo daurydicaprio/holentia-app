@@ -17,3 +17,12 @@ export interface SectionData {
   text: string
   cards: CardData[]
 }
+
+export interface AmortizationRow {
+  month: number
+  initialBalance: number
+  payment: number
+  interest: number
+  principal: number
+  remainingBalance: number
+}

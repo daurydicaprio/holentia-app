@@ -30,7 +30,7 @@ holentia/
 │   │   ├── header/           # Componentes de encabezado
 │   │   ├── footer/           # Componente de pie de página
 │   │   ├── logo/             # Componente de logo con efectos
-│   │   ├── mobile-fab/       # Botón flotante para móviles
+│   │   ├── mobile-fab/       # Wrapper de ScrollToTop (solo móvil) para secciones
 │   │   ├── menu-button/      # Botón de menú desplegable
 │   │   ├── scroll-to-top/    # Botón para volver arriba
 │   │   └── tab-swipe-navigation/ # Navegación por gestos para pestañas
@@ -49,7 +49,8 @@ holentia/
 │   │   ├── hydration-calculator/ # Calculadora de hidratación (Cuerpo)
 │   │   ├── calorie-calculator/  # Calculadora de calorías (Cuerpo)
 │   │   ├── electricity-calculator/ # Consumo eléctrico (Finanzas)
-│   │   └── card-cutoff/         # Corte y vencimiento tarjeta (Finanzas)
+│   │   ├── card-cutoff/         # Corte y vencimiento tarjeta (Finanzas)
+│   │   └── card-interest/       # Interés de tarjeta (Finanzas)
 │   ├── ui/                   # Componentes de interfaz (botones, tarjetas, etc.)
 │   └── tool-page-client.tsx  # Componente base para páginas de herramientas
 ├── hooks/                    # Custom hooks
@@ -122,6 +123,7 @@ La aplicación está dividida en cuatro secciones principales, cada una con su p
 - **Calculadora de préstamo**: Estrategia para eliminar deudas con capacidad para guardar y comparar simulaciones
 - **Calculadora consumo eléctrico**: Estima tu factura por kWh (tarifa RD) con subsidio aproximado
 - **Corte y vencimiento tarjeta**: Descubre a qué corte entra tu compra y cuándo la pagas
+- **Calculadora interés tarjeta**: Mide cuánto te cuesta financiar el saldo de tu tarjeta y en cuántos meses liquidas
 
 ## Páginas Informativas
 

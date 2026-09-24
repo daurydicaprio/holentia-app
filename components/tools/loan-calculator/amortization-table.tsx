@@ -3,15 +3,7 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react"
-
-interface AmortizationRow {
-  month: number
-  initialBalance: number
-  payment: number
-  interest: number
-  principal: number
-  remainingBalance: number
-}
+import type { AmortizationRow } from "@/types"
 
 interface AmortizationTableProps {
   data: AmortizationRow[]

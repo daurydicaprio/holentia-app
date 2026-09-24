@@ -288,6 +288,14 @@ export const sectionsData: Record<string, SectionData> = {
         category: "finanzas",
       },
       {
+        id: "calculadora-interes-tarjeta",
+        title: "Calculadora interés tarjeta",
+        description: "Descubre cuánto te cuesta financiar.",
+        slug: "calculadora-interes-tarjeta",
+        isAvailable: true,
+        category: "finanzas",
+      },
+      {
         id: "test-perfil-riesgo",
         title: "Test de perfíl de riesgo",
         description: "Aprende a ver como inviertes.",

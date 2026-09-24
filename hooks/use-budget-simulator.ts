@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
 export interface BudgetItem {
@@ -187,14 +187,14 @@ export function useBudgetSimulator() {
   ])
 
   // Función para formatear moneda
-  const formatCurrency = (value: number): string => {
+  const formatCurrency = useCallback((value: number): string => {
     return new Intl.NumberFormat("es-MX", {
       style: "currency",
       currency: "MXN",
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(value)
-  }
+  }, [])
 
   // Función para añadir un nuevo ingreso
   const addIncome = (concept: string) => {

@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { simulationsKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
+import type { AmortizationRow } from "@/types"
 
 // Tipos para las simulaciones guardadas
 export interface LoanSimulation {
@@ -41,14 +42,14 @@ export function useLoanCalculator() {
   }, [savedSimulations])
 
   // Función para formatear moneda
-  const formatCurrency = (value: number): string => {
+  const formatCurrency = useCallback((value: number): string => {
     return new Intl.NumberFormat("es-MX", {
       style: "currency",
       currency: "MXN",
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(value)
-  }
+  }, [])
 
   // Función para calcular la cuota mensual
   const calculateMonthlyPayment = (loanAmount: number, interestRate: number, loanTerm: number): number => {
@@ -71,7 +72,7 @@ export function useLoanCalculator() {
     const monthlyPayment = calculateMonthlyPayment(loanAmount, interestRate, loanTerm)
     let remainingBalance = loanAmount
     const monthlyInterestRate = interestRate / 100 / 12
-    const amortizationData = []
+    const amortizationData: AmortizationRow[] = []
 
     for (let month = 1; month <= loanTerm; month++) {
       // Calcular el interés mensual

@@ -27,6 +27,7 @@ export default function SectionSwipeNavigation() {
       "/calculadora-consumo-electrico",
       "/calculadora-calorias",
       "/tarjeta-corte-vencimiento",
+      "/calculadora-interes-tarjeta",
     ]
 
     // Verificar si la ruta actual comienza con alguna de las rutas de herramientas

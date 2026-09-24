@@ -32,7 +32,7 @@ main.min-h-screen.flex.flex-col.items-center.p-4.sm:p-6
 │  ├─ <SectionHeader sectionData />           // h1 + span gradiente + subtitle + h2 ¿Qué quieres aprender?
 │  └─ <ToolsGrid cards section />             // grid 1/2/4 cols, gap-5, botón ver-más color sección
 ├─ <Footer section />
-└─ <MobileFab />                              // solo móvil scrollY>300
+└─ <MobileFab />                              // wrapper de ScrollToTop mobileOnly (solo móvil scrollY>300)
 ```
 
 ## 3. Estructura páginas herramienta (plantilla obligatoria)
@@ -92,9 +92,9 @@ Umbral único `useMediaQuery("(max-width:768px)")` (`hooks/use-media-query.ts`).
 ## 6. Datos y tipos
 
 `types/index.ts`: `SectionType mente|cuerpo|finanzas|relaciones`, `CardData {id,title,description,slug,isAvailable,category}`, `SectionData`.
-`lib/data.ts`: 35 cards, 9 disponibles (cuerpo: calorías + hidratación primero; finanzas suma consumo eléctrico y tarjeta). Nueva card debe traer `slug = ruta app/{slug}` y `category = sección` para heredar color. Las activas van primero en su sección.
+`lib/data.ts`: 36 cards, 10 disponibles (cuerpo: calorías + hidratación primero; finanzas suma consumo eléctrico, tarjeta y interés de tarjeta). Nueva card debe traer `slug = ruta app/{slug}` y `category = sección` para heredar color. Las activas van primero en su sección.
 Storage: helper `lib/storage.ts`, keys `holentia:{slug}:{draft|simulations|entries}:v1` (diario migrado de clave legada). Taxonomía E/D/S por herramienta (ver `plan.md Fase 3`).
-Patrones de layout por tool (todos sobre `ToolPageClient` + color de sección): wizard por pasos (presupuesto), inputs+resultado lado a lado (interés), form+tabla con tabs (préstamo), timeline vertical (tarjeta), factura-papel (luz), objetivo-primero (calorías), controles+heroe+plan-dia (hidratación: chips icono en vez de selects, héroe ámbar con desglose de fórmula y minis vasos/botellas/litros, plan del día 5 hitos con acento `sky` solo para agua, tarjeta contraste verde/rojo de señales), responsive simple (diario, amor).
+Patrones de layout por tool (todos sobre `ToolPageClient` + color de sección): wizard por pasos (presupuesto), inputs+resultado lado a lado (interés), form+tabla con tabs (préstamo), timeline vertical (tarjeta), factura-papel (luz), objetivo-primero (calorías), controles+heroe+plan-dia (hidratación: chips icono en vez de selects, héroe ámbar con desglose de fórmula y minis vasos/botellas/litros, plan del día 5 hitos con acento `sky` solo para agua, tarjeta contraste verde/rojo de señales), controles+heroe+desglose (interés tarjeta: 5-col, héroe verde o rojo según si el pago baja el saldo, minis interés/total/costo%), responsive simple (diario, amor).
 
 ## 7. Prohibido en nuevas herramientas
 

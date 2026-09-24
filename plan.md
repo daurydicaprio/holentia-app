@@ -4,9 +4,9 @@
 > Prod `holentia.com → main`. No tocar dominios.
 > Principios: sin DB, sin registro, local-first privado (`holentia:*` en navegador), cero tracking.
 
-## Estado actual (09-Oct-2026) — 9 tools en `dev`, listo para merge a `main`
+## Estado actual (09-Oct-2026) — 10 tools en `dev`
 - [x] Stack: Next 15.5.26 + React 19.3 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores
-- [x] Cobertura: 9 tools (`diario-guiado, test-lenguajes-amor, calculadora-hidratacion, calculadora-calorias, crear-presupuesto-personal, calculadora-interes-compuesto, calculadora-prestamo, calculadora-consumo-electrico, tarjeta-corte-vencimiento`)
+- [x] Cobertura: 10 tools (`diario-guiado, test-lenguajes-amor, calculadora-hidratacion, calculadora-calorias, crear-presupuesto-personal, calculadora-interes-compuesto, calculadora-prestamo, calculadora-consumo-electrico, tarjeta-corte-vencimiento, calculadora-interes-tarjeta`)
 - [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main`
 - [x] `tsc 0 errores + next build OK` en estricto
 
@@ -54,7 +54,7 @@ Canónicos: mente `#1976d2`, relaciones `#7c3aed`, cuerpo `#ffa000`, finanzas `#
 
 ## Fase 4 — Plantilla + móvil + muertos — HECHA (en Fase 1)
 Muertos borrados, icons opacos, hover tilt único en cards (fix franja), `any[]` tipados, Chart.js v4 API.
-Pendiente menor: `postcss autoprefixer`, unificar `mobile-fab/scroll-to-top`, `formatCurrency useCallback` — no bloquean.
+- [x] Higiene completa: `postcss autoprefixer`, `AmortizationRow` en `types` (fin `any[]` préstamo), `formatCurrency useCallback` en 3 hooks, `MobileFab` → wrapper de `ScrollToTop mobileOnly` (haptics + color relaciones), animación charts 2000→600ms en móvil.
 - [x] Hidratación rediseñada (patrón 5-col como luz/tarjeta): chips icono actividad/clima (sin selects), héroe ámbar con número + minis 3-col + desglose fórmula, plan del día 5 hitos (acento `sky` solo agua), tarjeta contraste verde/rojo de señales, haptics, draft intacto.
 
 ## Fase 5 — Finanzas foco + deploy
@@ -64,7 +64,7 @@ Pendiente menor: `postcss autoprefixer`, unificar `mobile-fab/scroll-to-top`, `f
 - [x] `calculadora de calorías` (cuerpo, Tipo D, Mifflin-St Jeor, objetivos Bajar grasa −20% / Mantener / Subir +10%, guía EL EQUILIBRIO ES LA CLAVE + báscula)
 - [x] `tarjeta-corte-vencimiento` (finanzas, Tipo D, timeline, gráfico ciclo, nombre+terminación tarjeta, borradores)
 - [x] Cuerpo reordenado: activas primero (calorías, hidratación)
-- [ ] SIGUIENTE: `calculadora de interés de tarjeta` (tasa default 60% anual ajustable por país)
+- [x] `calculadora de interés de tarjeta` (tasa default 60% anual ajustable, Tipo D, meses para liquidar + interés total, aviso si pago ≤ interés mensual)
 - [x] Merge `dev → main` (09-Oct-2026), verificar `curl -sI https://holentia.com 200` + `vercel inspect holentia.com` nuevo ID
 
 ## Fase 6 — Mayores diferidos

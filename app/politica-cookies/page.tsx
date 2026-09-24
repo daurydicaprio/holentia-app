@@ -148,6 +148,10 @@ export default function PoliticaCookiesPage() {
                       key: "holentia:calculadora-hidratacion:draft:v1",
                       desc: "Borrador de la calculadora de hidratación",
                     },
+                    {
+                      key: "holentia:calculadora-interes-tarjeta:draft:v1",
+                      desc: "Borrador de la calculadora de interés de tarjeta",
+                    },
                   ].map((item) => (
                     <div
                       key={item.key}
