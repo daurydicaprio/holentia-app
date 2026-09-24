@@ -60,7 +60,7 @@ Muertos borrados, icons opacos, hover tilt único en cards (fix franja), `any[]`
 ## Fase 5 — Finanzas foco + deploy
 - [ ] `planificador-ahorros Tipo S` reutilizando hooks compound/budget
 - [ ] `tracker-gastos-hormiga Tipo D`
-- [x] `test-perfil-riesgo` (finanzas, **Tipo D**, quiz 6 preguntas honestidad, niveles 1–3 con candado de conocimiento, 5 niveles en accordion opinión Daury, 3 pasteles situacionales A/B/C Chart.js, capital+USD/DOP al final, banner &lt;$3k → nivel 1–2, proyección 5–10 años + link interés compuesto, anti-hacerte-rico 20–30 años)
+- [x] `test-perfil-riesgo` (finanzas, **Tipo D**, quiz **12 preguntas** lenguaje principiante/escenarios, niveles 1–3 con candado de conocimiento, gráfico arco SVG 5 niveles (4–5 rojos, AFI/mercado local), 3 pasteles situacionales A/B/C con montos, fondo de emergencia 2/4/6× sueldo, capital+moneda, chips tasa 8/10/15%, banner &lt;$3k, proyección 5–10 años + link interés compuesto, anti-hacerte-rico 20–30 años)
 - [x] `calculadora de calorías` (cuerpo, Tipo D, Mifflin-St Jeor, objetivos Bajar grasa −20% / Mantener / Subir +10%, guía EL EQUILIBRIO ES LA CLAVE + báscula)
 - [x] `tarjeta-corte-vencimiento` (finanzas, Tipo D, timeline, gráfico ciclo, nombre+terminación tarjeta, borradores)
 - [x] Cuerpo reordenado: activas primero (calorías, hidratación)
