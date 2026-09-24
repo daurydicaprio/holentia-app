@@ -55,6 +55,7 @@ Canónicos: mente `#1976d2`, relaciones `#7c3aed`, cuerpo `#ffa000`, finanzas `#
 ## Fase 4 — Plantilla + móvil + muertos — HECHA (en Fase 1)
 Muertos borrados, icons opacos, hover tilt único en cards (fix franja), `any[]` tipados, Chart.js v4 API.
 Pendiente menor: `postcss autoprefixer`, unificar `mobile-fab/scroll-to-top`, `formatCurrency useCallback` — no bloquean.
+- [x] Hidratación rediseñada (patrón 5-col como luz/tarjeta): chips icono actividad/clima (sin selects), héroe ámbar con número + minis 3-col + desglose fórmula, plan del día 5 hitos (acento `sky` solo agua), tarjeta contraste verde/rojo de señales, haptics, draft intacto.
 
 ## Fase 5 — Finanzas foco + deploy
 - [ ] `planificador-ahorros Tipo S` reutilizando hooks compound/budget
