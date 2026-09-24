@@ -14,9 +14,9 @@ const ACTIVITY: Record<string, { label: string; factor: number }> = {
 }
 
 const GOALS = [
-  { id: "lose", label: "Bajar grasa", hint: "−20% aprox.", icon: Minus },
+  { id: "lose", label: "Bajar grasa", hint: "−20% déficit", icon: Minus },
   { id: "maintain", label: "Mantener mi cuerpo actual", hint: "tu gasto total", icon: Equal },
-  { id: "gain", label: "Subir masa muscular", hint: "+10% aprox.", icon: Plus },
+  { id: "gain", label: "Subir masa muscular", hint: "+10% superávit", icon: Plus },
 ] as const
 
 type GoalId = (typeof GOALS)[number]["id"]
@@ -80,9 +80,13 @@ export function CalorieCalculator() {
     if (isNaN(w) || w <= 0 || isNaN(h) || h <= 0 || isNaN(a) || a <= 0) return null
     const bmr = 10 * w + 6.25 * h - 5 * a + (sex === "male" ? 5 : -161)
     const tdee = Math.round(bmr * (ACTIVITY[activity]?.factor ?? 1.55))
+    // Bajar grasa: déficit moderado −20% (≈ −500 kcal/día → ~0.5 kg/semana, ACSM),
+    // nunca por debajo del metabolismo base.
+    // Subir músculo: superávit ligero +10% (ISSN: excedentes grandes solo suman grasa).
+    // Son porcentajes distintos a propósito: perder y ganar no son simétricos.
     return {
       bmr: Math.round(bmr),
-      lose: Math.round(tdee * 0.8),
+      lose: Math.max(Math.round(tdee * 0.8), Math.round(bmr)),
       maintain: tdee,
       gain: Math.round(tdee * 1.1),
     }
@@ -251,37 +255,38 @@ export function CalorieCalculator() {
                 {(["lose", "maintain", "gain"] as const).map((id) => (
                   <div
                     key={id}
-                    className={`rounded-lg py-2 px-1 text-sm ${
-                      id === goal ? "bg-white/25 font-bold" : "bg-white/10 opacity-80"
+                    className={`rounded-lg py-2 px-1 text-sm border ${
+                      id === goal
+                        ? "bg-white text-amber-900 font-bold shadow-md border-white"
+                        : "bg-white/10 text-white border-white/30"
                     }`}
                   >
-                    <div className="text-xs opacity-90 capitalize">
-                      {id === "lose" ? "Bajar" : id === "maintain" ? "Mantener" : "Subir"}
+                    <div className={`text-xs ${id === goal ? "opacity-70" : "opacity-90"}`}>
+                      {id === "lose" ? "Bajar −20%" : id === "maintain" ? "Mantener" : "Subir +10%"}
                     </div>
-                    <div className="font-bold">{result[id].toLocaleString("es-ES")}</div>
+                    <div className="font-bold tabular-nums">{result[id].toLocaleString("es-ES")}</div>
                   </div>
                 ))}
               </div>
               <div className="text-xs opacity-80 mt-4">Metabolismo base: {result.bmr.toLocaleString("es-ES")} kcal</div>
+              <div className="border-t border-white/25 mt-4 pt-3 text-[11px] leading-relaxed opacity-90">
+                Estimación educativa (Mifflin-St Jeor). No es plan médico. Todo queda en tu navegador.
+              </div>
             </div>
           )}
-          <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 mt-6 mb-2 px-1">
-            <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-amber-600" />
-            <span>
-              Estimación educativa (Mifflin-St Jeor). No es plan médico. Todo queda en tu navegador.
-            </span>
-          </div>
         </div>
       </div>
 
-      {/* Guía: la mesa de 4 patas */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
-        <h2 className="text-xl font-bold mb-1">La mesa de 4 patas</h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+      {/* Guía: el equilibrio es la clave */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-10 shadow-lg">
+        <h2 className="text-xl sm:text-2xl font-bold mb-2 text-center uppercase tracking-wide">
+          El equilibrio es la clave
+        </h2>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-8 text-center max-w-2xl mx-auto leading-relaxed">
           Bajar grasa, mantenerte o subir músculo se sostiene en 4 patas. Si una falla, la mesa cojea.
         </p>
 
-        <div className="grid sm:grid-cols-2 gap-3">
+        <div className="grid sm:grid-cols-2 gap-4">
           {[
             {
               icon: Salad,
@@ -304,7 +309,7 @@ export function CalorieCalculator() {
               text: "Duerme 7–9 horas, toma agua — usa la calculadora de hidratación — y controla el estrés.",
             },
           ].map((leg) => (
-            <div key={leg.title} className="bg-amber-50 dark:bg-amber-900/15 rounded-xl px-4 py-3 flex items-start gap-3">
+            <div key={leg.title} className="bg-amber-50 dark:bg-amber-900/15 rounded-xl px-5 py-4 flex items-start gap-3">
               <leg.icon className="h-5 w-5 mt-0.5 flex-shrink-0 text-amber-600 dark:text-amber-400" />
               <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                 <strong>{leg.title}:</strong> {leg.text}
@@ -312,7 +317,7 @@ export function CalorieCalculator() {
             </div>
           ))}
         </div>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mt-4">
+        <p className="text-sm text-gray-600 dark:text-gray-400 mt-6 text-center">
           ¿Quieres profundizar? Sigo este tema en{" "}
           <a
             href="https://alimentacionsabia.com"
@@ -325,7 +330,7 @@ export function CalorieCalculator() {
           .
         </p>
 
-        <div className="mt-4 bg-gray-50 dark:bg-gray-700/40 rounded-xl p-5 sm:p-6 flex items-start gap-3">
+        <div className="mt-6 bg-gray-50 dark:bg-gray-700/40 rounded-xl p-5 sm:p-6 flex items-start gap-3">
           <Scale className="h-5 w-5 mt-1 flex-shrink-0 text-amber-600 dark:text-amber-400" />
           <div className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed space-y-2">
             <p>
@@ -343,7 +348,7 @@ export function CalorieCalculator() {
           </div>
         </div>
 
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-4 leading-relaxed">
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-6 leading-relaxed text-center max-w-2xl mx-auto">
           Esto es orientación general con base científica, no un plan médico. Para un plan a tu medida, visita a un
           nutricionista o profesional del área. Sigo hablando de todo esto en mi proyecto{" "}
           <a
