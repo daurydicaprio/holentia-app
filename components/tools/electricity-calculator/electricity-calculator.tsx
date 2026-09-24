@@ -18,7 +18,6 @@ const TRAMO3_PRECIO = 13.04
 const UMBRAL_SIN_TRAMOS = 700
 // Subsidio estimado global ref. facturas 397 kWh 45.47% / 438 kWh 45.02% / 445 kWh 44.65%.
 const SUBSIDY_FACTOR = 0.819
-const SUBSIDY_PCT_REF = 45.0
 
 const DRAFT_KEY = draftKey("calculadora-consumo-electrico")
 
@@ -112,7 +111,7 @@ export function ElectricityCalculator() {
   return (
     <div className="grid lg:grid-cols-5 gap-6">
       {/* Controles */}
-      <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg h-fit">
+      <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
         <h2 className="text-xl font-bold mb-1">Tu consumo</h2>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">Mueve el medidor y mira tu factura al instante.</p>
 
@@ -184,11 +183,11 @@ export function ElectricityCalculator() {
             <p className="text-sm mt-1">y aquí aparece tu factura estimada.</p>
           </div>
         ) : (
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border-2 border-gray-900/80 dark:border-gray-100/20">
-            <div className="bg-sky-200 dark:bg-sky-900/60 px-4 py-2 text-center font-bold tracking-wide text-sm">
-              CALCULO DE LA FACTURA
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border-2 border-gray-900/80 dark:border-gray-100/20 h-full flex flex-col">
+            <div className="bg-sky-200 dark:bg-sky-900/60 px-5 py-3.5 sm:px-6 sm:py-4 text-center font-bold tracking-wide text-base sm:text-lg">
+              CÁLCULO DE LA FACTURA
             </div>
-            <div className="p-5 sm:p-6 font-mono text-sm tabular-nums">
+            <div className="p-5 sm:p-6 font-mono text-sm tabular-nums flex-1">
               <div className="flex justify-between py-1.5">
                 <span>Cargo fijo</span>
                 <span>RD$ {CARGO_FIJO.toFixed(2)}</span>
@@ -210,7 +209,7 @@ export function ElectricityCalculator() {
                 <span>
                   {result.sinTramos
                     ? "Sin subsidio desde 700 kWh"
-                    : `Subsidio gobierno (aprox. ${SUBSIDY_PCT_REF}%)`}
+                    : "Subsidio gobierno (est., ~45%)"}
                 </span>
                 <span>{formatRD(result.subsidio)}</span>
               </div>
@@ -225,13 +224,18 @@ export function ElectricityCalculator() {
                 <br />
                 A PAGAR EN RD$
               </span>
-              <span className="text-2xl sm:text-3xl whitespace-nowrap">{formatRD(result.total)}</span>
+              <span className="flex items-center gap-2">
+                <span className="text-lg" title="Cálculo exacto con la tarifa vigente">✓</span>
+                <span className="text-2xl sm:text-3xl whitespace-nowrap">{formatRD(result.total)}</span>
+              </span>
             </div>
             <div className="px-5 py-3 flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800">
               <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
               <span>
-                Estimación con tarifa subsidiada. Puede variar ±RD$ 100 por picos de generación y tu consumo. No
-                incluye mora ni reconexión. Todo queda en tu navegador.
+                <strong>Total exacto</strong> con la tarifa vigente. El{" "}
+                <strong>subsidio del gobierno es una estimación</strong> (~45%) y puede variar{" "}
+                <strong>±RD$ 100</strong> por picos de generación y tu consumo — por eso el importe sin
+                subsidio también es estimado. No incluye mora ni reconexión. Todo queda en tu navegador.
               </span>
             </div>
           </div>
