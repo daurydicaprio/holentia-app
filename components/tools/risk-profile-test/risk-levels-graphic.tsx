@@ -6,7 +6,7 @@ interface LevelDef {
   n: number
   /** Título corto: solo "Nivel N" (el nombre del perfil va en el copy, no en el título). */
   name: string
-  /** Nombre del perfil para el héroe ("Conservador", "un inversor en crecimiento"). */
+  /** Título del perfil para el héroe: frase suelta y capitalizada (sin "Eres"/artículos). */
   profileName: string
   /** Descripción breve de qué es este perfil (héroe). */
   blurb: string
@@ -30,7 +30,7 @@ export const LEVELS: LevelDef[] = [
   {
     n: 2,
     name: "Nivel 2",
-    profileName: "un inversor en crecimiento",
+    profileName: "Inversor en crecimiento",
     blurb:
       "Buscas crecer a largo plazo sin vigilar el mercado cada día: confías en la diversificación más que en elegir empresas.",
     short: "ETF y fondos indexados (EE.UU. / mundial)",
@@ -41,7 +41,7 @@ export const LEVELS: LevelDef[] = [
   {
     n: 3,
     name: "Nivel 3",
-    profileName: "un buscador de oportunidades",
+    profileName: "Buscador de oportunidades",
     blurb:
       "Te gusta elegir tus propias empresas y dedicas tiempo real a estudiar el mercado antes de comprar.",
     short: "Empresas concretas, con conocimiento",
@@ -52,7 +52,7 @@ export const LEVELS: LevelDef[] = [
   {
     n: 4,
     name: "Nivel 4",
-    profileName: "un inversor apalancado",
+    profileName: "Inversor apalancado",
     blurb: "Buscas resultados rápidos con dinero prestado: el riesgo de perder más de lo invertido es real.",
     short: "Margen, forex, CFD",
     desc: "Puedes perder más de lo invertido. No lo necesitas para crecer patrimonio. En Holentia no lo recomendamos.",
@@ -61,7 +61,7 @@ export const LEVELS: LevelDef[] = [
   {
     n: 5,
     name: "Nivel 5",
-    profileName: "un jugador de derivados",
+    profileName: "Jugador de derivados",
     blurb: "Operas productos de riesgo extremo donde la mayoría de participantes pierde a largo plazo.",
     short: "Opciones, futuros, apalancado extremo",
     desc: "Riesgo extremo, casi siempre pierdes a largo plazo. Solo lo regulado, sin prisa y a largo plazo construye riqueza. En Holentia no lo recomendamos.",

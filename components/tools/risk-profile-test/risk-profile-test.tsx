@@ -301,17 +301,47 @@ const SLICE_MIN: Record<string, number> = {
 }
 
 /** Tasa por etiqueta de rodaja (fallback: AFI líquido). */
+function rateKeyForLabel(label: string): RateKey | null {
+  if (label.startsWith("Certificado")) return "cert"
+  if (label.startsWith("AFI a más")) return "afi30"
+  if (label.startsWith("ETF") || label.startsWith("Acciones") || label.startsWith("Bonos")) return "etf"
+  if (label.startsWith("Fondo a 30 días")) return "usd30"
+  if (label.startsWith("Cuenta")) return null
+  return "afi"
+}
+
+/** Tasa efectiva de una clave: default si está vacía/inválida, tope 100%. */
+function readRate(k: RateKey, rates: Record<RateKey, string>): number {
+  const n = Number.parseFloat((rates[k] ?? "").replace(/,/g, ""))
+  return isNaN(n) || n < 0 ? Number.parseFloat(DEFAULT_RATES[k]) : Math.min(n, 100)
+}
+
 function sliceRate(label: string, rates: Record<RateKey, string>): number {
-  const read = (k: RateKey) => {
-    const n = Number.parseFloat(rates[k])
-    return isNaN(n) || n < 0 ? Number.parseFloat(DEFAULT_RATES[k]) : n
+  const k = rateKeyForLabel(label)
+  return k ? readRate(k, rates) : 0
+}
+
+/** Etiqueta corta de cada tasa (para citar en captions). */
+const RATE_SHORT: Record<RateKey, string> = {
+  afi: "AFI líquido",
+  cert: "certificado",
+  afi30: "AFI 30+",
+  etf: "ETF",
+  usd30: "fondo 30 días",
+}
+
+/**
+ * "AFI líquido 8% · certificado 6%": cita SOLO las tasas de las rodajas que
+ * realmente se usan (la cuenta no rinde y un instrumento ausente no va en el copy).
+ */
+function rateSummary(labels: string[], rates: Record<RateKey, string>): string {
+  const keys: RateKey[] = []
+  for (const label of labels) {
+    const k = rateKeyForLabel(label)
+    if (k && !keys.includes(k)) keys.push(k)
   }
-  if (label.startsWith("Certificado")) return read("cert")
-  if (label.startsWith("AFI a más")) return read("afi30")
-  if (label.startsWith("ETF") || label.startsWith("Acciones") || label.startsWith("Bonos")) return read("etf")
-  if (label.startsWith("Fondo a 30 días")) return read("usd30")
-  if (label.startsWith("Cuenta")) return 0
-  return read("afi")
+  if (keys.length === 0) return "sin inversión (todo en cuenta)"
+  return keys.map((k) => `${RATE_SHORT[k]} ${readRate(k, rates)}%`).join(" · ")
 }
 
 /** Solo dígitos, comas y puntos: los inputs no aceptan letras. */
@@ -711,16 +741,23 @@ export function RiskProfileTest() {
 
   useEffect(() => {
     const draft = storageGet<RiskDraft>(DRAFT_KEY, {})
-    if (draft.answers && Object.keys(draft.answers).length >= questions.length && draft.level) {
-      setAnswers(draft.answers)
+    const answered = questions.filter((q) => draft.answers?.[q.id])
+    if (answered.length > 0) {
+      setAnswers(draft.answers ?? {})
       if (draft.capital !== undefined) setCapitalInput(draft.capital)
       if (draft.currency === "USD" || draft.currency === "DOP") setCurrency(draft.currency)
       if (draft.rates) setRates({ ...DEFAULT_RATES, ...draft.rates })
       if (draft.monthlyIncome !== undefined) setMonthlyIncome(draft.monthlyIncome)
       if (typeof draft.fundMultiplier === "number") setFundMultiplier(draft.fundMultiplier)
       if (typeof draft.savePct === "string" && draft.savePct) setSavePct(draft.savePct)
-      setPhase("result")
-      setRestored(true)
+      if (answered.length >= questions.length && draft.level) {
+        setPhase("result")
+        setRestored(true)
+      } else {
+        // Quiz a medio camino: continúa en la primera pregunta sin responder.
+        setPhase("quiz")
+        setCurrentQuestion(Math.min(answered.length, questions.length - 1))
+      }
     }
     firstLoad.current = false
   }, [])
@@ -778,13 +815,12 @@ export function RiskProfileTest() {
   const showABC =
     capital > 0 && capital >= abcThreshold && !(currency === "USD" && effectiveLevel === 1)
 
-  const rateValue = (k: RateKey): number => {
-    const n = Number.parseFloat(rates[k].replace(/,/g, ""))
-    return isNaN(n) || n < 0 ? Number.parseFloat(DEFAULT_RATES[k]) : n
-  }
+  const rateValue = (k: RateKey): number => readRate(k, rates)
 
   const inflationLoss = fundSize > 0 ? fundSize * 0.03 : 0
   const fundParts = fundSize > 0 ? fundSuggestion(fundSize, currency) : []
+  // ¿Alguna parte del colchón cabe en un instrumento real (no todo en la cuenta)?
+  const fundCanInvest = fundParts.some((p) => p.label !== "Cuenta a la vista")
   // Rendimiento anual del colchón = Σ por tramo con la tasa de su instrumento (cuenta: 0%).
   const fundYearReturn = fundParts.reduce((sum, p) => sum + p.amount * (sliceRate(p.label, rates) / 100), 0)
   const fundAfiRate = rateValue(currency === "USD" ? "usd30" : "afi")
@@ -901,14 +937,9 @@ export function RiskProfileTest() {
     triggerHapticFeedback("medium")
   }
 
+  /** Borra TODO (test + draft) y vuelve al inicio: el autosave no debe re-guardarlo. */
   const clearData = () => {
-    storageRemove(DRAFT_KEY)
-    setCapitalInput("")
-    setMonthlyIncome("")
-    setSavePct("10")
-    setFundMultiplier(0)
-    triggerHapticFeedback("medium")
-    setSavedFlash(false)
+    resetAll()
   }
 
   const inputClass =
@@ -1005,17 +1036,38 @@ export function RiskProfileTest() {
           {!question.hint && <div className="mb-5" />}
 
           <div className="space-y-3">
-            {question.options.map((option) => (
-              <button
-                key={option.key}
-                onClick={() => handleAnswer(question.id, option.key)}
-                className="w-full text-left p-4 border-2 border-gray-200 dark:border-gray-700 rounded-lg hover:border-[#388e3c] hover:bg-[#388e3c]/5 dark:hover:bg-[#388e3c]/10 transition-all"
-                data-interactive="true"
-              >
-                <span className="text-gray-700 dark:text-gray-300">{option.text}</span>
-              </button>
-            ))}
+            {question.options.map((option) => {
+              const isSelected = answers[question.id] === option.key
+              return (
+                <button
+                  key={option.key}
+                  onClick={() => handleAnswer(question.id, option.key)}
+                  aria-pressed={isSelected}
+                  className={`w-full text-left p-4 border-2 rounded-lg transition-all ${
+                    isSelected
+                      ? "border-[#388e3c] bg-[#388e3c]/10 dark:bg-[#388e3c]/20"
+                      : "border-gray-200 dark:border-gray-700 hover:border-[#388e3c] hover:bg-[#388e3c]/5 dark:hover:bg-[#388e3c]/10"
+                  }`}
+                  data-interactive="true"
+                >
+                  <span className="text-gray-700 dark:text-gray-300">{option.text}</span>
+                </button>
+              )
+            })}
           </div>
+
+          {currentQuestion > 0 && (
+            <button
+              onClick={() => {
+                setCurrentQuestion(currentQuestion - 1)
+                triggerHapticFeedback("light")
+              }}
+              className="mt-4 text-sm font-medium text-gray-500 hover:text-[#388e3c] dark:text-gray-400 transition-colors"
+              data-interactive="true"
+            >
+              ← Atrás
+            </button>
+          )}
         </div>
       </div>
     )
@@ -1065,6 +1117,8 @@ export function RiskProfileTest() {
   }
 
   const floor = currency === "DOP" ? INSTR_MIN.DOP.liquid : INSTR_MIN.USD.d30
+  // ¿El monto actual ya alcanza para abrir algo? (USD: desde $200 sí, aunque sea "capital pequeño")
+  const canInvestNow = capital >= floor
   const distSubtitle =
     capital <= 0
       ? "Escribe cuánto planeas invertir arriba."
@@ -1171,9 +1225,20 @@ export function RiskProfileTest() {
                 return (
                   <li
                     key={lvl.n}
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={lvl.n === selectedLevel}
+                    aria-label={`Ver nivel ${lvl.n}`}
                     onClick={() => {
                       setSelectedLevel(lvl.n)
                       triggerHapticFeedback("light")
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault()
+                        setSelectedLevel(lvl.n)
+                        triggerHapticFeedback("light")
+                      }
                     }}
                     data-interactive="true"
                     className={`cursor-pointer rounded-lg border p-3 transition-colors ${
@@ -1365,10 +1430,12 @@ export function RiskProfileTest() {
                     months={monthsToFund}
                     currency={currency}
                     rate={fundAfiRate}
+                    rateLabel={currency === "USD" ? "fondo a 30 días" : "AFI líquido"}
                   />
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">
-                    La línea punteada azul muestra lo mismo ahorrando, pero invirtiéndolo cada mes en AFI líquido con
-                    su tasa por defecto: al llegar a la meta, tendrías un poco más.
+                    La línea punteada azul muestra lo mismo ahorrando, pero invirtiéndolo cada mes en{" "}
+                    {currency === "USD" ? "el fondo a 30 días" : "AFI líquido"} con la tasa que definiste (~
+                    {fundAfiRate}%): al llegar a la meta, tendrías un poco más.
                   </p>
                 </>
               ) : (
@@ -1438,29 +1505,32 @@ export function RiskProfileTest() {
           {/* Si lo inviertes / si lo dejas parado: dos caminos explícitos */}
           {hasFund && fundSize > 0 && (
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-xl border border-[#388e3c]/30 bg-[#388e3c]/10 px-5 py-5 text-center">
-                <div className="mb-2 inline-flex items-center gap-2 text-sm font-bold text-[#1b5e20] dark:text-[#a5d6a7]">
-                  <TrendingUp className="h-4 w-4" aria-hidden /> Si inviertes tu fondo
+              {fundCanInvest ? (
+                <div className="rounded-xl border border-[#388e3c]/30 bg-[#388e3c]/10 px-5 py-5 text-center">
+                  <div className="mb-2 inline-flex items-center gap-2 text-sm font-bold text-[#1b5e20] dark:text-[#a5d6a7]">
+                    <TrendingUp className="h-4 w-4" aria-hidden /> Si inviertes tu fondo
+                  </div>
+                  <div className="text-2xl font-bold tabular-nums text-[#1b5e20] dark:text-[#a5d6a7]">
+                    +{formatMoney(fundYearReturn, currency)}
+                  </div>
+                  <p className="mt-2 text-xs leading-relaxed text-gray-600 dark:text-gray-400 sm:text-sm">
+                    Con las tasas que definiste ({rateSummary(fundParts.map((p) => p.label), rates)}), tus{" "}
+                    {formatMoney(fundSize, currency)} podrían ser {formatMoney(fundSize + fundYearReturn, currency)} en
+                    1 año.
+                  </p>
                 </div>
-                <div className="text-2xl font-bold tabular-nums text-[#1b5e20] dark:text-[#a5d6a7]">
-                  +{formatMoney(fundYearReturn, currency)}
+              ) : (
+                <div className="rounded-xl border border-amber-200 bg-amber-50 px-5 py-5 text-center dark:border-amber-800 dark:bg-amber-900/20">
+                  <div className="mb-2 inline-flex items-center gap-2 text-sm font-bold text-amber-700 dark:text-amber-400">
+                    <PiggyBank className="h-4 w-4" aria-hidden /> Todavía no abres el instrumento
+                  </div>
+                  <p className="mt-2 text-xs leading-relaxed text-gray-600 dark:text-gray-400 sm:text-sm">
+                    Con {formatMoney(fundSize, currency)} sigues por debajo del mínimo{" "}
+                    {currency === "DOP" ? "del AFI líquido (RD$5,000)" : "del fondo a 30 días ($200)"}: este dinero
+                    queda en tu cuenta y no rinde. Sigue ahorrando; al llegar al mínimo, ábrelo.
+                  </p>
                 </div>
-                <p className="mt-2 text-xs leading-relaxed text-gray-600 dark:text-gray-400 sm:text-sm">
-                  {currency === "USD" ? (
-                    <>
-                      Con tu tasa del fondo a 30 días (~{rateValue("usd30")}%), tus{" "}
-                      {formatMoney(fundSize, currency)} podrían ser{" "}
-                      {formatMoney(fundSize + fundYearReturn, currency)} en 1 año.
-                    </>
-                  ) : (
-                    <>
-                      Con las tasas que definiste (AFI líquido ~{rateValue("afi")}% · certificado ~
-                      {rateValue("cert")}%), tus {formatMoney(fundSize, currency)} podrían ser{" "}
-                      {formatMoney(fundSize + fundYearReturn, currency)} en 1 año.
-                    </>
-                  )}
-                </p>
-              </div>
+              )}
               <div className="rounded-xl border border-red-200 bg-red-50 px-5 py-5 text-center dark:border-red-800 dark:bg-red-900/20">
                 <div className="mb-2 inline-flex items-center gap-2 text-sm font-bold text-red-700 dark:text-red-400">
                   <AlertTriangle className="h-4 w-4" aria-hidden /> Si lo dejas parado
@@ -1645,6 +1715,16 @@ export function RiskProfileTest() {
                       inputMode="decimal"
                       value={rates[k]}
                       onChange={(e) => setRates((prev) => ({ ...prev, [k]: filterNumeric(e.target.value) }))}
+                      onBlur={() =>
+                        setRates((prev) => {
+                          const n = Number.parseFloat(prev[k].replace(/,/g, ""))
+                          // Normaliza al salir: vacío → default; tope 0–100%.
+                          return {
+                            ...prev,
+                            [k]: isNaN(n) || n < 0 ? DEFAULT_RATES[k] : String(Math.min(n, 100)),
+                          }
+                        })
+                      }
                       className={`${inputClass} pr-8`}
                       data-interactive="true"
                     />
@@ -1661,19 +1741,42 @@ export function RiskProfileTest() {
         </div>
 
         {lowCapital && (
-          <div className="mt-5 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-4 flex items-start gap-3">
-            <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-red-800 dark:text-red-200 leading-relaxed">
-              {currency === "DOP" ? (
+          <div
+            className={`mt-5 rounded-lg border p-4 flex items-start gap-3 ${
+              canInvestNow
+                ? "bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800"
+                : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
+            }`}
+          >
+            <AlertTriangle
+              className={`h-5 w-5 flex-shrink-0 mt-0.5 ${
+                canInvestNow ? "text-amber-600 dark:text-amber-400" : "text-red-600 dark:text-red-400"
+              }`}
+            />
+            <p
+              className={`text-sm leading-relaxed ${
+                canInvestNow
+                  ? "text-amber-800 dark:text-amber-200"
+                  : "text-red-800 dark:text-red-200"
+              }`}
+            >
+              {currency === "USD" ? (
+                canInvestNow ? (
+                  <>
+                    Desde <strong>$200</strong> ya puedes empezar (fondo a 30 días). Con menos de{" "}
+                    <strong>$3,000</strong> quédate en <strong>nivel 1–2</strong>: menos riesgo y mueve la aguja
+                    cuando crezca.
+                  </>
+                ) : (
+                  <>
+                    Con menos de <strong>$200</strong> aún no abres el fondo a 30 días. Quédate en{" "}
+                    <strong>nivel 1–2</strong> y sigue ahorrando: primero el colchón, después el portafolio.
+                  </>
+                )
+              ) : (
                 <>
                   Para invertir en <strong>pesos hace falta al menos RD$5,000</strong>. Con poco capital quédate en{" "}
                   <strong>nivel 1–2</strong>: menos riesgo y mueve la aguja cuando crezca.
-                </>
-              ) : (
-                <>
-                  Desde <strong>$200</strong> ya puedes empezar (fondo a 30 días). Con menos de{" "}
-                  <strong>$3,000</strong> quédate en <strong>nivel 1–2</strong>: menos riesgo y mueve la aguja
-                  cuando crezca.
                 </>
               )}
             </p>
@@ -1719,9 +1822,16 @@ export function RiskProfileTest() {
             }
           >
             {situations.map((sit) => {
-              const sitSlices =
-                feasibleSlices(chosenSlices[sit], capital) ?? [singleSliceFor(capital, sit, currency)]
+              const template = chosenSlices[sit]
+              const feasible = feasibleSlices(template, capital)
+              const sitSlices = feasible ?? [singleSliceFor(capital, sit, currency)]
               const isRecommended = sit === result.situation
+              const singleNote =
+                template.length === 1
+                  ? currency === "USD"
+                    ? "En dólares y a tu nivel todo va al fondo a 30 días: es el único instrumento de plazo corto."
+                    : "A tu nivel todo va a un solo instrumento propio: sin dividir, sin complicarte."
+                  : "Este monto aún no alcanza para dividir: falta el mínimo de un segundo instrumento."
               return (
                 <div
                   key={sit}
@@ -1768,7 +1878,7 @@ export function RiskProfileTest() {
                     {showABC
                       ? situationMeta[sit].pickIf
                       : sitSlices.length === 1
-                        ? "Un solo instrumento: por ahora este monto no alcanza para dividir."
+                        ? singleNote
                         : "Estructura simple para tu nivel y moneda."}
                   </p>
                 </div>
@@ -1783,19 +1893,16 @@ export function RiskProfileTest() {
           </p>
         )}
 
-        {/* Proyección integrada al Paso 3 (ponderada por instrumento) */}
-        {capital > 0 && (
+        {/* Proyección integrada al Paso 3 (ponderada por instrumento); solo si alcanza algún instrumento */}
+        {capital > 0 && maxTogether > 0 && (
           <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-center gap-2 mb-4">
               <TrendingUp className="h-5 w-5 text-[#388e3c] dark:text-[#81c784]" aria-hidden />
               <h4 className="text-lg font-bold text-gray-800 dark:text-gray-100">Proyección</h4>
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 text-center mb-4 leading-relaxed max-w-2xl mx-auto">
-              Cada rodaja crece con la tasa de su instrumento (
-              {currency === "DOP"
-                ? `AFI ${rateValue("afi")}% · certificado ${rateValue("cert")}% · AFI 30+ ${rateValue("afi30")}% · ETF ${rateValue("etf")}%`
-                : `fondo 30 días ${rateValue("usd30")}% · ETF ${rateValue("etf")}%`}
-              ) · aportes no incluidos · no es garantía.
+              Cada rodaja crece con la tasa de su instrumento ({rateSummary(projSlices.map((s) => s.label), rates)}) ·
+              aportes no incluidos · no es garantía.
             </p>
 
             <div className="grid grid-cols-2 gap-4 mb-4">
@@ -1854,7 +1961,9 @@ export function RiskProfileTest() {
             </div>
           </div>
           <Link
-            href="#"
+            href="https://www.sb.gob.do/supervisados/"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-sky-600 hover:bg-sky-700 text-white px-5 py-3 text-base font-semibold transition-colors"
             data-interactive="true"
           >
@@ -1875,7 +1984,8 @@ export function RiskProfileTest() {
         </button>
         <button
           onClick={() => {
-            resetAll()
+            // El test ya quedó guardado localmente: salir no lo borra.
+            triggerHapticFeedback("light")
             router.push("/finanzas")
           }}
           className="flex-1 flex items-center justify-center gap-2 border border-[#388e3c] text-[#388e3c] hover:bg-[#388e3c]/10 px-6 py-3.5 rounded-lg font-medium text-base transition-colors"

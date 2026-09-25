@@ -26,12 +26,14 @@ interface FundProjectionChartProps {
   target: number
   months: number
   currency: "USD" | "DOP"
-  /** Tasa anual del AFI líquido (%): curva comparativa de "si lo inviertes". */
+  /** Tasa anual de referencia (%): curva comparativa de "si lo inviertes". */
   rate?: number
+  /** Nombre del instrumento para la leyenda ("AFI líquido", "fondo a 30 días"). */
+  rateLabel?: string
 }
 
-/** Línea del colchón mes a mes con la meta (2×) y la curva AFI como referencia. */
-export function FundProjectionChart({ start, monthly, target, months, currency, rate }: FundProjectionChartProps) {
+/** Línea del colchón mes a mes con la meta (2×) y la curva de inversión como referencia. */
+export function FundProjectionChart({ start, monthly, target, months, currency, rate, rateLabel = "AFI líquido" }: FundProjectionChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const chartRef = useRef<Chart | null>(null)
   const { resolvedTheme } = useTheme()
@@ -80,7 +82,7 @@ export function FundProjectionChart({ start, monthly, target, months, currency, 
               borderWidth: 2.5,
             },
             {
-              label: `Ahorro + AFI líquido (~${rate ?? 0}%)`,
+              label: `Ahorro + ${rateLabel} (~${rate ?? 0}%)`,
               data: invested,
               borderColor: "#0284c7",
               backgroundColor: "rgba(2, 132, 199, 0.08)",
@@ -160,7 +162,7 @@ export function FundProjectionChart({ start, monthly, target, months, currency, 
         chartRef.current = null
       }
     }
-  }, [start, monthly, target, months, currency, rate, resolvedTheme, isMobile])
+  }, [start, monthly, target, months, currency, rate, rateLabel, resolvedTheme, isMobile])
 
   return (
     <div className="h-[240px] w-full mt-3">
