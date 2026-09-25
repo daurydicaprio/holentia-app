@@ -26,10 +26,12 @@ interface FundProjectionChartProps {
   target: number
   months: number
   currency: "USD" | "DOP"
+  /** Tasa anual del AFI líquido (%): curva comparativa de "si lo inviertes". */
+  rate?: number
 }
 
-/** Línea del colchón mes a mes con la meta (2×) como referencia punteada. */
-export function FundProjectionChart({ start, monthly, target, months, currency }: FundProjectionChartProps) {
+/** Línea del colchón mes a mes con la meta (2×) y la curva AFI como referencia. */
+export function FundProjectionChart({ start, monthly, target, months, currency, rate }: FundProjectionChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const chartRef = useRef<Chart | null>(null)
   const { resolvedTheme } = useTheme()
@@ -47,9 +49,15 @@ export function FundProjectionChart({ start, monthly, target, months, currency }
     const last = Math.min(Math.max(Math.round(months), 1), 72)
     const labels: string[] = []
     const values: number[] = []
+    const invested: number[] = []
+    const monthlyRate = rate && rate > 0 ? rate / 100 / 12 : 0
     for (let m = 0; m <= last; m++) {
       labels.push(String(m))
       values.push(Math.round(start + monthly * m))
+      // Valor futuro de aportes mensuales al AFI líquido (interés compuesto mensual).
+      invested.push(
+        Math.round(monthlyRate > 0 ? start * Math.pow(1 + monthlyRate, m) + monthly * ((Math.pow(1 + monthlyRate, m) - 1) / monthlyRate) : start + monthly * m),
+      )
     }
     const targetLine = labels.map(() => target)
 
@@ -61,7 +69,7 @@ export function FundProjectionChart({ start, monthly, target, months, currency }
           labels,
           datasets: [
             {
-              label: "Tu colchón",
+              label: "Solo ahorro",
               data: values,
               borderColor: "#388e3c",
               backgroundColor: "rgba(56, 142, 60, 0.15)",
@@ -70,6 +78,18 @@ export function FundProjectionChart({ start, monthly, target, months, currency }
               pointRadius: 0,
               pointHitRadius: 8,
               borderWidth: 2.5,
+            },
+            {
+              label: `Ahorro + AFI líquido (~${rate ?? 0}%)`,
+              data: invested,
+              borderColor: "#0284c7",
+              backgroundColor: "rgba(2, 132, 199, 0.08)",
+              fill: true,
+              tension: 0.3,
+              pointRadius: 0,
+              pointHitRadius: 8,
+              borderWidth: 2,
+              borderDash: [5, 4],
             },
             {
               label: "Meta (2× sueldo)",
@@ -140,10 +160,10 @@ export function FundProjectionChart({ start, monthly, target, months, currency }
         chartRef.current = null
       }
     }
-  }, [start, monthly, target, months, currency, resolvedTheme, isMobile])
+  }, [start, monthly, target, months, currency, rate, resolvedTheme, isMobile])
 
   return (
-    <div className="h-[180px] w-full mt-3">
+    <div className="h-[240px] w-full mt-3">
       <canvas ref={canvasRef} aria-hidden />
     </div>
   )

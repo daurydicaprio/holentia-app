@@ -21,6 +21,7 @@ import {
   PieChart,
   CheckCircle2,
   ClipboardList,
+  Landmark,
 } from "lucide-react"
 import { useTheme } from "next-themes"
 import Chart from "chart.js/auto"
@@ -39,7 +40,7 @@ interface RiskDraft {
   level?: number
   capital?: string
   currency?: "USD" | "DOP"
-  rate?: string
+  rates?: Partial<Record<RateKey, string>>
   monthlyIncome?: string
   fundMultiplier?: number
   savePct?: string
@@ -269,7 +270,7 @@ const situationMeta: Record<"A" | "B" | "C", { title: string; pickIf: string }> 
   },
 }
 
-const ABC_DOP = 100000
+const ABC_DOP = 50000
 const ABC_USD = 3000
 const INSTR_MIN = {
   DOP: { liquid: 5000, cert: 10000, d30: 10000 },
@@ -277,15 +278,62 @@ const INSTR_MIN = {
 }
 /** Hasta aquí el capital se considera "pequeño" → nivel 1–2. */
 const LEVEL_CAP: Record<"USD" | "DOP", number> = { DOP: 5000, USD: 3000 }
-const RATES = [8, 10, 15]
+
+/** Tasas anuales de referencia por instrumento (editables por el usuario, sin chips globales). */
+type RateKey = "afi" | "cert" | "afi30" | "etf" | "usd30"
+const DEFAULT_RATES: Record<RateKey, string> = { afi: "8", cert: "6", afi30: "9", etf: "10", usd30: "10" }
+const RATE_META: Record<RateKey, { label: string; hint: string }> = {
+  afi: { label: "AFI líquido", hint: "Histórico ~8% anual. Retiro en 1 día hábil." },
+  cert: { label: "Certificado", hint: "Históricamente rinde ~40–50% menos que el AFI (≈6%)." },
+  afi30: { label: "AFI a más de 30 días", hint: "Plazos de 30/90/180 días: históricamente mejor que el líquido." },
+  etf: { label: "ETF / bolsa", hint: "Niveles 2–3 (EE.UU. / mundial). Referencia 10%, no es garantía." },
+  usd30: { label: "Fondo a 30 días (USD)", hint: "Única opción en dólares. Referencia 10–15%." },
+}
 
 /** Mínimo real por instrumento para poder abrirlo (usa las etiquetas de los pasteles). */
 const SLICE_MIN: Record<string, number> = {
   "AFI líquido": 5000,
   "AFI líquido / estabilidad": 5000,
+  "AFI a más de 30 días": 10000,
   Certificados: 10000,
   "Certificados cortos": 10000,
   "Fondo a 30 días (USD)": 200,
+}
+
+/** Tasa por etiqueta de rodaja (fallback: AFI líquido). */
+function sliceRate(label: string, rates: Record<RateKey, string>): number {
+  const read = (k: RateKey) => {
+    const n = Number.parseFloat(rates[k])
+    return isNaN(n) || n < 0 ? Number.parseFloat(DEFAULT_RATES[k]) : n
+  }
+  if (label.startsWith("Certificado")) return read("cert")
+  if (label.startsWith("AFI a más")) return read("afi30")
+  if (label.startsWith("ETF") || label.startsWith("Acciones") || label.startsWith("Bonos")) return read("etf")
+  if (label.startsWith("Fondo a 30 días")) return read("usd30")
+  if (label.startsWith("Cuenta")) return 0
+  return read("afi")
+}
+
+/** Solo dígitos, comas y puntos: los inputs no aceptan letras. */
+function filterNumeric(value: string): string {
+  return value.replace(/[^\d.,]/g, "")
+}
+
+/** Formatea con coma de miles (100000 → 100,000); conserva el decimal tras el último separador. */
+function formatWithCommas(value: string): string {
+  if (!value) return ""
+  const [intPartRaw, ...rest] = value.split(/[.,]/)
+  const intPart = (intPartRaw || "").replace(/\D/g, "")
+  const dec = rest.length > 0 ? `.${rest.join("").replace(/\D/g, "")}` : ""
+  if (!intPart && !dec) return ""
+  const grouped = intPart ? Number(intPart).toLocaleString("en-US") : ""
+  return rest.length > 0 ? `${grouped}${dec}` : grouped
+}
+
+/** Parsea "25,000" / "25.5" → número (sin coma de miles). */
+function parseNumeric(value: string): number {
+  const n = Number.parseFloat(value.replace(/,/g, ""))
+  return isNaN(n) ? NaN : n
 }
 
 function sliceMin(label: string): number {
@@ -350,7 +398,8 @@ interface FundPart {
 
 /**
  * Reparto sugerido del colchón por tramos (aprobado):
- * <5k cuenta · 5k–10k todo AFI · 10k–35k 20% cuenta/80% AFI · ≥35k 30/40/30.
+ * <5k cuenta · 5k–10k todo AFI · 10k–35k 20% cuenta/80% AFI · 35k–50k 30/40/30 ·
+ * >50k 20% cuenta + 80% en 70% AFI / 30% certificado.
  * USD: fondo a 30 días desde $200 (única opción en dólares).
  */
 function fundSuggestion(fundSize: number, currency: "USD" | "DOP"): FundPart[] {
@@ -417,29 +466,57 @@ function fundSuggestion(fundSize: number, currency: "USD" | "DOP"): FundPart[] {
       },
     ]
   }
-  const cash = Math.round(fundSize * 0.3)
-  const afi = Math.round(fundSize * 0.4)
+  if (fundSize < 50000) {
+    const cash = Math.round(fundSize * 0.3)
+    const afi = Math.round(fundSize * 0.4)
+    return [
+      {
+        label: "Cuenta a la vista",
+        amount: cash,
+        pct: 30,
+        color: FUND_COLORS.cash,
+        why: "Para gastos repentinos sin tocar inversiones.",
+      },
+      {
+        label: "AFI líquido",
+        amount: afi,
+        pct: 40,
+        color: FUND_COLORS.afi,
+        why: "Para emergencias que aceptan tarjeta o retiros parciales.",
+      },
+      {
+        label: "Certificado vía web",
+        amount: fundSize - cash - afi,
+        pct: 30,
+        color: FUND_COLORS.cert,
+        why: "Dinero quieto a plazo (30–360 días). Si lo cancelas, pierdes 3% anual proporcional.",
+      },
+    ]
+  }
+  // >RD$50,000: 20% en cuenta y el 80% restante repartido 70% AFI / 30% certificado.
+  const cash = Math.round(fundSize * 0.2)
+  const afi = Math.round((fundSize - cash) * 0.7)
   return [
     {
       label: "Cuenta a la vista",
       amount: cash,
-      pct: 30,
+      pct: 20,
       color: FUND_COLORS.cash,
       why: "Para gastos repentinos sin tocar inversiones.",
     },
     {
       label: "AFI líquido",
       amount: afi,
-      pct: 40,
+      pct: Math.round((afi / fundSize) * 100),
       color: FUND_COLORS.afi,
-      why: "Para emergencias que aceptan tarjeta o retiros parciales.",
+      why: "La mayor parte: le gana a la inflación y retiras en 1 día hábil.",
     },
     {
       label: "Certificado vía web",
       amount: fundSize - cash - afi,
-      pct: 30,
+      pct: 100 - 20 - Math.round((afi / fundSize) * 100),
       color: FUND_COLORS.cert,
-      why: "Dinero quieto a plazo (30–360 días). Si lo cancelas, pierdes 3% anual proporcional.",
+      why: "Más rendimiento que el AFI a plazo fijo (30–360 días); penalidad si cancelas antes.",
     },
   ]
 }
@@ -538,12 +615,12 @@ function SectionHeader({
 }) {
   return (
     <div className="text-center mb-6">
-      {badge && (
-        <span className="inline-block rounded-full bg-[#388e3c] text-white text-xs font-bold px-3 py-1 mb-2">
-          {badge}
-        </span>
-      )}
       <div className="inline-flex items-center justify-center gap-2 mb-2">
+        {badge && (
+          <span className="inline-block rounded-full bg-[#388e3c] text-white text-xs font-bold px-3 py-1 leading-normal">
+            {badge}
+          </span>
+        )}
         <Icon className="h-6 w-6 text-[#388e3c] dark:text-[#81c784]" aria-hidden />
         <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">{title}</h3>
       </div>
@@ -600,14 +677,14 @@ function computeResult(answers: Record<number, string>): ComputedResult {
   const incomeKey = answers[6]
   const incomePhrase =
     incomeKey === "q6_free"
-      ? "ingreso independiente"
+      ? "tienes ingreso independiente"
       : incomeKey === "q6_risk"
         ? "tu empleo puede cambiar pronto"
-        : "ingreso estable"
+        : "tu ingreso es estable"
 
-  let reason = `Quédate en el nivel ${level}: ${fundPhrase} y ${incomePhrase}.`
+  let reason = `${fundPhrase[0].toUpperCase()}${fundPhrase.slice(1)} y ${incomePhrase}: primero el colchón, después invertir.`
   if (knowledgeLocked) {
-    reason = `Quédate en el nivel ${level}: estás empezando y primero conviene aprender.`
+    reason = "Estás empezando y primero conviene aprender: domina lo básico antes de subir de nivel."
   }
 
   return { level, knowledgeCeiling, knowledgeLocked, situation, richQuick, reason }
@@ -621,10 +698,11 @@ export function RiskProfileTest() {
   const [answers, setAnswers] = useState<Record<number, string>>({})
   const [capitalInput, setCapitalInput] = useState("")
   const [currency, setCurrency] = useState<"USD" | "DOP">("DOP")
-  const [rateInput, setRateInput] = useState<string>("8")
+  const [rates, setRates] = useState<Record<RateKey, string>>({ ...DEFAULT_RATES })
   const [monthlyIncome, setMonthlyIncome] = useState("")
   const [fundMultiplier, setFundMultiplier] = useState(0)
-  const [savePct, setSavePct] = useState("")
+  const [savePct, setSavePct] = useState("10")
+  const [selectedLevel, setSelectedLevel] = useState(1)
   const [showLevels, setShowLevels] = useState(false)
   const [savedFlash, setSavedFlash] = useState(false)
   const [restored, setRestored] = useState(false)
@@ -637,10 +715,10 @@ export function RiskProfileTest() {
       setAnswers(draft.answers)
       if (draft.capital !== undefined) setCapitalInput(draft.capital)
       if (draft.currency === "USD" || draft.currency === "DOP") setCurrency(draft.currency)
-      if (typeof draft.rate === "string") setRateInput(draft.rate)
+      if (draft.rates) setRates({ ...DEFAULT_RATES, ...draft.rates })
       if (draft.monthlyIncome !== undefined) setMonthlyIncome(draft.monthlyIncome)
       if (typeof draft.fundMultiplier === "number") setFundMultiplier(draft.fundMultiplier)
-      if (typeof draft.savePct === "string") setSavePct(draft.savePct)
+      if (typeof draft.savePct === "string" && draft.savePct) setSavePct(draft.savePct)
       setPhase("result")
       setRestored(true)
     }
@@ -654,12 +732,12 @@ export function RiskProfileTest() {
   }, [phase, answers])
 
   const capital = useMemo(() => {
-    const n = Number.parseFloat(capitalInput)
+    const n = parseNumeric(capitalInput)
     return isNaN(n) || n <= 0 ? 0 : n
   }, [capitalInput])
 
   const income = useMemo(() => {
-    const n = Number.parseFloat(monthlyIncome)
+    const n = parseNumeric(monthlyIncome)
     return isNaN(n) || n <= 0 ? 0 : n
   }, [monthlyIncome])
 
@@ -668,7 +746,7 @@ export function RiskProfileTest() {
   const fundTarget = income * 2
 
   const saveRate = useMemo(() => {
-    const n = Number.parseFloat(savePct)
+    const n = parseNumeric(savePct)
     return isNaN(n) || n <= 0 ? 0 : Math.min(n, 100)
   }, [savePct])
 
@@ -686,21 +764,30 @@ export function RiskProfileTest() {
 
   const effectiveLevel = lowCapital && result ? Math.min(result.level, 2) : (result?.level ?? 1)
 
+  // Al (re)cargar resultados la selección del arco vuelve al nivel del usuario.
+  const prevLevelRef = useRef<number | null>(null)
+  useEffect(() => {
+    if (phase !== "result") return
+    if (prevLevelRef.current !== effectiveLevel) {
+      prevLevelRef.current = effectiveLevel
+      setSelectedLevel(effectiveLevel)
+    }
+  }, [phase, effectiveLevel])
+
   const abcThreshold = currency === "DOP" ? ABC_DOP : ABC_USD
   const showABC =
     capital > 0 && capital >= abcThreshold && !(currency === "USD" && effectiveLevel === 1)
 
-  const selectedRate = useMemo(() => {
-    const n = Number.parseFloat(rateInput)
-    return isNaN(n) || n < 0 ? (currency === "USD" ? 10 : 8) : n
-  }, [rateInput, currency])
-
-  const proj5 = capital > 0 ? capital * Math.pow(1 + selectedRate / 100, 5) : 0
-  const proj10 = capital > 0 ? capital * Math.pow(1 + selectedRate / 100, 10) : 0
+  const rateValue = (k: RateKey): number => {
+    const n = Number.parseFloat(rates[k].replace(/,/g, ""))
+    return isNaN(n) || n < 0 ? Number.parseFloat(DEFAULT_RATES[k]) : n
+  }
 
   const inflationLoss = fundSize > 0 ? fundSize * 0.03 : 0
-  const fundYearReturn = fundSize > 0 ? fundSize * (selectedRate / 100) : 0
   const fundParts = fundSize > 0 ? fundSuggestion(fundSize, currency) : []
+  // Rendimiento anual del colchón = Σ por tramo con la tasa de su instrumento (cuenta: 0%).
+  const fundYearReturn = fundParts.reduce((sum, p) => sum + p.amount * (sliceRate(p.label, rates) / 100), 0)
+  const fundAfiRate = rateValue(currency === "USD" ? "usd30" : "afi")
 
   const instruments = useMemo(() => {
     if (capital <= 0) return [] as { name: string; min: number; note: string }[]
@@ -720,6 +807,13 @@ export function RiskProfileTest() {
         name: "AFI líquido",
         min: INSTR_MIN.DOP.liquid,
         note: "Retiro lun–vie 9am–3pm (sin feriados). Ideal para colchón.",
+      })
+    }
+    if (capital >= INSTR_MIN.DOP.d30) {
+      list.push({
+        name: "AFI a más de 30 días",
+        min: INSTR_MIN.DOP.d30,
+        note: "Plazos de 30/90/180 días: históricamente rinde más que el líquido; el dinero queda 30 días mínimo.",
       })
     }
     if (capital >= INSTR_MIN.DOP.cert) {
@@ -750,7 +844,7 @@ export function RiskProfileTest() {
         level: result?.level,
         capital: capitalInput,
         currency,
-        rate: rateInput,
+        rates,
         monthlyIncome,
         fundMultiplier,
         savePct,
@@ -764,7 +858,7 @@ export function RiskProfileTest() {
     return () => {
       if (saveTimer.current) clearTimeout(saveTimer.current)
     }
-  }, [phase, answers, capitalInput, currency, rateInput, monthlyIncome, fundMultiplier, savePct, result])
+  }, [phase, answers, capitalInput, currency, rates, monthlyIncome, fundMultiplier, savePct, result])
 
   const startQuiz = () => {
     setPhase("quiz")
@@ -788,7 +882,6 @@ export function RiskProfileTest() {
 
   const handleCurrency = (c: "USD" | "DOP") => {
     setCurrency(c)
-    setRateInput(c === "USD" ? "10" : "8")
     triggerHapticFeedback("light")
   }
 
@@ -798,10 +891,10 @@ export function RiskProfileTest() {
     setAnswers({})
     setCapitalInput("")
     setCurrency("DOP")
-    setRateInput("8")
+    setRates({ ...DEFAULT_RATES })
     setMonthlyIncome("")
     setFundMultiplier(0)
-    setSavePct("")
+    setSavePct("10")
     setShowLevels(false)
     setRestored(false)
     storageRemove(DRAFT_KEY)
@@ -812,7 +905,7 @@ export function RiskProfileTest() {
     storageRemove(DRAFT_KEY)
     setCapitalInput("")
     setMonthlyIncome("")
-    setSavePct("")
+    setSavePct("10")
     setFundMultiplier(0)
     triggerHapticFeedback("medium")
     setSavedFlash(false)
@@ -948,6 +1041,19 @@ export function RiskProfileTest() {
   const situations: Array<"A" | "B" | "C"> = showABC ? ["A", "B", "C"] : [result.situation]
   const chosenSlices = (currency === "USD" ? portfoliosUsd : portfolios)[effectiveLevel]
 
+  // Proyección ponderada por instrumento con las tasas del usuario (recomendada).
+  const projSlices =
+    feasibleSlices(chosenSlices[result.situation], capital) ?? [singleSliceFor(capital, result.situation, currency)]
+  const projAt = (years: number) =>
+    projSlices.reduce((sum, s) => {
+      const amount = (capital * s.pct) / 100
+      return sum + amount * Math.pow(1 + sliceRate(s.label, rates) / 100, years)
+    }, 0)
+  const proj5 = capital > 0 ? projAt(5) : 0
+  const proj10 = capital > 0 ? projAt(10) : 0
+  const blendedRate =
+    projSlices.reduce((sum, s) => sum + (s.pct / 100) * sliceRate(s.label, rates), 0) || rateValue("afi")
+
   // Cuántos instrumentos caben a la vez (suma de sus mínimos ≤ capital)
   const reachableMins = instruments.map((i) => i.min).sort((a, b) => a - b)
   let maxTogether = 0
@@ -980,13 +1086,14 @@ export function RiskProfileTest() {
         style={{ background: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)" }}
       >
         <div className="text-xs font-semibold uppercase tracking-widest opacity-80 mb-2">Tu resultado</div>
-        <h2 className="text-4xl sm:text-5xl font-bold mb-4">Eres {levelDef.profileName}</h2>
+        <h2 className="text-4xl sm:text-5xl font-bold mb-4">{levelDef.profileName}</h2>
         <div className="mb-4">
           <span className="inline-flex items-center gap-2 bg-white/15 rounded-full px-4 py-1.5 text-sm font-semibold">
-            Sugerencia: nivel {effectiveLevel} de 5
+            Quédate en el nivel {effectiveLevel}
           </span>
         </div>
-        <p className="text-base sm:text-lg font-semibold mb-4 max-w-xl mx-auto leading-snug">{result.reason}</p>
+        <p className="text-base sm:text-lg font-semibold mb-3 max-w-xl mx-auto leading-snug">{result.reason}</p>
+        <p className="text-sm sm:text-base opacity-90 mb-4 max-w-xl mx-auto leading-relaxed">{levelDef.blurb}</p>
         {lowCapital && (
           <div className="mb-4 inline-flex items-center gap-2 bg-white/15 rounded-full px-4 py-2 text-sm">
             <AlertTriangle className="h-4 w-4" />
@@ -1044,40 +1151,60 @@ export function RiskProfileTest() {
               Los 5 niveles de inversión
             </h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 text-center mb-5">
-              Tu nivel está resaltado en el arco. Solo lo regulado, sin prisa, a largo plazo.
+              Tu nivel está resaltado en el arco. Toca cualquier nivel para ver su color. Solo lo regulado, sin prisa,
+              a largo plazo.
             </p>
 
-            <RiskLevelsGraphic activeLevel={effectiveLevel} />
+            <RiskLevelsGraphic
+              activeLevel={effectiveLevel}
+              selectedLevel={selectedLevel}
+              onSelect={(n) => {
+                setSelectedLevel(n)
+                triggerHapticFeedback("light")
+              }}
+            />
 
             <ul className="mt-5 space-y-3">
               {LEVELS.map((lvl) => {
                 const isActive = lvl.n === effectiveLevel
+                const isColored = isActive || lvl.n === selectedLevel
                 return (
                   <li
                     key={lvl.n}
-                    className={`rounded-lg border p-3 ${
-                      lvl.danger
-                        ? "border-red-300 dark:border-red-800 bg-red-50 dark:bg-red-900/15"
-                        : isActive
-                          ? "border-[#388e3c] bg-[#388e3c]/5 dark:bg-[#388e3c]/10"
-                          : "border-gray-200 dark:border-gray-700"
-                    } ${isActive ? "ring-1 ring-[#388e3c]" : ""}`}
+                    onClick={() => {
+                      setSelectedLevel(lvl.n)
+                      triggerHapticFeedback("light")
+                    }}
+                    data-interactive="true"
+                    className={`cursor-pointer rounded-lg border p-3 transition-colors ${
+                      isActive
+                        ? "border-[#388e3c] bg-[#388e3c]/5 dark:bg-[#388e3c]/10 ring-1 ring-[#388e3c]"
+                        : isColored && lvl.danger
+                          ? "border-red-300 dark:border-red-800 bg-red-50 dark:bg-red-900/15"
+                          : isColored
+                            ? "border-[#388e3c]/60 bg-[#388e3c]/5 dark:bg-[#388e3c]/10"
+                            : "border-gray-200 dark:border-gray-700 opacity-60"
+                    }`}
                   >
                     <div className="flex items-center gap-2 flex-wrap">
                       <span
                         className={`text-xs font-bold px-2 py-0.5 rounded-full ${
-                          lvl.danger
-                            ? "bg-red-600 text-white"
-                            : isActive
-                              ? "bg-[#388e3c] text-white"
-                              : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                          isActive || isColored
+                            ? lvl.danger
+                              ? "bg-red-600 text-white"
+                              : "bg-[#388e3c] text-white"
+                            : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
                         }`}
                       >
                         {lvl.n}
                       </span>
                       <span
                         className={`text-base font-semibold ${
-                          lvl.danger ? "text-red-700 dark:text-red-400" : "text-gray-800 dark:text-gray-100"
+                          isActive || isColored
+                            ? lvl.danger
+                              ? "text-red-700 dark:text-red-400"
+                              : "text-gray-800 dark:text-gray-100"
+                            : "text-gray-500 dark:text-gray-400"
                         }`}
                       >
                         {lvl.name}
@@ -1095,10 +1222,26 @@ export function RiskProfileTest() {
                     </div>
                     <p
                       className={`text-sm mt-1 leading-relaxed ${
-                        lvl.danger ? "text-red-700 dark:text-red-300" : "text-gray-600 dark:text-gray-400"
+                        lvl.danger
+                          ? isColored
+                            ? "text-red-700 dark:text-red-300"
+                            : "text-red-700/60 dark:text-red-300/60"
+                          : isColored
+                            ? "text-gray-600 dark:text-gray-400"
+                            : "text-gray-500 dark:text-gray-500"
                       }`}
                     >
-                      <strong className={lvl.danger ? "text-red-700 dark:text-red-400" : "text-[#388e3c]"}>
+                      <strong
+                        className={
+                          lvl.danger
+                            ? isColored
+                              ? "text-red-700 dark:text-red-400"
+                              : "text-red-700/70 dark:text-red-400/70"
+                            : isColored
+                              ? "text-[#388e3c]"
+                              : "text-gray-500 dark:text-gray-400"
+                        }
+                      >
                         {lvl.short}
                       </strong>{" "}
                       — {lvl.desc}
@@ -1124,12 +1267,11 @@ export function RiskProfileTest() {
           <div>
             <label className="block text-sm font-medium mb-2">¿Cuánto ganas al mes?</label>
             <input
-              type="number"
-              min={0}
-              inputMode="decimal"
+              type="text"
+              inputMode="numeric"
               value={monthlyIncome}
-              onChange={(e) => setMonthlyIncome(e.target.value)}
-              placeholder={currency === "DOP" ? "Ej: 45000" : "Ej: 800"}
+              onChange={(e) => setMonthlyIncome(formatWithCommas(filterNumeric(e.target.value)))}
+              placeholder={currency === "DOP" ? "Ej: 45,000" : "Ej: 800"}
               className={inputClass}
               data-interactive="true"
             />
@@ -1164,33 +1306,50 @@ export function RiskProfileTest() {
           {/* Sin fondo: plan de ahorro con gráfico */}
           {!hasFund && (
             <div className="rounded-lg bg-[#388e3c]/5 dark:bg-[#388e3c]/10 border border-[#388e3c]/30 p-4">
-              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
-                <strong className="text-gray-900 dark:text-gray-100">Primero: tu fondo de emergencia.</strong> El
-                mínimo sugerido es <strong>2× sueldo</strong>
+              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                <strong className="text-gray-900 dark:text-gray-100">Primero: tu fondo de emergencia.</strong> Es el
+                dinero que te evita vender inversiones en el peor momento. Tu meta sugerida es{" "}
+                <strong>2× sueldo</strong>
                 {income > 0 && (
                   <>
                     {" "}
                     = <strong>{formatMoney(fundTarget, currency)}</strong>
                   </>
                 )}
-                . Sin colchón, invertir no funciona: si hay una emergencia, venderías en el peor momento.
+                . Ahorra primero esto; invertir viene después.
               </p>
-              <label className="block text-sm font-medium mb-2 text-gray-600 dark:text-gray-400">
+              <label className="block text-sm font-medium mt-4 mb-2 text-gray-600 dark:text-gray-400">
                 ¿Qué % de tu sueldo puedes ahorrar al mes?
               </label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="number"
-                  min={1}
-                  max={100}
-                  inputMode="numeric"
-                  value={savePct}
-                  onChange={(e) => setSavePct(e.target.value)}
-                  placeholder="Ej: 15"
-                  className={`${inputClass} max-w-[120px]`}
-                  data-interactive="true"
-                />
-                <span className="text-sm text-gray-500 dark:text-gray-400">% de tu sueldo</span>
+              <div className="flex flex-wrap items-center gap-2">
+                {[5, 10, 15, 20].map((p) => (
+                  <button
+                    key={p}
+                    onClick={() => {
+                      setSavePct(String(p))
+                      triggerHapticFeedback("light")
+                    }}
+                    className={chipClass(savePct === String(p))}
+                    data-interactive="true"
+                  >
+                    {p}%
+                  </button>
+                ))}
+                <div className="flex items-center gap-2">
+                  <div className="w-24 shrink-0">
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={savePct}
+                      onChange={(e) => setSavePct(filterNumeric(e.target.value).replace(/,/g, ""))}
+                      placeholder="Otro %"
+                      aria-label="Establece tu % de ahorro manualmente"
+                      className={inputClass}
+                      data-interactive="true"
+                    />
+                  </div>
+                  <span className="text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">% de tu sueldo</span>
+                </div>
               </div>
               {monthsToFund !== null ? (
                 <>
@@ -1205,7 +1364,12 @@ export function RiskProfileTest() {
                     target={fundTarget}
                     months={monthsToFund}
                     currency={currency}
+                    rate={fundAfiRate}
                   />
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">
+                    La línea punteada azul muestra lo mismo ahorrando, pero invirtiéndolo cada mes en AFI líquido con
+                    su tasa por defecto: al llegar a la meta, tendrías un poco más.
+                  </p>
                 </>
               ) : (
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-3">
@@ -1282,8 +1446,19 @@ export function RiskProfileTest() {
                   +{formatMoney(fundYearReturn, currency)}
                 </div>
                 <p className="mt-2 text-xs leading-relaxed text-gray-600 dark:text-gray-400 sm:text-sm">
-                  En AFI con la tasa que elegiste (~{selectedRate}%/año), tus {formatMoney(fundSize, currency)}{" "}
-                  podrían ser {formatMoney(fundSize + fundYearReturn, currency)} en 1 año.
+                  {currency === "USD" ? (
+                    <>
+                      Con tu tasa del fondo a 30 días (~{rateValue("usd30")}%), tus{" "}
+                      {formatMoney(fundSize, currency)} podrían ser{" "}
+                      {formatMoney(fundSize + fundYearReturn, currency)} en 1 año.
+                    </>
+                  ) : (
+                    <>
+                      Con las tasas que definiste (AFI líquido ~{rateValue("afi")}% · certificado ~
+                      {rateValue("cert")}%), tus {formatMoney(fundSize, currency)} podrían ser{" "}
+                      {formatMoney(fundSize + fundYearReturn, currency)} en 1 año.
+                    </>
+                  )}
                 </p>
               </div>
               <div className="rounded-xl border border-red-200 bg-red-50 px-5 py-5 text-center dark:border-red-800 dark:bg-red-900/20">
@@ -1362,11 +1537,17 @@ export function RiskProfileTest() {
 
           {/* Elección: no invertir + tarjeta */}
           <div className="rounded-lg border border-gray-200 p-4 sm:p-5 dark:border-gray-700">
-            <p className="mb-1 text-sm font-semibold text-gray-800 dark:text-gray-100">
+            <p className="mb-2 text-sm font-semibold text-gray-800 dark:text-gray-100">
               ¿Prefieres no invertir tu fondo de emergencia?
             </p>
             <p className="mb-3 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
-              Es válido — pero parado pierde poder de compra cada año. Antes de decidir, lee esto:
+              Puedes dejarlo quieto, pero pierde ~3% de poder de compra cada año. Antes de decidir, responde esto:{" "}
+              <strong>¿cuándo fue tu última emergencia?</strong> Hospital, una avería del auto o un electrodoméstico
+              rara vez llegan por el monto completo: casi siempre es una parte. Y la mayoría se puede pagar con{" "}
+              <strong>tarjeta de crédito</strong>: retiras del colchón{" "}
+              <strong>2–3 días antes del vencimiento</strong> y no financias nada. Por eso la sugerencia es
+              invertirlo hasta el AFI líquido: <strong>sigue disponible en 1 día hábil</strong> y no se queda parado
+              perdiendo valor.
             </p>
             <Disclosure label="Leer más: qué pasa si lo dejas parado">
               <p className="mb-2">
@@ -1378,12 +1559,11 @@ export function RiskProfileTest() {
                   </>
                 ) : (
                   <>El dinero parado pierde ~3% al año de poder de compra.</>
-                )}{" "}
-                Pregúntate: <em>¿cuándo fue mi última emergencia? ¿No siempre es una parte, no todo de golpe?</em>
+                )}
               </p>
               <p>
-                Si la emergencia pide <strong>efectivo</strong>, retira del fondo <strong>líquido</strong> (horario
-                de oficina). No hace falta tocar inversiones a largo plazo.
+                Invertirlo no lo bloquea: el AFI líquido se retira en horario de oficina (lun–vie 9am–3pm), así que
+                sigue siendo tu colchón. No hace falta tocar inversiones a largo plazo.
               </p>
             </Disclosure>
 
@@ -1391,13 +1571,12 @@ export function RiskProfileTest() {
               <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
                 <Info className="h-4 w-4 flex-shrink-0 text-[#388e3c]" aria-hidden />
                 <span>
-                  Si pagas con <strong>tarjeta de crédito</strong> (hospital, llantas…): no financias. Saca del
-                  colchón <strong>2–3 días antes del vencimiento</strong>.
+                  ¿No domina tus fechas de corte y vencimiento? Aprende a usar la tarjeta a tu favor.
                 </span>
               </div>
               <Link
                 href="/tarjeta-corte-vencimiento"
-                className="inline-flex items-center gap-2 whitespace-nowrap rounded-lg bg-[#388e3c] px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-[#1b5e20]"
+                className="ml-auto inline-flex items-center gap-2 whitespace-nowrap rounded-lg bg-[#388e3c] px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-[#1b5e20]"
                 data-interactive="true"
               >
                 Comprende tu fecha de corte y vencimiento →
@@ -1421,12 +1600,11 @@ export function RiskProfileTest() {
             <label className="block text-sm font-medium mb-2">¿Cuánto planeas invertir?</label>
             <div className="flex flex-col sm:flex-row gap-3">
               <input
-                type="number"
-                min={0}
-                inputMode="decimal"
+                type="text"
+                inputMode="numeric"
                 value={capitalInput}
-                onChange={(e) => setCapitalInput(e.target.value)}
-                placeholder={currency === "DOP" ? "Ej: 25000" : "Ej: 1500"}
+                onChange={(e) => setCapitalInput(formatWithCommas(filterNumeric(e.target.value)))}
+                placeholder={currency === "DOP" ? "Ej: 25,000" : "Ej: 1,500"}
                 className={`flex-1 ${inputClass}`}
                 data-interactive="true"
               />
@@ -1450,28 +1628,34 @@ export function RiskProfileTest() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Tasa anual que esperas (%)</label>
-            <div className="flex flex-wrap gap-2">
-              {RATES.map((r) => (
-                <button
-                  key={r}
-                  onClick={() => {
-                    setRateInput(String(r))
-                    triggerHapticFeedback("light")
-                  }}
-                  className={`px-4 py-2 text-sm rounded-md font-medium transition-colors ${
-                    Number(rateInput) === r
-                      ? "bg-[#388e3c] text-white"
-                      : "bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784]"
-                  }`}
-                  data-interactive="true"
-                >
-                  {r}%
-                </button>
+            <label className="block text-sm font-medium mb-2">Tasas de referencia por instrumento (%)</label>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {(currency === "USD"
+                ? (["usd30", "etf"] as RateKey[])
+                : (["afi", "cert", "afi30", "etf"] as RateKey[])
+              ).map((k) => (
+                <div key={k}>
+                  <label htmlFor={`rate-${k}`} className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                    {RATE_META[k].label}
+                  </label>
+                  <div className="relative">
+                    <input
+                      id={`rate-${k}`}
+                      type="text"
+                      inputMode="decimal"
+                      value={rates[k]}
+                      onChange={(e) => setRates((prev) => ({ ...prev, [k]: filterNumeric(e.target.value) }))}
+                      className={`${inputClass} pr-8`}
+                      data-interactive="true"
+                    />
+                    <span className="absolute inset-y-0 right-3 flex items-center text-sm text-gray-400">%</span>
+                  </div>
+                  <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1 leading-snug">{RATE_META[k].hint}</p>
+                </div>
               ))}
             </div>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-              Referencia actual: ~8% en pesos · 10–15% en dólares (no es garantía).
+              La proyección usa la tasa de cada instrumento. No es garantía.
             </p>
           </div>
         </div>
@@ -1598,48 +1782,86 @@ export function RiskProfileTest() {
             Tu fondo de emergencia queda fuera de estos montos — ya lo planificaste arriba.
           </p>
         )}
+
+        {/* Proyección integrada al Paso 3 (ponderada por instrumento) */}
+        {capital > 0 && (
+          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <TrendingUp className="h-5 w-5 text-[#388e3c] dark:text-[#81c784]" aria-hidden />
+              <h4 className="text-lg font-bold text-gray-800 dark:text-gray-100">Proyección</h4>
+            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 text-center mb-4 leading-relaxed max-w-2xl mx-auto">
+              Cada rodaja crece con la tasa de su instrumento (
+              {currency === "DOP"
+                ? `AFI ${rateValue("afi")}% · certificado ${rateValue("cert")}% · AFI 30+ ${rateValue("afi30")}% · ETF ${rateValue("etf")}%`
+                : `fondo 30 días ${rateValue("usd30")}% · ETF ${rateValue("etf")}%`}
+              ) · aportes no incluidos · no es garantía.
+            </p>
+
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="rounded-xl bg-[#388e3c]/10 px-4 py-5 text-center">
+                <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">En 5 años</div>
+                <div className="text-2xl font-bold text-[#1b5e20] dark:text-[#a5d6a7] tabular-nums">
+                  {formatMoney(proj5, currency)}
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  +{formatMoney(proj5 - capital, currency)}
+                </div>
+              </div>
+              <div className="rounded-xl bg-[#388e3c]/10 px-4 py-5 text-center">
+                <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">En 10 años</div>
+                <div className="text-2xl font-bold text-[#1b5e20] dark:text-[#a5d6a7] tabular-nums">
+                  {formatMoney(proj10, currency)}
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  +{formatMoney(proj10 - capital, currency)}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between gap-3 flex-wrap rounded-lg border border-[#388e3c]/40 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 p-4">
+              <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                <Calculator className="h-5 w-5 text-[#388e3c] flex-shrink-0" />
+                <span>
+                  Tasa combinada de tu distribución: <strong>~{blendedRate.toFixed(1)}%</strong> anual.
+                </span>
+              </div>
+              <Link
+                href="/calculadora-interes-compuesto"
+                className="inline-flex items-center gap-2 bg-[#388e3c] hover:bg-[#1b5e20] text-white px-5 py-3 rounded-lg text-base font-semibold transition-colors"
+                data-interactive="true"
+              >
+                Abrir calculadora de interés compuesto →
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* 8 · Proyección + interés compuesto */}
-      {capital > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 sm:p-8 shadow-lg">
-          <SectionHeader
-            icon={TrendingUp}
-            badge="Extra"
-            title="Proyección"
-            subtitle={`Aportes no incluidos · tasa ${selectedRate}% anual · no es garantía.`}
-          />
-
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div className="rounded-xl bg-[#388e3c]/10 px-4 py-5 text-center">
-              <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">En 5 años</div>
-              <div className="text-2xl font-bold text-[#1b5e20] dark:text-[#a5d6a7] tabular-nums">
-                {formatMoney(proj5, currency)}
-              </div>
-            </div>
-            <div className="rounded-xl bg-[#388e3c]/10 px-4 py-5 text-center">
-              <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">En 10 años</div>
-              <div className="text-2xl font-bold text-[#1b5e20] dark:text-[#a5d6a7] tabular-nums">
-                {formatMoney(proj10, currency)}
-              </div>
+      {/* 8 · Dónde invertir: instituciones reguladas */}
+      <div className="rounded-xl border border-sky-300 bg-sky-50 p-5 sm:p-6 dark:border-sky-800 dark:bg-sky-900/20 shadow-lg">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <Landmark className="h-6 w-6 text-sky-700 dark:text-sky-400 flex-shrink-0 mt-0.5" aria-hidden />
+            <div>
+              <h3 className="text-base font-bold text-gray-800 dark:text-gray-100 mb-1">
+                ¿Dónde invertir en instituciones legales?
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                Abre tus AFI y certificados solo en entidades reguladas y supervisadas por la{" "}
+                <strong>Superintendencia de Bancos (SIB)</strong>: así tu dinero queda protegido y tú, tranquilo.
+              </p>
             </div>
           </div>
-
-          <div className="flex items-center justify-between gap-3 flex-wrap rounded-lg border border-[#388e3c]/40 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 p-4">
-            <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-              <Calculator className="h-5 w-5 text-[#388e3c] flex-shrink-0" />
-              ¿Quieres sumar aportes mensuales o ver otros plazos?
-            </div>
-            <Link
-              href="/calculadora-interes-compuesto"
-              className="inline-flex items-center gap-2 bg-[#388e3c] hover:bg-[#1b5e20] text-white px-5 py-3 rounded-lg text-base font-semibold transition-colors"
-              data-interactive="true"
-            >
-              Abrir calculadora de interés compuesto →
-            </Link>
-          </div>
+          <Link
+            href="#"
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-sky-600 hover:bg-sky-700 text-white px-5 py-3 text-base font-semibold transition-colors"
+            data-interactive="true"
+          >
+            Ver instituciones reguladas en República Dominicana →
+          </Link>
         </div>
-      )}
+      </div>
 
       {/* 9 · Acciones */}
       <div className="flex flex-col sm:flex-row gap-3">
