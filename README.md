@@ -125,7 +125,7 @@ La aplicación está dividida en cuatro secciones principales, cada una con su p
 - **Calculadora consumo eléctrico**: Estima tu factura por kWh (tarifa RD) con subsidio aproximado
 - **Corte y vencimiento tarjeta**: Descubre a qué corte entra tu compra y cuándo la pagas
 - **Calculadora interés tarjeta**: Mide cuánto te cuesta financiar el saldo de tu tarjeta y en cuántos meses liquidas
-- **Test de perfil de riesgo**: 12 preguntas honestas para saber en qué nivel invertir (niveles 1–3 con candado por conocimiento, portafolios según capital, fondo de emergencia aparte y proyección)
+- **Test de perfil de riesgo**: 12 preguntas honestas para saber en qué nivel invertir (niveles 1–3 con candado por conocimiento, distribución que respeta los mínimos de cada instrumento, fondo de emergencia aparte con gráfico de plan de ahorro y proyección)
 
 ## Páginas Informativas
 
