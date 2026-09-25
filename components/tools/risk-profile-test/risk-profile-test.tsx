@@ -281,13 +281,13 @@ const LEVEL_CAP: Record<"USD" | "DOP", number> = { DOP: 5000, USD: 3000 }
 
 /** Tasas anuales de referencia por instrumento (editables por el usuario, sin chips globales). */
 type RateKey = "afi" | "cert" | "afi30" | "etf" | "usd30"
-const DEFAULT_RATES: Record<RateKey, string> = { afi: "8", cert: "6", afi30: "9", etf: "10", usd30: "10" }
+const DEFAULT_RATES: Record<RateKey, string> = { afi: "8", cert: "6", afi30: "9", etf: "10", usd30: "2.5" }
 const RATE_META: Record<RateKey, { label: string; hint: string }> = {
   afi: { label: "AFI líquido", hint: "Histórico ~8% anual. Retiro en 1 día hábil." },
   cert: { label: "Certificado", hint: "Históricamente rinde ~40–50% menos que el AFI (≈6%)." },
   afi30: { label: "AFI a más de 30 días", hint: "Plazos de 30/90/180 días: históricamente mejor que el líquido." },
   etf: { label: "ETF / bolsa", hint: "Niveles 2–3 (EE.UU. / mundial). Referencia 10%, no es garantía." },
-  usd30: { label: "Fondo a 30 días (USD)", hint: "Única opción en dólares. Referencia 10–15%." },
+  usd30: { label: "Fondo a 30 días (USD)", hint: "Única opción en dólares. Referencia ~2.5%: casi siempre, a veces un poco más." },
 }
 
 /** Mínimo real por instrumento para poder abrirlo (usa las etiquetas de los pasteles). */
@@ -310,10 +310,10 @@ function rateKeyForLabel(label: string): RateKey | null {
   return "afi"
 }
 
-/** Tasa efectiva de una clave: default si está vacía/inválida, tope 100%. */
+/** Tasa efectiva de una clave: default si está vacía/inválida, tope 99.99%. */
 function readRate(k: RateKey, rates: Record<RateKey, string>): number {
   const n = Number.parseFloat((rates[k] ?? "").replace(/,/g, ""))
-  return isNaN(n) || n < 0 ? Number.parseFloat(DEFAULT_RATES[k]) : Math.min(n, 100)
+  return isNaN(n) || n < 0 ? Number.parseFloat(DEFAULT_RATES[k]) : Math.min(n, 99.99)
 }
 
 function sliceRate(label: string, rates: Record<RateKey, string>): number {
@@ -349,15 +349,33 @@ function filterNumeric(value: string): string {
   return value.replace(/[^\d.,]/g, "")
 }
 
-/** Formatea con coma de miles (100000 → 100,000); conserva el decimal tras el último separador. */
+/**
+ * Formatea un monto mientras se escribe: coma = SIEMPRE miles (100000 → 100,000),
+ * punto = decimal con máximo 2 cifras (10000.555 → 10,000.55).
+ * Antes la coma existente se interpretaba como decimal y "10000" terminaba en "1.0000".
+ */
 function formatWithCommas(value: string): string {
   if (!value) return ""
-  const [intPartRaw, ...rest] = value.split(/[.,]/)
-  const intPart = (intPartRaw || "").replace(/\D/g, "")
-  const dec = rest.length > 0 ? `.${rest.join("").replace(/\D/g, "")}` : ""
+  const raw = value.replace(/[^\d.,]/g, "").replace(/,/g, "")
+  const dot = raw.indexOf(".")
+  const intPart = (dot === -1 ? raw : raw.slice(0, dot)).replace(/\D/g, "")
+  const dec = dot === -1 ? null : raw.slice(dot + 1).replace(/\D/g, "").slice(0, 2)
   if (!intPart && !dec) return ""
-  const grouped = intPart ? Number(intPart).toLocaleString("en-US") : ""
-  return rest.length > 0 ? `${grouped}${dec}` : grouped
+  const grouped = intPart ? Number(intPart).toLocaleString("en-US") : dec ? "0" : ""
+  return dec === null ? grouped : `${grouped}.${dec}`
+}
+
+/**
+ * Tasa (%): máximo 2 dígitos enteros y hasta 2 decimales (tope 99.99).
+ * Una tasa normalmente no pasa del 99.99%, así que ni siquiera se teclea el resto.
+ */
+function filterRate(value: string): string {
+  const raw = value.replace(/[^\d.]/g, "")
+  const dot = raw.indexOf(".")
+  if (dot === -1) return raw.slice(0, 2)
+  const intPart = raw.slice(0, dot).slice(0, 2)
+  const dec = raw.slice(dot + 1).replace(/\./g, "").slice(0, 2)
+  return dec ? `${intPart}.${dec}` : `${intPart}.`
 }
 
 /** Parsea "25,000" / "25.5" → número (sin coma de miles). */
@@ -796,6 +814,21 @@ export function RiskProfileTest() {
     return Math.ceil(remaining / monthlySave)
   }, [fundSize, fundTarget, saveRate, income])
 
+  // Meses hasta la meta aportando CADA mes al instrumento (interés compuesto mensual).
+  const monthsToFundInvested = useMemo(() => {
+    if (fundTarget <= 0 || saveRate <= 0 || income <= 0) return null
+    const monthlySave = income * (saveRate / 100)
+    if (monthlySave <= 0) return null
+    const monthlyRate = readRate(currency === "USD" ? "usd30" : "afi", rates) / 100 / 12
+    if (!(monthlyRate > 0)) return null
+    let balance = fundSize
+    for (let m = 1; m <= 600; m++) {
+      balance = balance * (1 + monthlyRate) + monthlySave
+      if (balance >= fundTarget) return m
+    }
+    return null
+  }, [fundSize, fundTarget, saveRate, income, currency, rates])
+
   const levelCap = LEVEL_CAP[currency]
   const lowCapital = capital > 0 && capital < levelCap
 
@@ -1156,9 +1189,11 @@ export function RiskProfileTest() {
         )}
         <div className="max-w-xl mx-auto">
           <Disclosure label="Aprende qué significa tu nivel" align="center" tone="light">
-            <strong className="block mb-1">{levelDef.name}</strong>
-            <span className="block mb-2 opacity-90">{levelDef.short}</span>
-            {levelDef.desc}
+            <div className="rounded-lg border border-white/30 bg-white/15 px-4 py-3">
+              <strong className="block mb-1 text-white">{levelDef.name}</strong>
+              <span className="block mb-2 text-white/90">{levelDef.short}</span>
+              <span className="block text-white/85">{levelDef.desc}</span>
+            </div>
           </Disclosure>
         </div>
       </div>
@@ -1333,7 +1368,7 @@ export function RiskProfileTest() {
             <label className="block text-sm font-medium mb-2">¿Cuánto ganas al mes?</label>
             <input
               type="text"
-              inputMode="numeric"
+              inputMode="decimal"
               value={monthlyIncome}
               onChange={(e) => setMonthlyIncome(formatWithCommas(filterNumeric(e.target.value)))}
               placeholder={currency === "DOP" ? "Ej: 45,000" : "Ej: 800"}
@@ -1370,59 +1405,89 @@ export function RiskProfileTest() {
 
           {/* Sin fondo: plan de ahorro con gráfico */}
           {!hasFund && (
-            <div className="rounded-lg bg-[#388e3c]/5 dark:bg-[#388e3c]/10 border border-[#388e3c]/30 p-4">
-              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                <strong className="text-gray-900 dark:text-gray-100">Primero: tu fondo de emergencia.</strong> Es el
-                dinero que te evita vender inversiones en el peor momento. Tu meta sugerida es{" "}
-                <strong>2× sueldo</strong>
-                {income > 0 && (
-                  <>
-                    {" "}
-                    = <strong>{formatMoney(fundTarget, currency)}</strong>
-                  </>
-                )}
-                . Ahorra primero esto; invertir viene después.
-              </p>
-              <label className="block text-sm font-medium mt-4 mb-2 text-gray-600 dark:text-gray-400">
-                ¿Qué % de tu sueldo puedes ahorrar al mes?
-              </label>
-              <div className="flex flex-wrap items-center gap-2">
-                {[5, 10, 15, 20].map((p) => (
-                  <button
-                    key={p}
-                    onClick={() => {
-                      setSavePct(String(p))
-                      triggerHapticFeedback("light")
-                    }}
-                    className={chipClass(savePct === String(p))}
-                    data-interactive="true"
-                  >
-                    {p}%
-                  </button>
-                ))}
-                <div className="flex items-center gap-2">
-                  <div className="w-24 shrink-0">
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      value={savePct}
-                      onChange={(e) => setSavePct(filterNumeric(e.target.value).replace(/,/g, ""))}
-                      placeholder="Otro %"
-                      aria-label="Establece tu % de ahorro manualmente"
-                      className={inputClass}
-                      data-interactive="true"
-                    />
-                  </div>
-                  <span className="text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">% de tu sueldo</span>
+            <div className="rounded-xl border border-[#388e3c]/30 bg-[#388e3c]/5 p-4 sm:p-5 dark:bg-[#388e3c]/10">
+              {/* A · Qué es */}
+              <div className="flex items-start gap-3">
+                <PiggyBank className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#388e3c]" aria-hidden />
+                <div>
+                  <p className="text-sm font-bold text-gray-900 dark:text-gray-100">
+                    Primero: tu fondo de emergencia
+                  </p>
+                  <p className="mt-1 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                    Es el dinero que te evita vender inversiones en el peor momento. Tu meta sugerida es{" "}
+                    <strong>2× sueldo</strong>
+                    {income > 0 && (
+                      <>
+                        {" "}
+                        = <strong>{formatMoney(fundTarget, currency)}</strong>
+                      </>
+                    )}
+                    : ahorra primero esto; invertir viene después.
+                  </p>
                 </div>
               </div>
-              {monthsToFund !== null ? (
-                <>
-                  <p className="text-sm text-[#1b5e20] dark:text-[#a5d6a7] mt-3 font-medium">
-                    En ~{monthsToFund} {monthsToFund === 1 ? "mes" : "meses"}
-                    {monthsToFund > 24 ? ` (unos ${Math.round(monthsToFund / 12)} años)` : ""} completas tu colchón
-                    de {formatMoney(fundTarget, currency)} ahorrando {saveRate}% cada mes.
-                  </p>
+
+              {/* B · Cuánto puedes ahorrar al mes */}
+              <div className="mt-4 rounded-lg border border-[#388e3c]/25 bg-white/70 p-3 dark:border-[#388e3c]/30 dark:bg-gray-900/40">
+                <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+                  ¿Qué % de tu sueldo puedes ahorrar al mes?
+                </label>
+                <div className="flex flex-wrap items-center gap-2">
+                  {[5, 10, 15, 20].map((p) => (
+                    <button
+                      key={p}
+                      onClick={() => {
+                        setSavePct(String(p))
+                        triggerHapticFeedback("light")
+                      }}
+                      className={chipClass(savePct === String(p))}
+                      data-interactive="true"
+                    >
+                      {p}%
+                    </button>
+                  ))}
+                  <div className="flex items-center gap-2">
+                    <div className="w-24 shrink-0">
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        value={savePct}
+                        onChange={(e) => setSavePct(filterNumeric(e.target.value).replace(/,/g, ""))}
+                        placeholder="Otro %"
+                        aria-label="Establece tu % de ahorro manualmente"
+                        className={inputClass}
+                        data-interactive="true"
+                      />
+                    </div>
+                    <span className="text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">% de tu sueldo</span>
+                  </div>
+                </div>
+                <p
+                  className={`mt-3 text-sm font-medium ${
+                    monthsToFund !== null
+                      ? "text-[#1b5e20] dark:text-[#a5d6a7]"
+                      : "text-gray-500 dark:text-gray-400"
+                  }`}
+                >
+                  {monthsToFund !== null ? (
+                    <>
+                      En ~{monthsToFund} {monthsToFund === 1 ? "mes" : "meses"}
+                      {monthsToFund > 24 ? ` (unos ${Math.round(monthsToFund / 12)} años)` : ""} completas tu colchón de{" "}
+                      {formatMoney(fundTarget, currency)} ahorrando {saveRate}% cada mes.
+                    </>
+                  ) : (
+                    <>
+                      {income > 0
+                        ? "Pon tu % de ahorro para ver en cuánto tiempo llegas a tu colchón."
+                        : "Pon cuánto ganas al mes para calcular tu plan de ahorro."}
+                    </>
+                  )}
+                </p>
+              </div>
+
+              {/* C · Gráfico mes a mes */}
+              {monthsToFund !== null && (
+                <div className="mt-4">
                   <FundProjectionChart
                     start={0}
                     monthly={income * (saveRate / 100)}
@@ -1437,14 +1502,47 @@ export function RiskProfileTest() {
                     {currency === "USD" ? "el fondo a 30 días" : "AFI líquido"} con la tasa que definiste (~
                     {fundAfiRate}%): al llegar a la meta, tendrías un poco más.
                   </p>
-                </>
-              ) : (
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-3">
-                  {income > 0
-                    ? "Pon tu % de ahorro para ver en cuánto tiempo llegas a tu colchón."
-                    : "Pon cuánto ganas al mes para calcular tu plan de ahorro."}
-                </p>
+                </div>
               )}
+
+              {/* D · Interés compuesto: por qué conviene aportar mes a mes */}
+              {monthsToFund !== null && monthsToFundInvested !== null && monthsToFundInvested < monthsToFund && (
+                <div className="mt-4 flex items-start gap-2 rounded-lg border border-sky-200 bg-sky-50 p-3 dark:border-sky-800 dark:bg-sky-900/20">
+                  <TrendingUp
+                    className="mt-0.5 h-4 w-4 flex-shrink-0 text-sky-700 dark:text-sky-400"
+                    aria-hidden
+                  />
+                  <p className="text-xs leading-relaxed text-sky-900 dark:text-sky-200">
+                    Invirtiendo cada mes en <strong>{currency === "USD" ? "el fondo a 30 días" : "AFI líquido"}</strong>{" "}
+                    (~{fundAfiRate}%), tu colchón toma <strong>~{monthsToFundInvested} meses</strong> en vez de{" "}
+                    {monthsToFund}: el interés compuesto te ahorra{" "}
+                    <strong>
+                      ~{monthsToFund - monthsToFundInvested}{" "}
+                      {monthsToFund - monthsToFundInvested === 1 ? "mes" : "meses"}
+                    </strong>
+                    . Por eso conviene invertir mes a mes desde el inicio, aunque sea poco.
+                  </p>
+                </div>
+              )}
+
+              {/* E · Mínimos a recordar */}
+              <div className="mt-3 rounded-lg border border-gray-200 bg-white/70 p-3 dark:border-gray-700 dark:bg-gray-900/40">
+                <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">
+                  <strong className="text-gray-900 dark:text-gray-100">Al llegar al mínimo:</strong>{" "}
+                  {currency === "DOP" ? (
+                    <>
+                      <strong>AFI líquido desde RD$5,000</strong>, fondo a 30 días y certificado desde{" "}
+                      <strong>RD$10,000</strong>: elige el que más te convenga; históricamente las AFI son las que más
+                      rinden.
+                    </>
+                  ) : (
+                    <>
+                      En dólares empiezas con <strong>$200</strong> en el fondo a 30 días: la única opción de plazo
+                      corto en USD.
+                    </>
+                  )}
+                </p>
+              </div>
             </div>
           )}
 
@@ -1482,20 +1580,33 @@ export function RiskProfileTest() {
                   ))}
                 </div>
               )}
-              <ul className="space-y-3">
+              <ul
+                className={
+                  fundParts.length === 3
+                    ? "grid gap-3 sm:grid-cols-3"
+                    : fundParts.length === 2
+                      ? "grid gap-3 sm:grid-cols-2"
+                      : "grid gap-3"
+                }
+              >
                 {fundParts.map((p) => (
-                  <li key={p.label} className="flex items-start gap-2.5">
-                    <span
-                      className="mt-1.5 h-3 w-3 flex-shrink-0 rounded-full"
-                      style={{ backgroundColor: p.color }}
-                      aria-hidden
-                    />
-                    <div className="text-sm leading-relaxed">
-                      <strong className="text-gray-900 dark:text-gray-100">
-                        {p.label}: {formatMoney(p.amount, currency)} ({p.pct}%)
-                      </strong>
-                      <span className="block text-xs text-gray-600 dark:text-gray-400">{p.why}</span>
+                  <li
+                    key={p.label}
+                    className="rounded-lg border border-[#388e3c]/25 bg-white/70 p-3 leading-relaxed dark:border-[#388e3c]/30 dark:bg-gray-900/40"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="h-3 w-3 flex-shrink-0 rounded-full"
+                        style={{ backgroundColor: p.color }}
+                        aria-hidden
+                      />
+                      <strong className="text-sm text-gray-900 dark:text-gray-100">{p.label}</strong>
                     </div>
+                    <p className="mt-1.5 text-base font-bold tabular-nums text-gray-900 dark:text-gray-100">
+                      {formatMoney(p.amount, currency)}{" "}
+                      <span className="text-sm font-semibold text-[#388e3c] dark:text-[#81c784]">({p.pct}%)</span>
+                    </p>
+                    <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">{p.why}</p>
                   </li>
                 ))}
               </ul>
@@ -1637,16 +1748,16 @@ export function RiskProfileTest() {
               </p>
             </Disclosure>
 
-            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[#388e3c]/40 bg-[#388e3c]/5 p-4 dark:bg-[#388e3c]/10">
-              <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-                <Info className="h-4 w-4 flex-shrink-0 text-[#388e3c]" aria-hidden />
+            <div className="mt-4 rounded-lg border border-[#388e3c]/40 bg-[#388e3c]/5 p-4 dark:bg-[#388e3c]/10">
+              <div className="flex items-start gap-2 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#388e3c]" aria-hidden />
                 <span>
-                  ¿No domina tus fechas de corte y vencimiento? Aprende a usar la tarjeta a tu favor.
+                  ¿No dominas tus fechas de corte y vencimiento? Aprende a usar la tarjeta a tu favor.
                 </span>
               </div>
               <Link
                 href="/tarjeta-corte-vencimiento"
-                className="ml-auto inline-flex items-center gap-2 whitespace-nowrap rounded-lg bg-[#388e3c] px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-[#1b5e20]"
+                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[#388e3c] bg-white px-4 py-2.5 text-sm font-semibold text-[#388e3c] transition-colors hover:bg-[#388e3c]/10 dark:bg-gray-900/40 sm:w-auto"
                 data-interactive="true"
               >
                 Comprende tu fecha de corte y vencimiento →
@@ -1671,7 +1782,7 @@ export function RiskProfileTest() {
             <div className="flex flex-col sm:flex-row gap-3">
               <input
                 type="text"
-                inputMode="numeric"
+                inputMode="decimal"
                 value={capitalInput}
                 onChange={(e) => setCapitalInput(formatWithCommas(filterNumeric(e.target.value)))}
                 placeholder={currency === "DOP" ? "Ej: 25,000" : "Ej: 1,500"}
@@ -1714,14 +1825,17 @@ export function RiskProfileTest() {
                       type="text"
                       inputMode="decimal"
                       value={rates[k]}
-                      onChange={(e) => setRates((prev) => ({ ...prev, [k]: filterNumeric(e.target.value) }))}
+                      onChange={(e) => setRates((prev) => ({ ...prev, [k]: filterRate(e.target.value) }))}
                       onBlur={() =>
                         setRates((prev) => {
                           const n = Number.parseFloat(prev[k].replace(/,/g, ""))
-                          // Normaliza al salir: vacío → default; tope 0–100%.
+                          // Normaliza al salir: vacío → default; tope 0–99.99% con 2 decimales.
                           return {
                             ...prev,
-                            [k]: isNaN(n) || n < 0 ? DEFAULT_RATES[k] : String(Math.min(n, 100)),
+                            [k]:
+                              isNaN(n) || n < 0
+                                ? DEFAULT_RATES[k]
+                                : String(Math.min(Math.round(n * 100) / 100, 99.99)),
                           }
                         })
                       }
@@ -1800,26 +1914,10 @@ export function RiskProfileTest() {
         )}
 
         {capital > 0 && instruments.length > 0 && (
-          <div className="mb-5 rounded-lg border border-[#388e3c]/40 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 p-4">
-            <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2">
-              Instrumentos a los que alcanza tu monto
-            </p>
-            <ul className="space-y-2">
-              {instruments.map((inst) => (
-                <li key={inst.name} className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                  <strong className="text-[#388e3c]">{inst.name}</strong> (mín.{" "}
-                  {formatMoney(inst.min, currency)}) — {inst.note}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {capital > 0 && instruments.length > 0 && (
           <div
-            className={
+            className={`mt-5 ${
               showABC ? "grid sm:grid-cols-3 gap-4" : "grid sm:grid-cols-1 max-w-md gap-4"
-            }
+            }`}
           >
             {situations.map((sit) => {
               const template = chosenSlices[sit]
@@ -1891,6 +1989,22 @@ export function RiskProfileTest() {
           <p className="mt-4 text-xs text-gray-500 dark:text-gray-400 text-center leading-relaxed">
             Tu fondo de emergencia queda fuera de estos montos — ya lo planificaste arriba.
           </p>
+        )}
+
+        {/* Instrumentos alcanzables: ahora bajo los gráficos, plegado con su icono de información */}
+        {capital > 0 && instruments.length > 0 && (
+          <div className="mt-5 rounded-lg border border-[#388e3c]/40 bg-[#388e3c]/5 p-4 dark:bg-[#388e3c]/10">
+            <Disclosure label="Instrumentos a los que alcanza tu monto">
+              <ul className="space-y-2">
+                {instruments.map((inst) => (
+                  <li key={inst.name} className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                    <strong className="text-[#388e3c]">{inst.name}</strong> (mín.{" "}
+                    {formatMoney(inst.min, currency)}) — {inst.note}
+                  </li>
+                ))}
+              </ul>
+            </Disclosure>
+          </div>
         )}
 
         {/* Proyección integrada al Paso 3 (ponderada por instrumento); solo si alcanza algún instrumento */}

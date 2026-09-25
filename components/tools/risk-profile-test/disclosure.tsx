@@ -1,6 +1,6 @@
 "use client"
 
-import type { ReactNode } from "react"
+import { useEffect, useRef, useState, type ReactNode } from "react"
 import { Info, ChevronDown } from "lucide-react"
 
 interface DisclosureProps {
@@ -14,6 +14,18 @@ interface DisclosureProps {
 
 /** Contenedor progresivo: resumen visible, detalle plegado (patrón FAQ de app/ayuda). */
 export function Disclosure({ label, children, align = "left", tone = "green", className = "" }: DisclosureProps) {
+  const detailsRef = useRef<HTMLDetailsElement>(null)
+  // Remonta el contenido en cada apertura para que la microanimación se repita.
+  const [nonce, setNonce] = useState(0)
+
+  useEffect(() => {
+    const el = detailsRef.current
+    if (!el) return
+    const onToggle = () => setNonce((n) => n + 1)
+    el.addEventListener("toggle", onToggle)
+    return () => el.removeEventListener("toggle", onToggle)
+  }, [])
+
   const summaryTone =
     tone === "light"
       ? "text-white/90 hover:text-white"
@@ -21,7 +33,7 @@ export function Disclosure({ label, children, align = "left", tone = "green", cl
   const contentTone = tone === "light" ? "text-white/85" : "text-gray-600 dark:text-gray-400"
 
   return (
-    <details className={`group ${className}`}>
+    <details ref={detailsRef} className={`group ${className}`}>
       <summary
         className={`flex cursor-pointer list-none select-none items-center gap-2 text-sm font-medium transition-colors ${summaryTone} ${
           align === "center" ? "justify-center" : "justify-start"
@@ -32,7 +44,10 @@ export function Disclosure({ label, children, align = "left", tone = "green", cl
         <span>{label}</span>
         <ChevronDown className="h-4 w-4 flex-shrink-0 transition-transform group-open:rotate-180" aria-hidden />
       </summary>
-      <div className={`mt-3 text-sm leading-relaxed ${contentTone} ${align === "center" ? "text-left" : ""}`}>
+      <div
+        key={nonce}
+        className={`mt-3 animate-fadeIn text-sm leading-relaxed ${contentTone} ${align === "center" ? "text-left" : ""}`}
+      >
         {children}
       </div>
     </details>
