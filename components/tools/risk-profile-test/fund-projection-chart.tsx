@@ -30,10 +30,21 @@ interface FundProjectionChartProps {
   rate?: number
   /** Nombre del instrumento para la leyenda ("AFI líquido", "fondo a 30 días"). */
   rateLabel?: string
+  /** "both" = las dos curvas · "save" = solo la línea de ahorro. */
+  mode?: "save" | "both"
 }
 
 /** Línea del colchón mes a mes con la meta (2×) y la curva de inversión como referencia. */
-export function FundProjectionChart({ start, monthly, target, months, currency, rate, rateLabel = "AFI líquido" }: FundProjectionChartProps) {
+export function FundProjectionChart({
+  start,
+  monthly,
+  target,
+  months,
+  currency,
+  rate,
+  rateLabel = "AFI líquido",
+  mode = "both",
+}: FundProjectionChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const chartRef = useRef<Chart | null>(null)
   const { resolvedTheme } = useTheme()
@@ -64,9 +75,43 @@ export function FundProjectionChart({ start, monthly, target, months, currency, 
     const targetLine = labels.map(() => target)
 
     const isDark = resolvedTheme === "dark"
+    const showInvested = mode === "both" && monthlyRate > 0
+    // Un punto por mes visible (grande si hay pocos meses, más pequeño si hay muchos).
+    const pt = last <= 24 ? 2.5 : last <= 48 ? 1.8 : 1.2
+    // Etiqueta persistente con el valor del último mes de cada curva.
+    const endLabelsPlugin = {
+      id: "endLabels",
+      afterDatasetsDraw(chart: Chart) {
+        const ctx2 = chart.ctx
+        const items: Array<{ y: number; text: string; color: string }> = [
+          { y: values[last], text: formatMoney(values[last], currency), color: "#388e3c" },
+        ]
+        if (showInvested) items.push({ y: invested[last], text: formatMoney(invested[last], currency), color: "#0ea5e9" })
+        const anchor = chart.getDatasetMeta(0).data[last]
+        if (!anchor) return
+        ctx2.save()
+        ctx2.font = "600 10px system-ui, sans-serif"
+        ctx2.textAlign = "right"
+        ctx2.textBaseline = "middle"
+        items.forEach((item, i) => {
+          const y = chart.scales.y.getPixelForValue(item.y) - (i === 0 ? 9 : -9)
+          const w = ctx2.measureText(item.text).width + 8
+          ctx2.fillStyle = isDark ? "rgba(31, 41, 55, 0.92)" : "rgba(255, 255, 255, 0.94)"
+          ctx2.strokeStyle = isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.08)"
+          ctx2.beginPath()
+          ctx2.rect(anchor.x - w - 6, y - 8, w, 16)
+          ctx2.fill()
+          ctx2.stroke()
+          ctx2.fillStyle = item.color
+          ctx2.fillText(item.text, anchor.x - 10, y)
+        })
+        ctx2.restore()
+      },
+    }
     try {
       chartRef.current = new Chart(ctx, {
         type: "line",
+        plugins: [endLabelsPlugin],
         data: {
           labels,
           datasets: [
@@ -77,22 +122,28 @@ export function FundProjectionChart({ start, monthly, target, months, currency, 
               backgroundColor: "rgba(56, 142, 60, 0.15)",
               fill: true,
               tension: 0.3,
-              pointRadius: 0,
+              pointRadius: pt,
+              pointHoverRadius: 5,
               pointHitRadius: 8,
               borderWidth: 2.5,
             },
-            {
-              label: `Ahorro + ${rateLabel} (~${rate ?? 0}%)`,
-              data: invested,
-              borderColor: "#0ea5e9",
-              backgroundColor: "transparent",
-              fill: false,
-              tension: 0.3,
-              pointRadius: 0,
-              pointHitRadius: 8,
-              borderWidth: 3,
-              borderDash: [7, 4],
-            },
+            ...(showInvested
+              ? [
+                  {
+                    label: `Ahorro + ${rateLabel} (~${rate ?? 0}%)`,
+                    data: invested,
+                    borderColor: "#0ea5e9",
+                    backgroundColor: "transparent",
+                    fill: false,
+                    tension: 0.3,
+                    pointRadius: pt,
+                    pointHoverRadius: 5,
+                    pointHitRadius: 8,
+                    borderWidth: 3,
+                    borderDash: [7, 4],
+                  },
+                ]
+              : []),
             {
               label: "Meta (2× sueldo)",
               data: targetLine,
@@ -162,7 +213,7 @@ export function FundProjectionChart({ start, monthly, target, months, currency, 
         chartRef.current = null
       }
     }
-  }, [start, monthly, target, months, currency, rate, rateLabel, resolvedTheme, isMobile])
+  }, [start, monthly, target, months, currency, rate, rateLabel, mode, resolvedTheme, isMobile])
 
   return (
     <div className="h-[240px] w-full mt-3">

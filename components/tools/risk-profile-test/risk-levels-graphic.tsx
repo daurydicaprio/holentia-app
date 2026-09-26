@@ -22,31 +22,31 @@ export const LEVELS: LevelDef[] = [
     profileName: "Conservador",
     blurb:
       "Priorizas no perder: buscas rendimiento estable y predecible, con riesgo bajo y tu dinero siempre disponible.",
-    short: "Certificados, mercado de valores local y AFI",
+    short: "Cuentas remuneradas, AFI, mercado de valores y dólares",
     desc:
-      "Perfil conservador: poco riesgo con certificados de depósito, mercado de valores local y AFI (fondos de inversión, en pesos o dólares). Le gana a la inflación — históricamente estos instrumentos logran entre 7% y 8% de rendimiento anual — y es factible desde montos pequeños. Es donde la mayoría debe empezar y donde mucha gente se queda, sin perder.",
+      "Cuatro métodos regulados y de bajo riesgo, factibles desde montos pequeños: cuentas remuneradas, AFI (fondos de inversión), mercado de valores local (certificados, bonos y reportos) y cuentas en dólares. En pesos rinden entre 7% y 10% anual según el año, y en dólares entre 3% y 6% según el monto: ambos le ganan a la inflación. Es donde la mayoría empieza y donde mucha gente se queda, sin perder.",
     danger: false,
   },
   {
     n: 2,
     name: "Nivel 2",
-    profileName: "Inversor en crecimiento",
+    profileName: "Invertir en la bolsa de valores EE.UU. / mundial",
     blurb:
       "Buscas crecer a largo plazo sin vigilar el mercado cada día: confías en la diversificación más que en elegir empresas.",
-    short: "ETF y fondos indexados (EE.UU. / mundial)",
+    short: "Invertir en la bolsa de valores EE.UU. / mundial",
     desc:
-      "Perfil en crecimiento: bolsa de EE.UU. y del mundo vía ETF o fondos indexados, sin elegir acciones una por una. Diversificación global y más que suficiente para hacer crecer patrimonio a largo plazo.",
+      "Crecer en la bolsa de EE.UU. y del mundo vía ETF y fondos indexados tipo S&P 500 y otros globales, sin elegir acciones una por una. Pagas una comisión baja y quedas diversificado en decenas o cientos de empresas en dólares: más que suficiente para hacer crecer patrimonio a largo plazo.",
     danger: false,
   },
   {
     n: 3,
     name: "Nivel 3",
-    profileName: "Buscador de oportunidades",
+    profileName: "Invertir en acciones individuales",
     blurb:
       "Te gusta elegir tus propias empresas y dedicas tiempo real a estudiar el mercado antes de comprar.",
-    short: "Empresas concretas, con conocimiento",
+    short: "Invertir en acciones individuales",
     desc:
-      "Perfil de oportunidades: comprar acciones de empresas específicas exige leer mercados y noticias. Dedica al menos un año de estudio antes de subir; si tu capital es pequeño, 7–10 empresas como máximo.",
+      "Comprar acciones de empresas concretas implica tiempo real: leer estados financieros, noticias y decidir cuándo entrar o salir, con el riesgo concentrado en pocas empresas. Si tu capital es pequeño, 7–10 empresas como máximo, y conviene dedicar al menos un año de estudio antes de subir de nivel.",
     danger: false,
   },
   {
@@ -55,7 +55,8 @@ export const LEVELS: LevelDef[] = [
     profileName: "Inversor apalancado",
     blurb: "Buscas resultados rápidos con dinero prestado: el riesgo de perder más de lo invertido es real.",
     short: "Margen, forex, CFD",
-    desc: "Puedes perder más de lo invertido. No lo necesitas para crecer patrimonio. En Holentia no lo recomendamos.",
+    desc:
+      "Invertir con dinero prestado: puedes perder más de lo invertido y el riesgo crece al mismo ritmo que la posible ganancia. No lo necesitas para crecer patrimonio y a novatos ni a intermedios no lo recomendamos.",
     danger: true,
   },
   {
