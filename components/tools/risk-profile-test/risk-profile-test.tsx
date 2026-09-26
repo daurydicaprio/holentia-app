@@ -225,7 +225,7 @@ const DEFAULT_RATES: Record<RateKey, string> = {
   afi: "8",
   cert: "7.5",
   afi30: "9",
-  mv: "8.5",
+  mv: "10",
   etf: "10",
   stocks: "12",
   usd30: "2.5",
@@ -255,7 +255,7 @@ const RATE_META: Record<RateKey, { label: string; hint: string }> = {
   },
   mv: {
     label: "Mercado de valores local",
-    hint: "Bonos, reportos y titulares del gobierno en RD: referencia 8.5% según el plazo. Solo entidades reguladas.",
+    hint: "Bonos, reportos y titulares del gobierno en RD: referencia 10% según el plazo. Solo entidades reguladas.",
   },
   etf: {
     label: "ETF / bolsa",
@@ -1379,9 +1379,22 @@ export function RiskProfileTest() {
     <div className="space-y-8 sm:space-y-10">
       {/* 1 · Héroe */}
       <div
-        className="rounded-xl p-7 sm:p-10 text-white text-center shadow-lg"
+        className="relative rounded-xl px-7 pb-7 pt-12 sm:px-10 sm:pb-10 sm:pt-10 text-white text-center shadow-lg"
         style={{ background: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)" }}
       >
+        <button
+          onClick={() => {
+            setShowLevels(!showLevels)
+            triggerHapticFeedback("light")
+          }}
+          aria-expanded={showLevels}
+          className="absolute right-3 top-3 sm:right-5 sm:top-5 inline-flex items-center gap-1.5 rounded-full border border-white/40 bg-white/15 px-2.5 py-1.5 text-xs sm:text-sm font-semibold text-white hover:bg-white/25 transition-colors"
+          data-interactive="true"
+        >
+          <PieChart className="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden />
+          Ver niveles
+          <ChevronDown className={`h-3.5 w-3.5 transition-transform ${showLevels ? "rotate-180" : ""}`} />
+        </button>
         <div className="text-xs font-semibold uppercase tracking-widest opacity-80 mb-2">Tu resultado</div>
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 max-w-3xl mx-auto leading-tight">
           {levelDef.profileName}
@@ -1412,44 +1425,10 @@ export function RiskProfileTest() {
         </div>
       </div>
 
-      {/* 2 · Aviso conocimiento */}
-      {result.knowledgeLocked && (
-        <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-5 flex items-start gap-3">
-          <Lightbulb className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-          <p className="text-sm text-amber-800 dark:text-amber-200 leading-relaxed">
-            <strong>Apetito alto, conocimiento bajo.</strong> Primero aprende: quédate en el{" "}
-            <strong>nivel {result.knowledgeCeiling}</strong> (o baja) hasta que domines lo básico — con poco tiempo los
-            niveles 1 y 2 <strong>le ganan a la inflación</strong>.
-          </p>
-        </div>
-      )}
-
-      {/* 3 · Aviso prisa */}
-      {result.richQuick && (
-        <div className="rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-5 flex items-start gap-3">
-          <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
-          <p className="text-sm text-red-800 dark:text-red-200 leading-relaxed">
-            <strong>No busques hacerte rico con las inversiones.</strong> Sirven para crecer patrimonio; la riqueza real
-            se construye en <strong>20–30 años</strong>.
-          </p>
-        </div>
-      )}
-
-      {/* 4 · Ver niveles (colapsado) */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg overflow-hidden">
-        <button
-          onClick={() => {
-            setShowLevels(!showLevels)
-            triggerHapticFeedback("light")
-          }}
-          className="w-full flex items-center justify-center gap-2 px-6 py-4 text-base font-semibold text-[#388e3c] hover:bg-[#388e3c]/5 transition-colors"
-          data-interactive="true"
-        >
-          Ver niveles de inversor · Daury
-          <ChevronDown className={`h-4 w-4 transition-transform ${showLevels ? "rotate-180" : ""}`} />
-        </button>
-        {showLevels && (
-          <div className="px-6 pb-6 pt-2 border-t border-gray-200 dark:border-gray-700">
+      {/* 2 · Ver niveles (colapsado) */}
+      {showLevels && (
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg overflow-hidden">
+          <div className="px-6 pb-6 pt-4">
             <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 text-center mb-1 mt-3">
               Los 5 niveles de inversión
             </h3>
@@ -1565,8 +1544,32 @@ export function RiskProfileTest() {
               })}
             </ul>
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
+      {/* 3 · Aviso conocimiento */}
+      {result.knowledgeLocked && (
+        <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-5 flex items-start gap-3">
+          <Lightbulb className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <p className="text-sm text-amber-800 dark:text-amber-200 leading-relaxed">
+            <strong>Apetito alto, conocimiento bajo.</strong> Primero aprende: quédate en el{" "}
+            <strong>nivel {result.knowledgeCeiling}</strong> (o baja) hasta que domines lo básico — con poco tiempo los
+            niveles 1 y 2 <strong>le ganan a la inflación</strong>.
+          </p>
+        </div>
+      )}
+
+      {/* 4 · Aviso prisa */}
+      {result.richQuick && (
+        <div className="rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-5 flex items-start gap-3">
+          <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+          <p className="text-sm text-red-800 dark:text-red-200 leading-relaxed">
+            <strong>No busques hacerte rico con las inversiones.</strong> Sirven para crecer patrimonio; la riqueza real
+            se construye en <strong>20–30 años</strong>.
+          </p>
+        </div>
+      )}
+
 
       {/* 5 · Paso 1 — Fondo de emergencia */}
       <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 sm:p-8 shadow-lg">
@@ -1943,7 +1946,7 @@ export function RiskProfileTest() {
             fundSize > 0 &&
             (currency === "DOP" ? fundSize >= INSTR_MIN.DOP.liquid : fundSize >= INSTR_MIN.USD.d30) && (
               <div className="rounded-xl border border-[#388e3c]/25 bg-[#388e3c]/5 p-4 dark:bg-[#388e3c]/10">
-                <Disclosure label="1 · Ver detalles: mínimos, horarios y penalidades">
+                <Disclosure label="Ver detalles: mínimos, horarios y penalidades">
                   <ul className="space-y-3">
                     {currency === "DOP" && fundSize >= INSTR_MIN.DOP.liquid && (
                       <li>
@@ -1985,7 +1988,7 @@ export function RiskProfileTest() {
           {/* 2 · Elección: no invertir */}
           <div className="rounded-xl border border-gray-200 p-4 sm:p-5 dark:border-gray-700">
             <p className="mb-2 text-sm font-semibold text-gray-800 dark:text-gray-100">
-              2 · ¿Prefieres no invertir tu fondo de emergencia?
+              ¿Prefieres no invertir tu fondo de emergencia?
             </p>
             <p className="mb-3 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
               Puedes dejarlo quieto, pero pierde poder de compra cada año. Casi ninguna emergencia llega por el monto
@@ -2021,7 +2024,7 @@ export function RiskProfileTest() {
             <div className="flex items-start gap-2 text-sm leading-snug text-gray-700 dark:text-gray-300 sm:flex-1">
               <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#388e3c]" aria-hidden />
               <span className="sm:max-w-md">
-                3 · ¿No dominas tus fechas de corte y vencimiento? Aprende a usar la tarjeta a tu favor.
+                ¿No dominas tus fechas de corte y vencimiento? Aprende a usar la tarjeta a tu favor.
               </span>
             </div>
             <Link
@@ -2044,17 +2047,18 @@ export function RiskProfileTest() {
           subtitle="Esto alimenta tu distribución y tu proyección."
         />
 
-        <div className="space-y-5">
-          <div>
-            <label className="block text-sm font-medium mb-2">¿Cuánto planeas invertir?</label>
-            <div className="flex flex-col sm:flex-row gap-3">
+        <div className="grid gap-4 lg:grid-cols-2">
+          {/* Izquierda · cuánto planeas invertir */}
+          <div className="flex flex-col justify-center rounded-xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-700 dark:bg-gray-900/40">
+            <label className="mb-3 block text-center text-sm font-medium">¿Cuánto planeas invertir?</label>
+            <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
               <input
                 type="text"
                 inputMode="decimal"
                 value={capitalInput}
                 onChange={(e) => setCapitalInput(formatWithCommas(filterNumeric(e.target.value)))}
                 placeholder={currency === "DOP" ? "Ej: 25,000" : "Ej: 1,500"}
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm shadow-sm focus:border-transparent focus:ring-2 focus:ring-[#388e3c] dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 sm:max-w-md"
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm shadow-sm focus:border-transparent focus:ring-2 focus:ring-[#388e3c] dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 sm:w-auto sm:max-w-[13rem]"
                 data-interactive="true"
               />
               <div className="flex gap-2">
@@ -2074,11 +2078,18 @@ export function RiskProfileTest() {
                 ))}
               </div>
             </div>
+            <p className="mx-auto mt-3 max-w-xs text-center text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+              Es lo que repartes entre instrumentos en el Paso 3. Tu fondo de emergencia no se invierte: primero se
+              queda disponible por si algo pasa.
+            </p>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-2">Tasas de referencia por instrumento (%)</label>
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-6">
+          {/* Derecha · tasas de referencia */}
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-700 dark:bg-gray-900/40">
+            <label className="mb-3 block text-center text-sm font-medium">
+              Tasas de referencia por instrumento (%)
+            </label>
+            <div className="grid grid-cols-2 gap-2 sm:gap-3">
               {(currency === "USD"
                 ? effectiveLevel >= 3
                   ? (["usd30", "etf", "stocks"] as RateKey[])
@@ -2143,7 +2154,7 @@ export function RiskProfileTest() {
                 </div>
               ))}
             </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+            <p className="mt-3 text-center text-xs leading-relaxed text-gray-500 dark:text-gray-400">
               Cada campo vacío usa su valor de referencia (el número en gris); si escribes otro, la proyección lo usa.
               No es garantía.
             </p>
@@ -2300,8 +2311,12 @@ export function RiskProfileTest() {
                 const items = instruments.filter((i) => i.group === group)
                 if (items.length === 0) return null
                 return (
-                  <div key={group} className="mb-3 last:mb-0">
-                    <p className="mb-1.5 text-xs font-bold uppercase tracking-wide text-[#388e3c]">{group}</p>
+                  <div key={group} className="mb-4 last:mb-0">
+                    <p className="mb-2.5 flex justify-center">
+                      <span className="inline-flex items-center rounded-full border border-[#388e3c]/40 bg-[#388e3c]/15 px-4 py-1 text-sm font-bold uppercase tracking-wider text-[#388e3c]">
+                        {group}
+                      </span>
+                    </p>
                     <ul className="space-y-2">
                       {items.map((inst) => (
                         <li key={inst.name} className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">

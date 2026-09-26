@@ -30,9 +30,9 @@ export const LEVELS: LevelDef[] = [
   {
     n: 2,
     name: "Nivel 2",
-    profileName: "Invertir en la bolsa de valores EE.UU. / mundial",
+    profileName: "Inversor en crecimiento",
     blurb:
-      "Buscas crecer a largo plazo sin vigilar el mercado cada día: confías en la diversificación más que en elegir empresas.",
+      "Invertir en la bolsa de valores EE.UU. / mundial: buscas crecer a largo plazo sin vigilar el mercado cada día, confías en la diversificación más que en elegir empresas.",
     short: "Invertir en la bolsa de valores EE.UU. / mundial",
     desc:
       "Crecer en la bolsa de EE.UU. y del mundo vía ETF y fondos indexados tipo S&P 500 y otros globales, sin elegir acciones una por una. Pagas una comisión baja y quedas diversificado en decenas o cientos de empresas en dólares: más que suficiente para hacer crecer patrimonio a largo plazo.",
@@ -41,9 +41,9 @@ export const LEVELS: LevelDef[] = [
   {
     n: 3,
     name: "Nivel 3",
-    profileName: "Invertir en acciones individuales",
+    profileName: "Buscador de oportunidades",
     blurb:
-      "Te gusta elegir tus propias empresas y dedicas tiempo real a estudiar el mercado antes de comprar.",
+      "Invertir en acciones individuales: te gusta elegir tus propias empresas y dedicas tiempo real a estudiar el mercado antes de comprar.",
     short: "Invertir en acciones individuales",
     desc:
       "Comprar acciones de empresas concretas implica tiempo real: leer estados financieros, noticias y decidir cuándo entrar o salir, con el riesgo concentrado en pocas empresas. Si tu capital es pequeño, 7–10 empresas como máximo, y conviene dedicar al menos un año de estudio antes de subir de nivel.",
