@@ -11,14 +11,26 @@ interface ToolCardProps {
   index: number
 }
 
-// Mapa estático (sin template literals) para que Tailwind genere las clases
+// Mapas estáticos (sin template literals) para que Tailwind genere las clases
+// Claro: gradiente sólido sección → sección-oscura con texto blanco (cuerpo/ámbar usa texto oscuro).
+// Oscuro: glass translúcido sobre #121212 con texto blanco.
 const sectionCardClasses: Record<SectionType, string> = {
-  mente: "bg-mente-glass border-mente-border text-mente-text text-mente-category hover:border-mente-light",
+  mente:
+    "bg-gradient-to-br from-mente-DEFAULT to-mente-dark text-white dark:bg-none dark:bg-mente-glass dark:text-mente-text border-mente-border hover:border-mente-light",
   relaciones:
-    "bg-relaciones-glass border-relaciones-border text-relaciones-text text-relaciones-category hover:border-relaciones-light",
-  cuerpo: "bg-cuerpo-glass border-cuerpo-border text-cuerpo-text text-cuerpo-category hover:border-cuerpo-light",
+    "bg-gradient-to-br from-relaciones-DEFAULT to-relaciones-dark text-white dark:bg-none dark:bg-relaciones-glass dark:text-relaciones-text border-relaciones-border hover:border-relaciones-light",
+  cuerpo:
+    "bg-gradient-to-br from-cuerpo-DEFAULT to-cuerpo-dark text-black dark:bg-none dark:bg-cuerpo-glass dark:text-cuerpo-text border-cuerpo-border hover:border-cuerpo-light",
   finanzas:
-    "bg-finanzas-glass border-finanzas-border text-finanzas-text text-finanzas-category hover:border-finanzas-light",
+    "bg-gradient-to-br from-finanzas-DEFAULT to-finanzas-dark text-white dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text border-finanzas-border hover:border-finanzas-light",
+}
+
+// Color de la etiqueta de categoría (texto secundario dentro de la tarjeta)
+const sectionCategoryClasses: Record<SectionType, string> = {
+  mente: "text-white/85 dark:text-mente-lighter",
+  relaciones: "text-white/85 dark:text-relaciones-lighter",
+  cuerpo: "text-black/70 dark:text-cuerpo-lighter",
+  finanzas: "text-white/85 dark:text-finanzas-lighter",
 }
 
 export default function ToolCard({ card, index }: ToolCardProps) {
@@ -63,6 +75,7 @@ export default function ToolCard({ card, index }: ToolCardProps) {
   }, [isAvailable])
 
   const sectionClasses = sectionCardClasses[category] ?? sectionCardClasses.finanzas
+  const categoryClasses = sectionCategoryClasses[category] ?? sectionCategoryClasses.finanzas
 
   const cardBody = (
     <div
@@ -80,7 +93,9 @@ export default function ToolCard({ card, index }: ToolCardProps) {
       onTouchStart={handleCardPress}
     >
       <div className="pr-7">
-        <span className="text-[0.8rem] font-medium uppercase tracking-[0.05em] opacity-90 md:text-[0.7rem]">
+        <span
+          className={`text-[0.8rem] font-medium uppercase tracking-[0.05em] md:text-[0.7rem] ${categoryClasses}`}
+        >
           {category.charAt(0).toUpperCase() + category.slice(1)}
         </span>
         <h3 className="mt-1 text-xl font-semibold leading-tight md:text-base">{title}</h3>

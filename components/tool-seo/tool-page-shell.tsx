@@ -39,7 +39,7 @@ interface ToolPageShellProps {
   children: React.ReactNode
 }
 
-/** Shell server-rendered de las páginas de herramienta: breadcrumb, H1, descripción, FAQ y JSON-LD en el HTML inicial */
+/** Shell server-rendered de las páginas de herramienta: H1, descripción, FAQ y JSON-LD (con BreadcrumbList) en el HTML inicial */
 export default function ToolPageShell({ section, tool, faq = [], children }: ToolPageShellProps) {
   const titleClass = sectionTitleClass[section] ?? "text-finanzas-DEFAULT"
   const underlineClass = sectionUnderlineClass[section] ?? "bg-finanzas-DEFAULT"
@@ -57,26 +57,6 @@ export default function ToolPageShell({ section, tool, faq = [], children }: Too
       <SectionSwipeNavigation />
 
       <div className="flex-1 p-4 sm:p-6 max-w-6xl mx-auto w-full">
-        <nav aria-label="Migas de pan" className="mb-4 text-xs text-gray-500 dark:text-gray-400">
-          <ol className="flex flex-wrap items-center gap-1">
-            <li>
-              <Link href="/" className="hover:underline">
-                Inicio
-              </Link>
-            </li>
-            <li aria-hidden="true">/</li>
-            <li>
-              <Link href={`/${section}`} className="hover:underline">
-                {sectionLabel(section)}
-              </Link>
-            </li>
-            <li aria-hidden="true">/</li>
-            <li aria-current="page" className="font-medium text-gray-700 dark:text-gray-200">
-              {tool.title}
-            </li>
-          </ol>
-        </nav>
-
         <header className="mb-6 text-center">
           <h1 className={`text-2xl font-bold sm:text-3xl ${titleClass}`} style={{ marginBottom: "0.25rem" }}>
             {tool.title}
@@ -105,7 +85,7 @@ export default function ToolPageShell({ section, tool, faq = [], children }: Too
 
         {children}
 
-        <ToolFaq faq={faq} />
+        <ToolFaq faq={faq} section={section} />
       </div>
 
       <Footer section={section} />
