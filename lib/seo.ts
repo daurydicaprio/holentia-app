@@ -30,24 +30,18 @@ export function findToolCard(section: string, slug: string): CardData | undefine
   return sectionData.cards.find((card) => card.slug === slug)
 }
 
-/** Metadata por página de sección derivada del catálogo en lib/data.ts */
-export function sectionMetadata(section: string): Metadata {
-  const data = sectionsData[section]
-  const title = data ? `${data.title} ${data.highlightText}` : sectionLabel(section)
-  const description =
-    data?.subtitle ?? `Herramientas de ${sectionLabel(section)} para tu bienestar integral en ${SITE_NAME}.`
-  const url = `/${section}`
-
+/** Bloque base de metadata: title, description, canonical, openGraph y twitter */
+function baseMetadata(title: string, description: string, path: string): Metadata {
   return {
     title,
     description,
     alternates: {
-      canonical: url,
+      canonical: path,
     },
     openGraph: {
       title: `${title} | ${SITE_NAME}`,
       description,
-      url,
+      url: path,
       siteName: SITE_NAME,
       locale: "es_DO",
       type: "website",
@@ -65,33 +59,44 @@ export interface FaqItem {
   answer: string
 }
 
+/** Metadata para páginas informativas (que-es-holentia, ayuda, aviso-legal, etc.) */
+export function pageMetadata(title: string, description: string, path: string): Metadata {
+  return baseMetadata(title, description, path)
+}
+
+/** Datos estructurados FAQPage a partir de una lista de preguntas */
+export function faqJsonLd(faq: FaqItem[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  }
+}
+
+/** Metadata por página de sección derivada del catálogo en lib/data.ts */
+export function sectionMetadata(section: string): Metadata {
+  const data = sectionsData[section]
+  const title = data ? `${data.title} ${data.highlightText}` : sectionLabel(section)
+  const description =
+    data?.subtitle ?? `Herramientas de ${sectionLabel(section)} para tu bienestar integral en ${SITE_NAME}.`
+
+  return baseMetadata(title, description, `/${section}`)
+}
+
 /** Metadata por página de herramienta derivada del catálogo en lib/data.ts */
 export function toolMetadata(section: string, slug: string): Metadata {
   const tool = findToolCard(section, slug)
   const title = tool?.title ?? "Herramienta"
   const description = tool?.description ?? "Herramienta de bienestar integral de HOLENTIA."
-  const url = `/${slug}`
 
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: url,
-    },
-    openGraph: {
-      title: `${title} | ${SITE_NAME}`,
-      description,
-      url,
-      siteName: SITE_NAME,
-      locale: "es_DO",
-      type: "website",
-    },
-    twitter: {
-      card: "summary",
-      title: `${title} | ${SITE_NAME}`,
-      description,
-    },
-  }
+  return baseMetadata(title, description, `/${slug}`)
 }
 
 /** Datos estructurados JSON-LD: WebApplication + BreadcrumbList (+ FAQPage si hay FAQ) */

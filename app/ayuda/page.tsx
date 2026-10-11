@@ -4,10 +4,54 @@ import Logo from "@/components/common/logo/logo"
 import Footer from "@/components/common/footer/footer"
 import MenuButton from "@/components/common/menu-button/menu-button"
 import { ClearAllData } from "@/components/common/clear-all-data/clear-all-data"
+import JsonLd from "@/components/tool-seo/json-ld"
+import { faqJsonLd, pageMetadata, type FaqItem } from "@/lib/seo"
+
+export function generateMetadata() {
+  return pageMetadata(
+    "Centro de Ayuda",
+    "Guías, preguntas frecuentes y soporte de HOLENTIA: gratuitidad, privacidad de tus datos, precisión de las calculadoras y uso en móvil.",
+    "/ayuda",
+  )
+}
+
+const helpFaq: FaqItem[] = [
+  {
+    question: "¿HOLENTIA es completamente gratis?",
+    answer:
+      "Sí, todas las herramientas de HOLENTIA son completamente gratuitas y estarán disponibles para siempre. Nuestro objetivo es hacer el bienestar accesible para todos.",
+  },
+  {
+    question: "¿Necesito crear una cuenta para usar HOLENTIA?",
+    answer:
+      "No, no necesitas crear cuenta ni proporcionar información personal. Todas las herramientas funcionan directamente en tu navegador sin necesidad de registro.",
+  },
+  {
+    question: "¿Mis datos se guardan en algún servidor?",
+    answer:
+      "No. Todos tus datos se almacenan localmente en tu dispositivo. HOLENTIA no tiene acceso a ninguna información que introduzcas en las herramientas.",
+  },
+  {
+    question: "¿Las calculadoras financieras son precisas?",
+    answer:
+      "Las calculadoras proporcionan estimaciones basadas en fórmulas estándar. Son herramientas educativas y no sustituyen el asesoramiento financiero profesional.",
+  },
+  {
+    question: "¿Puedo usar HOLENTIA en mi dispositivo móvil?",
+    answer:
+      "Sí, HOLENTIA está completamente optimizada para dispositivos móviles, tablets y computadoras. Funciona en cualquier navegador moderno.",
+  },
+  {
+    question: "¿Cómo puedo sugerir nuevas herramientas?",
+    answer:
+      "Valoramos tus ideas. Puedes enviarnos tus sugerencias a través de nuestro formulario de contacto o dejando un comentario en nuestras redes sociales.",
+  },
+]
 
 export default function AyudaPage() {
   return (
     <main className="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+      <JsonLd data={faqJsonLd(helpFaq)} />
       <div className="flex-1 max-w-5xl w-full mx-auto p-6 sm:p-8 lg:p-12">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -84,38 +128,7 @@ export default function AyudaPage() {
           <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 text-center mb-8">Preguntas Frecuentes</h2>
 
           <div className="space-y-4">
-            {[
-              {
-                question: "¿HOLENTIA es completamente gratis?",
-                answer:
-                  "Sí, todas las herramientas de HOLENTIA son completamente gratuitas y estarán disponibles para siempre. Nuestro objetivo es hacer el bienestar accesible para todos.",
-              },
-              {
-                question: "¿Necesito crear una cuenta para usar HOLENTIA?",
-                answer:
-                  "No, no necesitas crear cuenta ni proporcionar información personal. Todas las herramientas funcionan directamente en tu navegador sin necesidad de registro.",
-              },
-              {
-                question: "¿Mis datos se guardan en algún servidor?",
-                answer:
-                  "No. Todos tus datos se almacenan localmente en tu dispositivo. HOLENTIA no tiene acceso a ninguna información que introduzcas en las herramientas.",
-              },
-              {
-                question: "¿Las calculadoras financieras son precisas?",
-                answer:
-                  "Las calculadoras proporcionan estimaciones basadas en fórmulas estándar. Son herramientas educativas y no sustituyen el asesoramiento financiero profesional.",
-              },
-              {
-                question: "¿Puedo usar HOLENTIA en mi dispositivo móvil?",
-                answer:
-                  "Sí, HOLENTIA está completamente optimizada para dispositivos móviles, tablets y computadoras. Funciona en cualquier navegador moderno.",
-              },
-              {
-                question: "¿Cómo puedo sugerir nuevas herramientas?",
-                answer:
-                  "Valoramos tus ideas. Puedes enviarnos tus sugerencias a través de nuestro formulario de contacto o dejando un comentario en nuestras redes sociales.",
-              },
-            ].map((faq, i) => (
+            {helpFaq.map((faq, i) => (
               <details
                 key={i}
                 className="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all duration-300"

@@ -1,5 +1,14 @@
 import Link from "next/link"
 import { ArrowLeft, Scale, FileText, Shield, AlertTriangle, Globe, Mail } from "lucide-react"
+import { pageMetadata } from "@/lib/seo"
+
+export function generateMetadata() {
+  return pageMetadata(
+    "Aviso Legal",
+    "Aviso legal de HOLENTIA: titularidad del sitio, condiciones de uso, propiedad intelectual y limitación de responsabilidad de las herramientas educativas.",
+    "/aviso-legal",
+  )
+}
 import Logo from "@/components/common/logo/logo"
 import Footer from "@/components/common/footer/footer"
 import MenuButton from "@/components/common/menu-button/menu-button"

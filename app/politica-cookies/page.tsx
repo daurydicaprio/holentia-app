@@ -1,5 +1,14 @@
 import Link from "next/link"
 import { ArrowLeft, Shield, Cookie, Lock, Database, Eye, CheckCircle2 } from "lucide-react"
+import { pageMetadata } from "@/lib/seo"
+
+export function generateMetadata() {
+  return pageMetadata(
+    "Política de Cookies",
+    "Política de cookies de HOLENTIA: qué es localStorage, cómo se guardan tus borradores en tu dispositivo y cómo borrarlos en cualquier momento.",
+    "/politica-cookies",
+  )
+}
 import Logo from "@/components/common/logo/logo"
 import Footer from "@/components/common/footer/footer"
 import MenuButton from "@/components/common/menu-button/menu-button"

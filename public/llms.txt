@@ -1,0 +1,45 @@
+# HOLENTIA
+
+> Herramientas gratuitas de bienestar integral: mente, relaciones, cuerpo y finanzas.
+> Calculadoras, simuladores y tests que funcionan directamente en el navegador del usuario,
+> sin cuenta, sin registro y sin enviar datos a servidores.
+
+Las 11 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
+de cada herramienta, y los resultados son estimaciones educativas, no asesoramiento profesional
+(médico, financiero ni psicológico).
+
+## Secciones
+
+- [Mente](https://holentia.com/mente): diario guiado para reflexionar con preguntas estructuradas.
+- [Relaciones](https://holentia.com/relaciones): test de los 5 lenguajes del amor.
+- [Cuerpo](https://holentia.com/cuerpo): calculadora de calorías (Mifflin-St Jeor) e hidratación (EFSA/NASEM).
+- [Finanzas](https://holentia.com/finanzas): presupuesto, interés compuesto, préstamo, consumo eléctrico,
+  corte/vencimiento de tarjeta, interés de tarjeta y perfil de riesgo.
+
+## Herramientas
+
+- [Crear presupuesto personal](https://holentia.com/crear-presupuesto-personal): simula ingresos, gastos y categorías para equilibrar tu presupuesto.
+- [Calculadora de interés compuesto](https://holentia.com/calculadora-interes-compuesto): crecimiento de aportes periódicos con gráfico de capital vs. aportes.
+- [Calculadora de préstamo](https://holentia.com/calculadora-prestamo): cuota mensual, interés total y tabla de amortización.
+- [Calculadora de consumo eléctrico](https://holentia.com/calculadora-consumo-electrico): estima el consumo y el costo de aparatos eléctricos.
+- [Corte y vencimiento de tarjeta](https://holentia.com/tarjeta-corte-vencimiento): fechas de corte, días restantes y vencimiento.
+- [Calculadora de interés de tarjeta](https://holentia.com/calculadora-interes-tarjeta): costo de financiar el saldo mínimo o total.
+- [Test de perfil de riesgo](https://holentia.com/test-perfil-riesgo): cuestionario de tolerancia al riesgo para inversiones.
+- [Calculadora de calorías](https://holentia.com/calculadora-calorias): gasto diario (TDEE) y planes con déficit o superávit.
+- [Calculadora de hidratación](https://holentia.com/calculadora-hidratacion): agua diaria según peso, actividad y clima.
+- [Diario guiado](https://holentia.com/diario-guiado): entradas de reflexión guardadas en el navegador.
+- [Test de lenguajes del amor](https://holentia.com/test-lenguajes-amor): descubre tu lenguaje principal de cariño.
+
+## Páginas informativas
+
+- [Qué es HOLENTIA](https://holentia.com/que-es-holentia)
+- [Centro de ayuda](https://holentia.com/ayuda)
+- [Apoyar el proyecto](https://holentia.com/apoyar)
+- [Aviso legal](https://holentia.com/aviso-legal)
+- [Política de cookies](https://holentia.com/politica-cookies)
+
+## Contacto
+
+- Sitio: https://holentia.com
+- Idioma: español (es)
+- Datos: todos los cálculos ocurren en el dispositivo del usuario (localStorage); no hay backend de datos.

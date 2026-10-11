@@ -1,5 +1,14 @@
 import Link from "next/link"
 import { ArrowLeft, Heart, Coffee, Sparkles, Gift, Users, Rocket } from "lucide-react"
+import { pageMetadata } from "@/lib/seo"
+
+export function generateMetadata() {
+  return pageMetadata(
+    "Apoya a HOLENTIA",
+    "No todas las contribuciones son monetarias: descubre maneras de apoyar HOLENTIA y mantener sus herramientas de bienestar gratuitas para todos.",
+    "/apoyar",
+  )
+}
 import Logo from "@/components/common/logo/logo"
 import Footer from "@/components/common/footer/footer"
 import MenuButton from "@/components/common/menu-button/menu-button"

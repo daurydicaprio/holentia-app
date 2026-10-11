@@ -1,5 +1,14 @@
 import Link from "next/link"
 import { ArrowLeft, Heart, Shield, Sparkles, Users } from "lucide-react"
+import { pageMetadata } from "@/lib/seo"
+
+export function generateMetadata() {
+  return pageMetadata(
+    "¿Qué es HOLENTIA?",
+    "HOLENTIA es tu plataforma integral de bienestar: herramientas gratuitas de mente, relaciones, cuerpo y finanzas que funcionan en tu navegador, sin cuenta ni datos personales.",
+    "/que-es-holentia",
+  )
+}
 import Logo from "@/components/common/logo/logo"
 import Footer from "@/components/common/footer/footer"
 import MenuButton from "@/components/common/menu-button/menu-button"
