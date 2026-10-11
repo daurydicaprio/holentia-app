@@ -1,214 +1,79 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
-import { useTheme } from "next-themes"
+import { cn } from "@/lib/utils"
+
+const TABS = [
+  {
+    href: "/mente",
+    label: "Mente",
+    section: "mente",
+    activeClass: "text-mente-DEFAULT",
+    hoverClass: "hover:text-mente-darkest",
+    underlineClass: "bg-mente-DEFAULT",
+  },
+  {
+    href: "/relaciones",
+    label: "Relaciones",
+    section: "relaciones",
+    activeClass: "text-relaciones-DEFAULT",
+    hoverClass: "hover:text-relaciones-darkest",
+    underlineClass: "bg-relaciones-DEFAULT",
+  },
+  {
+    href: "/cuerpo",
+    label: "Cuerpo",
+    section: "cuerpo",
+    activeClass: "text-cuerpo-DEFAULT",
+    hoverClass: "hover:text-cuerpo-darkest",
+    underlineClass: "bg-cuerpo-DEFAULT",
+  },
+  {
+    href: "/finanzas",
+    label: "Finanzas",
+    section: "finanzas",
+    activeClass: "text-finanzas-DEFAULT",
+    hoverClass: "hover:text-finanzas-darkest",
+    underlineClass: "bg-finanzas-DEFAULT",
+  },
+] as const
 
 export default function SectionTabs() {
-  const [activeTab, setActiveTab] = useState<string | null>(null)
-  const [mounted, setMounted] = useState(false)
   const pathname = usePathname()
   const { triggerHapticFeedback } = useHapticFeedback()
-  const { theme } = useTheme()
 
-  useEffect(() => {
-    setMounted(true)
-
-    // Extraer la sección del pathname
-    const pathParts = pathname.split("/").filter(Boolean)
-    const section = pathParts[0]
-
-    if (section && ["mente", "cuerpo", "finanzas", "relaciones"].includes(section)) {
-      setActiveTab(section)
-    } else {
-      setActiveTab(null)
-    }
-  }, [pathname])
-
-  const handleTabClick = () => {
-    triggerHapticFeedback("light")
-  }
-
-  if (!mounted) return null
-
-  // Estilos base para las pestañas
-  const baseTabStyle = {
-    position: "relative" as const,
-    paddingLeft: "1rem",
-    paddingRight: "1rem",
-    paddingTop: "0.5rem",
-    paddingBottom: "0.5rem",
-    borderRadius: "0.375rem",
-    fontSize: "0.875rem",
-    fontWeight: 500 as const,
-    transition: "color 0.2s ease, background-color 0.2s ease",
-    color: theme === "dark" ? "#a0a0a0" : "#4b5563",
-    opacity: 0.7,
-  }
-
-  // Estilos para las pestañas activas
-  const activeTabStyle = {
-    fontWeight: 600 as const,
-    opacity: 1,
-  }
-
-  // Colores específicos para cada sección
-  const menteColor = "var(--color-mente-active)"
-  const relacionesColor = "var(--color-relaciones-active)"
-  const cuerpoColor = "var(--color-cuerpo-active)"
-  const finanzasColor = "var(--color-finanzas-active)"
+  const activeSection = pathname?.split("/").filter(Boolean)[0] ?? null
 
   return (
-    <div className="flex gap-4 justify-center flex-wrap mt-6">
-      <Link
-        href="/mente"
-        onClick={handleTabClick}
-        style={{
-          ...baseTabStyle,
-          ...(activeTab === "mente" ? { ...activeTabStyle, color: menteColor } : {}),
-        }}
-        onMouseOver={(e) => {
-          if (activeTab !== "mente") {
-            e.currentTarget.style.opacity = "0.9"
-            e.currentTarget.style.color = menteColor
-          }
-        }}
-        onMouseOut={(e) => {
-          if (activeTab !== "mente") {
-            e.currentTarget.style.opacity = "0.7"
-            e.currentTarget.style.color = theme === "dark" ? "#a0a0a0" : "#4b5563"
-          }
-        }}
-      >
-        <span>Mente</span>
-        <div
-          style={{
-            content: '""',
-            position: "absolute",
-            bottom: "-4px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: activeTab === "mente" ? "2rem" : "0",
-            height: "3px",
-            borderRadius: "9999px",
-            backgroundColor: menteColor,
-            transition: "width 0.3s ease",
-          }}
-        />
-      </Link>
-
-      <Link
-        href="/relaciones"
-        onClick={handleTabClick}
-        style={{
-          ...baseTabStyle,
-          ...(activeTab === "relaciones" ? { ...activeTabStyle, color: relacionesColor } : {}),
-        }}
-        onMouseOver={(e) => {
-          if (activeTab !== "relaciones") {
-            e.currentTarget.style.opacity = "0.9"
-            e.currentTarget.style.color = relacionesColor
-          }
-        }}
-        onMouseOut={(e) => {
-          if (activeTab !== "relaciones") {
-            e.currentTarget.style.opacity = "0.7"
-            e.currentTarget.style.color = theme === "dark" ? "#a0a0a0" : "#4b5563"
-          }
-        }}
-      >
-        <span>Relaciones</span>
-        <div
-          style={{
-            content: '""',
-            position: "absolute",
-            bottom: "-4px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: activeTab === "relaciones" ? "2rem" : "0",
-            height: "3px",
-            borderRadius: "9999px",
-            backgroundColor: relacionesColor,
-            transition: "width 0.3s ease",
-          }}
-        />
-      </Link>
-
-      <Link
-        href="/cuerpo"
-        onClick={handleTabClick}
-        style={{
-          ...baseTabStyle,
-          ...(activeTab === "cuerpo" ? { ...activeTabStyle, color: cuerpoColor } : {}),
-        }}
-        onMouseOver={(e) => {
-          if (activeTab !== "cuerpo") {
-            e.currentTarget.style.opacity = "0.9"
-            e.currentTarget.style.color = cuerpoColor
-          }
-        }}
-        onMouseOut={(e) => {
-          if (activeTab !== "cuerpo") {
-            e.currentTarget.style.opacity = "0.7"
-            e.currentTarget.style.color = theme === "dark" ? "#a0a0a0" : "#4b5563"
-          }
-        }}
-      >
-        <span>Cuerpo</span>
-        <div
-          style={{
-            content: '""',
-            position: "absolute",
-            bottom: "-4px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: activeTab === "cuerpo" ? "2rem" : "0",
-            height: "3px",
-            borderRadius: "9999px",
-            backgroundColor: cuerpoColor,
-            transition: "width 0.3s ease",
-          }}
-        />
-      </Link>
-
-      <Link
-        href="/finanzas"
-        onClick={handleTabClick}
-        style={{
-          ...baseTabStyle,
-          ...(activeTab === "finanzas" ? { ...activeTabStyle, color: finanzasColor } : {}),
-        }}
-        onMouseOver={(e) => {
-          if (activeTab !== "finanzas") {
-            e.currentTarget.style.opacity = "0.9"
-            e.currentTarget.style.color = finanzasColor
-          }
-        }}
-        onMouseOut={(e) => {
-          if (activeTab !== "finanzas") {
-            e.currentTarget.style.opacity = "0.7"
-            e.currentTarget.style.color = theme === "dark" ? "#a0a0a0" : "#4b5563"
-          }
-        }}
-      >
-        <span>Finanzas</span>
-        <div
-          style={{
-            content: '""',
-            position: "absolute",
-            bottom: "-4px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: activeTab === "finanzas" ? "2rem" : "0",
-            height: "3px",
-            borderRadius: "9999px",
-            backgroundColor: finanzasColor,
-            transition: "width 0.3s ease",
-          }}
-        />
-      </Link>
-    </div>
+    <nav aria-label="Secciones" className="mt-6 flex flex-wrap justify-center gap-4">
+      {TABS.map((tab) => {
+        const isActive = activeSection === tab.section
+        return (
+          <Link
+            key={tab.href}
+            href={tab.href}
+            onClick={() => triggerHapticFeedback("light")}
+            data-interactive="true"
+            className={cn(
+              "relative rounded-md px-4 py-2 text-sm transition-all duration-200",
+              "text-gray-600 opacity-70 hover:opacity-90 dark:text-gray-400",
+              isActive ? cn(tab.activeClass, "font-semibold opacity-100") : tab.hoverClass,
+            )}
+          >
+            {tab.label}
+            <span
+              aria-hidden="true"
+              className={cn(
+                "absolute -bottom-1 left-1/2 h-[3px] -translate-x-1/2 rounded-full transition-all duration-300",
+                isActive ? "w-8" : "w-0",
+                tab.underlineClass,
+              )}
+            />
+          </Link>
+        )
+      })}
+    </nav>
   )
 }

@@ -4,7 +4,7 @@ import { useState } from "react"
 import { ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import ToolCard from "./tool-card"
-import type { CardData } from "@/types"
+import type { CardData, SectionType } from "@/types"
 import { cn } from "@/lib/utils"
 
 interface ToolsGridProps {
@@ -12,44 +12,55 @@ interface ToolsGridProps {
   section: string
 }
 
+// Mapa estático para que Tailwind genere las clases
+const sectionButtonClasses: Record<SectionType, string> = {
+  mente: "text-mente-DEFAULT hover:text-mente-darkest",
+  relaciones: "text-relaciones-DEFAULT hover:text-relaciones-darkest",
+  cuerpo: "text-cuerpo-DEFAULT hover:text-cuerpo-darkest",
+  finanzas: "text-finanzas-DEFAULT hover:text-finanzas-darkest",
+}
+
 export default function ToolsGrid({ cards, section }: ToolsGridProps) {
-  const [showAll, setShowAll] = useState(false)
+  const [showComingSoon, setShowComingSoon] = useState(false)
 
-  const visibleCards = showAll ? cards : cards.slice(0, 4)
-  const hasMoreCards = cards.length > 4
+  // Las herramientas disponibles siempre están visibles y en el HTML (SEO + descubrimiento)
+  const availableCards = cards.filter((card) => card.isAvailable)
+  const comingSoonCards = cards.filter((card) => !card.isAvailable)
 
-  // Determinar las clases de color basadas en la sección
-  let buttonTextClass = "text-gray-600 hover:text-gray-800"
-
-  if (section === "mente") {
-    buttonTextClass = "text-mente-DEFAULT hover:text-mente-darkest"
-  } else if (section === "cuerpo") {
-    buttonTextClass = "text-cuerpo-DEFAULT hover:text-cuerpo-darkest"
-  } else if (section === "finanzas") {
-    buttonTextClass = "text-finanzas-DEFAULT hover:text-finanzas-darkest"
-  } else if (section === "relaciones") {
-    buttonTextClass = "text-relaciones-DEFAULT hover:text-relaciones-darkest"
-  }
+  const buttonTextClass = sectionButtonClasses[section as SectionType] ?? "text-gray-600 hover:text-gray-800"
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {visibleCards.map((card, index) => (
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {availableCards.map((card, index) => (
           <ToolCard key={card.id} card={card} index={index} />
         ))}
       </div>
 
-      {hasMoreCards && (
-        <div className="flex justify-center mt-8">
-          <Button
-            variant="ghost"
-            className={cn("flex items-center gap-2", buttonTextClass)}
-            onClick={() => setShowAll(!showAll)}
+      {comingSoonCards.length > 0 && (
+        <>
+          <div
+            className={cn(
+              "mt-5 gap-5 sm:grid-cols-2 lg:grid-cols-4",
+              showComingSoon ? "grid" : "hidden",
+            )}
           >
-            <span>{showAll ? "Mostrar menos" : "Ver todas las herramientas"}</span>
-            <ChevronDown className={`h-4 w-4 transition-transform ${showAll ? "rotate-180" : ""}`} />
-          </Button>
-        </div>
+            {comingSoonCards.map((card, index) => (
+              <ToolCard key={card.id} card={card} index={availableCards.length + index} />
+            ))}
+          </div>
+
+          <div className="mt-8 flex justify-center">
+            <Button
+              variant="ghost"
+              className={cn("flex items-center gap-2", buttonTextClass)}
+              onClick={() => setShowComingSoon(!showComingSoon)}
+            >
+              <span>{showComingSoon ? "Mostrar menos" : "Ver todas las herramientas"}</span>
+              <ChevronDown className={cn("h-4 w-4 transition-transform", showComingSoon ? "rotate-180" : "")} />
+            </Button>
+          </div>
+        </>
       )}
     </div>
   )

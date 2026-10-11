@@ -1,7 +1,13 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState } from "react"
 import { useRouter, usePathname } from "next/navigation"
+import { sectionsData } from "@/lib/data"
+
+// Rutas de herramientas derivadas del catálogo (una sola fuente de verdad)
+const TOOL_ROUTES = Object.values(sectionsData).flatMap((section) =>
+  section.cards.filter((card) => card.isAvailable).map((card) => `/${card.slug}`),
+)
 
 export default function SectionSwipeNavigation() {
   const router = useRouter()
@@ -9,35 +15,12 @@ export default function SectionSwipeNavigation() {
   const [touchStart, setTouchStart] = useState<number | null>(null)
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
   const [isMobile, setIsMobile] = useState(false)
-  const [isToolPage, setIsToolPage] = useState(false)
 
   // Configuración de sensibilidad del swipe
   const minSwipeDistance = 50
 
-  // Verificar si estamos dentro de una herramienta
-  const isInsideTool = useCallback(() => {
-    // Lista de rutas de herramientas conocidas
-    const toolRoutes = [
-      "/calculadora-prestamo",
-      "/calculadora-interes-compuesto",
-      "/crear-presupuesto-personal",
-      "/diario-guiado",
-      "/test-lenguajes-amor",
-      "/calculadora-hidratacion",
-      "/calculadora-consumo-electrico",
-      "/calculadora-calorias",
-      "/tarjeta-corte-vencimiento",
-      "/calculadora-interes-tarjeta",
-      "/test-perfil-riesgo",
-    ]
-
-    // Verificar si la ruta actual comienza con alguna de las rutas de herramientas
-    return toolRoutes.some((route) => pathname.startsWith(route))
-  }, [pathname])
-
-  useEffect(() => {
-    setIsToolPage(isInsideTool())
-  }, [isInsideTool])
+  // Si estamos dentro de una herramienta, no activar la navegación por swipe
+  const isToolPage = TOOL_ROUTES.some((route) => pathname?.startsWith(route))
 
   useEffect(() => {
     const checkMobile = () => {
