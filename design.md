@@ -1,7 +1,7 @@
 # Design System Holentia — estructura, plantilla, colores, bordes
 
-> Fuente única de color: CSS vars en `app/globals.css:78-188`.
-> Tailwind mapea vars en `tailwind.config.ts:20-70`. No usar hex suelto en componentes nuevos.
+> Fuente única de color: CSS vars en `app/globals.css` (`:root` 78-141, `.dark` 142+).
+> Tailwind mapea vars en `tailwind.config.ts`. No usar hex suelto en componentes nuevos.
 
 ## 1. Tokens por sección
 
@@ -15,11 +15,11 @@
 Modo oscuro `globals.css:153-188`: glass baja a `0.25`, borders a `0.4`, `text-card #fff`, fondo `#121212`, texto `#e0e0e0`.
 Base: `--color-background #f8f9fa`, `--color-text-primary #212529`, `--color-text-secondary #495057`, `--radius 0.5rem`.
 
-Canónicos obligatorios en inline styles: mente `#1976d2`, relaciones `#7c3aed`, cuerpo `#ffa000`, finanzas `#388e3c`. Ver bugs a unificar en `plan.md Fase 1` (`logo.tsx:77-85`, `#1565c0/#ef6c00/#2e7d32`).
+Canónicos obligatorios en inline styles: mente `#1976d2`, relaciones `#7c3aed`, cuerpo `#ffa000`, finanzas `#388e3c`. Unificado (11-Oct-2026): `globals.css` usa los canónicos (se eliminaron los hex oscurecidos `#1565c0/#ef6c00/#2e7d32`); `tool-card.tsx` usa tokens Tailwind por sección, sin hex inline.
 
 ## 2. Estructura páginas sección
 
-Ruta: `app/{mente,relaciones,cuerpo,finanzas}/page.tsx` (ej `app/mente/page.tsx:15-40`).
+Ruta: `app/{mente,relaciones,cuerpo,finanzas}/page.tsx` — wrappers delgados: `generateMetadata` (`sectionMetadata`) + `<SectionPage section="X" />` (`components/sections/section-page.tsx`, server component con JsonLd + swipe + logo + tabs + header + grid + footer).
 
 ```
 main.min-h-screen.flex.flex-col.items-center.p-4.sm:p-6
@@ -66,20 +66,20 @@ En móvil el título vive en el header compacto, no duplicar `h1` dentro del too
 
 ## 4. Componentes y recetas
 
-**Logo + aura** `logo.tsx:112-148`: wrapper `relative flex center`, aura `motion.div absolute z-0 rounded-full blur 8-10px opacity 0.25 hover 0.45` con `auraColor` sección, animación circular 10s + hover scale 1.03. Tamaños: `sm w-10 h-10 text-xs`, `md w-24 h-24 text-sm`, `lg w-32 h-32 sm:w-40 sm:h-40 text-lg sm:text-2xl`. Clases CSS equivalentes: `.logo-aura`, `.logo-aura-{mente,cuerpo,finanzas,relaciones}`.
+**Logo + aura** `logo.tsx`: wrapper `relative flex center`, aura `motion.div absolute z-0 rounded-full blur 8-10px opacity 0.25 hover 0.45` con `auraColor` sección, animación circular 10s + hover scale 1.03. Tamaños: `sm w-10 h-10 text-xs`, `md w-24 h-24 text-sm`, `lg w-32 h-32 sm:w-40 sm:h-40 text-lg sm:text-2xl`. (Las clases `.logo-aura*` de CSS fueron eliminadas: todo es inline style.)
 
-**SectionTabs** `section-tabs.tsx:58-99`: links con `baseTabStyle` gris + activo `color var(--color-X-active) font 600 opacity 1`, underline `div absolute bottom -4px w 2rem h 3px rounded-full bg sección`. Clases: `.section-tab`, `.section-tab-{X}`, `.section-tab-active`.
+**SectionTabs** `section-tabs.tsx` (server component, 11-Oct-2026): links renderizados en el HTML inicial desde el array estático `TABS` (home + 4 secciones con `label` y `href`), activa = sección actual con `color: var(--color-X-active)` y underline `div absolute bottom -4px w 2rem h 3px rounded-full bg sección`. Sin state/effect; inactivas `text-gray-600 dark:text-gray-400`. (Las clases `.section-tab*` de CSS fueron eliminadas.)
 
-**SectionHeader** `section-header.tsx:9-31`: `h1 text-3xl sm:text-4xl font-bold` + `span style backgroundImage linear-gradient(var(--color-X-active),var(--color-X-active-dark)) + backgroundClip text + transparent`. Clases: `.section-title-highlight-{X}`.
+**SectionHeader** `section-header.tsx`: `h1 text-3xl sm:text-4xl font-bold` + `span style backgroundImage linear-gradient(var(--color-X-active),var(--color-X-active-dark)) + backgroundClip text + transparent`. (La clase `.section-title-highlight-{X}` de CSS fue eliminada.)
 
-**ToolCard** `tool-card.tsx:40-90,137-157`: glass `padding 1.5rem, radius 16px, border 1px solid borderColor, backdrop blur 20px, height fija 180px, flex column space-between, shadow 0 12px 28px rgba(0,0,0,0.1)` si disponible sino `0 6px 16px + opacity 0.6`. Fondos: disponible `rgba(X,0.75) light / 0.4 dark`, no disponible `0.35 / 0.2`. Textos: categoría `uppercase 0.7rem tracking 0.05em`, título `1rem semibold (1.25rem móvil)`, descripción `0.8rem (0.9rem móvil)`. Excepción cuerpo light texto `#000`. `ChevronRight h-6` derecha centro. No disponible → `.card-coming-soon::before "Próximamente" blur4`.
+**ToolCard** `tool-card.tsx` (server-safe, 11-Oct-2026): mapa estático `sectionCardClasses` con tokens Tailwind por sección (`bg-{X}-600/75` light, `dark:bg-{X}-900/40`, etc.) — sin hex inline, así el dark mode respeta alfas reales. Glass `p-6 radius 16px border backdrop-blur-xl height 180px flex column justify-between`; hover real `hover:-translate-y-0.5 hover:scale-[1.03] hover:shadow-xl`. Textos: categoría `uppercase text-[0.7rem] tracking-[0.05em]`, título `text-base sm:text-lg font-semibold`, descripción `text-sm sm:text-base`. Disponible → `<Link>` con `ChevronRight`; no disponible → card estática con icono `Lock` + badge "Próximamente" (`.card-coming-soon`, badge siempre visible sin esperar hydration).
 Bordes: `--card-border-radius 14px`, `--card-padding-v 18px / -h 22px`, `--card-gap 20px`, `--card-shadow 0 10px 25px rgba(0,0,0,0.06)`, hover `0 15px 35px rgba(0,0,0,0.08)`, `.card-hover-effect translateY -2px scale 1.05`.
 
 **Botones**: outline sección `border sectionColor + text sectionColor + bg rgba(255,255,255,0.6) light / rgba(0,0,0,0.2) dark + blur4 + h-10 px-5 hover scale 1.05`. Sólido sección `bg #388e3c hover #1b5e20 text white` (finanzas; equivalente por sección). Tabs móviles activos `bg sección text white` (`budget-tabs.tsx`, `mobile-tabs-navigation.tsx`, `loan-calculator-tabs.tsx` con `layoutId activeTab`).
 
-**Sliders** `globals.css:190-210,342-377`: track `h 8px rounded gray-200/424242`, fill `var(--color-finanzas-active)`, thumb `20px white border 2px sección shadow`. Usar `data-interactive="true"` para no chocar con swipe.
+**Sliders** `globals.css` (`.loan-calculator-slider` 176-209): track `h 8px rounded gray-200/424242`, fill `var(--color-finanzas-active)`, thumb `20px white border 2px sección shadow`. Usar `data-interactive="true"` para no chocar con swipe.
 
-**Headers/footers**: línea tool `.tool-header-line 4remx0.175rem` + `.tool-header-line-{X}`. Header móvil tool `sticky top-0 z-50 blur8`. Footer link hover a `*-dark`. ScrollTop/FAB `fixed bottom-6 right-6 3rem rounded-full shadow`.
+**Headers/footers**: header móvil tool `sticky top-0 z-50 blur8` (sin `.tool-header-line*`, eliminadas). Footer link hover a `*-dark`. ScrollTop/FAB `fixed bottom-6 right-6 3rem rounded-full shadow`.
 
 ## 5. Responsive / móvil — cuándo qué
 

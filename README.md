@@ -53,7 +53,7 @@ holentia/
 │   │   ├── card-interest/       # Interés de tarjeta (Finanzas)
 │   │   └── risk-profile-test/   # Test de perfil de riesgo (Finanzas)
 │   ├── ui/                   # Componentes de interfaz (botones, tarjetas, etc.)
-│   └── tool-page-client.tsx  # Componente base para páginas de herramientas
+│   └── tool-seo/             # Shell server de herramientas: tool-page-shell, json-ld, tool-faq
 ├── hooks/                    # Custom hooks
 │   ├── use-budget-simulator.ts    # Lógica para el simulador de presupuesto
 │   ├── use-compound-interest-calculator.ts # Lógica para calculadora de interés compuesto
@@ -62,11 +62,18 @@ holentia/
 │   └── use-media-query.ts         # Hook para consultas de medios
 ├── lib/                      # Utilidades y funciones
 │   ├── data.ts               # Datos de secciones y herramientas
+│   ├── seo.ts                # Metadata + JSON-LD (WebApplication, Breadcrumb, FAQPage, sitemap)
 │   ├── storage.ts            # Helper localStorage namespaced holentia:*
 │   └── utils.ts              # Funciones de utilidad
 ├── types/                    # Definiciones de tipos
 │   └── index.ts              # Tipos principales
-└── public/                   # Archivos estáticos
+├── app/sitemap.ts            # Sitemap XML (21 URLs)
+├── app/robots.ts             # Robots.txt
+├── app/error.tsx             # Página de error de ruta
+├── app/global-error.tsx      # Error global (raíz)
+├── app/icon.svg              # Favicon (convención App Router)
+├── app/apple-icon.png        # Icono touch 180x180
+└── public/                   # Archivos estáticos (llms.txt, assets)
 ```
 
 ## Características Principales
@@ -89,13 +96,25 @@ holentia/
 
 ## Tecnologías Utilizadas
 
-- **Next.js 15.2.8**: Framework React con App Router
+- **Next.js 15.5.26**: Framework React con App Router
 - **TypeScript**: Para tipado estático
 - **Tailwind CSS**: Para estilos
 - **next-themes**: Para gestionar el modo oscuro
 - **Framer Motion**: Para animaciones suaves
 - **Lucide React**: Para iconografía consistente
 - **Chart.js**: Para visualizaciones de datos en herramientas financieras
+
+## SEO y Rendimiento
+
+- **Páginas de herramienta server-rendered**: cada herramienta usa `ToolPageShell` (server component) con H1, descripción y breadcrumb en el HTML inicial; la interactividad vive dentro como client components
+- **Metadata por página**: `generateMetadata` en las 11 herramientas, las 4 secciones, el home y las páginas informativas (title, description, canonical, openGraph, twitter) con template global `{página} | HOLENTIA` en `app/layout.tsx`
+- **Datos estructurados JSON-LD**: `WebApplication` + `BreadcrumbList` + `FAQPage` por herramienta, `CollectionPage` + `BreadcrumbList` por sección, `WebSite` + `Organization` en el home, `FAQPage` en Ayuda
+- **FAQ visible en el HTML inicial** de las 11 herramientas (no escondida tras hydration gates)
+- **`app/sitemap.ts`**: 21 URLs (home, 4 secciones, 11 herramientas, 5 informativas)
+- **`app/robots.ts`**: permite todo y apunta al sitemap
+- **`public/llms.txt`**: índice legible por LLMs con las 11 herramientas y sus fórmulas
+- **Enlaces a herramientas en el HTML inicial** de las secciones (tabs y tarjetas server-rendered, sin `mounted` guard)
+- **Errores**: `app/error.tsx` + `app/global-error.tsx`; `app/ayuda/loading.tsx` con skeleton real
 
 ## Secciones
 
@@ -190,17 +209,23 @@ Cada sección tiene su propia paleta de colores:
 ## Desarrollo
 
 ```bash
-# Instalar dependencias
-npm install
+# Instalar dependencias (pnpm)
+pnpm install
 
 # Ejecutar en modo desarrollo
-npm run dev
+pnpm dev
+
+# Lint (ESLint, .eslintrc.json con next/core-web-vitals)
+pnpm lint
+
+# Typecheck
+pnpm exec tsc --noEmit
 
 # Construir para producción
-npm run build
+pnpm build
 
 # Iniciar en modo producción
-npm start
+pnpm start
 ```
 
 ## Contribución
@@ -224,4 +249,4 @@ Este proyecto es propiedad de Daury DiCaprio. Todos los derechos reservados.
 
 ---
 
-**Última actualización**: Octubre 2026 (9 herramientas, build estricto, local-first)
+**Última actualización**: Octubre 2026 (11 herramientas, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first)

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import type { ChartData, PieChartData } from "@/hooks/use-compound-interest-calculator"
 import { useTheme } from "next-themes"
 import { useMediaQuery } from "@/hooks/use-media-query"
@@ -24,16 +24,19 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
 
   // Colores para los gráficos - Mejorados para mejor contraste
-  const chartColors = {
-    line: resolvedTheme === "dark" ? "#81c784" : "#66bb6a", // Verde más claro para la línea
-    deposit: resolvedTheme === "dark" ? "#388e3c" : "#2e7d32",
-    contribution: resolvedTheme === "dark" ? "#1b5e20" : "#1b5e20",
-    interest: resolvedTheme === "dark" ? "#a5d6a7" : "#81c784",
-    grid: resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.1)",
-    text: resolvedTheme === "dark" ? "#e0e0e0" : "#1E3A2E",
-    tooltipBg: resolvedTheme === "dark" ? "rgba(30, 30, 30, 0.9)" : "rgba(255, 255, 255, 0.9)",
-    tooltipBorder: resolvedTheme === "dark" ? "#4caf50" : "#2e7d32",
-  }
+  const chartColors = useMemo(
+    () => ({
+      line: resolvedTheme === "dark" ? "#81c784" : "#66bb6a", // Verde más claro para la línea
+      deposit: resolvedTheme === "dark" ? "#388e3c" : "#2e7d32",
+      contribution: resolvedTheme === "dark" ? "#1b5e20" : "#1b5e20",
+      interest: resolvedTheme === "dark" ? "#a5d6a7" : "#81c784",
+      grid: resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.1)",
+      text: resolvedTheme === "dark" ? "#e0e0e0" : "#1E3A2E",
+      tooltipBg: resolvedTheme === "dark" ? "rgba(30, 30, 30, 0.9)" : "rgba(255, 255, 255, 0.9)",
+      tooltipBorder: resolvedTheme === "dark" ? "#4caf50" : "#2e7d32",
+    }),
+    [resolvedTheme],
+  )
 
   // Crear/actualizar gráfico de línea
   useEffect(() => {
@@ -206,7 +209,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
         lineChartInstance.current.destroy()
       }
     }
-  }, [lineChartData, resolvedTheme, formatCurrency, isMobile])
+  }, [lineChartData, chartColors, resolvedTheme, formatCurrency, isMobile])
 
   // Crear/actualizar gráfico de pastel - Implementación completamente nueva
   useEffect(() => {
@@ -357,7 +360,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
         pieChartInstance.current = null
       }
     }
-  }, [pieChartData, resolvedTheme, showPieChart, formatCurrency, isMobile])
+  }, [pieChartData, chartColors, resolvedTheme, showPieChart, formatCurrency, isMobile])
 
   // Asegurar que los bordes de los gráficos sean visibles
   return (

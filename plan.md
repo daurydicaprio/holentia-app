@@ -4,11 +4,12 @@
 > Prod `holentia.com → main`. No tocar dominios.
 > Principios: sin DB, sin registro, local-first privado (`holentia:*` en navegador), cero tracking.
 
-## Estado actual (09-Oct-2026) — 11 tools en `dev` + `main`
-- [x] Stack: Next 15.5.26 + React 19.3 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores
+## Estado actual (11-Oct-2026) — 11 tools en `dev` + `main`, SEO server-rendered en `dev`
+- [x] Stack: Next 15.5.26 + React 19.3 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
 - [x] Cobertura: 11 tools (`diario-guiado, test-lenguajes-amor, calculadora-hidratacion, calculadora-calorias, crear-presupuesto-personal, calculadora-interes-compuesto, calculadora-prestamo, calculadora-consumo-electrico, tarjeta-corte-vencimiento, calculadora-interes-tarjeta, test-perfil-riesgo`)
+- [x] SEO: metadata + JSON-LD en 11 tools + 4 secciones + home + 5 informativas; sitemap 21 URLs; robots; llms.txt; FAQ en HTML inicial
 - [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main`
-- [x] `tsc 0 errores + next build OK` en estricto
+- [x] `tsc 0 errores + next build OK + pnpm lint 0` en estricto
 
 ---
 
@@ -77,9 +78,24 @@ Muertos borrados, icons opacos, hover tilt único en cards (fix franja), `any[]`
 
 ---
 
+## Fase S — SEO/GEO + dark mode + pastel (11-Oct-2026) — HECHA
+Plan por herramientas, ejecutado sobre `dev` (preview `dev.holentia.com`), sin tocar `main`.
+
+- [x] **Fase 0**: entorno (pnpm 10.34.6, node 24) + baseline `tsc 0 + build OK`; **fix pastel interés compuesto** en `use-compound-interest-calculator.ts` (`prepareChartData` recibía `summary` stale del closure; ahora pasa `nextSummary` local)
+- [x] **Fase 1 — paleta**: `globals.css` reescrito (275 líneas) con canónicos `#1976d2/#7c3aed/#ffa000/#388e3c`, eliminadas clases muertas (`.logo-aura*`, `.section-tab*`, `.section-title-highlight*`, `.tool-header-line*`, slider genérico, ripple, animate-in, menu); `tailwind.config.ts` safelist recortado; `getSectionColor` y `styles/globals.css` borrados
+- [x] **Fase 2 — SSR de secciones**: `tool-card.tsx` reescrito (mapa `sectionCardClasses` con tokens, sin hex inline → dark mode correcto, hover real, badge "Próximamente" + Lock siempre visibles); `section-tabs.tsx` server (array `TABS`, sin mounted guard); `tools-grid.tsx` server (todas las disponibles en HTML, próximamente tras toggle); `TOOL_ROUTES` en `section-swipe-navigation.tsx`
+- [x] **Fase 3 — shell de herramientas**: `lib/seo.ts` (`toolMetadata`, `sectionMetadata`, `pageMetadata`, `toolJsonLd`, `sectionJsonLd`, `faqJsonLd`, `SITE_URL`), `components/tool-seo/` (`tool-page-shell`, `json-ld`, `tool-faq`), `app/layout.tsx` con `metadataBase` + title template `{página} | HOLENTIA` + viewport/themeColor; las 11 herramientas migradas a shell server con `generateMetadata` + FAQ + JSON-LD; **`tool-page-client.tsx` eliminado** (vació el HTML de las herramientas)
+- [x] **Fase 4 — hubs y home**: `components/sections/section-page.tsx` (server) unifica las 4 secciones; metadata + CollectionPage/Breadcrumb por sección; home con metadata + WebSite/Organization
+- [x] **Fase 5 — infra SEO**: `app/sitemap.ts` (21 URLs), `app/robots.ts`, `app/error.tsx` + `app/global-error.tsx`, `app/ayuda/loading.tsx` (skeleton real), `public/llms.txt`, iconos movidos a `app/icon.svg` + `app/apple-icon.png`, metadata de las 5 páginas informativas, FAQPage JSON-LD en `/ayuda`
+- [x] **Fase 6 — verificación + docs**: `.eslintrc.json` (`next/core-web-vitals`, `no-html-link-for-pages` off por bug de resolución); `eslint` 8.0.0 → 8.57.1 y `eslint-config-next` → 15.5.26 (crash de reglas con 8.0.0); `chartColors` memorizado en `calculator-charts.tsx` (lint 0 warnings); `tsc 0 · lint 0 · build OK`; smoke test `pnpm start` con 22 rutas en 200 (11 tools + 4 secciones + 5 informativas + robots/sitemap/llms); README y design.md actualizados
+- Commits en `dev`: `d3facf1` (pastel) · `80c0e1b` (globals) · `7389891` (SSR secciones) · `89d8963` (shell finanzas) · `1a5ccbb` (shell restantes) · `885f508` (hubs/home) · `2a53352` (infra SEO) · pendiente: docs/lint
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
-pnpm tsc --noEmit
+pnpm exec tsc --noEmit
+pnpm lint
 pnpm build
 vercel inspect https://dev.holentia.com
 curl -sI https://holentia.com
