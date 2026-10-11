@@ -334,7 +334,7 @@ export function useCompoundInterestCalculator(): useCompoundInterestCalculatorRe
       }
 
       // Actualizar resumen
-      setSummary({
+      const nextSummary: SummaryData = {
         balanceNet: balanceAjustado,
         netGain: Math.max(0, gananciaAjustada),
         totalContributions: totalContrib,
@@ -343,17 +343,23 @@ export function useCompoundInterestCalculator(): useCompoundInterestCalculatorRe
         doubleTime: r > 0 && r < 1 ? (72 / (r * 100)).toFixed(1) + " años" : "--",
         annualizedReturn: (r * 100).toFixed(2) + "%",
         totalReturn: isFinite(rendimientoInversion) ? rendimientoInversion.toFixed(2) + "%" : "∞%",
-      })
+      }
+      setSummary(nextSummary)
 
-      // Preparar datos para gráficos
-      prepareChartData(simData, monthlyData)
+      // Preparar datos para gráficos con los valores recién calculados
+      // (no con el estado `summary`, que aún no se ha aplicado)
+      prepareChartData(simData, monthlyData, nextSummary)
     } catch (error) {
       console.error("Error en la función calcular():", error)
     }
   }
 
   // Función para preparar datos de gráficos
-  const prepareChartData = (simData: SimulationData[], monthlyData: SimulationData[]) => {
+  const prepareChartData = (
+    simData: SimulationData[],
+    monthlyData: SimulationData[],
+    summaryActual: SummaryData,
+  ) => {
     try {
       // Preparar datos para gráfico de línea
       let annualDataForChart: SimulationData[] = []
@@ -446,21 +452,21 @@ export function useCompoundInterestCalculator(): useCompoundInterestCalculatorRe
       }
 
       // Añadir contribuciones si son mayores que cero
-      const totalContrib = summary.totalContributions
+      const totalContrib = summaryActual.totalContributions
       if (totalContrib > 0) {
         pieData.push(totalContrib)
         pieLabels.push("Contribuciones")
       }
 
       // Añadir ganancia si es mayor que cero
-      const netGain = summary.netGain
+      const netGain = summaryActual.netGain
       if (netGain > 0) {
         pieData.push(netGain)
         pieLabels.push("Ganancia")
       }
 
       // Añadir inflación si es relevante
-      const inflationEffect = summary.inflationEffect
+      const inflationEffect = summaryActual.inflationEffect
       if (inflation > 0 && inflationEffect > 0) {
         pieData.push(inflationEffect)
         pieLabels.push("Inflación")
