@@ -30,6 +30,36 @@ export function findToolCard(section: string, slug: string): CardData | undefine
   return sectionData.cards.find((card) => card.slug === slug)
 }
 
+/** Metadata por página de sección derivada del catálogo en lib/data.ts */
+export function sectionMetadata(section: string): Metadata {
+  const data = sectionsData[section]
+  const title = data ? `${data.title} ${data.highlightText}` : sectionLabel(section)
+  const description =
+    data?.subtitle ?? `Herramientas de ${sectionLabel(section)} para tu bienestar integral en ${SITE_NAME}.`
+  const url = `/${section}`
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title: `${title} | ${SITE_NAME}`,
+      description,
+      url,
+      siteName: SITE_NAME,
+      locale: "es_DO",
+      type: "website",
+    },
+    twitter: {
+      card: "summary",
+      title: `${title} | ${SITE_NAME}`,
+      description,
+    },
+  }
+}
+
 export interface FaqItem {
   question: string
   answer: string

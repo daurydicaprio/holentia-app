@@ -1,13 +1,42 @@
+import type { Metadata } from "next"
 import Logo from "@/components/common/logo/logo"
 import Footer from "@/components/common/footer/footer"
 import SectionTabs from "@/components/sections/section-tabs"
 import MobileFab from "@/components/common/mobile-fab/mobile-fab"
 import SectionSwipeNavigation from "@/components/sections/section-swipe-navigation"
 import MenuButton from "@/components/common/menu-button/menu-button"
+import JsonLd from "@/components/tool-seo/json-ld"
+import { SITE_NAME, SITE_URL } from "@/lib/seo"
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+}
+
+const homeJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      name: SITE_NAME,
+      url: SITE_URL,
+      inLanguage: "es",
+      description:
+        "Herramientas gratuitas de bienestar integral: mente, relaciones, cuerpo y finanzas. Calculadoras, simuladores y tests que funcionan en tu dispositivo.",
+    },
+    {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+  ],
+}
 
 export default function Home() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
+      <JsonLd data={homeJsonLd} />
       <SectionSwipeNavigation />
 
       <div className="flex-1 flex flex-col items-center justify-center max-w-6xl w-full mx-auto">
