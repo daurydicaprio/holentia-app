@@ -54,13 +54,14 @@ export function Glossary() {
 
   return (
     <section aria-label="Buscador del glosario" className="space-y-8">
-      {/* Panel hero: receta ToolCard (gradiente claro / glass oscuro), centrado y contenido */}
-      <div className="mx-auto max-w-2xl rounded-2xl border border-finanzas-border bg-gradient-to-br from-finanzas to-finanzas-dark p-6 text-white dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text sm:p-8">
-        <h2 className="text-center text-xl font-bold sm:text-2xl">Aprende y busca un nuevo término</h2>
-        <p className="mt-1.5 text-center text-sm text-white/85 dark:text-finanzas-lighter">
-          Ahorro, crédito, intereses, inversiones y bolsa: todo explicado con ejemplos.
-        </p>
-        <div className="relative mt-4">
+      {/* Panel hero: receta ToolCard (gradiente claro / glass oscuro), ancho completo con contenido centrado */}
+      <div className="rounded-2xl border border-finanzas-border bg-gradient-to-br from-finanzas to-finanzas-dark p-6 text-white dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text sm:p-8">
+        <div className="mx-auto max-w-2xl">
+          <h2 className="text-center text-xl font-bold sm:text-2xl">Aprende y busca un nuevo término</h2>
+          <p className="mt-1.5 text-center text-sm text-white/85 dark:text-finanzas-lighter">
+            Ahorro, crédito, intereses, inversiones y bolsa: todo explicado con ejemplos.
+          </p>
+          <div className="relative mt-4">
           <label htmlFor="glossary-search" className="sr-only">
             Buscar un término del glosario
           </label>
@@ -89,6 +90,7 @@ export function Glossary() {
               <X aria-hidden="true" className="h-4 w-4" />
             </button>
           )}
+          </div>
         </div>
       </div>
 
