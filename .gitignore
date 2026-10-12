@@ -6,3 +6,12 @@ out/
 *.tsbuildinfo
 next-env.d.ts
 pnpm-workspace.yaml
+
+# Skills instaladas localmente (no se versionan)
+.opencode/skills/grill-me/
+.opencode/skills/design-taste-frontend/
+.opencode/skills/find-skills/
+.opencode/skills/vercel-react-best-practices/
+.opencode/skills/frontend-design/
+skills-lock.json
+.agents/
