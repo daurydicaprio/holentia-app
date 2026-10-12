@@ -1,7 +1,8 @@
 "use client"
 
+import Link from "next/link"
 import { useMemo, useState } from "react"
-import { Lightbulb, Search, Wallet, X } from "lucide-react"
+import { ArrowRight, Lightbulb, Search, Wallet, X } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { cn } from "@/lib/utils"
 import { GLOSSARY_CATEGORIES, GLOSSARY_TERMS, type GlossaryCategoryId } from "./glossary-terms"
@@ -50,6 +51,10 @@ export function Glossary() {
     setQuery("")
     setCategory("all")
     triggerHapticFeedback("light")
+  }
+
+  const handleToolLink = () => {
+    triggerHapticFeedback("medium")
   }
 
   return (
@@ -168,6 +173,17 @@ export function Glossary() {
                         <Lightbulb aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-finanzas-dark dark:text-finanzas-light" />
                         <span>{item.example}</span>
                       </p>
+                    )}
+                    {item.related && (
+                      <Link
+                        href={`/${item.related.slug}`}
+                        onClick={handleToolLink}
+                        data-interactive="true"
+                        className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-finanzas transition-colors hover:text-finanzas-dark dark:text-finanzas-light dark:hover:text-finanzas-lighter"
+                      >
+                        {item.related.label}
+                        <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                      </Link>
                     )}
                   </article>
                 ))}

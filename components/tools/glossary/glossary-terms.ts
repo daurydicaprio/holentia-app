@@ -10,6 +10,8 @@ export interface GlossaryTerm {
   category: GlossaryCategoryId
   definition: string
   example?: string
+  /** Herramienta relacionada: link interno (SEO + UX). */
+  related?: { slug: string; label: string }
 }
 
 export const GLOSSARY_CATEGORIES: GlossaryCategory[] = [
@@ -29,6 +31,7 @@ const terms: GlossaryTerm[] = [
       "Plan que decide en qué se destina cada peso de tus ingresos en un período. Asignarle un destino al dinero antes de gastarlo es la base para ahorrar sin esfuerzo.",
     example:
       "Si ganas $24,000 al mes y repartes $14,000 en gastos necesarios, $5,000 en gustos y $5,000 en ahorro, ese reparto es tu presupuesto.",
+    related: { slug: "crear-presupuesto-personal", label: "Crear mi presupuesto" },
   },
   {
     term: "Gastos fijos y variables",
@@ -41,6 +44,7 @@ const terms: GlossaryTerm[] = [
     category: "presupuesto",
     definition:
       "Ahorro reservado para imprevistos (pérdida de ingreso, médico, reparación) que evita endeudarte por sorpresas. Como referencia, se recomienda cubrir de 3 a 6 meses de gastos básicos.",
+    related: { slug: "crear-presupuesto-personal", label: "Simular mi presupuesto" },
   },
   {
     term: "Punto de equilibrio",
@@ -60,6 +64,7 @@ const terms: GlossaryTerm[] = [
     definition:
       "Guía simple para repartir el ingreso neto: 50% necesidades, 30% gustos y 20% ahorro o pago de deudas. Es un punto de partida, no una regla estricta.",
     example: "Con $24,000 netos: $12,000 necesidades, $7,200 gustos y $4,800 ahorro o deudas.",
+    related: { slug: "crear-presupuesto-personal", label: "Aplicarla a mis números" },
   },
   {
     term: "Regla del 17%",
@@ -68,6 +73,7 @@ const terms: GlossaryTerm[] = [
       "Guía sencilla para convertir el ahorro en hábito: si cada mes apartas cerca del 17% de tu sueldo, al final del año tendrás acumulado el equivalente a unos 2 sueldos.",
     example:
       "Con un sueldo de $24,000, el 17% son $4,080 al mes: en 12 meses tendrías cerca de $49,000, algo más de 2 sueldos.",
+    related: { slug: "calculadora-interes-compuesto", label: "Ver cómo crece ese ahorro" },
   },
 
   // — Crédito y deudas —
@@ -76,18 +82,21 @@ const terms: GlossaryTerm[] = [
     category: "credito",
     definition:
       "El dinero original que se presta, sin intereses. Cada amortización reduce este saldo hasta llegar a cero.",
+    related: { slug: "calculadora-prestamo", label: "Simular un préstamo" },
   },
   {
     term: "Amortización",
     category: "credito",
     definition:
       "Proceso de pagar un préstamo en partes: cada cuota cubre los intereses del período y el resto baja el capital. La calculadora de préstamo muestra el detalle mes a mes en su tabla de amortización.",
+    related: { slug: "calculadora-prestamo", label: "Ver la tabla de amortización" },
   },
   {
     term: "Cuota mensual",
     category: "credito",
     definition:
       "Pago periódico que combina intereses y una parte del capital hasta liquidar la deuda. Depende del monto, la tasa y el plazo elegidos.",
+    related: { slug: "calculadora-prestamo", label: "Calcular mi cuota" },
   },
   {
     term: "Endeudamiento",
@@ -100,12 +109,14 @@ const terms: GlossaryTerm[] = [
     category: "credito",
     definition:
       "Pago mínimo que exige la tarjeta cada mes. Pagar solo eso mantiene la cuenta al día, pero el saldo restante sigue generando intereses: pagar el total es lo ideal.",
+    related: { slug: "calculadora-interes-tarjeta", label: "Ver el costo de financiar" },
   },
   {
     term: "Fecha de corte y vencimiento",
     category: "credito",
     definition:
-      "El corte cierra el resumen del mes y el vencimiento es la fecha límite de pago. Las compras hechas después del corte entran al siguiente ciclo. Herramienta relacionada: corte y vencimiento de tarjeta.",
+      "El corte cierra el resumen del mes y el vencimiento es la fecha límite de pago. Las compras hechas después del corte entran al siguiente ciclo.",
+    related: { slug: "tarjeta-corte-vencimiento", label: "Descubrir mis fechas" },
   },
   {
     term: "Score crediticio",
@@ -120,6 +131,7 @@ const terms: GlossaryTerm[] = [
     category: "tasas",
     definition:
       "Se calcula solo sobre el capital inicial, siempre igual. En un crédito de $10,000 al 10% anual simple, cada año se generan $1,000 de intereses, sin acumular.",
+    related: { slug: "calculadora-interes-compuesto", label: "Verlo en la calculadora" },
   },
   {
     term: "Interés compuesto",
@@ -128,6 +140,7 @@ const terms: GlossaryTerm[] = [
       "Interés que se genera también sobre los intereses ya acumulados: el crecimiento se acelera con el tiempo. Es tu mejor aliado invirtiendo y tu peor enemigo endeudándote.",
     example:
       "$10,000 al 10% anual compuesto quedan en $11,000 el primer año y en $12,100 el segundo (no $12,000): el interés ganó intereses.",
+    related: { slug: "calculadora-interes-compuesto", label: "Usar la calculadora" },
   },
   {
     term: "Tasa nominal",
@@ -160,6 +173,7 @@ const terms: GlossaryTerm[] = [
     definition:
       "Truco para estimar en cuántos años se duplica el dinero: divide 72 entre la tasa anual de rendimiento.",
     example: "Con un 8% anual: 72 ÷ 8 = 9 años para duplicar.",
+    related: { slug: "calculadora-interes-compuesto", label: "Estimar mi duplicación" },
   },
 
   // — Inversiones —
@@ -185,7 +199,8 @@ const terms: GlossaryTerm[] = [
     term: "Tolerancia al riesgo",
     category: "inversion",
     definition:
-      "Hasta qué punto puedes y quieres soportar caídas sin entrar en pánico. Depende de tu personalidad y tu situación, no solo del monto. Herramienta relacionada: test de perfil de riesgo.",
+      "Hasta qué punto puedes y quieres soportar caídas sin entrar en pánico. Depende de tu personalidad y tu situación, no solo del monto.",
+    related: { slug: "test-perfil-riesgo", label: "Hacer el test de perfil de riesgo" },
   },
   {
     term: "Retorno de inversión (ROI)",
@@ -211,6 +226,7 @@ const terms: GlossaryTerm[] = [
     category: "inversion",
     definition:
       "Aportar montos fijos con frecuencia constante en lugar de intentar adivinar el mejor momento: promedia el precio de compra y quita la presión del timing.",
+    related: { slug: "calculadora-interes-compuesto", label: "Simular aportes periódicos" },
   },
   {
     term: "Mercado de valores",
