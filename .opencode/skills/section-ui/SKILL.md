@@ -56,6 +56,7 @@ Nunca hex suelto en componentes: clases Tailwind o CSS vars (`var(--color-finanz
 - **Botones outline (ToolPageShell)**: base `border-{s} text-{s} dark:border-{s}-light dark:text-{s}-light` · hover claro `hover:bg-{s}-dark hover:text-white` (cuerpo: `hover:bg-cuerpo hover:text-black`) · hover oscuro `dark:hover:bg-{s}-light dark:hover:text-black`. Sin escala, `transition-colors`.
 - **Fila FAQ**: `hover:bg-black/5 hover:text-{s} dark:hover:bg-white/10 dark:hover:text-{s}-light`. Icono del círculo: sólido `bg-{s} group-hover:bg-{s}-dark dark:bg-{s}-light dark:group-hover:bg-{s}-lighter` + `text-white dark:text-black` (cuerpo: `bg-cuerpo-dark`→`bg-cuerpo-darkest`).
 - **Tabs activos**: `text-{s} dark:text-{s}-light` + underline `bg-{s} dark:bg-{s}-light`. Inactivos `text-gray-600 dark:text-gray-400`; hover oscuro `dark:hover:text-{s}-light` (NUNCA `-darkest` en oscuro: queda invisible).
+- **Tarjeta de contenido no enlazada** (glosario, listas): `group` + `transition-colors hover:border-{s} hover:bg-black/5 dark:hover:border-{s}-light dark:hover:bg-white/10` y el título `group-hover:text-{s}-darkest dark:group-hover:text-{s}-lighter`.
 - Regla general: el hover debe cambiar **relleno Y texto**, perceptible en ambos modos.
 
 ## 7. Contraste (AA)

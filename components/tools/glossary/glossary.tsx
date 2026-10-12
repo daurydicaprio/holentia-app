@@ -147,10 +147,10 @@ export function Glossary() {
                 {group.terms.map((item, index) => (
                   <article
                     key={item.term}
-                    className="animate-fadeIn rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-800"
+                    className="group animate-fadeIn rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-colors hover:border-finanzas hover:bg-black/5 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-finanzas-light dark:hover:bg-white/10"
                     style={{ animationDelay: `${Math.min(index, 8) * 0.05}s` }}
                   >
-                    <h3 className="text-lg font-semibold text-finanzas-dark dark:text-finanzas-light">
+                    <h3 className="text-lg font-semibold text-finanzas-dark transition-colors group-hover:text-finanzas-darkest dark:text-finanzas-light dark:group-hover:text-finanzas-lighter">
                       {item.term}
                     </h3>
                     <p className="mt-2 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
