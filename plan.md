@@ -38,7 +38,7 @@ Canónicos: mente `#1976d2`, relaciones `#7c3aed`, cuerpo `#ffa000`, finanzas `#
 - [x] `tool-page-client.tsx` rama `relaciones #7c3aed`
 - [x] `unified-header.tsx` rama `relaciones rgba(124,58,237,0.7)`
 - [x] `footer.tsx` rama `relaciones`
-- [x] `tools-grid.tsx` rama `relaciones text-relaciones-DEFAULT`
+- [x] `tools-grid.tsx` rama `relaciones text-relaciones` (corregido: la clave DEFAULT genera clase sin sufijo)
 - [x] `menu-button.tsx` quitada clase dinámica rota `ring-${section}-400` (el ring open ya sale de `accentColor` en boxShadow)
 - [x] `logo.tsx` aura unificada a RGB canónicos
 - [x] Nota: vars `globals #1565c0/#ef6c00/#2e7d32` se dejan — fueron oscurecidas a propósito para contraste en cards; los hex inline de headers usan canónicos. No tocar sin revisión visual.

@@ -2,7 +2,8 @@
 
 > Fuente única de verdad para color, tipografía, espaciado y patrones de UI.
 > Tokens en `app/globals.css` · mapeo Tailwind en `tailwind.config.ts` · recetas en este documento.
-> Regla de oro: **nunca hex suelto en componentes nuevos** — siempre tokens Tailwind (`bg-mente-DEFAULT`, etc.) o CSS vars.
+> Regla de oro: **nunca hex suelto en componentes nuevos** — siempre tokens Tailwind (`bg-mente`, etc.) o CSS vars.
+> Importante: la clave `DEFAULT` genera la clase **sin sufijo** (`bg-mente`, `text-finanzas`), nunca `bg-mente-DEFAULT`.
 
 ---
 
@@ -17,7 +18,7 @@ Cada sección tiene un color canónico de Material (o equivalente) y su escala. 
 | Cuerpo | `#ffa000` | `#e65100` | `#ffb74d` | `#ffcc80` | `#bf360c` | `#ff5722` |
 | Finanzas | `#388e3c` | `#1b5e20` | `#66bb6a` | `#a5d6a7` | `#1a4314` | `#00796b` |
 
-Tokens Tailwind por sección (`tailwind.config.ts`): `DEFAULT`, `dark`, `light`, `lighter`, `darkest`, `foreground`, `glass`, `border`, `text`, `category`, `accent`. Uso típico: `text-mente-DEFAULT`, `bg-finanzas-lighter/30`, `border-cuerpo-DEFAULT`.
+Tokens Tailwind por sección (`tailwind.config.ts`): `DEFAULT`, `dark`, `light`, `lighter`, `darkest`, `foreground`, `glass`, `border`, `text`, `category`, `accent`. Uso típico: `text-mente`, `bg-finanzas-lighter/30`, `border-cuerpo`. La clave `DEFAULT` se usa **sin sufijo** en las clases (`text-mente`, no `text-mente-DEFAULT`).
 
 ### Glass y bordes (vars `:root` / `.dark`)
 
@@ -59,7 +60,7 @@ Tokens Tailwind por sección (`tailwind.config.ts`): `DEFAULT`, `dark`, `light`,
 
 Superficie **gradiente** por sección (no glass) para garantizar contraste en claro:
 
-- **Light**: `bg-gradient-to-br from-{s}-DEFAULT to-{s}-dark`, texto blanco (cuerpo: `text-black`).
+- **Light**: `bg-gradient-to-br from-{s} to-{s}-dark`, texto blanco (cuerpo: `text-black`).
 - **Dark**: `dark:bg-none dark:bg-{s}-glass dark:text-{s}-text`.
 - Borde `border-{s}-border`, hover `hover:border-{s}-light hover:-translate-y-0.5` + sombra mayor + efecto 3D (solo `hover:hover`).
 - Categoría: `text-white/85 dark:text-{s}-lighter` (cuerpo: `text-black/70`).
@@ -69,7 +70,7 @@ Superficie **gradiente** por sección (no glass) para garantizar contraste en cl
 ### ToolsGrid (`components/sections/tools-grid.tsx`)
 
 - **Disponibles primero** (siempre en HTML), no disponibles colapsados tras botón "Ver todas las herramientas" (`hidden`/`grid`).
-- Botón fantasma con color de sección (`text-{s}-DEFAULT hover:text-{s}-darkest`) + chevron rotable.
+- Botón fantasma con color de sección (`text-{s} hover:text-{s}-darkest dark:text-{s}-light`) + chevron rotable.
 
 ### SectionTabs (`components/sections/section-tabs.tsx`)
 
@@ -77,7 +78,7 @@ Server component. Links a `/` + 4 secciones desde array estático. Activa: `colo
 
 ### ToolPageShell (`components/tool-seo/tool-page-shell.tsx`)
 
-H1 centrado en color de sección + descripción + underline · botones outline "Volver a {sección}" / "Hacer donación" (`border-{s}-DEFAULT text-{s}-DEFAULT hover:bg-{s}-glass`) · `children` · FAQ · `JsonLd`. Sin breadcrumb visible (el `BreadcrumbList` va en JSON-LD).
+H1 centrado en color de sección + descripción + underline · botones outline "Volver a {sección}" / "Hacer donación" (`border-{s} text-{s} hover:bg-{s}-glass dark:border-{s}-light dark:text-{s}-light`) · `children` · FAQ · `JsonLd`. Sin breadcrumb visible (el `BreadcrumbList` va en JSON-LD).
 
 ### FAQ acordeón (`components/tool-seo/tool-faq.tsx`)
 
@@ -86,7 +87,7 @@ Client component. Una pregunta abierta a la vez (`openIndex`). Fila `button` con
 ### Botones (`components/ui/button.tsx` + custom)
 
 - shadcn `Button` para UI genérica (fantasma en toggle de grid).
-- Botones de herramienta: outline sección (ver shell) o sólidos `{s}-DEFAULT` → hover `{s}-dark`.
+- Botones de herramienta: outline sección (ver shell) o sólidos `{s}` → hover `{s}-dark`.
 
 ## 5. Modo oscuro
 

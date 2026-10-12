@@ -42,7 +42,7 @@ Regla: nada de `useEffect`/`mounted` guard para decidir si se renderiza contenid
 
 ## 4. Color y theming
 
-- Tokens por sección en `app/globals.css` (`:root` light + `.dark`), mapeados a Tailwind en `tailwind.config.ts` (clases `bg-mente-DEFAULT`, `text-finanzas-lighter`, etc.). Paleta canónica: mente `#1976d2`, relaciones `#7c3aed`, cuerpo `#ffa000`, finanzas `#388e3c`.
+- Tokens por sección en `app/globals.css` (`:root` light + `.dark`), mapeados a Tailwind en `tailwind.config.ts` (clases `bg-mente`, `text-finanzas-lighter`, etc.; la clave `DEFAULT` se usa sin sufijo). Paleta canónica: mente `#1976d2`, relaciones `#7c3aed`, cuerpo `#ffa000`, finanzas `#388e3c`.
 - Tarjetas: **gradiente sólido** en light (contraste con texto blanco), **glass** en dark. Detalle en `design.md` §4.
 - `next-themes` gestiona `resolvedTheme`; Chart.js y otros efectos reaccionan al tema.
 
