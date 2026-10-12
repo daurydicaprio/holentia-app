@@ -53,13 +53,14 @@ export function Glossary() {
   }
 
   return (
-    <section aria-label="Buscador del glosario" className="space-y-6">
-      {/* Encabezado + búsqueda centrada */}
-      <div className="mx-auto max-w-2xl space-y-4 text-center">
-        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 sm:text-2xl">
-          Aprende y busca un nuevo término
-        </h2>
-        <div className="relative">
+    <section aria-label="Buscador del glosario" className="space-y-8">
+      {/* Panel hero: receta ToolCard (gradiente claro / glass oscuro) */}
+      <div className="rounded-2xl border border-finanzas-border bg-gradient-to-br from-finanzas to-finanzas-dark p-6 text-white dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text sm:p-8">
+        <h2 className="text-xl font-bold sm:text-2xl">Aprende y busca un nuevo término</h2>
+        <p className="mt-1.5 text-sm text-white/85 dark:text-finanzas-lighter">
+          Ahorro, crédito, intereses, inversiones y bolsa: todo explicado con ejemplos.
+        </p>
+        <div className="relative mt-4">
           <label htmlFor="glossary-search" className="sr-only">
             Buscar un término del glosario
           </label>

@@ -49,6 +49,7 @@ Nunca hex suelto en componentes: clases Tailwind o CSS vars (`var(--color-finanz
 - **Tarjetas en LIGHT**: gradiente sólido `bg-gradient-to-br from-{s} to-{s}-dark` + `text-white` (cuerpo: `from-cuerpo to-cuerpo-dark text-black`). Jamás glass claro con texto blanco (queda blanco sobre blanco).
 - **Superficies en DARK**: `dark:bg-none dark:bg-{s}-glass dark:text-{s}-text` (glass translúcido sobre `#121212`).
 - Glass (`rgba(color, 0.45/0.25)`) solo para headers/overlays, nunca como fondo de tarjeta en claro.
+- **Panel hero dentro de una herramienta** (p. ej. el buscador del glosario): misma receta que ToolCard — `rounded-2xl border border-{s}-border bg-gradient-to-br from-{s} to-{s}-dark p-6 sm:p-8 text-white dark:bg-none dark:bg-{s}-glass dark:text-{s}-text`, a ancho completo del shell.
 - Categoría dentro de tarjeta: `text-white/85 dark:text-{s}-lighter` (cuerpo: `text-black/70`).
 
 ## 6. Hovers canónicos (ambos modos con contraste)
