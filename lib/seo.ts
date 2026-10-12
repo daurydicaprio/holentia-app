@@ -5,6 +5,14 @@ import type { CardData, SectionType } from "@/types"
 export const SITE_URL = "https://holentia.com"
 export const SITE_NAME = "HOLENTIA"
 
+// Imagen social 1200×630 generada por app/opengraph-image.tsx (file-convention).
+const OG_IMAGE = {
+  url: "/opengraph-image",
+  width: 1200,
+  height: 630,
+  alt: "HOLENTIA — Herramientas gratuitas de bienestar integral",
+}
+
 const SECTION_LABELS: Record<SectionType, string> = {
   mente: "Mente",
   relaciones: "Relaciones",
@@ -45,11 +53,13 @@ function baseMetadata(title: string, description: string, path: string): Metadat
       siteName: SITE_NAME,
       locale: "es_DO",
       type: "website",
+      images: [OG_IMAGE],
     },
     twitter: {
       card: "summary",
       title: `${title} | ${SITE_NAME}`,
       description,
+      images: [OG_IMAGE.url],
     },
   }
 }
