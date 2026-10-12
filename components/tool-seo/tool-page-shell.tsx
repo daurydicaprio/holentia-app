@@ -26,11 +26,14 @@ const sectionUnderlineClass: Record<string, string> = {
 }
 
 const sectionButtonClass: Record<string, string> = {
-  mente: "border-mente text-mente hover:bg-mente-glass dark:border-mente-light dark:text-mente-light",
+  mente:
+    "border-mente text-mente hover:bg-mente-dark hover:text-white dark:border-mente-light dark:text-mente-light dark:hover:bg-mente-light dark:hover:text-black",
   relaciones:
-    "border-relaciones text-relaciones hover:bg-relaciones-glass dark:border-relaciones-light dark:text-relaciones-light",
-  cuerpo: "border-cuerpo-dark text-cuerpo-dark hover:bg-cuerpo-glass dark:border-cuerpo-light dark:text-cuerpo-light",
-  finanzas: "border-finanzas text-finanzas hover:bg-finanzas-glass dark:border-finanzas-light dark:text-finanzas-light",
+    "border-relaciones text-relaciones hover:bg-relaciones-dark hover:text-white dark:border-relaciones-light dark:text-relaciones-light dark:hover:bg-relaciones-light dark:hover:text-black",
+  cuerpo:
+    "border-cuerpo-dark text-cuerpo-dark hover:bg-cuerpo hover:text-black dark:border-cuerpo-light dark:text-cuerpo-light dark:hover:bg-cuerpo-light dark:hover:text-black",
+  finanzas:
+    "border-finanzas text-finanzas hover:bg-finanzas-dark hover:text-white dark:border-finanzas-light dark:text-finanzas-light dark:hover:bg-finanzas-light dark:hover:text-black",
 }
 
 interface ToolPageShellProps {
@@ -48,7 +51,7 @@ export default function ToolPageShell({ section, tool, faq = [], children }: Too
   const jsonLd = toolJsonLd(section, tool.slug, faq)
 
   const buttonStyles =
-    "inline-flex h-10 items-center gap-2 rounded-md border bg-white/60 px-5 text-sm font-medium backdrop-blur-sm transition-all duration-300 hover:scale-105 dark:bg-black/20"
+    "inline-flex h-10 items-center gap-2 rounded-md border bg-white/60 px-5 text-sm font-medium backdrop-blur-sm transition-colors duration-200 dark:bg-black/20"
 
   return (
     <main className="min-h-screen flex flex-col">

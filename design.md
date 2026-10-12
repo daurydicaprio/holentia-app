@@ -78,11 +78,11 @@ Server component. Links a `/` + 4 secciones desde array estático. Activa: `colo
 
 ### ToolPageShell (`components/tool-seo/tool-page-shell.tsx`)
 
-H1 centrado en color de sección + descripción + underline · botones outline "Volver a {sección}" / "Hacer donación" (`border-{s} text-{s} hover:bg-{s}-glass dark:border-{s}-light dark:text-{s}-light`) · `children` · FAQ · `JsonLd`. Sin breadcrumb visible (el `BreadcrumbList` va en JSON-LD).
+H1 centrado en color de sección + descripción + underline · botones outline "Volver a {sección}" / "Hacer donación" (`border-{s} text-{s} dark:border-{s}-light dark:text-{s}-light`; hover claro: relleno `{s}-dark` + texto blanco — cuerpo: `{s}` + texto negro; hover oscuro: relleno `{s}-light` + texto negro; sin escala) · `children` · FAQ · `JsonLd`. Sin breadcrumb visible (el `BreadcrumbList` va en JSON-LD).
 
 ### FAQ acordeón (`components/tool-seo/tool-faq.tsx`)
 
-Client component. Una pregunta abierta a la vez (`openIndex`). Fila `button` con `aria-expanded`/`aria-controls`; panel con `grid-rows-[0fr→1fr]` + `overflow-hidden` (el contenido permanece en el HTML para SEO). Icono `Plus`/`Minus` en círculo `bg-{s}-lighter/50`; hover de fila `hover:bg-{s}-lighter/30` (cuerpo `/40`).
+Client component. Una pregunta abierta a la vez (`openIndex`). Fila `button` con `aria-expanded`/`aria-controls`; panel con `grid-rows-[0fr→1fr]` + `overflow-hidden` (el contenido permanece en el HTML para SEO). Icono `Plus`/`Minus` en círculo `bg-{s}-lighter/50`; hover de fila: relleno neutro visible `hover:bg-black/5` / `dark:hover:bg-white/10` + texto al tinte de sección (`hover:text-{s}` / `dark:hover:text-{s}-light`).
 
 ### Botones (`components/ui/button.tsx` + custom)
 

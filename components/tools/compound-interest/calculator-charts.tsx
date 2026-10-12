@@ -337,7 +337,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
                         text: `${label}: ${percentage}% (${formatCurrency(value)})`, // Añadir valor monetario
                         fillStyle: backgroundColors[i],
                         strokeStyle: backgroundColors[i],
-                        color: chartColors.text,
+                        fontColor: chartColors.text,
                         lineWidth: 0,
                         hidden: false,
                         index: i,
