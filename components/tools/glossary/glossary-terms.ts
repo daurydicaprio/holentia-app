@@ -28,7 +28,7 @@ const terms: GlossaryTerm[] = [
     definition:
       "Plan que decide en qué se destina cada peso de tus ingresos en un período. Asignarle un destino al dinero antes de gastarlo es la base para ahorrar sin esfuerzo.",
     example:
-      "Si ganas $40,000 al mes y repartes $22,000 en gastos necesarios, $8,000 en gustos y $10,000 en ahorro, ese reparto es tu presupuesto.",
+      "Si ganas $24,000 al mes y repartes $14,000 en gastos necesarios, $5,000 en gustos y $5,000 en ahorro, ese reparto es tu presupuesto.",
   },
   {
     term: "Gastos fijos y variables",
@@ -59,7 +59,15 @@ const terms: GlossaryTerm[] = [
     category: "presupuesto",
     definition:
       "Guía simple para repartir el ingreso neto: 50% necesidades, 30% gustos y 20% ahorro o pago de deudas. Es un punto de partida, no una regla estricta.",
-    example: "Con $40,000 netos: $20,000 necesidades, $12,000 gustos y $8,000 ahorro o deudas.",
+    example: "Con $24,000 netos: $12,000 necesidades, $7,200 gustos y $4,800 ahorro o deudas.",
+  },
+  {
+    term: "Regla del 17%",
+    category: "presupuesto",
+    definition:
+      "Guía sencilla para convertir el ahorro en hábito: si cada mes apartas cerca del 17% de tu sueldo, al final del año tendrás acumulado el equivalente a unos 2 sueldos.",
+    example:
+      "Con un sueldo de $24,000, el 17% son $4,080 al mes: en 12 meses tendrías cerca de $49,000, algo más de 2 sueldos.",
   },
 
   // — Crédito y deudas —

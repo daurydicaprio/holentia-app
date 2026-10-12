@@ -53,95 +53,99 @@ export function Glossary() {
   }
 
   return (
-    <section aria-label="Buscador del glosario" className="space-y-5">
-      {/* Búsqueda */}
-      <div className="relative">
-        <label htmlFor="glossary-search" className="sr-only">
-          Buscar un término del glosario
-        </label>
-        <Search
-          aria-hidden="true"
-          className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-gray-500"
-        />
-        <input
-          id="glossary-search"
-          type="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Busca un término… (ej. interés compuesto)"
-          autoComplete="off"
-          data-interactive="true"
-          className="h-10 w-full rounded-md border border-gray-300 bg-white py-2 pl-9 pr-10 text-sm text-gray-900 placeholder:text-gray-400 focus:border-finanzas focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-finanzas-light dark:focus:ring-finanzas-light"
-        />
-        {query && (
-          <button
-            type="button"
-            onClick={() => setQuery("")}
-            aria-label="Limpiar búsqueda"
+    <section aria-label="Buscador del glosario" className="space-y-6">
+      {/* Encabezado + búsqueda centrada */}
+      <div className="mx-auto max-w-2xl space-y-4 text-center">
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 sm:text-2xl">
+          Aprende y busca un nuevo término
+        </h2>
+        <div className="relative">
+          <label htmlFor="glossary-search" className="sr-only">
+            Buscar un término del glosario
+          </label>
+          <Search
+            aria-hidden="true"
+            className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 dark:text-gray-500"
+          />
+          <input
+            id="glossary-search"
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Busca un término… (ej. interés compuesto)"
+            autoComplete="off"
             data-interactive="true"
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-gray-500 transition-colors hover:bg-black/5 hover:text-finanzas dark:text-gray-400 dark:hover:bg-white/10 dark:hover:text-finanzas-light"
-          >
-            <X aria-hidden="true" className="h-4 w-4" />
-          </button>
-        )}
+            className="h-12 w-full rounded-md border border-gray-300 bg-white py-2 pl-12 pr-12 text-base text-gray-900 placeholder:text-gray-400 focus:border-finanzas focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-finanzas-light dark:focus:ring-finanzas-light"
+          />
+          {query && (
+            <button
+              type="button"
+              onClick={() => setQuery("")}
+              aria-label="Limpiar búsqueda"
+              data-interactive="true"
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-2 text-gray-500 transition-colors hover:bg-black/5 hover:text-finanzas dark:text-gray-400 dark:hover:bg-white/10 dark:hover:text-finanzas-light"
+            >
+              <X aria-hidden="true" className="h-4 w-4" />
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* Categorías */}
-      <div className="flex flex-wrap gap-2" role="group" aria-label="Filtrar por categoría">
-        <button
-          type="button"
-          aria-pressed={category === "all"}
-          onClick={() => handleCategory("all")}
-          data-interactive="true"
-          className={cn(
-            "rounded-md border px-3 py-1.5 text-sm font-medium transition-colors",
-            category === "all"
-              ? "border-finanzas-dark bg-finanzas-dark text-white dark:border-finanzas-light dark:bg-finanzas-light dark:text-black"
-              : "border-gray-300 text-gray-600 hover:bg-black/5 hover:text-finanzas dark:border-gray-600 dark:text-gray-400 dark:hover:bg-white/10 dark:hover:text-finanzas-light",
-          )}
-        >
-          Todas
-        </button>
-        {GLOSSARY_CATEGORIES.map((cat) => (
+      {/* Categorías + contador */}
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-3">
+        <div className="flex flex-wrap gap-2" role="group" aria-label="Filtrar por categoría">
           <button
-            key={cat.id}
             type="button"
-            aria-pressed={category === cat.id}
-            onClick={() => handleCategory(cat.id)}
+            aria-pressed={category === "all"}
+            onClick={() => handleCategory("all")}
             data-interactive="true"
             className={cn(
               "rounded-md border px-3 py-1.5 text-sm font-medium transition-colors",
-              category === cat.id
+              category === "all"
                 ? "border-finanzas-dark bg-finanzas-dark text-white dark:border-finanzas-light dark:bg-finanzas-light dark:text-black"
                 : "border-gray-300 text-gray-600 hover:bg-black/5 hover:text-finanzas dark:border-gray-600 dark:text-gray-400 dark:hover:bg-white/10 dark:hover:text-finanzas-light",
             )}
           >
-            {cat.label}
+            Todas
           </button>
-        ))}
-      </div>
+          {GLOSSARY_CATEGORIES.map((cat) => (
+            <button
+              key={cat.id}
+              type="button"
+              aria-pressed={category === cat.id}
+              onClick={() => handleCategory(cat.id)}
+              data-interactive="true"
+              className={cn(
+                "rounded-md border px-3 py-1.5 text-sm font-medium transition-colors",
+                category === cat.id
+                  ? "border-finanzas-dark bg-finanzas-dark text-white dark:border-finanzas-light dark:bg-finanzas-light dark:text-black"
+                  : "border-gray-300 text-gray-600 hover:bg-black/5 hover:text-finanzas dark:border-gray-600 dark:text-gray-400 dark:hover:bg-white/10 dark:hover:text-finanzas-light",
+              )}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
 
-      {/* Conteo */}
-      <p
-        aria-live="polite"
-        className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
-      >
-        <Wallet aria-hidden="true" className="h-4 w-4 text-finanzas dark:text-finanzas-light" />
-        {filtered.length === GLOSSARY_TERMS.length
-          ? `${GLOSSARY_TERMS.length} términos`
-          : `${filtered.length} de ${GLOSSARY_TERMS.length} términos`}
-      </p>
+        {/* Conteo a la derecha de los filtros */}
+        <p
+          aria-live="polite"
+          className="ml-auto flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400"
+        >
+          <Wallet aria-hidden="true" className="h-4 w-4 text-finanzas dark:text-finanzas-light" />
+          {filtered.length === GLOSSARY_TERMS.length
+            ? `${GLOSSARY_TERMS.length} términos`
+            : `${filtered.length} de ${GLOSSARY_TERMS.length} términos`}
+        </p>
+      </div>
 
       {/* Resultados agrupados por categoría */}
       {groups.length > 0 ? (
-        <div className="space-y-8">
+        <div className="space-y-10">
           {groups.map((group) => (
             <div key={group.id}>
               <h2 className="text-xl font-bold text-finanzas-dark dark:text-finanzas-light">
                 {group.label}
-                <span className="ml-2 text-sm font-normal text-gray-500 dark:text-gray-400">
-                  · {group.terms.length}
-                </span>
               </h2>
               <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {group.terms.map((item, index) => (
