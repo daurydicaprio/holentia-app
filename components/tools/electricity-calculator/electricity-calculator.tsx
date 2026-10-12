@@ -116,7 +116,7 @@ export function ElectricityCalculator() {
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">Mueve el medidor y mira tu factura al instante.</p>
 
         <div className="text-center mb-2">
-          <span className="text-5xl font-bold text-[#388e3c] dark:text-[#81c784]">
+          <span className="text-5xl font-bold text-finanzas dark:text-[#81c784]">
             {kwh > 0 ? kwh.toLocaleString("es-DO") : "—"}
           </span>
           <span className="block text-sm text-gray-500 dark:text-gray-400 mt-1">kWh del mes</span>
@@ -142,7 +142,7 @@ export function ElectricityCalculator() {
           value={kwhInput}
           onChange={(e) => setKwhInput(e.target.value)}
           placeholder="Ej: 445"
-          className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-[#388e3c] focus:border-transparent"
+          className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-finanzas focus:border-transparent"
           data-interactive="true"
         />
 
@@ -151,7 +151,7 @@ export function ElectricityCalculator() {
             <button
               key={v}
               onClick={() => setQuick(v)}
-              className="px-3 py-1.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784] font-medium transition-colors"
+              className="px-3 py-1.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-finanzas dark:text-[#81c784] font-medium transition-colors"
               data-interactive="true"
             >
               {v} kWh
@@ -230,7 +230,7 @@ export function ElectricityCalculator() {
               </span>
             </div>
             <div className="px-5 py-3 flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800">
-              <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
+              <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-finanzas" />
               <span>
                 <strong>Total exacto</strong> con la tarifa vigente. El{" "}
                 <strong>subsidio del gobierno es una estimación</strong> (~45%) y puede variar{" "}

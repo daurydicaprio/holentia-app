@@ -373,9 +373,9 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 className="text-xl font-bold text-[#388e3c] w-full text-center mb-6">
+        <h2 className="text-xl font-bold text-finanzas w-full text-center mb-6">
           Composición de la inversión
-          <span className="block w-16 h-1 bg-[#388e3c] mx-auto mt-2"></span>
+          <span className="block w-16 h-1 bg-finanzas mx-auto mt-2"></span>
         </h2>
 
         <div className="h-[300px] sm:h-[400px] flex items-center justify-center">
@@ -391,9 +391,9 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <h2 className="text-xl font-bold text-[#388e3c] w-full text-center mb-6">
+          <h2 className="text-xl font-bold text-finanzas w-full text-center mb-6">
             Distribución de la inversión
-            <span className="block w-16 h-1 bg-[#388e3c] mx-auto mt-2"></span>
+            <span className="block w-16 h-1 bg-finanzas mx-auto mt-2"></span>
           </h2>
 
           <div className="h-[300px] sm:h-[400px] flex items-center justify-center">

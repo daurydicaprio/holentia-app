@@ -209,7 +209,7 @@ function WhySection({
       {/* Barra delgada en 2 fases, dominio incluye el hoy */}
       <div className="relative h-3 rounded-full bg-gray-200 dark:bg-gray-600">
         <div
-          className="absolute h-full bg-[#388e3c]"
+          className="absolute h-full bg-finanzas"
           style={{ left: `${pctBuy}%`, width: `${Math.max(pctCut - pctBuy, 0)}%` }}
         />
         <div
@@ -219,14 +219,14 @@ function WhySection({
         <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-amber-400 border-[3px] border-amber-700" style={{ left: `${pctBuy}%` }} />
         {!sameDay && (
           <div
-            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-[#388e3c]"
+            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-finanzas"
             style={{ left: `${pctCut}%` }}
           />
         )}
         <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white dark:bg-gray-800 border-[3px] border-slate-500" style={{ left: `${pctDue}%` }} />
         {/* Nodo físico del pago sugerido sobre la barra */}
         <div
-          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-[#1b5e20] border-[3px] border-white dark:border-gray-800 shadow"
+          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-finanzas-dark border-[3px] border-white dark:border-gray-800 shadow"
           style={{ left: `${pctSug}%` }}
           title={`Pago sugerido: ${formatShort(result.suggestedPay)}`}
         />
@@ -240,8 +240,8 @@ function WhySection({
       {/* Pago sugerido: stem y badge centrados exacto sobre el nodo */}
       <div className="relative h-16">
         <div className="absolute top-0 flex flex-col items-center -translate-x-1/2" style={{ left: `${pctSug}%` }}>
-          <div className="w-1 h-6 bg-[#1b5e20] dark:bg-[#81c784]" />
-          <span className="px-3 py-1 rounded-full bg-[#1b5e20] text-white text-[11px] font-bold whitespace-nowrap shadow">
+          <div className="w-1 h-6 bg-finanzas-dark dark:bg-[#81c784]" />
+          <span className="px-3 py-1 rounded-full bg-finanzas-dark text-white text-[11px] font-bold whitespace-nowrap shadow">
             Sugerido: <span className="capitalize">{formatShort(result.suggestedPay)}</span>
           </span>
         </div>
@@ -263,7 +263,7 @@ function WhySection({
       {/* Tramos */}
       <div className="grid grid-cols-2 gap-3 mt-5">
         <div className="rounded-xl bg-[#388e3c]/10 dark:bg-[#388e3c]/20 px-4 py-3 text-center">
-          <div className="text-xl font-bold text-[#1b5e20] dark:text-[#a5d6a7] tabular-nums">
+          <div className="text-xl font-bold text-finanzas-dark dark:text-finanzas-lighter tabular-nums">
             {result.daysToCutoff} días
           </div>
           <div className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">para comprar</div>
@@ -278,7 +278,7 @@ function WhySection({
 
       {/* Pie útil */}
       <div className="flex items-start justify-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-6 leading-relaxed text-center">
-        <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
+        <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-finanzas" />
         <span className="max-w-md">
           Esto es una estimación con tu día de corte ({cutoffDay || "—"}) y de pago ({dueDay || "—"}). Cada banco
           tiene sus reglas y feriados: confirma las fechas exactas en tu estado de cuenta o la app de tu banco antes
@@ -389,7 +389,7 @@ export function CardCutoffCalculator() {
   const cardLabel = `${cardName || "Mi tarjeta"} •• ${cardLast4 || "••••"}`
 
   const inputClass =
-    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-[#388e3c] focus:border-transparent"
+    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-finanzas focus:border-transparent"
 
   const steps = result
     ? [
@@ -429,12 +429,12 @@ export function CardCutoffCalculator() {
       <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg h-fit">
         <div className="flex items-center gap-3 mb-2">
           <div className="p-2 rounded-lg bg-[#388e3c]/10 dark:bg-[#388e3c]/20">
-            <CreditCard className="h-6 w-6 text-[#388e3c] dark:text-[#81c784]" />
+            <CreditCard className="h-6 w-6 text-finanzas dark:text-[#81c784]" />
           </div>
           <h2 className="text-xl font-bold">Tu tarjeta</h2>
         </div>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Configúrala una vez, consúltala siempre.</p>
-        <p className="text-xs font-semibold text-[#388e3c] dark:text-[#81c784] mb-6">{cardLabel}</p>
+        <p className="text-xs font-semibold text-finanzas dark:text-[#81c784] mb-6">{cardLabel}</p>
 
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
@@ -508,7 +508,7 @@ export function CardCutoffCalculator() {
                 <button
                   key={chip.label}
                   onClick={() => setQuickDate(chip.offset)}
-                  className="px-3 py-1.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784] font-medium transition-colors"
+                  className="px-3 py-1.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-finanzas dark:text-[#81c784] font-medium transition-colors"
                   data-interactive="true"
                 >
                   {chip.label}
@@ -575,7 +575,7 @@ export function CardCutoffCalculator() {
                   <>
                     Tienes hasta el <strong>{formatLong(result.due)}</strong> para pagar. Te sugerimos pagar 2 o 3
                     días antes, o sea el{" "}
-                    <strong className="text-[#388e3c] dark:text-[#81c784]">
+                    <strong className="text-finanzas dark:text-[#81c784]">
                       {formatLong(result.suggestedPay)}
                     </strong>
                     .
@@ -605,7 +605,7 @@ export function CardCutoffCalculator() {
                       className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center shadow-sm transition-transform duration-300 group-hover:scale-110 ${
                         i === steps.length - 1
                           ? "text-white"
-                          : "bg-white dark:bg-slate-900 text-[#388e3c] dark:text-[#81c784] ring-2 ring-[#388e3c]/20"
+                          : "bg-white dark:bg-slate-900 text-finanzas dark:text-[#81c784] ring-2 ring-[#388e3c]/20"
                       }`}
                       style={i === steps.length - 1 ? { background: "linear-gradient(135deg, #2e7d32, #1b5e20)" } : undefined}
                     >
@@ -617,7 +617,7 @@ export function CardCutoffCalculator() {
                       {step.label}
                     </div>
                     <div className="font-bold text-lg leading-snug">{formatLong(step.date)}</div>
-                    <div className="text-sm text-[#388e3c] dark:text-[#81c784] font-medium mt-2">{step.note}</div>
+                    <div className="text-sm text-finanzas dark:text-[#81c784] font-medium mt-2">{step.note}</div>
                   </div>
                 </div>
               ))}

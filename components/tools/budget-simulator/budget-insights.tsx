@@ -81,7 +81,7 @@ export function BudgetInsights({ savingProjection, topExpenses, formatCurrency }
         <p className="text-gray-600 dark:text-gray-400 text-xs mb-3">
           Obtén tu plantilla de Excel o Google Sheet gratis y descubre cómo organizar tus finanzas de manera efectiva
         </p>
-        <div className="text-[#388e3c] dark:text-[#6a9c77] font-medium text-xs">Descargar ahora →</div>
+        <div className="text-finanzas dark:text-[#6a9c77] font-medium text-xs">Descargar ahora →</div>
       </div>
     </div>
   )

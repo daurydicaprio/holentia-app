@@ -34,6 +34,8 @@ Con `isAvailable: true`, `app/sitemap.ts` la incluye **automáticamente** (deriv
 - Directorio con el componente principal (ej. `compound-interest-calculator.tsx`) + subcomponentes.
 - `"use client"` solo donde haya interactividad.
 - Colores SIEMPRE con tokens de sección (skill `section-ui`). Iconos: `lucide-react` con el vocabulario de `design.md` §Iconos.
+- **Escala unificada obligatoria** (`design.md` §3 / skill `section-ui` §3b): controles `rounded-md` · recuadros internos `rounded-lg p-4` · tarjetas/tablas/modales `rounded-xl p-5` · paneles mayores `rounded-2xl p-6 sm:p-8` · foco `focus:border-transparent focus:ring-2 focus:ring-{s}` (nunca hex ni `ring-green-500`). Si la herramienta guarda drafts: patrón D; si guarda listas de simulaciones: patrón S (skill `tool-persistence`).
+- Copiar estructura visual de la herramienta más parecida ya existente (formulario→`compound-interest` · test→`risk-profile-test` · lista+buscador→`glosario`).
 - Lógica de cálculo en `hooks/use-{kebab}.ts` cuando sea reusable/pura (patrones D/S/E: skill `tool-persistence`).
 - Elementos interactivos: `data-interactive="true"`; acciones importantes con `useHapticFeedback`.
 

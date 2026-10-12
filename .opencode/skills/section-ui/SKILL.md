@@ -36,13 +36,31 @@ Nunca hex suelto en componentes: clases Tailwind o CSS vars (`var(--color-finanz
 - Fuente única: **Inter** (`next/font/google` en `app/layout.tsx`, body hereda). No cargar otras fuentes.
 - H1 herramienta: `text-2xl sm:text-3xl font-bold text-{s} dark:text-{s}-light` (lo pinta `ToolPageShell`).
 - H2 interno: `text-xl font-bold` · H3: `text-lg font-semibold`.
+- Cuerpo: UI densa `text-sm` · hero/buscador `text-base` · captions `text-xs`.
 - Números en tableros: `tabular-nums`. Énfasis de home/hub: gradiente `bg-clip-text`.
+
+## 3b. Escala unificada (SSOT: design.md §3 — resumen operativo)
+
+Un rol = una clase. No inventar radios/paddings nuevos; copiar del componente de referencia.
+
+| Rol | Clase | Referencia |
+|---|---|---|
+| Control (botón/input/chip/tab) | `rounded-md` | botones shell, input glosario, tabs |
+| Micro-contenedor (recuadro interno) | `rounded-lg` + `p-4` tip / `p-3` stat | caja de ejemplo, stats |
+| Sub-superficie (item/tabla/modal/dropdown) | `rounded-xl` + `p-5` | item FAQ, tarjeta de resultado |
+| Superficie mayor de herramienta | `rounded-2xl` + `p-6 sm:p-8` hero / `p-6` FAQ | ToolCard, panel hero |
+| Superficie mayor de página de contenido (ayuda/apoyar/legales) | `rounded-3xl` | SOLO esas páginas, nunca herramientas |
+| Círculo/pill | `rounded-full` | círculo FAQ, dots, underline |
+
+- Página herramienta: `p-4 sm:p-6 max-w-6xl mx-auto` · header→contenido `mb-6` · grupos `space-y-6/10` · grids `gap-4` (contenido) / `gap-5` (home) / `gap-6` (formularios).
+- **Foco canónico** (un solo patrón): `focus:border-transparent focus:ring-2 focus:ring-{s}` + `dark:focus:border-transparent dark:focus:ring-{s}-light`. Prohibido `ring-green-500`/hex en foco.
+- **Migración de legado**: hex bare de paleta → token (mismo valor); hex **con opacidad** `[#388e3c]/10` se deja así (tokens no admiten `/n`); `#81c784` pendiente de decisión (≈`finanzas-light`).
 
 ## 4. Iconos (`lucide-react`)
 
 - **Por sección** (nivel sección/estados vacíos/acentos): Mente `Brain` · Relaciones `Heart` · Cuerpo `Activity` · Finanzas `Wallet`. Colorear con `text-{s}`.
 - **Acciones compartidas** (vocabulario ya en uso — reutilizar, no inventar): guardar `Save` · borrar `Trash2` · info/disclaimer `Info`/`AlertTriangle` · editar `Edit2` · tiempo `Calendar` · dinero `DollarSign` · tasa `Percent` · tendencia `TrendingUp` · calculadora `Calculator` · ejemplo/tip `Lightbulb` · buscar `Search` · reset `RotateCcw` · cerrar `X` · navegación `ChevronRight/Left/Down`, `ArrowRight`.
-- Tamaños: botones/iconos inline `h-4 w-4` · destacados `h-5 w-5`+`flex-shrink-0`.
+- Tamaños: micro en fila (borrar) `h-3.5 w-3.5` · inline `h-4 w-4` · destacados `h-5 w-5`+`flex-shrink-0` · cabecera de paso `h-6 w-6` · estado vacío `h-12 w-12 opacity-40`.
 
 ## 5. Superficies — gradiente vs glass (CRÍTICO para contraste)
 

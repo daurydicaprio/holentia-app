@@ -125,7 +125,7 @@ export function HydrationCalculator() {
   }
 
   const inputClass =
-    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-cuerpo focus:border-transparent"
 
   const chipClass = (active: boolean) =>
     `p-3 rounded-xl border-2 font-medium transition-all text-center flex flex-col items-center gap-1 ${

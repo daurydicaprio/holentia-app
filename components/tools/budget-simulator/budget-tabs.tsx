@@ -14,7 +14,7 @@ export function BudgetTabs({ activeTab, onTabChange }: BudgetTabsProps) {
         onClick={() => onTabChange("income")}
         className={`flex items-center justify-center gap-2 py-2 px-3 text-sm font-medium flex-1 rounded-md transition-colors ${
           activeTab === "income"
-            ? "bg-[#388e3c] text-white shadow-sm"
+            ? "bg-finanzas text-white shadow-sm"
             : "bg-white/80 dark:bg-gray-700/80 text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700"
         }`}
       >
@@ -26,7 +26,7 @@ export function BudgetTabs({ activeTab, onTabChange }: BudgetTabsProps) {
         onClick={() => onTabChange("expenses")}
         className={`flex items-center justify-center gap-2 py-2 px-3 text-sm font-medium flex-1 rounded-md transition-colors ${
           activeTab === "expenses"
-            ? "bg-[#388e3c] text-white shadow-sm"
+            ? "bg-finanzas text-white shadow-sm"
             : "bg-white/80 dark:bg-gray-700/80 text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700"
         }`}
       >
@@ -38,7 +38,7 @@ export function BudgetTabs({ activeTab, onTabChange }: BudgetTabsProps) {
         onClick={() => onTabChange("summary")}
         className={`flex items-center justify-center gap-2 py-2 px-3 text-sm font-medium flex-1 rounded-md transition-colors ${
           activeTab === "summary"
-            ? "bg-[#388e3c] text-white shadow-sm"
+            ? "bg-finanzas text-white shadow-sm"
             : "bg-white/80 dark:bg-gray-700/80 text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700"
         }`}
       >

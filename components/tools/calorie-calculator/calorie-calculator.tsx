@@ -112,7 +112,7 @@ export function CalorieCalculator() {
   const goalLabel = GOALS.find((g) => g.id === goal)?.label.toLowerCase() ?? ""
 
   const inputClass =
-    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-cuerpo focus:border-transparent"
 
   return (
     <div className="space-y-6">

@@ -61,14 +61,61 @@ Librería única: **`lucide-react`**. Nuevos iconos solo de ese set (sin SVGs su
 
 - **Por sección** (nivel sección: estados vacíos, acentos de encabezado, menús): Mente `Brain` · Relaciones `Heart` · Cuerpo `Activity` · Finanzas `Wallet`. Color con token `text-{s}` / `dark:text-{s}-light`.
 - **Vocabulario de acciones compartidas** (reutilizar siempre que encaje): guardar `Save` · borrar `Trash2` · info `Info` · disclaimer `AlertTriangle`/`AlertCircle` · editar `Edit2` · tiempo `Calendar` · dinero `DollarSign` · tasa `Percent` · tendencia `TrendingUp` · calculadora `Calculator` · ejemplo/tip `Lightbulb` · buscar `Search` · reset `RotateCcw` · cerrar `X` · navegación `ChevronRight`/`ChevronLeft`/`ChevronDown`/`ArrowRight` · resultado OK `CheckCircle2` · lista `ClipboardList`.
-- Tamaños: inline en botones/filas `h-4 w-4` · destacados `h-5 w-5` + `flex-shrink-0`. Coherencia: mismo icono = misma acción en todas las herramientas.
+- Tamaños: micro en fila (borrar, cerrar) `h-3.5 w-3.5` · inline en botones/filas/links `h-4 w-4` · destacados `h-5 w-5` + `flex-shrink-0` · cabecera de paso/grupo `h-6 w-6` · estado vacío/hero decorativo `h-12 w-12` + `opacity-40`. Coherencia: mismo icono = misma acción en todas las herramientas.
 
-## 3. Espaciado, radios y sombras
+## 3. Escala unificada (radios, espaciado, tipografía de cuerpo, foco, sombras)
 
-- Radios: chips/inputs `rounded-md` (0.375rem) · tarjetas/paneles `rounded-2xl` (1rem) · hero/FAQ `rounded-3xl`.
-- Padding de página: `p-4 sm:p-6` (hubs) · `p-4 sm:p-6 max-w-6xl` (herramientas).
-- Grid de tarjetas: `grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5`.
-- Sombras: tarjeta `0 12px 28px rgba(0,0,0,0.1)` light / `0.35` dark · hover `0 16px 36px` (`0.16` / `0.45`).
+Un rol = una clase. Ante la duda, copiar el valor del componente de referencia, no inventar.
+
+### 3.1 Radios por rol
+
+| Rol | Radio | Referencia |
+|---|---|---|
+| **Control** (botón, input, chip, tab) | `rounded-md` | botones ToolPageShell, input del glosario, chips, tabs, shadcn `Button` |
+| **Micro-contenedor** (recuadro dentro de una tarjeta) | `rounded-lg` | recuadro de ejemplo/tip, cajas de stats, inputs de herramientas |
+| **Sub-superficie** (tarjeta anidada, item de lista, modal, dropdown, tabla) | `rounded-xl` | item FAQ, tarjeta de resultado, modales, tabla de amortización, dropdowns |
+| **Superficie mayor de herramienta** | `rounded-2xl` | ToolCard, panel hero, sección FAQ, panel de resultado grande, estado vacío |
+| **Superficie mayor de página de contenido** (ayuda, apoyar, legales, que-es) | `rounded-3xl` | tarjetas grandes de esas páginas — **no usar en herramientas** |
+| **Círculo / pill** | `rounded-full` | círculo del icono FAQ, dots, underline, botones circulares |
+
+### 3.2 Ritmo de espaciado
+
+| Nivel | Clase | Uso |
+|---|---|---|
+| Página herramienta | `p-4 sm:p-6 max-w-6xl mx-auto` | `ToolPageShell` |
+| Bloque header → contenido | `mb-6` | H1/descripción → children/FAQ |
+| Superficie mayor | `p-6 sm:p-8` (hero con contenido) · `p-6` (FAQ, resultado) | paneles `rounded-2xl` |
+| Sub-superficie | `p-5` | tarjetas de resultado/lista `rounded-xl` |
+| Micro-contenedor | `p-4` (tip/ejemplo) · `p-3` (stat) | recuadros `rounded-lg` |
+| Grupos hermanos | `space-y-6` (lista) · `space-y-10` (grupos de sección) | |
+| Grids | `gap-4` (tarjetas 2-col de contenido) · `gap-5` (grid home) · `gap-6` (formularios) | |
+
+### 3.3 Tipografía de cuerpo
+
+- UI densa (herramientas, listas, tablas): `text-sm` · hero/landing y buscadores: `text-base` · captions/micro: `text-xs`.
+- Labels de input: `text-sm font-medium` (los inputs grandes de buscador usan `text-base`).
+
+### 3.4 Foco (canónico, un solo patrón)
+
+```text
+focus:border-transparent focus:ring-2 focus:ring-{s}
+dark:focus:border-transparent dark:focus:ring-{s}-light
+```
+
+El borde se vuelve transparente al enfocar: solo el anillo de sección marca el foco. Nunca `ring-green-500`/`ring-blue-500`/colores genéricos ni hex en el foco.
+
+### 3.5 Sombras
+
+- Tarjeta: `0 12px 28px rgba(0,0,0,0.1)` light / `0.35` dark · hover: `0 16px 36px` (`0.16` / `0.45`).
+- Superficies planas de herramienta: `shadow-sm` · modales/popovers: `shadow-xl`/`shadow-lg`.
+
+### 3.6 Estado del legado (migración en curso, sin cambio visual)
+
+- Los componentes canónicos (ToolCard, shell, FAQ, glosario) ya son 100% tokens.
+- Los hex de paleta **sin opacidad** (`bg-[#388e3c]`) se han migrado a tokens (`bg-finanzas`) — valores idénticos.
+- Los hex **con opacidad** (`bg-[#388e3c]/10`) se quedan así deliberadamente: los tokens no admiten `/n` (clase muerta). Usar nativos con alpha (`bg-black/5`) o glass.
+- `#81c784` (verde claro legado en dark de finanzas, ~23 usos) es anterior a la paleta: pendiente de migrar a `finanzas-light` (#66bb6a) como decisión visual consciente (cambia apenas el tono).
+- Acentos locales de herramienta (`#1e3a2b` en budget) se conservan y se documentan aquí si se replican.
 
 ## 4. Recetas de componente
 

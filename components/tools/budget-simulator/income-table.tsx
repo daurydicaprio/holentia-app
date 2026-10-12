@@ -69,7 +69,7 @@ export function IncomeTable({
                     value={item.amount}
                     onChange={(e) => onUpdateAmount(item.id, Number(e.target.value))}
                     min="0"
-                    className="w-full p-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-[#388e3c] focus:border-[#388e3c]"
+                    className="w-full p-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-finanzas focus:border-transparent"
                   />
                 </td>
                 <td className="py-2 px-3 text-sm text-gray-800 dark:text-gray-200">
@@ -78,7 +78,7 @@ export function IncomeTable({
                 <td className="py-2 px-3">
                   <button
                     onClick={() => onRemoveIncome(item.id)}
-                    className="w-6 h-6 flex items-center justify-center rounded-md bg-[#388e3c]/10 dark:bg-[#388e3c]/20 text-[#388e3c] hover:bg-[#388e3c]/20 dark:hover:bg-[#388e3c]/30 border border-[#388e3c]/20 dark:border-[#388e3c]/30"
+                    className="w-6 h-6 flex items-center justify-center rounded-md bg-[#388e3c]/10 dark:bg-[#388e3c]/20 text-finanzas hover:bg-[#388e3c]/20 dark:hover:bg-[#388e3c]/30 border border-[#388e3c]/20 dark:border-[#388e3c]/30"
                     aria-label="Eliminar"
                   >
                     ×
@@ -99,7 +99,7 @@ export function IncomeTable({
       <div className="p-3">
         <button
           onClick={onAddIncome}
-          className="flex items-center justify-center gap-2 w-full sm:w-auto px-3 py-1.5 text-sm bg-[#388e3c] hover:bg-[#1b5e20] text-white font-medium rounded-md transition-colors"
+          className="flex items-center justify-center gap-2 w-full sm:w-auto px-3 py-1.5 text-sm bg-finanzas hover:bg-finanzas-dark text-white font-medium rounded-md transition-colors"
         >
           <span className="font-bold">+</span> Añadir ingreso
         </button>

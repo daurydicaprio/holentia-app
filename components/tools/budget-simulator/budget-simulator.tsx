@@ -134,7 +134,7 @@ export function BudgetSimulator() {
               />
               <button
                 onClick={toggleTips}
-                className="w-full mt-6 px-4 py-2 bg-[#388e3c] hover:bg-[#1b5e20] text-white font-medium rounded-md transition-colors"
+                className="w-full mt-6 px-4 py-2 bg-finanzas hover:bg-finanzas-dark text-white font-medium rounded-md transition-colors"
               >
                 {showTips ? "Ocultar consejos financieros" : "Mostrar consejos financieros"}
               </button>
@@ -170,7 +170,7 @@ export function BudgetSimulator() {
                 className={`flex items-center gap-1 px-4 py-2 rounded-md transition-colors ${
                   activeTab === "summary"
                     ? "opacity-50 cursor-not-allowed bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
-                    : "bg-[#388e3c] hover:bg-[#1b5e20] text-white"
+                    : "bg-finanzas hover:bg-finanzas-dark text-white"
                 }`}
                 disabled={activeTab === "summary"}
               >
@@ -181,7 +181,7 @@ export function BudgetSimulator() {
             {/* Barra de progreso */}
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
               <div
-                className="bg-[#388e3c] h-2.5 rounded-full transition-all duration-300"
+                className="bg-finanzas h-2.5 rounded-full transition-all duration-300"
                 style={{
                   width: activeTab === "income" ? "33.3%" : activeTab === "expenses" ? "66.6%" : "100%",
                 }}

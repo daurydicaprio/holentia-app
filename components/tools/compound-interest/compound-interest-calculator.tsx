@@ -112,7 +112,7 @@ export function CompoundInterestCalculator() {
               <div className="mt-6">
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700 shadow-sm">
                   <div className="flex items-start gap-3 mb-4">
-                    <div className="mt-1 text-[#388e3c] dark:text-[#6a9c77] flex-shrink-0">
+                    <div className="mt-1 text-finanzas dark:text-[#6a9c77] flex-shrink-0">
                       <AlertCircle size={20} />
                     </div>
                     <div className="w-full">
@@ -141,13 +141,13 @@ export function CompoundInterestCalculator() {
                       <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
                         Con inflación, tu inversión valdría:
                       </div>
-                      <div className="text-lg font-bold text-[#388e3c]">{formatCurrency(summary.balanceNet)}</div>
+                      <div className="text-lg font-bold text-finanzas">{formatCurrency(summary.balanceNet)}</div>
                     </div>
                   </div>
 
                   {/* Dato importante */}
                   <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 mt-3">
-                    <ArrowRight size={14} className="mt-1 flex-shrink-0 text-[#388e3c]" />
+                    <ArrowRight size={14} className="mt-1 flex-shrink-0 text-finanzas" />
                     <span>
                       Al invertir, no solo proteges tu dinero de la inflación, sino que también lo haces crecer con el
                       tiempo gracias al interés compuesto.

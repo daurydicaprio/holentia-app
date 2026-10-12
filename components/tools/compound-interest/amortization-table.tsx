@@ -63,9 +63,9 @@ export function AmortizationTable({
   // Asegurar que los bordes de la tabla sean visibles y redondeados
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-sm border border-gray-200 dark:border-gray-700">
-      <h2 className="text-xl font-bold text-center text-[#388e3c] mb-6">
+      <h2 className="text-xl font-bold text-center text-finanzas mb-6">
         Tabla de amortización
-        <span className="block w-16 h-1 bg-[#388e3c] mx-auto mt-2"></span>
+        <span className="block w-16 h-1 bg-finanzas mx-auto mt-2"></span>
       </h2>
 
       {/* Botones para cambiar vista - Aumentados en ancho */}
@@ -74,7 +74,7 @@ export function AmortizationTable({
           onClick={() => setTableView("annual")}
           className={`px-6 py-2 rounded-md transition-colors min-w-[120px] ${
             tableView === "annual"
-              ? "bg-[#388e3c] text-white shadow-sm"
+              ? "bg-finanzas text-white shadow-sm"
               : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
           }`}
         >
@@ -85,7 +85,7 @@ export function AmortizationTable({
           disabled={contributionFrequency !== 12}
           className={`px-6 py-2 rounded-md transition-colors min-w-[120px] ${
             tableView === "monthly"
-              ? "bg-[#388e3c] text-white shadow-sm"
+              ? "bg-finanzas text-white shadow-sm"
               : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
           } ${contributionFrequency !== 12 ? "opacity-50 cursor-not-allowed" : ""}`}
         >

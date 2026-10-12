@@ -244,7 +244,7 @@ export function LoanCalculatorForm({
               onChange={handleLoanAmountChange}
               onBlur={handleLoanAmountBlur}
               onFocus={() => setIsEditingLoanAmount(true)}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-finanzas focus:border-finanzas"
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-finanzas focus:border-transparent"
               data-interactive="true"
             />
             <Slider
@@ -277,7 +277,7 @@ export function LoanCalculatorForm({
               onChange={handleInterestRateChange}
               onBlur={handleInterestRateBlur}
               onFocus={() => setIsEditingInterestRate(true)}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-finanzas focus:border-finanzas"
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-finanzas focus:border-transparent"
               data-interactive="true"
             />
             <Slider
@@ -310,7 +310,7 @@ export function LoanCalculatorForm({
               onChange={handleLoanTermChange}
               onBlur={handleLoanTermBlur}
               onFocus={() => setIsEditingLoanTerm(true)}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-finanzas focus:border-finanzas"
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-finanzas focus:border-transparent"
               data-interactive="true"
             />
             <Slider

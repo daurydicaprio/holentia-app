@@ -55,7 +55,7 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200 flex items-center gap-2">
-          <Save size={18} className="text-[#388e3c] dark:text-[#6a9c77]" />
+          <Save size={18} className="text-finanzas dark:text-[#6a9c77]" />
           Simulaciones Guardadas
         </h3>
         <button
@@ -94,7 +94,7 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
                   <h3 className="font-medium text-gray-800 dark:text-gray-200">{simulation.name}</h3>
                   <button
                     onClick={() => handleNameClick(simulation)}
-                    className="ml-2 p-1 rounded-full hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors text-[#388e3c] dark:text-[#6a9c77]"
+                    className="ml-2 p-1 rounded-full hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors text-finanzas dark:text-[#6a9c77]"
                     aria-label="Editar nombre"
                   >
                     <Edit2 size={14} />

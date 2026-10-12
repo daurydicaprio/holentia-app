@@ -21,7 +21,7 @@ export function BudgetTips() {
           Aprende a construir tu propio presupuesto
         </h3>
         <p className="text-gray-600 dark:text-gray-400 text-xs">Obtén tu plantilla de Excel o Google Sheet gratis</p>
-        <div className="text-[#388e3c] dark:text-[#6a9c77] font-medium text-xs mt-2">Acceder ahora →</div>
+        <div className="text-finanzas dark:text-[#6a9c77] font-medium text-xs mt-2">Acceder ahora →</div>
       </div>
 
       <h2 className="text-base font-medium text-[#1e3a2b] dark:text-[#6a9c77] mb-3">Consejos financieros</h2>

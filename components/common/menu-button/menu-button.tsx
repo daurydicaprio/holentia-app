@@ -229,14 +229,14 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
                   href="/mente"
                   className={`block px-5 py-3 transition-all duration-200 ${
                     isActive("/mente")
-                      ? `font-medium text-[#1976d2] bg-blue-50 dark:bg-blue-900/20`
+                      ? `font-medium text-mente bg-blue-50 dark:bg-blue-900/20`
                       : `hover:bg-blue-50 dark:hover:bg-blue-900/20`
                   }`}
                   onClick={handleLinkClick}
                 >
                   <div className="flex items-center">
                     <span className="flex-grow">Mente</span>
-                    {isActive("/mente") && <div className="w-2 h-2 rounded-full bg-[#1976d2]" />}
+                    {isActive("/mente") && <div className="w-2 h-2 rounded-full bg-mente" />}
                   </div>
                 </Link>
 
@@ -244,14 +244,14 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
                   href="/relaciones"
                   className={`block px-5 py-3 transition-all duration-200 ${
                     isActive("/relaciones")
-                      ? `font-medium text-[#7c3aed] bg-purple-50 dark:bg-purple-900/20`
+                      ? `font-medium text-relaciones bg-purple-50 dark:bg-purple-900/20`
                       : `hover:bg-purple-50 dark:hover:bg-purple-900/20`
                   }`}
                   onClick={handleLinkClick}
                 >
                   <div className="flex items-center">
                     <span className="flex-grow">Relaciones</span>
-                    {isActive("/relaciones") && <div className="w-2 h-2 rounded-full bg-[#7c3aed]" />}
+                    {isActive("/relaciones") && <div className="w-2 h-2 rounded-full bg-relaciones" />}
                   </div>
                 </Link>
 
@@ -259,14 +259,14 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
                   href="/cuerpo"
                   className={`block px-5 py-3 transition-all duration-200 ${
                     isActive("/cuerpo")
-                      ? `font-medium text-[#ffa000] bg-amber-50 dark:bg-amber-900/20`
+                      ? `font-medium text-cuerpo bg-amber-50 dark:bg-amber-900/20`
                       : `hover:bg-amber-50 dark:hover:bg-amber-900/20`
                   }`}
                   onClick={handleLinkClick}
                 >
                   <div className="flex items-center">
                     <span className="flex-grow">Cuerpo</span>
-                    {isActive("/cuerpo") && <div className="w-2 h-2 rounded-full bg-[#ffa000]" />}
+                    {isActive("/cuerpo") && <div className="w-2 h-2 rounded-full bg-cuerpo" />}
                   </div>
                 </Link>
 
@@ -274,14 +274,14 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
                   href="/finanzas"
                   className={`block px-5 py-3 transition-all duration-200 ${
                     isActive("/finanzas")
-                      ? `font-medium text-[#388e3c] bg-green-50 dark:bg-green-900/20`
+                      ? `font-medium text-finanzas bg-green-50 dark:bg-green-900/20`
                       : `hover:bg-green-50 dark:hover:bg-green-900/20`
                   }`}
                   onClick={handleLinkClick}
                 >
                   <div className="flex items-center">
                     <span className="flex-grow">Finanzas</span>
-                    {isActive("/finanzas") && <div className="w-2 h-2 rounded-full bg-[#388e3c]" />}
+                    {isActive("/finanzas") && <div className="w-2 h-2 rounded-full bg-finanzas" />}
                   </div>
                 </Link>
               </div>

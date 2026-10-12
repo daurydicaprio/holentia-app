@@ -15,7 +15,7 @@ export function MobileTabsNavigation({ activeTab, onTabChange, hasSimulations = 
         onClick={() => onTabChange("calculator")}
         className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-colors border-r border-gray-200 dark:border-gray-700 ${
           activeTab === "calculator"
-            ? "bg-[#388e3c] text-white"
+            ? "bg-finanzas text-white"
             : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
         }`}
       >
@@ -27,7 +27,7 @@ export function MobileTabsNavigation({ activeTab, onTabChange, hasSimulations = 
         onClick={() => onTabChange("simulations")}
         className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-colors border-r border-gray-200 dark:border-gray-700 ${
           activeTab === "simulations"
-            ? "bg-[#388e3c] text-white"
+            ? "bg-finanzas text-white"
             : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
         }`}
       >
@@ -39,7 +39,7 @@ export function MobileTabsNavigation({ activeTab, onTabChange, hasSimulations = 
         onClick={() => onTabChange("charts")}
         className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-colors ${
           activeTab === "charts"
-            ? "bg-[#388e3c] text-white"
+            ? "bg-finanzas text-white"
             : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
         }`}
       >

@@ -792,11 +792,11 @@ function SectionHeader({
     <div className="text-center mb-6">
       <div className="inline-flex items-center justify-center gap-2 mb-2">
         {badge && (
-          <span className="inline-block rounded-full bg-[#388e3c] text-white text-xs font-bold px-3 py-1 leading-normal">
+          <span className="inline-block rounded-full bg-finanzas text-white text-xs font-bold px-3 py-1 leading-normal">
             {badge}
           </span>
         )}
-        <Icon className="h-6 w-6 text-[#388e3c] dark:text-[#81c784]" aria-hidden />
+        <Icon className="h-6 w-6 text-finanzas dark:text-[#81c784]" aria-hidden />
         <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">{title}</h3>
       </div>
       {subtitle !== undefined && (
@@ -1166,13 +1166,13 @@ export function RiskProfileTest() {
   }
 
   const inputClass =
-    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-[#388e3c] focus:border-transparent"
+    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-finanzas focus:border-transparent"
 
   const chipClass = (active: boolean) =>
     `px-3 py-1.5 text-sm rounded-md font-medium transition-colors ${
       active
-        ? "bg-[#388e3c] text-white"
-        : "bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-[#388e3c] dark:text-[#81c784]"
+        ? "bg-finanzas text-white"
+        : "bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-finanzas dark:text-[#81c784]"
     }`
 
   /* ---------- INTRO ---------- */
@@ -1182,7 +1182,7 @@ export function RiskProfileTest() {
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
           <div className="flex items-center gap-3 mb-3">
             <div className="p-2 rounded-lg bg-[#388e3c]/10 dark:bg-[#388e3c]/20">
-              <Gauge className="h-6 w-6 text-[#388e3c] dark:text-[#81c784]" />
+              <Gauge className="h-6 w-6 text-finanzas dark:text-[#81c784]" />
             </div>
             <h2 className="text-xl font-bold">Test de perfil de riesgo</h2>
           </div>
@@ -1200,14 +1200,14 @@ export function RiskProfileTest() {
           </div>
 
           {restored && (
-            <div className="mb-6 rounded-lg bg-[#388e3c]/10 border border-[#388e3c]/30 p-4 text-sm text-[#1b5e20] dark:text-[#a5d6a7]">
+            <div className="mb-6 rounded-lg bg-[#388e3c]/10 border border-[#388e3c]/30 p-4 text-sm text-finanzas-dark dark:text-finanzas-lighter">
               Tienes un test guardado. Puedes repetirlo o borrarlo desde el resultado.
             </div>
           )}
 
           <button
             onClick={startQuiz}
-            className="w-full bg-[#388e3c] hover:bg-[#1b5e20] text-white px-6 py-4 rounded-lg font-semibold transition-colors"
+            className="w-full bg-finanzas hover:bg-finanzas-dark text-white px-6 py-4 rounded-lg font-semibold transition-colors"
             data-interactive="true"
           >
             Empezar el test
@@ -1244,11 +1244,11 @@ export function RiskProfileTest() {
               <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 Pregunta {currentQuestion + 1} de {questions.length}
               </span>
-              <span className="text-sm font-medium text-[#388e3c] dark:text-[#81c784]">{pct}%</span>
+              <span className="text-sm font-medium text-finanzas dark:text-[#81c784]">{pct}%</span>
             </div>
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
               <div
-                className="bg-[#388e3c] h-2 rounded-full transition-all duration-300"
+                className="bg-finanzas h-2 rounded-full transition-all duration-300"
                 style={{ width: `${pct}%` }}
               />
             </div>
@@ -1268,8 +1268,8 @@ export function RiskProfileTest() {
                   aria-pressed={isSelected}
                   className={`w-full text-left p-4 border-2 rounded-lg transition-all ${
                     isSelected
-                      ? "border-[#388e3c] bg-[#388e3c]/10 dark:bg-[#388e3c]/20"
-                      : "border-gray-200 dark:border-gray-700 hover:border-[#388e3c] hover:bg-[#388e3c]/5 dark:hover:bg-[#388e3c]/10"
+                      ? "border-finanzas bg-[#388e3c]/10 dark:bg-[#388e3c]/20"
+                      : "border-gray-200 dark:border-gray-700 hover:border-finanzas hover:bg-[#388e3c]/5 dark:hover:bg-[#388e3c]/10"
                   }`}
                   data-interactive="true"
                 >
@@ -1285,7 +1285,7 @@ export function RiskProfileTest() {
                 setCurrentQuestion(currentQuestion - 1)
                 triggerHapticFeedback("light")
               }}
-              className="mt-4 text-sm font-medium text-gray-500 hover:text-[#388e3c] dark:text-gray-400 transition-colors"
+              className="mt-4 text-sm font-medium text-gray-500 hover:text-finanzas dark:text-gray-400 transition-colors"
               data-interactive="true"
             >
               ← Atrás
@@ -1303,7 +1303,7 @@ export function RiskProfileTest() {
         <p className="text-gray-500 dark:text-gray-400 mb-4">Responde las 12 preguntas para ver tu perfil.</p>
         <button
           onClick={startQuiz}
-          className="bg-[#388e3c] hover:bg-[#1b5e20] text-white px-6 py-3 rounded-lg font-medium"
+          className="bg-finanzas hover:bg-finanzas-dark text-white px-6 py-3 rounded-lg font-medium"
           data-interactive="true"
         >
           Empezar
@@ -1471,7 +1471,7 @@ export function RiskProfileTest() {
                     data-interactive="true"
                     className={`cursor-pointer rounded-lg border p-3 transition-colors ${
                       isActive
-                        ? "border-[#388e3c] bg-[#388e3c]/5 dark:bg-[#388e3c]/10 ring-1 ring-[#388e3c]"
+                        ? "border-finanzas bg-[#388e3c]/5 dark:bg-[#388e3c]/10 ring-1 ring-finanzas"
                         : isColored && lvl.danger
                           ? "border-red-300 dark:border-red-800 bg-red-50 dark:bg-red-900/15"
                           : isColored
@@ -1485,7 +1485,7 @@ export function RiskProfileTest() {
                           isActive || isColored
                             ? lvl.danger
                               ? "bg-red-600 text-white"
-                              : "bg-[#388e3c] text-white"
+                              : "bg-finanzas text-white"
                             : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
                         }`}
                       >
@@ -1503,7 +1503,7 @@ export function RiskProfileTest() {
                         {lvl.name}
                       </span>
                       {isActive && (
-                        <span className="text-[10px] font-bold uppercase bg-[#388e3c] text-white px-2 py-0.5 rounded-full">
+                        <span className="text-[10px] font-bold uppercase bg-finanzas text-white px-2 py-0.5 rounded-full">
                           Tuyo
                         </span>
                       )}
@@ -1531,7 +1531,7 @@ export function RiskProfileTest() {
                               ? "text-red-700 dark:text-red-400"
                               : "text-red-700/70 dark:text-red-400/70"
                             : isColored
-                              ? "text-[#388e3c]"
+                              ? "text-finanzas"
                               : "text-gray-500 dark:text-gray-400"
                         }
                       >
@@ -1625,7 +1625,7 @@ export function RiskProfileTest() {
             <div className="rounded-xl border border-[#388e3c]/30 bg-[#388e3c]/5 p-4 sm:p-5 dark:bg-[#388e3c]/10">
               {/* A · Qué es */}
               <div className="flex items-start gap-3">
-                <PiggyBank className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#388e3c]" aria-hidden />
+                <PiggyBank className="mt-0.5 h-5 w-5 flex-shrink-0 text-finanzas" aria-hidden />
                 <div>
                   <p className="text-sm font-bold text-gray-900 dark:text-gray-100">
                     Primero: tu fondo de emergencia
@@ -1682,7 +1682,7 @@ export function RiskProfileTest() {
                 <p
                   className={`mt-3 text-sm font-medium ${
                     monthsToFund !== null
-                      ? "text-[#1b5e20] dark:text-[#a5d6a7]"
+                      ? "text-finanzas-dark dark:text-finanzas-lighter"
                       : "text-gray-500 dark:text-gray-400"
                   }`}
                 >
@@ -1725,7 +1725,7 @@ export function RiskProfileTest() {
                           }}
                           className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
                             chartMode === m
-                              ? "bg-[#388e3c] text-white"
+                              ? "bg-finanzas text-white"
                               : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                           }`}
                           data-interactive="true"
@@ -1816,7 +1816,7 @@ export function RiskProfileTest() {
           {/* Ya tiene colchón */}
           {hasFund && fundSize > 0 && (
             <div className="rounded-lg border border-[#388e3c]/40 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 p-4 flex items-start gap-3">
-              <CheckCircle2 className="h-5 w-5 text-[#388e3c] flex-shrink-0 mt-0.5" />
+              <CheckCircle2 className="h-5 w-5 text-finanzas flex-shrink-0 mt-0.5" />
               <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                 <strong className="text-gray-900 dark:text-gray-100">¡Excelente! Ya tienes tu colchón financiero ✓</strong>
               </p>
@@ -1833,7 +1833,7 @@ export function RiskProfileTest() {
           {hasFund && fundSize > 0 && (
             <div className="rounded-xl border border-[#388e3c]/40 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 p-5">
               <div className="flex items-center gap-2 mb-3">
-                <PiggyBank className="h-5 w-5 text-[#388e3c] flex-shrink-0" aria-hidden />
+                <PiggyBank className="h-5 w-5 text-finanzas flex-shrink-0" aria-hidden />
                 <p className="text-sm font-bold text-gray-900 dark:text-gray-100">
                   Sugerencia para tu colchón de {formatMoney(fundSize, currency)}
                 </p>
@@ -1873,7 +1873,7 @@ export function RiskProfileTest() {
                     </div>
                     <p className="mt-1.5 text-base font-bold tabular-nums text-gray-900 dark:text-gray-100">
                       {formatMoney(p.amount, currency)}{" "}
-                      <span className="text-sm font-semibold text-[#388e3c] dark:text-[#81c784]">({p.pct}%)</span>
+                      <span className="text-sm font-semibold text-finanzas dark:text-[#81c784]">({p.pct}%)</span>
                     </p>
                     <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">{p.why}</p>
                   </li>
@@ -1887,10 +1887,10 @@ export function RiskProfileTest() {
             <div className="grid gap-4 sm:grid-cols-2">
               {fundCanInvest ? (
                 <div className="rounded-xl border border-[#388e3c]/30 bg-[#388e3c]/10 px-5 py-5 text-center">
-                  <div className="mb-2 inline-flex items-center gap-2 text-sm font-bold text-[#1b5e20] dark:text-[#a5d6a7]">
+                  <div className="mb-2 inline-flex items-center gap-2 text-sm font-bold text-finanzas-dark dark:text-finanzas-lighter">
                     <TrendingUp className="h-4 w-4" aria-hidden /> Si inviertes tu fondo
                   </div>
-                  <div className="text-2xl font-bold tabular-nums text-[#1b5e20] dark:text-[#a5d6a7]">
+                  <div className="text-2xl font-bold tabular-nums text-finanzas-dark dark:text-finanzas-lighter">
                     +{formatMoney(fundYearReturn, currency)}
                   </div>
                   <p className="mt-2 text-xs leading-relaxed text-gray-600 dark:text-gray-400 sm:text-sm">
@@ -1929,12 +1929,12 @@ export function RiskProfileTest() {
           {/* Simulador de presupuesto: de dónde sale el ahorro */}
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[#388e3c]/40 bg-[#388e3c]/5 p-4 dark:bg-[#388e3c]/10">
             <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-              <ClipboardList className="h-5 w-5 flex-shrink-0 text-[#388e3c]" aria-hidden />
+              <ClipboardList className="h-5 w-5 flex-shrink-0 text-finanzas" aria-hidden />
               <span>Para ahorrar más al mes y llegar antes a tu colchón, organiza tus ingresos y gastos.</span>
             </div>
             <Link
               href="/crear-presupuesto-personal"
-              className="inline-flex items-center gap-2 whitespace-nowrap rounded-lg bg-[#388e3c] px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-[#1b5e20]"
+              className="inline-flex items-center gap-2 whitespace-nowrap rounded-lg bg-finanzas px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-finanzas-dark"
               data-interactive="true"
             >
               Aprende a crear tu presupuesto →
@@ -1950,14 +1950,14 @@ export function RiskProfileTest() {
                   <ul className="space-y-3">
                     {currency === "DOP" && fundSize >= INSTR_MIN.DOP.liquid && (
                       <li>
-                        <strong className="text-[#388e3c]">AFI líquido</strong> — mín.{" "}
+                        <strong className="text-finanzas">AFI líquido</strong> — mín.{" "}
                         {formatMoney(INSTR_MIN.DOP.liquid, "DOP")}. Retiro lun–vie 9am–3pm (sin feriados ni festivos).
                         Para emergencias que aceptan tarjeta o retiros parciales.
                       </li>
                     )}
                     {currency === "DOP" && fundSize >= INSTR_MIN.DOP.cert && (
                       <li>
-                        <strong className="text-[#388e3c]">Certificado</strong> — mín.{" "}
+                        <strong className="text-finanzas">Certificado</strong> — mín.{" "}
                         {formatMoney(INSTR_MIN.DOP.cert, "DOP")}. App, web o sucursal. Plazos 30/90/180/360 días.
                         <span className="mt-1 block text-amber-700 dark:text-amber-400">
                           Cancelar antes de tiempo: <strong>3% anual sobre el capital</strong> (solo los días que
@@ -1968,14 +1968,14 @@ export function RiskProfileTest() {
                     )}
                     {currency === "DOP" && fundSize >= INSTR_MIN.DOP.d30 && (
                       <li>
-                        <strong className="text-[#388e3c]">Fondo a 30 días</strong> — mín.{" "}
+                        <strong className="text-finanzas">Fondo a 30 días</strong> — mín.{" "}
                         {formatMoney(INSTR_MIN.DOP.d30, "DOP")}. Retiro en ventana de ~5 días fijados por el fondo
                         (ej. del 25 al 30). Penalidad si sacas antes del plazo.
                       </li>
                     )}
                     {currency === "USD" && fundSize >= INSTR_MIN.USD.d30 && (
                       <li>
-                        <strong className="text-[#388e3c]">Fondo 30 días (USD)</strong> — mín.{" "}
+                        <strong className="text-finanzas">Fondo 30 días (USD)</strong> — mín.{" "}
                         {formatMoney(INSTR_MIN.USD.d30, "USD")}. En dólares no hay AFI líquido: el mínimo es plazo
                         de 30 días. Penalidad si retiras antes.
                       </li>
@@ -2022,14 +2022,14 @@ export function RiskProfileTest() {
           {/* 3 · CTA: fechas de corte y vencimiento (texto a la izquierda, botón a la derecha) */}
           <div className="flex flex-col gap-3 rounded-xl border border-[#388e3c]/40 bg-[#388e3c]/5 p-4 dark:bg-[#388e3c]/10 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-2 text-sm leading-snug text-gray-700 dark:text-gray-300 sm:flex-1">
-              <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#388e3c]" aria-hidden />
+              <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-finanzas" aria-hidden />
               <span className="sm:max-w-md">
                 ¿No dominas tus fechas de corte y vencimiento? Aprende a usar la tarjeta a tu favor.
               </span>
             </div>
             <Link
               href="/tarjeta-corte-vencimiento"
-              className="inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg border border-[#388e3c] bg-white px-4 py-2.5 text-sm font-semibold text-[#388e3c] transition-colors hover:bg-[#388e3c]/10 dark:bg-gray-900/40"
+              className="inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg border border-finanzas bg-white px-4 py-2.5 text-sm font-semibold text-finanzas transition-colors hover:bg-[#388e3c]/10 dark:bg-gray-900/40"
               data-interactive="true"
             >
               Comprende tu fecha de corte y vencimiento →
@@ -2058,7 +2058,7 @@ export function RiskProfileTest() {
                 value={capitalInput}
                 onChange={(e) => setCapitalInput(formatWithCommas(filterNumeric(e.target.value)))}
                 placeholder={currency === "DOP" ? "Ej: 25,000" : "Ej: 1,500"}
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm shadow-sm focus:border-transparent focus:ring-2 focus:ring-[#388e3c] dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 sm:w-auto sm:max-w-[13rem]"
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 sm:w-auto sm:max-w-[13rem]"
                 data-interactive="true"
               />
               <div className="flex gap-2">
@@ -2068,8 +2068,8 @@ export function RiskProfileTest() {
                     onClick={() => handleCurrency(c)}
                     className={`px-4 py-3 rounded-lg font-medium text-sm transition-colors ${
                       currency === c
-                        ? "bg-[#388e3c] text-white"
-                        : "bg-[#388e3c]/10 text-[#388e3c] dark:text-[#81c784] hover:bg-[#388e3c]/20"
+                        ? "bg-finanzas text-white"
+                        : "bg-[#388e3c]/10 text-finanzas dark:text-[#81c784] hover:bg-[#388e3c]/20"
                     }`}
                     data-interactive="true"
                   >
@@ -2146,7 +2146,7 @@ export function RiskProfileTest() {
                           }
                         })
                       }
-                      className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 pr-7 text-sm placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#388e3c] dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500"
+                      className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 pr-7 text-sm placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500"
                       data-interactive="true"
                     />
                     <span className="absolute inset-y-0 right-2.5 flex items-center text-xs text-gray-400">%</span>
@@ -2250,14 +2250,14 @@ export function RiskProfileTest() {
                   key={`${sit}-${optionIndex}`}
                   className={`rounded-xl border p-4 ${
                     isRecommended
-                      ? "border-[#388e3c] bg-[#388e3c]/5 dark:bg-[#388e3c]/10"
+                      ? "border-finanzas bg-[#388e3c]/5 dark:bg-[#388e3c]/10"
                       : "border-gray-200 dark:border-gray-700"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <h4 className="font-semibold text-base text-gray-800 dark:text-gray-100 leading-snug">{title}</h4>
                     {isRecommended && (
-                      <span className="text-[10px] font-bold uppercase bg-[#388e3c] text-white px-2 py-0.5 rounded-full whitespace-nowrap">
+                      <span className="text-[10px] font-bold uppercase bg-finanzas text-white px-2 py-0.5 rounded-full whitespace-nowrap">
                         Para ti
                       </span>
                     )}
@@ -2313,14 +2313,14 @@ export function RiskProfileTest() {
                 return (
                   <div key={group} className="mb-4 last:mb-0">
                     <p className="mb-2.5 flex justify-center">
-                      <span className="inline-flex items-center rounded-full border border-[#388e3c]/40 bg-[#388e3c]/15 px-4 py-1 text-sm font-bold uppercase tracking-wider text-[#388e3c]">
+                      <span className="inline-flex items-center rounded-full border border-[#388e3c]/40 bg-[#388e3c]/15 px-4 py-1 text-sm font-bold uppercase tracking-wider text-finanzas">
                         {group}
                       </span>
                     </p>
                     <ul className="space-y-2">
                       {items.map((inst) => (
                         <li key={inst.name} className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                          <strong className="text-[#388e3c]">{inst.name}</strong>
+                          <strong className="text-finanzas">{inst.name}</strong>
                           {inst.min > 0 && <> (mín. {formatMoney(inst.min, currency)})</>} — {inst.note}
                         </li>
                       ))}
@@ -2336,7 +2336,7 @@ export function RiskProfileTest() {
         {capital > 0 && maxTogether > 0 && (
           <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <TrendingUp className="h-5 w-5 text-[#388e3c] dark:text-[#81c784]" aria-hidden />
+              <TrendingUp className="h-5 w-5 text-finanzas dark:text-[#81c784]" aria-hidden />
               <h4 className="text-lg font-bold text-gray-800 dark:text-gray-100">Proyección</h4>
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 text-center mb-4 leading-relaxed max-w-2xl mx-auto">
@@ -2347,7 +2347,7 @@ export function RiskProfileTest() {
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div className="rounded-xl bg-[#388e3c]/10 px-4 py-5 text-center">
                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">En 5 años</div>
-                <div className="text-2xl font-bold text-[#1b5e20] dark:text-[#a5d6a7] tabular-nums">
+                <div className="text-2xl font-bold text-finanzas-dark dark:text-finanzas-lighter tabular-nums">
                   {formatMoney(proj5, currency)}
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -2356,7 +2356,7 @@ export function RiskProfileTest() {
               </div>
               <div className="rounded-xl bg-[#388e3c]/10 px-4 py-5 text-center">
                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">En 10 años</div>
-                <div className="text-2xl font-bold text-[#1b5e20] dark:text-[#a5d6a7] tabular-nums">
+                <div className="text-2xl font-bold text-finanzas-dark dark:text-finanzas-lighter tabular-nums">
                   {formatMoney(proj10, currency)}
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -2367,14 +2367,14 @@ export function RiskProfileTest() {
 
             <div className="flex items-center justify-between gap-3 flex-wrap rounded-lg border border-[#388e3c]/40 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 p-4">
               <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-                <Calculator className="h-5 w-5 text-[#388e3c] flex-shrink-0" />
+                <Calculator className="h-5 w-5 text-finanzas flex-shrink-0" />
                 <span>
                   Tasa combinada de tu distribución: <strong>~{blendedRate.toFixed(1)}%</strong> anual.
                 </span>
               </div>
               <Link
                 href="/calculadora-interes-compuesto"
-                className="inline-flex items-center gap-2 bg-[#388e3c] hover:bg-[#1b5e20] text-white px-5 py-3 rounded-lg text-base font-semibold transition-colors"
+                className="inline-flex items-center gap-2 bg-finanzas hover:bg-finanzas-dark text-white px-5 py-3 rounded-lg text-base font-semibold transition-colors"
                 data-interactive="true"
               >
                 Abrir calculadora de interés compuesto →
@@ -2417,7 +2417,7 @@ export function RiskProfileTest() {
       <div className="flex flex-col sm:flex-row gap-3">
         <button
           onClick={startQuiz}
-          className="flex-1 flex items-center justify-center gap-2 bg-[#388e3c] hover:bg-[#1b5e20] text-white px-6 py-3.5 rounded-lg font-medium text-base transition-colors"
+          className="flex-1 flex items-center justify-center gap-2 bg-finanzas hover:bg-finanzas-dark text-white px-6 py-3.5 rounded-lg font-medium text-base transition-colors"
           data-interactive="true"
         >
           <RotateCcw className="h-5 w-5" />
@@ -2429,7 +2429,7 @@ export function RiskProfileTest() {
             triggerHapticFeedback("light")
             router.push("/finanzas")
           }}
-          className="flex-1 flex items-center justify-center gap-2 border border-[#388e3c] text-[#388e3c] hover:bg-[#388e3c]/10 px-6 py-3.5 rounded-lg font-medium text-base transition-colors"
+          className="flex-1 flex items-center justify-center gap-2 border border-finanzas text-finanzas hover:bg-[#388e3c]/10 px-6 py-3.5 rounded-lg font-medium text-base transition-colors"
           data-interactive="true"
         >
           Volver a finanzas

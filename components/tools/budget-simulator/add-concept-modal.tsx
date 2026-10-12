@@ -51,7 +51,7 @@ export function AddConceptModal({ type, onSave, onCancel }: AddConceptModalProps
             onChange={(e) => setConceptName(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={`Ingrese un nombre para el ${type === "income" ? "ingreso" : "gasto"}`}
-            className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-[#388e3c] focus:border-[#388e3c]"
+            className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-finanzas focus:border-transparent"
             autoFocus
           />
         </div>
@@ -65,7 +65,7 @@ export function AddConceptModal({ type, onSave, onCancel }: AddConceptModalProps
           </button>
           <button
             onClick={handleSave}
-            className="px-4 py-2 bg-[#388e3c] hover:bg-[#1b5e20] text-white font-medium rounded-md transition-colors"
+            className="px-4 py-2 bg-finanzas hover:bg-finanzas-dark text-white font-medium rounded-md transition-colors"
           >
             Guardar
           </button>

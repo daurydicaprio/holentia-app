@@ -156,7 +156,7 @@ export function CardInterestCalculator() {
   }
 
   const inputClass =
-    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-[#388e3c] focus:border-transparent"
+    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-finanzas focus:border-transparent"
 
   const monthlyRatePct = annualRate / 12
 
@@ -166,7 +166,7 @@ export function CardInterestCalculator() {
       <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
         <div className="flex items-center gap-3 mb-2">
           <div className="p-2 rounded-lg bg-[#388e3c]/10 dark:bg-[#388e3c]/20">
-            <CreditCard className="h-6 w-6 text-[#388e3c] dark:text-[#81c784]" />
+            <CreditCard className="h-6 w-6 text-finanzas dark:text-[#81c784]" />
           </div>
           <h2 className="text-xl font-bold">Tu tarjeta</h2>
         </div>
@@ -363,7 +363,7 @@ export function CardInterestCalculator() {
 
             {/* Aviso */}
             <div className="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400 leading-relaxed px-1">
-              <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-[#388e3c]" />
+              <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-finanzas" />
               <span>
                 Estimación educativa: asume tasa fija, sin moras, seguros ni impuestos. La tasa real de tu tarjeta
                 está en tu estado de cuenta o app del banco. No es asesoría financiera. Tus datos no salen de este

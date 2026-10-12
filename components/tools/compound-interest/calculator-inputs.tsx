@@ -151,9 +151,9 @@ export function CalculatorInputs({
       transition={{ duration: 0.5 }}
       data-interactive="true"
     >
-      <h2 className="text-xl font-bold text-[#388e3c] mb-6 text-center">
+      <h2 className="text-xl font-bold text-finanzas mb-6 text-center">
         Parámetros de la inversión
-        <span className="block w-16 h-1 bg-[#388e3c] mx-auto mt-2"></span>
+        <span className="block w-16 h-1 bg-finanzas mx-auto mt-2"></span>
       </h2>
 
       <div className="space-y-6">
@@ -189,7 +189,7 @@ export function CalculatorInputs({
               value={formattedInitialDeposit}
               onChange={handleInitialDepositChange}
               onBlur={() => handleBlur(setFormattedInitialDeposit, initialDeposit)}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-finanzas focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               placeholder="0"
               data-interactive="true"
             />
@@ -228,7 +228,7 @@ export function CalculatorInputs({
               value={formattedContribution}
               onChange={handleContributionChange}
               onBlur={() => handleBlur(setFormattedContribution, contribution)}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-finanzas focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               placeholder="0"
               data-interactive="true"
             />
@@ -318,7 +318,7 @@ export function CalculatorInputs({
                 id="years"
                 value={years || ""}
                 onChange={(e) => handleNumberChange(setYears, e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-finanzas focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 placeholder="5"
                 min="1"
                 max="100"
@@ -358,7 +358,7 @@ export function CalculatorInputs({
                 id="interestRate"
                 value={interestRate || ""}
                 onChange={(e) => handleNumberChange(setInterestRate, e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-finanzas focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 placeholder="0"
                 min="0"
                 max="100"
@@ -398,7 +398,7 @@ export function CalculatorInputs({
                 id="inflation"
                 value={inflation || ""}
                 onChange={(e) => handleNumberChange(setInflation, e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-finanzas focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 placeholder="0"
                 min="0"
                 max="100"
@@ -417,7 +417,7 @@ export function CalculatorInputs({
             onClick={onSaveSimulation}
             disabled={disableSave}
             className={`px-4 py-2 rounded-md text-white font-medium transition-colors flex items-center gap-2 ${
-              disableSave ? "opacity-50 cursor-not-allowed bg-gray-400" : "bg-[#388e3c] hover:bg-[#1b5e20]"
+              disableSave ? "opacity-50 cursor-not-allowed bg-gray-400" : "bg-finanzas hover:bg-finanzas-dark"
             }`}
             data-interactive="true"
           >

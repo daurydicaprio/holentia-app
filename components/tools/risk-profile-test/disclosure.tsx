@@ -29,7 +29,7 @@ export function Disclosure({ label, children, align = "left", tone = "green", cl
   const summaryTone =
     tone === "light"
       ? "text-white/90 hover:text-white"
-      : "text-[#388e3c] dark:text-[#81c784] hover:text-[#1b5e20] dark:hover:text-[#a5d6a7]"
+      : "text-finanzas dark:text-[#81c784] hover:text-finanzas-dark dark:hover:text-finanzas-lighter"
   const contentTone = tone === "light" ? "text-white/85" : "text-gray-600 dark:text-gray-400"
 
   return (

@@ -124,7 +124,7 @@ export function GuidedJournal() {
             <select
               value={currentEntry.mood}
               onChange={(e) => setCurrentEntry({ ...currentEntry, mood: e.target.value })}
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-mente focus:border-transparent"
             >
               <option value="">Selecciona tu estado de ánimo</option>
               <option value="Muy bien">😄 Muy bien</option>
@@ -141,7 +141,7 @@ export function GuidedJournal() {
               value={currentEntry.gratitude}
               onChange={(e) => setCurrentEntry({ ...currentEntry, gratitude: e.target.value })}
               placeholder="Escribe al menos tres cosas por las que estás agradecido..."
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[100px]"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-mente focus:border-transparent min-h-[100px]"
             />
           </div>
 
@@ -151,7 +151,7 @@ export function GuidedJournal() {
               value={currentEntry.challenges}
               onChange={(e) => setCurrentEntry({ ...currentEntry, challenges: e.target.value })}
               placeholder="Describe los retos o dificultades del día..."
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[100px]"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-mente focus:border-transparent min-h-[100px]"
             />
           </div>
 
@@ -161,7 +161,7 @@ export function GuidedJournal() {
               value={currentEntry.achievements}
               onChange={(e) => setCurrentEntry({ ...currentEntry, achievements: e.target.value })}
               placeholder="Celebra tus logros, grandes y pequeños..."
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[100px]"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-mente focus:border-transparent min-h-[100px]"
             />
           </div>
 
@@ -171,7 +171,7 @@ export function GuidedJournal() {
               value={currentEntry.tomorrow}
               onChange={(e) => setCurrentEntry({ ...currentEntry, tomorrow: e.target.value })}
               placeholder="Establece una intención para mañana..."
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[100px]"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-mente focus:border-transparent min-h-[100px]"
             />
           </div>
 

@@ -82,7 +82,7 @@ export function Glossary() {
             placeholder="Busca un término… (ej. interés compuesto)"
             autoComplete="off"
             data-interactive="true"
-            className="h-12 w-full rounded-md border border-gray-300 bg-white py-2 pl-12 pr-12 text-base text-gray-900 placeholder:text-gray-400 focus:border-finanzas focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-finanzas-light dark:focus:ring-finanzas-light"
+            className="h-12 w-full rounded-md border border-gray-300 bg-white py-2 pl-12 pr-12 text-base text-gray-900 placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
           />
           {query && (
             <button
