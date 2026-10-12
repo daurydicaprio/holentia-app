@@ -157,42 +157,19 @@ La aplicación está dividida en cuatro secciones principales, cada una con su p
 
 ## Directrices de Diseño
 
-### Paleta de Colores
+La fuente única de verdad es **`design.md`** (paleta completa, tipografía Inter, iconos `lucide-react`, espaciado, recetas de componente y contraste). Resumen canónico:
 
-Cada sección tiene su propia paleta de colores:
+- **Paleta por sección**: Mente `#1976d2` · Relaciones `#7c3aed` · Cuerpo `#ffa000` · Finanzas `#388e3c` (+ escalas `dark/light/lighter/darkest`). Nunca hex suelto: tokens Tailwind (`text-finanzas`, `bg-mente-light`) — la clave `DEFAULT` va **sin sufijo** (`bg-mente`, no `bg-mente-DEFAULT`).
+- **Tipografía**: Inter (única), jerarquía `h1` color de sección → `h2` → `h3`, gradientes de texto solo en H1 de home/hub.
+- **Iconos**: solo `lucide-react`; por sección `Brain`/`Heart`/`Activity`/`Wallet`; vocabulario de acciones compartido en `design.md` §2b.
+- **Tarjetas**: gradiente `from-{s} to-{s}-dark` en claro (texto blanco; cuerpo negro) · glass `dark:bg-{s}-glass` en oscuro. Todo componente con color necesita su variante `dark:`.
+- **Hovers**: relleno + texto en ambos modos con contraste AA (recetas en `design.md` §4).
 
-- **Mente**:
-  - Principal: `#1976d2`
-  - Oscuro: `#0d47a1`
+## Agentes y skills
 
-- **Relaciones**:
-  - Principal: `#7c3aed`
-  - Oscuro: `#5b21b6`
-
-- **Cuerpo**:
-  - Principal: `#ffa000`
-  - Oscuro: `#e65100`
-
-- **Finanzas**:
-  - Principal: `#388e3c`
-  - Oscuro: `#1b5e20`
-
-### Componentes UI
-
-#### Tarjetas
-- Bordes redondeados, efectos de vidrio y sombras sutiles
-- Animaciones de hover con elevación
-- Gradientes sutiles para profundidad visual
-
-#### Botones
-- Colores según sección, con feedback táctil
-- Efectos de hover y active states
-- Gradientes para botones destacados
-
-#### Tipografía
-- Jerarquía clara con tamaños consistentes
-- Uso de text-balance y text-pretty para mejor legibilidad
-- Gradientes de texto para títulos destacados
+- **`AGENTS.md`**: reglas de oro para agentes (rama `dev`, verificación `tsc+lint+build`, privacidad, server-first). Cargado por `opencode.json`.
+- **Skills** en `.opencode/skills/`: `create-tool` (herramienta nueva de punta a punta), `section-ui` (colores/tipografía/iconos/dark), `tool-persistence` (localStorage patrones D/S/E), `chart-chartsjs` (teming de gráficos).
+- **Mantenimiento**: cada modificación de UI o proceso actualiza `design.md` y la skill afectada en el mismo commit.
 
 ## Privacidad y Datos
 
@@ -232,7 +209,7 @@ pnpm start
 
 Para contribuir al proyecto:
 
-1. Seguir las directrices de estilo y estructura
+1. Seguir **`AGENTS.md`** (reglas de oro) y la skill correspondiente de `.opencode/skills/` según la tarea
 2. Mantener la separación de lógica e interfaz
 3. Asegurar compatibilidad con modo oscuro
 4. Optimizar para dispositivos móviles y escritorio
@@ -242,6 +219,8 @@ Para contribuir al proyecto:
 8. Respetar la privacidad del usuario: no añadir tracking ni recopilación de datos
 9. Mantener diseño minimalista y coherente con la esencia de la aplicación
 10. Usar gradientes sutiles y efectos visuales con moderación
+11. **Al cambiar UI o procesos: actualizar `design.md` y la skill afectada en el mismo commit**
+12. Verificar `pnpm exec tsc --noEmit && pnpm lint && pnpm build` antes de cada push (rama `dev`)
 
 ## Licencia
 
@@ -249,4 +228,4 @@ Este proyecto es propiedad de Daury DiCaprio. Todos los derechos reservados.
 
 ---
 
-**Última actualización**: Octubre 2026 (11 herramientas, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first)
+**Última actualización**: Octubre 2026 (11 herramientas, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`)

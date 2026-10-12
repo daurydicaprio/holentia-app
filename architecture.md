@@ -67,7 +67,17 @@ lib/           data.ts (catálogo), seo.ts, storage.ts, utils.ts
 types/         index.ts (CardData, SectionType, AmortizationRow, …)
 ```
 
-## 7. Calidad
+## 7. Skills y mantenimiento de docs
+
+- `AGENTS.md` (cargado vía `opencode.json` → `instructions`) contiene reglas de oro e índice de skills; es la entrada para cualquier agente.
+- **Skills** en `.opencode/skills/<nombre>/SKILL.md` (formato opencode: frontmatter `name` + `description`):
+  - `create-tool` — receta de herramienta nueva (catálogo → página → FAQ → sitemap → llms.txt → verificación).
+  - `section-ui` — paleta, tokens, tipografía, iconos, hovers, contraste, dark mode.
+  - `tool-persistence` — `lib/storage.ts`, patrones E/D/S, claves `holentia:*`, privacidad.
+  - `chart-chartsjs` — theming Chart.js por tema + pitfall `fontColor` de leyendas.
+- **Regla**: cualquier cambio de UI/patrón/token/proceso actualiza `design.md` y/o las skills afectadas **en el mismo commit** (docs nunca desincronizados del código).
+
+## 8. Calidad
 
 - `pnpm exec tsc --noEmit` · `pnpm lint` (ESLint 8.57 + `next/core-web-vitals`) · `pnpm build` — los tres deben estar en verde antes de cada push.
 - Build estricto: sin `ignoreBuildErrors`/`ignoreDuringBuilds`.

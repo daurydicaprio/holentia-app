@@ -1,7 +1,8 @@
 # HOLENTIA Design System
 
-> Fuente única de verdad para color, tipografía, espaciado y patrones de UI.
+> Fuente única de verdad para color, tipografía, iconos, espaciado y patrones de UI.
 > Tokens en `app/globals.css` · mapeo Tailwind en `tailwind.config.ts` · recetas en este documento.
+> Skills de operación en `.opencode/skills/` (`section-ui` para UI, `create-tool` para herramientas nuevas) — **al cambiar cualquier patrón visual, actualizar este documento y la skill afectada en el mismo commit** (regla en `AGENTS.md`).
 > Regla de oro: **nunca hex suelto en componentes nuevos** — siempre tokens Tailwind (`bg-mente`, etc.) o CSS vars.
 > Importante: la clave `DEFAULT` genera la clase **sin sufijo** (`bg-mente`, `text-finanzas`), nunca `bg-mente-DEFAULT`.
 
@@ -41,11 +42,19 @@ Tokens Tailwind por sección (`tailwind.config.ts`): `DEFAULT`, `dark`, `light`,
 
 ## 2. Tipografía
 
-- Sin fuente custom: `system-ui` stack (heredado de Next).
-- Jerarquía de página: `h1` herramienta `text-2xl sm:text-3xl font-bold` en color de sección · `h2` secciones internas `text-xl font-bold` · `h3` títulos de tarjeta/lista.
+- Fuente única: **Inter** vía `next/font/google` en `app/layout.tsx` (subconjunto latin, heredada por `body`). No cargar fuentes adicionales ni usar `font-family` hardcodeado.
+- Jerarquía de página: `h1` herramienta `text-2xl sm:text-3xl font-bold` en color de sección (lo pinta `ToolPageShell`) · `h2` secciones internas `text-xl font-bold` · `h3` `text-lg font-semibold` títulos de tarjeta/lista.
 - Énfasis con gradiente de texto solo en H1 de home y H1 de sección: `bg-gradient-to-r from-{A} to-{B} bg-clip-text text-transparent`.
 - Números en tableros: `tabular-nums`.
 - Texto utilitario: `text-balance` en títulos largos, `text-pretty` en párrafos.
+
+## 2b. Iconos
+
+Librería única: **`lucide-react`**. Nuevos iconos solo de ese set (sin SVGs sueltos ni otra librería).
+
+- **Por sección** (nivel sección: estados vacíos, acentos de encabezado, menús): Mente `Brain` · Relaciones `Heart` · Cuerpo `Activity` · Finanzas `Wallet`. Color con token `text-{s}` / `dark:text-{s}-light`.
+- **Vocabulario de acciones compartidas** (reutilizar siempre que encaje): guardar `Save` · borrar `Trash2` · info `Info` · disclaimer `AlertTriangle`/`AlertCircle` · editar `Edit2` · tiempo `Calendar` · dinero `DollarSign` · tasa `Percent` · tendencia `TrendingUp` · calculadora `Calculator` · reset `RotateCcw` · cerrar `X` · navegación `ChevronRight`/`ChevronLeft`/`ChevronDown`/`ArrowRight` · resultado OK `CheckCircle2` · lista `ClipboardList`.
+- Tamaños: inline en botones/filas `h-4 w-4` · destacados `h-5 w-5` + `flex-shrink-0`. Coherencia: mismo icono = misma acción en todas las herramientas.
 
 ## 3. Espaciado, radios y sombras
 
