@@ -49,8 +49,8 @@ interface TabButtonProps {
 
 function TabButton({ isActive, onClick, icon, label, disabled = false }: TabButtonProps) {
   // Colores de la sección finanzas
-  const activeColor = "#2e7d32" // finanzas-DEFAULT
-  const hoverColor = "rgba(46, 125, 50, 0.1)" // finanzas-DEFAULT con opacidad
+  const activeColor = "#2e7d32" // finanzas
+  const hoverColor = "rgba(46, 125, 50, 0.1)" // finanzas con opacidad
 
   return (
     <motion.button

@@ -85,7 +85,7 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
                   onChange={(e) => setEditingName(e.target.value)}
                   onBlur={saveNameChange}
                   onKeyDown={handleKeyDown}
-                  className="font-medium text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 border border-finanzas-DEFAULT rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-finanzas-DEFAULT"
+                  className="font-medium text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 border border-finanzas rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-finanzas"
                   autoFocus
                   maxLength={25}
                 />

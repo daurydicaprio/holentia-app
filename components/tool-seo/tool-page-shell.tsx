@@ -12,24 +12,25 @@ import { sectionLabel, toolJsonLd, type FaqItem } from "@/lib/seo"
 
 // Mapas estáticos para que Tailwind genere las clases por sección
 const sectionTitleClass: Record<string, string> = {
-  mente: "text-mente-DEFAULT",
-  relaciones: "text-relaciones-DEFAULT",
-  cuerpo: "text-cuerpo-DEFAULT",
-  finanzas: "text-finanzas-DEFAULT",
+  mente: "text-mente dark:text-mente-light",
+  relaciones: "text-relaciones dark:text-relaciones-light",
+  cuerpo: "text-cuerpo-dark dark:text-cuerpo-light",
+  finanzas: "text-finanzas dark:text-finanzas-light",
 }
 
 const sectionUnderlineClass: Record<string, string> = {
-  mente: "bg-mente-DEFAULT",
-  relaciones: "bg-relaciones-DEFAULT",
-  cuerpo: "bg-cuerpo-DEFAULT",
-  finanzas: "bg-finanzas-DEFAULT",
+  mente: "bg-mente dark:bg-mente-light",
+  relaciones: "bg-relaciones dark:bg-relaciones-light",
+  cuerpo: "bg-cuerpo-dark dark:bg-cuerpo-light",
+  finanzas: "bg-finanzas dark:bg-finanzas-light",
 }
 
 const sectionButtonClass: Record<string, string> = {
-  mente: "border-mente-DEFAULT text-mente-DEFAULT hover:bg-mente-glass",
-  relaciones: "border-relaciones-DEFAULT text-relaciones-DEFAULT hover:bg-relaciones-glass",
-  cuerpo: "border-cuerpo-DEFAULT text-cuerpo-DEFAULT hover:bg-cuerpo-glass",
-  finanzas: "border-finanzas-DEFAULT text-finanzas-DEFAULT hover:bg-finanzas-glass",
+  mente: "border-mente text-mente hover:bg-mente-glass dark:border-mente-light dark:text-mente-light",
+  relaciones:
+    "border-relaciones text-relaciones hover:bg-relaciones-glass dark:border-relaciones-light dark:text-relaciones-light",
+  cuerpo: "border-cuerpo-dark text-cuerpo-dark hover:bg-cuerpo-glass dark:border-cuerpo-light dark:text-cuerpo-light",
+  finanzas: "border-finanzas text-finanzas hover:bg-finanzas-glass dark:border-finanzas-light dark:text-finanzas-light",
 }
 
 interface ToolPageShellProps {
@@ -41,9 +42,9 @@ interface ToolPageShellProps {
 
 /** Shell server-rendered de las páginas de herramienta: H1, descripción, FAQ y JSON-LD (con BreadcrumbList) en el HTML inicial */
 export default function ToolPageShell({ section, tool, faq = [], children }: ToolPageShellProps) {
-  const titleClass = sectionTitleClass[section] ?? "text-finanzas-DEFAULT"
-  const underlineClass = sectionUnderlineClass[section] ?? "bg-finanzas-DEFAULT"
-  const buttonClass = sectionButtonClass[section] ?? "border-finanzas-DEFAULT text-finanzas-DEFAULT"
+  const titleClass = sectionTitleClass[section] ?? "text-finanzas"
+  const underlineClass = sectionUnderlineClass[section] ?? "bg-finanzas"
+  const buttonClass = sectionButtonClass[section] ?? "border-finanzas text-finanzas"
   const jsonLd = toolJsonLd(section, tool.slug, faq)
 
   const buttonStyles =

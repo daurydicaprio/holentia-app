@@ -10,12 +10,12 @@ const sectionFaqStyles: Record<string, { hover: string; iconWrap: string; icon: 
   mente: {
     hover: "hover:bg-mente-lighter/30",
     iconWrap: "bg-mente-lighter/50 group-hover:bg-mente-lighter",
-    icon: "text-mente-DEFAULT dark:text-mente-light",
+    icon: "text-mente dark:text-mente-light",
   },
   relaciones: {
     hover: "hover:bg-relaciones-lighter/30",
     iconWrap: "bg-relaciones-lighter/50 group-hover:bg-relaciones-lighter",
-    icon: "text-relaciones-DEFAULT dark:text-relaciones-light",
+    icon: "text-relaciones dark:text-relaciones-light",
   },
   cuerpo: {
     hover: "hover:bg-cuerpo-lighter/40",
@@ -25,7 +25,7 @@ const sectionFaqStyles: Record<string, { hover: string; iconWrap: string; icon: 
   finanzas: {
     hover: "hover:bg-finanzas-lighter/30",
     iconWrap: "bg-finanzas-lighter/50 group-hover:bg-finanzas-lighter",
-    icon: "text-finanzas-DEFAULT dark:text-finanzas-light",
+    icon: "text-finanzas dark:text-finanzas-light",
   },
 }
 

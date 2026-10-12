@@ -223,7 +223,7 @@ export function LoanCalculatorForm({
       className="space-y-6 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700"
       data-interactive="true"
     >
-      <h3 className="text-xl font-semibold text-finanzas-DEFAULT dark:text-finanzas-light mb-4">Datos del préstamo</h3>
+      <h3 className="text-xl font-semibold text-finanzas dark:text-finanzas-light mb-4">Datos del préstamo</h3>
 
       <div className="space-y-5">
         <div className="space-y-3">
@@ -231,7 +231,7 @@ export function LoanCalculatorForm({
             <label htmlFor="loan-amount" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Monto del Préstamo
             </label>
-            <span className="text-sm font-semibold text-finanzas-DEFAULT dark:text-finanzas-light">
+            <span className="text-sm font-semibold text-finanzas dark:text-finanzas-light">
               {new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(loanAmount)}
             </span>
           </div>
@@ -244,7 +244,7 @@ export function LoanCalculatorForm({
               onChange={handleLoanAmountChange}
               onBlur={handleLoanAmountBlur}
               onFocus={() => setIsEditingLoanAmount(true)}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-finanzas-DEFAULT focus:border-finanzas-DEFAULT"
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-finanzas focus:border-finanzas"
               data-interactive="true"
             />
             <Slider
@@ -264,7 +264,7 @@ export function LoanCalculatorForm({
             <label htmlFor="interest-rate" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Tasa de Interés Anual
             </label>
-            <span className="text-sm font-semibold text-finanzas-DEFAULT dark:text-finanzas-light">
+            <span className="text-sm font-semibold text-finanzas dark:text-finanzas-light">
               {interestRate}%
             </span>
           </div>
@@ -277,7 +277,7 @@ export function LoanCalculatorForm({
               onChange={handleInterestRateChange}
               onBlur={handleInterestRateBlur}
               onFocus={() => setIsEditingInterestRate(true)}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-finanzas-DEFAULT focus:border-finanzas-DEFAULT"
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-finanzas focus:border-finanzas"
               data-interactive="true"
             />
             <Slider
@@ -297,7 +297,7 @@ export function LoanCalculatorForm({
             <label htmlFor="loan-term" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Plazo (meses)
             </label>
-            <span className="text-sm font-semibold text-finanzas-DEFAULT dark:text-finanzas-light">
+            <span className="text-sm font-semibold text-finanzas dark:text-finanzas-light">
               {loanTerm} {loanTerm === 1 ? "mes" : "meses"}
             </span>
           </div>
@@ -310,7 +310,7 @@ export function LoanCalculatorForm({
               onChange={handleLoanTermChange}
               onBlur={handleLoanTermBlur}
               onFocus={() => setIsEditingLoanTerm(true)}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-finanzas-DEFAULT focus:border-finanzas-DEFAULT"
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-finanzas focus:border-finanzas"
               data-interactive="true"
             />
             <Slider
@@ -334,7 +334,7 @@ export function LoanCalculatorForm({
             disableSave ? "opacity-50 cursor-not-allowed" : ""
           }`}
           style={{
-            backgroundColor: "#2e7d32", // Verde finanzas-DEFAULT
+            backgroundColor: "#2e7d32", // Verde finanzas
           }}
           data-interactive="true"
         >

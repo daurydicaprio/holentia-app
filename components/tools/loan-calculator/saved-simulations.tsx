@@ -19,11 +19,11 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
 
   // Colores de la sección finanzas
   const headerBgColor = "rgba(76, 175, 80, 0.2)" // finanzas-light con opacidad
-  const headerBgColorDark = "rgba(46, 125, 50, 0.2)" // finanzas-DEFAULT con opacidad
-  const iconColor = "#2e7d32" // finanzas-DEFAULT
+  const headerBgColorDark = "rgba(46, 125, 50, 0.2)" // finanzas con opacidad
+  const iconColor = "#2e7d32" // finanzas
   const iconColorDark = "#a5d6a7" // finanzas-light
   const editButtonHoverBgColor = "rgba(76, 175, 80, 0.1)" // finanzas-light con opacidad
-  const editButtonHoverBgColorDark = "rgba(46, 125, 50, 0.2)" // finanzas-DEFAULT con opacidad
+  const editButtonHoverBgColorDark = "rgba(46, 125, 50, 0.2)" // finanzas con opacidad
 
   // Manejar clic en el nombre para editar
   const handleNameClick = (simulation: LoanSimulation) => {
@@ -88,7 +88,7 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
                   onChange={(e) => setEditingName(e.target.value)}
                   onBlur={saveNameChange}
                   onKeyDown={handleKeyDown}
-                  className="font-medium text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 border border-finanzas-DEFAULT rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-finanzas-DEFAULT"
+                  className="font-medium text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 border border-finanzas rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-finanzas"
                   autoFocus
                   maxLength={25}
                 />

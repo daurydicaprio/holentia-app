@@ -20,14 +20,14 @@ export function AmortizationTable({ data, formatCurrency }: AmortizationTablePro
 
   // Colores de la sección finanzas
   const headerBgColor = "rgba(76, 175, 80, 0.2)" // finanzas-light con opacidad
-  const headerBgColorDark = "rgba(46, 125, 50, 0.3)" // finanzas-DEFAULT con opacidad
+  const headerBgColorDark = "rgba(46, 125, 50, 0.3)" // finanzas con opacidad
   const totalRowBgColor = "rgba(76, 175, 80, 0.3)" // finanzas-light con opacidad
-  const totalRowBgColorDark = "rgba(46, 125, 50, 0.2)" // finanzas-DEFAULT con opacidad
+  const totalRowBgColorDark = "rgba(46, 125, 50, 0.2)" // finanzas con opacidad
   const totalRowTextColor = "#1b5e20" // finanzas-dark
   const totalRowTextColorDark = "#a5d6a7" // finanzas-light
-  const buttonColor = "#2e7d32" // finanzas-DEFAULT
+  const buttonColor = "#2e7d32" // finanzas
   const buttonHoverBgColor = "rgba(76, 175, 80, 0.2)" // finanzas-light con opacidad
-  const buttonHoverBgColorDark = "rgba(46, 125, 50, 0.2)" // finanzas-DEFAULT con opacidad
+  const buttonHoverBgColorDark = "rgba(46, 125, 50, 0.2)" // finanzas con opacidad
 
   // Cambiar página
   const changePage = (page: number) => {

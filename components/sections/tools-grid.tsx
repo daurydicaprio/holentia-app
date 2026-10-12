@@ -14,10 +14,11 @@ interface ToolsGridProps {
 
 // Mapa estático para que Tailwind genere las clases
 const sectionButtonClasses: Record<SectionType, string> = {
-  mente: "text-mente-DEFAULT hover:text-mente-darkest",
-  relaciones: "text-relaciones-DEFAULT hover:text-relaciones-darkest",
-  cuerpo: "text-cuerpo-DEFAULT hover:text-cuerpo-darkest",
-  finanzas: "text-finanzas-DEFAULT hover:text-finanzas-darkest",
+  mente: "text-mente hover:text-mente-darkest dark:text-mente-light dark:hover:text-mente-lighter",
+  relaciones:
+    "text-relaciones hover:text-relaciones-darkest dark:text-relaciones-light dark:hover:text-relaciones-lighter",
+  cuerpo: "text-cuerpo-dark hover:text-cuerpo-darkest dark:text-cuerpo-light dark:hover:text-cuerpo-lighter",
+  finanzas: "text-finanzas hover:text-finanzas-darkest dark:text-finanzas-light dark:hover:text-finanzas-lighter",
 }
 
 export default function ToolsGrid({ cards, section }: ToolsGridProps) {
