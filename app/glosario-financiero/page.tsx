@@ -14,7 +14,7 @@ const faq: FaqItem[] = [
   {
     question: "¿Qué es el glosario financiero?",
     answer:
-      "Es una colección de términos clave del dinero —ahorro, crédito, intereses e inversiones— explicados en lenguaje sencillo con ejemplos concretos. Está pensado para que entiendas los conceptos que aparecen en las calculadoras y simuladores de la sección de finanzas.",
+      "Es una colección de términos clave del dinero —ahorro, crédito, intereses, fondos y bolsa— explicados en lenguaje sencillo con ejemplos concretos. Incluye productos como depósitos a plazo, ETFs y CETES, y está pensado para que entiendas los conceptos que aparecen en las calculadoras y simuladores de la sección de finanzas.",
   },
   {
     question: "¿Por qué conviene entender estos términos?",

@@ -204,6 +204,103 @@ const terms: GlossaryTerm[] = [
     definition:
       "Aportar montos fijos con frecuencia constante en lugar de intentar adivinar el mejor momento: promedia el precio de compra y quita la presión del timing.",
   },
+  {
+    term: "Mercado de valores",
+    category: "inversion",
+    definition:
+      "Lugar (físico o electrónico) donde se emiten y negocian acciones, bonos y otros títulos. En el mercado primario la empresa o el gobierno emite y recauda; en el secundario los inversores se compran y venden entre sí. En República Dominicana opera la Bolsa de Valores (BVRD).",
+  },
+  {
+    term: "Índice bursátil",
+    category: "inversion",
+    definition:
+      "Medida del desempeño de un grupo de acciones que sirve como referente del mercado. Ejemplos: S&P 500 (grandes empresas de EE. UU.), Nasdaq Composite (tecnológicas) e IPC (México). Si tu inversión «bate al índice», ganó más que ese promedio.",
+  },
+  {
+    term: "Fondo de inversión (fondo mutuo)",
+    category: "inversion",
+    definition:
+      "Puesto de dinero de muchos inversores que un gestor invierte de forma conjunta en acciones, bonos u otros activos. Compras participaciones cuyo precio sube o baja según la cartera. En varios países se le llama fondo mutuo o fondo colectivo.",
+    example: "Si la participación vale $100 y aportas $5,000, obtienes 50 participaciones del fondo.",
+  },
+  {
+    term: "Fondo indexado",
+    category: "inversion",
+    definition:
+      "Fondo que replica pasivamente un índice bursátil en lugar de elegir acciones una por una. Al seguir al mercado suele cobrar comisiones bajas y no depende de que un gestor «acierte». Puede cotizar en bolsa (entonces es un ETF) o suscribirse directamente.",
+  },
+  {
+    term: "ETF (fondo cotizado)",
+    category: "inversion",
+    definition:
+      "Siglas de Exchange Traded Fund: un fondo de inversión que cotiza en bolsa como si fuera una acción, así que puedes comprar y venderlo durante la jornada. Suele replicar un índice y destaca por sus comisiones bajas.",
+    example: "Un ETF del S&P 500 te da en una sola compra exposición a las 500 empresas más grandes de Estados Unidos.",
+  },
+  {
+    term: "AFI (Administradora de Fondos de Inversión)",
+    category: "inversion",
+    definition:
+      "Empresa que administra fondos de inversión: junta los aportes de muchas personas, invierte ese dinero según las reglas del fondo y atiende los rescates. Está autorizada y vigilada por el regulador de valores de su país; es el gestor, no el fondo en sí.",
+  },
+  {
+    term: "SAFI (Sociedad Administradora de Fondos de Inversión)",
+    category: "inversion",
+    definition:
+      "Nombre legal que recibe la administradora de fondos de inversión en varios países de la región (por ejemplo, Argentina y Venezuela). Cumple la misma función que una AFI: operar y custodiar los fondos bajo supervisión del regulador.",
+  },
+  {
+    term: "Casa de bolsa (bróker)",
+    category: "inversion",
+    definition:
+      "Intermediario autorizado que ejecuta tus órdenes de compra y venta en la bolsa, custodia tus títulos y cobra una comisión por operación o un porcentaje del monto operado.",
+  },
+  {
+    term: "Cartera de inversión (portafolio)",
+    category: "inversion",
+    definition:
+      "Conjunto de activos que posees: acciones, bonos, fondos y efectivo. Se diseña según tu horizonte y tolerancia al riesgo, y se reequilibra de vez en cuando para volver a la proporción elegida.",
+    example: "En una cartera 70/30, si las acciones suben mucho se venden unas para volver al 70%.",
+  },
+  {
+    term: "Renta fija y renta variable",
+    category: "inversion",
+    definition:
+      "Las dos grandes familias de inversión: la renta fija (bonos, plazos fijos) promete flujos conocidos y se mueve poco; la renta variable (acciones, ETFs de acciones) depende del negocio y fluctúa más. Más movimiento suele significar más riesgo y más potencial.",
+  },
+  {
+    term: "Dividendo",
+    category: "inversion",
+    definition:
+      "Parte de las utilidades que una empresa reparte entre sus accionistas, normalmente en efectivo. No está garantizado: la empresa puede reducirlo o suspenderlo.",
+    example: "Quien tiene 100 acciones que pagan $2 por acción recibe $200 de dividendo.",
+  },
+  {
+    term: "Depósito a plazo fijo",
+    category: "inversion",
+    definition:
+      "Ahorro pactado con el banco: depositas un monto por un plazo definido (30, 90, 180 días) a tasa fija. El dinero queda inmovilizado hasta el vencimiento (retirarlo antes suele costar una penalidad) y entonces recibes capital más intereses. Es de bajo riesgo.",
+    example: "$100,000 DOP a 90 días al 6% anual rinden cerca de $1,500 de intereses.",
+  },
+  {
+    term: "Certificado de depósito",
+    category: "inversion",
+    definition:
+      "Comprobante que emite un banco por tu depósito a plazo: fija monto, tasa y fecha de vencimiento. Es la familia del plazo fijo (en Colombia se llama CDT). Algunos son negociables, es decir, pueden venderse antes de vencer a un precio de mercado.",
+  },
+  {
+    term: "CDT (Certificado de Depósito a Término)",
+    category: "inversion",
+    definition:
+      "Nombre que recibe en Colombia el depósito a plazo fijo: compras un plazo en el banco a tasa fija y no retiras el dinero antes del vencimiento. Es uno de los instrumentos de menor riesgo para ahorrar con rendimiento.",
+    example: "$1,000,000 COP a 90 días al 10% anual efectivo rinden cerca de $24,700 al vencer.",
+  },
+  {
+    term: "CETES",
+    category: "inversion",
+    definition:
+      "Certificados de la Tesorería de la Federación: títulos de deuda del Gobierno de México a corto plazo (28, 91, 182 o 360 días). Se compran con descuento y al vencer pagan su valor nominal; al respaldarlos el Estado se consideran de riesgo muy bajo. Cada país tiene títulos similares.",
+    example: "Compras un Cete a 28 días por $980 y al vencimiento recibes $1,000.",
+  },
 
   // — Economía personal —
   {

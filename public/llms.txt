@@ -29,7 +29,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 - [Calculadora de hidratación](https://holentia.com/calculadora-hidratacion): agua diaria según peso, actividad y clima.
 - [Diario guiado](https://holentia.com/diario-guiado): entradas de reflexión guardadas en el navegador.
 - [Test de lenguajes del amor](https://holentia.com/test-lenguajes-amor): descubre tu lenguaje principal de cariño.
-- [Glosario financiero](https://holentia.com/glosario-financiero): términos de ahorro, crédito, intereses e inversiones explicados con ejemplos.
+- [Glosario financiero](https://holentia.com/glosario-financiero): términos de ahorro, crédito, intereses, fondos, bolsa y depósitos explicados con ejemplos.
 
 ## Páginas informativas
 
