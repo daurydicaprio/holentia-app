@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://holentia.com/sitemap.xml
