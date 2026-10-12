@@ -4,7 +4,7 @@
 > Calculadoras, simuladores y tests que funcionan directamente en el navegador del usuario,
 > sin cuenta, sin registro y sin enviar datos a servidores.
 
-Las 11 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
+Las 12 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
 de cada herramienta, y los resultados son estimaciones educativas, no asesoramiento profesional
 (médico, financiero ni psicológico).
 
@@ -14,7 +14,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 - [Relaciones](https://holentia.com/relaciones): test de los 5 lenguajes del amor.
 - [Cuerpo](https://holentia.com/cuerpo): calculadora de calorías (Mifflin-St Jeor) e hidratación (EFSA/NASEM).
 - [Finanzas](https://holentia.com/finanzas): presupuesto, interés compuesto, préstamo, consumo eléctrico,
-  corte/vencimiento de tarjeta, interés de tarjeta y perfil de riesgo.
+  corte/vencimiento de tarjeta, interés de tarjeta, perfil de riesgo y glosario financiero.
 
 ## Herramientas
 
@@ -29,6 +29,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 - [Calculadora de hidratación](https://holentia.com/calculadora-hidratacion): agua diaria según peso, actividad y clima.
 - [Diario guiado](https://holentia.com/diario-guiado): entradas de reflexión guardadas en el navegador.
 - [Test de lenguajes del amor](https://holentia.com/test-lenguajes-amor): descubre tu lenguaje principal de cariño.
+- [Glosario financiero](https://holentia.com/glosario-financiero): términos de ahorro, crédito, intereses e inversiones explicados con ejemplos.
 
 ## Páginas informativas
 

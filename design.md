@@ -32,6 +32,8 @@ Tokens Tailwind por sección (`tailwind.config.ts`): `DEFAULT`, `dark`, `light`,
 
 > El glass es para **superficies translúcidas sobre fondo con contenido detrás** (headers, overlays). No usar glass como fondo de tarjeta en modo claro: el texto blanco pierde contraste. Las tarjetas usan gradiente (ver §4).
 
+> **⚠️ Los tokens de sección NO admiten modificadores `/opacidad`** (`bg-finanzas/10`, `bg-mente-lighter/50`): los valores son `var(--…)` sin placeholder `<alpha-value>`, así que Tailwind **no genera la clase** (clase silenciosamente muerta). Para translúcidos usa los tokens `glass`/`glass-border` (ya llevan `rgba`), o colores sólidos. Los colores nativos de Tailwind (`bg-black/5`, `bg-white/10`, `bg-gray-100/70`) sí admiten opacidad.
+
 ### Base neutra
 
 - Fondo light `#f8f9fa` · texto `#212529` / secundario `#495057` · borde `#dee2e6`
@@ -53,7 +55,7 @@ Tokens Tailwind por sección (`tailwind.config.ts`): `DEFAULT`, `dark`, `light`,
 Librería única: **`lucide-react`**. Nuevos iconos solo de ese set (sin SVGs sueltos ni otra librería).
 
 - **Por sección** (nivel sección: estados vacíos, acentos de encabezado, menús): Mente `Brain` · Relaciones `Heart` · Cuerpo `Activity` · Finanzas `Wallet`. Color con token `text-{s}` / `dark:text-{s}-light`.
-- **Vocabulario de acciones compartidas** (reutilizar siempre que encaje): guardar `Save` · borrar `Trash2` · info `Info` · disclaimer `AlertTriangle`/`AlertCircle` · editar `Edit2` · tiempo `Calendar` · dinero `DollarSign` · tasa `Percent` · tendencia `TrendingUp` · calculadora `Calculator` · reset `RotateCcw` · cerrar `X` · navegación `ChevronRight`/`ChevronLeft`/`ChevronDown`/`ArrowRight` · resultado OK `CheckCircle2` · lista `ClipboardList`.
+- **Vocabulario de acciones compartidas** (reutilizar siempre que encaje): guardar `Save` · borrar `Trash2` · info `Info` · disclaimer `AlertTriangle`/`AlertCircle` · editar `Edit2` · tiempo `Calendar` · dinero `DollarSign` · tasa `Percent` · tendencia `TrendingUp` · calculadora `Calculator` · ejemplo/tip `Lightbulb` · buscar `Search` · reset `RotateCcw` · cerrar `X` · navegación `ChevronRight`/`ChevronLeft`/`ChevronDown`/`ArrowRight` · resultado OK `CheckCircle2` · lista `ClipboardList`.
 - Tamaños: inline en botones/filas `h-4 w-4` · destacados `h-5 w-5` + `flex-shrink-0`. Coherencia: mismo icono = misma acción en todas las herramientas.
 
 ## 3. Espaciado, radios y sombras
@@ -91,12 +93,23 @@ H1 centrado en color de sección + descripción + underline · botones outline "
 
 ### FAQ acordeón (`components/tool-seo/tool-faq.tsx`)
 
-Client component. Una pregunta abierta a la vez (`openIndex`). Fila `button` con `aria-expanded`/`aria-controls`; panel con `grid-rows-[0fr→1fr]` + `overflow-hidden` (el contenido permanece en el HTML para SEO). Icono `Plus`/`Minus` en círculo `bg-{s}-lighter/50`; hover de fila: relleno neutro visible `hover:bg-black/5` / `dark:hover:bg-white/10` + texto al tinte de sección (`hover:text-{s}` / `dark:hover:text-{s}-light`).
+Client component. Una pregunta abierta a la vez (`openIndex`). Fila `button` con `aria-expanded`/`aria-controls`; panel con `grid-rows-[0fr→1fr]` + `overflow-hidden` (el contenido permanece en el HTML para SEO). Icono `Plus`/`Minus` en círculo sólido `bg-{s} group-hover:bg-{s}-dark dark:bg-{s}-light dark:group-hover:bg-{s}-lighter` con icono `text-white dark:text-black` (en cuerpo: `bg-cuerpo-dark`→`bg-cuerpo-darkest` por claridad). Hover de fila: relleno neutro visible `hover:bg-black/5` / `dark:hover:bg-white/10` + texto al tinte de sección (`hover:text-{s}` / `dark:hover:text-{s}-light`).
 
 ### Botones (`components/ui/button.tsx` + custom)
 
 - shadcn `Button` para UI genérica (fantasma en toggle de grid).
 - Botones de herramienta: outline sección (ver shell) o sólidos `{s}` → hover `{s}-dark`.
+
+### Listas filtrables / Glosario (`components/tools/glossary/`)
+
+Patrón buscador + chips + resultados agrupados (referencia: `glossary.tsx`):
+
+- **Input búsqueda**: `h-10 rounded-md border-gray-300 bg-white pl-9 pr-10 text-sm` + icono `Search` absoluto `left-3` · foco `focus:ring-finanzas focus:border-finanzas` · dark: `dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100` + foco `-light` · botón limpiar `X` a la derecha · `type="search"` + `sr-only` label.
+- **Chips de categoría** (`rounded-md`, no pill): base `border px-3 py-1.5 text-sm font-medium` · activo `border-finanzas-dark bg-finanzas-dark text-white dark:border-finanzas-light dark:bg-finanzas-light dark:text-black` · inactivo con el hover de fila FAQ (`hover:bg-black/5 hover:text-finanzas dark:hover:bg-white/10 dark:hover:text-finanzas-light`) · `aria-pressed`.
+- **Contador** con icono `Wallet` + `aria-live="polite"` (`N de M términos`).
+- **Resultados**: agrupados por categoría con `h2 text-xl font-bold text-finanzas-dark dark:text-finanzas-light` (+ conteo en `text-sm text-gray-500`), grid `sm:grid-cols-2 gap-4`; tarjetas `rounded-xl border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-800` (sin hover: no son interactivas), título `h3 text-lg font-semibold text-finanzas-dark dark:text-finanzas-light`, cuerpo `text-sm text-gray-700 dark:text-gray-300`, ejemplo opcional en recuadro sólido `bg-finanzas-lighter text-gray-800 dark:bg-finanzas-dark dark:text-gray-200` con icono `Lightbulb text-finanzas-dark dark:text-finanzas-light`.
+- **Estado vacío**: panel centrado con `Search`, mensaje con la consulta y botón outline (receta shell) «Limpiar filtros».
+- Búsqueda sin distinción de acentos (`normalize("NFD")` + strip diacríticos). Persistencia: efímera (patrón E, nada en localStorage).
 
 ## 5. Modo oscuro
 

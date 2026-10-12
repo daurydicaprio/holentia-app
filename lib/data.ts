@@ -314,9 +314,9 @@ export const sectionsData: Record<string, SectionData> = {
       {
         id: "glosario-financiero",
         title: "Glosario Financiero",
-        description: "Entiende términos clave.",
+        description: "Términos financieros explicados de forma sencilla, con ejemplos.",
         slug: "glosario-financiero",
-        isAvailable: false,
+        isAvailable: true,
         category: "finanzas",
       },
       {

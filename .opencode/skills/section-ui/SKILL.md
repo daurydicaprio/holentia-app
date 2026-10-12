@@ -18,6 +18,8 @@ Claves en `tailwind.config.ts` por sección: `DEFAULT dark light lighter darkest
 
 Si una clase nueva no aparece en el CSS compilado (`.next/static/css/*.css`), casi siempre es esto.
 
+**Tampoco hay modificadores `/opacidad` sobre tokens de sección** (`bg-finanzas/10`, `bg-mente-lighter/50`): los valores son `var(--…)` sin `<alpha-value>` → Tailwind **no genera la clase** (muerta en silencio). Usa tokens `glass`/`glass-border` (ya con `rgba`), colores sólidos, o nativos de Tailwind (`bg-black/5`, `bg-white/10`).
+
 ## 2. Paleta canónica
 
 | Sección | Canónico | Dark | Light | Lighter | Darkest |
@@ -39,7 +41,7 @@ Nunca hex suelto en componentes: clases Tailwind o CSS vars (`var(--color-finanz
 ## 4. Iconos (`lucide-react`)
 
 - **Por sección** (nivel sección/estados vacíos/acentos): Mente `Brain` · Relaciones `Heart` · Cuerpo `Activity` · Finanzas `Wallet`. Colorear con `text-{s}`.
-- **Acciones compartidas** (vocabulario ya en uso — reutilizar, no inventar): guardar `Save` · borrar `Trash2` · info/disclaimer `Info`/`AlertTriangle` · editar `Edit2` · tiempo `Calendar` · dinero `DollarSign` · tasa `Percent` · tendencia `TrendingUp` · calculadora `Calculator` · reset `RotateCcw` · cerrar `X` · navegación `ChevronRight/Left/Down`, `ArrowRight`.
+- **Acciones compartidas** (vocabulario ya en uso — reutilizar, no inventar): guardar `Save` · borrar `Trash2` · info/disclaimer `Info`/`AlertTriangle` · editar `Edit2` · tiempo `Calendar` · dinero `DollarSign` · tasa `Percent` · tendencia `TrendingUp` · calculadora `Calculator` · ejemplo/tip `Lightbulb` · buscar `Search` · reset `RotateCcw` · cerrar `X` · navegación `ChevronRight/Left/Down`, `ArrowRight`.
 - Tamaños: botones/iconos inline `h-4 w-4` · destacados `h-5 w-5`+`flex-shrink-0`.
 
 ## 5. Superficies — gradiente vs glass (CRÍTICO para contraste)
@@ -52,7 +54,7 @@ Nunca hex suelto en componentes: clases Tailwind o CSS vars (`var(--color-finanz
 ## 6. Hovers canónicos (ambos modos con contraste)
 
 - **Botones outline (ToolPageShell)**: base `border-{s} text-{s} dark:border-{s}-light dark:text-{s}-light` · hover claro `hover:bg-{s}-dark hover:text-white` (cuerpo: `hover:bg-cuerpo hover:text-black`) · hover oscuro `dark:hover:bg-{s}-light dark:hover:text-black`. Sin escala, `transition-colors`.
-- **Fila FAQ**: `hover:bg-black/5 hover:text-{s} dark:hover:bg-white/10 dark:hover:text-{s}-light`.
+- **Fila FAQ**: `hover:bg-black/5 hover:text-{s} dark:hover:bg-white/10 dark:hover:text-{s}-light`. Icono del círculo: sólido `bg-{s} group-hover:bg-{s}-dark dark:bg-{s}-light dark:group-hover:bg-{s}-lighter` + `text-white dark:text-black` (cuerpo: `bg-cuerpo-dark`→`bg-cuerpo-darkest`).
 - **Tabs activos**: `text-{s} dark:text-{s}-light` + underline `bg-{s} dark:bg-{s}-light`. Inactivos `text-gray-600 dark:text-gray-400`; hover oscuro `dark:hover:text-{s}-light` (NUNCA `-darkest` en oscuro: queda invisible).
 - Regla general: el hover debe cambiar **relleno Y texto**, perceptible en ambos modos.
 

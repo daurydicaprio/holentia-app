@@ -9,23 +9,24 @@ import type { FaqItem } from "@/lib/seo"
 const sectionFaqStyles: Record<string, { hover: string; iconWrap: string; icon: string }> = {
   mente: {
     hover: "hover:bg-black/5 hover:text-mente dark:hover:bg-white/10 dark:hover:text-mente-light",
-    iconWrap: "bg-mente-lighter/50 group-hover:bg-mente-lighter",
-    icon: "text-mente dark:text-mente-light",
+    iconWrap: "bg-mente group-hover:bg-mente-dark dark:bg-mente-light dark:group-hover:bg-mente-lighter",
+    icon: "text-white dark:text-black",
   },
   relaciones: {
     hover: "hover:bg-black/5 hover:text-relaciones dark:hover:bg-white/10 dark:hover:text-relaciones-light",
-    iconWrap: "bg-relaciones-lighter/50 group-hover:bg-relaciones-lighter",
-    icon: "text-relaciones dark:text-relaciones-light",
+    iconWrap:
+      "bg-relaciones group-hover:bg-relaciones-dark dark:bg-relaciones-light dark:group-hover:bg-relaciones-lighter",
+    icon: "text-white dark:text-black",
   },
   cuerpo: {
     hover: "hover:bg-black/5 hover:text-cuerpo-dark dark:hover:bg-white/10 dark:hover:text-cuerpo-light",
-    iconWrap: "bg-cuerpo-lighter/50 group-hover:bg-cuerpo-lighter",
-    icon: "text-cuerpo-dark dark:text-cuerpo-light",
+    iconWrap: "bg-cuerpo-dark group-hover:bg-cuerpo-darkest dark:bg-cuerpo-light dark:group-hover:bg-cuerpo-lighter",
+    icon: "text-white dark:text-black",
   },
   finanzas: {
     hover: "hover:bg-black/5 hover:text-finanzas dark:hover:bg-white/10 dark:hover:text-finanzas-light",
-    iconWrap: "bg-finanzas-lighter/50 group-hover:bg-finanzas-lighter",
-    icon: "text-finanzas dark:text-finanzas-light",
+    iconWrap: "bg-finanzas group-hover:bg-finanzas-dark dark:bg-finanzas-light dark:group-hover:bg-finanzas-lighter",
+    icon: "text-white dark:text-black",
   },
 }
 
