@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowLeft, Scale, FileText, Shield, AlertTriangle, Globe, Mail } from "lucide-react"
+import { ArrowLeft, ArrowRight, FileText, Globe, Mail, Shield, AlertTriangle } from "lucide-react"
 import { pageMetadata } from "@/lib/seo"
 
 export function generateMetadata() {
@@ -12,174 +12,145 @@ export function generateMetadata() {
 import Logo from "@/components/common/logo/logo"
 import Footer from "@/components/common/footer/footer"
 import MenuButton from "@/components/common/menu-button/menu-button"
+import BrandDots from "@/components/common/brand-dots/brand-dots"
 
 export default function AvisoLegalPage() {
   return (
-    <main className="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
-      <div className="flex-1 max-w-5xl w-full mx-auto p-6 sm:p-8 lg:p-12">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+    <main className="min-h-screen flex flex-col">
+      <div className="flex-1 max-w-3xl w-full mx-auto p-4 sm:p-6">
+        <div className="flex items-center justify-between mb-10">
           <Link
             href="/"
-            className="group flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-all duration-300"
+            data-interactive="true"
+            className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
           >
-            <div className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 group-hover:bg-gray-200 dark:group-hover:bg-gray-700 transition-colors">
-              <ArrowLeft className="h-4 w-4" />
-            </div>
-            <span className="font-medium">Volver</span>
+            <ArrowLeft className="h-4 w-4" />
+            Volver
           </Link>
           <MenuButton />
         </div>
 
-        <div className="flex justify-center mb-12">
-          <div className="relative">
-            <div className="absolute inset-0 bg-blue-500/10 dark:bg-blue-400/5 blur-3xl rounded-full"></div>
-            <Logo size="lg" />
-          </div>
-        </div>
-
-        {/* Title with icon */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 mb-6 shadow-lg">
-            <Scale className="h-8 w-8 text-white" />
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 dark:from-gray-100 dark:via-gray-200 dark:to-gray-300 bg-clip-text text-transparent">
+        <div className="flex flex-col items-center text-center mb-12">
+          <Logo size="lg" />
+          <BrandDots className="mt-5 mb-6" />
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
             Aviso Legal
           </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
             Actualizado en {new Date().toLocaleDateString("es-ES", { year: "numeric", month: "long" })}
           </p>
         </div>
 
-        {/* Content sections */}
-        <div className="space-y-12">
-          {/* General information */}
-          <section className="group">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 rounded-xl bg-blue-100 dark:bg-blue-900/30 group-hover:scale-110 transition-transform">
-                <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+        <div className="space-y-10">
+          <section>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-900 text-white dark:bg-white dark:text-gray-900">
+                <FileText className="h-5 w-5" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Información General</h2>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Información general</h2>
             </div>
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed pl-12">
+            <p className="text-base leading-relaxed text-gray-700 dark:text-gray-300">
               Este sitio web, <strong>HOLENTIA</strong>, es una plataforma de herramientas de bienestar integral creada
               por Daury DiCaprio. El acceso y uso de este sitio está sujeto a los términos y condiciones descritos en
               este documento.
             </p>
           </section>
 
-          {/* Purpose */}
-          <section className="group">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 rounded-xl bg-purple-100 dark:bg-purple-900/30 group-hover:scale-110 transition-transform">
-                <Globe className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+          <section>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-900 text-white dark:bg-white dark:text-gray-900">
+                <Globe className="h-5 w-5" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Objeto y Ámbito</h2>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Objeto y ámbito</h2>
             </div>
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed pl-12">
+            <p className="text-base leading-relaxed text-gray-700 dark:text-gray-300">
               HOLENTIA proporciona herramientas gratuitas para el bienestar en las áreas de <strong>mente</strong>,{" "}
               <strong>relaciones</strong>, <strong>cuerpo</strong> y <strong>finanzas</strong>. Todas las herramientas
               son de carácter informativo y educativo.
             </p>
           </section>
 
-          {/* Responsibility */}
-          <section className="group">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 rounded-xl bg-amber-100 dark:bg-amber-900/30 group-hover:scale-110 transition-transform">
-                <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+          <section>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-900 text-white dark:bg-white dark:text-gray-900">
+                <AlertTriangle className="h-5 w-5" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Responsabilidad y Limitaciones</h2>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                Responsabilidad y limitaciones
+              </h2>
             </div>
-            <div className="pl-12 space-y-4">
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+            <div className="space-y-4">
+              <p className="text-base leading-relaxed text-gray-700 dark:text-gray-300">
                 Las herramientas proporcionadas son de carácter informativo y educativo.{" "}
                 <strong>No sustituyen el asesoramiento profesional especializado.</strong>
               </p>
-
-              <div className="bg-amber-50 dark:bg-amber-900/20 p-6 rounded-2xl border-l-4 border-amber-500">
-                <div className="flex items-start gap-3">
-                  <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-1 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold text-amber-900 dark:text-amber-100 mb-2">Importante</p>
-                    <p className="text-sm text-amber-800 dark:text-amber-200 leading-relaxed">
-                      Las calculadoras financieras, herramientas de bienestar mental y demás recursos son estimaciones.
-                      No constituyen asesoramiento financiero, médico o psicológico profesional. Siempre consulte con un
-                      profesional cualificado para decisiones importantes.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Privacy */}
-          <section className="group">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 rounded-xl bg-green-100 dark:bg-green-900/30 group-hover:scale-110 transition-transform">
-                <Shield className="h-5 w-5 text-green-600 dark:text-green-400" />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Privacidad y Protección de Datos</h2>
-            </div>
-            <div className="pl-12 space-y-4">
-              <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-2xl border border-green-200/50 dark:border-green-700/30">
-                <p className="text-lg font-semibold text-green-800 dark:text-green-200 mb-3">
-                  HOLENTIA no recopila, almacena ni procesa información personal.
+              <div className="rounded-2xl border-l-4 border-amber-500 bg-amber-50 p-5 dark:bg-amber-900/20">
+                <p className="text-sm font-semibold text-amber-900 dark:text-amber-100 mb-1">Importante</p>
+                <p className="text-sm leading-relaxed text-amber-800 dark:text-amber-200">
+                  Las calculadoras financieras, herramientas de bienestar mental y demás recursos son estimaciones. No
+                  constituyen asesoramiento financiero, médico o psicológico profesional. Siempre consulte con un
+                  profesional cualificado para decisiones importantes.
                 </p>
-                <ul className="space-y-2 text-green-700 dark:text-green-300">
-                  <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                    No utilizamos cookies de seguimiento
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                    No compartimos información con terceros
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                    No creamos perfiles de usuario
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                    No almacenamos historial de uso
-                  </li>
-                </ul>
               </div>
             </div>
           </section>
 
-          {/* Contact */}
-          <section className="group">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 group-hover:scale-110 transition-transform">
-                <Mail className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+          <section>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-900 text-white dark:bg-white dark:text-gray-900">
+                <Shield className="h-5 w-5" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Contacto</h2>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                Privacidad y protección de datos
+              </h2>
             </div>
-            <div className="pl-12">
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                Para consultas relacionadas con este aviso legal:
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900">
+              <p className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                HOLENTIA no recopila, almacena ni procesa información personal.
               </p>
-              <Link
-                href="/ayuda"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300"
-              >
-                Ir a Ayuda
-              </Link>
+              <ul className="space-y-2.5 text-sm text-gray-700 dark:text-gray-300">
+                {[
+                  "No utilizamos cookies de seguimiento",
+                  "No compartimos información con terceros",
+                  "No creamos perfiles de usuario",
+                  "No almacenamos historial de uso",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2.5">
+                    <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
           </section>
 
-          {/* Responsible use */}
-          <section className="relative overflow-hidden rounded-3xl p-8 bg-gradient-to-br from-gray-50 to-slate-50 dark:from-gray-800 dark:to-slate-800 border border-gray-200 dark:border-gray-700">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-gray-400/10 to-slate-500/10 rounded-full blur-3xl" />
-            <div className="relative">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Uso Responsable</h3>
-              <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                Al utilizar HOLENTIA, aceptas estos términos y te comprometes a hacer un uso responsable y ético de las
-                herramientas proporcionadas. Trabajemos juntos para crear una comunidad de bienestar basada en el
-                respeto y la mejora continua.
-              </p>
+          <section>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-900 text-white dark:bg-white dark:text-gray-900">
+                <Mail className="h-5 w-5" />
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Contacto</h2>
             </div>
+            <p className="text-base leading-relaxed text-gray-700 dark:text-gray-300">
+              Para consultas relacionadas con este aviso legal:
+            </p>
+            <Link
+              href="/ayuda"
+              data-interactive="true"
+              className="group mt-4 inline-flex h-10 items-center gap-2 rounded-md bg-gray-900 px-5 text-sm font-medium text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
+            >
+              Ir a Ayuda
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </section>
+
+          <section className="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8 dark:border-gray-700 dark:bg-gray-900">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">Uso responsable</h2>
+            <p className="text-base leading-relaxed text-gray-700 dark:text-gray-300">
+              Al utilizar HOLENTIA, aceptas estos términos y te comprometes a hacer un uso responsable y ético de las
+              herramientas proporcionadas. Trabajemos juntos para crear una comunidad de bienestar basada en el respeto
+              y la mejora continua.
+            </p>
           </section>
         </div>
       </div>
