@@ -114,8 +114,15 @@ El borde se vuelve transparente al enfocar: solo el anillo de sección marca el 
 - Los componentes canónicos (ToolCard, shell, FAQ, glosario) ya son 100% tokens.
 - Los hex de paleta **sin opacidad** (`bg-[#388e3c]`) se han migrado a tokens (`bg-finanzas`) — valores idénticos.
 - Los hex **con opacidad** (`bg-[#388e3c]/10`) se quedan así deliberadamente: los tokens no admiten `/n` (clase muerta). Usar nativos con alpha (`bg-black/5`) o glass.
-- `#81c784` (verde claro legado en dark de finanzas, ~23 usos) es anterior a la paleta: pendiente de migrar a `finanzas-light` (#66bb6a) como decisión visual consciente (cambia apenas el tono).
+- `#81c784` (verde claro legado en dark de finanzas) **migrado**: en clases → `finanzas-light` (#66bb6a); en gráficos JS (Chart.js, `sliceColors`, `FUND_COLORS`) → hex canónico `#66bb6a` (o `#388e3c` si había colisión cromática en un pie). Los gráficos usan hex literales porque Chart.js necesita valores crudos, no clases.
 - Acentos locales de herramienta (`#1e3a2b` en budget) se conservan y se documentan aquí si se replican.
+
+### 4b. Página de sección (hub mente/relaciones/cuerpo/finanzas)
+
+`SectionPage` = Logo + `SectionTabs` + `SectionHeader` + `ToolsGrid` + `Footer`, todo con tokens:
+
+- **Gradiente del H1** (`section-header.tsx`): mapa estático `gradientBySection` con vars `--color-{s}-active` / `-dark` (sin hex; fallback finanzas). H2 «¿Qué quieres aprender?»: `text-xl sm:text-2xl font-bold`.
+- **Footer** (`footer.tsx`): enlace de crédito por sección con clases `text-{s} hover:text-{s}-dark dark:text-{s}-light dark:hover:text-{s}-lighter` (cuerpo arranca en `-dark`); sin sección → neutro `text-gray-600 dark:text-gray-300` + `underline underline-offset-2`. Sin estilos inline ni manipulación JS de `style`.
 
 ## 4. Recetas de componente
 

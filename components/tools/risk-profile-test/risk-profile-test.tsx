@@ -193,7 +193,7 @@ interface Instrument {
   group: "En pesos" | "En dólares"
 }
 
-const sliceColors = ["#2e7d32", "#66bb6a", "#a5d6a7", "#1b5e20", "#81c784", "#c8e6c9"]
+const sliceColors = ["#2e7d32", "#66bb6a", "#a5d6a7", "#1b5e20", "#388e3c", "#c8e6c9"]
 
 const situationMeta: Record<"A" | "B" | "C", { title: string; pickIf: string }> = {
   A: {
@@ -561,7 +561,7 @@ function distributionFor(
   return options.length > 0 ? options[0] : null
 }
 
-const FUND_COLORS = { cash: "#9ca3af", afi: "#388e3c", cert: "#81c784" }
+const FUND_COLORS = { cash: "#9ca3af", afi: "#388e3c", cert: "#66bb6a" }
 
 interface FundPart {
   label: string
@@ -796,7 +796,7 @@ function SectionHeader({
             {badge}
           </span>
         )}
-        <Icon className="h-6 w-6 text-finanzas dark:text-[#81c784]" aria-hidden />
+        <Icon className="h-6 w-6 text-finanzas dark:text-finanzas-light" aria-hidden />
         <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">{title}</h3>
       </div>
       {subtitle !== undefined && (
@@ -1172,7 +1172,7 @@ export function RiskProfileTest() {
     `px-3 py-1.5 text-sm rounded-md font-medium transition-colors ${
       active
         ? "bg-finanzas text-white"
-        : "bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-finanzas dark:text-[#81c784]"
+        : "bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-finanzas dark:text-finanzas-light"
     }`
 
   /* ---------- INTRO ---------- */
@@ -1182,7 +1182,7 @@ export function RiskProfileTest() {
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
           <div className="flex items-center gap-3 mb-3">
             <div className="p-2 rounded-lg bg-[#388e3c]/10 dark:bg-[#388e3c]/20">
-              <Gauge className="h-6 w-6 text-finanzas dark:text-[#81c784]" />
+              <Gauge className="h-6 w-6 text-finanzas dark:text-finanzas-light" />
             </div>
             <h2 className="text-xl font-bold">Test de perfil de riesgo</h2>
           </div>
@@ -1244,7 +1244,7 @@ export function RiskProfileTest() {
               <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 Pregunta {currentQuestion + 1} de {questions.length}
               </span>
-              <span className="text-sm font-medium text-finanzas dark:text-[#81c784]">{pct}%</span>
+              <span className="text-sm font-medium text-finanzas dark:text-finanzas-light">{pct}%</span>
             </div>
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
               <div
@@ -1873,7 +1873,7 @@ export function RiskProfileTest() {
                     </div>
                     <p className="mt-1.5 text-base font-bold tabular-nums text-gray-900 dark:text-gray-100">
                       {formatMoney(p.amount, currency)}{" "}
-                      <span className="text-sm font-semibold text-finanzas dark:text-[#81c784]">({p.pct}%)</span>
+                      <span className="text-sm font-semibold text-finanzas dark:text-finanzas-light">({p.pct}%)</span>
                     </p>
                     <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">{p.why}</p>
                   </li>
@@ -2069,7 +2069,7 @@ export function RiskProfileTest() {
                     className={`px-4 py-3 rounded-lg font-medium text-sm transition-colors ${
                       currency === c
                         ? "bg-finanzas text-white"
-                        : "bg-[#388e3c]/10 text-finanzas dark:text-[#81c784] hover:bg-[#388e3c]/20"
+                        : "bg-[#388e3c]/10 text-finanzas dark:text-finanzas-light hover:bg-[#388e3c]/20"
                     }`}
                     data-interactive="true"
                   >
@@ -2336,7 +2336,7 @@ export function RiskProfileTest() {
         {capital > 0 && maxTogether > 0 && (
           <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <TrendingUp className="h-5 w-5 text-finanzas dark:text-[#81c784]" aria-hidden />
+              <TrendingUp className="h-5 w-5 text-finanzas dark:text-finanzas-light" aria-hidden />
               <h4 className="text-lg font-bold text-gray-800 dark:text-gray-100">Proyección</h4>
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 text-center mb-4 leading-relaxed max-w-2xl mx-auto">

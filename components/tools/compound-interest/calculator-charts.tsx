@@ -26,10 +26,10 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
   // Colores para los gráficos - Mejorados para mejor contraste
   const chartColors = useMemo(
     () => ({
-      line: resolvedTheme === "dark" ? "#81c784" : "#66bb6a", // Verde más claro para la línea
+      line: "#66bb6a", // Verde de sección (finanzas-light)
       deposit: resolvedTheme === "dark" ? "#388e3c" : "#2e7d32",
       contribution: resolvedTheme === "dark" ? "#1b5e20" : "#1b5e20",
-      interest: resolvedTheme === "dark" ? "#a5d6a7" : "#81c784",
+      interest: resolvedTheme === "dark" ? "#a5d6a7" : "#66bb6a",
       grid: resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.1)",
       text: resolvedTheme === "dark" ? "#e0e0e0" : "#1E3A2E",
       tooltipBg: resolvedTheme === "dark" ? "rgba(30, 30, 30, 0.9)" : "rgba(255, 255, 255, 0.9)",
@@ -244,7 +244,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
         return [
           "#2e7d32", // Verde oscuro para inversión inicial
           "#1b5e20", // Verde más oscuro para contribuciones
-          "#81c784", // Verde claro para ganancias
+          "#66bb6a", // Verde claro para ganancias
           "#c8e6c9", // Verde muy claro para inflación
         ]
       }

@@ -6,7 +6,7 @@ export const sectionsData: Record<string, SectionData> = {
     title: "Cultiva tu",
     highlightText: "mente",
     subtitle:
-      "Más de 8,000 personas han mejorado su bienestar mental con nuestras herramientas. Descubre técnicas para desarrollar claridad, resiliencia y un estado emocional equilibrado.",
+      "Más de 8,000 personas han mejorado su bienestar mental con nuestras herramientas. Descubre técnicas para desarrollar claridad y resiliencia, y mantener un estado emocional equilibrado.",
     text: "Cultiva claridad y resiliencia. Descubre herramientas para tu bienestar emocional y cognitivo.",
     cards: [
       {
@@ -155,7 +155,7 @@ export const sectionsData: Record<string, SectionData> = {
     highlightText: "cuerpo",
     subtitle:
       "Más de 12,000 personas han transformado su salud física con nuestras herramientas. Accede a rutinas, planes nutricionales y consejos para un estilo de vida activo y saludable.",
-    text: "Energiza tu cuerpo. Accede a rutinas, nutrición y consejos para un estilo de vida activo y así obtener un bienestar integral.",
+    text: "Energiza tu cuerpo. Accede a rutinas, nutrición y consejos para un estilo de vida activo y un bienestar integral.",
     cards: [
       {
         id: "calculadora-calorias",

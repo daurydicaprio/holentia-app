@@ -166,7 +166,7 @@ export function CardInterestCalculator() {
       <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
         <div className="flex items-center gap-3 mb-2">
           <div className="p-2 rounded-lg bg-[#388e3c]/10 dark:bg-[#388e3c]/20">
-            <CreditCard className="h-6 w-6 text-finanzas dark:text-[#81c784]" />
+            <CreditCard className="h-6 w-6 text-finanzas dark:text-finanzas-light" />
           </div>
           <h2 className="text-xl font-bold">Tu tarjeta</h2>
         </div>

@@ -13,7 +13,7 @@ Referencia canónica: `components/tools/compound-interest/calculator-charts.tsx`
 const { resolvedTheme } = useTheme()          // next-themes
 const chartColors = useMemo(
   () => ({
-    line: resolvedTheme === "dark" ? "#81c784" : "#66bb6a",
+    line: "#66bb6a",                          // verde de sección (finanzas-light) en ambos modos
     text: resolvedTheme === "dark" ? "#e0e0e0" : "#1E3A2E",
     grid: resolvedTheme === "dark" ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.1)",
     tooltipBg: resolvedTheme === "dark" ? "rgba(30,30,30,0.9)" : "rgba(255,255,255,0.9)",

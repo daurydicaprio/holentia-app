@@ -240,7 +240,7 @@ function WhySection({
       {/* Pago sugerido: stem y badge centrados exacto sobre el nodo */}
       <div className="relative h-16">
         <div className="absolute top-0 flex flex-col items-center -translate-x-1/2" style={{ left: `${pctSug}%` }}>
-          <div className="w-1 h-6 bg-finanzas-dark dark:bg-[#81c784]" />
+          <div className="w-1 h-6 bg-finanzas-dark dark:bg-finanzas-light" />
           <span className="px-3 py-1 rounded-full bg-finanzas-dark text-white text-[11px] font-bold whitespace-nowrap shadow">
             Sugerido: <span className="capitalize">{formatShort(result.suggestedPay)}</span>
           </span>
@@ -429,12 +429,12 @@ export function CardCutoffCalculator() {
       <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg h-fit">
         <div className="flex items-center gap-3 mb-2">
           <div className="p-2 rounded-lg bg-[#388e3c]/10 dark:bg-[#388e3c]/20">
-            <CreditCard className="h-6 w-6 text-finanzas dark:text-[#81c784]" />
+            <CreditCard className="h-6 w-6 text-finanzas dark:text-finanzas-light" />
           </div>
           <h2 className="text-xl font-bold">Tu tarjeta</h2>
         </div>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Configúrala una vez, consúltala siempre.</p>
-        <p className="text-xs font-semibold text-finanzas dark:text-[#81c784] mb-6">{cardLabel}</p>
+        <p className="text-xs font-semibold text-finanzas dark:text-finanzas-light mb-6">{cardLabel}</p>
 
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
@@ -508,7 +508,7 @@ export function CardCutoffCalculator() {
                 <button
                   key={chip.label}
                   onClick={() => setQuickDate(chip.offset)}
-                  className="px-3 py-1.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-finanzas dark:text-[#81c784] font-medium transition-colors"
+                  className="px-3 py-1.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-finanzas dark:text-finanzas-light font-medium transition-colors"
                   data-interactive="true"
                 >
                   {chip.label}
@@ -575,7 +575,7 @@ export function CardCutoffCalculator() {
                   <>
                     Tienes hasta el <strong>{formatLong(result.due)}</strong> para pagar. Te sugerimos pagar 2 o 3
                     días antes, o sea el{" "}
-                    <strong className="text-finanzas dark:text-[#81c784]">
+                    <strong className="text-finanzas dark:text-finanzas-light">
                       {formatLong(result.suggestedPay)}
                     </strong>
                     .
@@ -605,7 +605,7 @@ export function CardCutoffCalculator() {
                       className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center shadow-sm transition-transform duration-300 group-hover:scale-110 ${
                         i === steps.length - 1
                           ? "text-white"
-                          : "bg-white dark:bg-slate-900 text-finanzas dark:text-[#81c784] ring-2 ring-[#388e3c]/20"
+                          : "bg-white dark:bg-slate-900 text-finanzas dark:text-finanzas-light ring-2 ring-[#388e3c]/20"
                       }`}
                       style={i === steps.length - 1 ? { background: "linear-gradient(135deg, #2e7d32, #1b5e20)" } : undefined}
                     >
@@ -617,7 +617,7 @@ export function CardCutoffCalculator() {
                       {step.label}
                     </div>
                     <div className="font-bold text-lg leading-snug">{formatLong(step.date)}</div>
-                    <div className="text-sm text-finanzas dark:text-[#81c784] font-medium mt-2">{step.note}</div>
+                    <div className="text-sm text-finanzas dark:text-finanzas-light font-medium mt-2">{step.note}</div>
                   </div>
                 </div>
               ))}

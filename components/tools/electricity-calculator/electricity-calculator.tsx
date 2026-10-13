@@ -116,7 +116,7 @@ export function ElectricityCalculator() {
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">Mueve el medidor y mira tu factura al instante.</p>
 
         <div className="text-center mb-2">
-          <span className="text-5xl font-bold text-finanzas dark:text-[#81c784]">
+          <span className="text-5xl font-bold text-finanzas dark:text-finanzas-light">
             {kwh > 0 ? kwh.toLocaleString("es-DO") : "—"}
           </span>
           <span className="block text-sm text-gray-500 dark:text-gray-400 mt-1">kWh del mes</span>
@@ -151,7 +151,7 @@ export function ElectricityCalculator() {
             <button
               key={v}
               onClick={() => setQuick(v)}
-              className="px-3 py-1.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-finanzas dark:text-[#81c784] font-medium transition-colors"
+              className="px-3 py-1.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-finanzas dark:text-finanzas-light font-medium transition-colors"
               data-interactive="true"
             >
               {v} kWh

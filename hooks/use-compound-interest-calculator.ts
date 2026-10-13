@@ -499,7 +499,7 @@ export function useCompoundInterestCalculator(): useCompoundInterestCalculatorRe
       // Definir colores específicos para cada categoría
       const colorInicial = "#2e7d32" // Verde oscuro
       const colorContribuciones = "#1b5e20" // Verde más oscuro
-      const colorGanancias = "#81c784" // Verde claro
+      const colorGanancias = "#66bb6a" // Verde claro (finanzas-light)
       const colorInflacion = "#c8e6c9" // Verde muy claro
 
       // Asignar colores según las etiquetas
