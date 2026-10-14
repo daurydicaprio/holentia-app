@@ -1,6 +1,6 @@
 ---
 name: create-tool
-description: Use when creating a new HOLENTIA tool (herramienta nueva, nueva calculadora, nuevo test, añadir herramienta, activar tarjeta próximamente) — full end-to-end recipe covering lib/data.ts registration, app/{slug}/page.tsx template, ToolPageShell, FAQ, sitemap, llms.txt and verification commands.
+description: Use when creating a new HOLENTIA tool (herramienta nueva, nueva calculadora, nuevo test, añadir herramienta, activar tarjeta próximamente) — full end-to-end recipe covering lib/data.ts registration, app/{slug}/page.tsx template, ToolPageShell, sitemap, llms.txt, opengraph-image and verification commands.
 ---
 
 # Crear una herramienta nueva
@@ -47,7 +47,7 @@ Plantilla canónica (referencia: `app/calculadora-interes-compuesto/page.tsx`):
 
 ```tsx
 import { notFound } from "next/navigation"
-import { findToolCard, toolMetadata, type FaqItem } from "@/lib/seo"
+import { findToolCard, toolMetadata } from "@/lib/seo"
 import ToolPageShell from "@/components/tool-seo/tool-page-shell"
 import { MiHerramienta } from "@/components/tools/mi-herramienta/mi-herramienta"
 
@@ -58,31 +58,26 @@ export function generateMetadata() {
   return toolMetadata(section, toolSlug)
 }
 
-const faq: FaqItem[] = [
-  { question: "…", answer: "…" }, // 4-6 preguntas reales
-  // OBLIGATORIA: privacidad — ver paso 5
-]
-
 export default function MiHerramientaPage() {
   const toolData = findToolCard(section, toolSlug)
   if (!toolData) notFound()
 
   return (
-    <ToolPageShell section={section} tool={toolData} faq={faq}>
+    <ToolPageShell section={section} tool={toolData}>
       <MiHerramienta />
     </ToolPageShell>
   )
 }
 ```
 
-- `ToolPageShell` ya renderiza: H1 + descripción + underline + botones Volver/Donación + FAQ acordeón + JSON-LD (WebApplication + Breadcrumb + FAQPage). **No duplicar nada de eso dentro del componente.**
+- `ToolPageShell` ya renderiza: H1 + descripción + underline + botones Volver/Donación + JSON-LD (WebApplication + Breadcrumb). **No duplicar nada de eso dentro del componente.** No acepta prop `faq` (ver paso 5).
 - Nombres de función/ruta en kebab→PascalCase (`CalculadoraInteresCompuestoPage`).
 
-## 5. FAQ (obligatorio, SEO)
+## 5. Sin FAQ en herramientas (decisión de producto, 14-Oct-2026)
 
-- **5–6 preguntas** en español con respuestas útiles y reales (no relleno); responder en 1–3 frases (bueno para GEO).
-- **Siempre incluir** la de privacidad: «¿Guardan ustedes mis datos?» → que mencione `localStorage` y `holentia:{slug}:draft:v1` (o la clave que uses).
-- El contenido queda en el HTML inicial aunque el acordeón esté cerrado (no ocultarlo con JS).
+- Las herramientas **NO llevan bloque FAQ visible ni `FAQPage` JSON-LD**: la respuesta a las preguntas vive en la propia UI de la herramienta (resultados, tooltips, avisos, «Borrar mis datos»).
+- No crear arrays `const faq` ni pasarlos al shell — `toolJsonLd(section, slug)` no acepta FAQ.
+- El FAQ visible sí aplica donde no hay UI que lo responda: hubs de sección (`SectionData.faq`) y `/ayuda` (skill `seo-geo` §5).
 
 ## 6. Persistencia (si aplica)
 
@@ -101,7 +96,7 @@ export default function MiHerramientaPage() {
 pnpm exec tsc --noEmit && pnpm lint && pnpm build
 ```
 
-Smoke SEO (skill `seo-geo` §6–7): en `.next/server/app/{slug}.html` comprobar `<title>`, `meta description`, `canonical`, `og:image`, `twitter:card` y JSON-LD con FAQPage.
+Smoke SEO (skill `seo-geo` §6–7): en `.next/server/app/{slug}.html` comprobar `<title>`, `meta description`, `canonical`, `og:image`, `twitter:card`, JSON-LD (WebApplication + Breadcrumb, **sin FAQPage**) y ausencia del acordeón FAQ.
 
 ## 9. Mantenimiento de docs
 

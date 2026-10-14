@@ -101,8 +101,8 @@ export function toolMetadata(section: string, slug: string): Metadata {
   return baseMetadata(title, description, `/${slug}`)
 }
 
-/** Datos estructurados JSON-LD: WebApplication + BreadcrumbList (+ FAQPage si hay FAQ) */
-export function toolJsonLd(section: string, slug: string, faq: FaqItem[] = []) {
+/** Datos estructurados JSON-LD: WebApplication + BreadcrumbList (las herramientas NO emiten FAQPage: no tienen FAQ visible) */
+export function toolJsonLd(section: string, slug: string) {
   const tool = findToolCard(section, slug)
   if (!tool) return null
 
@@ -139,20 +139,6 @@ export function toolJsonLd(section: string, slug: string, faq: FaqItem[] = []) {
       ],
     },
   ]
-
-  if (faq.length > 0) {
-    graph.push({
-      "@type": "FAQPage",
-      mainEntity: faq.map((item) => ({
-        "@type": "Question",
-        name: item.question,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: item.answer,
-        },
-      })),
-    })
-  }
 
   return {
     "@context": "https://schema.org",

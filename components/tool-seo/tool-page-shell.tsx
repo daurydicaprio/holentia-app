@@ -7,8 +7,7 @@ import SectionSwipeNavigation from "@/components/sections/section-swipe-navigati
 import Footer from "@/components/common/footer/footer"
 import ScrollToTop from "@/components/common/scroll-to-top/scroll-to-top"
 import JsonLd from "./json-ld"
-import ToolFaq from "./tool-faq"
-import { sectionLabel, toolJsonLd, type FaqItem } from "@/lib/seo"
+import { sectionLabel, toolJsonLd } from "@/lib/seo"
 
 // Mapas estáticos para que Tailwind genere las clases por sección
 const sectionTitleClass: Record<string, string> = {
@@ -39,16 +38,15 @@ const sectionButtonClass: Record<string, string> = {
 interface ToolPageShellProps {
   section: string
   tool: CardData
-  faq?: FaqItem[]
   children: React.ReactNode
 }
 
-/** Shell server-rendered de las páginas de herramienta: H1, descripción, FAQ y JSON-LD (con BreadcrumbList) en el HTML inicial */
-export default function ToolPageShell({ section, tool, faq = [], children }: ToolPageShellProps) {
+/** Shell server-rendered de las páginas de herramienta: H1, descripción y JSON-LD (WebApplication + BreadcrumbList) en el HTML inicial. Sin bloque FAQ: la respuesta a cada uso vive en la propia herramienta. */
+export default function ToolPageShell({ section, tool, children }: ToolPageShellProps) {
   const titleClass = sectionTitleClass[section] ?? "text-finanzas"
   const underlineClass = sectionUnderlineClass[section] ?? "bg-finanzas"
   const buttonClass = sectionButtonClass[section] ?? "border-finanzas text-finanzas"
-  const jsonLd = toolJsonLd(section, tool.slug, faq)
+  const jsonLd = toolJsonLd(section, tool.slug)
 
   const buttonStyles =
     "inline-flex h-10 items-center gap-2 rounded-md border bg-white/60 px-5 text-sm font-medium backdrop-blur-sm transition-colors duration-200 dark:bg-black/20"
@@ -84,8 +82,6 @@ export default function ToolPageShell({ section, tool, faq = [], children }: Too
         </div>
 
         {children}
-
-        <ToolFaq faq={faq} section={section} />
       </div>
 
       <Footer section={section} />

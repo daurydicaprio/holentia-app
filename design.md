@@ -111,7 +111,7 @@ El borde se vuelve transparente al enfocar: solo el anillo de sección marca el 
 
 ### 3.6 Estado del legado (migración en curso, sin cambio visual)
 
-- Los componentes canónicos (ToolCard, shell, FAQ, glosario) ya son 100% tokens.
+- Los componentes canónicos (ToolCard, shell, glosario) ya son 100% tokens.
 - Los hex de paleta **sin opacidad** (`bg-[#388e3c]`) se han migrado a tokens (`bg-finanzas`) — valores idénticos.
 - Los hex **con opacidad** (`bg-[#388e3c]/10`) se quedan así deliberadamente: los tokens no admiten `/n` (clase muerta). Usar nativos con alpha (`bg-black/5`) o glass.
 - `#81c784` (verde claro legado en dark de finanzas) **migrado**: en clases → `finanzas-light` (#66bb6a); en gráficos JS (Chart.js, `sliceColors`, `FUND_COLORS`) → hex canónico `#66bb6a` (o `#388e3c` si había colisión cromática en un pie). Los gráficos usan hex literales porque Chart.js necesita valores crudos, no clases.
@@ -173,11 +173,11 @@ Client component. Links a 4 secciones desde array estático. Activa: token `{s}`
 
 ### ToolPageShell (`components/tool-seo/tool-page-shell.tsx`)
 
-Header con `pt-6` de aire bajo el logo/menú + H1 centrado en color de sección + descripción + underline · botones outline "Volver a {sección}" / "Hacer donación" visibles también en móvil (`border-{s} text-{s} dark:border-{s}-light dark:text-{s}-light`; hover claro: relleno `{s}-dark` + texto blanco — cuerpo: `{s}` + texto negro; hover oscuro: relleno `{s}-light` + texto negro; sin escala; `data-interactive="true"`) · `children` · FAQ · `JsonLd` (WebApplication + BreadcrumbList + FAQPage). **Sin miguita visible**: la navegación la dan los botones Volver y el footer; el `BreadcrumbList` va solo en JSON-LD (no obliga a UI visual).
+Header con `pt-6` de aire bajo el logo/menú + H1 centrado en color de sección + descripción + underline · botones outline "Volver a {sección}" / "Hacer donación" visibles también en móvil (`border-{s} text-{s} dark:border-{s}-light dark:text-{s}-light`; hover claro: relleno `{s}-dark` + texto blanco — cuerpo: `{s}` + texto negro; hover oscuro: relleno `{s}-light` + texto negro; sin escala; `data-interactive="true"`) · `children` · `JsonLd` (WebApplication + BreadcrumbList). **Sin miguita visible**: la navegación la dan los botones Volver y el footer; el `BreadcrumbList` va solo en JSON-LD (no obliga a UI visual). **Sin bloque FAQ** (decisión 14-Oct-2026): la respuesta vive en la propia herramienta; el FAQ visible queda para los hubs de sección y `/ayuda`.
 
-### FAQ acordeón (`components/tool-seo/tool-faq.tsx`)
+### FAQ en herramientas — ELIMINADO (14-Oct-2026)
 
-Client component. Una pregunta abierta a la vez (`openIndex`). Fila `button` con `aria-expanded`/`aria-controls`; panel con `grid-rows-[0fr→1fr]` + `overflow-hidden` (el contenido permanece en el HTML para SEO). Icono `Plus`/`Minus` en círculo sólido `bg-{s} group-hover:bg-{s}-dark dark:bg-{s}-light dark:group-hover:bg-{s}-lighter` con icono `text-white dark:text-black` (en cuerpo: `bg-cuerpo-dark`→`bg-cuerpo-darkest` por claridad). Hover de fila: relleno neutro visible `hover:bg-black/5` / `dark:hover:bg-white/10` + texto al tinte de sección (`hover:text-{s}` / `dark:hover:text-{s}-light`).
+El acordeón `tool-faq.tsx` se retiró de las 13 herramientas y de `ToolPageShell` (decisión del dueño: el FAQ repetía lo que la UI ya explica). `toolJsonLd(section, slug)` ya no acepta `faq` ni emite `FAQPage`. No recrearlo: si una herramienta necesita dar contexto, meterlo en su propia UI. El FAQ visible como patrón sigue vivo en `SectionPage` (mini-FAQ nativa `<details>`) y `/ayuda`.
 
 ### Botones (`components/ui/button.tsx` + custom)
 

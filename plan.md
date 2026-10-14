@@ -102,6 +102,7 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 - [x] **Social**: 17 `opengraph-image.tsx` (4 secciones + 13 tools) vía `ogTemplate`; raíz con texto ajustado (no roza el círculo); `twitter:card summary_large_image`
 - [x] **Skills/docs**: nueva `seo-geo` (receta + checklist por tool), `create-tool` (metaFields/OG/FAQ≥5/smoke SEO), `section-ui`, `AGENTS.md`, `design.md` (recetas ToolCard/ToolsGrid/SectionTabs/ToolPageShell/Footer/glosario/paleta budget/swipe), README/architecture/plan recuentos 13/23
 - [x] **Pulido post-feedback**: footer restaura `❤ 🇩🇴` (excepción documentada en design.md §4b), miguita visible eliminada de `ToolPageShell` (solo JSON-LD; navegación por botones), `pt-6` de aire bajo header en herramientas
+- [x] **FAQ fuera de las herramientas** (feedback 14-Oct-2026): acordeón `tool-faq.tsx` eliminado de las 13 tools + prop `faq` fuera de `ToolPageShell` + `toolJsonLd` sin `FAQPage` (sin FAQ visible no puede haber FAQPage JSON-LD). El FAQ visible queda en hubs de sección y `/ayuda`. Docs: design.md, README, architecture, skills `create-tool` + `seo-geo`
 - Verificado: `tsc 0 · lint 0 · build OK` + smoke HTML (titles, descriptions 140–150 ch, canonical, og:image por ruta, footer links, JSON-LD informativas, robots con bots IA, lastmod fijo, manifest)
 
 ---
