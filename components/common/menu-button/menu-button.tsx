@@ -104,7 +104,7 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
 
   // Clases para el botón según el contexto
   const buttonClasses = [
-    "flex items-center justify-center transition-colors duration-200",
+    "relative z-50 flex items-center justify-center transition-colors duration-200",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 dark:focus-visible:ring-white",
     isMenuOpen
       ? "ring-2 ring-gray-900 dark:ring-white"

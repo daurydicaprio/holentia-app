@@ -241,31 +241,9 @@
   }
 }
 
-/* Asegurar que los botones de menú siempre estén visibles y funcionales */
-button[aria-label="Abrir menú"],
-button[aria-label="Cerrar menú"] {
-  z-index: 9000 !important;
-  position: relative !important;
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-
 /* Asegurar que el menú móvil siempre esté por encima de otros elementos */
 .relative.z-50 {
   isolation: isolate;
-}
-
-/* Asegurar que el backdrop del menú no interfiera con la interacción del menú */
-.fixed.inset-0.bg-black\/60.backdrop-blur-md {
-  pointer-events: auto;
-}
-
-/* Asegurar que el menú desplegable siempre esté visible */
-.absolute.right-0.top-12.w-64 {
-  visibility: visible;
-  pointer-events: auto;
 }
 
 /* Aumentar la especificidad para el botón de menú en herramientas móviles */
