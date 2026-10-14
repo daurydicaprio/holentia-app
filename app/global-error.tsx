@@ -24,7 +24,7 @@ export default function GlobalError({ reset }: { error: Error & { digest?: strin
             style={{
               padding: "0.5rem 1.25rem",
               borderRadius: "0.375rem",
-              background: "#1976d2",
+              background: "#212529",
               color: "#fff",
               border: "none",
               cursor: "pointer",

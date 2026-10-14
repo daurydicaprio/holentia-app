@@ -55,6 +55,7 @@ Un rol = una clase. No inventar radios/paddings nuevos; copiar del componente de
 - Página herramienta: `p-4 sm:p-6 max-w-6xl mx-auto` · header→contenido `mb-6` · grupos `space-y-6/10` · grids `gap-4` (contenido) / `gap-5` (home) / `gap-6` (formularios).
 - **Foco canónico** (un solo patrón): `focus:border-transparent focus:ring-2 focus:ring-{s}` + `dark:focus:border-transparent dark:focus:ring-{s}-light`. Prohibido `ring-green-500`/hex en foco.
 - **Migración de legado**: hex bare de paleta → token (mismo valor); hex **con opacidad** `[#388e3c]/10` se deja así (tokens no admiten `/n`); `#81c784` ya migrado → `finanzas-light` en clases y `#66bb6a` en JS (Chart.js necesita hex crudo).
+- **Chrome global** (menu-button/logo/scroll-to-top/unified-header): acento por defecto **neutro** (nunca `#3B82F6`), **sin framer-motion** (CSS puro), sin estilos inline de color (mapa de clases por sección, patrón footer), sin `scale` en hovers. Ver `design.md` §4d.
 
 ## 4. Iconos (`lucide-react`)
 

@@ -135,6 +135,17 @@ La marca HOLENTIA es **monocroma** (logo negro/blanco, OG `#121212` + blanco). L
 - **FAQ nativa** (`<details>`): respuesta en el HTML inicial; `ChevronDown` que rota con `group-open:rotate-180` (nunca emoji ▼).
 - **Sin**: texto degradado, blobs `blur-*`, tarjetas pastel, `animate-pulse`, `hover:scale-*`, `shadow-xl`, emojis decorativos. Colores semánticos solo en avisos (`border-l-4 border-amber-500 bg-amber-50`) y borrado destructivo (`hover:bg-red-600`).
 
+### 4d. Chrome global (menú, logo, header, scroll-to-top)
+
+Reglas del armazón compartido, en línea con la identidad monocroma:
+
+- **Acento por defecto neutro**: fuera de sección, ningún azul genérico (`#3B82F6` prohibido). Estados abiertos/activos → `ring-gray-900 dark:ring-white`, `bg-gray-100 dark:bg-gray-800`.
+- **Sin framer-motion en el chrome global** (menu-button, logo): animaciones con CSS puro (`transition-*`, `group-hover:*`, keyframes en `globals.css` si hacen falta). framer-motion queda para herramientas de finanzas.
+- **Sin estilos inline ni manipulación JS de color/hover** (patrón footer): mapas estáticos de clases por sección + fallback neutro. Los valores crudos (rgba con alpha) solo en JS de Chart.js o fondos `headerBgColor` que necesitan opacidad.
+- **Sin `hover:scale-*`/`active:scale-*`** en chrome; feedback con `transition-colors`.
+- Menú desplegable: panel sólido `bg-white dark:bg-gray-900` + `border-gray-200 dark:border-gray-700` + `shadow-lg`; backdrop `bg-black/60` sin blur; entrada con keyframe `hol-menu-in`.
+- `data-interactive="true"` en botones, enlaces y toggle del menú.
+
 ## 4. Recetas de componente
 
 ### ToolCard (`components/sections/tool-card.tsx`)

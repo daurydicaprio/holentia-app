@@ -273,3 +273,15 @@ button[aria-label="Cerrar menú"] {
   position: relative;
   z-index: 200;
 }
+
+/* Animación de entrada del menú desplegable (sin framer-motion en el chrome global) */
+@keyframes hol-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

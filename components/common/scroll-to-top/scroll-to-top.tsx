@@ -2,9 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { ChevronUp } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { usePathname } from "next/navigation"
-import { useTheme } from "next-themes"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 
 interface ScrollToTopProps {
@@ -13,35 +11,31 @@ interface ScrollToTopProps {
   mobileOnly?: boolean
 }
 
+// Mapa estático para que Tailwind genere las clases por sección
+const sectionButtonClass: Record<string, string> = {
+  mente: "bg-mente hover:bg-mente-dark dark:bg-mente-light dark:hover:bg-mente-lighter",
+  relaciones:
+    "bg-relaciones hover:bg-relaciones-dark dark:bg-relaciones-light dark:hover:bg-relaciones-lighter",
+  cuerpo: "bg-cuerpo hover:bg-cuerpo-dark dark:bg-cuerpo-light dark:hover:bg-cuerpo-lighter",
+  finanzas:
+    "bg-finanzas hover:bg-finanzas-dark dark:bg-finanzas-light dark:hover:bg-finanzas-lighter",
+}
+
+const fallbackButtonClass =
+  "bg-gray-600 hover:bg-gray-700 dark:bg-gray-200 dark:hover:bg-white dark:text-gray-900"
+
 export default function ScrollToTop({ section, mobileOnly = false }: ScrollToTopProps) {
   const [showButton, setShowButton] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [mounted, setMounted] = useState(false)
   const pathname = usePathname()
-  const { theme, resolvedTheme } = useTheme()
   const { triggerHapticFeedback } = useHapticFeedback()
 
   // Extraer la sección del pathname si no se proporciona
   const pathParts = pathname.split("/").filter(Boolean)
   const currentSection = section || (pathParts.length > 0 ? pathParts[0] : null)
 
-  // Determinar el color del botón basado en la sección
-  let buttonBgColor = "#4b5563" // Color gris por defecto
-  let buttonHoverBgColor = "#374151" // Color gris oscuro por defecto
-
-  if (currentSection === "mente") {
-    buttonBgColor = "#1976d2" // Color mente
-    buttonHoverBgColor = "#0d47a1" // Color mente oscuro
-  } else if (currentSection === "cuerpo") {
-    buttonBgColor = "#ffa000" // Color cuerpo
-    buttonHoverBgColor = "#e65100" // Color cuerpo oscuro
-  } else if (currentSection === "finanzas") {
-    buttonBgColor = "#388e3c" // Color finanzas
-    buttonHoverBgColor = "#1b5e20" // Color finanzas oscuro
-  } else if (currentSection === "relaciones") {
-    buttonBgColor = "#7c3aed" // Color relaciones
-    buttonHoverBgColor = "#5b21b6" // Color relaciones oscuro
-  }
+  const buttonClass = currentSection ? sectionButtonClass[currentSection] : undefined
 
   useEffect(() => {
     setMounted(true)
@@ -79,32 +73,16 @@ export default function ScrollToTop({ section, mobileOnly = false }: ScrollToTop
   if (!mounted || !showButton || (mobileOnly && !isMobile)) return null
 
   return (
-    <Button
-      size="icon"
+    <button
+      type="button"
+      data-interactive="true"
+      aria-label="Volver arriba"
       onClick={scrollToTop}
-      style={{
-        position: "fixed",
-        bottom: "1.5rem",
-        right: "1.5rem",
-        borderRadius: "9999px",
-        boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
-        zIndex: 40,
-        height: "3rem",
-        width: "3rem",
-        backgroundColor: buttonBgColor,
-        color: "white",
-        transition: "all 0.2s ease",
-      }}
-      onMouseOver={(e) => {
-        e.currentTarget.style.backgroundColor = buttonHoverBgColor
-        e.currentTarget.style.transform = "translateY(-2px)"
-      }}
-      onMouseOut={(e) => {
-        e.currentTarget.style.backgroundColor = buttonBgColor
-        e.currentTarget.style.transform = "translateY(0)"
-      }}
+      className={`fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full text-white shadow-lg transition-all duration-200 hover:-translate-y-0.5 dark:text-gray-900 ${
+        buttonClass ?? fallbackButtonClass
+      }`}
     >
       <ChevronUp className="h-6 w-6" />
-    </Button>
+    </button>
   )
 }

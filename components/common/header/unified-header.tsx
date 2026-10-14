@@ -61,22 +61,17 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
   const currentTheme = mounted ? resolvedTheme : "light"
   const isDark = currentTheme === "dark"
 
-  // Determinar los estilos basados en la sección
-  let sectionColor = "#3B82F6" // Color azul por defecto
-  let headerBgColor = "rgba(59, 130, 246, 0.7)" // Color azul con 70% de opacidad para mejor contraste
+  // Determinar los estilos basados en la sección (fallback neutro de marca)
+  let headerBgColor = "rgba(17, 24, 39, 0.7)" // gray-900 con 70% de opacidad
 
   // Actualizar los colores basados en la sección
   if (toolSection === "mente") {
-    sectionColor = "#1976d2" // Color mente
     headerBgColor = "rgba(25, 118, 210, 0.7)" // Color mente con 70% de opacidad
   } else if (toolSection === "cuerpo") {
-    sectionColor = "#ffa000" // Color cuerpo
     headerBgColor = "rgba(255, 160, 0, 0.7)" // Color cuerpo con 70% de opacidad
   } else if (toolSection === "finanzas") {
-    sectionColor = "#388e3c" // Color finanzas
     headerBgColor = "rgba(56, 142, 60, 0.7)" // Color finanzas con 70% de opacidad
   } else if (toolSection === "relaciones") {
-    sectionColor = "#7c3aed" // Color relaciones
     headerBgColor = "rgba(124, 58, 237, 0.7)" // Color relaciones con 70% de opacidad
   }
 
@@ -99,11 +94,9 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
   if (isMobile && isToolPage) {
     return (
       <header
-        className="sticky top-0 z-50 w-full"
+        className="sticky top-0 z-50 w-full backdrop-blur-[8px]"
         style={{
           backgroundColor: headerBgColor,
-          backdropFilter: "blur(8px)",
-          WebkitBackdropFilter: "blur(8px)",
           boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
         }}
       >
@@ -121,7 +114,7 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
           {/* Logo adaptado con recuadro y efectos */}
           <Link
             href="/"
-            className="flex items-center justify-center px-3 py-1 rounded-md bg-white/20 hover:bg-white/30 active:bg-white/40 transition-all duration-200 active:scale-95"
+            className="flex items-center justify-center rounded-md bg-white/20 px-3 py-1 transition-colors duration-200 hover:bg-white/30 active:bg-white/40"
             onClick={() => triggerHapticFeedback("light")}
           >
             <span className="font-bold text-lg text-white">HOLENTIA</span>
@@ -147,15 +140,13 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
       <div className="w-full py-4 mb-2 relative">
         <div className="max-w-6xl mx-auto px-6 relative">
           {/* Botón de menú posicionado en la esquina superior derecha */}
-          <div className="absolute right-6 top-0" style={{ zIndex: 50 }}>
+          <div className="absolute right-6 top-0 z-50">
             <MenuButton section={toolSection} />
           </div>
 
           {/* Logo centrado con margen reducido */}
           <div className="flex flex-col items-center mb-2">
-            <div className="transform transition-transform hover:scale-105 duration-300">
-              <Logo section={toolSection} size="md" />
-            </div>
+            <Logo section={toolSection} size="md" />
           </div>
         </div>
       </div>

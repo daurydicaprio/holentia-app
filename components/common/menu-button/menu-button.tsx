@@ -6,13 +6,23 @@ import { Menu, X, Sun, Moon } from "lucide-react"
 import { useTheme } from "next-themes"
 import { usePathname } from "next/navigation"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
-import { motion, AnimatePresence } from "framer-motion"
 
 interface MenuButtonProps {
   section?: string | null
   isSquare?: boolean
   isCompact?: boolean
 }
+
+// Mapa estático para que Tailwind genere las clases por sección
+const sectionLinkClass: Record<string, string> = {
+  mente: "text-mente",
+  relaciones: "text-relaciones",
+  cuerpo: "text-cuerpo-dark dark:text-cuerpo",
+  finanzas: "text-finanzas",
+}
+
+const linkClass =
+  "block px-5 py-3 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
 
 export default function MenuButton({ section, isSquare = false, isCompact = false }: MenuButtonProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -21,31 +31,11 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
   const [mounted, setMounted] = useState(false)
   const { triggerHapticFeedback } = useHapticFeedback()
   const menuRef = useRef<HTMLDivElement>(null)
-  const buttonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  // Determinar colores basados en la sección
-  let accentColor = "#3B82F6" // Color azul por defecto
-  let accentColorDark = "#2563EB" // Color azul oscuro por defecto
-
-  if (section === "mente") {
-    accentColor = "#1976d2" // Color mente
-    accentColorDark = "#0d47a1" // Color mente oscuro
-  } else if (section === "relaciones") {
-    accentColor = "#7c3aed" // Color relaciones
-    accentColorDark = "#5b21b6" // Color relaciones oscuro
-  } else if (section === "cuerpo") {
-    accentColor = "#ffa000" // Color cuerpo
-    accentColorDark = "#e65100" // Color cuerpo oscuro
-  } else if (section === "finanzas") {
-    accentColor = "#388e3c" // Color finanzas
-    accentColorDark = "#1b5e20" // Color finanzas oscuro
-  }
-
-  // Usar el tema resuelto para evitar parpadeos
   const currentTheme = mounted ? resolvedTheme : "light"
   const isDark = currentTheme === "dark"
 
@@ -57,7 +47,6 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
     setIsMenuOpen(!isMenuOpen)
   }
 
-  // Función para cerrar el menú después de hacer clic en un enlace
   const handleLinkClick = () => {
     triggerHapticFeedback("light")
     setIsMenuOpen(false)
@@ -114,251 +103,188 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
   if (!mounted) return null
 
   // Clases para el botón según el contexto
-  const buttonClasses = `
-    flex items-center justify-center
-    transition-all duration-200
-    ${isMenuOpen ? "scale-110" : "hover:scale-105"}
-    active:scale-95
-    ${
-      isCompact
-        ? "bg-white/20 hover:bg-white/30 active:bg-white/40 text-white"
-        : isToolPage
-          ? "bg-white/30 hover:bg-white/40 active:bg-white/50 text-white"
-          : isDark
-            ? "bg-gray-800/70 hover:bg-gray-800/90 text-white"
-            : "bg-white/70 hover:bg-white/90 text-gray-800"
-    }
-    ${isSquare ? "rounded-md" : "rounded-full"}
-    ${isCompact ? "w-9 h-9" : "w-10 h-10"}
-  `
-    .trim()
-    .replace(/\s+/g, " ")
+  const buttonClasses = [
+    "flex items-center justify-center transition-colors duration-200",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 dark:focus-visible:ring-white",
+    isMenuOpen
+      ? "ring-2 ring-gray-900 dark:ring-white"
+      : "shadow-sm hover:bg-gray-50 dark:hover:bg-gray-800",
+    isCompact
+      ? "bg-white/20 hover:bg-white/30 active:bg-white/40 text-white shadow-none"
+      : isToolPage
+        ? "bg-white/30 hover:bg-white/40 active:bg-white/50 text-white shadow-none"
+        : isDark
+          ? "bg-gray-800/70 hover:bg-gray-800/90 text-white shadow-none"
+          : "bg-white/70 hover:bg-white/90 text-gray-800",
+    isSquare ? "rounded-md" : "rounded-full",
+    isCompact ? "w-9 h-9" : "w-10 h-10",
+  ]
+    .filter(Boolean)
+    .join(" ")
 
   return (
     <div ref={menuRef} className="relative z-50">
       <button
-        ref={buttonRef}
+        type="button"
+        data-interactive="true"
         className={buttonClasses}
         onClick={handleMenuToggle}
         aria-expanded={isMenuOpen}
         aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
-        style={{
-          boxShadow: isMenuOpen
-            ? `0 0 0 2px ${accentColor}, 0 4px 8px rgba(0, 0, 0, 0.1)`
-            : "0 2px 5px rgba(0, 0, 0, 0.05)",
-        }}
       >
-        <AnimatePresence mode="wait">
-          {isMenuOpen ? (
-            <motion.div
-              key="close"
-              initial={{ rotate: -90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 90, opacity: 0 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className="flex items-center justify-center w-full h-full"
-            >
-              <X className="h-5 w-5" />
-            </motion.div>
-          ) : (
-            <motion.div
-              key="menu"
-              initial={{ rotate: 90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: -90, opacity: 0 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className="flex items-center justify-center w-full h-full"
-            >
-              <Menu className="h-5 w-5" />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <span className="relative flex h-5 w-5 items-center justify-center">
+          <Menu
+            aria-hidden="true"
+            className={`absolute h-5 w-5 transition-all duration-200 ${
+              isMenuOpen ? "rotate-90 opacity-0" : "rotate-0 opacity-100"
+            }`}
+          />
+          <X
+            aria-hidden="true"
+            className={`absolute h-5 w-5 transition-all duration-200 ${
+              isMenuOpen ? "rotate-0 opacity-100" : "-rotate-90 opacity-0"
+            }`}
+          />
+        </span>
       </button>
 
-      <AnimatePresence>
-        {isMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-black/60 backdrop-blur-md"
-              style={{ zIndex: 40 }}
-              onClick={() => setIsMenuOpen(false)}
-              aria-hidden="true"
-            />
+      {isMenuOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 z-40 bg-black/60"
+            onClick={() => setIsMenuOpen(false)}
+            aria-hidden="true"
+          />
 
-            {/* Menú desplegable */}
-            <motion.div
-              initial={{ opacity: 0, y: -10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-              className="absolute right-0 top-12 w-64 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg overflow-hidden"
-              style={{
-                zIndex: 100,
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
-                backgroundColor: isDark ? "rgba(30, 30, 30, 0.95)" : "rgba(255, 255, 255, 0.95)",
-                boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05)",
-              }}
-            >
-              <div className="py-3 px-5 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Navegación</h3>
-              </div>
+          {/* Menú desplegable */}
+          <div className="absolute right-0 top-12 z-50 w-64 animate-[hol-menu-in_0.15s_ease-out] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
+            <div className="border-b border-gray-200 px-5 py-3 dark:border-gray-700">
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Navegación</h3>
+            </div>
 
-              <div className="py-2">
+            <div className="py-2">
+              <Link
+                href="/"
+                data-interactive="true"
+                className={`${linkClass} ${
+                  isActive("/")
+                    ? "bg-gray-100 font-medium dark:bg-gray-800"
+                    : ""
+                }`}
+                onClick={handleLinkClick}
+              >
+                <span className="flex items-center">
+                  <span className="flex-grow">Inicio</span>
+                  {isActive("/") && <span className="h-2 w-2 rounded-full bg-gray-500 dark:bg-gray-400" />}
+                </span>
+              </Link>
+
+              {(["mente", "relaciones", "cuerpo", "finanzas"] as const).map((s) => (
                 <Link
-                  href="/"
-                  className={`block px-5 py-3 transition-all duration-200 ${
-                    isActive("/")
-                      ? `font-medium bg-gray-100 dark:bg-gray-700`
-                      : `hover:bg-gray-100 dark:hover:bg-gray-700`
+                  key={s}
+                  href={`/${s}`}
+                  data-interactive="true"
+                  className={`${linkClass} capitalize ${
+                    isActive(`/${s}`)
+                      ? `bg-gray-100 font-medium dark:bg-gray-800 ${sectionLinkClass[s]}`
+                      : ""
                   }`}
                   onClick={handleLinkClick}
                 >
-                  <div className="flex items-center">
-                    <span className="flex-grow">Inicio</span>
-                    {isActive("/") && <div className="w-2 h-2 rounded-full bg-gray-500 dark:bg-gray-400" />}
-                  </div>
+                  <span className="flex items-center">
+                    <span className="flex-grow">{s}</span>
+                    {isActive(`/${s}`) && (
+                      <span
+                        className={`h-2 w-2 rounded-full ${
+                          s === "mente"
+                            ? "bg-mente"
+                            : s === "relaciones"
+                              ? "bg-relaciones"
+                              : s === "cuerpo"
+                                ? "bg-cuerpo"
+                                : "bg-finanzas"
+                        }`}
+                      />
+                    )}
+                  </span>
                 </Link>
+              ))}
+            </div>
 
-                <Link
-                  href="/mente"
-                  className={`block px-5 py-3 transition-all duration-200 ${
-                    isActive("/mente")
-                      ? `font-medium text-mente bg-blue-50 dark:bg-blue-900/20`
-                      : `hover:bg-blue-50 dark:hover:bg-blue-900/20`
-                  }`}
-                  onClick={handleLinkClick}
-                >
-                  <div className="flex items-center">
-                    <span className="flex-grow">Mente</span>
-                    {isActive("/mente") && <div className="w-2 h-2 rounded-full bg-mente" />}
-                  </div>
-                </Link>
+            <div className="mt-1 border-t border-gray-200 py-2 dark:border-gray-700">
+              <Link
+                href="/que-es-holentia"
+                data-interactive="true"
+                className={linkClass}
+                onClick={handleLinkClick}
+              >
+                <span className="flex items-center">
+                  <span className="flex-grow">¿Qué es Holentia?</span>
+                </span>
+              </Link>
+              <Link href="/ayuda" data-interactive="true" className={linkClass} onClick={handleLinkClick}>
+                <span className="flex items-center">
+                  <span className="flex-grow">Ayuda</span>
+                </span>
+              </Link>
+              <Link
+                href="/apoyar"
+                data-interactive="true"
+                className={`${linkClass} font-medium text-gray-900 dark:text-gray-100`}
+                onClick={handleLinkClick}
+              >
+                <span className="flex items-center">
+                  <span className="flex-grow">Hacer donación</span>
+                </span>
+              </Link>
+            </div>
 
-                <Link
-                  href="/relaciones"
-                  className={`block px-5 py-3 transition-all duration-200 ${
-                    isActive("/relaciones")
-                      ? `font-medium text-relaciones bg-purple-50 dark:bg-purple-900/20`
-                      : `hover:bg-purple-50 dark:hover:bg-purple-900/20`
-                  }`}
-                  onClick={handleLinkClick}
-                >
-                  <div className="flex items-center">
-                    <span className="flex-grow">Relaciones</span>
-                    {isActive("/relaciones") && <div className="w-2 h-2 rounded-full bg-relaciones" />}
-                  </div>
-                </Link>
+            <div className="mt-1 border-t border-gray-200 py-2 dark:border-gray-700">
+              <Link
+                href="/aviso-legal"
+                data-interactive="true"
+                className={`${linkClass} text-xs`}
+                onClick={handleLinkClick}
+              >
+                <span className="flex items-center">
+                  <span className="flex-grow">Aviso legal</span>
+                </span>
+              </Link>
+              <Link
+                href="/politica-cookies"
+                data-interactive="true"
+                className={`${linkClass} text-xs`}
+                onClick={handleLinkClick}
+              >
+                <span className="flex items-center">
+                  <span className="flex-grow">Política de cookies</span>
+                </span>
+              </Link>
+            </div>
 
-                <Link
-                  href="/cuerpo"
-                  className={`block px-5 py-3 transition-all duration-200 ${
-                    isActive("/cuerpo")
-                      ? `font-medium text-cuerpo bg-amber-50 dark:bg-amber-900/20`
-                      : `hover:bg-amber-50 dark:hover:bg-amber-900/20`
-                  }`}
-                  onClick={handleLinkClick}
-                >
-                  <div className="flex items-center">
-                    <span className="flex-grow">Cuerpo</span>
-                    {isActive("/cuerpo") && <div className="w-2 h-2 rounded-full bg-cuerpo" />}
-                  </div>
-                </Link>
-
-                <Link
-                  href="/finanzas"
-                  className={`block px-5 py-3 transition-all duration-200 ${
-                    isActive("/finanzas")
-                      ? `font-medium text-finanzas bg-green-50 dark:bg-green-900/20`
-                      : `hover:bg-green-50 dark:hover:bg-green-900/20`
-                  }`}
-                  onClick={handleLinkClick}
-                >
-                  <div className="flex items-center">
-                    <span className="flex-grow">Finanzas</span>
-                    {isActive("/finanzas") && <div className="w-2 h-2 rounded-full bg-finanzas" />}
-                  </div>
-                </Link>
-              </div>
-
-              <div className="py-2 border-t border-gray-200 dark:border-gray-700 mt-1">
-                <Link
-                  href="/que-es-holentia"
-                  className="block px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
-                  onClick={handleLinkClick}
-                >
-                  <div className="flex items-center">
-                    <span className="flex-grow">¿Qué es Holentia?</span>
-                  </div>
-                </Link>
-                <Link
-                  href="/ayuda"
-                  className="block px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
-                  onClick={handleLinkClick}
-                >
-                  <div className="flex items-center">
-                    <span className="flex-grow">Ayuda</span>
-                  </div>
-                </Link>
-                <Link
-                  href="/apoyar"
-                  className="block px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 font-medium"
-                  style={{ color: accentColor }}
-                  onClick={handleLinkClick}
-                >
-                  <div className="flex items-center">
-                    <span className="flex-grow">Hacer donación</span>
-                  </div>
-                </Link>
-              </div>
-
-              <div className="py-2 border-t border-gray-200 dark:border-gray-700 mt-1">
-                <Link
-                  href="/aviso-legal"
-                  className="block px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 text-sm"
-                  onClick={handleLinkClick}
-                >
-                  <div className="flex items-center">
-                    <span className="flex-grow">Aviso legal</span>
-                  </div>
-                </Link>
-                <Link
-                  href="/politica-cookies"
-                  className="block px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 text-sm"
-                  onClick={handleLinkClick}
-                >
-                  <div className="flex items-center">
-                    <span className="flex-grow">Política de cookies</span>
-                  </div>
-                </Link>
-              </div>
-
-              <div className="py-2 border-t border-gray-200 dark:border-gray-700 mt-1">
-                <button
-                  onClick={() => {
-                    triggerHapticFeedback("medium")
-                    setTheme(isDark ? "light" : "dark")
-                    setIsMenuOpen(false)
-                  }}
-                  className="w-full text-left px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
-                >
-                  <div className="flex items-center justify-between">
-                    <span>Modo {isDark ? "Claro" : "Oscuro"}</span>
-                    <div className="bg-gray-100 dark:bg-gray-700 p-1.5 rounded-full">
-                      {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                    </div>
-                  </div>
-                </button>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+            <div className="mt-1 border-t border-gray-200 py-2 dark:border-gray-700">
+              <button
+                type="button"
+                data-interactive="true"
+                onClick={() => {
+                  triggerHapticFeedback("medium")
+                  setTheme(isDark ? "light" : "dark")
+                  setIsMenuOpen(false)
+                }}
+                className="w-full px-5 py-3 text-left text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
+              >
+                <span className="flex items-center justify-between">
+                  <span>Modo {isDark ? "Claro" : "Oscuro"}</span>
+                  <span className="rounded-full bg-gray-100 p-1.5 dark:bg-gray-800">
+                    {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                  </span>
+                </span>
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }
