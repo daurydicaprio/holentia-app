@@ -31,6 +31,11 @@ const faq: FaqItem[] = [
     answer:
       "Sí, se guarda automáticamente como borrador en el almacenamiento local de tu navegador (clave holentia:crear-presupuesto-personal:draft:v1). Nada viaja a un servidor y puedes borrarlo en cualquier momento con «Borrar mis datos».",
   },
+  {
+    question: "¿Puedo usar el presupuesto en el celular?",
+    answer:
+      "Sí. La herramienta está optimizada para móviles y escritorio; tus datos se guardan en el navegador del dispositivo donde la uses.",
+  },
 ]
 
 export default function CrearPresupuestoPersonalPage() {

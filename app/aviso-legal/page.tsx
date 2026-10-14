@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { ArrowLeft, ArrowRight, FileText, Globe, Mail, Shield, AlertTriangle } from "lucide-react"
-import { pageMetadata } from "@/lib/seo"
+import { pageMetadata, pageJsonLd } from "@/lib/seo"
+import JsonLd from "@/components/tool-seo/json-ld"
 
 export function generateMetadata() {
   return pageMetadata(
@@ -17,6 +18,7 @@ import BrandDots from "@/components/common/brand-dots/brand-dots"
 export default function AvisoLegalPage() {
   return (
     <main className="min-h-screen flex flex-col">
+      <JsonLd data={pageJsonLd("Aviso legal", "/aviso-legal")} />
       <div className="flex-1 max-w-3xl w-full mx-auto p-4 sm:p-6">
         <div className="flex items-center justify-between mb-10">
           <Link
@@ -37,7 +39,7 @@ export default function AvisoLegalPage() {
             Aviso Legal
           </h1>
           <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
-            Actualizado en {new Date().toLocaleDateString("es-ES", { year: "numeric", month: "long" })}
+            Actualizado en octubre de 2026
           </p>
         </div>
 

@@ -27,6 +27,7 @@ Cargar la skill correspondiente antes de la tarea; cada una es la receta canóni
 | Skill | Cuándo usarla |
 |---|---|
 | `create-tool` | Crear una herramienta nueva de punta a punta (registro, página, FAQ, sitemap, llms.txt, verificación) |
+| `seo-geo` | Cualquier trabajo de SEO/GEO: metadata, metaTitle/metaDescription, canonical, sitemap, robots, JSON-LD, llms.txt, OG images, breadcrumbs, checklist por herramienta |
 | `section-ui` | Cualquier trabajo de UI: colores por sección, tokens, tipografía, iconos, hovers, dark mode, contraste |
 | `tool-persistence` | Persistencia local: drafts/snapshots, `lib/storage.ts`, claves `holentia:*`, integración «Borrar mis datos» |
 | `chart-chartsjs` | Gráficos Chart.js: theming por tema, leyendas (`fontColor`), efectos y destrucción |

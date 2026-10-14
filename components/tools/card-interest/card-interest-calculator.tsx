@@ -156,7 +156,7 @@ export function CardInterestCalculator() {
   }
 
   const inputClass =
-    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-finanzas focus:border-transparent"
+    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
 
   const monthlyRatePct = annualRate / 12
 
@@ -250,7 +250,7 @@ export function CardInterestCalculator() {
 
         <div className="flex items-center justify-between mt-6">
           <span className="text-xs text-gray-500 dark:text-gray-400">
-            {savedFlash ? "Guardado local ✓" : "Se guarda en tu navegador"}
+            {savedFlash ? "Guardado local" : "Se guarda en tu navegador"}
           </span>
           <button
             onClick={clearData}
@@ -275,12 +275,11 @@ export function CardInterestCalculator() {
           <div className="space-y-6 h-full">
             {/* Héroe */}
             <div
-              className="rounded-xl p-8 text-white text-center shadow-lg"
-              style={{
-                background: result.neverPaysOff
-                  ? "linear-gradient(135deg, #c62828 0%, #8e0000 100%)"
-                  : "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)",
-              }}
+              className={`rounded-xl p-8 text-white text-center shadow-lg ${
+                result.neverPaysOff
+                  ? "bg-gradient-to-br from-red-700 to-red-900"
+                  : "bg-gradient-to-br from-finanzas to-finanzas-dark dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text"
+              }`}
             >
               {result.neverPaysOff ? (
                 <>
@@ -311,10 +310,10 @@ export function CardInterestCalculator() {
                       <div className="text-[11px] opacity-90 mt-1 leading-tight">Total pagado</div>
                     </div>
                     <div className="rounded-lg bg-white/15 px-2 py-3">
-                      <div className="text-lg sm:text-xl font-bold tabular-nums text-[#ffee58]">
+                      <div className="text-lg sm:text-xl font-bold tabular-nums text-yellow-300 dark:text-yellow-300">
                         {balance > 0 ? `+${Math.round((result.totalInterest / balance) * 100)}%` : "—"}
                       </div>
-                      <div className="text-[11px] opacity-90 mt-1 leading-tight text-[#ffee58]">Costo extra</div>
+                      <div className="text-[11px] opacity-90 mt-1 leading-tight text-yellow-300 dark:text-yellow-300">Costo extra</div>
                     </div>
                   </div>
                 </>
@@ -363,7 +362,7 @@ export function CardInterestCalculator() {
 
             {/* Aviso */}
             <div className="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400 leading-relaxed px-1">
-              <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-finanzas" />
+              <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-finanzas dark:text-finanzas-light" />
               <span>
                 Estimación educativa: asume tasa fija, sin moras, seguros ni impuestos. La tasa real de tu tarjeta
                 está en tu estado de cuenta o app del banco. No es asesoría financiera. Tus datos no salen de este

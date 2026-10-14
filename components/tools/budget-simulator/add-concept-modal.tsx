@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
+import { X } from "lucide-react"
 
 interface AddConceptModalProps {
   type: "income" | "expense"
@@ -27,13 +28,14 @@ export function AddConceptModal({ type, onSave, onCancel }: AddConceptModalProps
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 max-w-md w-[90%] p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 max-w-md w-[90%] p-6">
         <button
           onClick={onCancel}
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-xl"
           aria-label="Cerrar modal"
+          data-interactive="true"
         >
-          ×
+          <X className="h-4 w-4" aria-hidden="true" />
         </button>
 
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
@@ -51,8 +53,9 @@ export function AddConceptModal({ type, onSave, onCancel }: AddConceptModalProps
             onChange={(e) => setConceptName(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={`Ingrese un nombre para el ${type === "income" ? "ingreso" : "gasto"}`}
-            className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-finanzas focus:border-transparent"
+            className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
             autoFocus
+            data-interactive="true"
           />
         </div>
 
@@ -60,12 +63,14 @@ export function AddConceptModal({ type, onSave, onCancel }: AddConceptModalProps
           <button
             onClick={onCancel}
             className="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-md transition-colors"
+            data-interactive="true"
           >
             Cancelar
           </button>
           <button
             onClick={handleSave}
             className="px-4 py-2 bg-finanzas hover:bg-finanzas-dark text-white font-medium rounded-md transition-colors"
+            data-interactive="true"
           >
             Guardar
           </button>

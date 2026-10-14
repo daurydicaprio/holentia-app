@@ -26,7 +26,7 @@ const formatNumberWithCommas = (value: number | string): string => {
   if (isNaN(numValue)) return ""
 
   // Formatear con comas pero sin decimales para mejor experiencia de edición
-  return new Intl.NumberFormat("es-MX", {
+  return new Intl.NumberFormat("es-DO", {
     maximumFractionDigits: 0,
     useGrouping: true,
   }).format(numValue)
@@ -34,7 +34,7 @@ const formatNumberWithCommas = (value: number | string): string => {
 
 // Función para formatear números con comas y decimales (para mostrar)
 const formatNumber = (value: number): string => {
-  return new Intl.NumberFormat("es-MX", {
+  return new Intl.NumberFormat("es-DO", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(value)
@@ -232,7 +232,7 @@ export function LoanCalculatorForm({
               Monto del Préstamo
             </label>
             <span className="text-sm font-semibold text-finanzas dark:text-finanzas-light">
-              {new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(loanAmount)}
+              {new Intl.NumberFormat("es-DO", { style: "currency", currency: "DOP" }).format(loanAmount)}
             </span>
           </div>
 
@@ -244,7 +244,7 @@ export function LoanCalculatorForm({
               onChange={handleLoanAmountChange}
               onBlur={handleLoanAmountBlur}
               onFocus={() => setIsEditingLoanAmount(true)}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-finanzas focus:border-transparent"
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
               data-interactive="true"
             />
             <Slider
@@ -277,7 +277,7 @@ export function LoanCalculatorForm({
               onChange={handleInterestRateChange}
               onBlur={handleInterestRateBlur}
               onFocus={() => setIsEditingInterestRate(true)}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-finanzas focus:border-transparent"
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
               data-interactive="true"
             />
             <Slider
@@ -310,7 +310,7 @@ export function LoanCalculatorForm({
               onChange={handleLoanTermChange}
               onBlur={handleLoanTermBlur}
               onFocus={() => setIsEditingLoanTerm(true)}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-finanzas focus:border-transparent"
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
               data-interactive="true"
             />
             <Slider
@@ -330,12 +330,9 @@ export function LoanCalculatorForm({
         <button
           onClick={onSaveSimulation}
           disabled={disableSave}
-          className={`px-4 py-2 rounded-md text-white font-medium transition-colors flex items-center gap-2 ${
+          className={`px-4 py-2 rounded-md bg-finanzas-dark text-white font-medium transition-colors flex items-center gap-2 ${
             disableSave ? "opacity-50 cursor-not-allowed" : ""
           }`}
-          style={{
-            backgroundColor: "#2e7d32", // Verde finanzas
-          }}
           data-interactive="true"
         >
           <Save size={16} />

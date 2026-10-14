@@ -4,10 +4,10 @@
 > Prod `holentia.com → main`. No tocar dominios.
 > Principios: sin DB, sin registro, local-first privado (`holentia:*` en navegador), cero tracking.
 
-## Estado actual (11-Oct-2026) — 11 tools en `dev` + `main`, SEO server-rendered en `dev`
+## Estado actual (14-Oct-2026) — 13 tools en `dev` (12 en `main`), SEO server-rendered en `dev`
 - [x] Stack: Next 15.5.26 + React 19.3 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
-- [x] Cobertura: 11 tools (`diario-guiado, test-lenguajes-amor, calculadora-hidratacion, calculadora-calorias, crear-presupuesto-personal, calculadora-interes-compuesto, calculadora-prestamo, calculadora-consumo-electrico, tarjeta-corte-vencimiento, calculadora-interes-tarjeta, test-perfil-riesgo`)
-- [x] SEO: metadata + JSON-LD en 11 tools + 4 secciones + home + 5 informativas; sitemap 21 URLs; robots; llms.txt; FAQ en HTML inicial
+- [x] Cobertura: 13 tools (`diario-guiado, test-lenguajes-amor, calculadora-calorias, calculadora-hidratacion, crear-presupuesto-personal, calculadora-interes-compuesto, calculadora-prestamo, calculadora-consumo-electrico, calculadora-gasto-combustible, tarjeta-corte-vencimiento, calculadora-interes-tarjeta, test-perfil-riesgo, glosario-financiero`)
+- [x] SEO: metadata + JSON-LD en 13 tools + 4 secciones + home + 5 informativas; sitemap 23 URLs; robots; llms.txt; FAQ en HTML inicial
 - [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main`
 - [x] `tsc 0 errores + next build OK + pnpm lint 0` en estricto
 
@@ -50,7 +50,7 @@ Canónicos: mente `#1976d2`, relaciones `#7c3aed`, cuerpo `#ffa000`, finanzas `#
 - [x] `budget D` (borrador ingresos/gastos + botón borrar) · `compound D+S` (inputs + sims persistentes + `clearCompoundData`) · `préstamo D+S` (inputs + sims persistentes + `clearLoanSimulations`, Restablecer intacto) · `diario D` (clave `v1` con migración legada + Borrar todo) · `consumo eléctrico D` (migrado a helper)
 - [x] `alert()` sustituidos por banner inline en compound/préstamo
 - [x] Botón `Borrar mis datos`/`Borrar todas`/`Borrar todo` por tool + `ClearAllData` global en Ayuda
-- [x] `politica-cookies` lista las 12 claves activas (11 tools, compuesto/préstamo con simulations) + `README` privacidad y catálogo
+- [x] `politica-cookies` lista las 13 claves `holentia:*` activas (11 tools con persistencia, compuesto/préstamo con simulations) + `README` privacidad y catálogo
 - [x] Cero fetch/analytics/env nuevos — `vercel env ls` vacío
 
 ## Fase 4 — Plantilla + móvil + muertos — HECHA (en Fase 1)

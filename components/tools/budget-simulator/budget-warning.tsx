@@ -1,5 +1,7 @@
 "use client"
 
+import { AlertTriangle, X } from "lucide-react"
+
 interface BudgetWarningProps {
   onClose: () => void
 }
@@ -12,11 +14,14 @@ export function BudgetWarning({ onClose }: BudgetWarningProps) {
           onClick={onClose}
           className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-xl p-1"
           aria-label="Cerrar advertencia"
+          data-interactive="true"
         >
-          ×
+          <X className="h-4 w-4" aria-hidden="true" />
         </button>
         <div className="flex gap-4">
-          <div className="text-3xl text-red-500 dark:text-red-400">⚠️</div>
+          <div className="text-3xl text-red-500 dark:text-red-400">
+            <AlertTriangle className="h-4 w-4 inline -mt-0.5" aria-hidden="true" />
+          </div>
           <div>
             <h3 className="text-lg font-medium text-red-600 dark:text-red-400 mb-2">
               ¡Atención! Gastos exceden ingresos

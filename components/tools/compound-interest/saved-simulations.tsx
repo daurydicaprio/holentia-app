@@ -59,6 +59,7 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
           Simulaciones Guardadas
         </h3>
         <button
+          data-interactive="true"
           onClick={clearAll}
           className="text-xs text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors"
         >
@@ -85,14 +86,16 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
                   onChange={(e) => setEditingName(e.target.value)}
                   onBlur={saveNameChange}
                   onKeyDown={handleKeyDown}
-                  className="font-medium text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 border border-finanzas rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-finanzas"
+                  className="font-medium text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 border border-finanzas rounded-md px-2 py-1 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
                   autoFocus
                   maxLength={25}
+                  data-interactive="true"
                 />
               ) : (
                 <div className="flex items-center">
                   <h3 className="font-medium text-gray-800 dark:text-gray-200">{simulation.name}</h3>
                   <button
+                    data-interactive="true"
                     onClick={() => handleNameClick(simulation)}
                     className="ml-2 p-1 rounded-full hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors text-finanzas dark:text-[#6a9c77]"
                     aria-label="Editar nombre"
@@ -102,6 +105,7 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
                 </div>
               )}
               <button
+                data-interactive="true"
                 onClick={() => onRemove(simulation.id)}
                 className="text-red-500 hover:text-red-700 dark:hover:text-red-400 p-1 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                 aria-label="Eliminar simulación"

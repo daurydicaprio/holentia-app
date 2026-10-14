@@ -133,6 +133,7 @@ export function BudgetSimulator() {
                 formatCurrency={formatCurrency}
               />
               <button
+                data-interactive="true"
                 onClick={toggleTips}
                 className="w-full mt-6 px-4 py-2 bg-finanzas hover:bg-finanzas-dark text-white font-medium rounded-md transition-colors"
               >
@@ -150,6 +151,7 @@ export function BudgetSimulator() {
           <div className="mt-8 flex flex-col space-y-4">
             <div className="flex justify-between items-center">
               <button
+                data-interactive="true"
                 onClick={goToPreviousTab}
                 className={`px-4 py-2 rounded-md transition-colors ${
                   activeTab === "income"
@@ -166,6 +168,7 @@ export function BudgetSimulator() {
               </div>
 
               <button
+                data-interactive="true"
                 onClick={goToNextTab}
                 className={`flex items-center gap-1 px-4 py-2 rounded-md transition-colors ${
                   activeTab === "summary"
@@ -181,7 +184,7 @@ export function BudgetSimulator() {
             {/* Barra de progreso */}
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
               <div
-                className="bg-finanzas h-2.5 rounded-full transition-all duration-300"
+                className="bg-finanzas dark:bg-finanzas-light h-2.5 rounded-full transition-all duration-300"
                 style={{
                   width: activeTab === "income" ? "33.3%" : activeTab === "expenses" ? "66.6%" : "100%",
                 }}
@@ -189,6 +192,7 @@ export function BudgetSimulator() {
             </div>
 
             <button
+              data-interactive="true"
               onClick={clearBudgetData}
               className="text-xs text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors mx-auto"
             >
@@ -242,6 +246,7 @@ export function BudgetSimulator() {
           <div className="lg:col-span-1">
             <BudgetTips />
             <button
+              data-interactive="true"
               onClick={clearBudgetData}
               className="mt-4 text-xs text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors"
             >

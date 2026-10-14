@@ -24,8 +24,8 @@ export function AmortizationTable({ data, formatCurrency }: AmortizationTablePro
   const totalRowBgColor = "rgba(76, 175, 80, 0.3)" // finanzas-light con opacidad
   const totalRowBgColorDark = "rgba(46, 125, 50, 0.2)" // finanzas con opacidad
   const totalRowTextColor = "#1b5e20" // finanzas-dark
-  const totalRowTextColorDark = "#a5d6a7" // finanzas-light
-  const buttonColor = "#2e7d32" // finanzas
+  const totalRowTextColorDark = "#a5d6a7" // finanzas-lighter
+  const buttonColor = "#388e3c" // finanzas
   const buttonHoverBgColor = "rgba(76, 175, 80, 0.2)" // finanzas-light con opacidad
   const buttonHoverBgColorDark = "rgba(46, 125, 50, 0.2)" // finanzas con opacidad
 
@@ -171,6 +171,7 @@ export function AmortizationTable({ data, formatCurrency }: AmortizationTablePro
         <div className="flex justify-center items-center p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
           <div className="flex items-center space-x-2">
             <button
+              data-interactive="true"
               onClick={() => changePage(1)}
               disabled={currentPage === 1}
               className={`p-2 rounded-md ${
@@ -184,6 +185,7 @@ export function AmortizationTable({ data, formatCurrency }: AmortizationTablePro
               <ChevronsLeft size={16} />
             </button>
             <button
+              data-interactive="true"
               onClick={() => changePage(currentPage - 1)}
               disabled={currentPage === 1}
               className={`p-2 rounded-md ${
@@ -202,6 +204,7 @@ export function AmortizationTable({ data, formatCurrency }: AmortizationTablePro
             </span>
 
             <button
+              data-interactive="true"
               onClick={() => changePage(currentPage + 1)}
               disabled={currentPage === totalPages}
               className={`p-2 rounded-md ${
@@ -215,6 +218,7 @@ export function AmortizationTable({ data, formatCurrency }: AmortizationTablePro
               <ChevronRight size={16} />
             </button>
             <button
+              data-interactive="true"
               onClick={() => changePage(totalPages)}
               disabled={currentPage === totalPages}
               className={`p-2 rounded-md ${

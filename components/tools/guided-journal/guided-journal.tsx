@@ -114,7 +114,7 @@ export function GuidedJournal() {
     <div className="space-y-6">
       {/* Formulario de entrada */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-        <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-6">
+        <h2 className="text-xl font-bold text-mente dark:text-mente-light mb-6">
           {editingId ? "Editar entrada" : "Nueva entrada"}
         </h2>
 
@@ -122,9 +122,10 @@ export function GuidedJournal() {
           <div>
             <label className="block text-sm font-medium mb-2">¿Cómo te sientes hoy?</label>
             <select
+              data-interactive="true"
               value={currentEntry.mood}
               onChange={(e) => setCurrentEntry({ ...currentEntry, mood: e.target.value })}
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-mente focus:border-transparent"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-mente dark:focus:border-transparent dark:focus:ring-mente-light"
             >
               <option value="">Selecciona tu estado de ánimo</option>
               <option value="Muy bien">😄 Muy bien</option>
@@ -141,7 +142,8 @@ export function GuidedJournal() {
               value={currentEntry.gratitude}
               onChange={(e) => setCurrentEntry({ ...currentEntry, gratitude: e.target.value })}
               placeholder="Escribe al menos tres cosas por las que estás agradecido..."
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-mente focus:border-transparent min-h-[100px]"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-mente dark:focus:border-transparent dark:focus:ring-mente-light min-h-[100px]"
+              data-interactive="true"
             />
           </div>
 
@@ -151,7 +153,8 @@ export function GuidedJournal() {
               value={currentEntry.challenges}
               onChange={(e) => setCurrentEntry({ ...currentEntry, challenges: e.target.value })}
               placeholder="Describe los retos o dificultades del día..."
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-mente focus:border-transparent min-h-[100px]"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-mente dark:focus:border-transparent dark:focus:ring-mente-light min-h-[100px]"
+              data-interactive="true"
             />
           </div>
 
@@ -161,7 +164,8 @@ export function GuidedJournal() {
               value={currentEntry.achievements}
               onChange={(e) => setCurrentEntry({ ...currentEntry, achievements: e.target.value })}
               placeholder="Celebra tus logros, grandes y pequeños..."
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-mente focus:border-transparent min-h-[100px]"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-mente dark:focus:border-transparent dark:focus:ring-mente-light min-h-[100px]"
+              data-interactive="true"
             />
           </div>
 
@@ -171,20 +175,23 @@ export function GuidedJournal() {
               value={currentEntry.tomorrow}
               onChange={(e) => setCurrentEntry({ ...currentEntry, tomorrow: e.target.value })}
               placeholder="Establece una intención para mañana..."
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-mente focus:border-transparent min-h-[100px]"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-mente dark:focus:border-transparent dark:focus:ring-mente-light min-h-[100px]"
+              data-interactive="true"
             />
           </div>
 
           <div className="flex gap-3">
             <button
+              data-interactive="true"
               onClick={saveEntry}
-              className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 bg-mente hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
             >
               <Save className="h-5 w-5" />
               {editingId ? "Actualizar entrada" : "Guardar entrada"}
             </button>
             {editingId && (
               <button
+                data-interactive="true"
                 onClick={cancelEdit}
                 className="flex items-center justify-center gap-2 bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-700 text-gray-800 dark:text-white px-6 py-3 rounded-lg font-medium transition-colors"
               >
@@ -200,8 +207,9 @@ export function GuidedJournal() {
       {entries.length > 0 && (
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-400">Entradas anteriores</h2>
+            <h2 className="text-xl font-bold text-mente dark:text-mente-light">Entradas anteriores</h2>
             <button
+              data-interactive="true"
               onClick={clearAllEntries}
               className="text-xs text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors"
             >
@@ -228,12 +236,14 @@ export function GuidedJournal() {
                   </div>
                   <div className="flex gap-2">
                     <button
+                      data-interactive="true"
                       onClick={() => editEntry(entry)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                      className="p-2 text-mente dark:text-mente-light hover:text-mente-dark dark:hover:text-mente-lighter hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
                     >
                       <Edit2 className="h-4 w-4" />
                     </button>
                     <button
+                      data-interactive="true"
                       onClick={() => deleteEntry(entry.id)}
                       className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                     >

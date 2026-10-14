@@ -12,6 +12,7 @@ export function MobileTabsNavigation({ activeTab, onTabChange, hasSimulations = 
   return (
     <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex rounded-lg mt-6 overflow-hidden">
       <button
+        data-interactive="true"
         onClick={() => onTabChange("calculator")}
         className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-colors border-r border-gray-200 dark:border-gray-700 ${
           activeTab === "calculator"
@@ -24,6 +25,7 @@ export function MobileTabsNavigation({ activeTab, onTabChange, hasSimulations = 
       </button>
 
       <button
+        data-interactive="true"
         onClick={() => onTabChange("simulations")}
         className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-colors border-r border-gray-200 dark:border-gray-700 ${
           activeTab === "simulations"
@@ -36,6 +38,7 @@ export function MobileTabsNavigation({ activeTab, onTabChange, hasSimulations = 
       </button>
 
       <button
+        data-interactive="true"
         onClick={() => onTabChange("charts")}
         className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-colors ${
           activeTab === "charts"

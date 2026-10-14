@@ -4,11 +4,12 @@ interface SectionHeaderProps {
   section: SectionData
 }
 
-// Gradiente de título por sección (vars de paleta, sin hex hardcodeados)
+// Gradiente de título por sección (vars de paleta, sin hex hardcodeados).
+// Cuerpo arranca en -dark: el ámbar puro no alcanza contraste AA sobre fondo claro.
 const gradientBySection: Record<string, string> = {
   mente: "linear-gradient(to right, var(--color-mente-active), var(--color-mente-active-dark))",
   relaciones: "linear-gradient(to right, var(--color-relaciones-active), var(--color-relaciones-active-dark))",
-  cuerpo: "linear-gradient(to right, var(--color-cuerpo-active), var(--color-cuerpo-active-dark))",
+  cuerpo: "linear-gradient(to right, var(--color-cuerpo-active-dark), var(--color-cuerpo-active-darkest))",
   finanzas: "linear-gradient(to right, var(--color-finanzas-active), var(--color-finanzas-active-dark))",
 }
 
@@ -34,7 +35,7 @@ export default function SectionHeader({ section }: SectionHeaderProps) {
       </h1>
       <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">{section.subtitle}</p>
 
-      <div className="mt-8 mb-6">
+      <div className="mt-6 mb-6">
         <h2 className="text-xl sm:text-2xl font-bold">¿Qué quieres aprender?</h2>
       </div>
     </div>

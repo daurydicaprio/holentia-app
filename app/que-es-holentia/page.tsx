@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { ArrowLeft, Brain, Dumbbell, HeartHandshake, Wallet } from "lucide-react"
-import { pageMetadata } from "@/lib/seo"
+import { pageMetadata, pageJsonLd } from "@/lib/seo"
+import JsonLd from "@/components/tool-seo/json-ld"
 
 export function generateMetadata() {
   return pageMetadata(
@@ -94,6 +95,7 @@ const values = [
 export default function QueEsHolentiaPage() {
   return (
     <main className="min-h-screen flex flex-col">
+      <JsonLd data={pageJsonLd("¿Qué es HOLENTIA?", "/que-es-holentia")} />
       <div className="flex-1 max-w-3xl w-full mx-auto p-4 sm:p-6">
         <div className="flex items-center justify-between mb-10">
           <Link

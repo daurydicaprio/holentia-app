@@ -48,26 +48,21 @@ interface TabButtonProps {
 }
 
 function TabButton({ isActive, onClick, icon, label, disabled = false }: TabButtonProps) {
-  // Colores de la sección finanzas
-  const activeColor = "#2e7d32" // finanzas
-  const hoverColor = "rgba(46, 125, 50, 0.1)" // finanzas con opacidad
-
   return (
     <motion.button
       onClick={onClick}
       disabled={disabled}
+      data-interactive="true"
       className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-colors relative ${
         isActive
-          ? ""
-          : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+          ? "bg-finanzas-dark text-white"
+          : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-finanzas hover:text-white dark:hover:bg-finanzas-light dark:hover:text-black"
       } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
-      whileHover={!disabled && !isActive ? { backgroundColor: hoverColor } : undefined}
       whileTap={!disabled ? { scale: 0.98 } : undefined}
     >
       {isActive && (
         <motion.div
-          className="absolute inset-0"
-          style={{ backgroundColor: activeColor }}
+          className="absolute inset-0 bg-finanzas-dark"
           layoutId="activeTab"
           initial={false}
           transition={{ type: "spring", stiffness: 500, damping: 30 }}

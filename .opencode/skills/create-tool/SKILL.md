@@ -5,7 +5,7 @@ description: Use when creating a new HOLENTIA tool (herramienta nueva, nueva cal
 
 # Crear una herramienta nueva
 
-Receta canónica de punta a punta. Complementos: skill `section-ui` (UI/colores), `tool-persistence` (si guarda datos), `chart-chartsjs` (si tiene gráficos). Fuente de verdad de estilos: `design.md`.
+Receta canónica de punta a punta. Complementos: skill `section-ui` (UI/colores), `tool-persistence` (si guarda datos), `chart-chartsjs` (si tiene gráficos), **`seo-geo` (metadata, OG image, llms.txt, checklist SEO/GEO — OBLIGATORIO)**. Fuente de verdad de estilos: `design.md`.
 
 ## 1. Elegir slug y sección
 
@@ -24,10 +24,12 @@ En `sectionsData[seccion].cards` crear la tarjeta (o activar una existente ponie
   slug: "mi-herramienta",
   isAvailable: true,          // false = "Próximamente" en el grid
   category: "finanzas",        // igual a la sección padre
+  metaTitle: "Calculadora de algo",            // ≤60 chars, keyword primero (SEO)
+  metaDescription: "Descripción de 120 a 155 caracteres con keyword, beneficio y gancho para el snippet de Google.", // OBLIGATORIA
 }
 ```
 
-Con `isAvailable: true`, `app/sitemap.ts` la incluye **automáticamente** (deriva de `sectionsData`); no tocar sitemap.
+Con `isAvailable: true`, `app/sitemap.ts` la incluye **automáticamente** (deriva de `sectionsData`); no tocar sitemap. `toolMetadata()` usa `metaTitle`/`metaDescription` (con fallback al blurb — no depender del fallback).
 
 ## 3. Componente client — `components/tools/{kebab}/`
 
@@ -78,7 +80,7 @@ export default function MiHerramientaPage() {
 
 ## 5. FAQ (obligatorio, SEO)
 
-- 4–6 preguntas en español con respuestas útiles y reales (no relleno).
+- **5–6 preguntas** en español con respuestas útiles y reales (no relleno); responder en 1–3 frases (bueno para GEO).
 - **Siempre incluir** la de privacidad: «¿Guardan ustedes mis datos?» → que mencione `localStorage` y `holentia:{slug}:draft:v1` (o la clave que uses).
 - El contenido queda en el HTML inicial aunque el acordeón esté cerrado (no ocultarlo con JS).
 
@@ -88,10 +90,10 @@ export default function MiHerramientaPage() {
 - Añadir la clave a la tabla de `app/politica-cookies/page.tsx`.
 - Si hay botón «Borrar mis datos» global, asegurar que `storageClearAll()` cubre las claves (prefijo `holentia:` ✓).
 
-## 7. Doc externo — `public/llms.txt`
+## 7. Doc externo + imagen social — `public/llms.txt` y `opengraph-image`
 
-- Añadir la línea de la herramienta bajo `## Herramientas`.
-- Actualizar el recuento «Las N herramientas…» y, si procede, la línea de la sección bajo `## Secciones`.
+- Añadir la línea de la herramienta bajo `## Herramientas` en `public/llms.txt` y actualizar el recuento (ver skill `seo-geo` §4).
+- **Crear `app/{slug}/opengraph-image.tsx`** (imagen social 1200×630 para compartir en redes/mensajeros): copiar otra herramienta y cambiar `title`/`subtitle`/`alt`; usa la plantilla `ogTemplate` de `components/seo/og-template.tsx` (ver skill `seo-geo` §2). Sin esto, WhatsApp/X muestran la imagen genérica de la raíz.
 
 ## 8. Verificación (los tres en verde antes de push)
 
@@ -99,7 +101,7 @@ export default function MiHerramientaPage() {
 pnpm exec tsc --noEmit && pnpm lint && pnpm build
 ```
 
-Smoke opcional: `pnpm build && pnpm start` + `curl -s localhost:3000/{slug} | grep -o '<h1[^>]*>.*</h1>'`.
+Smoke SEO (skill `seo-geo` §6–7): en `.next/server/app/{slug}.html` comprobar `<title>`, `meta description`, `canonical`, `og:image`, `twitter:card` y JSON-LD con FAQPage.
 
 ## 9. Mantenimiento de docs
 

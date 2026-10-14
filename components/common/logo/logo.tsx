@@ -62,7 +62,7 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
           />
         )}
         <div
-          className={`${sizeClasses[size]} relative z-10 flex items-center justify-center rounded-full border border-gray-200 bg-white font-bold text-gray-800 shadow-lg transition-transform duration-300 group-hover:scale-[1.03] dark:border-gray-700 dark:bg-gray-900 dark:text-white`}
+          className={`${sizeClasses[size]} relative z-10 flex items-center justify-center rounded-full border border-gray-200 bg-white font-bold text-gray-800 shadow-lg transition-shadow duration-300 group-hover:shadow-xl dark:border-gray-700 dark:bg-gray-900 dark:text-white`}
         >
           HOLENTIA
         </div>

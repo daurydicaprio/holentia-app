@@ -5,14 +5,6 @@ import type { CardData, SectionType } from "@/types"
 export const SITE_URL = "https://holentia.com"
 export const SITE_NAME = "HOLENTIA"
 
-// Imagen social 1200×630 generada por app/opengraph-image.tsx (file-convention).
-const OG_IMAGE = {
-  url: "/opengraph-image",
-  width: 1200,
-  height: 630,
-  alt: "HOLENTIA — Herramientas gratuitas de bienestar integral",
-}
-
 const SECTION_LABELS: Record<SectionType, string> = {
   mente: "Mente",
   relaciones: "Relaciones",
@@ -53,13 +45,12 @@ function baseMetadata(title: string, description: string, path: string): Metadat
       siteName: SITE_NAME,
       locale: "es_DO",
       type: "website",
-      images: [OG_IMAGE],
+      // La imagen la aporta la file-convention (app/opengraph-image.tsx y variantes por ruta).
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: `${title} | ${SITE_NAME}`,
       description,
-      images: [OG_IMAGE.url],
     },
   }
 }
@@ -103,8 +94,9 @@ export function sectionMetadata(section: string): Metadata {
 /** Metadata por página de herramienta derivada del catálogo en lib/data.ts */
 export function toolMetadata(section: string, slug: string): Metadata {
   const tool = findToolCard(section, slug)
-  const title = tool?.title ?? "Herramienta"
-  const description = tool?.description ?? "Herramienta de bienestar integral de HOLENTIA."
+  const title = tool?.metaTitle ?? tool?.title ?? "Herramienta"
+  const description =
+    tool?.metaDescription ?? tool?.description ?? "Herramienta de bienestar integral de HOLENTIA."
 
   return baseMetadata(title, description, `/${slug}`)
 }
@@ -121,9 +113,9 @@ export function toolJsonLd(section: string, slug: string, faq: FaqItem[] = []) {
     {
       "@type": "WebApplication",
       name: tool.title,
-      description: tool.description,
+      description: tool.metaDescription ?? tool.description,
       url,
-      inLanguage: "es",
+      inLanguage: "es-DO",
       applicationCategory: SECTION_APP_CATEGORY[section as SectionType] ?? "WebApplication",
       operatingSystem: "Web",
       isAccessibleForFree: true,
@@ -168,16 +160,56 @@ export function toolJsonLd(section: string, slug: string, faq: FaqItem[] = []) {
   }
 }
 
-/** JSON-LD para páginas de sección (BreadcrumbList) */
-export function sectionJsonLd(section: string) {
+/** JSON-LD para páginas de sección: CollectionPage + BreadcrumbList (+ FAQPage si hay mini-FAQ) */
+export function sectionJsonLd(section: string, faq: FaqItem[] = []) {
+  const graph: Record<string, unknown>[] = [
+    {
+      "@type": "CollectionPage",
+      name: `${sectionLabel(section)} | ${SITE_NAME}`,
+      url: `${SITE_URL}/${section}`,
+      inLanguage: "es-DO",
+      isPartOf: {
+        "@type": "WebSite",
+        name: SITE_NAME,
+        url: SITE_URL,
+      },
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Inicio", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: sectionLabel(section), item: `${SITE_URL}/${section}` },
+      ],
+    },
+  ]
+
+  if (faq.length > 0) {
+    graph.push({
+      "@type": "FAQPage",
+      mainEntity: faq.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer },
+      })),
+    })
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": graph,
+  }
+}
+
+/** JSON-LD mínimo para páginas informativas (AboutPage + BreadcrumbList) */
+export function pageJsonLd(name: string, path: string) {
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "CollectionPage",
-        name: `${sectionLabel(section)} | ${SITE_NAME}`,
-        url: `${SITE_URL}/${section}`,
-        inLanguage: "es",
+        "@type": "AboutPage",
+        name: `${name} | ${SITE_NAME}`,
+        url: `${SITE_URL}${path}`,
+        inLanguage: "es-DO",
         isPartOf: {
           "@type": "WebSite",
           name: SITE_NAME,
@@ -188,7 +220,7 @@ export function sectionJsonLd(section: string) {
         "@type": "BreadcrumbList",
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Inicio", item: SITE_URL },
-          { "@type": "ListItem", position: 2, name: sectionLabel(section), item: `${SITE_URL}/${section}` },
+          { "@type": "ListItem", position: 2, name, item: `${SITE_URL}${path}` },
         ],
       },
     ],

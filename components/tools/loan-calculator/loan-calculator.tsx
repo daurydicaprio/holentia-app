@@ -11,6 +11,7 @@ import { LoanDisclaimer } from "./disclaimer"
 import { LoanCalculatorTabs } from "./loan-calculator-tabs"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { motion } from "framer-motion"
+import { X } from "lucide-react"
 import TabSwipeNavigation from "@/components/common/tab-swipe-navigation"
 import type { AmortizationRow } from "@/types"
 
@@ -149,7 +150,7 @@ export function LoanCalculator() {
   if (isMobile) {
     return (
       <motion.div
-        className="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden"
+        className="bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden"
         initial="hidden"
         animate="visible"
         variants={containerVariants}
@@ -167,8 +168,8 @@ export function LoanCalculator() {
           {saveError && (
             <div className="mb-4 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-sm text-red-700 dark:text-red-300 flex items-center justify-between gap-2">
               <span>{saveError}</span>
-              <button onClick={() => setSaveError(null)} className="font-bold" aria-label="Cerrar aviso">
-                ×
+              <button onClick={() => setSaveError(null)} className="font-bold" aria-label="Cerrar aviso" data-interactive="true">
+                <X className="h-4 w-4" aria-hidden="true" />
               </button>
             </div>
           )}
@@ -225,7 +226,7 @@ export function LoanCalculator() {
   // Versión de escritorio (sin pestañas)
   return (
     <motion.div
-      className="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden"
+      className="bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
@@ -234,8 +235,8 @@ export function LoanCalculator() {
         {saveError && (
           <div className="mb-4 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-sm text-red-700 dark:text-red-300 flex items-center justify-between gap-2">
             <span>{saveError}</span>
-            <button onClick={() => setSaveError(null)} className="font-bold" aria-label="Cerrar aviso">
-              ×
+            <button onClick={() => setSaveError(null)} className="font-bold" aria-label="Cerrar aviso" data-interactive="true">
+              <X className="h-4 w-4" aria-hidden="true" />
             </button>
           </div>
         )}

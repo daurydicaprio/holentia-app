@@ -87,9 +87,7 @@ export default function ToolCard({ card, index }: ToolCardProps) {
         "hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(0,0,0,0.16)] dark:hover:shadow-[0_16px_36px_rgba(0,0,0,0.45)]",
         sectionClasses,
         isAvailable ? "" : "card-coming-soon cursor-default opacity-60",
-        "animate-fadeIn",
       ].join(" ")}
-      style={{ animationDelay }}
       onTouchStart={handleCardPress}
     >
       <div className="pr-7">
@@ -116,7 +114,12 @@ export default function ToolCard({ card, index }: ToolCardProps) {
 
   if (!isAvailable) {
     return (
-      <div aria-disabled="true" title="Próximamente">
+      <div
+        aria-disabled="true"
+        title="Próximamente"
+        className="animate-fadeIn"
+        style={{ animationDelay }}
+      >
         {cardBody}
       </div>
     )
@@ -125,7 +128,8 @@ export default function ToolCard({ card, index }: ToolCardProps) {
   return (
     <Link
       href={`/${slug}`}
-      className="group block"
+      className="group block animate-fadeIn"
+      style={{ animationDelay }}
       onClick={() => triggerHapticFeedback("medium")}
       data-interactive="true"
     >

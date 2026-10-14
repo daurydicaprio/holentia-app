@@ -49,9 +49,11 @@ holentia/
 │   │   ├── hydration-calculator/ # Calculadora de hidratación (Cuerpo)
 │   │   ├── calorie-calculator/  # Calculadora de calorías (Cuerpo)
 │   │   ├── electricity-calculator/ # Consumo eléctrico (Finanzas)
+│   │   ├── fuel-expense-calculator/ # Gasto de combustible (Finanzas)
 │   │   ├── card-cutoff/         # Corte y vencimiento tarjeta (Finanzas)
 │   │   ├── card-interest/       # Interés de tarjeta (Finanzas)
-│   │   └── risk-profile-test/   # Test de perfil de riesgo (Finanzas)
+│   │   ├── risk-profile-test/   # Test de perfil de riesgo (Finanzas)
+│   │   └── glossary/            # Glosario financiero (Finanzas)
 │   ├── ui/                   # Componentes de interfaz (botones, tarjetas, etc.)
 │   └── tool-seo/             # Shell server de herramientas: tool-page-shell, json-ld, tool-faq
 ├── hooks/                    # Custom hooks
@@ -67,7 +69,7 @@ holentia/
 │   └── utils.ts              # Funciones de utilidad
 ├── types/                    # Definiciones de tipos
 │   └── index.ts              # Tipos principales
-├── app/sitemap.ts            # Sitemap XML (21 URLs)
+├── app/sitemap.ts            # Sitemap XML (23 URLs)
 ├── app/robots.ts             # Robots.txt
 ├── app/error.tsx             # Página de error de ruta
 ├── app/global-error.tsx      # Error global (raíz)
@@ -107,12 +109,12 @@ holentia/
 ## SEO y Rendimiento
 
 - **Páginas de herramienta server-rendered**: cada herramienta usa `ToolPageShell` (server component) con H1, descripción y breadcrumb en el HTML inicial; la interactividad vive dentro como client components
-- **Metadata por página**: `generateMetadata` en las 11 herramientas, las 4 secciones, el home y las páginas informativas (title, description, canonical, openGraph, twitter) con template global `{página} | HOLENTIA` en `app/layout.tsx`
+- **Metadata por página**: `generateMetadata` en las 13 herramientas, las 4 secciones, el home y las páginas informativas (title, description, canonical, openGraph, twitter) con template global `{página} | HOLENTIA` en `app/layout.tsx`
 - **Datos estructurados JSON-LD**: `WebApplication` + `BreadcrumbList` + `FAQPage` por herramienta, `CollectionPage` + `BreadcrumbList` por sección, `WebSite` + `Organization` en el home, `FAQPage` en Ayuda
-- **FAQ visible en el HTML inicial** de las 11 herramientas (no escondida tras hydration gates)
-- **`app/sitemap.ts`**: 21 URLs (home, 4 secciones, 11 herramientas, 5 informativas)
+- **FAQ visible en el HTML inicial** de las 13 herramientas (no escondida tras hydration gates)
+- **`app/sitemap.ts`**: 23 URLs (home, 4 secciones, 13 herramientas, 5 informativas)
 - **`app/robots.ts`**: permite todo y apunta al sitemap
-- **`public/llms.txt`**: índice legible por LLMs con las 11 herramientas y sus fórmulas
+- **`public/llms.txt`**: índice legible por LLMs con las 13 herramientas y sus fórmulas
 - **Enlaces a herramientas en el HTML inicial** de las secciones (tabs y tarjetas server-rendered, sin `mounted` guard)
 - **Errores**: `app/error.tsx` + `app/global-error.tsx`; `app/ayuda/loading.tsx` con skeleton real
 
@@ -142,9 +144,11 @@ La aplicación está dividida en cuatro secciones principales, cada una con su p
 - **Calculadora de interés compuesto**: Visualización del crecimiento de ahorros con capacidad para guardar y comparar simulaciones
 - **Calculadora de préstamo**: Estrategia para eliminar deudas con capacidad para guardar y comparar simulaciones
 - **Calculadora consumo eléctrico**: Estima tu factura por kWh (tarifa RD) con subsidio aproximado
+- **Calculadora gasto combustible**: Estima tu gasto de gasolina por día, semana, mes y año según tu ruta, vehículo y precio del litro
 - **Corte y vencimiento tarjeta**: Descubre a qué corte entra tu compra y cuándo la pagas
 - **Calculadora interés tarjeta**: Mide cuánto te cuesta financiar el saldo de tu tarjeta y en cuántos meses liquidas
 - **Test de perfil de riesgo**: 12 preguntas honestas para saber en qué nivel invertir (resultado en pasos: título con tu perfil y "Quédate en el nivel N", arco de niveles navegable, fondo de emergencia con sugerencia de reparto por montos y gráfico de ahorro con comparación AFI, tasas de referencia editables por instrumento, distribución que respeta los mínimos de cada instrumento y proyección ponderada por tasa)
+- **Glosario financiero**: Términos de ahorro, crédito, intereses, fondos, bolsa y depósitos explicados con ejemplos
 
 ## Páginas Informativas
 
@@ -228,4 +232,4 @@ Este proyecto es propiedad de Daury DiCaprio. Todos los derechos reservados.
 
 ---
 
-**Última actualización**: Octubre 2026 (11 herramientas, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`)
+**Última actualización**: Octubre 2026 (13 herramientas, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`)

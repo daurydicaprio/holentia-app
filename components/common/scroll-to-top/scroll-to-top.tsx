@@ -11,18 +11,21 @@ interface ScrollToTopProps {
   mobileOnly?: boolean
 }
 
-// Mapa estático para que Tailwind genere las clases por sección
+// Mapa estático para que Tailwind genere las clases por sección.
+// Cuerpo usa texto negro sobre ámbar (blanco no alcanza contraste AA).
 const sectionButtonClass: Record<string, string> = {
-  mente: "bg-mente hover:bg-mente-dark dark:bg-mente-light dark:hover:bg-mente-lighter",
+  mente:
+    "bg-mente text-white hover:bg-mente-dark dark:bg-mente-light dark:text-gray-900 dark:hover:bg-mente-lighter",
   relaciones:
-    "bg-relaciones hover:bg-relaciones-dark dark:bg-relaciones-light dark:hover:bg-relaciones-lighter",
-  cuerpo: "bg-cuerpo hover:bg-cuerpo-dark dark:bg-cuerpo-light dark:hover:bg-cuerpo-lighter",
+    "bg-relaciones text-white hover:bg-relaciones-dark dark:bg-relaciones-light dark:text-gray-900 dark:hover:bg-relaciones-lighter",
+  cuerpo:
+    "bg-cuerpo text-black hover:bg-cuerpo-dark dark:bg-cuerpo-light dark:text-gray-900 dark:hover:bg-cuerpo-lighter",
   finanzas:
-    "bg-finanzas hover:bg-finanzas-dark dark:bg-finanzas-light dark:hover:bg-finanzas-lighter",
+    "bg-finanzas text-white hover:bg-finanzas-dark dark:bg-finanzas-light dark:text-gray-900 dark:hover:bg-finanzas-lighter",
 }
 
 const fallbackButtonClass =
-  "bg-gray-600 hover:bg-gray-700 dark:bg-gray-200 dark:hover:bg-white dark:text-gray-900"
+  "bg-gray-600 text-white hover:bg-gray-700 dark:bg-gray-200 dark:text-gray-900 dark:hover:bg-white"
 
 export default function ScrollToTop({ section, mobileOnly = false }: ScrollToTopProps) {
   const [showButton, setShowButton] = useState(false)
@@ -78,7 +81,7 @@ export default function ScrollToTop({ section, mobileOnly = false }: ScrollToTop
       data-interactive="true"
       aria-label="Volver arriba"
       onClick={scrollToTop}
-      className={`fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full text-white shadow-lg transition-all duration-200 hover:-translate-y-0.5 dark:text-gray-900 ${
+      className={`fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full shadow-lg transition-all duration-200 hover:-translate-y-0.5 ${
         buttonClass ?? fallbackButtonClass
       }`}
     >

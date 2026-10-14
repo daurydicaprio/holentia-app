@@ -185,9 +185,9 @@ export function LoveLanguagesTest() {
       <div className="space-y-6">
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
           <div className="flex items-center justify-center mb-6">
-            <Heart className="h-12 w-12 text-purple-600 dark:text-purple-400" />
+            <Heart className="h-12 w-12 text-relaciones dark:text-relaciones-light" />
           </div>
-          <h2 className="text-2xl font-bold text-center text-purple-600 dark:text-purple-400 mb-4">
+          <h2 className="text-xl font-bold text-center text-relaciones dark:text-relaciones-light mb-4">
             Tu lenguaje del amor principal
           </h2>
           <div className="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-xl mb-6">
@@ -204,7 +204,7 @@ export function LoveLanguagesTest() {
             <ul className="space-y-2">
               {languageDescriptions[primaryLanguage.language].tips.map((tip, index) => (
                 <li key={index} className="flex items-start gap-2">
-                  <span className="text-purple-600 dark:text-purple-400 mt-1">•</span>
+                  <span className="text-relaciones dark:text-relaciones-light mt-1">•</span>
                   <span className="text-gray-700 dark:text-gray-300">{tip}</span>
                 </li>
               ))}
@@ -224,7 +224,7 @@ export function LoveLanguagesTest() {
                   </div>
                   <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                     <div
-                      className="bg-purple-600 dark:bg-purple-400 h-2 rounded-full transition-all duration-500"
+                      className="bg-relaciones dark:bg-relaciones-light h-2 rounded-full transition-all duration-500"
                       style={{ width: `${(score / questions.length) * 100}%` }}
                     />
                   </div>
@@ -234,8 +234,9 @@ export function LoveLanguagesTest() {
           </div>
 
           <button
+            data-interactive="true"
             onClick={resetTest}
-            className="w-full flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            className="w-full flex items-center justify-center gap-2 bg-relaciones hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
           >
             <RotateCcw className="h-5 w-5" />
             Volver a hacer el test
@@ -255,13 +256,13 @@ export function LoveLanguagesTest() {
             <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
               Pregunta {currentQuestion + 1} de {questions.length}
             </span>
-            <span className="text-sm font-medium text-purple-600 dark:text-purple-400">
+            <span className="text-sm font-medium text-relaciones dark:text-relaciones-light">
               {Math.round(((currentQuestion + 1) / questions.length) * 100)}%
             </span>
           </div>
           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
             <div
-              className="bg-purple-600 dark:bg-purple-400 h-2 rounded-full transition-all duration-300"
+              className="bg-relaciones dark:bg-relaciones-light h-2 rounded-full transition-all duration-300"
               style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
             />
           </div>
@@ -272,9 +273,10 @@ export function LoveLanguagesTest() {
         <div className="space-y-3">
           {question.options.map((option, index) => (
             <button
+              data-interactive="true"
               key={index}
               onClick={() => handleAnswer(question.id, option.language)}
-              className="w-full text-left p-4 border-2 border-gray-200 dark:border-gray-700 rounded-lg hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all"
+              className="w-full text-left p-4 border-2 border-gray-200 dark:border-gray-700 rounded-lg hover:border-relaciones hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all"
             >
               <span className="text-gray-700 dark:text-gray-300">{option.text}</span>
             </button>

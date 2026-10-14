@@ -34,7 +34,7 @@ export default async function Image() {
             justifyContent: "center",
           }}
         >
-          <span style={{ color: "#ffffff", fontSize: 42, fontWeight: 700, letterSpacing: 3 }}>
+          <span style={{ color: "#ffffff", fontSize: 36, fontWeight: 700, letterSpacing: 2 }}>
             HOLENTIA
           </span>
         </div>
@@ -54,7 +54,7 @@ export default async function Image() {
     ),
     {
       ...size,
-      fonts: [{ name: "Geist", data: font, style: "normal", weight: 700 }],
+      fonts: [{ name: "Inter", data: font, style: "normal", weight: 700 }],
     },
   )
 }

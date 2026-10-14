@@ -88,7 +88,7 @@ Un rol = una clase. Ante la duda, copiar el valor del componente de referencia, 
 | Sub-superficie | `p-5` | tarjetas de resultado/lista `rounded-xl` |
 | Micro-contenedor | `p-4` (tip/ejemplo) · `p-3` (stat) | recuadros `rounded-lg` |
 | Grupos hermanos | `space-y-6` (lista) · `space-y-10` (grupos de sección) | |
-| Grids | `gap-4` (tarjetas 2-col de contenido) · `gap-5` (grid home) · `gap-6` (formularios) | |
+| Grids | `gap-4` (tarjetas de herramientas y contenido 2-col) · `gap-6` (formularios) | |
 
 ### 3.3 Tipografía de cuerpo
 
@@ -115,14 +115,14 @@ El borde se vuelve transparente al enfocar: solo el anillo de sección marca el 
 - Los hex de paleta **sin opacidad** (`bg-[#388e3c]`) se han migrado a tokens (`bg-finanzas`) — valores idénticos.
 - Los hex **con opacidad** (`bg-[#388e3c]/10`) se quedan así deliberadamente: los tokens no admiten `/n` (clase muerta). Usar nativos con alpha (`bg-black/5`) o glass.
 - `#81c784` (verde claro legado en dark de finanzas) **migrado**: en clases → `finanzas-light` (#66bb6a); en gráficos JS (Chart.js, `sliceColors`, `FUND_COLORS`) → hex canónico `#66bb6a` (o `#388e3c` si había colisión cromática en un pie). Los gráficos usan hex literales porque Chart.js necesita valores crudos, no clases.
-- Acentos locales de herramienta (`#1e3a2b` en budget) se conservan y se documentan aquí si se replican.
+- Acentos locales de herramienta (budget-simulator, familia verde salvia documentada): `#1e3a2b` (texto/fondo profundo), `#6a9c77` (acento medio) y `#a4c3a2` (acento claro). Se usan con opacidad (`/10`–`/80`) porque los tokens no admiten `/n`; solo dentro de budget.
 
 ### 4b. Página de sección (hub mente/relaciones/cuerpo/finanzas)
 
-`SectionPage` = Logo + `SectionTabs` + `SectionHeader` + `ToolsGrid` + `Footer`, todo con tokens:
+`SectionPage` = Logo + `SectionTabs` + `SectionHeader` + intro (opcional, server) + `ToolsGrid` + mini-FAQ nativa (`<details>`, si la sección define `faq`) + `Footer`, todo con tokens:
 
-- **Gradiente del H1** (`section-header.tsx`): mapa estático `gradientBySection` con vars `--color-{s}-active` / `-dark` (sin hex; fallback finanzas). H2 «¿Qué quieres aprender?»: `text-xl sm:text-2xl font-bold`.
-- **Footer** (`footer.tsx`): enlace de crédito por sección con clases `text-{s} hover:text-{s}-dark dark:text-{s}-light dark:hover:text-{s}-lighter` (cuerpo arranca en `-dark`); sin sección → neutro `text-gray-600 dark:text-gray-300` + `underline underline-offset-2`. Sin estilos inline ni manipulación JS de `style`.
+- **Gradiente del H1** (`section-header.tsx`): mapa estático `gradientBySection` con vars `--color-{s}-active` / `-dark` (sin hex; fallback finanzas). **Cuerpo arranca en `-active-dark` → `-active-darkest`**: el ámbar puro no alcanza AA sobre fondo claro. H2 «¿Qué quieres aprender?»: `text-xl sm:text-2xl font-bold`.
+- **Footer** (`footer.tsx`): nav server-rendered de enlaces internos (`/que-es-holentia`, `/ayuda`, `/apoyar`, `/aviso-legal`, `/politica-cookies` — obligatorio para rastreo de páginas legales) + enlace de crédito por sección con clases `text-{s} hover:text-{s}-dark dark:text-{s}-light dark:hover:text-{s}-lighter` (cuerpo arranca en `-dark`); sin sección → neutro `text-gray-600 dark:text-gray-300` + `underline underline-offset-2`. Sin estilos inline, sin opacidades que hundan contraste, sin emojis decorativos.
 
 ### 4c. Páginas básicas (home, ayuda, apoyar, legales, qué-es) — monocromo de marca
 
@@ -156,23 +156,24 @@ Superficie **gradiente** por sección (no glass) para garantizar contraste en cl
 
 - **Light**: `bg-gradient-to-br from-{s} to-{s}-dark`, texto blanco (cuerpo: `text-black`).
 - **Dark**: `dark:bg-none dark:bg-{s}-glass dark:text-{s}-text`.
-- Borde `border-{s}-border`, hover `hover:border-{s}-light hover:-translate-y-0.5` + sombra mayor + efecto 3D (solo `hover:hover`).
+- Borde `border-{s}-border`, hover `hover:border-{s}-light hover:-translate-y-0.5` + sombra mayor + efecto 3D (solo `hover:hover`; el tilt JS pisa el transform — coexisten porque `animate-fadeIn` vive en el `<Link>` externo, NUNCA en el div con transform).
 - Categoría: `text-white/85 dark:text-{s}-lighter` (cuerpo: `text-black/70`).
-- No disponible: capa `.card-coming-soon` (overlay blur + "Próximamente") + candado + `opacity-60`, `cursor-default`.
-- Contenedor es `<Link>` con `group` + `data-interactive="true"`; haptic en touch.
+- No disponible: capa `.card-coming-soon` (overlay `rgba(0,0,0,0.45)` + blur + "Próximamente") + candado + `opacity-60`, `cursor-default`.
+- Contenedor es `<Link>` con `group` + `data-interactive="true"` + `animate-fadeIn` + `style={{ animationDelay }}`; haptic en touch.
 
 ### ToolsGrid (`components/sections/tools-grid.tsx`)
 
-- **Disponibles primero** (siempre en HTML), no disponibles colapsados tras botón "Ver todas las herramientas" (`hidden`/`grid`).
-- Botón fantasma con color de sección (`text-{s} hover:text-{s}-darkest dark:text-{s}-light`) + chevron rotable.
+- **Disponibles primero** (siempre en HTML), no disponibles colapsados tras botón "Ver todas las herramientas" (`hidden`/`grid`) con `aria-expanded`/`aria-controls` + `data-interactive="true"`.
+- Botón fantasma con color de sección (`text-{s} hover:text-{s}-darkest dark:text-{s}-light`) + chevron rotable + foco visible `focus-visible:ring-{s}`.
+- Grilla `gap-4`.
 
 ### SectionTabs (`components/sections/section-tabs.tsx`)
 
-Server component. Links a `/` + 4 secciones desde array estático. Activa: `color: var(--color-{s}-active)` + underline `div` (2rem × 3px, `rounded-full`). Inactiva: `text-gray-600 dark:text-gray-400`.
+Client component. Links a 4 secciones desde array estático. Activa: token `{s}` + underline `div` (2rem × 3px, `rounded-full`). Inactiva: `text-gray-600 dark:text-gray-400` + `hover:bg-black/5 dark:hover:bg-white/10` (relleno Y texto; sin `opacity-*`). Foco `focus-visible:ring-2 ring-{s}`. Prop `neutral` (home, página monocroma): hovers neutros `hover:text-gray-900 dark:hover:text-white`, sin colores de sección.
 
 ### ToolPageShell (`components/tool-seo/tool-page-shell.tsx`)
 
-H1 centrado en color de sección + descripción + underline · botones outline "Volver a {sección}" / "Hacer donación" (`border-{s} text-{s} dark:border-{s}-light dark:text-{s}-light`; hover claro: relleno `{s}-dark` + texto blanco — cuerpo: `{s}` + texto negro; hover oscuro: relleno `{s}-light` + texto negro; sin escala) · `children` · FAQ · `JsonLd`. Sin breadcrumb visible (el `BreadcrumbList` va en JSON-LD).
+Breadcrumb visible server-rendered (`Inicio / Sección / Herramienta`, `text-xs` + links `hover:underline`) + H1 centrado en color de sección + descripción + underline · botones outline "Volver a {sección}" / "Hacer donación" visibles también en móvil (`border-{s} text-{s} dark:border-{s}-light dark:text-{s}-light`; hover claro: relleno `{s}-dark` + texto blanco — cuerpo: `{s}` + texto negro; hover oscuro: relleno `{s}-light` + texto negro; sin escala; `data-interactive="true"`) · `children` · FAQ · `JsonLd` (WebApplication + BreadcrumbList + FAQPage).
 
 ### FAQ acordeón (`components/tool-seo/tool-faq.tsx`)
 
@@ -187,7 +188,7 @@ Client component. Una pregunta abierta a la vez (`openIndex`). Fila `button` con
 
 Patrón buscador + chips + resultados agrupados (referencia: `glossary.tsx`):
 
-- **Panel hero del buscador**: tarjeta a ancho completo con la receta ToolCard (§4): `rounded-2xl border border-finanzas-border bg-gradient-to-br from-finanzas to-finanzas-dark p-6 sm:p-8 text-white dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text`. Dentro, contenido centrado en `mx-auto max-w-2xl`: `h2 text-center text-xl sm:text-2xl font-bold` (hereda el color), subtítulo `text-center text-sm text-white/85 dark:text-finanzas-lighter` e input `relative mt-4`. El input búsqueda: `h-12 rounded-md border-gray-300 bg-white pl-12 pr-12 text-base` + icono `Search` absoluto `left-4 h-5 w-5` · foco `focus:ring-finanzas focus:border-finanzas` · dark: `dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100` + foco `-light` · botón limpiar `X` a la derecha · `type="search"` + `sr-only` label.
+- **Panel hero del buscador**: tarjeta a ancho completo con la receta ToolCard (§4): `rounded-2xl border border-finanzas-border bg-gradient-to-br from-finanzas to-finanzas-dark p-6 sm:p-8 text-white dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text`. Dentro, contenido centrado en `mx-auto max-w-2xl`: `h2 text-center text-xl sm:text-2xl font-bold` (hereda el color), subtítulo `text-center text-sm text-white/85 dark:text-finanzas-lighter` e input `relative mt-4`. El input búsqueda: `h-12 rounded-md border-gray-300 bg-white pl-12 pr-12 text-base` + icono `Search` absoluto `left-4 h-5 w-5` · foco canónico `focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light` · dark: `dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100` · botón limpiar `X` a la derecha · `type="search"` + `sr-only` label.
 - **Chips de categoría** (`rounded-md`, no pill): base `border px-3 py-1.5 text-sm font-medium` · activo `border-finanzas-dark bg-finanzas-dark text-white dark:border-finanzas-light dark:bg-finanzas-light dark:text-black` · inactivo con el hover de fila FAQ (`hover:bg-black/5 hover:text-finanzas dark:hover:bg-white/10 dark:hover:text-finanzas-light`) · `aria-pressed`.
 - **Contador** con icono `Wallet` + `aria-live="polite"` (`N de M términos`), alineado a la derecha de la barra de chips (`ml-auto` en el flex).
 - **Resultados**: agrupados por categoría con `h2 text-xl font-bold text-finanzas-dark dark:text-finanzas-light` (SIN conteo numérico) y separación `space-y-10` entre grupos, grid `sm:grid-cols-2 gap-4`; tarjetas `group rounded-xl border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-800` con hover de escaneo (no son enlaces): `transition-colors hover:border-finanzas hover:bg-black/5 dark:hover:border-finanzas-light dark:hover:bg-white/10` + título que reacciona `group-hover:text-finanzas-darkest dark:group-hover:text-finanzas-lighter`; título `h3 text-lg font-semibold text-finanzas-dark dark:text-finanzas-light`, cuerpo `text-sm text-gray-700 dark:text-gray-300`, ejemplo opcional en recuadro sólido `bg-finanzas-lighter text-gray-800 dark:bg-finanzas-dark dark:text-gray-200` con icono `Lightbulb text-finanzas-dark dark:text-finanzas-light`. Enlace interno a herramienta (campo `related` del término): `Link` de next/link `mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-finanzas hover:text-finanzas-dark dark:text-finanzas-light dark:hover:text-finanzas-lighter` + icono `ArrowRight h-4 w-4`, con `data-interactive` y haptic `medium` (interlinking SEO + UX).
@@ -222,5 +223,5 @@ Receta canónica para calculadoras/tests con varios campos (refs: `compound-inte
 
 - `aria-expanded` + `aria-controls` en acordeones/desplegables; `aria-hidden` en paneles colapsados.
 - Opciones de quiz con `aria-pressed`; elementos navegables con `role="button" tabIndex` + Enter/Espacio.
-- `data-interactive="true"` en todo elemento que deba ignorar el swipe navigation.
+- `data-interactive="true"` en todo elemento que deba ignorar el swipe navigation. El guard de `SectionSwipeNavigation` también excluye por tag (`input, button, a, select, textarea`) y exige dirección horizontal dominante; el de `TabSwipeNavigation` consume `data-interactive`. Mantener ambos: defensa en profundidad.
 - Contraste: texto blanco solo sobre fondos con alpha efectivo ≥ ~0.75 sobre blanco (gradiente sólido) o sobre dark glass. Nunca blanco sobre glass claro.

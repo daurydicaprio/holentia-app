@@ -62,8 +62,8 @@ export function AmortizationTable({
 
   // Asegurar que los bordes de la tabla sean visibles y redondeados
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-sm border border-gray-200 dark:border-gray-700">
-      <h2 className="text-xl font-bold text-center text-finanzas mb-6">
+    <div className="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700">
+      <h2 className="text-xl font-bold text-center text-finanzas mb-6 dark:text-finanzas-light">
         Tabla de amortización
         <span className="block w-16 h-1 bg-finanzas mx-auto mt-2"></span>
       </h2>
@@ -71,6 +71,7 @@ export function AmortizationTable({
       {/* Botones para cambiar vista - Aumentados en ancho */}
       <div className="flex justify-center mb-4 space-x-4">
         <button
+          data-interactive="true"
           onClick={() => setTableView("annual")}
           className={`px-6 py-2 rounded-md transition-colors min-w-[120px] ${
             tableView === "annual"
@@ -81,6 +82,7 @@ export function AmortizationTable({
           Anual
         </button>
         <button
+          data-interactive="true"
           onClick={() => setTableView("monthly")}
           disabled={contributionFrequency !== 12}
           className={`px-6 py-2 rounded-md transition-colors min-w-[120px] ${
@@ -184,6 +186,7 @@ export function AmortizationTable({
       {totalPages > 1 && (
         <div className="flex justify-center items-center mt-4 space-x-2">
           <button
+            data-interactive="true"
             onClick={() => changePage(1)}
             disabled={currentPage === 1}
             className={`px-3 py-1 rounded-md ${
@@ -195,6 +198,7 @@ export function AmortizationTable({
             &laquo;
           </button>
           <button
+            data-interactive="true"
             onClick={() => changePage(currentPage - 1)}
             disabled={currentPage === 1}
             className={`px-3 py-1 rounded-md ${
@@ -209,6 +213,7 @@ export function AmortizationTable({
             Página {currentPage} de {totalPages}
           </span>
           <button
+            data-interactive="true"
             onClick={() => changePage(currentPage + 1)}
             disabled={currentPage === totalPages}
             className={`px-3 py-1 rounded-md ${
@@ -220,6 +225,7 @@ export function AmortizationTable({
             &rsaquo;
           </button>
           <button
+            data-interactive="true"
             onClick={() => changePage(totalPages)}
             disabled={currentPage === totalPages}
             className={`px-3 py-1 rounded-md ${

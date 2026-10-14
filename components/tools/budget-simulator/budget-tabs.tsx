@@ -11,6 +11,7 @@ export function BudgetTabs({ activeTab, onTabChange }: BudgetTabsProps) {
   return (
     <div className="flex p-2 gap-1 bg-gray-50 dark:bg-gray-800 rounded-t-lg">
       <button
+        data-interactive="true"
         onClick={() => onTabChange("income")}
         className={`flex items-center justify-center gap-2 py-2 px-3 text-sm font-medium flex-1 rounded-md transition-colors ${
           activeTab === "income"
@@ -23,6 +24,7 @@ export function BudgetTabs({ activeTab, onTabChange }: BudgetTabsProps) {
       </button>
 
       <button
+        data-interactive="true"
         onClick={() => onTabChange("expenses")}
         className={`flex items-center justify-center gap-2 py-2 px-3 text-sm font-medium flex-1 rounded-md transition-colors ${
           activeTab === "expenses"
@@ -35,6 +37,7 @@ export function BudgetTabs({ activeTab, onTabChange }: BudgetTabsProps) {
       </button>
 
       <button
+        data-interactive="true"
         onClick={() => onTabChange("summary")}
         className={`flex items-center justify-center gap-2 py-2 px-3 text-sm font-medium flex-1 rounded-md transition-colors ${
           activeTab === "summary"

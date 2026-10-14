@@ -17,19 +17,19 @@ export function LoanDisclaimer() {
       </h3>
       <ul className="space-y-1 text-gray-600 dark:text-gray-400">
         <li className="flex items-start">
-          <span className="text-finanzas mr-2">•</span>
+          <span className="text-finanzas mr-2 dark:text-finanzas-light">•</span>
           Los resultados de esta simulación son aproximados.
         </li>
         <li className="flex items-start">
-          <span className="text-finanzas mr-2">•</span>
+          <span className="text-finanzas mr-2 dark:text-finanzas-light">•</span>
           Se consideran meses de 30 días y años de 360 días.
         </li>
         <li className="flex items-start">
-          <span className="text-finanzas mr-2">•</span>
+          <span className="text-finanzas mr-2 dark:text-finanzas-light">•</span>
           No se contempló período de gracia y el primer vencimiento es a 30 días.
         </li>
         <li className="flex items-start">
-          <span className="text-finanzas mr-2">•</span>
+          <span className="text-finanzas mr-2 dark:text-finanzas-light">•</span>
           En caso de préstamos hipotecarios, la cuota mensual aumentaría producto del seguro de vida y de propiedad, no
           incluidos en el cálculo.
         </li>

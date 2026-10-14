@@ -22,7 +22,7 @@ const homeJsonLd = {
       "@type": "WebSite",
       name: SITE_NAME,
       url: SITE_URL,
-      inLanguage: "es",
+      inLanguage: "es-DO",
       description:
         "Herramientas gratuitas de bienestar integral: mente, relaciones, cuerpo y finanzas. Calculadoras, simuladores y tests que funcionan en tu dispositivo.",
     },
@@ -30,6 +30,10 @@ const homeJsonLd = {
       "@type": "Organization",
       name: SITE_NAME,
       url: SITE_URL,
+      logo: `${SITE_URL}/apple-icon.png`,
+      description:
+        "Herramientas gratuitas de bienestar integral que funcionan en el navegador, sin cuenta ni datos personales.",
+      inLanguage: "es-DO",
     },
   ],
 }
@@ -44,18 +48,18 @@ export default function Home() {
         <div className="relative w-full flex justify-center mb-8">
           <Logo size="lg" />
 
-          <div className="absolute right-0 sm:right-4 md:right-12 lg:right-20 top-4">
+          <div className="absolute right-0 sm:right-4 md:right-6 top-4">
             <MenuButton />
           </div>
         </div>
 
-        <SectionTabs />
+        <SectionTabs neutral />
 
-        <div className="mt-12 text-center max-w-3xl px-4 sm:px-6">
+        <div className="mt-12 text-center max-w-3xl px-4">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-balance text-gray-900 dark:text-gray-100">
             Tu camino hacia el bienestar integral
           </h1>
-          <BrandDots className="mt-5" />
+          <BrandDots className="mt-6" />
 
           <p className="mt-6 text-lg sm:text-xl leading-relaxed text-pretty text-gray-700 dark:text-gray-300">
             <span className="font-bold text-gray-900 dark:text-gray-100">HOLENTIA</span> es tu compañero en el

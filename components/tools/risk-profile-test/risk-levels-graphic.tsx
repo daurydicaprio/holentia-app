@@ -70,7 +70,7 @@ export const LEVELS: LevelDef[] = [
   },
 ]
 
-const RISK_COLORS = ["#2e7d32", "#43a047", "#66bb6a", "#e53935", "#b71c1c"]
+const RISK_COLORS = ["#388e3c", "#66bb6a", "#a5d6a7", "#e53935", "#b71c1c"]
 /** Color de los niveles inactivos: opacos/grises, en claro y oscuro. */
 const INACTIVE_GRAY = "#9ca3af"
 

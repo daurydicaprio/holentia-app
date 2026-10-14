@@ -193,7 +193,7 @@ interface Instrument {
   group: "En pesos" | "En dólares"
 }
 
-const sliceColors = ["#2e7d32", "#66bb6a", "#a5d6a7", "#1b5e20", "#388e3c", "#c8e6c9"]
+const sliceColors = ["#388e3c", "#66bb6a", "#a5d6a7", "#1b5e20", "#388e3c", "#c8e6c9"]
 
 const situationMeta: Record<"A" | "B" | "C", { title: string; pickIf: string }> = {
   A: {
@@ -1166,7 +1166,7 @@ export function RiskProfileTest() {
   }
 
   const inputClass =
-    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-finanzas focus:border-transparent"
+    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
 
   const chipClass = (active: boolean) =>
     `px-3 py-1.5 text-sm rounded-md font-medium transition-colors ${
@@ -1215,7 +1215,7 @@ export function RiskProfileTest() {
 
           <div className="flex items-center justify-between mt-5">
             <span className="text-xs text-gray-500 dark:text-gray-400">
-              {savedFlash ? "Guardado local ✓" : "Se guarda en tu navegador"}
+              {savedFlash ? "Guardado local" : "Se guarda en tu navegador"}
             </span>
             <button
               onClick={clearData}
@@ -1379,8 +1379,7 @@ export function RiskProfileTest() {
     <div className="space-y-8 sm:space-y-10">
       {/* 1 · Héroe */}
       <div
-        className="relative rounded-xl px-7 pb-7 pt-12 sm:px-10 sm:pb-10 sm:pt-10 text-white text-center shadow-lg"
-        style={{ background: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)" }}
+        className="relative rounded-xl px-7 pb-7 pt-12 sm:px-10 sm:pb-10 sm:pt-10 text-white text-center shadow-lg bg-gradient-to-br from-finanzas to-finanzas-dark dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text"
       >
         <button
           onClick={() => {
@@ -1531,7 +1530,7 @@ export function RiskProfileTest() {
                               ? "text-red-700 dark:text-red-400"
                               : "text-red-700/70 dark:text-red-400/70"
                             : isColored
-                              ? "text-finanzas"
+                              ? "text-finanzas dark:text-finanzas-light"
                               : "text-gray-500 dark:text-gray-400"
                         }
                       >
@@ -1625,7 +1624,7 @@ export function RiskProfileTest() {
             <div className="rounded-xl border border-[#388e3c]/30 bg-[#388e3c]/5 p-4 sm:p-5 dark:bg-[#388e3c]/10">
               {/* A · Qué es */}
               <div className="flex items-start gap-3">
-                <PiggyBank className="mt-0.5 h-5 w-5 flex-shrink-0 text-finanzas" aria-hidden />
+                <PiggyBank className="mt-0.5 h-5 w-5 flex-shrink-0 text-finanzas dark:text-finanzas-light" aria-hidden />
                 <div>
                   <p className="text-sm font-bold text-gray-900 dark:text-gray-100">
                     Primero: tu fondo de emergencia
@@ -1816,7 +1815,7 @@ export function RiskProfileTest() {
           {/* Ya tiene colchón */}
           {hasFund && fundSize > 0 && (
             <div className="rounded-lg border border-[#388e3c]/40 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 p-4 flex items-start gap-3">
-              <CheckCircle2 className="h-5 w-5 text-finanzas flex-shrink-0 mt-0.5" />
+              <CheckCircle2 className="h-5 w-5 text-finanzas flex-shrink-0 mt-0.5 dark:text-finanzas-light" />
               <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                 <strong className="text-gray-900 dark:text-gray-100">¡Excelente! Ya tienes tu colchón financiero ✓</strong>
               </p>
@@ -1833,7 +1832,7 @@ export function RiskProfileTest() {
           {hasFund && fundSize > 0 && (
             <div className="rounded-xl border border-[#388e3c]/40 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 p-5">
               <div className="flex items-center gap-2 mb-3">
-                <PiggyBank className="h-5 w-5 text-finanzas flex-shrink-0" aria-hidden />
+                <PiggyBank className="h-5 w-5 text-finanzas flex-shrink-0 dark:text-finanzas-light" aria-hidden />
                 <p className="text-sm font-bold text-gray-900 dark:text-gray-100">
                   Sugerencia para tu colchón de {formatMoney(fundSize, currency)}
                 </p>
@@ -1929,7 +1928,7 @@ export function RiskProfileTest() {
           {/* Simulador de presupuesto: de dónde sale el ahorro */}
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[#388e3c]/40 bg-[#388e3c]/5 p-4 dark:bg-[#388e3c]/10">
             <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-              <ClipboardList className="h-5 w-5 flex-shrink-0 text-finanzas" aria-hidden />
+              <ClipboardList className="h-5 w-5 flex-shrink-0 text-finanzas dark:text-finanzas-light" aria-hidden />
               <span>Para ahorrar más al mes y llegar antes a tu colchón, organiza tus ingresos y gastos.</span>
             </div>
             <Link
@@ -1950,14 +1949,14 @@ export function RiskProfileTest() {
                   <ul className="space-y-3">
                     {currency === "DOP" && fundSize >= INSTR_MIN.DOP.liquid && (
                       <li>
-                        <strong className="text-finanzas">AFI líquido</strong> — mín.{" "}
+                        <strong className="text-finanzas dark:text-finanzas-light">AFI líquido</strong> — mín.{" "}
                         {formatMoney(INSTR_MIN.DOP.liquid, "DOP")}. Retiro lun–vie 9am–3pm (sin feriados ni festivos).
                         Para emergencias que aceptan tarjeta o retiros parciales.
                       </li>
                     )}
                     {currency === "DOP" && fundSize >= INSTR_MIN.DOP.cert && (
                       <li>
-                        <strong className="text-finanzas">Certificado</strong> — mín.{" "}
+                        <strong className="text-finanzas dark:text-finanzas-light">Certificado</strong> — mín.{" "}
                         {formatMoney(INSTR_MIN.DOP.cert, "DOP")}. App, web o sucursal. Plazos 30/90/180/360 días.
                         <span className="mt-1 block text-amber-700 dark:text-amber-400">
                           Cancelar antes de tiempo: <strong>3% anual sobre el capital</strong> (solo los días que
@@ -1968,14 +1967,14 @@ export function RiskProfileTest() {
                     )}
                     {currency === "DOP" && fundSize >= INSTR_MIN.DOP.d30 && (
                       <li>
-                        <strong className="text-finanzas">Fondo a 30 días</strong> — mín.{" "}
+                        <strong className="text-finanzas dark:text-finanzas-light">Fondo a 30 días</strong> — mín.{" "}
                         {formatMoney(INSTR_MIN.DOP.d30, "DOP")}. Retiro en ventana de ~5 días fijados por el fondo
                         (ej. del 25 al 30). Penalidad si sacas antes del plazo.
                       </li>
                     )}
                     {currency === "USD" && fundSize >= INSTR_MIN.USD.d30 && (
                       <li>
-                        <strong className="text-finanzas">Fondo 30 días (USD)</strong> — mín.{" "}
+                        <strong className="text-finanzas dark:text-finanzas-light">Fondo 30 días (USD)</strong> — mín.{" "}
                         {formatMoney(INSTR_MIN.USD.d30, "USD")}. En dólares no hay AFI líquido: el mínimo es plazo
                         de 30 días. Penalidad si retiras antes.
                       </li>
@@ -2022,14 +2021,14 @@ export function RiskProfileTest() {
           {/* 3 · CTA: fechas de corte y vencimiento (texto a la izquierda, botón a la derecha) */}
           <div className="flex flex-col gap-3 rounded-xl border border-[#388e3c]/40 bg-[#388e3c]/5 p-4 dark:bg-[#388e3c]/10 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-2 text-sm leading-snug text-gray-700 dark:text-gray-300 sm:flex-1">
-              <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-finanzas" aria-hidden />
+              <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-finanzas dark:text-finanzas-light" aria-hidden />
               <span className="sm:max-w-md">
                 ¿No dominas tus fechas de corte y vencimiento? Aprende a usar la tarjeta a tu favor.
               </span>
             </div>
             <Link
               href="/tarjeta-corte-vencimiento"
-              className="inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg border border-finanzas bg-white px-4 py-2.5 text-sm font-semibold text-finanzas transition-colors hover:bg-[#388e3c]/10 dark:bg-gray-900/40"
+              className="inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg border border-finanzas bg-white px-4 py-2.5 text-sm font-semibold text-finanzas transition-colors hover:bg-[#388e3c]/10 dark:bg-gray-900/40 dark:text-finanzas-light"
               data-interactive="true"
             >
               Comprende tu fecha de corte y vencimiento →
@@ -2058,7 +2057,7 @@ export function RiskProfileTest() {
                 value={capitalInput}
                 onChange={(e) => setCapitalInput(formatWithCommas(filterNumeric(e.target.value)))}
                 placeholder={currency === "DOP" ? "Ej: 25,000" : "Ej: 1,500"}
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 sm:w-auto sm:max-w-[13rem]"
+                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 sm:w-auto sm:max-w-[13rem]"
                 data-interactive="true"
               />
               <div className="flex gap-2">
@@ -2146,7 +2145,7 @@ export function RiskProfileTest() {
                           }
                         })
                       }
-                      className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 pr-7 text-sm placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500"
+                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 pr-7 text-sm placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500"
                       data-interactive="true"
                     />
                     <span className="absolute inset-y-0 right-2.5 flex items-center text-xs text-gray-400">%</span>
@@ -2313,14 +2312,14 @@ export function RiskProfileTest() {
                 return (
                   <div key={group} className="mb-4 last:mb-0">
                     <p className="mb-2.5 flex justify-center">
-                      <span className="inline-flex items-center rounded-full border border-[#388e3c]/40 bg-[#388e3c]/15 px-4 py-1 text-sm font-bold uppercase tracking-wider text-finanzas">
+                      <span className="inline-flex items-center rounded-full border border-[#388e3c]/40 bg-[#388e3c]/15 px-4 py-1 text-sm font-bold uppercase tracking-wider text-finanzas dark:text-finanzas-light">
                         {group}
                       </span>
                     </p>
                     <ul className="space-y-2">
                       {items.map((inst) => (
                         <li key={inst.name} className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                          <strong className="text-finanzas">{inst.name}</strong>
+                          <strong className="text-finanzas dark:text-finanzas-light">{inst.name}</strong>
                           {inst.min > 0 && <> (mín. {formatMoney(inst.min, currency)})</>} — {inst.note}
                         </li>
                       ))}
@@ -2367,7 +2366,7 @@ export function RiskProfileTest() {
 
             <div className="flex items-center justify-between gap-3 flex-wrap rounded-lg border border-[#388e3c]/40 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 p-4">
               <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-                <Calculator className="h-5 w-5 text-finanzas flex-shrink-0" />
+                <Calculator className="h-5 w-5 text-finanzas flex-shrink-0 dark:text-finanzas-light" />
                 <span>
                   Tasa combinada de tu distribución: <strong>~{blendedRate.toFixed(1)}%</strong> anual.
                 </span>
@@ -2405,7 +2404,7 @@ export function RiskProfileTest() {
             href="https://www.sb.gob.do/supervisados/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-sky-600 hover:bg-sky-700 text-white px-5 py-3 text-base font-semibold transition-colors"
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-finanzas hover:bg-finanzas-dark text-white px-5 py-3 text-base font-semibold transition-colors"
             data-interactive="true"
           >
             Ver instituciones reguladas en República Dominicana →
@@ -2429,7 +2428,7 @@ export function RiskProfileTest() {
             triggerHapticFeedback("light")
             router.push("/finanzas")
           }}
-          className="flex-1 flex items-center justify-center gap-2 border border-finanzas text-finanzas hover:bg-[#388e3c]/10 px-6 py-3.5 rounded-lg font-medium text-base transition-colors"
+          className="flex-1 flex items-center justify-center gap-2 border border-finanzas text-finanzas hover:bg-finanzas hover:text-white dark:hover:bg-finanzas-light dark:hover:text-black px-6 py-3.5 rounded-lg font-medium text-base transition-colors dark:text-finanzas-light"
           data-interactive="true"
         >
           Volver a finanzas
@@ -2438,7 +2437,7 @@ export function RiskProfileTest() {
 
       <div className="flex items-center justify-between">
         <span className="text-xs text-gray-500 dark:text-gray-400">
-          {savedFlash ? "Guardado local ✓" : `Nivel ${effectiveLevel} · guardado local`}
+          {savedFlash ? "Guardado local" : `Nivel ${effectiveLevel} · guardado local`}
         </span>
         <button
           onClick={clearData}

@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { ArrowLeft, Coffee, Gift, Heart, Rocket, Sparkles, Users } from "lucide-react"
-import { pageMetadata } from "@/lib/seo"
+import { pageMetadata, pageJsonLd } from "@/lib/seo"
+import JsonLd from "@/components/tool-seo/json-ld"
 
 export function generateMetadata() {
   return pageMetadata(
@@ -35,6 +36,7 @@ const impactItems = [
 export default function ApoyarPage() {
   return (
     <main className="min-h-screen flex flex-col">
+      <JsonLd data={pageJsonLd("Apoyar", "/apoyar")} />
       <div className="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6">
         <div className="flex items-center justify-between mb-10">
           <Link

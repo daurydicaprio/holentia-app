@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { Trash2, Info, Zap } from "lucide-react"
+import { Trash2, Info, Zap, CheckCircle2 } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
@@ -142,7 +142,7 @@ export function ElectricityCalculator() {
           value={kwhInput}
           onChange={(e) => setKwhInput(e.target.value)}
           placeholder="Ej: 445"
-          className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-finanzas focus:border-transparent"
+          className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
           data-interactive="true"
         />
 
@@ -151,7 +151,7 @@ export function ElectricityCalculator() {
             <button
               key={v}
               onClick={() => setQuick(v)}
-              className="px-3 py-1.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-finanzas dark:text-finanzas-light font-medium transition-colors"
+              className="px-3 py-1.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 hover:text-finanzas-dark dark:hover:text-finanzas-lighter text-finanzas dark:text-finanzas-light font-medium transition-colors"
               data-interactive="true"
             >
               {v} kWh
@@ -161,7 +161,7 @@ export function ElectricityCalculator() {
 
         <div className="flex items-center justify-between mt-6">
           <span className="text-xs text-gray-500 dark:text-gray-400">
-            {savedFlash ? "Guardado local ✓" : "Se guarda en tu navegador"}
+            {savedFlash ? "Guardado local" : "Se guarda en tu navegador"}
           </span>
           <button
             onClick={clearData}
@@ -225,12 +225,12 @@ export function ElectricityCalculator() {
                 A PAGAR EN RD$
               </span>
               <span className="flex items-center gap-2">
-                <span className="text-lg" title="Cálculo exacto con la tarifa vigente">✓</span>
+                <span className="text-lg" title="Cálculo exacto con la tarifa vigente"><CheckCircle2 className="h-4 w-4" aria-hidden="true" /></span>
                 <span className="text-2xl sm:text-3xl whitespace-nowrap">{formatRD(result.total)}</span>
               </span>
             </div>
             <div className="px-5 py-3 flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800">
-              <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-finanzas" />
+              <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-finanzas dark:text-finanzas-light" />
               <span>
                 <strong>Total exacto</strong> con la tarifa vigente. El{" "}
                 <strong>subsidio del gobierno es una estimación</strong> (~45%) y puede variar{" "}

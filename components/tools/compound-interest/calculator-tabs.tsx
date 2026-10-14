@@ -11,6 +11,7 @@ export function CalculatorTabs({ activeTab, onTabChange }: CalculatorTabsProps) 
   return (
     <div className="flex p-2 gap-1 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
       <button
+        data-interactive="true"
         onClick={() => onTabChange("chart")}
         className={`flex items-center justify-center gap-2 py-2 px-3 text-sm font-medium flex-1 rounded-md transition-colors ${
           activeTab === "chart"
@@ -23,6 +24,7 @@ export function CalculatorTabs({ activeTab, onTabChange }: CalculatorTabsProps) 
       </button>
 
       <button
+        data-interactive="true"
         onClick={() => onTabChange("summary")}
         className={`flex items-center justify-center gap-2 py-2 px-3 text-sm font-medium flex-1 rounded-md transition-colors ${
           activeTab === "summary"

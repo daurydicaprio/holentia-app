@@ -2,6 +2,7 @@
 
 import type { ExpenseItem } from "@/hooks/use-budget-simulator"
 import { useMediaQuery } from "@/hooks/use-media-query"
+import { X } from "lucide-react"
 
 interface ExpenseTableProps {
   expenseItems: ExpenseItem[]
@@ -34,9 +35,9 @@ export function ExpenseTable({
   const totalAmountPercentage = totalIncome > 0 ? (totalAmount / totalIncome) * 100 : 0
 
   return (
-    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden">
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden">
       <div className="bg-gray-50 dark:bg-gray-800 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-        <h2 className="text-base font-medium text-[#1e3a2b] dark:text-[#6a9c77]">Gastos mensuales</h2>
+        <h2 className="text-xl font-bold text-[#1e3a2b] dark:text-[#6a9c77]">Gastos mensuales</h2>
       </div>
 
       <div className="overflow-x-auto">
@@ -102,11 +103,12 @@ export function ExpenseTable({
                     value={item.target}
                     onChange={(e) => onUpdateTarget(item.id, Number(e.target.value))}
                     min="0"
-                    className={`w-full p-1.5 text-sm border rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-finanzas focus:border-transparent ${
+                    className={`w-full p-1.5 text-sm border rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light ${
                       item.target > totalIncome && totalIncome > 0
                         ? "border-red-500 dark:border-red-500"
                         : "border-gray-300 dark:border-gray-600"
                     }`}
+                    data-interactive="true"
                   />
                 </td>
                 {!isMobile && (
@@ -120,11 +122,12 @@ export function ExpenseTable({
                     value={item.amount}
                     onChange={(e) => onUpdateAmount(item.id, Number(e.target.value))}
                     min="0"
-                    className={`w-full p-1.5 text-sm border rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-finanzas focus:border-transparent ${
+                    className={`w-full p-1.5 text-sm border rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light ${
                       item.amount > totalIncome && totalIncome > 0
                         ? "border-red-500 dark:border-red-500"
                         : "border-gray-300 dark:border-gray-600"
                     }`}
+                    data-interactive="true"
                   />
                 </td>
                 {!isMobile && (
@@ -146,10 +149,11 @@ export function ExpenseTable({
                 <td className="py-2 px-3">
                   <button
                     onClick={() => onRemoveExpense(item.id)}
-                    className="w-6 h-6 flex items-center justify-center rounded-md bg-[#388e3c]/10 dark:bg-[#388e3c]/20 text-finanzas hover:bg-[#388e3c]/20 dark:hover:bg-[#388e3c]/30 border border-[#388e3c]/20 dark:border-[#388e3c]/30"
+                    className="w-6 h-6 flex items-center justify-center rounded-md bg-[#388e3c]/10 dark:bg-[#388e3c]/20 text-finanzas hover:bg-[#388e3c]/20 hover:text-finanzas-dark dark:hover:text-finanzas-lighter dark:hover:bg-[#388e3c]/30 border border-[#388e3c]/20 dark:border-[#388e3c]/30 dark:text-finanzas-light"
                     aria-label="Eliminar"
+                    data-interactive="true"
                   >
-                    ×
+                    <X className="h-4 w-4" aria-hidden="true" />
                   </button>
                 </td>
               </tr>
@@ -187,6 +191,7 @@ export function ExpenseTable({
 
       <div className="p-3">
         <button
+          data-interactive="true"
           onClick={onAddExpense}
           className="flex items-center justify-center gap-2 w-full sm:w-auto px-3 py-1.5 text-sm bg-finanzas hover:bg-finanzas-dark text-white font-medium rounded-md transition-colors"
         >

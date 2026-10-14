@@ -11,9 +11,9 @@ export function BudgetSummary({ summary, formatCurrency }: BudgetSummaryProps) {
   const { totalIncome, totalExpenses, balance, totalSaved, savedPercentage } = summary
 
   return (
-    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden mb-6">
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden mb-6">
       <div className="bg-gray-50 dark:bg-gray-800 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-        <h2 className="text-base font-medium text-[#1e3a2b] dark:text-[#6a9c77]">Resumen financiero</h2>
+        <h2 className="text-xl font-bold text-[#1e3a2b] dark:text-[#6a9c77]">Resumen financiero</h2>
       </div>
 
       <div className="p-4 space-y-4">

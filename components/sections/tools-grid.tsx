@@ -12,13 +12,16 @@ interface ToolsGridProps {
   section: string
 }
 
-// Mapa estático para que Tailwind genere las clases
+// Mapa estático para que Tailwind genere las clases (texto + foco canónico por sección)
 const sectionButtonClasses: Record<SectionType, string> = {
-  mente: "text-mente hover:text-mente-darkest dark:text-mente-light dark:hover:text-mente-lighter",
+  mente:
+    "text-mente hover:text-mente-darkest dark:text-mente-light dark:hover:text-mente-lighter focus-visible:ring-mente dark:focus-visible:ring-mente-light",
   relaciones:
-    "text-relaciones hover:text-relaciones-darkest dark:text-relaciones-light dark:hover:text-relaciones-lighter",
-  cuerpo: "text-cuerpo-dark hover:text-cuerpo-darkest dark:text-cuerpo-light dark:hover:text-cuerpo-lighter",
-  finanzas: "text-finanzas hover:text-finanzas-darkest dark:text-finanzas-light dark:hover:text-finanzas-lighter",
+    "text-relaciones hover:text-relaciones-darkest dark:text-relaciones-light dark:hover:text-relaciones-lighter focus-visible:ring-relaciones dark:focus-visible:ring-relaciones-light",
+  cuerpo:
+    "text-cuerpo-dark hover:text-cuerpo-darkest dark:text-cuerpo-light dark:hover:text-cuerpo-lighter focus-visible:ring-cuerpo dark:focus-visible:ring-cuerpo-light",
+  finanzas:
+    "text-finanzas hover:text-finanzas-darkest dark:text-finanzas-light dark:hover:text-finanzas-lighter focus-visible:ring-finanzas dark:focus-visible:ring-finanzas-light",
 }
 
 export default function ToolsGrid({ cards, section }: ToolsGridProps) {
@@ -28,11 +31,13 @@ export default function ToolsGrid({ cards, section }: ToolsGridProps) {
   const availableCards = cards.filter((card) => card.isAvailable)
   const comingSoonCards = cards.filter((card) => !card.isAvailable)
 
-  const buttonTextClass = sectionButtonClasses[section as SectionType] ?? "text-gray-600 hover:text-gray-800"
+  const buttonTextClass =
+    sectionButtonClasses[section as SectionType] ??
+    "text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 focus-visible:ring-gray-500"
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4">
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {availableCards.map((card, index) => (
           <ToolCard key={card.id} card={card} index={index} />
         ))}
@@ -41,8 +46,9 @@ export default function ToolsGrid({ cards, section }: ToolsGridProps) {
       {comingSoonCards.length > 0 && (
         <>
           <div
+            id="proximas-herramientas"
             className={cn(
-              "mt-5 gap-5 sm:grid-cols-2 lg:grid-cols-4",
+              "mt-6 gap-4 sm:grid-cols-2 lg:grid-cols-4",
               showComingSoon ? "grid" : "hidden",
             )}
           >
@@ -51,10 +57,16 @@ export default function ToolsGrid({ cards, section }: ToolsGridProps) {
             ))}
           </div>
 
-          <div className="mt-8 flex justify-center">
+          <div className="mt-6 flex justify-center">
             <Button
               variant="ghost"
-              className={cn("flex items-center gap-2", buttonTextClass)}
+              data-interactive="true"
+              aria-expanded={showComingSoon}
+              aria-controls="proximas-herramientas"
+              className={cn(
+                "flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+                buttonTextClass,
+              )}
               onClick={() => setShowComingSoon(!showComingSoon)}
             >
               <span>{showComingSoon ? "Mostrar menos" : "Ver todas las herramientas"}</span>

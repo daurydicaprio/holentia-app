@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { sectionsData } from "@/lib/data"
 
@@ -9,15 +9,23 @@ const TOOL_ROUTES = Object.values(sectionsData).flatMap((section) =>
   section.cards.filter((card) => card.isAvailable).map((card) => `/${card.slug}`),
 )
 
+const SECTIONS = ["mente", "relaciones", "cuerpo", "finanzas"]
+
+const MIN_SWIPE_DISTANCE = 50
+
+function isInteractiveTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) return false
+  return Boolean(target.closest("input, button, a, select, textarea, [data-interactive]"))
+}
+
 export default function SectionSwipeNavigation() {
   const router = useRouter()
   const pathname = usePathname()
-  const [touchStart, setTouchStart] = useState<number | null>(null)
-  const [touchEnd, setTouchEnd] = useState<number | null>(null)
   const [isMobile, setIsMobile] = useState(false)
 
-  // Configuración de sensibilidad del swipe
-  const minSwipeDistance = 50
+  const touchStartX = useRef(0)
+  const touchStartY = useRef(0)
+  const touchEndX = useRef<number | null>(null)
 
   // Si estamos dentro de una herramienta, no activar la navegación por swipe
   const isToolPage = TOOL_ROUTES.some((route) => pathname?.startsWith(route))
@@ -39,46 +47,50 @@ export default function SectionSwipeNavigation() {
     if (!isMobile) return
 
     const handleTouchStart = (e: TouchEvent) => {
-      setTouchEnd(null)
-      setTouchStart(e.targetTouches[0].clientX)
+      if (isInteractiveTarget(e.target)) {
+        touchStartX.current = 0
+        touchEndX.current = null
+        return
+      }
+      touchEndX.current = null
+      touchStartX.current = e.targetTouches[0].clientX
+      touchStartY.current = e.targetTouches[0].clientY
     }
 
     const handleTouchMove = (e: TouchEvent) => {
-      setTouchEnd(e.targetTouches[0].clientX)
+      if (touchStartX.current === 0) return
+      touchEndX.current = e.targetTouches[0].clientX
     }
 
-    const handleTouchEnd = () => {
-      if (!touchStart || !touchEnd) return
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (touchStartX.current === 0 || touchEndX.current === null) return
 
-      const distance = touchStart - touchEnd
-      const isLeftSwipe = distance > minSwipeDistance
-      const isRightSwipe = distance < -minSwipeDistance
+      const dx = touchStartX.current - touchEndX.current
+      const dy = touchStartY.current - e.changedTouches[0].clientY
 
-      // Solo procesar swipes horizontales significativos
+      // Solo swipes horizontales dominantes (ignora scroll diagonal)
+      if (Math.abs(dy) >= Math.abs(dx)) return
+
+      const isLeftSwipe = dx > MIN_SWIPE_DISTANCE
+      const isRightSwipe = dx < -MIN_SWIPE_DISTANCE
       if (!isLeftSwipe && !isRightSwipe) return
 
-      // Obtener la sección actual del pathname
       const pathParts = pathname.split("/").filter(Boolean)
       const currentSection = pathParts.length > 0 ? pathParts[0] : null
 
-      const sections = ["mente", "relaciones", "cuerpo", "finanzas"]
-
-      if (!currentSection || !sections.includes(currentSection)) {
-        // Si no estamos en una sección, ir a la primera sección con swipe izquierdo
+      if (!currentSection || !SECTIONS.includes(currentSection)) {
         if (isLeftSwipe) {
-          router.push(`/${sections[0]}`)
+          router.push(`/${SECTIONS[0]}`)
         }
         return
       }
 
-      const currentIndex = sections.indexOf(currentSection)
+      const currentIndex = SECTIONS.indexOf(currentSection)
 
-      if (isLeftSwipe && currentIndex < sections.length - 1) {
-        // Navegar a la siguiente sección
-        router.push(`/${sections[currentIndex + 1]}`)
+      if (isLeftSwipe && currentIndex < SECTIONS.length - 1) {
+        router.push(`/${SECTIONS[currentIndex + 1]}`)
       } else if (isRightSwipe && currentIndex > 0) {
-        // Navegar a la sección anterior
-        router.push(`/${sections[currentIndex - 1]}`)
+        router.push(`/${SECTIONS[currentIndex - 1]}`)
       }
     }
 
@@ -91,9 +103,8 @@ export default function SectionSwipeNavigation() {
       document.removeEventListener("touchmove", handleTouchMove)
       document.removeEventListener("touchend", handleTouchEnd)
     }
-  }, [touchStart, touchEnd, pathname, router, isMobile])
+  }, [pathname, router, isMobile])
 
-  // Si estamos dentro de una herramienta, no activar la navegación por swipe
   if (isToolPage) {
     return null
   }

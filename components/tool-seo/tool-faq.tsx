@@ -45,7 +45,7 @@ export default function ToolFaq({ faq, section = "finanzas" }: ToolFaqProps) {
 
   return (
     <section aria-labelledby="faq-heading" className="mt-10 rounded-2xl border border-gray-200 bg-white/60 p-6 dark:border-gray-700 dark:bg-black/20">
-      <h2 id="faq-heading" className="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-100">
+      <h2 id="faq-heading" className="mb-4 text-xl font-bold text-gray-800 dark:text-gray-100">
         Preguntas frecuentes
       </h2>
       <div className="space-y-3">
@@ -62,6 +62,7 @@ export default function ToolFaq({ faq, section = "finanzas" }: ToolFaqProps) {
                   type="button"
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${index}`}
+                  data-interactive="true"
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   className={`flex w-full items-center justify-between gap-4 px-4 py-3 text-left text-sm font-medium text-gray-800 transition-colors dark:text-gray-100 ${styles.hover}`}
                 >

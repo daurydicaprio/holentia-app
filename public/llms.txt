@@ -21,7 +21,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 - [Crear presupuesto personal](https://holentia.com/crear-presupuesto-personal): simula ingresos, gastos y categorías para equilibrar tu presupuesto.
 - [Calculadora de interés compuesto](https://holentia.com/calculadora-interes-compuesto): crecimiento de aportes periódicos con gráfico de capital vs. aportes.
 - [Calculadora de préstamo](https://holentia.com/calculadora-prestamo): cuota mensual, interés total y tabla de amortización.
-- [Calculadora de consumo eléctrico](https://holentia.com/calculadora-consumo-electrico): estima el consumo y el costo de aparatos eléctricos.
+- [Calculadora de consumo eléctrico](https://holentia.com/calculadora-consumo-electrico): estima tu factura mensual de luz en pesos según el consumo en kWh.
 - [Calculadora de gasto de combustible](https://holentia.com/calculadora-gasto-combustible): gasto de gasolina por día, semana, mes y año según tu ruta, vehículo y precio del litro.
 - [Corte y vencimiento de tarjeta](https://holentia.com/tarjeta-corte-vencimiento): fechas de corte, días restantes y vencimiento.
 - [Calculadora de interés de tarjeta](https://holentia.com/calculadora-interes-tarjeta): costo de financiar el saldo mínimo o total.

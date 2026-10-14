@@ -27,13 +27,13 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
   const chartColors = useMemo(
     () => ({
       line: "#66bb6a", // Verde de sección (finanzas-light)
-      deposit: resolvedTheme === "dark" ? "#388e3c" : "#2e7d32",
+      deposit: resolvedTheme === "dark" ? "#388e3c" : "#388e3c",
       contribution: resolvedTheme === "dark" ? "#1b5e20" : "#1b5e20",
       interest: resolvedTheme === "dark" ? "#a5d6a7" : "#66bb6a",
       grid: resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.1)",
       text: resolvedTheme === "dark" ? "#e0e0e0" : "#1E3A2E",
       tooltipBg: resolvedTheme === "dark" ? "rgba(30, 30, 30, 0.9)" : "rgba(255, 255, 255, 0.9)",
-      tooltipBorder: resolvedTheme === "dark" ? "#4caf50" : "#2e7d32",
+      tooltipBorder: resolvedTheme === "dark" ? "#4caf50" : "#388e3c",
     }),
     [resolvedTheme],
   )
@@ -236,13 +236,13 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
       if (resolvedTheme === "dark") {
         return [
           "#4caf50", // Verde para inversión inicial
-          "#2e7d32", // Verde oscuro para contribuciones
+          "#388e3c", // Verde oscuro para contribuciones
           "#a5d6a7", // Verde claro para ganancias
           "#e8f5e9", // Verde muy claro para inflación
         ]
       } else {
         return [
-          "#2e7d32", // Verde oscuro para inversión inicial
+          "#388e3c", // Verde oscuro para inversión inicial
           "#1b5e20", // Verde más oscuro para contribuciones
           "#66bb6a", // Verde claro para ganancias
           "#c8e6c9", // Verde muy claro para inflación
@@ -373,7 +373,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 className="text-xl font-bold text-finanzas w-full text-center mb-6">
+        <h2 className="text-xl font-bold text-finanzas w-full text-center mb-6 dark:text-finanzas-light">
           Composición de la inversión
           <span className="block w-16 h-1 bg-finanzas mx-auto mt-2"></span>
         </h2>
@@ -391,7 +391,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <h2 className="text-xl font-bold text-finanzas w-full text-center mb-6">
+          <h2 className="text-xl font-bold text-finanzas w-full text-center mb-6 dark:text-finanzas-light">
             Distribución de la inversión
             <span className="block w-16 h-1 bg-finanzas mx-auto mt-2"></span>
           </h2>

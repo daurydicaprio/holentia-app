@@ -112,7 +112,7 @@ export function CalorieCalculator() {
   const goalLabel = GOALS.find((g) => g.id === goal)?.label.toLowerCase() ?? ""
 
   const inputClass =
-    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-cuerpo focus:border-transparent"
+    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-cuerpo dark:focus:border-transparent dark:focus:ring-cuerpo-light"
 
   return (
     <div className="space-y-6">
@@ -127,7 +127,7 @@ export function CalorieCalculator() {
               onClick={() => pickGoal(g.id)}
               className={`p-4 rounded-xl border-2 font-medium transition-all text-center ${
                 goal === g.id
-                  ? "border-amber-600 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 shadow-sm"
+                  ? "border-cuerpo-dark bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 shadow-sm"
                   : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-amber-300 dark:hover:border-amber-700"
               }`}
               data-interactive="true"
@@ -196,7 +196,7 @@ export function CalorieCalculator() {
                     onClick={() => setSex(opt.value)}
                     className={`flex-1 py-3 px-2 rounded-lg font-medium transition-colors ${
                       sex === opt.value
-                        ? "bg-amber-600 text-white shadow-sm"
+                        ? "bg-cuerpo-dark text-white shadow-sm"
                         : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
                     }`}
                     data-interactive="true"
@@ -226,7 +226,7 @@ export function CalorieCalculator() {
 
           <div className="flex items-center justify-between mt-4">
             <span className="text-xs text-gray-500 dark:text-gray-400">
-              {savedFlash ? "Guardado local ✓" : "Se guarda en tu navegador"}
+              {savedFlash ? "Guardado local" : "Se guarda en tu navegador"}
             </span>
             <button
               onClick={clearData}
@@ -247,7 +247,7 @@ export function CalorieCalculator() {
               <p className="text-sm mt-1">y verás tus calorías para {goalLabel}.</p>
             </div>
           ) : (
-            <div className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl p-8 shadow-lg text-white text-center h-full flex flex-col justify-center">
+            <div className="bg-gradient-to-br from-cuerpo to-cuerpo-dark rounded-xl p-8 shadow-lg text-black text-center h-full flex flex-col justify-center">
               <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Para {goalLabel} necesitas</div>
               <div className="text-6xl font-bold">{heroValue?.toLocaleString("es-ES")}</div>
               <div className="text-lg opacity-90 mt-1">kcal al día</div>
@@ -310,7 +310,7 @@ export function CalorieCalculator() {
             },
           ].map((leg) => (
             <div key={leg.title} className="bg-amber-50 dark:bg-amber-900/15 rounded-xl px-5 py-4 flex items-start gap-3">
-              <leg.icon className="h-5 w-5 mt-0.5 flex-shrink-0 text-amber-600 dark:text-amber-400" />
+              <leg.icon className="h-5 w-5 mt-0.5 flex-shrink-0 text-cuerpo-dark dark:text-amber-400" />
               <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                 <strong>{leg.title}:</strong> {leg.text}
               </p>
@@ -331,7 +331,7 @@ export function CalorieCalculator() {
         </p>
 
         <div className="mt-6 bg-gray-50 dark:bg-gray-700/40 rounded-xl p-5 sm:p-6 flex items-start gap-3">
-          <Scale className="h-5 w-5 mt-1 flex-shrink-0 text-amber-600 dark:text-amber-400" />
+          <Scale className="h-5 w-5 mt-1 flex-shrink-0 text-cuerpo-dark dark:text-amber-400" />
           <div className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed space-y-2">
             <p>
               <strong>La báscula manda.</strong> Encontrar tus calorías adecuadas a tu objetivo toma tiempo y paciencia:

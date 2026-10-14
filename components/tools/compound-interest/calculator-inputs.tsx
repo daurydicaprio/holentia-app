@@ -52,7 +52,7 @@ export function CalculatorInputs({
     if (isNaN(value)) return ""
 
     // Formatear el número con comas y dos decimales
-    return new Intl.NumberFormat("es-MX", {
+    return new Intl.NumberFormat("es-DO", {
       minimumFractionDigits: 0,
       maximumFractionDigits: 2,
     }).format(value)
@@ -145,13 +145,13 @@ export function CalculatorInputs({
 
   return (
     <motion.div
-      className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-sm border border-gray-200 dark:border-gray-700"
+      className="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       data-interactive="true"
     >
-      <h2 className="text-xl font-bold text-finanzas mb-6 text-center">
+      <h2 className="text-xl font-bold text-finanzas dark:text-finanzas-light mb-6 text-center">
         Parámetros de la inversión
         <span className="block w-16 h-1 bg-finanzas mx-auto mt-2"></span>
       </h2>
@@ -166,6 +166,7 @@ export function CalculatorInputs({
             <div className="relative">
               <button
                 className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                data-interactive="true"
                 onMouseEnter={() => setActiveTooltip("initialDeposit")}
                 onMouseLeave={() => setActiveTooltip(null)}
                 aria-label="Información sobre depósito inicial"
@@ -173,7 +174,7 @@ export function CalculatorInputs({
                 <HelpCircle size={16} />
               </button>
               {activeTooltip === "initialDeposit" && (
-                <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
+                <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-20 text-xs text-gray-600 dark:text-gray-300">
                   {tooltips.initialDeposit}
                 </div>
               )}
@@ -189,7 +190,7 @@ export function CalculatorInputs({
               value={formattedInitialDeposit}
               onChange={handleInitialDepositChange}
               onBlur={() => handleBlur(setFormattedInitialDeposit, initialDeposit)}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-finanzas focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               placeholder="0"
               data-interactive="true"
             />
@@ -205,6 +206,7 @@ export function CalculatorInputs({
             <div className="relative">
               <button
                 className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                data-interactive="true"
                 onMouseEnter={() => setActiveTooltip("contribution")}
                 onMouseLeave={() => setActiveTooltip(null)}
                 aria-label="Información sobre aportación periódica"
@@ -212,7 +214,7 @@ export function CalculatorInputs({
                 <HelpCircle size={16} />
               </button>
               {activeTooltip === "contribution" && (
-                <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
+                <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-20 text-xs text-gray-600 dark:text-gray-300">
                   {tooltips.contribution}
                 </div>
               )}
@@ -228,7 +230,7 @@ export function CalculatorInputs({
               value={formattedContribution}
               onChange={handleContributionChange}
               onBlur={() => handleBlur(setFormattedContribution, contribution)}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-finanzas focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               placeholder="0"
               data-interactive="true"
             />
@@ -247,6 +249,7 @@ export function CalculatorInputs({
             <div className="relative">
               <button
                 className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                data-interactive="true"
                 onMouseEnter={() => setActiveTooltip("contributionFrequency")}
                 onMouseLeave={() => setActiveTooltip(null)}
                 aria-label="Información sobre frecuencia de aportación"
@@ -254,7 +257,7 @@ export function CalculatorInputs({
                 <HelpCircle size={16} />
               </button>
               {activeTooltip === "contributionFrequency" && (
-                <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
+                <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-20 text-xs text-gray-600 dark:text-gray-300">
                   {tooltips.contributionFrequency}
                 </div>
               )}
@@ -265,7 +268,7 @@ export function CalculatorInputs({
               onClick={() => setContributionFrequency(12)}
               className={`flex-1 py-2 px-4 rounded-md transition-colors ${
                 contributionFrequency === 12
-                  ? "bg-green-600 text-white shadow-sm"
+                  ? "bg-finanzas text-white shadow-sm"
                   : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
               data-interactive="true"
@@ -276,7 +279,7 @@ export function CalculatorInputs({
               onClick={() => setContributionFrequency(1)}
               className={`flex-1 py-2 px-4 rounded-md transition-colors ${
                 contributionFrequency === 1
-                  ? "bg-green-600 text-white shadow-sm"
+                  ? "bg-finanzas text-white shadow-sm"
                   : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
               data-interactive="true"
@@ -287,7 +290,7 @@ export function CalculatorInputs({
         </div>
 
         {/* Años, Tasa de interés e Inflación en la misma línea */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-3">
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label htmlFor="years" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -296,6 +299,7 @@ export function CalculatorInputs({
               <div className="relative">
                 <button
                   className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                  data-interactive="true"
                   onMouseEnter={() => setActiveTooltip("years")}
                   onMouseLeave={() => setActiveTooltip(null)}
                   aria-label="Información sobre años"
@@ -303,7 +307,7 @@ export function CalculatorInputs({
                   <HelpCircle size={16} />
                 </button>
                 {activeTooltip === "years" && (
-                  <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
+                  <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-20 text-xs text-gray-600 dark:text-gray-300">
                     {tooltips.years}
                   </div>
                 )}
@@ -318,7 +322,7 @@ export function CalculatorInputs({
                 id="years"
                 value={years || ""}
                 onChange={(e) => handleNumberChange(setYears, e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-finanzas focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 placeholder="5"
                 min="1"
                 max="100"
@@ -336,6 +340,7 @@ export function CalculatorInputs({
               <div className="relative">
                 <button
                   className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                  data-interactive="true"
                   onMouseEnter={() => setActiveTooltip("interestRate")}
                   onMouseLeave={() => setActiveTooltip(null)}
                   aria-label="Información sobre tasa de interés"
@@ -343,7 +348,7 @@ export function CalculatorInputs({
                   <HelpCircle size={16} />
                 </button>
                 {activeTooltip === "interestRate" && (
-                  <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
+                  <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-20 text-xs text-gray-600 dark:text-gray-300">
                     {tooltips.interestRate}
                   </div>
                 )}
@@ -358,7 +363,7 @@ export function CalculatorInputs({
                 id="interestRate"
                 value={interestRate || ""}
                 onChange={(e) => handleNumberChange(setInterestRate, e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-finanzas focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 placeholder="0"
                 min="0"
                 max="100"
@@ -376,6 +381,7 @@ export function CalculatorInputs({
               <div className="relative">
                 <button
                   className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                  data-interactive="true"
                   onMouseEnter={() => setActiveTooltip("inflation")}
                   onMouseLeave={() => setActiveTooltip(null)}
                   aria-label="Información sobre inflación"
@@ -383,7 +389,7 @@ export function CalculatorInputs({
                   <HelpCircle size={16} />
                 </button>
                 {activeTooltip === "inflation" && (
-                  <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-10 text-xs text-gray-600 dark:text-gray-300">
+                  <div className="absolute right-0 top-full mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 w-64 z-20 text-xs text-gray-600 dark:text-gray-300">
                     {tooltips.inflation}
                   </div>
                 )}
@@ -398,7 +404,7 @@ export function CalculatorInputs({
                 id="inflation"
                 value={inflation || ""}
                 onChange={(e) => handleNumberChange(setInflation, e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-finanzas focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 placeholder="0"
                 min="0"
                 max="100"

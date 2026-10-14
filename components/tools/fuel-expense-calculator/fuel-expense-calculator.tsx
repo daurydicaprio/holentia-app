@@ -78,7 +78,7 @@ function parseNum(input: string): number {
 }
 
 const inputClass =
-  "block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-finanzas focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+  "block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
 
 const chipClass = (selected: boolean) =>
   `px-2.5 py-1 text-xs rounded-md font-medium transition-colors ${
@@ -107,6 +107,7 @@ function Field({ id, label, tooltipKey, icon, activeTooltip, setActiveTooltip, c
         <div className="relative">
           <button
             type="button"
+            data-interactive="true"
             className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
             onMouseEnter={() => setActiveTooltip(tooltipKey)}
             onMouseLeave={() => setActiveTooltip(null)}
@@ -437,7 +438,7 @@ export function FuelExpenseCalculator() {
             <p className="text-sm mt-1">y aquí aparece tu gasto estimado de combustible.</p>
           </div>
         ) : (
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border-2 border-finanzas/40 dark:border-finanzas-light/30 flex flex-col">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border-2 border-finanzas-border flex flex-col">
             <div className="bg-finanzas px-5 py-3 sm:px-6 sm:py-3.5 text-white text-center font-bold tracking-wide text-base">
               TU GASTO DE COMBUSTIBLE
             </div>
@@ -501,7 +502,7 @@ export function FuelExpenseCalculator() {
       <div className="lg:col-span-5 bg-white dark:bg-gray-800 rounded-xl p-5 shadow-lg">
         <div className="flex items-center gap-2 mb-3">
           <Lightbulb className="h-5 w-5 text-finanzas dark:text-finanzas-light flex-shrink-0" />
-          <h2 className="text-lg font-bold">Cómo ahorrar combustible</h2>
+          <h2 className="text-xl font-bold">Cómo ahorrar combustible</h2>
         </div>
         <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2">
           {SAVE_TIPS.map((tip) => (

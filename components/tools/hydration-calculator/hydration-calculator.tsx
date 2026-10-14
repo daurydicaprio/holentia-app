@@ -125,12 +125,12 @@ export function HydrationCalculator() {
   }
 
   const inputClass =
-    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-cuerpo focus:border-transparent"
+    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-cuerpo dark:focus:border-transparent dark:focus:ring-cuerpo-light"
 
   const chipClass = (active: boolean) =>
     `p-3 rounded-xl border-2 font-medium transition-all text-center flex flex-col items-center gap-1 ${
       active
-        ? "border-amber-600 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 shadow-sm"
+        ? "border-cuerpo-dark bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 shadow-sm"
         : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-amber-300 dark:hover:border-amber-700"
     }`
 
@@ -199,7 +199,7 @@ export function HydrationCalculator() {
 
           <div className="flex items-center justify-between mt-6">
             <span className="text-xs text-gray-500 dark:text-gray-400">
-              {savedFlash ? "Guardado local ✓" : "Se guarda en tu navegador"}
+              {savedFlash ? "Guardado local" : "Se guarda en tu navegador"}
             </span>
             <button
               onClick={clearData}
@@ -221,7 +221,7 @@ export function HydrationCalculator() {
               <p className="text-sm mt-1">y aquí verás cuánta agua necesitas hoy.</p>
             </div>
           ) : (
-            <div className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl p-8 shadow-lg text-white text-center h-full flex flex-col justify-center">
+            <div className="bg-gradient-to-br from-cuerpo to-cuerpo-dark rounded-xl p-8 shadow-lg text-black text-center h-full flex flex-col justify-center">
               <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Tu hidratación diaria</div>
               <div className="text-6xl font-bold tabular-nums">{result.direct.toLocaleString("es-ES")}</div>
               <div className="text-lg opacity-90 mt-1">
