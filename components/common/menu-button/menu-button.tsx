@@ -108,7 +108,7 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 dark:focus-visible:ring-white",
     isMenuOpen
       ? "ring-2 ring-gray-900 dark:ring-white"
-      : "shadow-sm hover:bg-gray-50 dark:hover:bg-gray-800",
+      : "shadow-sm",
     isCompact
       ? "bg-white/20 hover:bg-white/30 active:bg-white/40 text-white shadow-none"
       : isToolPage
@@ -132,16 +132,16 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
         aria-expanded={isMenuOpen}
         aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
       >
-        <span className="relative flex h-5 w-5 items-center justify-center">
+        <span className="grid h-5 w-5 place-items-center">
           <Menu
             aria-hidden="true"
-            className={`absolute h-5 w-5 transition-all duration-200 ${
+            className={`col-start-1 row-start-1 h-5 w-5 transition-all duration-200 ${
               isMenuOpen ? "rotate-90 opacity-0" : "rotate-0 opacity-100"
             }`}
           />
           <X
             aria-hidden="true"
-            className={`absolute h-5 w-5 transition-all duration-200 ${
+            className={`col-start-1 row-start-1 h-5 w-5 transition-all duration-200 ${
               isMenuOpen ? "rotate-0 opacity-100" : "-rotate-90 opacity-0"
             }`}
           />
