@@ -48,6 +48,10 @@ const localStorageKeys = [
     desc: "Borrador de la calculadora de consumo eléctrico",
   },
   {
+    key: "holentia:calculadora-gasto-combustible:draft:v1",
+    desc: "Borrador de la calculadora de gasto de combustible",
+  },
+  {
     key: "holentia:calculadora-calorias:draft:v1",
     desc: "Borrador de la calculadora de calorías",
   },

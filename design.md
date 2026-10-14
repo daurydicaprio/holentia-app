@@ -135,6 +135,8 @@ La marca HOLENTIA es **monocroma** (logo negro/blanco, OG `#121212` + blanco). L
 - **FAQ nativa** (`<details>`): respuesta en el HTML inicial; `ChevronDown` que rota con `group-open:rotate-180` (nunca emoji ▼).
 - **Sin**: texto degradado, blobs `blur-*`, tarjetas pastel, `animate-pulse`, `hover:scale-*`, `shadow-xl`, emojis decorativos. Colores semánticos solo en avisos (`border-l-4 border-amber-500 bg-amber-50`) y borrado destructivo (`hover:bg-red-600`).
 
+**Burbuja de ayuda** (campo que requiere verificación del usuario, ej. precio de combustible): chip ámbar bajo el input con muesca rotada 45° (`-top-[5px] left-6 h-2.5 w-2.5 rotate-45 border-l border-t`), texto `text-xs`, variantes `border-amber-200 bg-amber-50 text-amber-800` / dark `border-amber-800/40 bg-amber-900/20 text-amber-200`.
+
 ### 4d. Chrome global (menú, logo, header, scroll-to-top)
 
 Reglas del armazón compartido, en línea con la identidad monocroma:

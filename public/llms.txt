@@ -4,7 +4,7 @@
 > Calculadoras, simuladores y tests que funcionan directamente en el navegador del usuario,
 > sin cuenta, sin registro y sin enviar datos a servidores.
 
-Las 12 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
+Las 13 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
 de cada herramienta, y los resultados son estimaciones educativas, no asesoramiento profesional
 (médico, financiero ni psicológico).
 
@@ -14,7 +14,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 - [Relaciones](https://holentia.com/relaciones): test de los 5 lenguajes del amor.
 - [Cuerpo](https://holentia.com/cuerpo): calculadora de calorías (Mifflin-St Jeor) e hidratación (EFSA/NASEM).
 - [Finanzas](https://holentia.com/finanzas): presupuesto, interés compuesto, préstamo, consumo eléctrico,
-  corte/vencimiento de tarjeta, interés de tarjeta, perfil de riesgo y glosario financiero.
+  gasto de combustible, corte/vencimiento de tarjeta, interés de tarjeta, perfil de riesgo y glosario financiero.
 
 ## Herramientas
 
@@ -22,6 +22,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 - [Calculadora de interés compuesto](https://holentia.com/calculadora-interes-compuesto): crecimiento de aportes periódicos con gráfico de capital vs. aportes.
 - [Calculadora de préstamo](https://holentia.com/calculadora-prestamo): cuota mensual, interés total y tabla de amortización.
 - [Calculadora de consumo eléctrico](https://holentia.com/calculadora-consumo-electrico): estima el consumo y el costo de aparatos eléctricos.
+- [Calculadora de gasto de combustible](https://holentia.com/calculadora-gasto-combustible): gasto de gasolina por día, semana, mes y año según tu ruta, vehículo y precio del litro.
 - [Corte y vencimiento de tarjeta](https://holentia.com/tarjeta-corte-vencimiento): fechas de corte, días restantes y vencimiento.
 - [Calculadora de interés de tarjeta](https://holentia.com/calculadora-interes-tarjeta): costo de financiar el saldo mínimo o total.
 - [Test de perfil de riesgo](https://holentia.com/test-perfil-riesgo): cuestionario de tolerancia al riesgo para inversiones.

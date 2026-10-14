@@ -280,6 +280,14 @@ export const sectionsData: Record<string, SectionData> = {
         category: "finanzas",
       },
       {
+        id: "calculadora-gasto-combustible",
+        title: "Calculadora gasto combustible",
+        description: "Estima tu gasto de gasolina por día, mes y año.",
+        slug: "calculadora-gasto-combustible",
+        isAvailable: true,
+        category: "finanzas",
+      },
+      {
         id: "tarjeta-corte-vencimiento",
         title: "Corte y vencimiento tarjeta",
         description: "Planea tus compras y pagos.",
