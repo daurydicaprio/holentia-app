@@ -43,7 +43,7 @@ export default function Footer({ section }: FooterProps) {
           </Link>
         ))}
       </nav>
-      <div className="mb-2">Hecho con cariño en República Dominicana · #VERyGoodforlife</div>
+      <div className="mb-2">Hecho con ❤ 🇩🇴 #VERyGoodforlife</div>
       <div className="text-xs">
         <Link
           href="https://daurydicaprio.com"

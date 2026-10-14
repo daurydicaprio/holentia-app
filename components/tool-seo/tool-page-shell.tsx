@@ -61,22 +61,7 @@ export default function ToolPageShell({ section, tool, faq = [], children }: Too
       <SectionSwipeNavigation />
 
       <div className="flex-1 p-4 sm:p-6 max-w-6xl mx-auto w-full">
-        <header className="mb-6 text-center">
-          <nav aria-label="Migas de pan" className="mb-3 text-xs text-gray-500 dark:text-gray-400">
-            <Link href="/" data-interactive="true" className="hover:underline">
-              Inicio
-            </Link>
-            <span aria-hidden="true" className="mx-1.5">
-              /
-            </span>
-            <Link href={`/${section}`} data-interactive="true" className="hover:underline">
-              {sectionLabel(section)}
-            </Link>
-            <span aria-hidden="true" className="mx-1.5">
-              /
-            </span>
-            <span>{tool.title}</span>
-          </nav>
+        <header className="mb-6 pt-6 text-center">
           <h1 className={`mb-1 text-2xl font-bold sm:text-3xl ${titleClass}`}>{tool.title}</h1>
           <p className="mb-2 text-gray-600 dark:text-gray-300">{tool.description}</p>
           <div aria-hidden="true" className={`mx-auto mb-4 h-[0.175rem] w-16 rounded-full ${underlineClass}`} />

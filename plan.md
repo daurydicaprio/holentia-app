@@ -4,12 +4,13 @@
 > Prod `holentia.com → main`. No tocar dominios.
 > Principios: sin DB, sin registro, local-first privado (`holentia:*` en navegador), cero tracking.
 
-## Estado actual (14-Oct-2026) — 13 tools en `dev` (12 en `main`), SEO server-rendered en `dev`
+## Estado actual (14-Oct-2026) — 13 tools en `dev` y en `main`; SEO + GEO moderno desplegado en ambas
 - [x] Stack: Next 15.5.26 + React 19.3 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
 - [x] Cobertura: 13 tools (`diario-guiado, test-lenguajes-amor, calculadora-calorias, calculadora-hidratacion, crear-presupuesto-personal, calculadora-interes-compuesto, calculadora-prestamo, calculadora-consumo-electrico, calculadora-gasto-combustible, tarjeta-corte-vencimiento, calculadora-interes-tarjeta, test-perfil-riesgo, glosario-financiero`)
-- [x] SEO: metadata + JSON-LD en 13 tools + 4 secciones + home + 5 informativas; sitemap 23 URLs; robots; llms.txt; FAQ en HTML inicial
-- [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main`
+- [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/AboutPage/Collection), OG images por ruta (17), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 23 URLs con lastmod fijo, llms.txt 13 tools; skill `seo-geo`
+- [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` actualizado a `bb82c6e` (14-Oct)**
 - [x] `tsc 0 errores + next build OK + pnpm lint 0` en estricto
+- [ ] **Próximo**: modificaciones en herramientas (pedido del usuario, pendiente de spec)
 
 ---
 
@@ -89,6 +90,19 @@ Plan por herramientas, ejecutado sobre `dev` (preview `dev.holentia.com`), sin t
 - [x] **Fase 5 — infra SEO**: `app/sitemap.ts` (21 URLs), `app/robots.ts`, `app/error.tsx` + `app/global-error.tsx`, `app/ayuda/loading.tsx` (skeleton real), `public/llms.txt`, iconos movidos a `app/icon.svg` + `app/apple-icon.png`, metadata de las 5 páginas informativas, FAQPage JSON-LD en `/ayuda`
 - [x] **Fase 6 — verificación + docs**: `.eslintrc.json` (`next/core-web-vitals`, `no-html-link-for-pages` off por bug de resolución); `eslint` 8.0.0 → 8.57.1 y `eslint-config-next` → 15.5.26 (crash de reglas con 8.0.0); `chartColors` memorizado en `calculator-charts.tsx` (lint 0 warnings); `tsc 0 · lint 0 · build OK`; smoke test `pnpm start` con 22 rutas en 200 (11 tools + 4 secciones + 5 informativas + robots/sitemap/llms); README y design.md actualizados
 - Commits en `dev`: `d3facf1` (pastel) · `80c0e1b` (globals) · `7389891` (SSR secciones) · `89d8963` (shell finanzas) · `1a5ccbb` (shell restantes) · `885f508` (hubs/home) · `2a53352` (infra SEO) · pendiente: docs/lint
+
+---
+
+## Fase T — Auditoría UI + SEO/GEO moderno + social (14-Oct-2026) — HECHA
+Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills. Commit `bb82c6e` en `dev` y `main`.
+
+- [x] **Secciones**: tablas/headers/footer/tabs/grid/cards/swipe — contraste AA (scroll-to-top cuerpo, overlay 0.45, tabs sin opacity, gradiente H1 cuerpo `-dark`), `animate-fadeIn` movido al `<Link>` (keyframe pisaba hover/tilt), hover de relleno+texto, foco `ring-{s}`, `gap-4`/`mt-6` a la escala, swipe con guard de interactividad + dirección dominante, logo sin `scale`, home con tabs `neutral` (monocromo), alineación header home/sección
+- [x] **Herramientas (33 archivos)**: locale `es-MX/MXN → es-DO/DOP`, hex fuera de paleta → tokens (`#2e7d32`, `#ffee58`, blue/purple/amber/sky/green-600), estilos `color:#ffffff` redundantes quitados, foco canónico completo en ~28 inputs, `dark:` en ~45 tokens de sección, glifos `⚠️ × + ✓` → lucide, ~100 `data-interactive`, h2 a `text-xl font-bold`, contenedores a `rounded-xl`, presupuesto FAQ 4→5
+- [x] **SEO/GEO**: `metaTitle`+`metaDescription` (120–155 ch) en las 13 tools; subtitles de secciones sin cifras inventadas (E-E-A-T); intro+mini-FAQ por sección (thin content); JSON-LD en las 4 informativas (`pageJsonLd`); breadcrumb visible (luego retirado de UI, queda JSON-LD); footer con enlaces server-rendered (fin de páginas huérfanas); `lang es-DO` + `inLanguage`; robots explícitos GPTBot/ClaudeBot/PerplexityBot/Google-Extended; sitemap `LAST_UPDATED` fijo; `manifest.ts`; 404 `noindex`; Organization enriquecida; `llms.txt` consumo eléctrico corregido
+- [x] **Social**: 17 `opengraph-image.tsx` (4 secciones + 13 tools) vía `ogTemplate`; raíz con texto ajustado (no roza el círculo); `twitter:card summary_large_image`
+- [x] **Skills/docs**: nueva `seo-geo` (receta + checklist por tool), `create-tool` (metaFields/OG/FAQ≥5/smoke SEO), `section-ui`, `AGENTS.md`, `design.md` (recetas ToolCard/ToolsGrid/SectionTabs/ToolPageShell/Footer/glosario/paleta budget/swipe), README/architecture/plan recuentos 13/23
+- [x] **Pulido post-feedback**: footer restaura `❤ 🇩🇴` (excepción documentada en design.md §4b), miguita visible eliminada de `ToolPageShell` (solo JSON-LD; navegación por botones), `pt-6` de aire bajo header en herramientas
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke HTML (titles, descriptions 140–150 ch, canonical, og:image por ruta, footer links, JSON-LD informativas, robots con bots IA, lastmod fijo, manifest)
 
 ---
 
