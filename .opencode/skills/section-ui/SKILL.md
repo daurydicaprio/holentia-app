@@ -57,6 +57,17 @@ Un rol = una clase. No inventar radios/paddings nuevos; copiar del componente de
 - **Migración de legado**: hex bare de paleta → token (mismo valor); hex **con opacidad** `[#388e3c]/10` se deja así (tokens no admiten `/n`); `#81c784` ya migrado → `finanzas-light` en clases y `#66bb6a` en JS (Chart.js necesita hex crudo).
 - **Chrome global** (menu-button/logo/scroll-to-top/unified-header): acento por defecto **neutro** (nunca `#3B82F6`), **sin framer-motion** (CSS puro), sin estilos inline de color (mapa de clases por sección, patrón footer), sin `scale` en hovers. Ver `design.md` §4d.
 
+## 3c. Formularios de herramienta (inputs, ayuda ⓘ y agrupación)
+
+Receta para cualquier calculadora/test con varios campos numéricos (referencias canónicas: `compound-interest/calculator-inputs.tsx`, `fuel-expense-calculator/fuel-expense-calculator.tsx`):
+
+- **Labels limpios, sin paréntesis de unidad** ("Precio del combustible", no "Precio (por galón)"). La unidad va como **icono a la izquierda del input** (`DollarSign`/`MapPin`/`Calendar`/`Gauge`/`Percent`, `absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none`, input con `pl-10`).
+- **Ayuda contextual con ⓘ**: a la derecha del label, botón `HelpCircle size={16}` (`p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400`, `aria-label="Información sobre …"`) con tooltip `absolute right-0 top-full mt-2 p-3 w-64 z-20` (`bg-white dark:bg-gray-800 border rounded-lg shadow-lg text-xs`) gestionado por estado `activeTooltip` (`onMouseEnter`/`onMouseLeave`). Texto del tooltip en un mapa `TOOLTIPS` en el componente. No uses framer-motion para esto.
+- **Agrupar en la misma línea los campos cortos** (1–2 dígitos: viajes/día, días/semana, años/tasa): `grid grid-cols-2 gap-3` (o `cols-3`) con un `Field` por celda. Los campos que ameriten ancho completo (precio, distancia, consumo) van solos, `w-full`. Regla: agrupa siempre que quepan sin apretar; no agrupes por rellenar.
+- **Chips de preset** debajo de su campo relacionado (distancia corta/media/larga, días 5/6/7): `chipClass(selected)` = outline con `border-finanzas text-finanzas dark:border-finanzas-light dark:text-finanzas-light` si activo, neutro si no; `data-interactive="true"` + haptic `light`.
+- Sin títulos redundantes dentro del panel ("Tu rutina" y similares sobran: el label de la herramienta ya da contexto; ahorra pantalla).
+- **Selector de vehículo** (si existe): `grid grid-cols-3 gap-2`, celdas `p-2 gap-0.5 rounded-xl` con icono `h-4 w-4`, nombre `text-xs` y dato clave `text-[11px]`; seleccionado = `border-2 border-{s} text-{s} dark:border-{s}-light dark:text-{s}-light` (radiogroup accesible).
+
 ## 4. Iconos (`lucide-react`)
 
 - **Por sección** (nivel sección/estados vacíos/acentos): Mente `Brain` · Relaciones `Heart` · Cuerpo `Activity` · Finanzas `Wallet`. Colorear con `text-{s}`.

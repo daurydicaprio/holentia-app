@@ -194,6 +194,18 @@ Patrón buscador + chips + resultados agrupados (referencia: `glossary.tsx`):
 - **Estado vacío**: panel centrado con `Search`, mensaje con la consulta y botón outline (receta shell) «Limpiar filtros».
 - Búsqueda sin distinción de acentos (`normalize("NFD")` + strip diacríticos). Persistencia: efímera (patrón E, nada en localStorage).
 
+### Formularios de herramienta (inputs, ayuda ⓘ, agrupación)
+
+Receta canónica para calculadoras/tests con varios campos (refs: `compound-interest/calculator-inputs.tsx`, `fuel-expense-calculator/fuel-expense-calculator.tsx`; detalle operativo en skill `section-ui` §3c):
+
+- **Labels limpios, sin paréntesis de unidad**; la unidad va como **icono izquierdo del input** (`absolute inset-y-0 left-0 pl-3`, input `pl-10`; `DollarSign`/`MapPin`/`Calendar`/`Gauge`/`Percent`).
+- **Ayuda contextual con ⓘ**: botón `HelpCircle size={16}` a la derecha del label (`p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700`, `aria-label="Información sobre …"`) + tooltip `absolute right-0 top-full mt-2 p-3 w-64 z-20` gestionado por estado `activeTooltip`. Textos en mapa `TOOLTIPS` del componente; sin framer-motion.
+- **Agrupar campos cortos en la misma línea** (`grid grid-cols-2 gap-3`, un `Field` por celda) cuando quepan sin apretar; los que ameriten ancho completo van solos (`w-full`). No agrupar por rellenar.
+- **Chips de preset** debajo de su campo (outline `{s}` si activo, neutro si no, haptic `light`).
+- Sin títulos redundantes dentro del panel ("Tu rutina" sobra: ahorra pantalla).
+- **Selector de vehículo**: `grid grid-cols-3 gap-2`, celdas `p-2 gap-0.5 rounded-xl`, icono `h-4 w-4`, nombre `text-xs`, dato `text-[11px]`; activo `border-2 border-{s} text-{s} dark:border-{s}-light dark:text-{s}-light` (radiogroup accesible).
+- **Bloque de tips de ahorro** (cuando la herramienta los tenga): tarjeta a ancho del grid con icono `Lightbulb text-{s}` + título `text-lg font-bold`, lista en `grid sm:grid-cols-2` con bullets `h-1.5 w-1.5 rounded-full bg-{s}` y líneas `text-sm text-gray-600 dark:text-gray-300` (breve: 4–6 tips de una línea).
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.

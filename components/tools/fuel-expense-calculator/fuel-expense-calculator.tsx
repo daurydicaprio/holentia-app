@@ -14,6 +14,7 @@ import {
   Calendar,
   Gauge,
   HelpCircle,
+  Lightbulb,
 } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
@@ -52,6 +53,15 @@ const TOOLTIPS: Record<string, string> = {
   consumo:
     "Kilómetros que recorre tu carro por litro. Referencia: pequeño ≈16, sedán ≈13, SUV ≈9. Ajustalo con lo que marca tu tablero.",
 }
+
+const SAVE_TIPS: string[] = [
+  "Mantén velocidad constante y evita frenar y acelerar fuerte: el tráfico de alto y bajo consume de más.",
+  "Conduce a velocidad moderada y respeta los límites: por encima de ~90 km/h el consumo se dispara.",
+  "Carga en horas frescas (mañana temprano o de noche): la gasolina se expande con el calor y recibes menos por el mismo precio.",
+  "Evita dejar el carro bajo el sol: el calor evapora combustible del tanque y te obliga a más aire acondicionado.",
+  "Revisa la presión de los neumáticos: con baja presión el consumo sube varios puntos porcentuales.",
+  "Quita el peso muerto del baúl y el rack del techo: cada kilo extra se paga en gasolina.",
+]
 
 function formatRD(value: number): string {
   return new Intl.NumberFormat("es-DO", {
@@ -224,8 +234,6 @@ export function FuelExpenseCalculator() {
     <div className="grid lg:grid-cols-5 gap-6">
       {/* Controles */}
       <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl p-5 shadow-lg">
-        <h2 className="text-lg font-bold mb-3">Tu rutina</h2>
-
         <div className="space-y-4">
           {/* Precio por galón */}
           <Field
@@ -366,13 +374,13 @@ export function FuelExpenseCalculator() {
                     aria-checked={selected}
                     onClick={() => selectVehicle(v.id)}
                     data-interactive="true"
-                    className={`flex flex-col items-center gap-1 rounded-xl p-2.5 text-center transition-colors ${
+                    className={`flex flex-col items-center gap-0.5 rounded-xl p-2 text-center transition-colors ${
                       selected
                         ? "border-2 border-finanzas text-finanzas dark:border-finanzas-light dark:text-finanzas-light"
                         : "border border-gray-200 text-gray-600 hover:border-gray-300 dark:border-gray-600 dark:text-gray-300 dark:hover:border-gray-500"
                     }`}
                   >
-                    <Icon className="h-5 w-5" />
+                    <Icon className="h-4 w-4" />
                     <span className="text-xs font-semibold leading-tight">{v.label}</span>
                     <span className="text-[11px] text-gray-500 dark:text-gray-400">≈{v.kmL} km/L</span>
                   </button>
@@ -487,6 +495,25 @@ export function FuelExpenseCalculator() {
             </div>
           </div>
         )}
+      </div>
+
+      {/* Cómo ahorrar combustible */}
+      <div className="lg:col-span-5 bg-white dark:bg-gray-800 rounded-xl p-5 shadow-lg">
+        <div className="flex items-center gap-2 mb-3">
+          <Lightbulb className="h-5 w-5 text-finanzas dark:text-finanzas-light flex-shrink-0" />
+          <h2 className="text-lg font-bold">Cómo ahorrar combustible</h2>
+        </div>
+        <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2">
+          {SAVE_TIPS.map((tip) => (
+            <li key={tip} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
+              <span
+                aria-hidden="true"
+                className="mt-1.5 h-1.5 w-1.5 rounded-full bg-finanzas dark:bg-finanzas-light flex-shrink-0"
+              />
+              {tip}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   )
