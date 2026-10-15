@@ -119,7 +119,7 @@ El borde se vuelve transparente al enfocar: solo el anillo de sección marca el 
 
 ### 4b. Página de sección (hub mente/relaciones/cuerpo/finanzas)
 
-`SectionPage` = Logo + `SectionTabs` + `SectionHeader` + intro (opcional, server) + `ToolsGrid` + `Footer`, todo con tokens. **Sin FAQ en los hubs** (decisión 14-Oct-2026: el FAQ vive en cada herramienta y en `/ayuda`), sin «¿Qué quieres aprender?» ni otros títulos de relleno:
+`SectionPage` = Logo + `SectionTabs` + `SectionHeader` (H1 + `subtitle` inspiracional; el copy factual vive en `metaDescription`, **sin `intro` renderizada**) + `ToolsGrid` + `Footer`, todo con tokens. **Sin FAQ en los hubs** (decisión 14-Oct-2026: el FAQ vive en cada herramienta y en `/ayuda`), sin «¿Qué quieres aprender?» ni otros títulos de relleno:
 
 - **Gradiente del H1** (`section-header.tsx`): mapa estático `gradientBySection` con vars `--color-{s}-active` / `-dark` (sin hex; fallback finanzas). **Cuerpo arranca en `-active-dark` → `-active-darkest`**: el ámbar puro no alcanza AA sobre fondo claro. **Sin H2 «¿Qué quieres aprender?»** ni otros títulos de relleno entre el header y el grid (quitado 14-Oct-2026: rompía el diseño).
 - **Footer** (`footer.tsx`): nav server-rendered de enlaces internos (`/que-es-holentia`, `/ayuda`, `/apoyar`, `/aviso-legal`, `/politica-cookies` — obligatorio para rastreo de páginas legales) + enlace de crédito por sección con clases `text-{s} hover:text-{s}-dark dark:text-{s}-light dark:hover:text-{s}-lighter` (cuerpo arranca en `-dark`); sin sección → neutro `text-gray-600 dark:text-gray-300` + `underline underline-offset-2`. Sin estilos inline ni opacidades que hundan contraste. **Excepción**: el footer es el ÚNICO lugar del sitio permitido para emoticones decorativos (`❤ 🇩🇴` en la línea de crédito — decisión explícita del dueño del proyecto; la lista "sin emojis" de §4c aplica al resto del contenido).
@@ -171,7 +171,7 @@ Superficie **gradiente** por sección (no glass) para garantizar contraste en cl
 
 ### SectionTabs (`components/sections/section-tabs.tsx`)
 
-Client component. Links a 4 secciones desde array estático. Activa: token `{s}` + `font-semibold` + `aria-current="page"` — **sin subrayado** (pedido del dueño 14-Oct-2026: solo el texto en color de sección). Inactiva: `text-gray-600 dark:text-gray-400` + `hover:bg-black/5 dark:hover:bg-white/10` (relleno Y texto; sin `opacity-*`). Foco `focus-visible:ring-2 ring-{s}`. Prop `neutral` (home, página monocroma): hovers neutros `hover:text-gray-900 dark:hover:text-white`, sin colores de sección.
+Client component. Links a 4 secciones desde array estático. Activa: token `{s}` + `font-semibold` + `aria-current="page"` — **sin subrayado** (pedido del dueño 14-Oct-2026: solo el texto en color de sección). Inactiva: `text-gray-600 dark:text-gray-400` y hover **solo de color** (`hover:text-{s}-darkest dark:hover:text-{s}-light`) — **sin relleno** (`bg-black/5` retirado 14-Oct-2026: nada de recuadro al pasar el cursor). Foco `focus-visible:ring-2 ring-{s}`. Prop `neutral` (home, página monocroma): hovers neutros `hover:text-gray-900 dark:hover:text-white`, sin colores de sección.
 
 ### ToolPageShell (`components/tool-seo/tool-page-shell.tsx`)
 

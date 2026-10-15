@@ -6,7 +6,7 @@ import JsonLd from "@/components/tool-seo/json-ld"
 export function generateMetadata() {
   return pageMetadata(
     "¿Qué es HOLENTIA?",
-    "HOLENTIA es tu plataforma integral de bienestar: herramientas gratuitas de mente, relaciones, cuerpo y finanzas que funcionan en tu navegador, sin cuenta ni datos personales.",
+    "HOLENTIA es tu plataforma de bienestar: herramientas gratuitas de mente, relaciones, cuerpo y finanzas en tu navegador, sin cuenta ni datos personales.",
     "/que-es-holentia",
   )
 }

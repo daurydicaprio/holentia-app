@@ -6,10 +6,10 @@ export const sectionsData: Record<string, SectionData> = {
     title: "Cultiva tu",
     highlightText: "mente",
     subtitle:
-      "Diario guiado y técnicas de reflexión para desarrollar claridad, resiliencia emocional y equilibrio. Gratuitas, sin registro y en tu navegador.",
+      "Tu mente también merece un espacio cada día. Escribe, reflexiona y gana claridad junto a quienes ya convirtieron la reflexión en un hábito. Gratuitas, en tu navegador y sin registro.",
     text: "Cultiva claridad y resiliencia. Descubre herramientas para tu bienestar emocional y cognitivo.",
-    intro:
-      "La sección de Mente reúne herramientas gratuitas para tu bienestar emocional y cognitivo. La primera disponible es el diario guiado, que te ayuda a ordenar tus pensamientos en 3 pasos: qué sentiste, qué aprendiste y una gratitud. Todas funcionan en tu navegador, sin cuenta ni datos personales.",
+    metaDescription:
+      "Diario guiado, reflexión y hábitos para ganar claridad, resiliencia emocional y equilibrio. Herramientas gratuitas, sin registro y en tu navegador.",
     cards: [
       {
         id: "diario-guiado",
@@ -85,10 +85,10 @@ export const sectionsData: Record<string, SectionData> = {
     title: "Fortalece tus",
     highlightText: "relaciones",
     subtitle:
-      "Test del lenguaje del amor y guías para comunicarte mejor, resolver conflictos y construir vínculos más profundos. Gratis y sin cuenta.",
+      "Las relaciones que importan se cuidan con intención. Comunícate mejor, entiende a quienes amas y fortalece tus vínculos junto a quienes ya dieron el primer paso. Gratis, sin registro y en tu navegador.",
     text: "Fortalece tus relaciones. Herramientas para mejorar la comunicación, resolver conflictos y construir vínculos significativos.",
-    intro:
-      "La sección de Relaciones te ayuda a mejorar tus vínculos con personas pareja, familia o amistades. El test de los 5 lenguajes del amor te muestra cómo das y recibes afecto; las guías próximas cubren comunicación asertiva, resolución de conflictos y empatía. Todo es privado y funciona en tu navegador.",
+    metaDescription:
+      "Test de lenguajes del amor y guías para comunicarte mejor, resolver conflictos y fortalecer tus vínculos. Gratuitas, sin registro y en tu navegador.",
     cards: [
       {
         id: "test-lenguajes-amor",
@@ -164,10 +164,10 @@ export const sectionsData: Record<string, SectionData> = {
     title: "Energiza tu",
     highlightText: "cuerpo",
     subtitle:
-      "Calculadoras de calorías e hidratación y rutinas para un estilo de vida activo y saludable. Gratuitas, en tu navegador y sin registro.",
+      "Tu energía empieza con pequeños cambios. Calcula, ajusta tu rutina y avanza a tu ritmo con la comunidad que ya eligió cuidarse cada día. Gratuitas, en tu navegador y sin registro.",
     text: "Energiza tu cuerpo. Accede a rutinas, nutrición y consejos para un estilo de vida activo y un bienestar integral.",
-    intro:
-      "La sección de Cuerpo reúne calculadoras de salud física basadas en fórmulas reconocidas: calorías diarias con el método de Mifflin-St Jeor e hidratación con la fórmula de Watson ajustada a tu peso, actividad y clima. Rutinas de ejercicio y nutrición llegarán próximamente.",
+    metaDescription:
+      "Calculadora de calorías Mifflin-St Jeor, hidratación diaria y hábitos para un estilo de vida activo. Gratuitas, en tu navegador y sin registro.",
     cards: [
       {
         id: "calculadora-calorias",
@@ -254,10 +254,10 @@ export const sectionsData: Record<string, SectionData> = {
     title: "Domina tus",
     highlightText: "finanzas",
     subtitle:
-      "Presupuesto, interés compuesto, préstamos, tarjetas y consumo eléctrico. Calculadoras gratuitas para administrar tu dinero sin registro.",
+      "El control de tu dinero empieza hoy. Presupuesta, ahorra y haz crecer tus metas con quienes ya tomaron las riendas de sus finanzas. Gratuitas, en tu navegador y sin registro.",
     text: "Domina tus finanzas. Herramientas para presupuestar, invertir y alcanzar tus metas económicas.",
-    intro:
-      "La sección de Finanzas concentra las calculadoras más usadas del sitio: presupuesto personal con regla 50/30/20, interés compuesto con aportaciones e inflación, cuotas de préstamo con tabla de amortización, corte y vencimiento de tarjeta, gasto de combustible, factura eléctrica, perfil de riesgo y un glosario con más de 100 términos explicados con ejemplos. Todos los cálculos ocurren en tu navegador.",
+    metaDescription:
+      "Presupuesto 50/30/20, interés compuesto, préstamos, tarjetas, gasto de combustible y factura eléctrica. Calculadoras gratuitas en tu navegador.",
     cards: [
       {
         id: "crear-presupuesto-personal",

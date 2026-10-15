@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_NAME}`,
   },
   description:
-    "Herramientas gratuitas de bienestar integral: mente, relaciones, cuerpo y finanzas. Calculadoras, simuladores y tests que funcionan en tu dispositivo, sin registrar tus datos.",
+    "Herramientas gratuitas de bienestar integral: mente, relaciones, cuerpo y finanzas. Calculadoras y tests en tu navegador, sin registrar tus datos.",
   applicationName: SITE_NAME,
   openGraph: {
     siteName: SITE_NAME,

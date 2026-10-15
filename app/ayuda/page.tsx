@@ -6,7 +6,7 @@ import MenuButton from "@/components/common/menu-button/menu-button"
 import BrandDots from "@/components/common/brand-dots/brand-dots"
 import { ClearAllData } from "@/components/common/clear-all-data/clear-all-data"
 import JsonLd from "@/components/tool-seo/json-ld"
-import { faqJsonLd, pageMetadata, type FaqItem } from "@/lib/seo"
+import { faqWithBreadcrumbJsonLd, pageMetadata, type FaqItem } from "@/lib/seo"
 
 export function generateMetadata() {
   return pageMetadata(
@@ -52,7 +52,7 @@ const helpFaq: FaqItem[] = [
 export default function AyudaPage() {
   return (
     <main className="min-h-screen flex flex-col">
-      <JsonLd data={faqJsonLd(helpFaq)} />
+      <JsonLd data={faqWithBreadcrumbJsonLd(helpFaq, "/ayuda", "Centro de Ayuda")} />
       <div className="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6">
         <div className="flex items-center justify-between mb-10">
           <Link

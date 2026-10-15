@@ -66,9 +66,8 @@ export function pageMetadata(title: string, description: string, path: string): 
 }
 
 /** Datos estructurados FAQPage a partir de una lista de preguntas */
-export function faqJsonLd(faq: FaqItem[]) {
+function faqNode(faq: FaqItem[]) {
   return {
-    "@context": "https://schema.org",
     "@type": "FAQPage",
     mainEntity: faq.map((item) => ({
       "@type": "Question",
@@ -81,12 +80,32 @@ export function faqJsonLd(faq: FaqItem[]) {
   }
 }
 
+/** FAQPage + BreadcrumbList en un solo @graph (páginas con FAQ sin shell de herramienta, p.ej. /ayuda). */
+export function faqWithBreadcrumbJsonLd(faq: FaqItem[], path: string, name: string) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      faqNode(faq),
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Inicio", item: SITE_URL },
+          { "@type": "ListItem", position: 2, name, item: `${SITE_URL}${path}` },
+        ],
+      },
+    ],
+  }
+}
+
 /** Metadata por página de sección derivada del catálogo en lib/data.ts */
 export function sectionMetadata(section: string): Metadata {
   const data = sectionsData[section]
   const title = data ? `${data.title} ${data.highlightText}` : sectionLabel(section)
+  // La meta description es factual (120–155 ch); el copy inspirador visible va en `subtitle`.
   const description =
-    data?.subtitle ?? `Herramientas de ${sectionLabel(section)} para tu bienestar integral en ${SITE_NAME}.`
+    data?.metaDescription ??
+    data?.subtitle ??
+    `Herramientas de ${sectionLabel(section)} para tu bienestar integral en ${SITE_NAME}.`
 
   return baseMetadata(title, description, `/${section}`)
 }
@@ -162,12 +181,14 @@ export function toolJsonLd(section: string, slug: string, faq: FaqItem[] = []) {
 
 /** JSON-LD para páginas de sección: CollectionPage + BreadcrumbList (sin FAQPage: los hubs ya no llevan FAQ visible) */
 export function sectionJsonLd(section: string) {
+  const data = sectionsData[section]
   const graph: Record<string, unknown>[] = [
     {
       "@type": "CollectionPage",
       name: `${sectionLabel(section)} | ${SITE_NAME}`,
       url: `${SITE_URL}/${section}`,
       inLanguage: "es-DO",
+      ...(data?.metaDescription ? { description: data.metaDescription } : {}),
       isPartOf: {
         "@type": "WebSite",
         name: SITE_NAME,

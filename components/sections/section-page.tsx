@@ -40,12 +40,6 @@ export default function SectionPage({ section }: SectionPageProps) {
 
         <SectionHeader section={sectionData} />
 
-        {sectionData.intro && (
-          <p className="mt-6 max-w-3xl px-4 text-center text-sm sm:text-base text-gray-600 dark:text-gray-300">
-            {sectionData.intro}
-          </p>
-        )}
-
         <ToolsGrid cards={sectionData.cards} section={section} />
       </div>
 

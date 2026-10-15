@@ -19,8 +19,8 @@ export interface SectionData {
   highlightText: string
   subtitle: string
   text: string
-  /** Párrafo introductorio extra (server-rendered, bueno para SEO/GEO). */
-  intro?: string
+  /** Meta description de la página de sección (120–155 chars). El copy visible va en `subtitle`. */
+  metaDescription?: string
   cards: CardData[]
 }
 

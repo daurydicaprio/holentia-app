@@ -13,7 +13,7 @@ Objivo: que Google, Bing y los buscadores generativos (ChatGPT, Claude, Perplexi
   - `metaTitle` (obligatorio por herramienta): ≤60 chars, keyword principal primero, sin marcas raras. El `titleTemplate` del layout añade `| HOLENTIA`.
   - `metaDescription` (obligatoria): **120–155 chars**, keyword + beneficio + gancho («Gratis y sin registro», «en tu navegador»). NUNCA reutilizar el blurb corto de la tarjeta (mide 27–47 chars → snippet pobre).
   - `description` corto se queda solo como subtítulo del shell.
-- **Secciones**: `sectionMetadata()` usa `subtitle` del catálogo — mantenerlo 120–155 chars y **sin cifras inventadas** («8,000 personas» = afirmación no verificable; el sitio no tiene analytics → riesgo E-E-A-T/GEO).
+- **Secciones**: `sectionMetadata()` usa `metaDescription` del catálogo (**120–155 chars**, copy factual: qué hay en la página, keywords de las tools) con fallback a `subtitle`. El `subtitle` visible bajo el H1 es **inspiracional** (sin cifras inventadas — «8,000 personas» = afirmación no verificable; el sitio no tiene analytics → riesgo E-E-A-T/GEO). El copy largo NO se renderiza en el hub (decisión 14-Oct-2026: sin `intro` visible → vive en la meta description).
 - **Informativas**: `pageMetadata(title, description, path)`.
 - `html lang="es-DO"`, `locale: "es_DO"` en OG, `inLanguage: "es-DO"` en JSON-LD.
 
@@ -21,7 +21,7 @@ Objivo: que Google, Bing y los buscadores generativos (ChatGPT, Claude, Perplexi
 
 - File-convention **por ruta**: `app/{ruta}/opengraph-image.tsx` (1200×630, PNG). Next la inyecta como `og:image` Y `twitter:image` con dims/alt. **No** declarar `images` en metadata (pisa la convención).
 - Plantilla compartida: `components/seo/og-template.tsx` (`ogTemplate({ title, subtitle })`) + fuente `app/og-font.ts` (INTER_BOLD_BASE64). Cada variante: `import { INTER_BOLD_BASE64 } from "../og-font"`.
-- Variantes existentes: raíz (`app/opengraph-image.tsx`), 4 secciones, 13 herramientas (17 archivos). **Al añadir herramienta: crear `app/{slug}/opengraph-image.tsx`** (copiar de otra tool y cambiar title/subtitle/alt).
+- Variantes existentes: raíz (`app/opengraph-image.tsx`), 4 secciones, 13 herramientas y 5 informativas (`ayuda`, `apoyar`, `aviso-legal`, `politica-cookies`, `que-es-holentia`) = **22 archivos**. **Al añadir herramienta o página: crear `app/{ruta}/opengraph-image.tsx`** (copiar de otra y cambiar title/subtitle/alt). La convención NO hereda: cada ruta sin archivo sale sin `og:image`.
 - `twitter.card` = `summary_large_image` (layout + `baseMetadata`).
 
 ## 3. Datos estructurados (JSON-LD)
@@ -34,7 +34,7 @@ Todo server-rendered vía `<JsonLd data={...} />`:
 | Sección | CollectionPage + BreadcrumbList (**sin FAQPage**: los hubs no llevan FAQ visible) | `sectionJsonLd(section)` |
 | Herramienta | WebApplication (applicationCategory por sección, offers 0 DOP) + BreadcrumbList + FAQPage (si hay FAQ — obligatorio) | `toolJsonLd(section, slug, faq)` |
 | Informativa | AboutPage + BreadcrumbList | `pageJsonLd(name, path)` |
-| Ayuda | FAQPage | `faqJsonLd(faq)` |
+| Ayuda | FAQPage + BreadcrumbList (un solo `@graph`) | `faqWithBreadcrumbJsonLd(faq, "/ayuda", "Centro de Ayuda")` |
 | Glosario | DefinedTermSet | inline en `app/glosario-financiero/page.tsx` |
 
 Miguita: **solo en JSON-LD** (no UI visible — los botones Volver y el footer cubren la navegación).
@@ -43,7 +43,7 @@ Miguita: **solo en JSON-LD** (no UI visible — los botones Volver y el footer c
 
 - **`public/llms.txt`** en la raíz (spec llms.txt): H1 + blockquote + `## Secciones` + `## Herramientas` con URLs `https://holentia.com/{slug}` y descripciones de una línea coherentes con la tool real. Actualizar en el MISMO commit de la herramienta nueva (12→13 → próxima cuenta).
 - **robots.ts**: reglas explícitas `GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended` con `allow: "/"` + `*`. Nunca bloquear bots de IA: queremos ser citados.
-- **Contenido con respuesta inmediata**: H1 + subtítulo + FAQ en HTML inicial (server) **en cada herramienta y `/ayuda`** (1–3 frases por respuesta). Los hubs llevan `intro` pero NO FAQ (corrección 14-Oct-2026).
+- **Contenido con respuesta inmediata**: H1 + subtítulo + FAQ en HTML inicial (server) **en cada herramienta y `/ayuda`** (1–3 frases por respuesta). Los hubs NO llevan FAQ ni intro visible (14-Oct-2026): su copy factual vive en `metaDescription` y el visible es el `subtitle` inspiracional.
 - **Sin afirmaciones numéricas no verificables** (usuarios, descargas, precisiones sin fuente).
 - `lang="es-DO"`: los generativos usan el idioma para citar la fuente correcta.
 
@@ -53,7 +53,7 @@ Miguita: **solo en JSON-LD** (no UI visible — los botones Volver y el footer c
 - **Sitemap** (`app/sitemap.ts`): se deriva de `sectionsData` (solo `isAvailable`) + rutas estáticas. `lastModified` usa la constante `LAST_UPDATED` (fecha fija, actualizar a mano al publicar cambios de contenido — NO `new Date()` en cada build).
 - **Enlaces internos server-rendered**: el `Footer` enlaza `/que-es-holentia`, `/ayuda`, `/apoyar`, `/aviso-legal`, `/politica-cookies` (sin esto las legales quedan huérfanas: el menú es client y no cuenta para el HTML inicial). `ToolPageShell` enlaza sección y `/apoyar`. No romper estos enlaces.
 - `app/manifest.ts` (PWA mínima) y `app/not-found.tsx` con `robots: { index: false }`.
-- Contenido fino: las secciones llevan `intro` en el catálogo (`SectionData.intro`) renderizado en `SectionPage` — sin FAQ de sección.
+- Contenido fino: las secciones llevan `subtitle` visible (inspiracional) + `metaDescription` factual (120–155) en el catálogo — sin `intro` renderizada y sin FAQ de sección.
 
 ## 6. Checklist por herramienta nueva (obligatorio antes del push)
 

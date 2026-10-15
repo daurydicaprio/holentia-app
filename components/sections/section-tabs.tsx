@@ -65,7 +65,7 @@ export default function SectionTabs({ neutral = false }: SectionTabsProps) {
             aria-current={isActive ? "page" : undefined}
             className={cn(
               "rounded-md px-4 py-2 text-sm transition-colors duration-200",
-              "text-gray-600 hover:bg-black/5 dark:text-gray-400 dark:hover:bg-white/10",
+              "text-gray-600 dark:text-gray-400",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
               tab.focusClass,
               isActive ? cn(tab.activeClass, "font-semibold") : hoverClass,
