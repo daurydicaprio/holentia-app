@@ -50,7 +50,7 @@ Un rol = una clase. No inventar radios/paddings nuevos; copiar del componente de
 | Sub-superficie (item/tabla/modal/dropdown) | `rounded-xl` + `p-5` | item FAQ, tarjeta de resultado |
 | Superficie mayor de herramienta | `rounded-2xl` + `p-6 sm:p-8` hero / `p-6` FAQ | ToolCard, panel hero |
 | Superficie mayor de página de contenido (ayuda/apoyar/legales) | `rounded-3xl` | SOLO esas páginas, nunca herramientas |
-| Círculo/pill | `rounded-full` | círculo FAQ, dots, underline |
+| Círculo/pill | `rounded-full` | círculo FAQ, dots |
 
 - Página herramienta: `p-4 sm:p-6 max-w-6xl mx-auto` · header→contenido `mb-6` · grupos `space-y-6/10` · grids `gap-4` (tarjetas de herramientas y contenido) / `gap-6` (formularios).
 - **Foco canónico** (un solo patrón): `focus:border-transparent focus:ring-2 focus:ring-{s}` + `dark:focus:border-transparent dark:focus:ring-{s}-light`. Prohibido `ring-green-500`/hex en foco.

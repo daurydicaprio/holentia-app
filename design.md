@@ -119,9 +119,9 @@ El borde se vuelve transparente al enfocar: solo el anillo de sección marca el 
 
 ### 4b. Página de sección (hub mente/relaciones/cuerpo/finanzas)
 
-`SectionPage` = Logo + `SectionTabs` + `SectionHeader` + intro (opcional, server) + `ToolsGrid` + mini-FAQ nativa (`<details>`, si la sección define `faq`) + `Footer`, todo con tokens:
+`SectionPage` = Logo + `SectionTabs` + `SectionHeader` + intro (opcional, server) + `ToolsGrid` + `Footer`, todo con tokens. **Sin FAQ en los hubs** (decisión 14-Oct-2026: el FAQ vive en cada herramienta y en `/ayuda`), sin «¿Qué quieres aprender?» ni otros títulos de relleno:
 
-- **Gradiente del H1** (`section-header.tsx`): mapa estático `gradientBySection` con vars `--color-{s}-active` / `-dark` (sin hex; fallback finanzas). **Cuerpo arranca en `-active-dark` → `-active-darkest`**: el ámbar puro no alcanza AA sobre fondo claro. H2 «¿Qué quieres aprender?»: `text-xl sm:text-2xl font-bold`.
+- **Gradiente del H1** (`section-header.tsx`): mapa estático `gradientBySection` con vars `--color-{s}-active` / `-dark` (sin hex; fallback finanzas). **Cuerpo arranca en `-active-dark` → `-active-darkest`**: el ámbar puro no alcanza AA sobre fondo claro. **Sin H2 «¿Qué quieres aprender?»** ni otros títulos de relleno entre el header y el grid (quitado 14-Oct-2026: rompía el diseño).
 - **Footer** (`footer.tsx`): nav server-rendered de enlaces internos (`/que-es-holentia`, `/ayuda`, `/apoyar`, `/aviso-legal`, `/politica-cookies` — obligatorio para rastreo de páginas legales) + enlace de crédito por sección con clases `text-{s} hover:text-{s}-dark dark:text-{s}-light dark:hover:text-{s}-lighter` (cuerpo arranca en `-dark`); sin sección → neutro `text-gray-600 dark:text-gray-300` + `underline underline-offset-2`. Sin estilos inline ni opacidades que hundan contraste. **Excepción**: el footer es el ÚNICO lugar del sitio permitido para emoticones decorativos (`❤ 🇩🇴` en la línea de crédito — decisión explícita del dueño del proyecto; la lista "sin emojis" de §4c aplica al resto del contenido).
 
 ### 4c. Páginas básicas (home, ayuda, apoyar, legales, qué-es) — monocromo de marca
@@ -157,6 +157,8 @@ Superficie **gradiente** por sección (no glass) para garantizar contraste en cl
 - **Light**: `bg-gradient-to-br from-{s} to-{s}-dark`, texto blanco (cuerpo: `text-black`).
 - **Dark**: `dark:bg-none dark:bg-{s}-glass dark:text-{s}-text`.
 - Borde `border-{s}-border`, hover `hover:border-{s}-light hover:-translate-y-0.5` + sombra mayor + efecto 3D (solo `hover:hover`; el tilt JS pisa el transform — coexisten porque `animate-fadeIn` vive en el `<Link>` externo, NUNCA en el div con transform).
+- **Hover aclarado** (feedback extra, AA-safe): el extremo del gradiente se aclara un paso con `group-hover:to-{s}` (el texto vive sobre `from-{s}`, color base sin tocar → contraste intacto; la zona `to-` es la vacía inferior). En oscuro el glass no cambia (borde/sombra/lift ya dan la señal).
+- **Chevron**: se desliza a la derecha (`group-hover:translate-x-1`, sube a `opacity-100`) y su círculo aparece con `group-hover:bg-white/20 dark:group-hover:bg-white/10` — el «punto» que pide el usuario, sutil.
 - Categoría: `text-white/85 dark:text-{s}-lighter` (cuerpo: `text-black/70`).
 - No disponible: capa `.card-coming-soon` (overlay `rgba(0,0,0,0.45)` + blur + "Próximamente") + candado + `opacity-60`, `cursor-default`.
 - Contenedor es `<Link>` con `group` + `data-interactive="true"` + `animate-fadeIn` + `style={{ animationDelay }}`; haptic en touch.
@@ -169,15 +171,15 @@ Superficie **gradiente** por sección (no glass) para garantizar contraste en cl
 
 ### SectionTabs (`components/sections/section-tabs.tsx`)
 
-Client component. Links a 4 secciones desde array estático. Activa: token `{s}` + underline `div` (2rem × 3px, `rounded-full`). Inactiva: `text-gray-600 dark:text-gray-400` + `hover:bg-black/5 dark:hover:bg-white/10` (relleno Y texto; sin `opacity-*`). Foco `focus-visible:ring-2 ring-{s}`. Prop `neutral` (home, página monocroma): hovers neutros `hover:text-gray-900 dark:hover:text-white`, sin colores de sección.
+Client component. Links a 4 secciones desde array estático. Activa: token `{s}` + `font-semibold` + `aria-current="page"` — **sin subrayado** (pedido del dueño 14-Oct-2026: solo el texto en color de sección). Inactiva: `text-gray-600 dark:text-gray-400` + `hover:bg-black/5 dark:hover:bg-white/10` (relleno Y texto; sin `opacity-*`). Foco `focus-visible:ring-2 ring-{s}`. Prop `neutral` (home, página monocroma): hovers neutros `hover:text-gray-900 dark:hover:text-white`, sin colores de sección.
 
 ### ToolPageShell (`components/tool-seo/tool-page-shell.tsx`)
 
-Header con `pt-6` de aire bajo el logo/menú + H1 centrado en color de sección + descripción + underline · botones outline "Volver a {sección}" / "Hacer donación" visibles también en móvil (`border-{s} text-{s} dark:border-{s}-light dark:text-{s}-light`; hover claro: relleno `{s}-dark` + texto blanco — cuerpo: `{s}` + texto negro; hover oscuro: relleno `{s}-light` + texto negro; sin escala; `data-interactive="true"`) · `children` · `JsonLd` (WebApplication + BreadcrumbList). **Sin miguita visible**: la navegación la dan los botones Volver y el footer; el `BreadcrumbList` va solo en JSON-LD (no obliga a UI visual). **Sin bloque FAQ** (decisión 14-Oct-2026): la respuesta vive en la propia herramienta; el FAQ visible queda para los hubs de sección y `/ayuda`.
+Header con `pt-6` de aire bajo el logo/menú + H1 centrado en color de sección + descripción + underline · botones outline "Volver a {sección}" / "Hacer donación" visibles también en móvil (`border-{s} text-{s} dark:border-{s}-light dark:text-{s}-light`; hover claro: relleno `{s}-dark` + texto blanco — cuerpo: `{s}` + texto negro; hover oscuro: relleno `{s}-light` + texto negro; sin escala; `data-interactive="true"`) · `children` · FAQ acordeón · `JsonLd` (WebApplication + BreadcrumbList + FAQPage). **Sin miguita visible**: la navegación la dan los botones Volver y el footer; el `BreadcrumbList` va solo en JSON-LD (no obliga a UI visual).
 
-### FAQ en herramientas — ELIMINADO (14-Oct-2026)
+### FAQ acordeón (`components/tool-seo/tool-faq.tsx`)
 
-El acordeón `tool-faq.tsx` se retiró de las 13 herramientas y de `ToolPageShell` (decisión del dueño: el FAQ repetía lo que la UI ya explica). `toolJsonLd(section, slug)` ya no acepta `faq` ni emite `FAQPage`. No recrearlo: si una herramienta necesita dar contexto, meterlo en su propia UI. El FAQ visible como patrón sigue vivo en `SectionPage` (mini-FAQ nativa `<details>`) y `/ayuda`.
+Client component. Una pregunta abierta a la vez (`openIndex`). Fila `button` con `aria-expanded`/`aria-controls`; panel con `grid-rows-[0fr→1fr]` + `overflow-hidden` (el contenido permanece en el HTML para SEO). Icono `Plus`/`Minus` en círculo sólido `bg-{s} group-hover:bg-{s}-dark dark:bg-{s}-light dark:group-hover:bg-{s}-lighter` con icono `text-white dark:text-black` (en cuerpo: `bg-cuerpo-dark`→`bg-cuerpo-darkest` por claridad). Hover de fila: relleno neutro visible `hover:bg-black/5` / `dark:hover:bg-white/10` + texto al tinte de sección (`hover:text-{s}` / `dark:hover:text-{s}-light`). **Solo en herramientas** (el prop `faq` del shell) — los hubs de sección NO llevan FAQ (corrección 14-Oct-2026).
 
 ### Botones (`components/ui/button.tsx` + custom)
 

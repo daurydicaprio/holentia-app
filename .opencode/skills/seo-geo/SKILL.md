@@ -31,8 +31,8 @@ Todo server-rendered vía `<JsonLd data={...} />`:
 | Página | Tipo | Helper |
 |---|---|---|
 | Home | WebSite + Organization (con logo, description) | inline en `app/page.tsx` |
-| Sección | CollectionPage + BreadcrumbList + FAQPage (si tiene `faq` en catálogo) | `sectionJsonLd(section, faq)` |
-| Herramienta | WebApplication (applicationCategory por sección, offers 0 DOP) + BreadcrumbList — **sin FAQPage** (las herramientas no llevan FAQ visible; decisión de producto 14-Oct-2026) | `toolJsonLd(section, slug)` |
+| Sección | CollectionPage + BreadcrumbList (**sin FAQPage**: los hubs no llevan FAQ visible) | `sectionJsonLd(section)` |
+| Herramienta | WebApplication (applicationCategory por sección, offers 0 DOP) + BreadcrumbList + FAQPage (si hay FAQ — obligatorio) | `toolJsonLd(section, slug, faq)` |
 | Informativa | AboutPage + BreadcrumbList | `pageJsonLd(name, path)` |
 | Ayuda | FAQPage | `faqJsonLd(faq)` |
 | Glosario | DefinedTermSet | inline en `app/glosario-financiero/page.tsx` |
@@ -43,7 +43,7 @@ Miguita: **solo en JSON-LD** (no UI visible — los botones Volver y el footer c
 
 - **`public/llms.txt`** en la raíz (spec llms.txt): H1 + blockquote + `## Secciones` + `## Herramientas` con URLs `https://holentia.com/{slug}` y descripciones de una línea coherentes con la tool real. Actualizar en el MISMO commit de la herramienta nueva (12→13 → próxima cuenta).
 - **robots.ts**: reglas explícitas `GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended` con `allow: "/"` + `*`. Nunca bloquear bots de IA: queremos ser citados.
-- **Contenido con respuesta inmediata**: H1 + subtítulo + intro/mini-FAQ en HTML inicial (server) **en hubs de sección y `/ayuda`** — allí responde en 1–3 frases lo que alguien preguntaría en voz alta. En herramientas NO: la respuesta vive en la propia UI (decisión de producto).
+- **Contenido con respuesta inmediata**: H1 + subtítulo + FAQ en HTML inicial (server) **en cada herramienta y `/ayuda`** (1–3 frases por respuesta). Los hubs llevan `intro` pero NO FAQ (corrección 14-Oct-2026).
 - **Sin afirmaciones numéricas no verificables** (usuarios, descargas, precisiones sin fuente).
 - `lang="es-DO"`: los generativos usan el idioma para citar la fuente correcta.
 
@@ -53,18 +53,18 @@ Miguita: **solo en JSON-LD** (no UI visible — los botones Volver y el footer c
 - **Sitemap** (`app/sitemap.ts`): se deriva de `sectionsData` (solo `isAvailable`) + rutas estáticas. `lastModified` usa la constante `LAST_UPDATED` (fecha fija, actualizar a mano al publicar cambios de contenido — NO `new Date()` en cada build).
 - **Enlaces internos server-rendered**: el `Footer` enlaza `/que-es-holentia`, `/ayuda`, `/apoyar`, `/aviso-legal`, `/politica-cookies` (sin esto las legales quedan huérfanas: el menú es client y no cuenta para el HTML inicial). `ToolPageShell` enlaza sección y `/apoyar`. No romper estos enlaces.
 - `app/manifest.ts` (PWA mínima) y `app/not-found.tsx` con `robots: { index: false }`.
-- Contenido fino: las secciones llevan `intro` + mini-FAQ en el catálogo (`SectionData.intro`/`faq`) renderizados en `SectionPage`.
+- Contenido fino: las secciones llevan `intro` en el catálogo (`SectionData.intro`) renderizado en `SectionPage` — sin FAQ de sección.
 
 ## 6. Checklist por herramienta nueva (obligatorio antes del push)
 
 1. `metaTitle` ≤60 chars + `metaDescription` 120–155 chars en `lib/data.ts`.
-2. **Sin FAQ** en `app/{slug}/page.tsx`: no crear arrays `faq` ni pasárselos a `ToolPageShell` (la respuesta está en la UI de la herramienta).
+2. FAQ ≥5 preguntas reales en `app/{slug}/page.tsx` (`const faq` + `faq={faq}` al shell; una responde privacidad/local).
 3. `app/{slug}/opengraph-image.tsx` con `ogTemplate` (title/subtitle/alt propios).
 4. Línea en `public/llms.txt` (herramientas + total actualizado).
 5. `toolMetadata` + `toolJsonLd` ya proveen canonical/OG/WebApplication/Breadcrumb — verificar con smoke.
 6. Sitemap: solo agregar la card al catálogo (se genera solo); si tocas contenido existente, actualizar `LAST_UPDATED`.
 7. Enlaces: el footer ya la enlaza indirectamente (catálogo); no hace falta link manual.
-8. Verificación: `pnpm build` + comprobar en `.next/server/app/{slug}.html`: `<title>`, `meta description`, `canonical`, `og:image`, `twitter:card`, `<script type="application/ld+json">` con WebApplication + Breadcrumb (**sin FAQPage**) y **sin** acordeón «Preguntas frecuentes».
+8. Verificación: `pnpm build` + comprobar en `.next/server/app/{slug}.html`: `<title>`, `meta description`, `canonical`, `og:image`, `twitter:card`, `<script type="application/ld+json">` con WebApplication + Breadcrumb + FAQPage y el acordeón «Preguntas frecuentes» en el HTML.
 
 ## 7. Verificación global (tras cambios SEO)
 

@@ -10,23 +10,6 @@ export const sectionsData: Record<string, SectionData> = {
     text: "Cultiva claridad y resiliencia. Descubre herramientas para tu bienestar emocional y cognitivo.",
     intro:
       "La sección de Mente reúne herramientas gratuitas para tu bienestar emocional y cognitivo. La primera disponible es el diario guiado, que te ayuda a ordenar tus pensamientos en 3 pasos: qué sentiste, qué aprendiste y una gratitud. Todas funcionan en tu navegador, sin cuenta ni datos personales.",
-    faq: [
-      {
-        question: "¿Qué herramientas hay en la sección de Mente?",
-        answer:
-          "El diario guiado de emociones está disponible hoy. Próximamente llegarán meditación mindfulness, visualización positiva, seguimiento de hábitos, ejercicios de gratitud, técnicas de respiración, mapas mentales y afirmaciones diarias.",
-      },
-      {
-        question: "¿Necesito crear una cuenta para usar las herramientas de Mente?",
-        answer:
-          "No. Todas las herramientas funcionan directamente en tu navegador y tus entradas o datos se guardan solo en tu dispositivo (almacenamiento local). No hay registro ni servidores.",
-      },
-      {
-        question: "¿Son gratuitas las herramientas de bienestar mental?",
-        answer:
-          "Sí, todas las herramientas de HOLENTIA son gratuitas y sin publicidad. Puedes usar el diario guiado cuantas veces quieras.",
-      },
-    ],
     cards: [
       {
         id: "diario-guiado",
@@ -106,23 +89,6 @@ export const sectionsData: Record<string, SectionData> = {
     text: "Fortalece tus relaciones. Herramientas para mejorar la comunicación, resolver conflictos y construir vínculos significativos.",
     intro:
       "La sección de Relaciones te ayuda a mejorar tus vínculos con personas pareja, familia o amistades. El test de los 5 lenguajes del amor te muestra cómo das y recibes afecto; las guías próximas cubren comunicación asertiva, resolución de conflictos y empatía. Todo es privado y funciona en tu navegador.",
-    faq: [
-      {
-        question: "¿Qué es el test de los 5 lenguajes del amor?",
-        answer:
-          "Es un cuestionario rápido que identifica cuál de los cinco lenguajes (palabras de afirmación, tiempo de calidad, regalos, actos de servicio y contacto físico) prefieres para expresar y recibir amor. Ayuda a parejas y amistades a entenderse mejor.",
-      },
-      {
-        question: "¿El test es confidencial?",
-        answer:
-          "Sí. Se responde y se calcula en tu dispositivo; no hay cuenta, ni servidor, ni envío de datos. Solo tú ves tu resultado.",
-      },
-      {
-        question: "¿Qué otras herramientas habrá en Relaciones?",
-        answer:
-          "Próximamente: guía de comunicación asertiva, resolución de conflictos, diario para parejas, test de apego, límites saludables, preguntas profundas y ejercicios de empatía.",
-      },
-    ],
     cards: [
       {
         id: "test-lenguajes-amor",
@@ -202,23 +168,6 @@ export const sectionsData: Record<string, SectionData> = {
     text: "Energiza tu cuerpo. Accede a rutinas, nutrición y consejos para un estilo de vida activo y un bienestar integral.",
     intro:
       "La sección de Cuerpo reúne calculadoras de salud física basadas en fórmulas reconocidas: calorías diarias con el método de Mifflin-St Jeor e hidratación con la fórmula de Watson ajustada a tu peso, actividad y clima. Rutinas de ejercicio y nutrición llegarán próximamente.",
-    faq: [
-      {
-        question: "¿Cómo calcula la calculadora de calorías mis necesidades?",
-        answer:
-          "Usa la fórmula de Mifflin-St Jeor para estimar tu gasto basal (TMB) según sexo, edad, peso y altura, y lo multiplica por tu nivel de actividad. Luego muestra el mantenimiento y ajustes de déficit o superávit según tu objetivo.",
-      },
-      {
-        question: "¿Qué fórmula usa la calculadora de hidratación?",
-        answer:
-          "La fórmula de Watson: estima tu requerimiento diario de agua por peso y lo ajusta según nivel de actividad física y clima caliente, devolviendo el total en litros y vasos.",
-      },
-      {
-        question: "¿Los resultados reemplazan a un nutricionista?",
-        answer:
-          "No. Son estimaciones educativas para orientarte. Para decisiones de salud, consulta a un profesional.",
-      },
-    ],
     cards: [
       {
         id: "calculadora-calorias",
@@ -309,23 +258,6 @@ export const sectionsData: Record<string, SectionData> = {
     text: "Domina tus finanzas. Herramientas para presupuestar, invertir y alcanzar tus metas económicas.",
     intro:
       "La sección de Finanzas concentra las calculadoras más usadas del sitio: presupuesto personal con regla 50/30/20, interés compuesto con aportaciones e inflación, cuotas de préstamo con tabla de amortización, corte y vencimiento de tarjeta, gasto de combustible, factura eléctrica, perfil de riesgo y un glosario con más de 100 términos explicados con ejemplos. Todos los cálculos ocurren en tu navegador.",
-    faq: [
-      {
-        question: "¿Qué calculadora financiera elijo?",
-        answer:
-          "Si organizas ingresos y gastos, usa el presupuesto personal. Para simular el crecimiento de ahorros, la de interés compuesto. Para un crédito o tarjeta, la calculadora de préstamo o la de interés de tarjeta. El glosario resuelve dudas de términos.",
-      },
-      {
-        question: "¿Los resultados son asesoría financiera?",
-        answer:
-          "No, son estimaciones educativas para que decidas con más información. Para decisiones importantes, consulta a un asesor financiero certificado.",
-      },
-      {
-        question: "¿Mis datos financieros salen de mi dispositivo?",
-        answer:
-          "No. No hay backend ni analytics: los montos se procesan y guardan en el almacenamiento local de tu navegador, y puedes borrarlos con «Borrar mis datos».",
-      },
-    ],
     cards: [
       {
         id: "crear-presupuesto-personal",

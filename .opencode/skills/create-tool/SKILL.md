@@ -71,14 +71,15 @@ export default function MiHerramientaPage() {
 }
 ```
 
-- `ToolPageShell` ya renderiza: H1 + descripción + underline + botones Volver/Donación + JSON-LD (WebApplication + Breadcrumb). **No duplicar nada de eso dentro del componente.** No acepta prop `faq` (ver paso 5).
+- `ToolPageShell` ya renderiza: H1 + descripción + underline + botones Volver/Donación + FAQ acordeón + JSON-LD (WebApplication + Breadcrumb + FAQPage). **No duplicar nada de eso dentro del componente.**
 - Nombres de función/ruta en kebab→PascalCase (`CalculadoraInteresCompuestoPage`).
 
-## 5. Sin FAQ en herramientas (decisión de producto, 14-Oct-2026)
+## 5. FAQ (obligatorio, SEO)
 
-- Las herramientas **NO llevan bloque FAQ visible ni `FAQPage` JSON-LD**: la respuesta a las preguntas vive en la propia UI de la herramienta (resultados, tooltips, avisos, «Borrar mis datos»).
-- No crear arrays `const faq` ni pasarlos al shell — `toolJsonLd(section, slug)` no acepta FAQ.
-- El FAQ visible sí aplica donde no hay UI que lo responda: hubs de sección (`SectionData.faq`) y `/ayuda` (skill `seo-geo` §5).
+- **5–6 preguntas** en español con respuestas útiles y reales (no relleno); responder en 1–3 frases (bueno para GEO). Renderizadas en `app/{slug}/page.tsx` como `const faq: FaqItem[]` + prop `faq={faq}` al shell (acordeón con hover por sección vía `tool-faq.tsx`).
+- **Siempre incluir** la de privacidad: «¿Guardan ustedes mis datos?» → que mencione `localStorage` y `holentia:{slug}:draft:v1` (o la clave que uses).
+- El contenido queda en el HTML inicial aunque el acordeón esté cerrado (no ocultarlo con JS).
+- **Los hubs de sección NO llevan FAQ** (corrección 14-Oct-2026): el FAQ vive en cada herramienta y en `/ayuda`. No reintroducir `SectionData.faq`.
 
 ## 6. Persistencia (si aplica)
 
@@ -97,7 +98,7 @@ export default function MiHerramientaPage() {
 pnpm exec tsc --noEmit && pnpm lint && pnpm build
 ```
 
-Smoke SEO (skill `seo-geo` §6–7): en `.next/server/app/{slug}.html` comprobar `<title>`, `meta description`, `canonical`, `og:image`, `twitter:card`, JSON-LD (WebApplication + Breadcrumb, **sin FAQPage**) y ausencia del acordeón FAQ.
+Smoke SEO (skill `seo-geo` §6–7): en `.next/server/app/{slug}.html` comprobar `<title>`, `meta description`, `canonical`, `og:image`, `twitter:card` y JSON-LD con FAQPage.
 
 ## 9. Mantenimiento de docs
 

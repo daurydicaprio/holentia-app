@@ -12,7 +12,6 @@ const TABS = [
     section: "mente",
     activeClass: "text-mente dark:text-mente-light",
     hoverClass: "hover:text-mente-darkest dark:hover:text-mente-light",
-    underlineClass: "bg-mente dark:bg-mente-light",
     focusClass: "focus-visible:ring-mente dark:focus-visible:ring-mente-light",
   },
   {
@@ -21,7 +20,6 @@ const TABS = [
     section: "relaciones",
     activeClass: "text-relaciones dark:text-relaciones-light",
     hoverClass: "hover:text-relaciones-darkest dark:hover:text-relaciones-light",
-    underlineClass: "bg-relaciones dark:bg-relaciones-light",
     focusClass: "focus-visible:ring-relaciones dark:focus-visible:ring-relaciones-light",
   },
   {
@@ -30,7 +28,6 @@ const TABS = [
     section: "cuerpo",
     activeClass: "text-cuerpo-dark dark:text-cuerpo-light",
     hoverClass: "hover:text-cuerpo-darkest dark:hover:text-cuerpo-light",
-    underlineClass: "bg-cuerpo-dark dark:bg-cuerpo-light",
     focusClass: "focus-visible:ring-cuerpo dark:focus-visible:ring-cuerpo-light",
   },
   {
@@ -39,7 +36,6 @@ const TABS = [
     section: "finanzas",
     activeClass: "text-finanzas dark:text-finanzas-light",
     hoverClass: "hover:text-finanzas-darkest dark:hover:text-finanzas-light",
-    underlineClass: "bg-finanzas dark:bg-finanzas-light",
     focusClass: "focus-visible:ring-finanzas dark:focus-visible:ring-finanzas-light",
   },
 ] as const
@@ -66,8 +62,9 @@ export default function SectionTabs({ neutral = false }: SectionTabsProps) {
             href={tab.href}
             onClick={() => triggerHapticFeedback("light")}
             data-interactive="true"
+            aria-current={isActive ? "page" : undefined}
             className={cn(
-              "relative rounded-md px-4 py-2 text-sm transition-all duration-200",
+              "rounded-md px-4 py-2 text-sm transition-colors duration-200",
               "text-gray-600 hover:bg-black/5 dark:text-gray-400 dark:hover:bg-white/10",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
               tab.focusClass,
@@ -75,14 +72,6 @@ export default function SectionTabs({ neutral = false }: SectionTabsProps) {
             )}
           >
             {tab.label}
-            <span
-              aria-hidden="true"
-              className={cn(
-                "absolute -bottom-1 left-1/2 h-[3px] -translate-x-1/2 rounded-full transition-all duration-300",
-                isActive ? "w-8" : "w-0",
-                tab.underlineClass,
-              )}
-            />
           </Link>
         )
       })}

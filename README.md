@@ -55,7 +55,7 @@ holentia/
 │   │   ├── risk-profile-test/   # Test de perfil de riesgo (Finanzas)
 │   │   └── glossary/            # Glosario financiero (Finanzas)
 │   ├── ui/                   # Componentes de interfaz (botones, tarjetas, etc.)
-│   └── tool-seo/             # Shell server de herramientas: tool-page-shell, json-ld
+│   └── tool-seo/             # Shell server de herramientas: tool-page-shell, json-ld, tool-faq
 ├── hooks/                    # Custom hooks
 │   ├── use-budget-simulator.ts    # Lógica para el simulador de presupuesto
 │   ├── use-compound-interest-calculator.ts # Lógica para calculadora de interés compuesto
@@ -64,7 +64,7 @@ holentia/
 │   └── use-media-query.ts         # Hook para consultas de medios
 ├── lib/                      # Utilidades y funciones
 │   ├── data.ts               # Datos de secciones y herramientas
-│   ├── seo.ts                # Metadata + JSON-LD (WebApplication, Breadcrumb, FAQPage de hubs/ayuda, sitemap)
+│   ├── seo.ts                # Metadata + JSON-LD (WebApplication, Breadcrumb, FAQPage, sitemap)
 │   ├── storage.ts            # Helper localStorage namespaced holentia:*
 │   └── utils.ts              # Funciones de utilidad
 ├── types/                    # Definiciones de tipos
@@ -110,8 +110,8 @@ holentia/
 
 - **Páginas de herramienta server-rendered**: cada herramienta usa `ToolPageShell` (server component) con H1, descripción y breadcrumb en el HTML inicial; la interactividad vive dentro como client components
 - **Metadata por página**: `generateMetadata` en las 13 herramientas, las 4 secciones, el home y las páginas informativas (title, description, canonical, openGraph, twitter) con template global `{página} | HOLENTIA` en `app/layout.tsx`
-- **Datos estructurados JSON-LD**: `WebApplication` + `BreadcrumbList` por herramienta (sin FAQPage), `CollectionPage` + `BreadcrumbList` + `FAQPage` por sección, `WebSite` + `Organization` en el home, `FAQPage` en Ayuda
-- **FAQ visible en el HTML inicial** de los hubs de sección y de `/ayuda` (las herramientas no llevan FAQ: la respuesta está en su propia UI)
+- **Datos estructurados JSON-LD**: `WebApplication` + `BreadcrumbList` + `FAQPage` por herramienta, `CollectionPage` + `BreadcrumbList` por sección, `WebSite` + `Organization` en el home, `FAQPage` en Ayuda
+- **FAQ visible en el HTML inicial** de las 13 herramientas (acordeón, no escondido tras hydration gates) y de `/ayuda` — los hubs de sección no llevan FAQ
 - **`app/sitemap.ts`**: 23 URLs (home, 4 secciones, 13 herramientas, 5 informativas)
 - **`app/robots.ts`**: permite todo y apunta al sitemap
 - **`public/llms.txt`**: índice legible por LLMs con las 13 herramientas y sus fórmulas

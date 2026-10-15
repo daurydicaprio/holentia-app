@@ -34,10 +34,6 @@ export default function SectionHeader({ section }: SectionHeaderProps) {
         </span>
       </h1>
       <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">{section.subtitle}</p>
-
-      <div className="mt-6 mb-6">
-        <h2 className="text-xl sm:text-2xl font-bold">¿Qué quieres aprender?</h2>
-      </div>
     </div>
   )
 }

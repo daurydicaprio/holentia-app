@@ -101,8 +101,8 @@ export function toolMetadata(section: string, slug: string): Metadata {
   return baseMetadata(title, description, `/${slug}`)
 }
 
-/** Datos estructurados JSON-LD: WebApplication + BreadcrumbList (las herramientas NO emiten FAQPage: no tienen FAQ visible) */
-export function toolJsonLd(section: string, slug: string) {
+/** Datos estructurados JSON-LD: WebApplication + BreadcrumbList + FAQPage (si hay FAQ) */
+export function toolJsonLd(section: string, slug: string, faq: FaqItem[] = []) {
   const tool = findToolCard(section, slug)
   if (!tool) return null
 
@@ -140,14 +140,28 @@ export function toolJsonLd(section: string, slug: string) {
     },
   ]
 
+  if (faq.length > 0) {
+    graph.push({
+      "@type": "FAQPage",
+      mainEntity: faq.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
+        },
+      })),
+    })
+  }
+
   return {
     "@context": "https://schema.org",
     "@graph": graph,
   }
 }
 
-/** JSON-LD para páginas de sección: CollectionPage + BreadcrumbList (+ FAQPage si hay mini-FAQ) */
-export function sectionJsonLd(section: string, faq: FaqItem[] = []) {
+/** JSON-LD para páginas de sección: CollectionPage + BreadcrumbList (sin FAQPage: los hubs ya no llevan FAQ visible) */
+export function sectionJsonLd(section: string) {
   const graph: Record<string, unknown>[] = [
     {
       "@type": "CollectionPage",
@@ -168,17 +182,6 @@ export function sectionJsonLd(section: string, faq: FaqItem[] = []) {
       ],
     },
   ]
-
-  if (faq.length > 0) {
-    graph.push({
-      "@type": "FAQPage",
-      mainEntity: faq.map((item) => ({
-        "@type": "Question",
-        name: item.question,
-        acceptedAnswer: { "@type": "Answer", text: item.answer },
-      })),
-    })
-  }
 
   return {
     "@context": "https://schema.org",

@@ -13,11 +13,6 @@ export interface CardData {
   metaDescription?: string
 }
 
-export interface SectionFaqItem {
-  question: string
-  answer: string
-}
-
 export interface SectionData {
   id: SectionType
   title: string
@@ -26,8 +21,6 @@ export interface SectionData {
   text: string
   /** Párrafo introductorio extra (server-rendered, bueno para SEO/GEO). */
   intro?: string
-  /** Mini-FAQ de la página de sección (renderizada en HTML inicial + FAQPage JSON-LD). */
-  faq?: SectionFaqItem[]
   cards: CardData[]
 }
 

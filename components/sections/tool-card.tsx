@@ -13,16 +13,17 @@ interface ToolCardProps {
 
 // Mapas estáticos (sin template literals) para que Tailwind genere las clases
 // Claro: gradiente sólido sección → sección-oscura con texto blanco (cuerpo/ámbar usa texto oscuro).
+// Hover: el extremo `to-` se aclara un paso (el bloque de texto vive sobre `from-`, sin recorte de contraste).
 // Oscuro: glass translúcido sobre #121212 con texto blanco.
 const sectionCardClasses: Record<SectionType, string> = {
   mente:
-    "bg-gradient-to-br from-mente to-mente-dark text-white dark:bg-none dark:bg-mente-glass dark:text-mente-text border-mente-border hover:border-mente-light",
+    "bg-gradient-to-br from-mente to-mente-dark group-hover:to-mente text-white dark:bg-none dark:bg-mente-glass dark:text-mente-text border-mente-border hover:border-mente-light",
   relaciones:
-    "bg-gradient-to-br from-relaciones to-relaciones-dark text-white dark:bg-none dark:bg-relaciones-glass dark:text-relaciones-text border-relaciones-border hover:border-relaciones-light",
+    "bg-gradient-to-br from-relaciones to-relaciones-dark group-hover:to-relaciones text-white dark:bg-none dark:bg-relaciones-glass dark:text-relaciones-text border-relaciones-border hover:border-relaciones-light",
   cuerpo:
-    "bg-gradient-to-br from-cuerpo to-cuerpo-dark text-black dark:bg-none dark:bg-cuerpo-glass dark:text-cuerpo-text border-cuerpo-border hover:border-cuerpo-light",
+    "bg-gradient-to-br from-cuerpo to-cuerpo-dark group-hover:to-cuerpo text-black dark:bg-none dark:bg-cuerpo-glass dark:text-cuerpo-text border-cuerpo-border hover:border-cuerpo-light",
   finanzas:
-    "bg-gradient-to-br from-finanzas to-finanzas-dark text-white dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text border-finanzas-border hover:border-finanzas-light",
+    "bg-gradient-to-br from-finanzas to-finanzas-dark group-hover:to-finanzas text-white dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text border-finanzas-border hover:border-finanzas-light",
 }
 
 // Color de la etiqueta de categoría (texto secundario dentro de la tarjeta)
@@ -100,11 +101,11 @@ export default function ToolCard({ card, index }: ToolCardProps) {
         <p className="mt-1 line-clamp-2 text-[0.9rem] leading-snug opacity-95 md:text-[0.8rem]">{description}</p>
       </div>
       <div
-        className="absolute right-5 top-1/2 -translate-y-1/2 opacity-75 transition-transform duration-300"
+        className="absolute right-5 top-1/2 -translate-y-1/2 opacity-75 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100"
         aria-hidden="true"
       >
         {isAvailable ? (
-          <ChevronRight className="h-6 w-6 transition-transform duration-300 group-hover:translate-x-1" />
+          <ChevronRight className="h-6 w-6 rounded-full p-0.5 transition-colors duration-300 group-hover:bg-white/20 dark:group-hover:bg-white/10" />
         ) : (
           <Lock className="h-5 w-5" />
         )}

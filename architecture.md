@@ -15,7 +15,7 @@ lib/data.ts (catálogo: sectionsData)
    │
    ├── app/{slug}/page.tsx  (13 herramientas)
    │       ├── generateMetadata() ← lib/seo.ts (title/canonical/OG)
-   │       └── ToolPageShell (server: H1, botones, JsonLd — sin FAQ)
+   │       └── ToolPageShell (server: H1, botones, FAQ acordeón, JsonLd)
    │               └── children = componente client de la herramienta
    │                       └── hooks/use-{tool}.ts (lógica pura)
    │                               └── lib/storage.ts (borrador/snapshots)
@@ -27,16 +27,16 @@ lib/data.ts (catálogo: sectionsData)
 
 | Capa | Tipo | Por qué |
 |---|---|---|
-| `app/**/page.tsx`, `ToolPageShell`, `SectionPage`, `ToolsGrid` (estructura), `SectionTabs`, `JsonLd` | Server | HTML inicial completo: enlaces, H1, FAQ de hubs/ayuda y JSON-LD visibles para buscadores y crawlers de AI sin ejecutar JS |
-| `ToolCard` (efecto 3D/haptic), componentes de herramientas, `hooks/*` | Client | Interactividad; lo importante (enlaces, H1, JSON-LD, FAQ de hubs/acordeones `<details>`) **sigue en el HTML inicial** aunque el panel esté colapsado vía CSS |
+| `app/**/page.tsx`, `ToolPageShell`, `SectionPage`, `ToolsGrid` (estructura), `SectionTabs`, `JsonLd` | Server | HTML inicial completo: enlaces, H1, FAQ de herramientas/ayuda y JSON-LD visibles para buscadores y crawlers de AI sin ejecutar JS |
+| `ToolCard` (efecto 3D/haptic), `ToolFaq` (acordeón), componentes de herramientas, `hooks/*` | Client | Interactividad; el contenido (preguntas FAQ, respuestas) **sigue en el HTML inicial** aunque el panel esté colapsado vía CSS |
 
 Regla: nada de `useEffect`/`mounted` guard para decidir si se renderiza contenido. Antes `ToolPageClient` vaciaba el HTML (bug corregido); hoy todo lo importante está en el primer HTML.
 
 ## 3. SEO / GEO
 
 - **Metadata**: `lib/seo.ts` expone `toolMetadata`, `sectionMetadata`, `pageMetadata` (construyen title + description + canonical + OG + Twitter). `app/layout.tsx` pone `metadataBase`, `title.template` ("{página} | HOLENTIA") y `viewport`.
-- **JSON-LD**: `toolJsonLd` (WebApplication + BreadcrumbList — sin FAQPage), `sectionJsonLd` (CollectionPage + BreadcrumbList + FAQPage si hay mini-FAQ), home (WebSite + Organization), `/ayuda` (FAQPage). Se emite vía `<JsonLd>` (script `application/ld+json`).
-- **FAQ visible**: solo en hubs de sección (mini-FAQ nativa `<details>`) y `/ayuda`. Las 13 herramientas **no** llevan FAQ (decisión 14-Oct-2026): la respuesta vive en su propia UI.
+- **JSON-LD**: `toolJsonLd` (WebApplication + BreadcrumbList + FAQPage), `sectionJsonLd` (CollectionPage + BreadcrumbList), home (WebSite + Organization), `/ayuda` (FAQPage). Se emite vía `<JsonLd>` (script `application/ld+json`).
+- **FAQ visible**: cada herramienta renderiza su FAQ en el HTML (acordeón, pero el texto está en el DOM) y `/ayuda`. Los hubs de sección **no** llevan FAQ (corrección 14-Oct-2026).
 - **Indexación**: `app/sitemap.ts` (23 URLs: home + 4 secciones + 13 herramientas + 5 informativas), `app/robots.ts` (allow all + sitemap), `public/llms.txt` (índice legible por LLMs).
 - El breadcrumb **no se muestra al usuario**; solo existe como `BreadcrumbList` en JSON-LD.
 
@@ -59,7 +59,7 @@ app/           páginas (server-first): 4 hubs, 13 herramientas, 5 informativas,
 components/
   common/      header, footer, logo, menu-button, scroll-to-top, clear-all-data, tab-swipe-navigation
   sections/    section-page, section-tabs, section-header, section-swipe-navigation, tool-card, tools-grid
-  tool-seo/    tool-page-shell, json-ld
+  tool-seo/    tool-page-shell, tool-faq (acordeón), json-ld
   tools/       13 componentes client de herramientas (+ subcomponentes)
   ui/          primitivas shadcn (button, count-up, input, slider)
 hooks/         lógica por herramienta + use-count-up, use-haptic-feedback, use-media-query
