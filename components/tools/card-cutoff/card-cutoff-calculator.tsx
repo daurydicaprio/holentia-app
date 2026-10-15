@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { CreditCard, Trash2, Info, ShoppingBag, Scissors, Wallet, BellRing, Lightbulb } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
+import { useCountUp } from "@/hooks/use-count-up"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
 const DRAFT_KEY = draftKey("tarjeta-corte-vencimiento")
@@ -355,6 +356,8 @@ export function CardCutoffCalculator() {
     }
   }, [configured, cutoffDay, dueDay, purchaseISO, todayISO])
 
+  const animatedGraceDays = useCountUp(result?.graceDays ?? 0)
+
   // Badge de salto de ciclo: si la compra cae en un corte posterior al vigente hoy.
   const cycleBadge = useMemo(() => {
     if (!configured || !result) return null
@@ -543,14 +546,14 @@ export function CardCutoffCalculator() {
             <p className="text-sm mt-1">y te cuento cuándo pagarías cada compra.</p>
           </div>
         ) : (
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
+          <div className="animate-result-in bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
             {/* Héroe: días gratis reales de esta compra */}
             <div
               className="rounded-xl p-8 text-white mb-8 text-center bg-gradient-to-br from-finanzas to-finanzas-dark dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text"
             >
               <div className="text-xs font-semibold uppercase tracking-widest opacity-80 mb-3">{cardLabel}</div>
               <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Financiamiento gratis</div>
-              <div className="text-6xl font-bold tabular-nums">{result.graceDays} días</div>
+              <div className="text-6xl font-bold tabular-nums">{animatedGraceDays} días</div>
             </div>
             <div className="mb-8 text-gray-700 dark:text-gray-200 space-y-3">
               <p className="text-base leading-relaxed">

@@ -21,6 +21,7 @@ import {
   AlertTriangle,
 } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
+import { useCountUp } from "@/hooks/use-count-up"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
 const DRAFT_KEY = draftKey("calculadora-hidratacion")
@@ -106,6 +107,9 @@ export function HydrationCalculator() {
     return { total, direct, weight: w }
   }, [weight, activityLevel, climate])
 
+  const animatedDirect = useCountUp(result?.direct ?? 0)
+  const animatedTotal = useCountUp(result?.total ?? 0)
+
   const pickActivity = (id: string) => {
     setActivityLevel(id)
     triggerHapticFeedback("light")
@@ -128,7 +132,7 @@ export function HydrationCalculator() {
     "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-cuerpo dark:focus:border-transparent dark:focus:ring-cuerpo-light"
 
   const chipClass = (active: boolean) =>
-    `p-3 rounded-xl border-2 font-medium transition-all text-center flex flex-col items-center gap-1 ${
+    `p-3 rounded-xl border-2 font-medium transition-[colors,transform] duration-150 active:scale-[0.97] text-center flex flex-col items-center gap-1 ${
       active
         ? "border-cuerpo-dark bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 shadow-sm"
         : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-amber-300 dark:hover:border-amber-700"
@@ -221,11 +225,11 @@ export function HydrationCalculator() {
               <p className="text-sm mt-1">y aquí verás cuánta agua necesitas hoy.</p>
             </div>
           ) : (
-            <div className="bg-gradient-to-br from-cuerpo to-cuerpo-dark rounded-xl p-8 shadow-lg text-black text-center h-full flex flex-col justify-center">
+            <div className="animate-result-in bg-gradient-to-br from-cuerpo to-cuerpo-dark rounded-xl p-8 shadow-lg text-black text-center h-full flex flex-col justify-center">
               <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Tu hidratación diaria</div>
-              <div className="text-6xl font-bold tabular-nums">{result.direct.toLocaleString("es-ES")}</div>
+              <div className="text-6xl font-bold tabular-nums">{animatedDirect.toLocaleString("es-ES")}</div>
               <div className="text-lg opacity-90 mt-1">
-                ml a beber al día · agua total {result.total.toLocaleString("es-ES")} ml
+                ml a beber al día · agua total {animatedTotal.toLocaleString("es-ES")} ml
               </div>
 
               <div className="grid grid-cols-3 gap-2 mt-6 text-center">

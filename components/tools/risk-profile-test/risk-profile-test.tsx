@@ -28,6 +28,7 @@ import {
 import { useTheme } from "next-themes"
 import Chart from "chart.js/auto"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
+import { CountUp } from "@/components/ui/count-up"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 import { RiskLevelsGraphic, LEVELS } from "./risk-levels-graphic"
@@ -1169,7 +1170,7 @@ export function RiskProfileTest() {
     "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
 
   const chipClass = (active: boolean) =>
-    `px-3 py-1.5 text-sm rounded-md font-medium transition-colors ${
+    `px-3 py-1.5 text-sm rounded-md font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
       active
         ? "bg-finanzas text-white"
         : "bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-finanzas dark:text-finanzas-light"
@@ -1379,7 +1380,7 @@ export function RiskProfileTest() {
     <div className="space-y-8 sm:space-y-10">
       {/* 1 · Héroe */}
       <div
-        className="relative rounded-xl px-7 pb-7 pt-12 sm:px-10 sm:pb-10 sm:pt-10 text-white text-center shadow-lg bg-gradient-to-br from-finanzas to-finanzas-dark dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text"
+        className="animate-result-in relative rounded-xl px-7 pb-7 pt-12 sm:px-10 sm:pb-10 sm:pt-10 text-white text-center shadow-lg bg-gradient-to-br from-finanzas to-finanzas-dark dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text"
       >
         <button
           onClick={() => {
@@ -1468,7 +1469,7 @@ export function RiskProfileTest() {
                       }
                     }}
                     data-interactive="true"
-                    className={`cursor-pointer rounded-lg border p-3 transition-colors ${
+                    className={`cursor-pointer rounded-lg border p-3 transition-[colors,transform] duration-150 active:scale-[0.97] ${
                       isActive
                         ? "border-finanzas bg-[#388e3c]/5 dark:bg-[#388e3c]/10 ring-1 ring-finanzas"
                         : isColored && lvl.danger
@@ -1722,7 +1723,7 @@ export function RiskProfileTest() {
                             setChartMode(m)
                             triggerHapticFeedback("light")
                           }}
-                          className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
+                          className={`rounded-md px-2.5 py-1 text-xs font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
                             chartMode === m
                               ? "bg-finanzas text-white"
                               : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
@@ -2065,7 +2066,7 @@ export function RiskProfileTest() {
                   <button
                     key={c}
                     onClick={() => handleCurrency(c)}
-                    className={`px-4 py-3 rounded-lg font-medium text-sm transition-colors ${
+                    className={`px-4 py-3 rounded-lg font-medium text-sm transition-[colors,transform] duration-150 active:scale-[0.97] ${
                       currency === c
                         ? "bg-finanzas text-white"
                         : "bg-[#388e3c]/10 text-finanzas dark:text-finanzas-light hover:bg-[#388e3c]/20"
@@ -2343,23 +2344,23 @@ export function RiskProfileTest() {
               montamos monto × (1 + tasa) por año, rodaja por rodaja · aportes no incluidos · no es garantía.
             </p>
 
-            <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="animate-result-in grid grid-cols-2 gap-4 mb-4">
               <div className="rounded-xl bg-[#388e3c]/10 px-4 py-5 text-center">
                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">En 5 años</div>
                 <div className="text-2xl font-bold text-finanzas-dark dark:text-finanzas-lighter tabular-nums">
-                  {formatMoney(proj5, currency)}
+                  <CountUp value={proj5} format={(n) => formatMoney(n, currency)} />
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  +{formatMoney(proj5 - capital, currency)}
+                  +<CountUp value={proj5 - capital} format={(n) => formatMoney(n, currency)} />
                 </div>
               </div>
               <div className="rounded-xl bg-[#388e3c]/10 px-4 py-5 text-center">
                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">En 10 años</div>
                 <div className="text-2xl font-bold text-finanzas-dark dark:text-finanzas-lighter tabular-nums">
-                  {formatMoney(proj10, currency)}
+                  <CountUp value={proj10} format={(n) => formatMoney(n, currency)} />
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  +{formatMoney(proj10 - capital, currency)}
+                  +<CountUp value={proj10 - capital} format={(n) => formatMoney(n, currency)} />
                 </div>
               </div>
             </div>

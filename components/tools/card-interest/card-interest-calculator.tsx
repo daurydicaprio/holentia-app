@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { CreditCard, Trash2, Info, Lightbulb, AlertTriangle } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
+import { useCountUp } from "@/hooks/use-count-up"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
 const DRAFT_KEY = draftKey("calculadora-interes-tarjeta")
@@ -138,6 +139,9 @@ export function CardInterestCalculator() {
     return simulatePayoff(balance, annualRate, payment)
   }, [balanceInput, paymentInput, balance, annualRate, payment])
 
+  const animatedMonths = useCountUp(result?.months ?? 0)
+  const animatedMonthlyInterest = useCountUp(result?.monthlyInterest ?? 0)
+
   const cardTitle = useMemo(() => {
     const name = cardName.trim() || "Tu tarjeta"
     const last4 = cardLast4.replace(/\D/g, "").slice(-4)
@@ -272,7 +276,7 @@ export function CardInterestCalculator() {
             <p className="text-sm mt-1">y te digo cuánto cuesta financiar y en cuántos meses liquidas.</p>
           </div>
         ) : (
-          <div className="space-y-6 h-full">
+          <div className="animate-result-in space-y-6 h-full">
             {/* Héroe */}
             <div
               className={`rounded-xl p-8 text-white text-center shadow-lg ${
@@ -287,7 +291,7 @@ export function CardInterestCalculator() {
                     <AlertTriangle className="h-5 w-5" />
                     <div className="text-sm uppercase tracking-widest opacity-90">Con ese pago no bajas el saldo</div>
                   </div>
-                  <div className="text-4xl sm:text-5xl font-bold tabular-nums mb-3">{formatAmount(result.monthlyInterest)}</div>
+                  <div className="text-4xl sm:text-5xl font-bold tabular-nums mb-3">{formatAmount(animatedMonthlyInterest)}</div>
                   <p className="text-sm opacity-90 max-w-md mx-auto leading-relaxed">
                     Este mes se genera solo en intereses {formatAmount(result.monthlyInterest)}. Con tu pago de{" "}
                     {formatAmount(payment)} no abonas capital: la deuda no baja.
@@ -296,7 +300,7 @@ export function CardInterestCalculator() {
               ) : (
                 <>
                   <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Liquidas en</div>
-                  <div className="text-6xl font-bold tabular-nums">{result.months}</div>
+                  <div className="text-6xl font-bold tabular-nums">{animatedMonths}</div>
                   <div className="text-lg opacity-90 mt-1">{result.months === 1 ? "mes" : "meses"}</div>
                   <div className="text-sm opacity-80 mt-1">{cardTitle}</div>
 

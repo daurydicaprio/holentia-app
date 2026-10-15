@@ -213,11 +213,19 @@ Receta canónica para calculadoras/tests con varios campos (refs: `compound-inte
 - Chart.js: colores por `resolvedTheme` (memorizados en `useMemo`, ver `calculator-charts.tsx`).
 - Regla: todo componente con color propio debe tener variante `dark:`. Probar ambos modos antes de mergear.
 
-## 6. Movimiento
+## 6. Movimiento (microanimaciones, 14-Oct-2026)
 
-- Entrada de tarjetas: `animate-fadeIn` (0.5s) con `animationDelay` escalonado `index * 0.1s`.
-- Transiciones de estado: `transition-all duration-300 ease-out`.
-- Haptics en móviles: `useHapticFeedback` (`medium` en guardar/navegar, `light` en tabs).
+- **Entrada de tarjetas**: `animate-fadeIn` (0.5s) con `animationDelay` escalonado `index * 0.1s`.
+- **Entrada de panel de resultado**: clase `animate-result-in` (keyframe `resultIn`, fade + sube 6px, 0.3s, `both`) en el contenedor del bloque de resultado. Se aplica al resultado de cada herramienta (también en los que siempre están visibles: monta 1 vez). Nunca framer-motion para esto — CSS puro.
+- **Count-up de números hero**: hook `useCountUp(value, { duration?, decimals? })` (`hooks/use-count-up.ts`) → devuelve el número animado (rAF + ease-out, 500ms default) y el caller lo envuelve con su formateador (`formatCurrency`, `formatRD`, `toLocaleString…`). Reglas:
+  - Solo heroes/totales (cuota, balance, factura, gasto, kcal, ml, meses, días, proyecciones); no animar filas secundarias.
+  - Render inicial = valor final (sin hydration mismatch); anima **al cambiar el valor**, no en el primer mount.
+  - En JSX condicional (tests con fases, ramas ternarias) usar el componente `<CountUp value format duration />` (`components/ui/count-up.tsx`) — así el hook nunca se llama condicionalmente.
+  - `decimals: 0` default (enteros al volar); negativos soportados.
+- **Press feedback**: `transition-[colors,transform] duration-150 active:scale-[0.97]` en botones sólidos y grupos de chips (base de `components/ui/button.tsx`, botones del shell, `chipClass()` de combustible/hidratación/riesgo, tarjetas de meta de calorías). Nunca escala mayor a `0.97`.
+- **Haptics en móviles**: `useHapticFeedback` (`medium` en guardar/navegar, `light` en tabs/chips).
+- **Guarda `prefers-reduced-motion`**: bloque global en `app/globals.css` (anula animaciones/transiciones CSS) + `useCountUp` salta al final vía `matchMedia`. Ambas vías son obligatorias: el CSS no corta un loop de rAF.
+- **Prohibido (anti-slop)**: confetti al calcular, parallax, scroll-reveal por sección, animar todo el texto, framer-motion donde baste CSS.
 
 ## 7. Accesibilidad
 

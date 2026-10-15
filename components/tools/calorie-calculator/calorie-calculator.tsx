@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { Flame, Trash2, Info, Minus, Equal, Plus, Salad, Footprints, Dumbbell, BedDouble, Scale } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
+import { useCountUp } from "@/hooks/use-count-up"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
 // Mifflin-St Jeor + factor de actividad. Estimación educativa, no plan médico.
@@ -109,6 +110,7 @@ export function CalorieCalculator() {
   }
 
   const heroValue = result ? result[goal] : null
+  const animatedHeroValue = useCountUp(heroValue ?? 0)
   const goalLabel = GOALS.find((g) => g.id === goal)?.label.toLowerCase() ?? ""
 
   const inputClass =
@@ -125,7 +127,7 @@ export function CalorieCalculator() {
             <button
               key={g.id}
               onClick={() => pickGoal(g.id)}
-              className={`p-4 rounded-xl border-2 font-medium transition-all text-center ${
+              className={`p-4 rounded-xl border-2 font-medium transition-[colors,transform] duration-150 active:scale-[0.97] text-center ${
                 goal === g.id
                   ? "border-cuerpo-dark bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 shadow-sm"
                   : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-amber-300 dark:hover:border-amber-700"
@@ -194,7 +196,7 @@ export function CalorieCalculator() {
                   <button
                     key={opt.value}
                     onClick={() => setSex(opt.value)}
-                    className={`flex-1 py-3 px-2 rounded-lg font-medium transition-colors ${
+                    className={`flex-1 py-3 px-2 rounded-lg font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
                       sex === opt.value
                         ? "bg-cuerpo-dark text-white shadow-sm"
                         : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
@@ -247,9 +249,9 @@ export function CalorieCalculator() {
               <p className="text-sm mt-1">y verás tus calorías para {goalLabel}.</p>
             </div>
           ) : (
-            <div className="bg-gradient-to-br from-cuerpo to-cuerpo-dark rounded-xl p-8 shadow-lg text-black text-center h-full flex flex-col justify-center">
+            <div className="animate-result-in bg-gradient-to-br from-cuerpo to-cuerpo-dark rounded-xl p-8 shadow-lg text-black text-center h-full flex flex-col justify-center">
               <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Para {goalLabel} necesitas</div>
-              <div className="text-6xl font-bold">{heroValue?.toLocaleString("es-ES")}</div>
+              <div className="text-6xl font-bold">{animatedHeroValue.toLocaleString("es-ES")}</div>
               <div className="text-lg opacity-90 mt-1">kcal al día</div>
               <div className="grid grid-cols-3 gap-2 mt-6 text-center">
                 {(["lose", "maintain", "gain"] as const).map((id) => (

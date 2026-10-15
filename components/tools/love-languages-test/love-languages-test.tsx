@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Heart, RotateCcw } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
+import { CountUp } from "@/components/ui/count-up"
 
 interface Question {
   id: number
@@ -182,7 +183,7 @@ export function LoveLanguagesTest() {
     const primaryLanguage = results[0]
 
     return (
-      <div className="space-y-6">
+      <div className="animate-result-in space-y-6">
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
           <div className="flex items-center justify-center mb-6">
             <Heart className="h-12 w-12 text-relaciones dark:text-relaciones-light" />
@@ -219,7 +220,7 @@ export function LoveLanguagesTest() {
                   <div className="flex justify-between mb-1">
                     <span className="text-sm font-medium">{languageDescriptions[language].name}</span>
                     <span className="text-sm text-gray-600 dark:text-gray-400">
-                      {score}/{questions.length}
+                      <CountUp value={score} format={(n) => String(n)} duration={400} />/{questions.length}
                     </span>
                   </div>
                   <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">

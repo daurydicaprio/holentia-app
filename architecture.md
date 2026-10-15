@@ -61,8 +61,8 @@ components/
   sections/    section-page, section-tabs, section-header, section-swipe-navigation, tool-card, tools-grid
   tool-seo/    tool-page-shell, json-ld
   tools/       13 componentes client de herramientas (+ subcomponentes)
-  ui/          primitivas shadcn (button, input, slider)
-hooks/         lógica por herramienta + use-haptic-feedback, use-media-query
+  ui/          primitivas shadcn (button, count-up, input, slider)
+hooks/         lógica por herramienta + use-count-up, use-haptic-feedback, use-media-query
 lib/           data.ts (catálogo), seo.ts, storage.ts, utils.ts
 types/         index.ts (CardData, SectionType, AmortizationRow, …)
 ```

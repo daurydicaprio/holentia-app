@@ -1,5 +1,6 @@
 "use client"
 import { DollarSign, Calendar, Percent, TrendingUp } from "lucide-react"
+import { useCountUp } from "@/hooks/use-count-up"
 
 interface LoanResultProps {
   monthlyPayment: number
@@ -14,6 +15,7 @@ export function LoanResult({ monthlyPayment, loanAmount, interestRate, loanTerm,
   const totalPayment = monthlyPayment * loanTerm
   const totalInterest = totalPayment - loanAmount
   const interestPercentage = loanAmount > 0 ? (totalInterest / loanAmount) * 100 : 0
+  const animatedPayment = useCountUp(monthlyPayment)
 
   return (
     <div className="rounded-xl p-6 shadow-lg bg-gradient-to-br from-finanzas to-finanzas-dark text-white dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text">
@@ -22,11 +24,11 @@ export function LoanResult({ monthlyPayment, loanAmount, interestRate, loanTerm,
         <span>Resultado del Préstamo</span>
       </h3>
 
-      <div className="text-3xl font-bold mb-4 flex items-center">
+      <div className="animate-result-in text-3xl font-bold mb-4 flex items-center">
         <span className="text-xl mr-2 opacity-90">
           Cuota mensual:
         </span>
-        {formatCurrency(monthlyPayment)}
+        {formatCurrency(animatedPayment)}
       </div>
 
       <div className="space-y-4">

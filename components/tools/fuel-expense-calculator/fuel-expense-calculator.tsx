@@ -17,6 +17,7 @@ import {
   Lightbulb,
 } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
+import { useCountUp } from "@/hooks/use-count-up"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
 const DRAFT_KEY = draftKey("calculadora-gasto-combustible")
@@ -81,7 +82,7 @@ const inputClass =
   "block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
 
 const chipClass = (selected: boolean) =>
-  `px-2.5 py-1 text-xs rounded-md font-medium transition-colors ${
+  `px-2.5 py-1 text-xs rounded-md font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
     selected
       ? "border border-finanzas text-finanzas dark:border-finanzas-light dark:text-finanzas-light"
       : "border border-gray-200 text-gray-700 hover:border-gray-300 dark:border-gray-600 dark:text-gray-300 dark:hover:border-gray-500"
@@ -201,6 +202,9 @@ export function FuelExpenseCalculator() {
     const galonesMes = kmMes / kmGalones
     return { kmMes, costoKm, gastoDia, gastoSemana, gastoMes, gastoAno, galonesMes }
   }, [precio, distancia, viajes, dias, consumo])
+
+  const animatedGastoMes = useCountUp(result?.gastoMes ?? 0)
+  const animatedGastoAno = useCountUp(result?.gastoAno ?? 0)
 
   const selectVehicle = (id: string) => {
     const v = VEHICLES.find((item) => item.id === id)
@@ -375,7 +379,7 @@ export function FuelExpenseCalculator() {
                     aria-checked={selected}
                     onClick={() => selectVehicle(v.id)}
                     data-interactive="true"
-                    className={`flex flex-col items-center gap-0.5 rounded-xl p-2 text-center transition-colors ${
+                    className={`flex flex-col items-center gap-0.5 rounded-xl p-2 text-center transition-[colors,transform] duration-150 active:scale-[0.97] ${
                       selected
                         ? "border-2 border-finanzas text-finanzas dark:border-finanzas-light dark:text-finanzas-light"
                         : "border border-gray-200 text-gray-600 hover:border-gray-300 dark:border-gray-600 dark:text-gray-300 dark:hover:border-gray-500"
@@ -438,14 +442,14 @@ export function FuelExpenseCalculator() {
             <p className="text-sm mt-1">y aquí aparece tu gasto estimado de combustible.</p>
           </div>
         ) : (
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border-2 border-finanzas-border flex flex-col">
+          <div className="animate-result-in bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border-2 border-finanzas-border flex flex-col">
             <div className="bg-finanzas px-5 py-3 sm:px-6 sm:py-3.5 text-white text-center font-bold tracking-wide text-base">
               TU GASTO DE COMBUSTIBLE
             </div>
             <div className="p-5 sm:p-6">
               <div className="text-center mb-4">
                 <span className="block text-4xl sm:text-5xl font-bold text-finanzas dark:text-finanzas-light tabular-nums">
-                  {formatRD(result.gastoMes)}
+                  {formatRD(animatedGastoMes)}
                 </span>
                 <span className="block text-sm text-gray-500 dark:text-gray-400 mt-1">gasto mensual estimado</span>
               </div>
@@ -483,7 +487,7 @@ export function FuelExpenseCalculator() {
                 <br />
                 ESTIMADO
               </span>
-              <span className="text-2xl sm:text-3xl whitespace-nowrap">{formatRD(result.gastoAno)}</span>
+              <span className="text-2xl sm:text-3xl whitespace-nowrap">{formatRD(animatedGastoAno)}</span>
             </div>
 
             <div className="px-5 py-2.5 flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800">

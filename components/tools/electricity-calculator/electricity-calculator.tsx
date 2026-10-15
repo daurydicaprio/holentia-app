@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { Trash2, Info, Zap, CheckCircle2 } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
+import { useCountUp } from "@/hooks/use-count-up"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
 // Tarifa residencial RD actual subsidiada — réplica factura usuario.
@@ -82,6 +83,8 @@ export function ElectricityCalculator() {
     const sinSubsidio = sinTramos ? total : total + subsidio
     return { t1kwh, t2kwh, t3kwh, t1, t2, t3, total, subsidio, sinSubsidio, promedio: total / kwh, sinTramos }
   }, [kwh, kwhInput])
+
+  const animatedTotal = useCountUp(result?.total ?? 0, { duration: 400 })
 
   const setQuick = (value: number) => {
     setKwhInput(String(value))
@@ -183,7 +186,7 @@ export function ElectricityCalculator() {
             <p className="text-sm mt-1">y aquí aparece tu factura estimada.</p>
           </div>
         ) : (
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border-2 border-gray-900/80 dark:border-gray-100/20 h-full flex flex-col">
+          <div className="animate-result-in bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border-2 border-gray-900/80 dark:border-gray-100/20 h-full flex flex-col">
             <div className="bg-sky-200 dark:bg-sky-900/60 px-5 py-3.5 sm:px-6 sm:py-4 text-center font-bold tracking-wide text-base sm:text-lg">
               CÁLCULO DE LA FACTURA
             </div>
@@ -226,7 +229,7 @@ export function ElectricityCalculator() {
               </span>
               <span className="flex items-center gap-2">
                 <span className="text-lg" title="Cálculo exacto con la tarifa vigente"><CheckCircle2 className="h-4 w-4" aria-hidden="true" /></span>
-                <span className="text-2xl sm:text-3xl whitespace-nowrap">{formatRD(result.total)}</span>
+                <span className="text-2xl sm:text-3xl whitespace-nowrap">{formatRD(animatedTotal)}</span>
               </span>
             </div>
             <div className="px-5 py-3 flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800">

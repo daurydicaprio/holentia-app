@@ -7,6 +7,7 @@ import { CalculatorCharts } from "./calculator-charts"
 import { AmortizationTable } from "./amortization-table"
 import { MobileTabsNavigation } from "./mobile-tabs-navigation"
 import { useMediaQuery } from "@/hooks/use-media-query"
+import { useCountUp } from "@/hooks/use-count-up"
 import { CompoundInterestResult } from "./compound-interest-result"
 import { InvestmentImpactSection } from "./investment-impact-section"
 import { TrendingUp, DollarSign, Calendar, AlertCircle, ArrowRight, X } from "lucide-react"
@@ -60,6 +61,7 @@ export function CompoundInterestCalculator() {
   const totalInvested = summary.initialDeposit + summary.totalContributions
   const nonInvestedValue = inflation > 0 ? totalInvested / Math.pow(1 + inflation / 100, years) : totalInvested
   const grossBalance = summary.balanceNet + summary.inflationEffect
+  const animatedBalance = useCountUp(summary.balanceNet)
 
   // Función para cambiar de pestaña
   const handleTabChange = (tab: string) => {
@@ -236,11 +238,11 @@ export function CompoundInterestCalculator() {
                 <span>Resultado de la Inversión</span>
               </h3>
 
-              <div className="text-3xl font-bold mb-4 flex items-center">
+              <div className="animate-result-in text-3xl font-bold mb-4 flex items-center">
                 <span className="text-xl mr-2 opacity-90">
                   Balance final:
                 </span>
-                {formatCurrency(summary.balanceNet)}
+                {formatCurrency(animatedBalance)}
               </div>
 
               <div className="space-y-4">

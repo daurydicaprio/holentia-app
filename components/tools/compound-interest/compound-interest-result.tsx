@@ -3,6 +3,7 @@
 import { DollarSign, Calendar, Percent, TrendingUp } from "lucide-react"
 import type { SummaryData } from "@/hooks/use-compound-interest-calculator"
 import { useMediaQuery } from "@/hooks/use-media-query"
+import { useCountUp } from "@/hooks/use-count-up"
 
 interface CompoundInterestResultProps {
   summary: SummaryData
@@ -23,6 +24,7 @@ export function CompoundInterestResult({ summary, formatCurrency, inflation }: C
   const years = summary.doubleTime !== "--" ? Number.parseInt(summary.doubleTime) : 5
 
   const nonInvestedValue = inflation > 0 ? totalInvested / Math.pow(1 + inflation / 100, years) : totalInvested
+  const animatedBalance = useCountUp(summary.balanceNet)
 
   return (
     <div className="space-y-4">
@@ -32,11 +34,11 @@ export function CompoundInterestResult({ summary, formatCurrency, inflation }: C
           <span>Resultado de la Inversión</span>
         </h3>
 
-        <div className="text-3xl font-bold mb-4 flex items-center">
+        <div className="animate-result-in text-3xl font-bold mb-4 flex items-center">
           <span className="text-xl mr-2 opacity-90">
             Balance final:
           </span>
-          {formatCurrency(summary.balanceNet)}
+          {formatCurrency(animatedBalance)}
         </div>
 
         <div className="space-y-4">

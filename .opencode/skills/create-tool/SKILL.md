@@ -40,6 +40,7 @@ Con `isAvailable: true`, `app/sitemap.ts` la incluye **automáticamente** (deriv
 - Copiar estructura visual de la herramienta más parecida ya existente (formulario→`compound-interest` · test→`risk-profile-test` · lista+buscador→`glosario`).
 - Lógica de cálculo en `hooks/use-{kebab}.ts` cuando sea reusable/pura (patrones D/S/E: skill `tool-persistence`).
 - Elementos interactivos: `data-interactive="true"`; acciones importantes con `useHapticFeedback`.
+- Resultado hero numérico: `animate-result-in` en el contenedor + `useCountUp` (o `<CountUp>` en JSX condicional) sobre el valor formateado — receta `design.md` §6 / skill `section-ui` §8.
 
 ## 4. Página — `app/{slug}/page.tsx` (server component)
 
