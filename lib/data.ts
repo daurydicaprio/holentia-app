@@ -6,7 +6,7 @@ export const sectionsData: Record<string, SectionData> = {
     title: "Cultiva tu",
     highlightText: "mente",
     subtitle:
-      "Tu mente también merece un espacio cada día. Escribe, reflexiona y gana claridad junto a quienes ya convirtieron la reflexión en un hábito. Gratuitas, en tu navegador y sin registro.",
+      "Tu mente también merece un espacio cada día. Con el diario guiado conviertes pensamientos sueltos en claridad: escribes qué sentiste, qué aprendiste y una gratitud, y con el tiempo notas cómo cambia tu perspectiva. Herramientas simples para reflexionar mejor y sentirte más en calma.",
     text: "Cultiva claridad y resiliencia. Descubre herramientas para tu bienestar emocional y cognitivo.",
     metaDescription:
       "Diario guiado, reflexión y hábitos para ganar claridad, resiliencia emocional y equilibrio. Herramientas gratuitas, sin registro y en tu navegador.",
@@ -85,7 +85,7 @@ export const sectionsData: Record<string, SectionData> = {
     title: "Fortalece tus",
     highlightText: "relaciones",
     subtitle:
-      "Las relaciones que importan se cuidan con intención. Comunícate mejor, entiende a quienes amas y fortalece tus vínculos junto a quienes ya dieron el primer paso. Gratis, sin registro y en tu navegador.",
+      "Las relaciones que importan se cuidan con intención. Descubre cómo das y recibes cariño con el test de los lenguajes del amor y llévate ideas prácticas para comunicarte mejor, resolver roces y fortalecer los vínculos con tu pareja, familia o amistades.",
     text: "Fortalece tus relaciones. Herramientas para mejorar la comunicación, resolver conflictos y construir vínculos significativos.",
     metaDescription:
       "Test de lenguajes del amor y guías para comunicarte mejor, resolver conflictos y fortalecer tus vínculos. Gratuitas, sin registro y en tu navegador.",
@@ -164,7 +164,7 @@ export const sectionsData: Record<string, SectionData> = {
     title: "Energiza tu",
     highlightText: "cuerpo",
     subtitle:
-      "Tu energía empieza con pequeños cambios. Calcula, ajusta tu rutina y avanza a tu ritmo con la comunidad que ya eligió cuidarse cada día. Gratuitas, en tu navegador y sin registro.",
+      "Tu energía empieza con pequeños cambios. Calcula tus calorías diarias con un método científico y descubre cuánta agua necesita tu cuerpo; usa esos datos para ajustar lo que comes y cómo te mueves, sin dietas imposibles ni promesas vacías.",
     text: "Energiza tu cuerpo. Accede a rutinas, nutrición y consejos para un estilo de vida activo y un bienestar integral.",
     metaDescription:
       "Calculadora de calorías Mifflin-St Jeor, hidratación diaria y hábitos para un estilo de vida activo. Gratuitas, en tu navegador y sin registro.",
@@ -254,7 +254,7 @@ export const sectionsData: Record<string, SectionData> = {
     title: "Domina tus",
     highlightText: "finanzas",
     subtitle:
-      "El control de tu dinero empieza hoy. Presupuesta, ahorra y haz crecer tus metas con quienes ya tomaron las riendas de sus finanzas. Gratuitas, en tu navegador y sin registro.",
+      "El control de tu dinero empieza hoy. Arma tu presupuesto con la regla 50/30/20, descubre cuánto rinde tu ahorro con el interés compuesto, compara préstamos y tarjetas antes de firmar y entiende al detalle tu factura de luz y el gasto del tanque de gasolina.",
     text: "Domina tus finanzas. Herramientas para presupuestar, invertir y alcanzar tus metas económicas.",
     metaDescription:
       "Presupuesto 50/30/20, interés compuesto, préstamos, tarjetas, gasto de combustible y factura eléctrica. Calculadoras gratuitas en tu navegador.",

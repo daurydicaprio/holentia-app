@@ -19,7 +19,7 @@ export default function SectionHeader({ section }: SectionHeaderProps) {
     "linear-gradient(to right, var(--color-finanzas-active), var(--color-finanzas-active-dark))"
 
   return (
-    <div className="text-center max-w-3xl mx-auto px-4 mt-6">
+    <div className="text-center max-w-3xl mx-auto px-4 mt-8">
       <h1 className="text-3xl sm:text-4xl font-bold mb-4">
         {section.title}{" "}
         <span
@@ -33,7 +33,9 @@ export default function SectionHeader({ section }: SectionHeaderProps) {
           {section.highlightText}
         </span>
       </h1>
-      <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">{section.subtitle}</p>
+      <p className="max-w-2xl mx-auto text-gray-600 dark:text-gray-300 text-sm sm:text-base leading-relaxed">
+        {section.subtitle}
+      </p>
     </div>
   )
 }
