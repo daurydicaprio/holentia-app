@@ -70,7 +70,7 @@ export function IncomeTable({
                     value={item.amount}
                     onChange={(e) => onUpdateAmount(item.id, Number(e.target.value))}
                     min="0"
-                    className="w-full p-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
+                    className="w-full p-1.5 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
                     data-interactive="true"
                   />
                 </td>

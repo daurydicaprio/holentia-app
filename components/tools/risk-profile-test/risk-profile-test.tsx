@@ -1379,7 +1379,7 @@ export function RiskProfileTest() {
   return (
     <div className="space-y-8 sm:space-y-10">
       {/* 1 · Héroe */}
-      <div
+      <div aria-live="polite"
         className="animate-result-in relative rounded-xl px-7 pb-7 pt-12 sm:px-10 sm:pb-10 sm:pt-10 text-white text-center shadow-lg bg-gradient-to-br from-finanzas to-finanzas-dark dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text"
       >
         <button
@@ -2058,7 +2058,7 @@ export function RiskProfileTest() {
                 value={capitalInput}
                 onChange={(e) => setCapitalInput(formatWithCommas(filterNumeric(e.target.value)))}
                 placeholder={currency === "DOP" ? "Ej: 25,000" : "Ej: 1,500"}
-                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 sm:w-auto sm:max-w-[13rem]"
+                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-base md:text-sm shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 sm:w-auto sm:max-w-[13rem]"
                 data-interactive="true"
               />
               <div className="flex gap-2">
@@ -2344,7 +2344,7 @@ export function RiskProfileTest() {
               montamos monto × (1 + tasa) por año, rodaja por rodaja · aportes no incluidos · no es garantía.
             </p>
 
-            <div className="animate-result-in grid grid-cols-2 gap-4 mb-4">
+            <div aria-live="polite" className="animate-result-in grid grid-cols-2 gap-4 mb-4">
               <div className="rounded-xl bg-[#388e3c]/10 px-4 py-5 text-center">
                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">En 5 años</div>
                 <div className="text-2xl font-bold text-finanzas-dark dark:text-finanzas-lighter tabular-nums">

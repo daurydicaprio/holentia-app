@@ -79,6 +79,13 @@ cat .next/server/app/sitemap.xml.body | head
 cat .next/server/app/robots.txt.body
 ```
 
+**Smoke runtime de OG (obligatorio al añadir rutas o tocar imágenes):** las URLs `og:image` se generan al vuelo — comprobar que responden de verdad (un 404 se cuela como URL válida en el HTML):
+
+```bash
+pnpm start &
+curl -s -o /dev/null -w '%{http_code} %{content_type}\n' localhost:3000/{slug}/opengraph-image   # → 200 image/png
+```
+
 ## 8. Prohibido
 
 - `noindex` accidental, `images` explícitos en metadata (rompen la variante por ruta).

@@ -34,7 +34,7 @@ export function CompoundInterestResult({ summary, formatCurrency, inflation }: C
           <span>Resultado de la Inversión</span>
         </h3>
 
-        <div className="animate-result-in text-3xl font-bold mb-4 flex items-center">
+        <div aria-live="polite" className="animate-result-in text-3xl font-bold mb-4 flex items-center">
           <span className="text-xl mr-2 opacity-90">
             Balance final:
           </span>

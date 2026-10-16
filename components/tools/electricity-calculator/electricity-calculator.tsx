@@ -186,7 +186,7 @@ export function ElectricityCalculator() {
             <p className="text-sm mt-1">y aquí aparece tu factura estimada.</p>
           </div>
         ) : (
-          <div className="animate-result-in bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border-2 border-gray-900/80 dark:border-gray-100/20 h-full flex flex-col">
+          <div aria-live="polite" className="animate-result-in bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border-2 border-gray-900/80 dark:border-gray-100/20 h-full flex flex-col">
             <div className="bg-sky-200 dark:bg-sky-900/60 px-5 py-3.5 sm:px-6 sm:py-4 text-center font-bold tracking-wide text-base sm:text-lg">
               CÁLCULO DE LA FACTURA
             </div>

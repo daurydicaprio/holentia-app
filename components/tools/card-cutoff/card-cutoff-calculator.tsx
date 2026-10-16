@@ -546,7 +546,7 @@ export function CardCutoffCalculator() {
             <p className="text-sm mt-1">y te cuento cuándo pagarías cada compra.</p>
           </div>
         ) : (
-          <div className="animate-result-in bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
+          <div aria-live="polite" className="animate-result-in bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
             {/* Héroe: días gratis reales de esta compra */}
             <div
               className="rounded-xl p-8 text-white mb-8 text-center bg-gradient-to-br from-finanzas to-finanzas-dark dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text"

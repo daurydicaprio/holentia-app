@@ -314,7 +314,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             },
             legend: {
               display: true,
-              position: "left",
+              position: isMobile ? "bottom" : "left",
               align: "center",
               labels: {
                 font: { size: 13, weight: "bold" },

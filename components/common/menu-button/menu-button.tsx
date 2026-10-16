@@ -117,7 +117,7 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
           ? "bg-gray-800/70 hover:bg-gray-800/90 text-white shadow-none"
           : "bg-white/70 hover:bg-white/90 text-gray-800",
     isSquare ? "rounded-md" : "rounded-full",
-    isCompact ? "w-9 h-9" : "w-10 h-10",
+    "w-11 h-11",
   ]
     .filter(Boolean)
     .join(" ")

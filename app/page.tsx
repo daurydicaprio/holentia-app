@@ -24,7 +24,7 @@ const homeJsonLd = {
       url: SITE_URL,
       inLanguage: "es-DO",
       description:
-        "Herramientas gratuitas de bienestar integral: mente, relaciones, cuerpo y finanzas. Calculadoras, simuladores y tests que funcionan en tu dispositivo.",
+        "Herramientas gratuitas de bienestar integral: mente, relaciones, cuerpo y finanzas. Calculadoras, simuladores y tests que funcionan en tu navegador.",
     },
     {
       "@type": "Organization",

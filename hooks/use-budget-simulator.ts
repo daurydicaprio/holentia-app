@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
+import { formatDOP } from "@/lib/format"
 
 export interface BudgetItem {
   id: string
@@ -187,14 +188,7 @@ export function useBudgetSimulator() {
   ])
 
   // Función para formatear moneda
-  const formatCurrency = useCallback((value: number): string => {
-    return new Intl.NumberFormat("es-MX", {
-      style: "currency",
-      currency: "MXN",
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(value)
-  }, [])
+  const formatCurrency = useCallback((value: number): string => formatDOP(value), [])
 
   // Función para añadir un nuevo ingreso
   const addIncome = (concept: string) => {

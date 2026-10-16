@@ -50,6 +50,7 @@ useEffect(() => {
 2. Textos fijos `text-[#388e3c]` en títulos de gráfico: aceptable (verde sección, pasa AA large en ambos modos), pero preferir tokens si se toca.
 3. Colores de series en oscuro: usar tonos `{s}-light`/`{s}-lighter` (claros) — los `{s}-dark` sobre fondo oscuro no se distinguen.
 4. `options.plugins.legend.labels.color` y `tooltip.{title,body}Color: chartColors.text` — mantener sincronizados con `fontColor`.
+5. **Leyenda en móvil**: los doughnut/radial con `position: "left"` aplastan el gráfico en pantallas <768px → `position: isMobile ? "bottom" : "left"` (el hook `useMediaQuery("(max-width: 768px)")` ya existe en `calculator-charts.tsx`). Las leyendas `"top"`/`"bottom"` pueden quedarse fijas.
 
 ## Si cambia este patrón
 

@@ -183,7 +183,7 @@ export function LoveLanguagesTest() {
     const primaryLanguage = results[0]
 
     return (
-      <div className="animate-result-in space-y-6">
+      <div aria-live="polite" className="animate-result-in space-y-6">
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
           <div className="flex items-center justify-center mb-6">
             <Heart className="h-12 w-12 text-relaciones dark:text-relaciones-light" />

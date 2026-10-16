@@ -117,6 +117,16 @@ El borde se vuelve transparente al enfocar: solo el anillo de sección marca el 
 - `#81c784` (verde claro legado en dark de finanzas) **migrado**: en clases → `finanzas-light` (#66bb6a); en gráficos JS (Chart.js, `sliceColors`, `FUND_COLORS`) → hex canónico `#66bb6a` (o `#388e3c` si había colisión cromática en un pie). Los gráficos usan hex literales porque Chart.js necesita valores crudos, no clases.
 - Acentos locales de herramienta (budget-simulator, familia verde salvia documentada): `#1e3a2b` (texto/fondo profundo), `#6a9c77` (acento medio) y `#a4c3a2` (acento claro). Se usan con opacidad (`/10`–`/80`) porque los tokens no admiten `/n`; solo dentro de budget.
 
+### 3.7 Mobile (reglas rápidas, 16-Oct-2026)
+
+- **Breakpoint de móvil**: `<768px` (`md`) — swipe entre secciones, FAB `MobileFab`, header compacto de herramienta.
+- **Inputs**: nunca `text-sm` a secas en un input — iOS Safari hace zoom al enfocar (<16px). Patrón canónico: `text-base md:text-sm` (como `components/ui/input.tsx`). Añadir `inputMode` (`numeric`/`decimal`) en inputs numéricos.
+- **Tap targets ≥44px** en acciones táctiles (botones de header, menú); el resto de controles ≥40px.
+- **Formato local**: moneda siempre con `formatDOP` de `lib/format.ts` (es-DO/DOP, `Intl.NumberFormat`) — nunca `es-MX`/`MXN` ni `$` pelado.
+- **Charts**: leyendas de doughnut/radial → `position: isMobile ? "bottom" : "left"` (a la izquierda aplastan el gráfico en móvil).
+- **Tablas**: siempre `overflow-x-auto` en contenedor.
+- **PWA**: manifest con iconos 192/512 + maskable (`public/icon-{192,512}.png`, `icon-512-maskable.png`); `themeColor` claro/oscuro en `viewport`.
+
 ### 4b. Página de sección (hub mente/relaciones/cuerpo/finanzas)
 
 `SectionPage` = Logo + `SectionTabs` + `SectionHeader` (H1 + `subtitle` inspiracional; el copy factual vive en `metaDescription`, **sin `intro` renderizada**) + `ToolsGrid` + `Footer`, todo con tokens. **Sin FAQ en los hubs** (decisión 14-Oct-2026: el FAQ vive en cada herramienta y en `/ayuda`), sin «¿Qué quieres aprender?» ni otros títulos de relleno:
@@ -147,6 +157,7 @@ Reglas del armazón compartido, en línea con la identidad monocroma:
 - **Sin estilos inline ni manipulación JS de color/hover** (patrón footer): mapas estáticos de clases por sección + fallback neutro. Los valores crudos (rgba con alpha) solo en JS de Chart.js o fondos `headerBgColor` que necesitan opacidad.
 - **Sin `hover:scale-*`/`active:scale-*`** en chrome; feedback con `transition-colors`.
 - Menú desplegable: panel sólido `bg-white dark:bg-gray-900` + `border-gray-200 dark:border-gray-700` + `shadow-lg`; backdrop `bg-black/60` sin blur; entrada con keyframe `hol-menu-in`.
+- **Header móvil de herramienta** (`unified-header.tsx`, sticky <768px): fondo **sólido** con el token `--color-{s}-active-dark` de la sección (mapa estático; fallback `rgb(17,24,39)`), texto/iconos blancos — los `-active-dark` garantizan ≥4.5:1 en ambos temas (el glass al 70% no cumplía AA en claro, cuerpo ≈1.9:1; retirado 16-Oct-2026). **Sin `backdrop-blur`** (con fondo sólido no aporta). Tap targets de 44px (`h-11 w-11`) en volver y menú; chip de logo con `py-2`.
 - `data-interactive="true"` en botones, enlaces y toggle del menú.
 
 ## 4. Recetas de componente
@@ -213,6 +224,7 @@ Receta canónica para calculadoras/tests con varios campos (refs: `compound-inte
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.
+- **Anti-flash (FOUC)**: el `ThemeProvider` (`components/theme-provider.tsx`) se renderiza directo, **sin gate de `mounted`** — así next-themes inyecta su script inline en el HTML inicial y aplica el tema antes del primer pintado. Los gates locales `mounted` solo van en los componentes que leen el tema para su icono/estado (menú, header, charts).
 - Chart.js: colores por `resolvedTheme` (memorizados en `useMemo`, ver `calculator-charts.tsx`).
 - Regla: todo componente con color propio debe tener variante `dark:`. Probar ambos modos antes de mergear.
 

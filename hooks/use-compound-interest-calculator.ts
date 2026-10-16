@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react"
 import { draftKey, simulationsKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
+import { formatDOP } from "@/lib/format"
 
 export interface SimulationData {
   year: number
@@ -188,14 +189,7 @@ export function useCompoundInterestCalculator(): useCompoundInterestCalculatorRe
   })
 
   // Función para formatear moneda
-  const formatCurrency = useCallback((value: number): string => {
-    return new Intl.NumberFormat("es-MX", {
-      style: "currency",
-      currency: "MXN",
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(value)
-  }, [])
+  const formatCurrency = useCallback((value: number): string => formatDOP(value), [])
 
   // Función para simular inversión mensual - CORREGIDA según el código original
   const simulateInvestmentMonthly = (

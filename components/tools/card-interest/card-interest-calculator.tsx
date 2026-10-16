@@ -276,7 +276,7 @@ export function CardInterestCalculator() {
             <p className="text-sm mt-1">y te digo cuánto cuesta financiar y en cuántos meses liquidas.</p>
           </div>
         ) : (
-          <div className="animate-result-in space-y-6 h-full">
+          <div aria-live="polite" className="animate-result-in space-y-6 h-full">
             {/* Héroe */}
             <div
               className={`rounded-xl p-8 text-white text-center shadow-lg ${

@@ -249,7 +249,7 @@ export function CalorieCalculator() {
               <p className="text-sm mt-1">y verás tus calorías para {goalLabel}.</p>
             </div>
           ) : (
-            <div className="animate-result-in bg-gradient-to-br from-cuerpo to-cuerpo-dark rounded-xl p-8 shadow-lg text-black text-center h-full flex flex-col justify-center">
+            <div aria-live="polite" className="animate-result-in bg-gradient-to-br from-cuerpo to-cuerpo-dark rounded-xl p-8 shadow-lg text-black text-center h-full flex flex-col justify-center">
               <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Para {goalLabel} necesitas</div>
               <div className="text-6xl font-bold">{animatedHeroValue.toLocaleString("es-ES")}</div>
               <div className="text-lg opacity-90 mt-1">kcal al día</div>

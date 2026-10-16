@@ -110,6 +110,18 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase U — Auditoría mobile + tema + DX (16-Oct-2026) — HECHA
+
+- [x] **Tema (FOUC)**: `components/theme-provider.tsx` sin gate de `mounted` — next-themes ahora inyecta su script anti-flash en el HTML inicial (antes el tema oscuro llegaba recién tras la hidratación → destello claro→oscuro). Gates locales `mounted` intactos en menú/header/charts.
+- [x] **Contraste móvil**: header sticky de herramienta con fondo **sólido** `{s}-active-dark` + texto blanco (≥4.5:1 en ambos temas; el glass al 70% daba cuerpo ≈1.9:1 en claro) y sin `backdrop-blur`; tap targets `h-11 w-11` (44px) en volver/menú y chip de logo `py-2`; `isDark` muerto eliminado.
+- [x] **Bug de moneda**: 3 hooks (`compound-interest`, `loan`, `budget`) seguían formateando `es-MX`/`MXN` → nuevo `lib/format.ts` (`formatDOP`, es-DO/DOP) como fuente única.
+- [x] **Mobile**: 2 inputs con `text-sm` (zoom iOS) → `text-base md:text-sm` (income-table, risk-profile-test); leyenda del doughnut `position: isMobile ? "bottom" : "left"`; 13 contenedores de resultado con `aria-live="polite"`.
+- [x] **PWA**: iconos `public/icon-192.png`, `icon-512.png`, `icon-512-maskable.png` (generados con ruta temporal `ImageResponse`, retirada tras generar) + manifest con los 4 iconos.
+- [x] **Menores**: `LAST_UPDATED` sitemap → 2026-10-16; home JSON-LD «en tu navegador» (consistencia con meta); docs `design.md` (§3.7 Mobile, §4d header móvil, §5 anti-flash), skills `section-ui` (mobile/formato/aria-live), `create-tool` (formato + checklist mobile + smoke OG runtime), `seo-geo` (smoke runtime OG), `chart-chartsjs` (leyenda móvil).
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke (script de tema en HTML, manifest con 4 iconos, aria-live ×13, RD$ en hooks, header sólido en tool móvil).
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

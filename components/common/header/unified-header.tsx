@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { ChevronLeft } from "lucide-react"
-import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { sectionsData } from "@/lib/data"
@@ -18,7 +17,6 @@ interface UnifiedHeaderProps {
 export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
   const router = useRouter()
   const pathname = usePathname()
-  const { resolvedTheme } = useTheme()
   const { triggerHapticFeedback } = useHapticFeedback()
   const [mounted, setMounted] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
@@ -57,23 +55,16 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
     isToolPage = true
   }
 
-  // Usar el tema resuelto para evitar parpadeos
-  const currentTheme = mounted ? resolvedTheme : "light"
-  const isDark = currentTheme === "dark"
-
-  // Determinar los estilos basados en la sección (fallback neutro de marca)
-  let headerBgColor = "rgba(17, 24, 39, 0.7)" // gray-900 con 70% de opacidad
-
-  // Actualizar los colores basados en la sección
-  if (toolSection === "mente") {
-    headerBgColor = "rgba(25, 118, 210, 0.7)" // Color mente con 70% de opacidad
-  } else if (toolSection === "cuerpo") {
-    headerBgColor = "rgba(255, 160, 0, 0.7)" // Color cuerpo con 70% de opacidad
-  } else if (toolSection === "finanzas") {
-    headerBgColor = "rgba(56, 142, 60, 0.7)" // Color finanzas con 70% de opacidad
-  } else if (toolSection === "relaciones") {
-    headerBgColor = "rgba(124, 58, 237, 0.7)" // Color relaciones con 70% de opacidad
+  // Fondo del header móvil de herramienta: sólido con el tono `-active-dark` de la sección.
+  // El rgba al 70% anterior no alcanzaba AA en modo claro (cuerpo = blanco sobre ámbar ≈ 1.9:1);
+  // los `-active-dark` dan ≥4.5:1 con texto blanco en ambos temas. Fallback: gray-900 de marca.
+  const headerBgBySection: Record<string, string> = {
+    mente: "var(--color-mente-active-dark)",
+    relaciones: "var(--color-relaciones-active-dark)",
+    cuerpo: "var(--color-cuerpo-active-dark)",
+    finanzas: "var(--color-finanzas-active-dark)",
   }
+  const headerBgColor = headerBgBySection[toolSection ?? ""] ?? "rgb(17, 24, 39)"
 
   const handleBackClick = () => {
     triggerHapticFeedback("medium")
@@ -94,7 +85,7 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
   if (isMobile && isToolPage) {
     return (
       <header
-        className="sticky top-0 z-50 w-full backdrop-blur-[8px]"
+        className="sticky top-0 z-50 w-full"
         style={{
           backgroundColor: headerBgColor,
           boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
@@ -106,7 +97,7 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
             variant="ghost"
             size="icon"
             onClick={handleBackClick}
-            className="h-9 w-9 p-0 flex items-center justify-center text-white hover:bg-white/20 active:bg-white/30 transition-colors"
+            className="h-11 w-11 p-0 flex items-center justify-center text-white hover:bg-white/20 active:bg-white/30 transition-colors"
           >
             <ChevronLeft className="h-5 w-5" />
           </Button>
@@ -114,7 +105,7 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
           {/* Logo adaptado con recuadro y efectos */}
           <Link
             href="/"
-            className="flex items-center justify-center rounded-md bg-white/20 px-3 py-1 transition-colors duration-200 hover:bg-white/30 active:bg-white/40"
+            className="flex items-center justify-center rounded-md bg-white/20 px-3 py-2 transition-colors duration-200 hover:bg-white/30 active:bg-white/40"
             onClick={() => triggerHapticFeedback("light")}
           >
             <span className="font-bold text-lg text-white">HOLENTIA</span>

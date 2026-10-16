@@ -40,7 +40,9 @@ Con `isAvailable: true`, `app/sitemap.ts` la incluye **automáticamente** (deriv
 - Copiar estructura visual de la herramienta más parecida ya existente (formulario→`compound-interest` · test→`risk-profile-test` · lista+buscador→`glosario`).
 - Lógica de cálculo en `hooks/use-{kebab}.ts` cuando sea reusable/pura (patrones D/S/E: skill `tool-persistence`).
 - Elementos interactivos: `data-interactive="true"`; acciones importantes con `useHapticFeedback`.
-- Resultado hero numérico: `animate-result-in` en el contenedor + `useCountUp` (o `<CountUp>` en JSX condicional) sobre el valor formateado — receta `design.md` §6 / skill `section-ui` §8.
+- Resultado hero numérico: `animate-result-in` + `aria-live="polite"` en el contenedor + `useCountUp` (o `<CountUp>` en JSX condicional) sobre el valor formateado — receta `design.md` §6 / skill `section-ui` §8.
+- **Moneda**: `formatDOP` de `lib/format.ts` (es-DO/DOP) — nunca `es-MX`/`MXN` ni `$` pelado.
+- **Mobile**: inputs con `text-base md:text-sm` (evita el zoom de iOS) + `inputMode` en numéricos; tap targets ≥44px; tablas en `overflow-x-auto`; leyenda de doughnut `position: isMobile ? "bottom" : "left"`. Detalle: `design.md` §3.7.
 
 ## 4. Página — `app/{slug}/page.tsx` (server component)
 
@@ -98,7 +100,7 @@ export default function MiHerramientaPage() {
 pnpm exec tsc --noEmit && pnpm lint && pnpm build
 ```
 
-Smoke SEO (skill `seo-geo` §6–7): en `.next/server/app/{slug}.html` comprobar `<title>`, `meta description`, `canonical`, `og:image`, `twitter:card` y JSON-LD con FAQPage.
+Smoke SEO (skill `seo-geo` §6–7): en `.next/server/app/{slug}.html` comprobar `<title>`, `meta description`, `canonical`, `og:image`, `twitter:card` y JSON-LD con FAQPage. Y **smoke runtime del OG** (la URL en el HTML no garantiza que la imagen se genere): `pnpm start` + `curl -o /dev/null -w '%{http_code} %{content_type}' localhost:3000/{slug}/opengraph-image` → `200 image/png`.
 
 ## 9. Mantenimiento de docs
 

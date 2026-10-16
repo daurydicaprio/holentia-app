@@ -442,7 +442,7 @@ export function FuelExpenseCalculator() {
             <p className="text-sm mt-1">y aquí aparece tu gasto estimado de combustible.</p>
           </div>
         ) : (
-          <div className="animate-result-in bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border-2 border-finanzas-border flex flex-col">
+          <div aria-live="polite" className="animate-result-in bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border-2 border-finanzas-border flex flex-col">
             <div className="bg-finanzas px-5 py-3 sm:px-6 sm:py-3.5 text-white text-center font-bold tracking-wide text-base">
               TU GASTO DE COMBUSTIBLE
             </div>
