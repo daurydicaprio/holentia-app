@@ -4,13 +4,13 @@
 > Calculadoras, simuladores y tests que funcionan directamente en el navegador del usuario,
 > sin cuenta, sin registro y sin enviar datos a servidores.
 
-Las 21 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
+Las 22 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
 de cada herramienta, y los resultados son estimaciones educativas, no asesoramiento profesional
 (médico, financiero ni psicológico).
 
 ## Secciones
 
-- [Mente](https://holentia.com/mente): diario guiado, respiración guiada (4-7-8, caja y calma) y test de ansiedad GAD-7.
+- [Mente](https://holentia.com/mente): diario guiado, respiración guiada (4-7-8, caja y calma), test de ansiedad GAD-7 y calculadora del sueño.
 - [Relaciones](https://holentia.com/relaciones): test de los 5 lenguajes del amor.
 - [Cuerpo](https://holentia.com/cuerpo): calculadora de calorías (Mifflin-St Jeor) e hidratación (EFSA/NASEM).
 - [Finanzas](https://holentia.com/finanzas): presupuesto, interés compuesto, préstamo, consumo eléctrico,
@@ -41,6 +41,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 - [Planificador de compras](https://holentia.com/planificador-compras): compara comprar hoy vs. esperar e invertir el precio: cuánto te gana la paciencia en meses.
 - [Respiración guiada](https://holentia.com/tecnicas-respiracion): ejercicios con círculo en tiempo real (4-7-8 para dormir, caja para concentrarte y calma) con rondas y temporizador.
 - [Test de ansiedad GAD-7](https://holentia.com/test-ansiedad): cuestionario de cribado de 7 preguntas con puntaje 0–21 y orientación por nivel (mínima, leve, moderada o grave).
+- [Calculadora del sueño](https://holentia.com/calculadora-sueno): hora ideal para acostarte o despertarte según los ciclos de sueño (4–6 ciclos de 90 minutos).
 
 ## Páginas informativas
 

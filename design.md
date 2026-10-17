@@ -279,6 +279,13 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 - **Contenido por banda**: resumen + 3 tips + enlaces cruzados a respiración y diario; **aviso de crisis solo en banda grave** (`AlertTriangle` + 911/emergencias). Nunca ocultar el «no es un diagnóstico».
 - **Tokens**: acciones y acentos en `mente`; los semáforos de severidad usan la paleta Tailwind estándar (emerald/amber/orange/red), no tokens de sección.
 
+### Calculadora del sueño (17-Oct-2026, ref. `components/tools/sleep-calculator/`)
+
+- **Modo segmentado** («Me levanto a las…» / «Me acuesto a las…») + `<input type="time">` nativo (mobile-first, sin dependencias); resultado inmediato con `aria-live="polite"` + `animate-result-in`.
+- **3 filas de ciclos** (6/5/4 × 90 min) con la de 5 ciclos resaltada como «Recomendado» (7 h 30 min); margen fijo de 15 min para conciliar el sueño.
+- **Formato 12 h `a.m./p.m.`** con `formatTime` (normaliza cruzando medianoche con `((t % 1440) + 1440) % 1440`); nada de `Date` para aritmética de horas.
+- **Patrón D** con `{mode, wakeTime, bedTime}`; validar con regex `HH:MM` al restaurar.
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.

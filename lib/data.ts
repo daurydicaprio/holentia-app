@@ -77,6 +77,17 @@ export const sectionsData: Record<string, SectionData> = {
           "Cuestionario GAD-7 validado: 7 preguntas sobre tus últimas 2 semanas, puntaje 0–21 y orientación según tu nivel (mínima, leve, moderada o grave). Gratis.",
       },
       {
+        id: "calculadora-sueno",
+        title: "Calculadora del Sueño",
+        description: "¿A qué hora acostarte para despertar bien?",
+        slug: "calculadora-sueno",
+        isAvailable: true,
+        category: "mente",
+        metaTitle: "Calculadora del sueño: ¿a qué hora debo dormir?",
+        metaDescription:
+          "Calcula a qué hora acostarte (o despertar) según los ciclos de sueño de 90 minutos: de 4 a 6 ciclos por noche, con hora recomendada. Gratis.",
+      },
+      {
         id: "mapas-mentales",
         title: "Mapas Mentales",
         description: "Organiza ideas y potencia la creatividad.",

@@ -231,6 +231,15 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AG — Mente: Calculadora del sueño (17-Oct-2026) — HECHA
+
+- [x] **Herramienta nueva** (22ª, card `calculadora-sueno`): modo «me levanto a las…» / «me acuesto a las…» con `<input type="time">`, 3 opciones de ciclos (6/5/4 × 90 min + 15 min de conciliación), 5 ciclos marcada como recomendada, formato 12 h `a.m./p.m.` y tips de descanso; patrón D `holentia:calculadora-sueno:draft:v1` (`{mode, wakeTime, bedTime}`).
+- [x] **SEO**: metaTitle «Calculadora del sueño: ¿a qué hora debo dormir?» (47 ch) · metaDescription 140 ch; FAQ ×6; OG propia.
+- [x] **Docs/recuentos**: llms.txt 22 (header + sección Mente + línea), README (×5), architecture (×3), `seo-geo` (32 archivos OG); receta `design.md` §4 «Calculadora del sueño».
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke + auditoría 16 puntos PASS.
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

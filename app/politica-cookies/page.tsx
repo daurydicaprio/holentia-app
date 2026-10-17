@@ -108,6 +108,10 @@ const localStorageKeys = [
     key: "holentia:test-ansiedad:draft:v1",
     desc: "Tu último test de ansiedad GAD-7 (respuestas y puntaje)",
   },
+  {
+    key: "holentia:calculadora-sueno:draft:v1",
+    desc: "Tu configuración de la calculadora del sueño (modo y horas)",
+  },
 ]
 
 const notUsedItems = [
