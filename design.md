@@ -286,6 +286,11 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 - **Formato 12 h `a.m./p.m.`** con `formatTime` (normaliza cruzando medianoche con `((t % 1440) + 1440) % 1440`); nada de `Date` para aritmética de horas.
 - **Patrón D** con `{mode, wakeTime, bedTime}`; validar con regex `HH:MM` al restaurar.
 
+### Test de lenguajes del amor (mejoras 17-Oct-2026, ref. `components/tools/love-languages-test/`)
+
+- **Reescritura a estándar**: tokens `relaciones` en todo el componente (se eliminaron los `purple-*` sueltos, incluidos `hover:bg-purple-700` y `bg-purple-50`); quiz una pregunta a la vez con **auto-avance 300 ms** y «← Atrás» que conserva la selección (`aria-pressed`).
+- **Patrón D reanudable**: respuestas parciales → vuelve a la primera sin responder; completas → resultado directo (`holentia:test-lenguajes-amor:draft:v1`). Resultado con **copiar resumen** (`navigator.clipboard` + check 1,5 s) y acciones Repetir / Borrar.
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.

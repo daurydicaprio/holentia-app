@@ -122,9 +122,9 @@ export const sectionsData: Record<string, SectionData> = {
         slug: "test-lenguajes-amor",
         isAvailable: true,
         category: "relaciones",
-        metaTitle: "Test de los 5 lenguajes del amor",
+        metaTitle: "Test de los 5 lenguajes del amor: ¿cuál es el tuyo?",
         metaDescription:
-          "Descubre cómo das y recibes amor con el test de los 5 lenguajes. Preguntas rápidas para parejas y reflexión personal. Gratis y sin registro.",
+          "Descubre en 5 minutos cuál de los 5 lenguajes del amor es el tuyo: palabras, tiempo, regalos, actos o contacto físico. Con consejos para tu pareja.",
       },
       {
         id: "comunicacion-asertiva",

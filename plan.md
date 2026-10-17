@@ -240,6 +240,15 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AH — Relaciones: mejoras al test de lenguajes del amor (17-Oct-2026) — HECHA
+
+- [x] **Reescritura** de `love-languages-test.tsx`: tokens `relaciones` (fuera `purple-*` sueltos), patrón D reanudable (`holentia:test-lenguajes-amor:draft:v1`), «← Atrás» conservando selección, copiar resultado, «Borrar mis datos» y flash de guardado; las 5 preguntas quedan intactas.
+- [x] **SEO**: metaTitle «Test de los 5 lenguajes del amor: ¿cuál es el tuyo?» (51 ch) · metaDescription 147 ch (antes 31/139 con keyword débil); FAQ ×6 (nueva «¿Y si mi pareja y yo tenemos lenguajes distintos?» + privacidad con clave).
+- [x] **Docs**: politica-cookies (clave nueva), receta `design.md` §4; sin cambios de recuentos (misma herramienta).
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke + auditoría targeted PASS.
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

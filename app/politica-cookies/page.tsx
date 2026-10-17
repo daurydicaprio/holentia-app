@@ -112,6 +112,10 @@ const localStorageKeys = [
     key: "holentia:calculadora-sueno:draft:v1",
     desc: "Tu configuración de la calculadora del sueño (modo y horas)",
   },
+  {
+    key: "holentia:test-lenguajes-amor:draft:v1",
+    desc: "Tu avance y último resultado del test de lenguajes del amor",
+  },
 ]
 
 const notUsedItems = [

@@ -1,9 +1,15 @@
 "use client"
 
-import { useState } from "react"
-import { Heart, RotateCcw } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
+import { Check, Copy, Heart, RotateCcw, Trash2 } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { CountUp } from "@/components/ui/count-up"
+import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
+
+// Test de los 5 lenguajes del amor (versión educativa y abreviada).
+// Quiz de una pregunta a la vez con avance automático; el avance y el
+// resultado se guardan en el navegador (patrón D) para poder continuar.
+const DRAFT_KEY = draftKey("test-lenguajes-amor")
 
 interface Question {
   id: number
@@ -130,14 +136,64 @@ const languageDescriptions: Record<string, { name: string; description: string; 
   },
 }
 
+interface LoveDraft {
+  answers?: Record<number, string>
+  showResult?: boolean
+  savedAt?: string
+}
+
 export function LoveLanguagesTest() {
   const { triggerHapticFeedback } = useHapticFeedback()
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<Record<number, string>>({})
   const [showResults, setShowResults] = useState(false)
+  const [savedFlash, setSavedFlash] = useState(false)
+  const [copied, setCopied] = useState(false)
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const firstLoad = useRef(true)
+
+  // Restaurar avance guardado (completo → resultado; a medias → quiz)
+  useEffect(() => {
+    const draft = storageGet<LoveDraft>(DRAFT_KEY, {})
+    const validAnswers: Record<number, string> = {}
+    for (const [key, value] of Object.entries(draft.answers ?? {})) {
+      const question = questions.find((q) => q.id === Number(key))
+      if (question && question.options.some((option) => option.language === value)) {
+        validAnswers[question.id] = value
+      }
+    }
+    const answeredCount = Object.keys(validAnswers).length
+    if (answeredCount > 0) {
+      setAnswers(validAnswers)
+      if (answeredCount >= questions.length) {
+        setShowResults(true)
+      } else {
+        const firstMissing = questions.findIndex((q) => validAnswers[q.id] === undefined)
+        setCurrentQuestion(firstMissing === -1 ? questions.length - 1 : firstMissing)
+      }
+    }
+    firstLoad.current = false
+  }, [])
+
+  // Autoguardado con debounce 500 ms (se salta la carga inicial)
+  useEffect(() => {
+    if (firstLoad.current) return
+    if (!showResults && Object.keys(answers).length === 0) return
+    if (saveTimer.current) clearTimeout(saveTimer.current)
+    saveTimer.current = setTimeout(() => {
+      const payload: LoveDraft = { answers, showResult: showResults, savedAt: new Date().toISOString() }
+      if (storageSet(DRAFT_KEY, payload)) {
+        setSavedFlash(true)
+        setTimeout(() => setSavedFlash(false), 1500)
+      }
+    }, 500)
+    return () => {
+      if (saveTimer.current) clearTimeout(saveTimer.current)
+    }
+  }, [answers, showResults])
 
   const handleAnswer = (questionId: number, language: string) => {
-    setAnswers({ ...answers, [questionId]: language })
+    setAnswers((prev) => ({ ...prev, [questionId]: language }))
     triggerHapticFeedback("light")
 
     if (currentQuestion < questions.length - 1) {
@@ -158,6 +214,14 @@ export function LoveLanguagesTest() {
     triggerHapticFeedback("medium")
   }
 
+  const clearData = () => {
+    setCurrentQuestion(0)
+    setAnswers({})
+    setShowResults(false)
+    storageRemove(DRAFT_KEY)
+    triggerHapticFeedback("medium")
+  }
+
   const calculateResults = () => {
     const scores: Record<string, number> = {
       palabras: 0,
@@ -171,11 +235,31 @@ export function LoveLanguagesTest() {
       scores[language] = (scores[language] || 0) + 1
     })
 
-    const sortedLanguages = Object.entries(scores)
+    return Object.entries(scores)
       .sort(([, a], [, b]) => b - a)
       .map(([language, score]) => ({ language, score }))
+  }
 
-    return sortedLanguages
+  const copyResult = async () => {
+    const results = calculateResults()
+    const main = results[0]
+    const text = [
+      `Mi lenguaje del amor principal: ${languageDescriptions[main.language].name}.`,
+      "",
+      "Distribución:",
+      ...results.map(({ language, score }) => `· ${languageDescriptions[language].name}: ${score}/${questions.length}`),
+      "",
+      "Test de los 5 lenguajes del amor — HOLENTIA",
+    ].join("\n")
+
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+      triggerHapticFeedback("light")
+    } catch {
+      // Portapapeles no disponible (contexto no seguro): sin acción
+    }
   }
 
   if (showResults) {
@@ -184,28 +268,28 @@ export function LoveLanguagesTest() {
 
     return (
       <div aria-live="polite" className="animate-result-in space-y-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-          <div className="flex items-center justify-center mb-6">
+        <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
+          <div className="mb-6 flex items-center justify-center">
             <Heart className="h-12 w-12 text-relaciones dark:text-relaciones-light" />
           </div>
-          <h2 className="text-xl font-bold text-center text-relaciones dark:text-relaciones-light mb-4">
+          <h2 className="mb-4 text-center text-xl font-bold text-relaciones dark:text-relaciones-light">
             Tu lenguaje del amor principal
           </h2>
-          <div className="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-xl mb-6">
-            <h3 className="text-2xl font-bold text-center text-purple-700 dark:text-purple-300 mb-4">
+          <div className="mb-6 rounded-xl bg-relaciones-lighter p-6 dark:bg-relaciones-dark">
+            <h3 className="mb-4 text-center text-2xl font-bold text-relaciones-darkest dark:text-relaciones-lighter">
               {languageDescriptions[primaryLanguage.language].name}
             </h3>
-            <p className="text-gray-700 dark:text-gray-300 text-center">
+            <p className="text-center text-gray-700 dark:text-gray-300">
               {languageDescriptions[primaryLanguage.language].description}
             </p>
           </div>
 
           <div className="mb-6">
-            <h4 className="font-semibold text-lg mb-3">Consejos para ti:</h4>
+            <h4 className="mb-3 text-lg font-semibold">Consejos para ti:</h4>
             <ul className="space-y-2">
               {languageDescriptions[primaryLanguage.language].tips.map((tip, index) => (
                 <li key={index} className="flex items-start gap-2">
-                  <span className="text-relaciones dark:text-relaciones-light mt-1">•</span>
+                  <span className="mt-1 text-relaciones dark:text-relaciones-light">•</span>
                   <span className="text-gray-700 dark:text-gray-300">{tip}</span>
                 </li>
               ))}
@@ -213,19 +297,19 @@ export function LoveLanguagesTest() {
           </div>
 
           <div className="mb-6">
-            <h4 className="font-semibold text-lg mb-3">Distribución de tus lenguajes:</h4>
+            <h4 className="mb-3 text-lg font-semibold">Distribución de tus lenguajes:</h4>
             <div className="space-y-3">
               {results.map(({ language, score }) => (
                 <div key={language}>
-                  <div className="flex justify-between mb-1">
+                  <div className="mb-1 flex justify-between">
                     <span className="text-sm font-medium">{languageDescriptions[language].name}</span>
                     <span className="text-sm text-gray-600 dark:text-gray-400">
                       <CountUp value={score} format={(n) => String(n)} duration={400} />/{questions.length}
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                  <div className="h-2 w-full rounded-full bg-gray-200 dark:bg-gray-700">
                     <div
-                      className="bg-relaciones dark:bg-relaciones-light h-2 rounded-full transition-all duration-500"
+                      className="h-2 rounded-full bg-relaciones transition-all duration-500 dark:bg-relaciones-light"
                       style={{ width: `${(score / questions.length) * 100}%` }}
                     />
                   </div>
@@ -234,26 +318,51 @@ export function LoveLanguagesTest() {
             </div>
           </div>
 
-          <button
-            data-interactive="true"
-            onClick={resetTest}
-            className="w-full flex items-center justify-center gap-2 bg-relaciones hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-          >
-            <RotateCcw className="h-5 w-5" />
-            Volver a hacer el test
-          </button>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <button
+              data-interactive="true"
+              onClick={resetTest}
+              className="flex flex-1 items-center justify-center gap-2 rounded-md bg-relaciones px-6 py-3 font-medium text-white transition-colors hover:bg-relaciones-dark active:scale-[0.98]"
+            >
+              <RotateCcw className="h-5 w-5" />
+              Hacer el test de nuevo
+            </button>
+            <button
+              data-interactive="true"
+              onClick={copyResult}
+              className="flex items-center justify-center gap-2 rounded-md bg-gray-200 px-4 py-3 font-medium text-gray-800 transition-colors hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+            >
+              {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              {copied ? "¡Copiado!" : "Copiar resultado"}
+            </button>
+          </div>
+
+          <div className="mt-4 flex items-center justify-between">
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              {savedFlash ? "Guardado local" : "Se guarda en tu navegador"}
+            </span>
+            <button
+              data-interactive="true"
+              onClick={clearData}
+              className="flex items-center gap-1 text-xs text-gray-500 transition-colors hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+              Borrar mis datos
+            </button>
+          </div>
         </div>
       </div>
     )
   }
 
   const question = questions[currentQuestion]
+  const selected = answers[question.id]
 
   return (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+      <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
         <div className="mb-6">
-          <div className="flex justify-between items-center mb-4">
+          <div className="mb-4 flex items-center justify-between">
             <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
               Pregunta {currentQuestion + 1} de {questions.length}
             </span>
@@ -261,28 +370,49 @@ export function LoveLanguagesTest() {
               {Math.round(((currentQuestion + 1) / questions.length) * 100)}%
             </span>
           </div>
-          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+          <div className="h-2 w-full rounded-full bg-gray-200 dark:bg-gray-700">
             <div
-              className="bg-relaciones dark:bg-relaciones-light h-2 rounded-full transition-all duration-300"
+              className="h-2 rounded-full bg-relaciones transition-all duration-300 dark:bg-relaciones-light"
               style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
             />
           </div>
         </div>
 
-        <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6">{question.text}</h2>
+        <h2 className="mb-6 text-xl font-bold text-gray-800 dark:text-gray-100">{question.text}</h2>
 
         <div className="space-y-3">
-          {question.options.map((option, index) => (
-            <button
-              data-interactive="true"
-              key={index}
-              onClick={() => handleAnswer(question.id, option.language)}
-              className="w-full text-left p-4 border-2 border-gray-200 dark:border-gray-700 rounded-lg hover:border-relaciones hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all"
-            >
-              <span className="text-gray-700 dark:text-gray-300">{option.text}</span>
-            </button>
-          ))}
+          {question.options.map((option, index) => {
+            const isSelected = selected === option.language
+            return (
+              <button
+                data-interactive="true"
+                key={index}
+                onClick={() => handleAnswer(question.id, option.language)}
+                aria-pressed={isSelected}
+                className={`w-full rounded-lg border-2 p-4 text-left transition-all ${
+                  isSelected
+                    ? "border-relaciones bg-relaciones-lighter dark:border-relaciones-light dark:bg-relaciones-dark"
+                    : "border-gray-200 hover:border-relaciones hover:bg-relaciones-lighter dark:border-gray-700 dark:hover:border-relaciones-light dark:hover:bg-relaciones-dark"
+                }`}
+              >
+                <span className="text-gray-700 dark:text-gray-300">{option.text}</span>
+              </button>
+            )
+          })}
         </div>
+
+        {currentQuestion > 0 && (
+          <button
+            data-interactive="true"
+            onClick={() => {
+              setCurrentQuestion(currentQuestion - 1)
+              triggerHapticFeedback("light")
+            }}
+            className="mt-4 text-sm font-medium text-gray-500 transition-colors hover:text-relaciones dark:text-gray-400"
+          >
+            ← Atrás
+          </button>
+        )}
       </div>
     </div>
   )

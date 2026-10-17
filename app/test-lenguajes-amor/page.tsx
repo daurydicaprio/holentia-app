@@ -19,7 +19,7 @@ const faq: FaqItem[] = [
   {
     question: "¿Cómo funciona el test?",
     answer:
-      "Enfrentas situaciones cotidianas y eliges la opción que más te gusta o que más te molesta. Al terminar, la herramienta cuenta tus elecciones y te muestra tu lenguaje principal y el orden de los demás.",
+      "Enfrentas 5 situaciones cotidianas y eliges la opción que más te identifica. Puedes volver atrás para cambiar una respuesta, y al terminar la herramienta cuenta tus elecciones y te muestra tu lenguaje principal y el orden de los demás.",
   },
   {
     question: "¿Para quién es útil este test?",
@@ -29,12 +29,17 @@ const faq: FaqItem[] = [
   {
     question: "¿Se guarda mi resultado?",
     answer:
-      "No. El test se resuelve en tu navegador y el resultado se muestra al finalizar; no se envía a servidores ni se guarda de forma permanente. Si recargas la página, puedes volver a empezar.",
+      "Sí, pero solo en tu navegador: tus respuestas y tu último resultado se guardan en el almacenamiento local (clave holentia:test-lenguajes-amor:draft:v1) para que puedas continuar más tarde o revisarlo. No se envían a ningún servidor y puedes borrarlos con «Borrar mis datos» o desde el Centro de Ayuda.",
   },
   {
     question: "¿Esto es un test psicológico formal?",
     answer:
       "No, es una herramienta educativa inspirada en el concepto de los lenguajes del amor. No diagnostica ni reemplaza la orientación profesional de pareja.",
+  },
+  {
+    question: "¿Y si mi pareja y yo tenemos lenguajes distintos?",
+    answer:
+      "Es lo más común: cada uno da cariño en su propio idioma y no siempre en el que el otro necesita. Compartan el resultado (puedes copiarlo con un botón) y hagan el ajuste consciente: si la otra persona necesita tiempo de calidad, una salida sin celulares vale más que un regalo caro.",
   },
 ]
 
