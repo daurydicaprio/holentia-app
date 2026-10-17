@@ -303,6 +303,12 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 - **Navegación**: «← Anterior» (deshabilitado en la primera) / «Otra pregunta» con contador «Pregunta X de 15»; copiar con clipboard + check.
 - **Patrón D mínimo**: solo la categoría preferida (`holentia:preguntas-profundas:draft:v1`); tarjetas de categoría con `aria-pressed` y badge de conteo.
 
+### Diario para parejas (17-Oct-2026, ref. `components/tools/couples-journal/`)
+
+- **Pregunta del día determinista por fecha local** (índice = días desde epoch ÷ 30). Se calcula **después del montaje** (`useEffect`): las páginas son estáticas y un SSR prerenderizado quedaría con la fecha del build; placeholder `animate-pulse` estable para no romper la hidratación.
+- **Dos campos** (tú / tu pareja) con borrador autoguardado **solo tras la primera edición** (`touched` ref: evita el flash «Borrador guardado» al precargar), upsert por día en `holentia:diario-parejas:entries:v1` y limpieza del borrador al guardar.
+- **Historial con racha** (misma semántica que el diario guiado), copiar con clipboard + check y borrado en 2 pasos; «Borrar todo» con temporizador de 4 s.
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.

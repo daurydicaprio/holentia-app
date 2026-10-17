@@ -267,6 +267,15 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AK — Relaciones: diario para parejas (17-Oct-2026) — HECHA
+
+- [x] **Herramienta nueva** (25ª, card `diario-parejas` activada): pregunta del día determinista (30 preguntas, rotación por fecha local calculada tras el montaje), dos campos con borrador autoguardado (patrón D, `holentia:diario-parejas:draft:v1`), upsert diario en `holentia:diario-parejas:entries:v1`, historial con racha, copiar y borrado en 2 pasos + «Borrar todo»; enlace cruzado a preguntas profundas.
+- [x] **SEO**: metaTitle «Diario para parejas: pregunta diaria para conectar» (50 ch) · metaDescription 148 ch; FAQ ×6; OG propia; hub de relaciones actualizado (4 herramientas vivas).
+- [x] **Docs/recuentos**: llms.txt 25 (header + sección Relaciones + línea), README (×5), architecture (×3), `seo-geo` (35 archivos OG); receta `design.md` §4 «Diario para parejas».
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke + auditoría 16 puntos PASS.
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

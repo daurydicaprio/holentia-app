@@ -110,10 +110,10 @@ export const sectionsData: Record<string, SectionData> = {
     title: "Fortalece tus",
     highlightText: "relaciones",
     subtitle:
-      "Las relaciones que importan se cuidan con intención. Descubre cómo das y recibes cariño con el test de los lenguajes del amor, entiende tus patrones con el test de apego y abre conversaciones que valen con las 45 preguntas profundas.",
+      "Las relaciones que importan se cuidan con intención. Descubre cómo das y recibes cariño con el test de los lenguajes del amor, entiende tus patrones con el test de apego y haz de la conversación un ritual con las 45 preguntas profundas y el diario para parejas.",
     text: "Fortalece tus relaciones. Herramientas para mejorar la comunicación, resolver conflictos y construir vínculos significativos.",
     metaDescription:
-      "Test de lenguajes del amor, test de estilo de apego y preguntas profundas para conversar. Herramientas gratuitas, sin registro y en tu navegador.",
+      "Test de lenguajes del amor, test de apego, preguntas profundas y diario para parejas. Herramientas gratuitas, sin registro y en tu navegador.",
     cards: [
       {
         id: "test-lenguajes-amor",
@@ -147,8 +147,11 @@ export const sectionsData: Record<string, SectionData> = {
         title: "Diario para parejas",
         description: "Fortalece tu conexión diaria.",
         slug: "diario-parejas",
-        isAvailable: false,
+        isAvailable: true,
         category: "relaciones",
+        metaTitle: "Diario para parejas: pregunta diaria para conectar",
+        metaDescription:
+          "Un ritual diario para parejas: una pregunta distinta cada día y un espacio para que ambos escriban su respuesta. Historial y racha, en tu navegador.",
       },
       {
         id: "test-apego",

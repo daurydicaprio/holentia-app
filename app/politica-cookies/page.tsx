@@ -124,6 +124,14 @@ const localStorageKeys = [
     key: "holentia:preguntas-profundas:draft:v1",
     desc: "Tu categoría preferida del generador de preguntas profundas",
   },
+  {
+    key: "holentia:diario-parejas:entries:v1",
+    desc: "Tus entradas guardadas del diario para parejas (fecha, pregunta y respuestas)",
+  },
+  {
+    key: "holentia:diario-parejas:draft:v1",
+    desc: "El borrador sin guardar de la entrada de hoy del diario para parejas",
+  },
 ]
 
 const notUsedItems = [
