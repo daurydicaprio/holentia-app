@@ -210,7 +210,7 @@ export const sectionsData: Record<string, SectionData> = {
         slug: "calculadora-calorias",
         isAvailable: true,
         category: "cuerpo",
-        metaTitle: "Calculadora de calorías diarias",
+        metaTitle: "Calculadora de calorías diarias (Mifflin-St Jeor)",
         metaDescription:
           "Calcula tu gasto basal (TMB), calorías diarias y déficit o superávit según tu objetivo. Fórmula de Mifflin-St Jeor, en español y sin registro.",
       },

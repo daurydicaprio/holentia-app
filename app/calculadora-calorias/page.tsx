@@ -27,6 +27,11 @@ const faq: FaqItem[] = [
       "Porque comer por debajo de tu metabolismo basal no es sostenible ni recomendable. La calculadora usa como suelo tu gasto basal, así que el plan propuesto nunca baja de ese mínimo.",
   },
   {
+    question: "¿Cuánto peso puedo bajar a la semana?",
+    answer:
+      "Con el déficit moderado del 20% (unas 500 kcal al día) apuntas a unos 0.5 kg por semana, el ritmo que recomienda la ACSM. Bajar más rápido normalmente cuesta músculo y se recupera: mejor lento y sostenido.",
+  },
+  {
     question: "¿Esta calculadora reemplaza a un nutricionista?",
     answer:
       "No, es una estimación educativa. Tus necesidades reales dependen de tu composición corporal, historial y salud. La báscula y la guía profesional mandan sobre cualquier número.",

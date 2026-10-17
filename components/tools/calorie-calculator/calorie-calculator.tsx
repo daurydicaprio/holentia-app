@@ -129,8 +129,8 @@ export function CalorieCalculator() {
               onClick={() => pickGoal(g.id)}
               className={`p-4 rounded-xl border-2 font-medium transition-[colors,transform] duration-150 active:scale-[0.97] text-center ${
                 goal === g.id
-                  ? "border-cuerpo-dark bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 shadow-sm"
-                  : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-amber-300 dark:hover:border-amber-700"
+                  ? "border-cuerpo bg-cuerpo-lighter text-cuerpo-darkest shadow-sm dark:border-cuerpo-light dark:bg-cuerpo-dark dark:text-cuerpo-lighter"
+                  : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-cuerpo-light dark:hover:border-cuerpo-light"
               }`}
               data-interactive="true"
             >
@@ -249,9 +249,9 @@ export function CalorieCalculator() {
               <p className="text-sm mt-1">y verás tus calorías para {goalLabel}.</p>
             </div>
           ) : (
-            <div aria-live="polite" className="animate-result-in bg-gradient-to-br from-cuerpo to-cuerpo-dark rounded-xl p-8 shadow-lg text-black text-center h-full flex flex-col justify-center">
+            <div aria-live="polite" className="animate-result-in bg-gradient-to-br from-cuerpo to-cuerpo-dark rounded-xl p-8 shadow-lg text-black text-center h-full flex flex-col justify-center dark:bg-none dark:bg-cuerpo-glass dark:text-cuerpo-text">
               <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Para {goalLabel} necesitas</div>
-              <div className="text-6xl font-bold">{animatedHeroValue.toLocaleString("es-ES")}</div>
+              <div className="text-6xl font-bold">{animatedHeroValue.toLocaleString("es-DO")}</div>
               <div className="text-lg opacity-90 mt-1">kcal al día</div>
               <div className="grid grid-cols-3 gap-2 mt-6 text-center">
                 {(["lose", "maintain", "gain"] as const).map((id) => (
@@ -259,18 +259,18 @@ export function CalorieCalculator() {
                     key={id}
                     className={`rounded-lg py-2 px-1 text-sm border ${
                       id === goal
-                        ? "bg-white text-amber-900 font-bold shadow-md border-white"
-                        : "bg-white/10 text-white border-white/30"
+                        ? "bg-white text-cuerpo-darkest font-bold shadow-md border-white"
+                        : "bg-black/10 text-black/80 border-black/15 dark:bg-white/10 dark:text-cuerpo-lighter dark:border-white/20"
                     }`}
                   >
                     <div className={`text-xs ${id === goal ? "opacity-70" : "opacity-90"}`}>
                       {id === "lose" ? "Bajar −20%" : id === "maintain" ? "Mantener" : "Subir +10%"}
                     </div>
-                    <div className="font-bold tabular-nums">{result[id].toLocaleString("es-ES")}</div>
+                    <div className="font-bold tabular-nums">{result[id].toLocaleString("es-DO")}</div>
                   </div>
                 ))}
               </div>
-              <div className="text-xs opacity-80 mt-4">Metabolismo base: {result.bmr.toLocaleString("es-ES")} kcal</div>
+              <div className="text-xs opacity-80 mt-4">Metabolismo base: {result.bmr.toLocaleString("es-DO")} kcal</div>
               <div className="border-t border-white/25 mt-4 pt-3 text-[11px] leading-relaxed opacity-90">
                 Estimación educativa (Mifflin-St Jeor). No es plan médico. Todo queda en tu navegador.
               </div>
@@ -311,8 +311,8 @@ export function CalorieCalculator() {
               text: "Duerme 7–9 horas, toma agua — usa la calculadora de hidratación — y controla el estrés.",
             },
           ].map((leg) => (
-            <div key={leg.title} className="bg-amber-50 dark:bg-amber-900/15 rounded-xl px-5 py-4 flex items-start gap-3">
-              <leg.icon className="h-5 w-5 mt-0.5 flex-shrink-0 text-cuerpo-dark dark:text-amber-400" />
+            <div key={leg.title} className="bg-cuerpo-lighter dark:bg-cuerpo-dark rounded-xl px-5 py-4 flex items-start gap-3">
+              <leg.icon className="h-5 w-5 mt-0.5 flex-shrink-0 text-cuerpo-dark dark:text-cuerpo-light" />
               <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                 <strong>{leg.title}:</strong> {leg.text}
               </p>
@@ -325,7 +325,7 @@ export function CalorieCalculator() {
             href="https://alimentacionsabia.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-semibold text-amber-700 dark:text-amber-300 underline underline-offset-2"
+            className="font-semibold text-cuerpo-darkest dark:text-cuerpo-light underline underline-offset-2"
           >
             alimentacionsabia.com (Daury Diet)
           </a>
@@ -333,7 +333,7 @@ export function CalorieCalculator() {
         </p>
 
         <div className="mt-6 bg-gray-50 dark:bg-gray-700/40 rounded-xl p-5 sm:p-6 flex items-start gap-3">
-          <Scale className="h-5 w-5 mt-1 flex-shrink-0 text-cuerpo-dark dark:text-amber-400" />
+          <Scale className="h-5 w-5 mt-1 flex-shrink-0 text-cuerpo-dark dark:text-cuerpo-light" />
           <div className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed space-y-2">
             <p>
               <strong>La báscula manda.</strong> Encontrar tus calorías adecuadas a tu objetivo toma tiempo y paciencia:
@@ -357,7 +357,7 @@ export function CalorieCalculator() {
             href="https://alimentacionsabia.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-semibold text-amber-700 dark:text-amber-300 underline underline-offset-2"
+            className="font-semibold text-cuerpo-darkest dark:text-cuerpo-light underline underline-offset-2"
           >
             alimentacionsabia.com (Daury Diet)
           </a>

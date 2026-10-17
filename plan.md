@@ -294,6 +294,14 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AN — Cuerpo: pulido de la calculadora de calorías (17-Oct-2026) — HECHA
+
+- [x] **FAQ ×6**: nueva «¿Cuánto peso puedo bajar a la semana?» (ritmo ≈0.5 kg/semana con déficit del 20%, ACSM).
+- [x] **Consistencia**: números a `es-DO` (antes `es-ES`), 0 clases `amber-*` (tokens `cuerpo` en objetivos, tips y enlaces), héroe con variante dark (`dark:bg-cuerpo-glass dark:text-cuerpo-text`) y chips internos con contraste corregido (texto oscuro sobre el gradiente ámbar; el blanco sobre ámbar quedaba ≈1.9:1), metaTitle con el método (49 ch).
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke + auditoría targeted PASS.
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit
