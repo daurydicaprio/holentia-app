@@ -88,4 +88,5 @@ types/         index.ts (CardData, SectionType, AmortizationRow, …)
 - Build estricto: sin `ignoreBuildErrors`/`ignoreDuringBuilds`.
 - Smoke antes de cada push con rutas nuevas: HTML prerenderado (H1 ×1, canonical, 0 `noindex`, JSON-LD) + runtime de `opengraph-image` (`200 image/png`).
 - Auditoría automatizada: `pnpm audit:seo` (`scripts/audit-seo.mjs`) valida el sitemap completo — SEO/GEO, estructura a11y y runtime OG — en un paso (detalle: skill `seo-geo-audit` §2.0).
+- Presupuesto de rendimiento: herramienta ≤ ~150 kB First Load y Chart.js siempre en chunks diferidos (`next/dynamic`); medir con la tabla de `pnpm build` (design.md §3.8).
 - Commits atómicos por fase en `dev`; `main` solo cuando se pide deploy a producción.

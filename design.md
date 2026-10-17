@@ -130,6 +130,14 @@ El borde se vuelve transparente al enfocar: solo el anillo de sección marca el 
 - **Tablas**: siempre `overflow-x-auto` en contenedor.
 - **PWA**: manifest con iconos 192/512 + maskable (`public/icon-{192,512}.png`, `icon-512-maskable.png`); `themeColor` claro/oscuro en `viewport`.
 
+### 3.8 Rendimiento (bundle móvil, 17-Oct-2026)
+
+- **Presupuesto**: herramienta ≤ ~150 kB First Load (bundle compartido ~103 kB); ninguna lib pesada en el bundle inicial.
+- **Chart.js nunca en el bundle inicial**: componente de gráfico propio → `next/dynamic` (`ssr: false`) + skeleton `animate-pulse` que reserva altura (`h-[300px] sm:h-[400px]` línea/pastel; `h-[240px]` proyección). Charts inline sin componente propio (dona `PortfolioPie` del perfil de riesgo) → `import("chart.js/auto")` dentro del `useEffect` con bandera `cancelled` y `instance.destroy()` en el cleanup.
+- **Paneles secundarios pesados** (p. ej. `SavedSimulations` con framer-motion): `next/dynamic` con `ssr:false` y skeleton — se cargan al abrir la pestaña (móvil) o tras la hidratación (escritorio).
+- **framer-motion**: solo en chunks diferidos; donde basta CSS se usa `animate-result-in` (fade + 6px). Regla: no añadir framer al camino crítico.
+- **Medición**: la tabla de `pnpm build` (Route Size / First Load JS) es la referencia antes/después. Resultado de este pase: interés compuesto 251→139 kB · perfil de riesgo 220→151 kB · préstamo 186→145 kB.
+
 ### 4b. Página de sección (hub mente/relaciones/cuerpo/finanzas)
 
 `SectionPage` = Logo + `SectionTabs` + `SectionHeader` (H1 + `subtitle` inspiracional; el copy factual vive en `metaDescription`, **sin `intro` renderizada**) + `ToolsGrid` + `Footer`, todo con tokens. **Sin FAQ en los hubs** (decisión 14-Oct-2026: el FAQ vive en cada herramienta y en `/ayuda`), sin «¿Qué quieres aprender?» ni otros títulos de relleno:
@@ -157,7 +165,7 @@ La marca HOLENTIA es **monocroma** (logo negro/blanco, OG `#121212` + blanco). L
 Reglas del armazón compartido, en línea con la identidad monocroma:
 
 - **Acento por defecto neutro**: fuera de sección, ningún azul genérico (`#3B82F6` prohibido). Estados abiertos/activos → `ring-gray-900 dark:ring-white`, `bg-gray-100 dark:bg-gray-800`.
-- **Sin framer-motion en el chrome global** (menu-button, logo): animaciones con CSS puro (`transition-*`, `group-hover:*`, keyframes en `globals.css` si hacen falta). framer-motion queda para herramientas de finanzas.
+- **Sin framer-motion en el chrome global** (menu-button, logo): animaciones con CSS puro (`transition-*`, `group-hover:*`, keyframes en `globals.css` si hacen falta). framer-motion queda para paneles de herramientas de finanzas **y siempre detrás de un chunk diferido** (§3.8); en el camino crítico, CSS (`animate-result-in`).
 - **Sin estilos inline ni manipulación JS de color/hover** (patrón footer): mapas estáticos de clases por sección + fallback neutro. Los valores crudos (rgba con alpha) solo en JS de Chart.js o fondos `headerBgColor` que necesitan opacidad.
 - **Sin `hover:scale-*`/`active:scale-*`** en chrome; feedback con `transition-colors`.
 - Menú desplegable: panel sólido `bg-white dark:bg-gray-900` + `border-gray-200 dark:border-gray-700` + `shadow-lg`; backdrop `bg-black/60` sin blur; entrada con keyframe `hol-menu-in`.

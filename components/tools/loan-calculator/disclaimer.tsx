@@ -1,16 +1,10 @@
 "use client"
 
 import { AlertTriangle } from "lucide-react"
-import { motion } from "framer-motion"
 
 export function LoanDisclaimer() {
   return (
-    <motion.div
-      className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg p-4 text-sm"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.2 }}
-    >
+    <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg p-4 text-sm">
       <h3 className="font-medium mb-2 text-gray-800 dark:text-gray-200 flex items-center gap-2">
         <AlertTriangle size={16} className="text-amber-500" />
         <span>Notas Importantes</span>
@@ -34,6 +28,6 @@ export function LoanDisclaimer() {
           incluidos en el cálculo.
         </li>
       </ul>
-    </motion.div>
+    </div>
   )
 }

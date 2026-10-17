@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import { useCompoundInterestCalculator } from "@/hooks/use-compound-interest-calculator"
+import dynamic from "next/dynamic"
 import { CalculatorInputs } from "./calculator-inputs"
-import { CalculatorCharts } from "./calculator-charts"
 import { AmortizationTable } from "./amortization-table"
 import { MobileTabsNavigation } from "./mobile-tabs-navigation"
 import { useMediaQuery } from "@/hooks/use-media-query"
@@ -12,7 +12,20 @@ import { CompoundInterestResult } from "./compound-interest-result"
 import { InvestmentImpactSection } from "./investment-impact-section"
 import { TrendingUp, DollarSign, Calendar, AlertCircle, ArrowRight, X } from "lucide-react"
 import TabSwipeNavigation from "@/components/common/tab-swipe-navigation"
-import { SavedSimulations } from "./saved-simulations"
+
+// chart.js y los paneles con framer-motion fuera del bundle inicial: se cargan
+// solo cuando la vista los monta (tab de móvil o layout de escritorio).
+const CalculatorCharts = dynamic(() => import("./calculator-charts").then((m) => m.CalculatorCharts), {
+  ssr: false,
+  loading: () => (
+    <div className="h-[300px] w-full animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800 sm:h-[400px]" aria-hidden />
+  ),
+})
+
+const SavedSimulations = dynamic(() => import("./saved-simulations").then((m) => m.SavedSimulations), {
+  ssr: false,
+  loading: () => <div className="h-24 w-full animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800" aria-hidden />,
+})
 
 export function CompoundInterestCalculator() {
   const {

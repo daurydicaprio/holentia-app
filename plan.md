@@ -398,6 +398,15 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 - [x] **Docs**: `design.md` §4d (skip link), skill `section-ui` §8, skill `seo-geo-audit` §2.0 + §4 (fila nueva), `create-tool` §8 (atajo), README (comando), architecture §8.
 - Verificado: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` → **37/37 rutas PASS, 0 FAIL, 0 WARN** (OG runtime `200 image/png` en las 37).
 
+## Fase AX — Rendimiento móvil: Chart.js y paneles pesados fuera del bundle inicial (17-Oct-2026) — HECHA
+
+- [x] **Interés compuesto**: `CalculatorCharts` con `next/dynamic` (`ssr:false` + skeleton que reserva altura); inputs con `animate-result-in` en vez de framer-motion; `SavedSimulations` diferido — la ruta pasa de **251 a 139 kB** First Load.
+- [x] **Perfil de riesgo**: fuera el `import Chart from "chart.js/auto"` estático — la dona `PortfolioPie` hace `import("chart.js/auto")` dentro del `useEffect` (bandera `cancelled` + `instance.destroy()` en cleanup); `FundProjectionChart` diferido con `next/dynamic` — la ruta pasa de **220 a 151 kB**.
+- [x] **Préstamo**: framer-motion fuera del camino crítico (variantes → `animate-result-in`, tabs con `active:scale-[0.98]` en vez de `whileTap` + `layoutId`, disclaimer estático, tabla sin `motion.tr`); `SavedSimulations` y `AmortizationTable` diferidos — la ruta pasa de **186 a 145 kB**.
+- [x] **Sin regresiones**: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` → **37/37 rutas PASS, 0 FAIL, 0 WARN** (estructura SEO/a11y intacta).
+- [x] **Docs**: `design.md` §3.8 (presupuesto y reglas de carga) + §4d; skill `chart-chartsjs` (§Carga); skill `create-tool` §8 (presupuesto); `architecture.md` §8; README.
+- Medición: tabla de `pnpm build` (Route Size / First Load JS). Los CWV de campo (Lighthouse/PSI) se comprueban sobre `dev.holentia.com` tras el deploy.
+
 ---
 
 ## Backlog propuesto (17-Oct-2026, pendiente de decisión)
@@ -406,7 +415,7 @@ Sin fase asignada; se convierte en fase al aprobar el frente. Candidatos analiza
 
 1. ~~Auditoría integral de cierre~~ **HECHA (Fase AW)**: `pnpm audit:seo` valida las 37 rutas en un paso (SEO/GEO + estructura a11y + runtime OG); barrido 37/37 PASS.
 2. **Accesibilidad más allá del color**: skip link, landmarks y `<main>` único **ya hechos (Fase AW)**; pendiente el barrido axe/DOM en navegador real (este entorno no trae Chrome: se hará en dispositivo) y la revisión de foco/orden de tabulación.
-3. **Rendimiento móvil (Core Web Vitals)**: medir LCP/CLS/INP en home, un hub y 2–3 herramientas (interés compuesto y perfil de riesgo son las pesadas por Chart.js) y aplicar lazy-load del gráfico si hace falta.
+3. ~~Rendimiento móvil~~ **HECHO (Fase AX)**: lazy-load de Chart.js y de paneles pesados (compuesto 251→139 kB, riesgo 220→151 kB, préstamo 186→145 kB First Load) + framer-motion fuera del camino crítico. Pendiente de campo: CWV reales (Lighthouse/PSI) sobre `dev.holentia.com` tras el deploy.
 4. **Directorio `/herramientas`**: índice de las 27 con filtro por sección (server-rendered) + enlaces desde home/footer — descubribilidad y SEO interno.
 5. **«Mis datos»**: exportar/importar JSON de las claves `holentia:*` (respaldo local, sin nube) + enlace en `/ayuda`.
 6. **PWA offline**: service worker para que las herramientas funcionen sin conexión (manifest y iconos ya existen).

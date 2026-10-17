@@ -104,6 +104,8 @@ Smoke SEO (skill `seo-geo` §6–7): en `.next/server/app/{slug}.html` comprobar
 
 **Auditoría final de 16 puntos (obligatoria)**: cargar la skill `seo-geo-audit` y pasar su checklist §1 + barrido §2 sobre la herramienta nueva antes del push; ninguna herramienta se considera terminada sin los 16 puntos en PASS (y anotar la fila en su registro §4). **Atajo**: `pnpm build && pnpm audit:seo` (script §2.0) valida la herramienta nueva junto con todo el sitio en un solo paso.
 
+**Rendimiento**: si la herramienta usa Chart.js (o cualquier lib pesada), cargarla con `next/dynamic` + `ssr:false` y skeleton (§Carga de la skill `chart-chartsjs`) — nunca en el bundle inicial. Tras el build, la ruta debe quedar en ~≤150 kB First Load.
+
 ## 9. Mantenimiento de docs
 
 - Si la herramienta introdujo un **patrón UI nuevo**, documentarlo en `design.md` §4 Recetas y, si cambia el proceso, actualizar esta skill (regla en `AGENTS.md`).

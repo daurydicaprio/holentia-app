@@ -72,6 +72,7 @@ holentia/
 - **Guardado de Simulaciones**: Capacidad para guardar y comparar diferentes escenarios en calculadoras
 - **Optimización Táctil**: Controles ≥40px y acciones táctiles ≥44px; inputs ≥16px (sin zoom en iOS)
 - **Contraste AA**: texto y controles con tiers por sección en claro/oscuro, revisados herramienta por herramienta
+- **Rendimiento**: gráficos y paneles pesados cargados bajo demanda (Chart.js nunca en el bundle inicial; herramientas ~≤150 kB First Load)
 - **Privacidad Total**: No se recopilan datos personales, todo se procesa localmente
 - **Diseño Minimalista**: Interfaz limpia, moderna y atractiva con gradientes sutiles
 

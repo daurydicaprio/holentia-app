@@ -25,15 +25,24 @@ import {
   Landmark,
   DollarSign,
 } from "lucide-react"
+import dynamic from "next/dynamic"
 import { useTheme } from "next-themes"
-import Chart from "chart.js/auto"
+import type { Chart as ChartJS } from "chart.js"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { CountUp } from "@/components/ui/count-up"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 import { RiskLevelsGraphic, LEVELS } from "./risk-levels-graphic"
-import { FundProjectionChart } from "./fund-projection-chart"
 import { Disclosure } from "./disclosure"
+
+// chart.js (≈70 kB) fuera del bundle inicial: el gráfico de proyección se carga
+// solo cuando el resultado lo monta (next/dynamic, sin SSR).
+const FundProjectionChart = dynamic(() => import("./fund-projection-chart").then((m) => m.FundProjectionChart), {
+  ssr: false,
+  loading: () => (
+    <div className="mt-3 h-[240px] w-full animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800" aria-hidden />
+  ),
+})
 
 const DRAFT_KEY = draftKey("test-perfil-riesgo")
 
@@ -714,59 +723,62 @@ function formatMoney(value: number, currency: "USD" | "DOP"): string {
 
 function PortfolioPie({ slices, id }: { slices: Slice[]; id: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const chartRef = useRef<Chart | null>(null)
   const { resolvedTheme } = useTheme()
   const isMobile = useMediaQuery("(max-width: 768px)")
 
   useEffect(() => {
-    if (!canvasRef.current) return
-    if (chartRef.current) {
-      chartRef.current.destroy()
-      chartRef.current = null
-    }
-    const ctx = canvasRef.current.getContext("2d")
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext("2d")
     if (!ctx) return
 
+    let cancelled = false
+    let instance: ChartJS | null = null
     const isDark = resolvedTheme === "dark"
-    try {
-      chartRef.current = new Chart(ctx, {
-        type: "doughnut",
-        data: {
-          labels: slices.map((s) => s.label),
-          datasets: [
-            {
-              data: slices.map((s) => s.pct),
-              backgroundColor: sliceColors,
-              borderColor: isDark ? "#1f2937" : "#ffffff",
-              borderWidth: 2,
-              hoverOffset: 8,
+
+    // chart.js se carga solo cuando el resultado monta la dona (fuera del bundle inicial).
+    import("chart.js/auto")
+      .then(({ default: Chart }) => {
+        if (cancelled) return
+        try {
+          instance = new Chart(ctx, {
+            type: "doughnut",
+            data: {
+              labels: slices.map((s) => s.label),
+              datasets: [
+                {
+                  data: slices.map((s) => s.pct),
+                  backgroundColor: sliceColors,
+                  borderColor: isDark ? "#1f2937" : "#ffffff",
+                  borderWidth: 2,
+                  hoverOffset: 8,
+                },
+              ],
             },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          cutout: "58%",
-          animation: { animateRotate: true, duration: isMobile ? 500 : 1200 },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: (c) => `${c.label}: ${Math.round(c.parsed * 100) / 100}%`,
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              cutout: "58%",
+              animation: { animateRotate: true, duration: isMobile ? 500 : 1200 },
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: (c) => `${c.label}: ${Math.round(c.parsed * 100) / 100}%`,
+                  },
+                },
               },
             },
-          },
-        },
+          })
+        } catch {
+          // chart no crítico: los % se listan debajo
+        }
       })
-    } catch {
-      // chart no crítico: los % se listan debajo
-    }
+      .catch(() => {})
 
     return () => {
-      if (chartRef.current) {
-        chartRef.current.destroy()
-        chartRef.current = null
-      }
+      cancelled = true
+      if (instance) instance.destroy()
     }
   }, [slices, resolvedTheme, isMobile])
 

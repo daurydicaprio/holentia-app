@@ -3,7 +3,6 @@
 import type React from "react"
 
 import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
 import { DollarSign, Percent, Calendar, HelpCircle, Save } from "lucide-react"
 
 interface CalculatorInputsProps {
@@ -144,11 +143,8 @@ export function CalculatorInputs({
   }
 
   return (
-    <motion.div
-      className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+    <div
+      className="animate-result-in bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700"
       data-interactive="true"
     >
       <h2 className="text-xl font-bold text-finanzas dark:text-finanzas-light mb-6 text-center">
@@ -435,6 +431,6 @@ export function CalculatorInputs({
           )}
         </div>
       )}
-    </motion.div>
+    </div>
   )
 }

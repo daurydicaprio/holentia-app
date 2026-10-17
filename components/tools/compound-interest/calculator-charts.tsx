@@ -5,7 +5,6 @@ import type { ChartData, PieChartData } from "@/hooks/use-compound-interest-calc
 import { useTheme } from "next-themes"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import Chart from "chart.js/auto"
-import { motion } from "framer-motion"
 
 interface CalculatorChartsProps {
   lineChartData: ChartData
@@ -367,12 +366,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
   return (
     <div className="space-y-8">
       {/* Gráfico de línea */}
-      <motion.div
-        className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
+      <div className="animate-result-in bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
         <h2 className="text-xl font-bold text-finanzas w-full text-center mb-6 dark:text-finanzas-light">
           Composición de la inversión
           <span className="block w-16 h-1 bg-finanzas mx-auto mt-2"></span>
@@ -381,16 +375,11 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
         <div className="h-[300px] sm:h-[400px] flex items-center justify-center">
           <canvas ref={lineChartRef}></canvas>
         </div>
-      </motion.div>
+      </div>
 
       {/* Gráfico de pastel - solo mostrar en escritorio o si showPieChart es true */}
       {showPieChart && (
-        <motion.div
-          className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
+        <div className="animate-result-in bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
           <h2 className="text-xl font-bold text-finanzas w-full text-center mb-6 dark:text-finanzas-light">
             Distribución de la inversión
             <span className="block w-16 h-1 bg-finanzas mx-auto mt-2"></span>
@@ -399,7 +388,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
           <div className="h-[300px] sm:h-[400px] flex items-center justify-center">
             <canvas ref={pieChartRef}></canvas>
           </div>
-        </motion.div>
+        </div>
       )}
     </div>
   )

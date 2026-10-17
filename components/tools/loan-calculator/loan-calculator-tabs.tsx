@@ -3,7 +3,6 @@
 import type React from "react"
 
 import { Calculator, BarChart3, Table } from "lucide-react"
-import { motion } from "framer-motion"
 
 interface LoanCalculatorTabsProps {
   activeTab: string
@@ -49,29 +48,20 @@ interface TabButtonProps {
 
 function TabButton({ isActive, onClick, icon, label, disabled = false }: TabButtonProps) {
   return (
-    <motion.button
+    <button
       onClick={onClick}
       disabled={disabled}
       data-interactive="true"
-      className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-colors relative ${
+      className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-[colors,transform] duration-150 relative active:scale-[0.98] ${
         isActive
           ? "bg-finanzas-dark text-white"
           : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-finanzas-dark hover:text-white dark:hover:bg-finanzas-light dark:hover:text-gray-900"
       } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
-      whileTap={!disabled ? { scale: 0.98 } : undefined}
     >
-      {isActive && (
-        <motion.div
-          className="absolute inset-0 bg-finanzas-dark"
-          layoutId="activeTab"
-          initial={false}
-          transition={{ type: "spring", stiffness: 500, damping: 30 }}
-        />
-      )}
       <span className={`relative z-10 flex items-center gap-2 ${isActive ? "text-white" : ""}`}>
         {icon}
         <span>{label}</span>
       </span>
-    </motion.button>
+    </button>
   )
 }

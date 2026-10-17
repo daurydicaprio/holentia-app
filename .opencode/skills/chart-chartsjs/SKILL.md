@@ -37,6 +37,27 @@ useEffect(() => {
 }, [pieChartData, chartColors, resolvedTheme, isMobile])
 ```
 
+## Carga: nunca en el bundle inicial (17-Oct-2026)
+
+- **Componente de gráfico propio** → `next/dynamic` con `ssr:false` y skeleton `animate-pulse` que reserva altura (evita CLS):
+  ```tsx
+  const CalculatorCharts = dynamic(() => import("./calculator-charts").then((m) => m.CalculatorCharts), {
+    ssr: false,
+    loading: () => <div className="h-[300px] w-full animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800 sm:h-[400px]" aria-hidden />,
+  })
+  ```
+- **Chart inline en un componente grande** (dona `PortfolioPie` del perfil de riesgo) → `import("chart.js/auto")` dentro del `useEffect`, con bandera `cancelled` y `instance.destroy()` en el cleanup; el tipo va con `import type { Chart as ChartJS } from "chart.js"` (no arrastra runtime):
+  ```tsx
+  let cancelled = false
+  let instance: ChartJS | null = null
+  import("chart.js/auto").then(({ default: Chart }) => {
+    if (cancelled) return
+    instance = new Chart(ctx, { … })
+  })
+  return () => { cancelled = true; instance?.destroy() }
+  ```
+- **Medir con el build**: la tabla de `pnpm build` (First Load JS) es la referencia; una tool no debe notar chart.js en su bundle inicial (el compuesto pasó de 251 a 139 kB). Presupuesto: ≤ ~150 kB.
+
 ## Errores conocidos (no volver a cometerlos)
 
 1. **Leyenda con `generateLabels` personalizado**: Chart.js v4 dibuja el texto con `legendItem.fontColor` (`chart.cjs` lo lee directo en `ctx.fillStyle = legendItem.fontColor`). `labels.color` solo lo inyecta la `generateLabels` **por defecto**. Si overrideas, **cada item debe llevar `fontColor: chartColors.text`** — si no, queda `undefined` → texto NEGRO ilegible en modo oscuro.

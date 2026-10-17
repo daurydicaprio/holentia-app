@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { motion } from "framer-motion"
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react"
 import type { AmortizationRow } from "@/types"
 
@@ -34,12 +33,7 @@ export function AmortizationTable({ data, formatCurrency }: AmortizationTablePro
   }
 
   return (
-    <motion.div
-      className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-    >
+    <div className="animate-result-in bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
@@ -78,14 +72,11 @@ export function AmortizationTable({ data, formatCurrency }: AmortizationTablePro
           </thead>
           <tbody>
             {currentData.map((row, index) => (
-              <motion.tr
+              <tr
                 key={row.month}
                 className={`${
                   index % 2 === 0 ? "bg-white dark:bg-gray-900" : "bg-gray-50 dark:bg-gray-800/50"
                 } hover:bg-green-50 dark:hover:bg-green-900/10 transition-colors`}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.03, duration: 0.2 }}
               >
                 <td className="p-3 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200">
                   {row.month}
@@ -105,7 +96,7 @@ export function AmortizationTable({ data, formatCurrency }: AmortizationTablePro
                 <td className="p-3 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200">
                   {formatCurrency(row.remainingBalance)}
                 </td>
-              </motion.tr>
+              </tr>
             ))}
             <tr className="font-medium bg-[#388e3c]/10 dark:bg-[#388e3c]/20">
               <td
@@ -199,6 +190,6 @@ export function AmortizationTable({ data, formatCurrency }: AmortizationTablePro
           </div>
         </div>
       )}
-    </motion.div>
+    </div>
   )
 }
