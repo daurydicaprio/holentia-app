@@ -38,6 +38,8 @@ Regla: nada de `useEffect`/`mounted` guard para decidir si se renderiza contenid
 - **JSON-LD**: `toolJsonLd` (WebApplication + BreadcrumbList + FAQPage), `sectionJsonLd` (CollectionPage + BreadcrumbList), home (WebSite + Organization), `/ayuda` (FAQPage). Se emite vía `<JsonLd>` (script `application/ld+json`).
 - **FAQ visible**: cada herramienta renderiza su FAQ en el HTML (acordeón, pero el texto está en el DOM) y `/ayuda`. Los hubs de sección **no** llevan FAQ (corrección 14-Oct-2026).
 - **Indexación**: `app/sitemap.ts` (37 URLs: home + 4 secciones + 27 herramientas + 5 informativas), `app/robots.ts` (allow all + sitemap), `public/llms.txt` (índice legible por LLMs).
+- **Imágenes sociales**: `app/{ruta}/opengraph-image.tsx` por ruta (37: raíz + 4 hubs + 27 herramientas + 5 informativas) sobre `components/seo/og-template.tsx`; la convención **no hereda**, cada ruta nueva necesita su OG propia. `app/manifest.ts` (PWA: iconos 192/512/maskable, themeColor claro/oscuro).
+- **Auditoría**: checklist de 16 puntos, barrido estático + runtime de OG y registro histórico en la skill `seo-geo-audit` (obligatoria antes de push con rutas nuevas).
 - El breadcrumb **no se muestra al usuario**; solo existe como `BreadcrumbList` en JSON-LD.
 
 ## 4. Color y theming
@@ -55,15 +57,16 @@ Regla: nada de `useEffect`/`mounted` guard para decidir si se renderiza contenid
 ## 6. Estructura de directorios
 
 ```
-app/           páginas (server-first): 4 hubs, 27 herramientas, 5 informativas, layout, error, sitemap, robots
+app/           páginas (server-first): 4 hubs, 27 herramientas, 5 informativas, layout, error, manifest, sitemap, robots + OG por ruta
 components/
-  common/      header, footer, logo, menu-button, scroll-to-top, clear-all-data, tab-swipe-navigation
+  common/      header, footer, logo, brand-dots, menu-button, scroll-to-top, clear-all-data, tab-swipe-navigation
   sections/    section-page, section-tabs, section-header, section-swipe-navigation, tool-card, tools-grid
   tool-seo/    tool-page-shell, tool-faq (acordeón), json-ld
-  tools/       19 componentes client de herramientas (+ subcomponentes)
+  tools/       27 componentes client de herramientas (+ subcomponentes)
+  seo/         og-template (plantilla compartida de las imágenes OG)
   ui/          primitivas shadcn (button, count-up, input, slider)
 hooks/         lógica por herramienta + use-count-up, use-haptic-feedback, use-media-query
-lib/           data.ts (catálogo), seo.ts, storage.ts, utils.ts
+lib/           data.ts (catálogo), seo.ts, storage.ts, format.ts (formatDOP), utils.ts
 types/         index.ts (CardData, SectionType, AmortizationRow, …)
 ```
 
@@ -75,10 +78,13 @@ types/         index.ts (CardData, SectionType, AmortizationRow, …)
   - `section-ui` — paleta, tokens, tipografía, iconos, hovers, contraste, dark mode.
   - `tool-persistence` — `lib/storage.ts`, patrones E/D/S, claves `holentia:*`, privacidad.
   - `chart-chartsjs` — theming Chart.js por tema + pitfall `fontColor` de leyendas.
+  - `seo-geo` — receta SEO/GEO por página y por herramienta (metadata, canonical, JSON-LD, OG, llms.txt).
+  - `seo-geo-audit` — checklist de 16 puntos + barrido automatizado + registro de auditorías (obligatoria al añadir herramienta).
 - **Regla**: cualquier cambio de UI/patrón/token/proceso actualiza `design.md` y/o las skills afectadas **en el mismo commit** (docs nunca desincronizados del código).
 
 ## 8. Calidad
 
 - `pnpm exec tsc --noEmit` · `pnpm lint` (ESLint 8.57 + `next/core-web-vitals`) · `pnpm build` — los tres deben estar en verde antes de cada push.
 - Build estricto: sin `ignoreBuildErrors`/`ignoreDuringBuilds`.
+- Smoke antes de cada push con rutas nuevas: HTML prerenderado (H1 ×1, canonical, 0 `noindex`, JSON-LD) + runtime de `opengraph-image` (`200 image/png`).
 - Commits atómicos por fase en `dev`; `main` solo cuando se pide deploy a producción.

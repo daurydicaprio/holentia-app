@@ -17,7 +17,7 @@ holentia/
 │   ├── relaciones/           # Página de la sección relaciones
 │   ├── cuerpo/               # Página de la sección cuerpo
 │   ├── finanzas/             # Página de la sección finanzas
-│   ├── [herramienta]/        # Páginas individuales para cada herramienta
+│   ├── {slug}/               # Páginas de las 27 herramientas (una carpeta por slug)
 │   ├── que-es-holentia/      # Página informativa sobre Holentia
 │   ├── aviso-legal/          # Página con el aviso legal
 │   ├── politica-cookies/     # Página con la política de cookies
@@ -26,56 +26,34 @@ holentia/
 │   ├── layout.tsx            # Layout principal de la aplicación
 │   └── page.tsx              # Página principal (home)
 ├── components/               # Componentes reutilizables
-│   ├── common/               # Componentes comunes
-│   │   ├── header/           # Componentes de encabezado
-│   │   ├── footer/           # Componente de pie de página
-│   │   ├── logo/             # Componente de logo con efectos
-│   │   ├── mobile-fab/       # Wrapper de ScrollToTop (solo móvil) para secciones
-│   │   ├── menu-button/      # Botón de menú desplegable
-│   │   ├── scroll-to-top/    # Botón para volver arriba
-│   │   └── tab-swipe-navigation/ # Navegación por gestos para pestañas
-│   ├── sections/             # Componentes específicos por sección
-│   │   ├── section-header.tsx # Encabezado de sección
-│   │   ├── section-tabs.tsx   # Pestañas de navegación entre secciones
-│   │   ├── section-swipe-navigation.tsx # Navegación por gestos
-│   │   ├── tool-card.tsx      # Tarjeta de herramienta
-│   │   └── tools-grid.tsx     # Cuadrícula de herramientas
-│   ├── tools/                # Componentes específicos de herramientas
-│   │   ├── budget-simulator/  # Simulador de presupuesto
-│   │   ├── compound-interest/ # Calculadora de interés compuesto
-│   │   ├── loan-calculator/   # Calculadora de préstamos
-│   │   ├── guided-journal/    # Diario guiado (Mente)
-│   │   ├── love-languages-test/ # Test de lenguajes del amor (Relaciones)
-│   │   ├── hydration-calculator/ # Calculadora de hidratación (Cuerpo)
-│   │   ├── calorie-calculator/  # Calculadora de calorías (Cuerpo)
-│   │   ├── electricity-calculator/ # Consumo eléctrico (Finanzas)
-│   │   ├── fuel-expense-calculator/ # Gasto de combustible (Finanzas)
-│   │   ├── card-cutoff/         # Corte y vencimiento tarjeta (Finanzas)
-│   │   ├── card-interest/       # Interés de tarjeta (Finanzas)
-│   │   ├── risk-profile-test/   # Test de perfil de riesgo (Finanzas)
-│   │   └── glossary/            # Glosario financiero (Finanzas)
-│   ├── ui/                   # Componentes de interfaz (botones, tarjetas, etc.)
-│   └── tool-seo/             # Shell server de herramientas: tool-page-shell, json-ld, tool-faq
+│   ├── common/               # Chrome global: header, footer, logo, brand-dots, menu-button,
+│   │                         # mobile-fab, scroll-to-top, tab-swipe-navigation, clear-all-data
+│   ├── sections/             # Hub de sección: section-page, section-tabs, section-header,
+│   │                         # section-swipe-navigation, tool-card, tools-grid
+│   ├── tools/                # 27 componentes client de herramientas (+ subcomponentes)
+│   ├── tool-seo/             # Shell server: tool-page-shell, tool-faq (acordeón), json-ld
+│   ├── seo/                  # og-template (plantilla compartida de las imágenes OG)
+│   ├── ui/                   # Primitivas de interfaz (button, input, slider, count-up)
+│   └── theme-provider.tsx    # next-themes sin gate de mounted (anti-FOUC)
 ├── hooks/                    # Custom hooks
-│   ├── use-budget-simulator.ts    # Lógica para el simulador de presupuesto
-│   ├── use-compound-interest-calculator.ts # Lógica para calculadora de interés compuesto
-│   ├── use-haptic-feedback.ts     # Hook para feedback háptico
-│   ├── use-loan-calculator.ts     # Lógica para calculadora de préstamos
-│   └── use-media-query.ts         # Hook para consultas de medios
+│                             # Lógica por herramienta (budget, compound, loan) + use-count-up,
+│                             # use-haptic-feedback y use-media-query
 ├── lib/                      # Utilidades y funciones
-│   ├── data.ts               # Datos de secciones y herramientas
+│   ├── data.ts               # Catálogo de secciones y herramientas (SSOT)
 │   ├── seo.ts                # Metadata + JSON-LD (WebApplication, Breadcrumb, FAQPage, sitemap)
 │   ├── storage.ts            # Helper localStorage namespaced holentia:*
+│   ├── format.ts             # formatDOP (es-DO/DOP) — fuente única de moneda
 │   └── utils.ts              # Funciones de utilidad
 ├── types/                    # Definiciones de tipos
 │   └── index.ts              # Tipos principales
-├── app/sitemap.ts            # Sitemap XML (23 URLs)
+├── app/sitemap.ts            # Sitemap XML (37 URLs)
 ├── app/robots.ts             # Robots.txt
+├── app/manifest.ts           # Manifest PWA (iconos 192/512/maskable)
 ├── app/error.tsx             # Página de error de ruta
 ├── app/global-error.tsx      # Error global (raíz)
 ├── app/icon.svg              # Favicon (convención App Router)
 ├── app/apple-icon.png        # Icono touch 180x180
-└── public/                   # Archivos estáticos (llms.txt, assets)
+└── public/                   # Archivos estáticos (llms.txt, iconos PWA, assets)
 ```
 
 ## Características Principales
@@ -92,7 +70,8 @@ holentia/
 - **Adaptación Contextual**: Colores y estilos adaptados según la sección actual
 - **Formateo Numérico**: Visualización de números con separadores de miles para mejor legibilidad
 - **Guardado de Simulaciones**: Capacidad para guardar y comparar diferentes escenarios en calculadoras
-- **Optimización Táctil**: Mejoras específicas para la interacción en dispositivos táctiles
+- **Optimización Táctil**: Controles ≥40px y acciones táctiles ≥44px; inputs ≥16px (sin zoom en iOS)
+- **Contraste AA**: texto y controles con tiers por sección en claro/oscuro, revisados herramienta por herramienta
 - **Privacidad Total**: No se recopilan datos personales, todo se procesa localmente
 - **Diseño Minimalista**: Interfaz limpia, moderna y atractiva con gradientes sutiles
 
@@ -108,7 +87,7 @@ holentia/
 
 ## SEO y Rendimiento
 
-- **Páginas de herramienta server-rendered**: cada herramienta usa `ToolPageShell` (server component) con H1, descripción y breadcrumb en el HTML inicial; la interactividad vive dentro como client components
+- **Páginas de herramienta server-rendered**: cada herramienta usa `ToolPageShell` (server component) con H1, descripción y FAQ en el HTML inicial; la interactividad vive dentro como client components
 - **Metadata por página**: `generateMetadata` en las 27 herramientas, las 4 secciones, el home y las páginas informativas (title, description, canonical, openGraph, twitter) con template global `{página} | HOLENTIA` en `app/layout.tsx`
 - **Datos estructurados JSON-LD**: `WebApplication` + `BreadcrumbList` + `FAQPage` por herramienta, `CollectionPage` + `BreadcrumbList` por sección, `WebSite` + `Organization` en el home, `FAQPage` en Ayuda
 - **FAQ visible en el HTML inicial** de las 27 herramientas (acordeón, no escondido tras hydration gates) y de `/ayuda` — los hubs de sección no llevan FAQ
@@ -129,26 +108,40 @@ La aplicación está dividida en cuatro secciones principales, cada una con su p
 
 ## Herramientas Implementadas
 
-### Mente
-- **Diario Guiado**: Herramienta de reflexión diaria con preguntas estructuradas para el autoconocimiento y bienestar emocional
+### Mente (4)
+- **Diario Guiado**: reflexión diaria con preguntas estructuradas, ánimo, racha y borrador autoguardado
+- **Respiración guiada**: ejercicios 4-7-8, caja y calma con círculo en tiempo real, rondas y haptics
+- **Test de ansiedad GAD-7**: cribado de 7 preguntas con puntaje 0–21 y orientación por nivel
+- **Calculadora del sueño**: hora ideal para acostarte o despertarte según los ciclos de 90 minutos
 
-### Relaciones
-- **Test de Lenguajes del Amor**: Test interactivo para descubrir tu lenguaje del amor principal y mejorar tus relaciones
+### Relaciones (4)
+- **Test de Lenguajes del Amor**: descubre tu lenguaje principal entre los 5 y mejora tus vínculos
+- **Test de estilo de apego**: 12 afirmaciones → seguro, ansioso, evitativo o temeroso, con consejos
+- **Preguntas profundas**: 45 preguntas para conversaciones significativas (pareja, familia y amigos)
+- **Diario para parejas**: una pregunta diaria para responder juntos, con historial y racha
 
-### Cuerpo
-- **Calculadora de Hidratación**: Calcula tu ingesta diaria de agua recomendada según tu peso, actividad y clima
-- **Calculadora de Calorías**: Estima tus calorías diarias para mantener, bajar o subir de peso
+### Cuerpo (4)
+- **Calculadora de Calorías**: TDEE (Mifflin-St Jeor) y objetivos bajar grasa / mantener / subir
+- **Calculadora de Hidratación**: agua diaria según peso, actividad y clima (EFSA/NASEM)
+- **Plan de pasos 5-10-20**: objetivo diario, plan por bloques de minutos y registro con racha
+- **Calculadora de IMC**: peso, estatura, banda OMS, rango saludable y contexto honesto
 
-### Finanzas
-- **Crear presupuesto personal**: Herramienta para gestionar ingresos y gastos con visualización de datos
-- **Calculadora de interés compuesto**: Visualización del crecimiento de ahorros con capacidad para guardar y comparar simulaciones
-- **Calculadora de préstamo**: Estrategia para eliminar deudas con capacidad para guardar y comparar simulaciones
-- **Calculadora consumo eléctrico**: Estima tu factura por kWh (tarifa RD) con subsidio aproximado
-- **Calculadora gasto combustible**: Estima tu gasto de gasolina por día, semana, mes y año según tu ruta, vehículo y precio del litro
-- **Corte y vencimiento tarjeta**: Descubre a qué corte entra tu compra y cuándo la pagas
-- **Calculadora interés tarjeta**: Mide cuánto te cuesta financiar el saldo de tu tarjeta y en cuántos meses liquidas
-- **Test de perfil de riesgo**: 12 preguntas honestas para saber en qué nivel invertir (resultado en pasos: título con tu perfil y "Quédate en el nivel N", arco de niveles navegable, fondo de emergencia con sugerencia de reparto por montos y gráfico de ahorro con comparación AFI, tasas de referencia editables por instrumento, distribución que respeta los mínimos de cada instrumento y proyección ponderada por tasa)
-- **Glosario financiero**: Términos de ahorro, crédito, intereses, fondos, bolsa y depósitos explicados con ejemplos
+### Finanzas (15)
+- **Crear presupuesto personal**: ingresos y gastos con tablas editables y visualización
+- **Calculadora de interés compuesto**: rendimiento de inversiones con aportes, inflación y gráfico
+- **Calculadora de préstamo**: cuota mensual, interés total y tabla de amortización
+- **Calculadora consumo eléctrico**: factura de luz por kWh (tarifa RD) con subsidio estimado
+- **Calculadora gasto combustible**: gasto por día/semana/mes/año según ruta, vehículo y precio
+- **Corte y vencimiento tarjeta**: a qué corte entra tu compra y cuándo la pagas
+- **Calculadora interés tarjeta**: costo de financiar el saldo y meses para liquidarlo
+- **Test de perfil de riesgo**: 12 preguntas, nivel de inversor, colchón y proyección de ahorro
+- **Glosario financiero**: términos de ahorro, crédito, intereses, fondos, bolsa y depósitos
+- **Tracker de gastos hormiga**: gastos pequeños anualizados con proporción y tips de ahorro
+- **Calculadora de aguinaldo**: doble sueldo de diciembre, proporcional y exento de ISR/TSS
+- **Calculadora de ITBIS**: agrega o quita el 18% (y 16% reducido) con base, impuesto y total
+- **Calculadora de certificado financiero**: interés, retención del 10% y ganancia neta
+- **Planificador de ahorros**: cuándo llegas a tu meta y cuánto aportar al mes
+- **Planificador de compras**: comprar hoy vs. esperar e invertir el precio (paciencia)
 
 ## Páginas Informativas
 
@@ -182,7 +175,7 @@ La fuente única de verdad es **`design.md`** (paleta completa, tipografía Inte
 - No utilizamos cookies de seguimiento o análisis
 - No compartimos información con terceros
 - No creamos perfiles de usuario
-- Los datos de herramientas se guardan solo en localStorage del navegador, bajo claves `holentia:{herramienta}:{draft|simulations|entries}:v1`
+- Los datos de herramientas se guardan solo en localStorage del navegador, bajo claves `holentia:{herramienta}:{draft|simulations|entries}:v1` (31 claves activas, listadas en la Política de Cookies)
 - Cada herramienta tiene botón «Borrar mis datos» y Ayuda permite borrarlo todo
 - No hay servidores backend que almacenen información personal
 - Solo usamos cookies técnicas esenciales (preferencias de tema)
@@ -232,4 +225,4 @@ Este proyecto es propiedad de Daury DiCaprio. Todos los derechos reservados.
 
 ---
 
-**Última actualización**: Octubre 2026 (27 herramientas, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`)
+**Última actualización**: Octubre 2026 (27 herramientas y 37 URLs, pase UI/UX móvil completo —contraste AA, tap targets, inputs sin zoom iOS—, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`)

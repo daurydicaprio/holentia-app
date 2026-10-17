@@ -4,13 +4,14 @@
 > Prod `holentia.com → main`. No tocar dominios.
 > Principios: sin DB, sin registro, local-first privado (`holentia:*` en navegador), cero tracking.
 
-## Estado actual (14-Oct-2026) — 13 tools en `dev` y en `main`; SEO + GEO moderno desplegado en ambas
+## Estado actual (17-Oct-2026) — 27 herramientas en `dev` y en `main`; SEO/GEO y pase UI/UX móvil completos
 - [x] Stack: Next 15.5.26 + React 19.3 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
-- [x] Cobertura: 13 tools (`diario-guiado, test-lenguajes-amor, calculadora-calorias, calculadora-hidratacion, crear-presupuesto-personal, calculadora-interes-compuesto, calculadora-prestamo, calculadora-consumo-electrico, calculadora-gasto-combustible, tarjeta-corte-vencimiento, calculadora-interes-tarjeta, test-perfil-riesgo, glosario-financiero`)
-- [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/AboutPage/Collection), OG images por ruta (17), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 23 URLs con lastmod fijo, llms.txt 13 tools; skill `seo-geo`
-- [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` actualizado a `bb82c6e` (14-Oct)**
+- [x] Cobertura: **27 herramientas** activas + 17 tarjetas «Próximamente» intactas en `lib/data.ts`; sitio de **37 URLs** (home + 4 hubs + 27 herramientas + 5 informativas)
+- [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite), OG por ruta (**37 archivos**), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 37 URLs con lastmod fijo, llms.txt 27 tools; auditorías registradas en la skill `seo-geo-audit`
+- [x] UI/UX móvil: pase completo por herramientas (cuerpo, mente, relaciones, finanzas ×3) y superficies globales (chrome, hubs, informativas, shell) — contraste AA con tiers por sección, tap targets ≥40/44px, inputs ≥16px sin zoom iOS, recetas en `design.md`
+- [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` actualizado a `1afe1a0` (17-Oct)**
 - [x] `tsc 0 errores + next build OK + pnpm lint 0` en estricto
-- [ ] **Próximo**: modificaciones en herramientas (pedido del usuario, pendiente de spec)
+- [ ] **Próximo**: siguiente frente a decisión del usuario — ver «Backlog propuesto» al pie
 
 ---
 
@@ -386,6 +387,21 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 - [x] **Identidad monocroma**: `app/error.tsx` fuera el `bg-blue-600` genérico → receta primaria `h-10` gray-900/blanco (§4c) en «Reintentar» e «Ir al inicio».
 - [x] **Docs**: `design.md` §3.7 (enlaces de texto con área táctil), §4 (ToolCard, ToolsGrid, SectionTabs, ToolPageShell, FAQ acordeón), §4b (footer), §4c (Volver, botón primario/error, ritmo `space-y-12`), §4d (ítem activo del menú), §7 (caso chrome global); skill `section-ui` §3b (radio de páginas de contenido corregido a `rounded-2xl`/`rounded-xl`) y §7.
 - Verificado: `tsc 0 · lint 0 · build OK` + smoke (13 rutas SSR con H1 ×1, canonical ×1 y 0 `noindex`; clases nuevas en el CSS compilado) + runtime 7 páginas `200` + OG `200 image/png` + auditoría targeted PASS.
+
+---
+
+## Backlog propuesto (17-Oct-2026, pendiente de decisión)
+
+Sin fase asignada; se convierte en fase al aprobar el frente. Candidatos analizados tras cerrar el pase UI/UX:
+
+1. **Auditoría integral de cierre**: barrido 37 rutas (estático + runtime OG) y **automatizarlo como script** (`pnpm audit:seo`) reutilizando el checklist de la skill `seo-geo-audit` — hoy el barrido se hace a mano.
+2. **Accesibilidad más allá del color**: enlace «Saltar al contenido», landmarks (`main`/`nav`), barrido con axe en las 27 herramientas, foco visible y orden de tabulación; registro de auditoría.
+3. **Rendimiento móvil (Core Web Vitals)**: medir LCP/CLS/INP en home, un hub y 2–3 herramientas (interés compuesto y perfil de riesgo son las pesadas por Chart.js) y aplicar lazy-load del gráfico si hace falta.
+4. **Directorio `/herramientas`**: índice de las 27 con filtro por sección (server-rendered) + enlaces desde home/footer — descubribilidad y SEO interno.
+5. **«Mis datos»**: exportar/importar JSON de las claves `holentia:*` (respaldo local, sin nube) + enlace en `/ayuda`.
+6. **PWA offline**: service worker para que las herramientas funcionen sin conexión (manifest y iconos ya existen).
+7. **Nuevas herramientas** (a especificar con el dueño; keywords RD): sueldo neto (TSS + ISR), prestaciones laborales/indemnización, proteína diaria… — con la receta `create-tool`.
+8. **Infra de calidad**: CI (GitHub Actions: `tsc` + `lint` + `build` en push a `dev`) y Vitest para los parsers/formatters (hoy sus casos se prueban ad hoc).
 
 ---
 
