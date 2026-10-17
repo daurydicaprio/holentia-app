@@ -4,7 +4,7 @@
 > Calculadoras, simuladores y tests que funcionan directamente en el navegador del usuario,
 > sin cuenta, sin registro y sin enviar datos a servidores.
 
-Las 18 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
+Las 19 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
 de cada herramienta, y los resultados son estimaciones educativas, no asesoramiento profesional
 (médico, financiero ni psicológico).
 
@@ -15,8 +15,8 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 - [Cuerpo](https://holentia.com/cuerpo): calculadora de calorías (Mifflin-St Jeor) e hidratación (EFSA/NASEM).
 - [Finanzas](https://holentia.com/finanzas): presupuesto, interés compuesto, préstamo, consumo eléctrico,
   gasto de combustible, corte/vencimiento de tarjeta, interés de tarjeta, perfil de riesgo, glosario financiero,
-  tracker de gastos hormiga, calculadora de aguinaldo, calculadora de ITBIS, certificado financiero y planificador
-  de ahorros.
+  tracker de gastos hormiga, calculadora de aguinaldo, calculadora de ITBIS, certificado financiero,
+  planificador de ahorros y planificador de compras.
 
 ## Herramientas
 
@@ -38,6 +38,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 - [Calculadora de ITBIS](https://holentia.com/calculadora-itbis): agrega o quita el ITBIS de un precio (18% general y 16% reducido) con base, impuesto y total al instante.
 - [Calculadora de certificado financiero](https://holentia.com/calculadora-certificado-financiero): cuánto rinde un depósito a plazo fijo: interés bruto, retención del 10% y ganancia neta.
 - [Planificador de ahorros](https://holentia.com/planificador-ahorros): cuándo llegas a tu meta y cuánto aportar al mes, con rendimiento anual e interés compuesto.
+- [Planificador de compras](https://holentia.com/planificador-compras): compara comprar hoy vs. esperar e invertir el precio: cuánto te gana la paciencia en meses.
 
 ## Páginas informativas
 

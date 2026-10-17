@@ -92,6 +92,10 @@ const localStorageKeys = [
     key: "holentia:planificador-ahorros:draft:v1",
     desc: "Borrador del planificador de ahorros",
   },
+  {
+    key: "holentia:planificador-compras:draft:v1",
+    desc: "Borrador del planificador de compras",
+  },
 ]
 
 const notUsedItems = [

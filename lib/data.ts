@@ -293,6 +293,17 @@ export const sectionsData: Record<string, SectionData> = {
           "Planifica tu meta de ahorro: cuánto aportar al mes o cuánto tardarás, con rendimiento anual e interés compuesto. Gratis y sin registro.",
       },
       {
+        id: "planificador-compras",
+        title: "Planificador de compras",
+        description: "¿Comprar ya o esperar e invertir?",
+        slug: "planificador-compras",
+        isAvailable: true,
+        category: "finanzas",
+        metaTitle: "Planificador de compras: ¿comprar ya o esperar?",
+        metaDescription:
+          "Compara comprar hoy vs. esperar e invertir el dinero: mira cuánto te gana la paciencia en meses, con rendimiento anual. Gratis y sin registro.",
+      },
+      {
         id: "calculadora-prestamo",
         title: "Calculadora de préstamo",
         description: "Cuota, interés total y tabla de amortización.",

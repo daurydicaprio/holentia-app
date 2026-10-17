@@ -184,6 +184,16 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AB — Finanzas: Planificador de Compras (17-Oct-2026) — HECHA
+
+- [x] **Nueva herramienta `/planificador-compras` (19ª del sitio)**: precio + meses de espera (slider 1–60) + rendimiento anual → cuánto gana la paciencia invirtiendo el precio (interés compuesto mensual); hero «La paciencia te paga», comparativa «Comprar hoy vs. esperar e invertir» («Al comprar te quedan +RD$…») y estado educativo si el rendimiento es 0%. Lema del dueño: esperar e ir invirtiendo con planificación gana.
+- [x] **Persistencia** patrón D draft: `holentia:planificador-compras:draft:v1` (en `politica-cookies`; FAQ de privacidad). Card en `lib/data.ts` (metaTitle 47 ch · metaDescription 142 ch) → sitemap y hub automáticos (29 URLs).
+- [x] **SEO/GEO**: OG propia («¿Comprar ya o esperar e invertir?»); `llms.txt` 18→19; FAQ ×6 (cómo compara, qué rendimiento, sin el dinero completo, precio cambiante, qué compras aplican, privacidad).
+- [x] **Docs**: receta `design.md` §4 «Planificador de compras»; recuentos 19 herramientas / 29 URLs.
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke (title/desc/canonical/FAQ JSON-LD, sitemap 29 URLs, og runtime 200 image/png).
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

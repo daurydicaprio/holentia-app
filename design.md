@@ -248,6 +248,11 @@ Patrón de un dato económico + resultado desglosado (2 columnas: form `lg:col-s
 - **Resultado**: hero con count-up cuyo dato es el tiempo (`X meses` + `≈ a años y b meses · llegas en {mes}`) o el aporte mensual; desglose meta/ya tienes/aportes/intereses con fila «Sale de tu bolsillo» en `font-bold`.
 - **Fecha objetivo solo en el cliente** (`mounted` + `Intl.DateTimeFormat("es-DO")`) para evitar desajustes de hidratación; estados borde «¡Ya alcanzaste tu meta!» y «plan > 100 años»; nota con enlace cruzado a la calculadora de interés compuesto.
 
+### Planificador de compras (esperar vs. invertir, ref. `components/tools/purchase-planner/`)
+
+- **Formulario**: precio (input moneda) + slider de meses 1–60 con número grande + rendimiento anual (helper 7%–11% ref.).
+- **Resultado**: hero «La paciencia te paga» con count-up; comparativa de 3 filas («Comprar hoy» / «Esperar e invertir» / «Al comprar te quedan `+RD$…`» en `font-bold`) con supuestos en `text-xs`; estado educativo a tasa 0% («sin invertir, esperar no gana nada») y nota con enlace a interés compuesto.
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.
