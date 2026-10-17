@@ -72,6 +72,10 @@ const localStorageKeys = [
     key: "holentia:test-perfil-riesgo:draft:v1",
     desc: "Tu último test de perfil de riesgo (nivel y fecha)",
   },
+  {
+    key: "holentia:tracker-gastos-hormiga:entries:v1",
+    desc: "Tus gastos anotados en el tracker de gastos hormiga",
+  },
 ]
 
 const notUsedItems = [

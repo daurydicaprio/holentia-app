@@ -377,10 +377,13 @@ export const sectionsData: Record<string, SectionData> = {
       {
         id: "tracker-gastos-hormiga",
         title: "Tracker Gastos Hormiga",
-        description: "Identifica pequeños gastos.",
+        description: "Suma café, delivery y demás gastos pequeños.",
         slug: "tracker-gastos-hormiga",
-        isAvailable: false,
+        isAvailable: true,
         category: "finanzas",
+        metaTitle: "Tracker de gastos hormiga: cuánto gastas al año",
+        metaDescription:
+          "Registra café, delivery, snacks y otros gastos pequeños: mira cuánto suman al día, al mes y al año. Gratis y sin registro.",
       },
     ],
   },

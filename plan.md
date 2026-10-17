@@ -122,6 +122,16 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase V — Finanzas: Tracker Gastos Hormiga (17-Oct-2026) — HECHA
+
+- [x] **Nueva herramienta `/tracker-gastos-hormiga` (14ª del sitio)**: registro de gastos pequeños con frecuencia anualizada (diario ×365, 3–4/sem ×182, semanal ×52, quincenal ×24, mensual ×12); hero gradiente con count-up del total anual + promedios mes/semana/día; lista con % y barra de proporción por gasto; editar/borrar por fila; chips de nombres rápidos (Café, Delivery, Snack, Colmado, Recarga, Soda); bloque de tips de ahorro.
+- [x] **Persistencia** patrón S «entries»: `holentia:tracker-gastos-hormiga:entries:v1` (registrada en `politica-cookies`; FAQ de privacidad incluida). Card activada en `lib/data.ts` (metaTitle 47 ch · metaDescription 122 ch) → sitemap y hub automáticos.
+- [x] **SEO/GEO**: `app/tracker-gastos-hormiga/opengraph-image.tsx` propia; `llms.txt` 13→14 herramientas; FAQ ×6 (¿qué es un gasto hormiga?, anualización, «3–4 veces por semana», privacidad, editar/borrar, relación con presupuesto).
+- [x] **Docs**: `design.md` §4 receta «Lista de entradas con proporción» (filas, barra `h-1.5`, hit area `h-11 w-11` en acciones de fila).
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke (title/desc/canonical/FAQ JSON-LD, hub finanzas con la card activa, sitemap 24 URLs, og runtime 200 image/png).
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

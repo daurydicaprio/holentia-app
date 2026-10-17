@@ -220,6 +220,7 @@ Receta canónica para calculadoras/tests con varios campos (refs: `compound-inte
 - Sin títulos redundantes dentro del panel ("Tu rutina" sobra: ahorra pantalla).
 - **Selector de vehículo**: `grid grid-cols-3 gap-2`, celdas `p-2 gap-0.5 rounded-xl`, icono `h-4 w-4`, nombre `text-xs`, dato `text-[11px]`; activo `border-2 border-{s} text-{s} dark:border-{s}-light dark:text-{s}-light` (radiogroup accesible).
 - **Bloque de tips de ahorro** (cuando la herramienta los tenga): tarjeta a ancho del grid con icono `Lightbulb text-{s}` + título `text-lg font-bold`, lista en `grid sm:grid-cols-2` con bullets `h-1.5 w-1.5 rounded-full bg-{s}` y líneas `text-sm text-gray-600 dark:text-gray-300` (breve: 4–6 tips de una línea).
+- **Lista de entradas con proporción** (trackers tipo gastos hormiga): filas `rounded-xl border border-gray-200 dark:border-gray-700` con nombre + frecuencia, monto anual `font-semibold tabular-nums text-{s}-dark dark:text-{s}-light`, `%` sobre el total en `text-xs` y barra `h-1.5 rounded-full bg-gray-100 dark:bg-gray-700` con relleno `bg-{s} dark:bg-{s}-light`; acciones de fila (editar/borrar) con hit area `h-11 w-11` (`aria-label` por fila). Hero de total anual en panel gradiente con `aria-live="polite"` + stats `rounded-lg bg-black/10 p-3`.
 
 ## 5. Modo oscuro
 
