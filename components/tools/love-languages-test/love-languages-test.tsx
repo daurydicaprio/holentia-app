@@ -322,7 +322,7 @@ export function LoveLanguagesTest() {
             <button
               data-interactive="true"
               onClick={resetTest}
-              className="flex flex-1 items-center justify-center gap-2 rounded-md bg-relaciones px-6 py-3 font-medium text-white transition-colors hover:bg-relaciones-dark active:scale-[0.98]"
+              className="flex flex-1 items-center justify-center gap-2 rounded-md bg-relaciones px-6 py-3 font-medium text-white transition-[colors,transform] duration-150 hover:bg-relaciones-dark active:scale-[0.97]"
             >
               <RotateCcw className="h-5 w-5" />
               Hacer el test de nuevo
@@ -330,7 +330,7 @@ export function LoveLanguagesTest() {
             <button
               data-interactive="true"
               onClick={copyResult}
-              className="flex items-center justify-center gap-2 rounded-md bg-gray-200 px-4 py-3 font-medium text-gray-800 transition-colors hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+              className="flex items-center justify-center gap-2 rounded-md bg-gray-200 px-4 py-3 font-medium text-gray-800 transition-[colors,transform] duration-150 hover:bg-gray-300 active:scale-[0.97] dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
             >
               {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               {copied ? "¡Copiado!" : "Copiar resultado"}
@@ -366,7 +366,7 @@ export function LoveLanguagesTest() {
             <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
               Pregunta {currentQuestion + 1} de {questions.length}
             </span>
-            <span className="text-sm font-medium text-relaciones dark:text-relaciones-light">
+            <span className="text-sm font-medium text-relaciones dark:text-relaciones-lighter">
               {Math.round(((currentQuestion + 1) / questions.length) * 100)}%
             </span>
           </div>
@@ -389,7 +389,7 @@ export function LoveLanguagesTest() {
                 key={index}
                 onClick={() => handleAnswer(question.id, option.language)}
                 aria-pressed={isSelected}
-                className={`w-full rounded-lg border-2 p-4 text-left transition-all ${
+                className={`w-full rounded-lg border-2 p-4 text-left transition-all active:scale-[0.97] ${
                   isSelected
                     ? "border-relaciones bg-relaciones-lighter dark:border-relaciones-light dark:bg-relaciones-dark"
                     : "border-gray-200 hover:border-relaciones hover:bg-relaciones-lighter dark:border-gray-700 dark:hover:border-relaciones-light dark:hover:bg-relaciones-dark"

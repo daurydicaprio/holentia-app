@@ -334,6 +334,17 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AR — Relaciones: pase UI/UX móvil de las 4 herramientas (espaciado, tipografía y contraste) (17-Oct-2026) — HECHA
+
+- [x] **Contraste (fallos AA)**: `relaciones-light` (#a78bfa) a 14px en oscuro quedaba 3.1:1 → porcentajes de quiz (lenguajes, apego) y enlaces cruzados (apego, parejas) pasan a `dark:text-relaciones-lighter` (5.0:1); subtexto de la categoría seleccionada en preguntas profundas de `gray-500` sobre `relaciones-lighter` (2.6:1) a `gray-700`/`dark:text-gray-200`; «(opcional)» del diario de `gray-400`/`gray-500` a `gray-500`/`gray-400`.
+- [x] **Inputs**: textarea del diario de parejas con la receta unificada (era `text-sm` + `ring-1` + `focus:border-relaciones` → 16px sin zoom iOS, `ring-2`, `focus:border-transparent`, dark completo).
+- [x] **Tipografía**: h2 de «Pregunta de hoy» y «Nuestro historial» a `text-xl` (eran `text-lg`, únicos de la sección); «Cómo aprovecharlas» de h3 `text-sm` a h2 `text-xl` con tarjeta `p-6`.
+- [x] **Mobile/táctil**: opciones de quiz (lenguajes y apego), filas de categoría, botones grises y sólidos con press feedback `active:scale-[0.97]` (había 0.98/0.99 sueltos y `transition-colors` sin transform); acciones de las entradas de parejas de 32px a `h-9 w-9` centradas.
+- [x] **Docs**: `design.md` §7 (caso relaciones) y recetas de las 4; skill `section-ui` §7.
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke (4 páginas SSR con H1 ×1 y 0 `noindex` + OG `200 image/png`) + auditoría targeted PASS.
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

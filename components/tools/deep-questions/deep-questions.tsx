@@ -208,7 +208,7 @@ export function DeepQuestions() {
                 onClick={() => selectCategory(option)}
                 aria-pressed={selected}
                 data-interactive="true"
-                className={`w-full rounded-lg border p-3 text-left transition-colors ${
+                className={`w-full rounded-lg border p-3 text-left transition-[colors,transform] duration-150 active:scale-[0.97] ${
                   selected
                     ? "border-relaciones bg-relaciones-lighter dark:border-relaciones-light dark:bg-relaciones-dark"
                     : "border-gray-200 hover:border-relaciones-light dark:border-gray-700 dark:hover:border-relaciones-light"
@@ -226,7 +226,13 @@ export function DeepQuestions() {
                     {option.questions.length} preguntas
                   </span>
                 </span>
-                <span className="mt-1 block text-xs text-gray-500 dark:text-gray-400">{option.hint}</span>
+                <span
+                  className={`mt-1 block text-xs ${
+                    selected ? "text-gray-700 dark:text-gray-200" : "text-gray-500 dark:text-gray-400"
+                  }`}
+                >
+                  {option.hint}
+                </span>
               </button>
             )
           })}
@@ -236,7 +242,7 @@ export function DeepQuestions() {
           type="button"
           onClick={shuffleDeck}
           data-interactive="true"
-          className="mt-4 flex w-full items-center justify-center gap-2 rounded-md bg-gray-100 px-4 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+          className="mt-4 flex w-full items-center justify-center gap-2 rounded-md bg-gray-100 px-4 py-3 text-sm font-medium text-gray-700 transition-[colors,transform] duration-150 hover:bg-gray-200 active:scale-[0.97] dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
         >
           <Shuffle className="h-4 w-4" />
           Mezclar el orden
@@ -282,7 +288,7 @@ export function DeepQuestions() {
               onClick={previousQuestion}
               disabled={position === 0}
               data-interactive="true"
-              className="rounded-md bg-gray-100 px-4 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+              className="rounded-md bg-gray-100 px-4 py-3 text-sm font-medium text-gray-700 transition-[colors,transform] duration-150 hover:bg-gray-200 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
             >
               ← Anterior
             </button>
@@ -290,7 +296,7 @@ export function DeepQuestions() {
               type="button"
               onClick={nextQuestion}
               data-interactive="true"
-              className="flex flex-1 items-center justify-center gap-2 rounded-md bg-relaciones px-6 py-3 font-medium text-white transition-colors hover:bg-relaciones-dark active:scale-[0.98]"
+              className="flex flex-1 items-center justify-center gap-2 rounded-md bg-relaciones px-6 py-3 font-medium text-white transition-[colors,transform] duration-150 hover:bg-relaciones-dark active:scale-[0.97]"
             >
               Otra pregunta
               <ArrowRight className="h-4 w-4" />
@@ -299,7 +305,7 @@ export function DeepQuestions() {
               type="button"
               onClick={copyQuestion}
               data-interactive="true"
-              className="flex items-center justify-center gap-2 rounded-md bg-gray-200 px-4 py-3 font-medium text-gray-800 transition-colors hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+              className="flex items-center justify-center gap-2 rounded-md bg-gray-200 px-4 py-3 font-medium text-gray-800 transition-[colors,transform] duration-150 hover:bg-gray-300 active:scale-[0.97] dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
             >
               {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               {copied ? "¡Copiada!" : "Copiar"}
@@ -308,8 +314,8 @@ export function DeepQuestions() {
         </div>
 
         {/* Cómo aprovecharlas */}
-        <div className="rounded-xl bg-white p-5 shadow-lg dark:bg-gray-800">
-          <h3 className="text-sm font-semibold">Cómo aprovecharlas</h3>
+        <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
+          <h2 className="text-xl font-bold">Cómo aprovecharlas</h2>
           <ol className="mt-3 space-y-2">
             {COMO_USARLAS.map((tip, i) => (
               <li key={tip} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-400">

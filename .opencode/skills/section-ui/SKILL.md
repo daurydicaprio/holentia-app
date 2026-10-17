@@ -100,6 +100,7 @@ Receta para cualquier calculadora/test con varios campos numéricos (referencias
 - Texto `{s}` sobre blanco pasa para bold/títulos; para 14px usa `{s}-dark` si dudas (finanzas `#388e3c` sobre blanco ≈ 3.7:1 — borderline).
 - **Caso cuerpo (ámbar medio, no pasa AA para texto pequeño en claro)**: pequeño sobre blanco/gris-800 → `text-cuerpo-darkest` (5.6:1) / `dark:text-cuerpo-light` (8.3:1) — `text-cuerpo-dark` (3.8:1) solo iconos y bordes. Sobre `bg-cuerpo-lighter`/`dark:bg-cuerpo-dark` (chips, bloques de total) → texto `text-gray-900` (12:1/4.6:1), iconos `text-cuerpo-darkest`/`dark:text-white`, borde de chip seleccionado `border-cuerpo-dark` (`border-cuerpo` = 2:1). Detalle: design.md §7.
 - **Caso mente (azul `#1976d2`)**: `text-mente` en blanco pasa justo (4.6:1, ≥14px). Sobre `bg-mente-lighter`/`dark:bg-mente-dark` (filas seleccionadas) el texto base es seguro, pero el **secundario nunca `text-gray-500`** (2.7:1) → `text-gray-700`/`dark:text-gray-200`. Nada de `text-white/85` sobre `#1976d2` (3.8:1): `text-white` sólido. Detalle: design.md §7.
+- **Caso relaciones (violeta `#7c3aed`)**: en oscuro, `relaciones-light` (`#a78bfa`) sobre `gray-800` = 3.1:1 → **solo iconos, barras y texto ≥20px**; texto pequeño/mediano en `dark:text-relaciones-lighter` (5.0:1). Subtexto de fila seleccionada (`bg-relaciones-lighter`/`dark:bg-relaciones-dark`) → `text-gray-700`/`dark:text-gray-200`, nunca `gray-500` (2.6:1). Detalle: design.md §7.
 - Probar siempre ambos modos: `:root` y `.dark` en `app/globals.css`.
 
 ## 8. Movimiento, haptics, accesibilidad

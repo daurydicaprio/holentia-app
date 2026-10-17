@@ -112,7 +112,7 @@ function formatEntryText(entry: CoupleEntry): string {
 }
 
 const TEXTAREA_CLASSES =
-  "w-full resize-y rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 placeholder:text-gray-400 focus:border-relaciones focus:outline-none focus:ring-1 focus:ring-relaciones dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500"
+  "w-full resize-y rounded-md border border-gray-300 bg-white px-3 py-2.5 text-base text-gray-800 placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-relaciones dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-relaciones-light"
 
 export function CouplesJournal() {
   const { triggerHapticFeedback } = useHapticFeedback()
@@ -251,7 +251,7 @@ export function CouplesJournal() {
             <Heart className="h-5 w-5 text-relaciones-dark dark:text-relaciones-light" />
           </div>
           <div>
-            <h2 className="text-lg font-bold">Pregunta de hoy</h2>
+            <h2 className="text-xl font-bold">Pregunta de hoy</h2>
             <p className="text-xs text-gray-500 dark:text-gray-400">{dayKey ? formatDay(dayKey) : "…"}</p>
           </div>
         </div>
@@ -286,7 +286,7 @@ export function CouplesJournal() {
         />
 
         <label htmlFor="couple-partner" className="mb-1 mt-4 block text-sm font-medium">
-          Tu pareja <span className="font-normal text-gray-400 dark:text-gray-500">(opcional)</span>
+          Tu pareja <span className="font-normal text-gray-500 dark:text-gray-400">(opcional)</span>
         </label>
         <textarea
           id="couple-partner"
@@ -306,7 +306,7 @@ export function CouplesJournal() {
           onClick={saveToday}
           disabled={!hasContent}
           data-interactive="true"
-          className="mt-4 flex w-full items-center justify-center gap-2 rounded-md bg-relaciones px-6 py-3 font-medium text-white transition-colors hover:bg-relaciones-dark active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+          className="mt-4 flex w-full items-center justify-center gap-2 rounded-md bg-relaciones px-6 py-3 font-medium text-white transition-[colors,transform] duration-150 hover:bg-relaciones-dark active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {justSaved ? (
             <>
@@ -327,7 +327,7 @@ export function CouplesJournal() {
 
         <Link
           href="/preguntas-profundas"
-          className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-relaciones-dark underline underline-offset-2 dark:text-relaciones-light"
+          className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-relaciones-dark underline underline-offset-2 dark:text-relaciones-lighter"
           data-interactive="true"
         >
           ¿Quieren más? Prueben las 45 preguntas profundas
@@ -338,7 +338,7 @@ export function CouplesJournal() {
       {/* Historial */}
       <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800 lg:col-span-3">
         <div className="mb-4 flex items-center justify-between gap-3">
-          <h2 className="text-lg font-bold">Nuestro historial</h2>
+          <h2 className="text-xl font-bold">Nuestro historial</h2>
           <div className="flex items-center gap-2">
             {streak > 0 && (
               <span className="flex items-center gap-1 rounded-full bg-relaciones-lighter px-2.5 py-1 text-xs font-medium text-relaciones-dark dark:bg-relaciones-dark dark:text-relaciones-lighter">
@@ -394,7 +394,7 @@ export function CouplesJournal() {
                         data-interactive="true"
                         onClick={() => void copyEntry(entry)}
                         aria-label="Copiar entrada"
-                        className="rounded-lg p-2 text-relaciones transition-colors hover:bg-relaciones-lighter dark:text-relaciones-light dark:hover:bg-relaciones-dark"
+                        className="flex h-9 w-9 items-center justify-center rounded-lg text-relaciones transition-[colors,transform] duration-150 hover:bg-relaciones-lighter active:scale-[0.97] dark:text-relaciones-light dark:hover:bg-relaciones-dark"
                       >
                         {copiedId === entry.id ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                       </button>
@@ -403,10 +403,10 @@ export function CouplesJournal() {
                         data-interactive="true"
                         onClick={() => (isConfirming ? deleteEntry(entry.id) : requestDelete(entry.id))}
                         aria-label={isConfirming ? "Confirmar borrado de la entrada" : "Borrar entrada"}
-                        className={`rounded-lg transition-colors ${
+                        className={`flex items-center justify-center rounded-lg transition-[colors,transform] duration-150 active:scale-[0.97] ${
                           isConfirming
-                            ? "flex items-center gap-1 bg-red-600 px-2.5 py-2 text-xs font-medium text-white hover:bg-red-700"
-                            : "p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                            ? "gap-1 bg-red-600 px-2.5 py-2 text-xs font-medium text-white hover:bg-red-700"
+                            : "h-9 w-9 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
                         }`}
                       >
                         {isConfirming ? (

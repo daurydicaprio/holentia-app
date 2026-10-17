@@ -269,7 +269,7 @@ export function AttachmentTest() {
 
           <Link
             href="/test-lenguajes-amor"
-            className="mb-6 inline-flex items-center gap-1 text-sm font-semibold text-relaciones-dark underline underline-offset-2 dark:text-relaciones-light"
+            className="mb-6 inline-flex items-center gap-1 text-sm font-semibold text-relaciones-dark underline underline-offset-2 dark:text-relaciones-lighter"
             data-interactive="true"
           >
             ¿Cómo das y recibes cariño? Haz el test de lenguajes del amor
@@ -285,7 +285,7 @@ export function AttachmentTest() {
             <button
               data-interactive="true"
               onClick={startQuiz}
-              className="flex flex-1 items-center justify-center gap-2 rounded-md bg-relaciones px-6 py-3 font-medium text-white transition-colors hover:bg-relaciones-dark active:scale-[0.98]"
+              className="flex flex-1 items-center justify-center gap-2 rounded-md bg-relaciones px-6 py-3 font-medium text-white transition-[colors,transform] duration-150 hover:bg-relaciones-dark active:scale-[0.97]"
             >
               <RotateCcw className="h-5 w-5" />
               Hacer el test de nuevo
@@ -293,7 +293,7 @@ export function AttachmentTest() {
             <button
               data-interactive="true"
               onClick={copyResult}
-              className="flex items-center justify-center gap-2 rounded-md bg-gray-200 px-4 py-3 font-medium text-gray-800 transition-colors hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+              className="flex items-center justify-center gap-2 rounded-md bg-gray-200 px-4 py-3 font-medium text-gray-800 transition-[colors,transform] duration-150 hover:bg-gray-300 active:scale-[0.97] dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
             >
               {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               {copied ? "¡Copiado!" : "Copiar resultado"}
@@ -332,7 +332,7 @@ export function AttachmentTest() {
               <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 Afirmación {currentQuestion + 1} de {STATEMENTS.length}
               </span>
-              <span className="text-sm font-medium text-relaciones dark:text-relaciones-light">{pct}%</span>
+              <span className="text-sm font-medium text-relaciones dark:text-relaciones-lighter">{pct}%</span>
             </div>
             <div className="h-2 w-full rounded-full bg-gray-200 dark:bg-gray-700">
               <div
@@ -356,7 +356,7 @@ export function AttachmentTest() {
                   data-interactive="true"
                   onClick={() => handleAnswer(currentQuestion, option.value)}
                   aria-pressed={isSelected}
-                  className={`w-full rounded-lg border-2 p-4 text-left transition-all ${
+                  className={`w-full rounded-lg border-2 p-4 text-left transition-all active:scale-[0.97] ${
                     isSelected
                       ? "border-relaciones bg-relaciones-lighter dark:border-relaciones-light dark:bg-relaciones-dark"
                       : "border-gray-200 hover:border-relaciones hover:bg-relaciones-lighter dark:border-gray-700 dark:hover:border-relaciones-light dark:hover:bg-relaciones-dark"
@@ -410,7 +410,7 @@ export function AttachmentTest() {
           type="button"
           onClick={startQuiz}
           data-interactive="true"
-          className="w-full rounded-lg bg-relaciones px-6 py-4 font-semibold text-white transition-colors hover:bg-relaciones-dark active:scale-[0.99]"
+          className="w-full rounded-lg bg-relaciones px-6 py-4 font-semibold text-white transition-[colors,transform] duration-150 hover:bg-relaciones-dark active:scale-[0.97]"
         >
           Empezar el test
         </button>

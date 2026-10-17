@@ -296,24 +296,28 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 
 - **Reescritura a estándar**: tokens `relaciones` en todo el componente (se eliminaron los `purple-*` sueltos, incluidos `hover:bg-purple-700` y `bg-purple-50`); quiz una pregunta a la vez con **auto-avance 300 ms** y «← Atrás» que conserva la selección (`aria-pressed`).
 - **Patrón D reanudable**: respuestas parciales → vuelve a la primera sin responder; completas → resultado directo (`holentia:test-lenguajes-amor:draft:v1`). Resultado con **copiar resumen** (`navigator.clipboard` + check 1,5 s) y acciones Repetir / Borrar.
+- **Pase UI/UX móvil (17-Oct-2026)**: porcentaje del quiz a `dark:text-relaciones-lighter` (el `relaciones-light` caía a 3.1:1 a 14px); botones y opciones con press feedback `active:scale-[0.97]`.
 
 ### Test de estilo de apego (17-Oct-2026, ref. `components/tools/attachment-test/`)
 
 - **Likert por afirmación** (Nada/Poco/Bastante/Mucho = 0–3) con una afirmación por pantalla, auto-avance 300 ms y «← Atrás»; 12 afirmaciones → 4 estilos (3 ítems cada uno, máx. 9 puntos por estilo).
 - **Sin semáforos**: los estilos no se colorean por «mejor/peor» — todos los acentos en tokens `relaciones` y el dominante se destaca con `bg-relaciones-lighter dark:bg-relaciones-dark`.
 - **Patrón D** reanudable con copiar resultado; disclaimer educativo en ámbar («no es un test clínico ni una etiqueta») + nota de continuo al pie. Enlace cruzado al test de lenguajes del amor.
+- **Pase UI/UX móvil (17-Oct-2026)**: enlace cruzado y porcentaje del quiz a `dark:text-relaciones-lighter` (3.1:1 → 5.0:1); botones y opciones con press feedback.
 
 ### Preguntas profundas (17-Oct-2026, ref. `components/tools/deep-questions/`)
 
 - **Deck mezclado en cliente**: orden curado por categoría; «Mezclar el orden» usa Fisher–Yates solo dentro del handler (nunca en el `useState` inicial, para no romper la hidratación SSR). `aria-live="polite"` en la tarjeta de la pregunta.
 - **Navegación**: «← Anterior» (deshabilitado en la primera) / «Otra pregunta» con contador «Pregunta X de 15»; copiar con clipboard + check.
 - **Patrón D mínimo**: solo la categoría preferida (`holentia:preguntas-profundas:draft:v1`); tarjetas de categoría con `aria-pressed` y badge de conteo.
+- **Pase UI/UX móvil (17-Oct-2026)**: subtexto de la categoría seleccionada a `gray-700`/`gray-200` (el `gray-500` sobre `relaciones-lighter` caía a 2.6:1); «Cómo aprovecharlas» con h2 `text-xl` y tarjeta `p-6`; filas, botones y badges con press feedback.
 
 ### Diario para parejas (17-Oct-2026, ref. `components/tools/couples-journal/`)
 
 - **Pregunta del día determinista por fecha local** (índice = días desde epoch ÷ 30). Se calcula **después del montaje** (`useEffect`): las páginas son estáticas y un SSR prerenderizado quedaría con la fecha del build; placeholder `animate-pulse` estable para no romper la hidratación.
 - **Dos campos** (tú / tu pareja) con borrador autoguardado **solo tras la primera edición** (`touched` ref: evita el flash «Borrador guardado» al precargar), upsert por día en `holentia:diario-parejas:entries:v1` y limpieza del borrador al guardar.
 - **Historial con racha** (misma semántica que el diario guiado), copiar con clipboard + check y borrado en 2 pasos; «Borrar todo» con temporizador de 4 s.
+- **Pase UI/UX móvil (17-Oct-2026)**: textareas con la receta unificada (eran `text-sm` + `ring-1`: zoom iOS y foco viejo); h2 de tarjetas a `text-xl`; enlace cruzado a `dark:text-relaciones-lighter`; «(opcional)» a `gray-500`/`gray-400`; acciones de tarjeta `h-9 w-9` con press feedback.
 
 ### Plan de pasos 5-10-20 (17-Oct-2026, ref. `components/tools/steps-plan/`)
 
@@ -367,3 +371,4 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
   - Sobre `bg-cuerpo-lighter` / `dark:bg-cuerpo-dark` (chips seleccionados, bloques de total, píldoras de nivel): texto = `text-gray-900` (12:1 / 4.6:1); iconos = `text-cuerpo-darkest` / `dark:text-white` (3.8:1). El borde de chip seleccionado usa `border-cuerpo-dark` (`border-cuerpo` se queda en 2:1 sobre blanco).
   - Nunca `/opacidad` sobre tokens de sección (clase muerta, §1) ni `text-white` sobre ámbar pequeño.
 - **Contraste mente (azul `#1976d2`)**: `text-mente` sobre blanco pasa AA justo (4.6:1) para texto ≥14px; sobre `-lighter` el texto base (`#212529`, 10:1) es seguro, pero el **texto secundario nunca en `text-gray-500` sobre `bg-mente-lighter`** (2.7:1): en filas seleccionadas subir a `text-gray-700` / `dark:text-gray-200` (`dark:bg-mente-dark` + texto base queda en 4.67:1, el mínimo AA). `text-white/85` sobre `#1976d2` cae a ~3.8:1 → sobre el extremo claro del gradiente, `text-white` sólido (4.6:1).
+- **Contraste relaciones (violeta `#7c3aed`)**: `text-relaciones` sobre blanco 5.7:1 y `text-relaciones-dark` 9:1 ✓. En oscuro, **`relaciones-light` (`#a78bfa`) sobre `gray-800` = 3.1:1 → solo iconos, barras y texto ≥20px (large)**; para texto pequeño/mediano, `dark:text-relaciones-lighter` (`#c4b5fd`, 5.0:1). Subtexto secundario sobre `bg-relaciones-lighter`/`dark:bg-relaciones-dark` (filas seleccionadas): `text-gray-700`/`dark:text-gray-200` (el `gray-500` cae a 2.6:1).
