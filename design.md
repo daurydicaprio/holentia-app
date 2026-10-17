@@ -94,7 +94,7 @@ Un rol = una clase. Ante la duda, copiar el valor del componente de referencia, 
 
 - UI densa (herramientas, listas, tablas): `text-sm` · hero/landing y buscadores: `text-base` · captions/micro: `text-xs`.
 - Labels de input: `text-sm font-medium` (los inputs grandes de buscador usan `text-base`).
-- **Inputs de herramienta (canónico, 17-Oct-2026)**: `w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold` + `placeholder:font-normal placeholder:text-gray-400` y foco de §3.4 · `dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500`. `text-lg` (18px ≥ 16px) evita el zoom de iOS y da peso al dato; los selects con etiquetas largas usan `text-base` (a 18px se clipean). `type="text"` + `inputMode` (`numeric`/`decimal`) con saneado: el `type="number"` rompe la escritura de decimales parciales en móvil. Con icono interior (`DollarSign`, `Percent`…): `py-2.5 pl-10 pr-3`, icono `text-gray-500 dark:text-gray-400`. Referencia: `components/tools/bmi-calculator/bmi-calculator.tsx`.
+- **Inputs de herramienta (canónico, 17-Oct-2026)**: `w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold` + `placeholder:font-normal placeholder:text-gray-400` y foco de §3.4 · `dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500`. `text-lg` (18px ≥ 16px) evita el zoom de iOS y da peso al dato; los selects con etiquetas largas usan `text-base` (a 18px se clipean). `type="text"` + `inputMode` (`numeric`/`decimal`) con saneado: el `type="number"` rompe la escritura de decimales parciales en móvil. Con icono interior (`DollarSign`, `Percent`…): `py-2.5 pl-10 pr-3`, icono `text-gray-500 dark:text-gray-400`. Referencia: `components/tools/bmi-calculator/bmi-calculator.tsx`. **Variantes (17-Oct-2026)**: texto libre (nombre de tarjeta) y `type="date"` → misma receta con `text-base` sin `font-semibold` (`inputClassText`; a 18px el nombre se ve pesado). Sobre `components/ui/input.tsx`: el override debe anular el base con `h-auto` y `md:text-lg` (el `h-10`/`md:text-sm` del componente gana en el merge de Tailwind).
 
 ### 3.4 Foco (canónico, un solo patrón)
 
@@ -257,6 +257,31 @@ Patrón de un dato económico + resultado desglosado (2 columnas: form `lg:col-s
 - **Entrada**: slider 0–1000 kWh + input numérico canónico (saneado `[^\d]`) + quick chips (150/300/445/700) en tinte `bg-[#388e3c]/10` con texto `finanzas-dark`/`finanzas-lighter`.
 - **Resultado ticket**: cabecera `bg-sky-200 dark:bg-sky-900/60`, cuerpo `p-6 font-mono` con desglose por tramos y subsidio, fila total `bg-yellow-300 dark:bg-yellow-500/90 text-gray-900` y nota de estimación.
 
+### Calculadora de préstamo (17-Oct-2026, ref. `components/tools/loan-calculator/`)
+
+- **Formulario**: campos sobre `Input` de `components/ui/input` con override canónico ampliado (`h-auto … text-lg font-semibold md:text-lg`; el base `h-10`/`md:text-sm` gana en el merge si no se anula) + sliders de monto/tasa/plazo; etiquetas de valor `text-sm font-semibold text-finanzas-dark dark:text-finanzas-lighter`.
+- **Resultado**: hero gradiente con cajas de stats `bg-black/20` (las `bg-white/20` dejaban el texto pequeño en ≈3.8:1).
+- **Tabs/amortización**: inactivo con hover `hover:bg-finanzas-dark hover:text-white` (el `bg-finanzas`+blanco = 4.1:1 no pasa a 14px); cabecera `bg-[#388e3c]/20 dark:bg-[#388e3c]/30`; fila Total `bg-[#388e3c]/10 dark:bg-[#388e3c]/20` con texto `finanzas-dark`/`finanzas-lighter`; paginación `p-2.5` por clases — fuera los estilos inline `#388e3c`/rgba que ignoraban el modo oscuro.
+- **Pase UI/UX móvil (17-Oct-2026)**: contenedor a `p-6`; Guardar/Reiniciar a `py-2.5` con press feedback; acciones de simulaciones con hit area `h-10 w-10` (`aria-label`).
+
+### Calculadora de interés de tarjeta (17-Oct-2026, ref. `components/tools/card-interest/`)
+
+- **Formulario**: dos recetas de input — numéricos a `text-lg font-semibold` y texto libre a `text-base` (`inputClassText`); parsers de dinero/tasa tolerantes a comas (`.replace(/,/g, "")`); 3 campos a `type="text"` + `inputMode` con saneado (`[^\d.,]`).
+- **Resultado**: hero `p-6 sm:p-8` (verde normal, rojo en «no bajas el saldo»), etiquetas `text-white` sólido en ambas ramas y cajas `bg-black/20` con label `text-xs`; h3 «El costo de financiar» a `text-xl font-bold`.
+
+### Tarjeta: corte y vencimiento (17-Oct-2026, ref. `components/tools/card-cutoff/`)
+
+- **Formulario**: 5 campos con la receta canónica; texto libre (nombre) y `type="date"` con `inputClassText` (`text-base`); días de corte/vencimiento `type="text"` + `inputMode="numeric"` + saneado y `slice(0,2)`.
+- **Badge celebratorio**: el verde Tailwind `#22c55e` con blanco (2.3:1) → `bg-finanzas-dark text-white dark:bg-finanzas-light dark:text-gray-900`.
+- **Héroe/timeline**: `p-6 sm:p-8` con etiquetas `text-white` sólido; quick chips `py-2.5` con press; notas de pasos y marcas a `finanzas-dark`/`finanzas-lighter` (iconos en `finanzas`/`finanzas-light`).
+
+### Calculadora de interés compuesto (17-Oct-2026, ref. `components/tools/compound-interest/`)
+
+- **Formulario**: 5 inputs canónicos con icono; años/tasa/inflación de `type="number"` a `type="text"` + `inputMode` con saneado y `handleNumberChange` normalizando la coma decimal (`"60,5"` → 60.5); Guardar `bg-finanzas-dark hover:bg-finanzas-darkest`.
+- **Tabs/segmentados**: activos `bg-finanzas-dark` sin `shadow-sm`; tabs a `py-2.5` con press feedback.
+- **Resultado (héroe duplicado mobile/desktop)**: cajas `bg-black/20` y «Balance final» sólido; impacto con verdes `finanzas-dark`/`finanzas-lighter` (18px) y rojos `text-red-700`/`red-400`; tabla y paginación como en préstamo.
+- **Charts y guardadas**: tarjetas `p-6`; hex de canvas en la familia de tokens (`#4caf50` → `#66bb6a`); acciones con hit area `h-10 w-10` y «+4.04%» a `text-green-700`/`green-400` (3.3→5.0:1).
+
 ### Planificador de ahorros (meta + tiempo, ref. `components/tools/savings-planner/`)
 
 - **Modo** (¿Cuándo llego? / ¿Cuánto aporto?) con segmented `grid-cols-2`; inputs de dinero formateados + plazo en meses + tasa con helper «0% si solo guardas».
@@ -386,3 +411,4 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 - **Contraste mente (azul `#1976d2`)**: `text-mente` sobre blanco pasa AA justo (4.6:1) para texto ≥14px; sobre `-lighter` el texto base (`#212529`, 10:1) es seguro, pero el **texto secundario nunca en `text-gray-500` sobre `bg-mente-lighter`** (2.7:1): en filas seleccionadas subir a `text-gray-700` / `dark:text-gray-200` (`dark:bg-mente-dark` + texto base queda en 4.67:1, el mínimo AA). `text-white/85` sobre `#1976d2` cae a ~3.8:1 → sobre el extremo claro del gradiente, `text-white` sólido (4.6:1).
 - **Contraste relaciones (violeta `#7c3aed`)**: `text-relaciones` sobre blanco 5.7:1 y `text-relaciones-dark` 9:1 ✓. En oscuro, **`relaciones-light` (`#a78bfa`) sobre `gray-800` = 3.1:1 → solo iconos, barras y texto ≥20px (large)**; para texto pequeño/mediano, `dark:text-relaciones-lighter` (`#c4b5fd`, 5.0:1). Subtexto secundario sobre `bg-relaciones-lighter`/`dark:bg-relaciones-dark` (filas seleccionadas): `text-gray-700`/`dark:text-gray-200` (el `gray-500` cae a 2.6:1).
 - **Caso finanzas (verde `#388e3c`)**: sobre blanco 4.1:1 → `text-finanzas` solo ≥20px o iconos; texto pequeño en claro → `text-finanzas-dark` (7.9:1). En oscuro, `finanzas-light` (`#66bb6a`) sobre `gray-800` = 3.6:1 → iconos/≥20px; texto pequeño → `dark:text-finanzas-lighter` (5.2:1). Blanco sobre `bg-finanzas` = 4.1:1 (falla a 16px): bandas de ticket y sólidos seleccionados usan `bg-finanzas-dark` (7.9:1 con blanco). Chips seleccionados: borde `finanzas`/`finanzas-light` + texto `finanzas-dark`/`finanzas-lighter`.
+- **Caso finanzas, tanda 2 (crédito e inversión, 17-Oct-2026)**: en héroes degradados las etiquetas van `text-white` sólido en todas las ramas (verde y roja) y las cajas translúcidas internas → `bg-black/20` (con `bg-white/15–20` el texto blanco pequeño se queda en ≈3.8–4.1:1). Badge/acento celebratorio: nunca verdes Tailwind sueltos con blanco (`#22c55e` = 2.3:1) → `bg-finanzas-dark text-white dark:bg-finanzas-light dark:text-gray-900`. Acentos de pérdida en claro: `text-red-600` (12px) y `text-red-700` (valores 18px) — `red-500` queda en 2.9–3.3:1 sobre blanco/gris; `dark:text-red-400`. Sin estilos inline JS de color en iconos/texto (ignoran el modo oscuro): clases con tokens, y el hex crudo solo en Chart.js (on-token: `#388e3c`/`#66bb6a`/`#a5d6a7`; fuera `#6a9c77`/`#4caf50`).

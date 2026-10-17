@@ -18,17 +18,6 @@ export function AmortizationTable({ data, formatCurrency }: AmortizationTablePro
   const endIndex = Math.min(startIndex + rowsPerPage, data.length)
   const currentData = data.slice(startIndex, endIndex)
 
-  // Colores de la sección finanzas
-  const headerBgColor = "rgba(76, 175, 80, 0.2)" // finanzas-light con opacidad
-  const headerBgColorDark = "rgba(46, 125, 50, 0.3)" // finanzas con opacidad
-  const totalRowBgColor = "rgba(76, 175, 80, 0.3)" // finanzas-light con opacidad
-  const totalRowBgColorDark = "rgba(46, 125, 50, 0.2)" // finanzas con opacidad
-  const totalRowTextColor = "#1b5e20" // finanzas-dark
-  const totalRowTextColorDark = "#a5d6a7" // finanzas-lighter
-  const buttonColor = "#388e3c" // finanzas
-  const buttonHoverBgColor = "rgba(76, 175, 80, 0.2)" // finanzas-light con opacidad
-  const buttonHoverBgColorDark = "rgba(46, 125, 50, 0.2)" // finanzas con opacidad
-
   // Cambiar página
   const changePage = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -56,38 +45,32 @@ export function AmortizationTable({ data, formatCurrency }: AmortizationTablePro
           <thead>
             <tr>
               <th
-                className="p-3 text-left text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700"
-                style={{ backgroundColor: headerBgColor }}
+                className="p-3 text-left text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700 bg-[#388e3c]/20 dark:bg-[#388e3c]/30"
               >
                 N° Cuota
               </th>
               <th
-                className="p-3 text-left text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700"
-                style={{ backgroundColor: headerBgColor }}
+                className="p-3 text-left text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700 bg-[#388e3c]/20 dark:bg-[#388e3c]/30"
               >
                 Saldo Inicial
               </th>
               <th
-                className="p-3 text-left text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700"
-                style={{ backgroundColor: headerBgColor }}
+                className="p-3 text-left text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700 bg-[#388e3c]/20 dark:bg-[#388e3c]/30"
               >
                 Cuota
               </th>
               <th
-                className="p-3 text-left text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700"
-                style={{ backgroundColor: headerBgColor }}
+                className="p-3 text-left text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700 bg-[#388e3c]/20 dark:bg-[#388e3c]/30"
               >
                 Interés
               </th>
               <th
-                className="p-3 text-left text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700"
-                style={{ backgroundColor: headerBgColor }}
+                className="p-3 text-left text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700 bg-[#388e3c]/20 dark:bg-[#388e3c]/30"
               >
                 Capital
               </th>
               <th
-                className="p-3 text-left text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700"
-                style={{ backgroundColor: headerBgColor }}
+                className="p-3 text-left text-gray-800 dark:text-gray-200 font-medium border border-gray-200 dark:border-gray-700 bg-[#388e3c]/20 dark:bg-[#388e3c]/30"
               >
                 Saldo Final
               </th>
@@ -124,40 +107,34 @@ export function AmortizationTable({ data, formatCurrency }: AmortizationTablePro
                 </td>
               </motion.tr>
             ))}
-            <tr style={{ backgroundColor: totalRowBgColor }} className="font-medium">
+            <tr className="font-medium bg-[#388e3c]/10 dark:bg-[#388e3c]/20">
               <td
-                className="p-3 text-sm border border-gray-200 dark:border-gray-700"
-                style={{ color: totalRowTextColor }}
+                className="p-3 text-sm border border-gray-200 dark:border-gray-700 text-finanzas-dark dark:text-finanzas-lighter"
               >
                 Total
               </td>
               <td
-                className="p-3 text-sm border border-gray-200 dark:border-gray-700"
-                style={{ color: totalRowTextColor }}
+                className="p-3 text-sm border border-gray-200 dark:border-gray-700 text-finanzas-dark dark:text-finanzas-lighter"
               >
                 {formatCurrency(data[0]?.initialBalance || 0)}
               </td>
               <td
-                className="p-3 text-sm border border-gray-200 dark:border-gray-700"
-                style={{ color: totalRowTextColor }}
+                className="p-3 text-sm border border-gray-200 dark:border-gray-700 text-finanzas-dark dark:text-finanzas-lighter"
               >
                 {formatCurrency(data.reduce((sum, row) => sum + row.payment, 0))}
               </td>
               <td
-                className="p-3 text-sm border border-gray-200 dark:border-gray-700"
-                style={{ color: totalRowTextColor }}
+                className="p-3 text-sm border border-gray-200 dark:border-gray-700 text-finanzas-dark dark:text-finanzas-lighter"
               >
                 {formatCurrency(data.reduce((sum, row) => sum + row.interest, 0))}
               </td>
               <td
-                className="p-3 text-sm border border-gray-200 dark:border-gray-700"
-                style={{ color: totalRowTextColor }}
+                className="p-3 text-sm border border-gray-200 dark:border-gray-700 text-finanzas-dark dark:text-finanzas-lighter"
               >
                 {formatCurrency(data.reduce((sum, row) => sum + row.principal, 0))}
               </td>
               <td
-                className="p-3 text-sm border border-gray-200 dark:border-gray-700"
-                style={{ color: totalRowTextColor }}
+                className="p-3 text-sm border border-gray-200 dark:border-gray-700 text-finanzas-dark dark:text-finanzas-lighter"
               >
                 {formatCurrency(data[data.length - 1]?.remainingBalance || 0)}
               </td>
@@ -174,12 +151,9 @@ export function AmortizationTable({ data, formatCurrency }: AmortizationTablePro
               data-interactive="true"
               onClick={() => changePage(1)}
               disabled={currentPage === 1}
-              className={`p-2 rounded-md ${
-                currentPage === 1 ? "text-gray-400 dark:text-gray-600 cursor-not-allowed" : ""
+              className={`p-2.5 rounded-md transition-colors ${
+                currentPage === 1 ? "text-gray-400 dark:text-gray-600 cursor-not-allowed" : "text-finanzas dark:text-finanzas-light hover:bg-[#388e3c]/10 dark:hover:bg-[#388e3c]/20"
               }`}
-              style={{
-                color: currentPage === 1 ? undefined : buttonColor,
-              }}
               aria-label="Primera página"
             >
               <ChevronsLeft size={16} />
@@ -188,12 +162,9 @@ export function AmortizationTable({ data, formatCurrency }: AmortizationTablePro
               data-interactive="true"
               onClick={() => changePage(currentPage - 1)}
               disabled={currentPage === 1}
-              className={`p-2 rounded-md ${
-                currentPage === 1 ? "text-gray-400 dark:text-gray-600 cursor-not-allowed" : ""
+              className={`p-2.5 rounded-md transition-colors ${
+                currentPage === 1 ? "text-gray-400 dark:text-gray-600 cursor-not-allowed" : "text-finanzas dark:text-finanzas-light hover:bg-[#388e3c]/10 dark:hover:bg-[#388e3c]/20"
               }`}
-              style={{
-                color: currentPage === 1 ? undefined : buttonColor,
-              }}
               aria-label="Página anterior"
             >
               <ChevronLeft size={16} />
@@ -207,12 +178,9 @@ export function AmortizationTable({ data, formatCurrency }: AmortizationTablePro
               data-interactive="true"
               onClick={() => changePage(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className={`p-2 rounded-md ${
-                currentPage === totalPages ? "text-gray-400 dark:text-gray-600 cursor-not-allowed" : ""
+              className={`p-2.5 rounded-md transition-colors ${
+                currentPage === totalPages ? "text-gray-400 dark:text-gray-600 cursor-not-allowed" : "text-finanzas dark:text-finanzas-light hover:bg-[#388e3c]/10 dark:hover:bg-[#388e3c]/20"
               }`}
-              style={{
-                color: currentPage === totalPages ? undefined : buttonColor,
-              }}
               aria-label="Página siguiente"
             >
               <ChevronRight size={16} />
@@ -221,12 +189,9 @@ export function AmortizationTable({ data, formatCurrency }: AmortizationTablePro
               data-interactive="true"
               onClick={() => changePage(totalPages)}
               disabled={currentPage === totalPages}
-              className={`p-2 rounded-md ${
-                currentPage === totalPages ? "text-gray-400 dark:text-gray-600 cursor-not-allowed" : ""
+              className={`p-2.5 rounded-md transition-colors ${
+                currentPage === totalPages ? "text-gray-400 dark:text-gray-600 cursor-not-allowed" : "text-finanzas dark:text-finanzas-light hover:bg-[#388e3c]/10 dark:hover:bg-[#388e3c]/20"
               }`}
-              style={{
-                color: currentPage === totalPages ? undefined : buttonColor,
-              }}
               aria-label="Última página"
             >
               <ChevronsRight size={16} />

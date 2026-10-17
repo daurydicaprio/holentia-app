@@ -169,7 +169,7 @@ function WhySection({
       {/* Badge de salto de ciclo */}
       {cycleBadge && (
         <div className="flex justify-center mb-8">
-          <span className="px-5 py-2 rounded-full bg-[#22c55e] text-white font-bold text-sm sm:text-base whitespace-nowrap shadow-md">
+          <span className="px-5 py-2 rounded-full bg-finanzas-dark text-white dark:bg-finanzas-light dark:text-gray-900 font-bold text-sm sm:text-base whitespace-nowrap shadow-md">
             ¡Ciclo del mes siguiente! Ganaste {cycleBadge.extra} días gratis
           </span>
         </div>
@@ -392,7 +392,10 @@ export function CardCutoffCalculator() {
   const cardLabel = `${cardName || "Mi tarjeta"} •• ${cardLast4 || "••••"}`
 
   const inputClass =
-    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
+    "w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold text-gray-800 placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
+
+  const inputClassText =
+    "w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-base text-gray-800 placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
 
   const steps = result
     ? [
@@ -437,7 +440,7 @@ export function CardCutoffCalculator() {
           <h2 className="text-xl font-bold">Tu tarjeta</h2>
         </div>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Configúrala una vez, consúltala siempre.</p>
-        <p className="text-xs font-semibold text-finanzas dark:text-finanzas-light mb-6">{cardLabel}</p>
+        <p className="text-xs font-semibold text-finanzas-dark dark:text-finanzas-lighter mb-6">{cardLabel}</p>
 
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
@@ -449,7 +452,7 @@ export function CardCutoffCalculator() {
                 onChange={(e) => setCardName(e.target.value)}
                 placeholder="Mi tarjeta"
                 maxLength={24}
-                className={inputClass}
+                className={inputClassText}
                 data-interactive="true"
               />
             </div>
@@ -461,7 +464,7 @@ export function CardCutoffCalculator() {
                 onChange={(e) => setCardLast4(e.target.value.replace(/\D/g, "").slice(0, 4))}
                 placeholder="0007"
                 inputMode="numeric"
-                className={inputClass}
+                className={inputClassText}
                 data-interactive="true"
               />
             </div>
@@ -469,12 +472,10 @@ export function CardCutoffCalculator() {
           <div>
             <label className="block text-sm font-medium mb-2">Día de corte (1-31)</label>
             <input
-              type="number"
-              min={1}
-              max={31}
+              type="text"
               inputMode="numeric"
               value={cutoffDay}
-              onChange={(e) => setCutoffDay(e.target.value)}
+              onChange={(e) => setCutoffDay(e.target.value.replace(/[^\d]/g, "").slice(0, 2))}
               placeholder="Ej: 15"
               className={inputClass}
               data-interactive="true"
@@ -483,12 +484,10 @@ export function CardCutoffCalculator() {
           <div>
             <label className="block text-sm font-medium mb-2">Día de vencimiento (1-31)</label>
             <input
-              type="number"
-              min={1}
-              max={31}
+              type="text"
               inputMode="numeric"
               value={dueDay}
-              onChange={(e) => setDueDay(e.target.value)}
+              onChange={(e) => setDueDay(e.target.value.replace(/[^\d]/g, "").slice(0, 2))}
               placeholder="Ej: 5"
               className={inputClass}
               data-interactive="true"
@@ -500,7 +499,7 @@ export function CardCutoffCalculator() {
               type="date"
               value={purchaseISO}
               onChange={(e) => setPurchaseISO(e.target.value)}
-              className={inputClass}
+              className={inputClassText}
               data-interactive="true"
             />
             <div className="flex gap-2 flex-wrap mt-3">
@@ -511,7 +510,7 @@ export function CardCutoffCalculator() {
                 <button
                   key={chip.label}
                   onClick={() => setQuickDate(chip.offset)}
-                  className="px-3 py-1.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 hover:text-finanzas-dark dark:hover:text-finanzas-lighter text-finanzas dark:text-finanzas-light font-medium transition-colors"
+                  className="px-3 py-2.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-finanzas-dark dark:text-finanzas-lighter font-medium transition-[colors,transform] duration-150 active:scale-[0.97]"
                   data-interactive="true"
                 >
                   {chip.label}
@@ -549,10 +548,10 @@ export function CardCutoffCalculator() {
           <div aria-live="polite" className="animate-result-in bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
             {/* Héroe: días gratis reales de esta compra */}
             <div
-              className="rounded-xl p-8 text-white mb-8 text-center bg-gradient-to-br from-finanzas to-finanzas-dark dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text"
+              className="rounded-xl p-6 sm:p-8 text-white mb-8 text-center bg-gradient-to-br from-finanzas to-finanzas-dark dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text"
             >
-              <div className="text-xs font-semibold uppercase tracking-widest opacity-80 mb-3">{cardLabel}</div>
-              <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Financiamiento gratis</div>
+              <div className="text-xs font-semibold uppercase tracking-widest mb-3">{cardLabel}</div>
+              <div className="text-sm uppercase tracking-widest mb-2">Financiamiento gratis</div>
               <div className="text-6xl font-bold tabular-nums">{animatedGraceDays} días</div>
             </div>
             <div className="mb-8 text-gray-700 dark:text-gray-200 space-y-3">
@@ -577,7 +576,7 @@ export function CardCutoffCalculator() {
                   <>
                     Tienes hasta el <strong>{formatLong(result.due)}</strong> para pagar. Te sugerimos pagar 2 o 3
                     días antes, o sea el{" "}
-                    <strong className="text-finanzas dark:text-finanzas-light">
+                    <strong className="text-finanzas-dark dark:text-finanzas-lighter">
                       {formatLong(result.suggestedPay)}
                     </strong>
                     .
@@ -618,7 +617,7 @@ export function CardCutoffCalculator() {
                       {step.label}
                     </div>
                     <div className="font-bold text-lg leading-snug">{formatLong(step.date)}</div>
-                    <div className="text-sm text-finanzas dark:text-finanzas-light font-medium mt-2">{step.note}</div>
+                    <div className="text-sm text-finanzas-dark dark:text-finanzas-lighter font-medium mt-2">{step.note}</div>
                   </div>
                 </div>
               ))}

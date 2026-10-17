@@ -17,14 +17,6 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
   const [editingId, setEditingId] = useState<number | null>(null)
   const [editingName, setEditingName] = useState<string>("")
 
-  // Colores de la sección finanzas
-  const headerBgColor = "rgba(76, 175, 80, 0.2)" // finanzas-light con opacidad
-  const headerBgColorDark = "rgba(46, 125, 50, 0.2)" // finanzas con opacidad
-  const iconColor = "#388e3c" // finanzas
-  const iconColorDark = "#a5d6a7" // finanzas-lighter
-  const editButtonHoverBgColor = "rgba(76, 175, 80, 0.1)" // finanzas-light con opacidad
-  const editButtonHoverBgColorDark = "rgba(46, 125, 50, 0.2)" // finanzas con opacidad
-
   // Manejar clic en el nombre para editar
   const handleNameClick = (simulation: LoanSimulation) => {
     setEditingId(simulation.id)
@@ -58,7 +50,7 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200 flex items-center gap-2">
-          <Save size={18} style={{ color: iconColor }} />
+          <Save size={18} className="text-finanzas dark:text-finanzas-light" />
           Simulaciones Guardadas
         </h3>
         <button
@@ -81,7 +73,7 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
             transition={{ duration: 0.3, delay: index * 0.1 }}
             layout
           >
-            <div style={{ backgroundColor: headerBgColor }} className="px-4 py-3 flex justify-between items-center">
+            <div className="bg-[#388e3c]/10 dark:bg-[#388e3c]/20 px-4 py-3 flex justify-between items-center">
               {editingId === simulation.id ? (
                 <input
                   type="text"
@@ -89,7 +81,7 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
                   onChange={(e) => setEditingName(e.target.value)}
                   onBlur={saveNameChange}
                   onKeyDown={handleKeyDown}
-                  className="font-medium text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 border border-finanzas rounded-md px-2 py-1 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
+                  className="font-medium text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 border border-finanzas rounded-md px-2 py-1.5 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
                   autoFocus
                   maxLength={25}
                   data-interactive="true"
@@ -100,8 +92,7 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
                   <button
                     data-interactive="true"
                     onClick={() => handleNameClick(simulation)}
-                    className="ml-2 p-1 rounded-full hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors"
-                    style={{ color: iconColor }}
+                    className="ml-2 flex h-10 w-10 items-center justify-center rounded-full hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors text-finanzas dark:text-finanzas-light"
                     aria-label="Editar nombre"
                   >
                     <Edit2 size={14} />
@@ -111,7 +102,7 @@ export function SavedSimulations({ simulations, onRemove, onUpdateName, formatCu
               <button
                 data-interactive="true"
                 onClick={() => onRemove(simulation.id)}
-                className="text-red-500 hover:text-red-700 dark:hover:text-red-400 p-1 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                className="flex h-10 w-10 items-center justify-center text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                 aria-label="Eliminar simulación"
               >
                 <Trash2 size={16} />

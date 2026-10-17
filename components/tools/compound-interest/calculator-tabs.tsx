@@ -13,9 +13,9 @@ export function CalculatorTabs({ activeTab, onTabChange }: CalculatorTabsProps) 
       <button
         data-interactive="true"
         onClick={() => onTabChange("chart")}
-        className={`flex items-center justify-center gap-2 py-2 px-3 text-sm font-medium flex-1 rounded-md transition-colors ${
+        className={`flex items-center justify-center gap-2 py-2.5 px-3 text-sm font-medium flex-1 rounded-md transition-[colors,transform] duration-150 active:scale-[0.97] ${
           activeTab === "chart"
-            ? "bg-finanzas text-white shadow-sm"
+            ? "bg-finanzas-dark text-white"
             : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600"
         }`}
       >
@@ -26,9 +26,9 @@ export function CalculatorTabs({ activeTab, onTabChange }: CalculatorTabsProps) 
       <button
         data-interactive="true"
         onClick={() => onTabChange("summary")}
-        className={`flex items-center justify-center gap-2 py-2 px-3 text-sm font-medium flex-1 rounded-md transition-colors ${
+        className={`flex items-center justify-center gap-2 py-2.5 px-3 text-sm font-medium flex-1 rounded-md transition-[colors,transform] duration-150 active:scale-[0.97] ${
           activeTab === "summary"
-            ? "bg-finanzas text-white shadow-sm"
+            ? "bg-finanzas-dark text-white"
             : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600"
         }`}
       >

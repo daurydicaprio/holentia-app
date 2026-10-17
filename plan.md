@@ -356,6 +356,17 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AT — Finanzas tanda 2: pase UI/UX móvil de crédito e inversión (préstamo, interés tarjeta, corte/vencimiento, interés compuesto) (17-Oct-2026) — HECHA
+
+- [x] **Receta de input extendida**: préstamo con override sobre `ui/Input` (`h-auto md:text-lg` — el base `h-10`/`md:text-sm` ganaba el merge), compuesto con 5 campos canónicos, corte/vencimiento con variante `inputClassText` para texto libre y `type="date"`. 8 `type="number"` → `type="text"` + `inputMode` con saneado (días `[^\d]` + `slice(0,2)`; años/tasas/inflación con coma decimal normalizada en `handleNumberChange`); parsers de tarjeta de interés tolerantes a comas (`.replace(/,/g, "")`).
+- [x] **Contraste (fallos AA)**: cajas de stats del héroe `bg-white/20` (≈3.8:1) → `bg-black/20` (préstamo, compuesto en ambos héroes duplicados, interés tarjeta); etiquetas `text-white` sólido también en la rama roja; badge `#22c55e`+blanco (2.3:1) → `bg-finanzas-dark`/`finanzas-light dark:text-gray-900`; tabs/segmentados/tabla de préstamo y compuesto de `bg-finanzas`+blanco (4.1:1) → `bg-finanzas-dark` (7.9:1) sin `shadow-sm`; textos `finanzas-light` a 14–18px → `finanzas-lighter` (3.6→5.2:1); rojos de pérdida `red-500` (2.9–3.3:1) → `red-600`/`text-red-700` + iconos.
+- [x] **Estilos inline de color fuera** (`saved-simulations` y `amortization-table` de préstamo): `iconColor`/`headerBg`/`buttonColor` (rgba/#388e3c) ignoraban el modo oscuro → clases con tokens y tintes `bg-[#388e3c]/10–30`; paginación con iconos a `p-2.5`, acciones de simulaciones a `h-10 w-10`; hex `#6a9c77` (×3) y `#4caf50` (charts) fuera (canvas on-token `#66bb6a`).
+- [x] **Respiración**: tarjetas `p-5` → `p-6` (formulario, tabla y charts del compuesto, impacto móvil, contenedor móvil del préstamo); Guardar/Reiniciar a `py-2.5`; tabs pequeñas a `py-2.5`.
+- [x] **Docs**: `design.md` §3.3 (variante de texto/`type="date"` + `ui/Input`), §7 (finanzas tanda 2), 4 recetas nuevas (préstamo, interés tarjeta, corte/vencimiento, interés compuesto); skill `section-ui` §3c/§7.
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke (4 páginas SSR con H1 ×1 y 0 `noindex` + OG `200 image/png`) + auditoría targeted PASS.
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

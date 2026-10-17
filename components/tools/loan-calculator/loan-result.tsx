@@ -25,7 +25,7 @@ export function LoanResult({ monthlyPayment, loanAmount, interestRate, loanTerm,
       </h3>
 
       <div aria-live="polite" className="animate-result-in text-3xl font-bold mb-4 flex items-center">
-        <span className="text-xl mr-2 opacity-90">
+        <span className="text-xl mr-2">
           Cuota mensual:
         </span>
         {formatCurrency(animatedPayment)}
@@ -45,7 +45,7 @@ export function LoanResult({ monthlyPayment, loanAmount, interestRate, loanTerm,
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-white/30">
-          <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm">
+          <div className="bg-black/20 p-3 rounded-lg backdrop-blur-sm">
             <div className="flex items-center gap-2 text-xs mb-1">
               <DollarSign size={14} />
               <span>Total a pagar</span>
@@ -55,7 +55,7 @@ export function LoanResult({ monthlyPayment, loanAmount, interestRate, loanTerm,
             </div>
           </div>
 
-          <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm">
+          <div className="bg-black/20 p-3 rounded-lg backdrop-blur-sm">
             <div className="flex items-center gap-2 text-xs mb-1">
               <Percent size={14} />
               <span>Total intereses</span>
@@ -68,7 +68,7 @@ export function LoanResult({ monthlyPayment, loanAmount, interestRate, loanTerm,
             </div>
           </div>
 
-          <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm">
+          <div className="bg-black/20 p-3 rounded-lg backdrop-blur-sm">
             <div className="flex items-center gap-2 text-xs mb-1">
               <Calendar size={14} />
               <span>Último pago</span>

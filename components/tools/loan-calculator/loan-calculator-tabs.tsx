@@ -56,7 +56,7 @@ function TabButton({ isActive, onClick, icon, label, disabled = false }: TabButt
       className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-colors relative ${
         isActive
           ? "bg-finanzas-dark text-white"
-          : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-finanzas hover:text-white dark:hover:bg-finanzas-light dark:hover:text-black"
+          : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-finanzas-dark hover:text-white dark:hover:bg-finanzas-light dark:hover:text-gray-900"
       } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
       whileTap={!disabled ? { scale: 0.98 } : undefined}
     >

@@ -35,7 +35,7 @@ export function CompoundInterestResult({ summary, formatCurrency, inflation }: C
         </h3>
 
         <div aria-live="polite" className="animate-result-in text-3xl font-bold mb-4 flex items-center">
-          <span className="text-xl mr-2 opacity-90">
+          <span className="text-xl mr-2">
             Balance final:
           </span>
           {formatCurrency(animatedBalance)}
@@ -58,7 +58,7 @@ export function CompoundInterestResult({ summary, formatCurrency, inflation }: C
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-white/30">
-            <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm">
+            <div className="bg-black/20 p-3 rounded-lg backdrop-blur-sm">
               <div className="flex items-center gap-2 text-xs mb-1">
                 <DollarSign size={14} />
                 <span>Ganancia neta</span>
@@ -68,7 +68,7 @@ export function CompoundInterestResult({ summary, formatCurrency, inflation }: C
               </div>
             </div>
 
-            <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm">
+            <div className="bg-black/20 p-3 rounded-lg backdrop-blur-sm">
               <div className="flex items-center gap-2 text-xs mb-1">
                 <DollarSign size={14} />
                 <span>Aportes totales</span>
@@ -79,7 +79,7 @@ export function CompoundInterestResult({ summary, formatCurrency, inflation }: C
             </div>
 
             {isMobile ? (
-              <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm group hover:bg-red-500/30 transition-colors">
+              <div className="bg-black/20 p-3 rounded-lg backdrop-blur-sm group hover:bg-red-500/30 transition-colors">
                 <div className="flex items-center gap-2 text-xs mb-1">
                   <Percent size={14} />
                   <span>Inflación</span>
@@ -89,7 +89,7 @@ export function CompoundInterestResult({ summary, formatCurrency, inflation }: C
                 </div>
               </div>
             ) : (
-              <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm">
+              <div className="bg-black/20 p-3 rounded-lg backdrop-blur-sm">
                 <div className="flex items-center gap-2 text-xs mb-1">
                   <Calendar size={14} />
                   <span>Tiempo en duplicar</span>

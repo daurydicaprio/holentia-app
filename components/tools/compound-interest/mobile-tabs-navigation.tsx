@@ -14,9 +14,9 @@ export function MobileTabsNavigation({ activeTab, onTabChange, hasSimulations = 
       <button
         data-interactive="true"
         onClick={() => onTabChange("calculator")}
-        className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-colors border-r border-gray-200 dark:border-gray-700 ${
+        className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-[colors,transform] duration-150 active:scale-[0.97] border-r border-gray-200 dark:border-gray-700 ${
           activeTab === "calculator"
-            ? "bg-finanzas text-white"
+            ? "bg-finanzas-dark text-white"
             : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
         }`}
       >
@@ -27,9 +27,9 @@ export function MobileTabsNavigation({ activeTab, onTabChange, hasSimulations = 
       <button
         data-interactive="true"
         onClick={() => onTabChange("simulations")}
-        className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-colors border-r border-gray-200 dark:border-gray-700 ${
+        className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-[colors,transform] duration-150 active:scale-[0.97] border-r border-gray-200 dark:border-gray-700 ${
           activeTab === "simulations"
-            ? "bg-finanzas text-white"
+            ? "bg-finanzas-dark text-white"
             : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
         }`}
       >
@@ -40,9 +40,9 @@ export function MobileTabsNavigation({ activeTab, onTabChange, hasSimulations = 
       <button
         data-interactive="true"
         onClick={() => onTabChange("charts")}
-        className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-colors ${
+        className={`flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium flex-1 transition-[colors,transform] duration-150 active:scale-[0.97] ${
           activeTab === "charts"
-            ? "bg-finanzas text-white"
+            ? "bg-finanzas-dark text-white"
             : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
         }`}
       >

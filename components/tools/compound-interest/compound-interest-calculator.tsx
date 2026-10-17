@@ -112,9 +112,9 @@ export function CompoundInterestCalculator() {
 
               {/* Sección de impacto optimizada para móvil */}
               <div className="mt-6">
-                <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700 shadow-sm">
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
                   <div className="flex items-start gap-3 mb-4">
-                    <div className="mt-1 text-finanzas dark:text-[#6a9c77] flex-shrink-0">
+                    <div className="mt-1 text-finanzas dark:text-finanzas-light flex-shrink-0">
                       <AlertCircle size={20} />
                     </div>
                     <div className="w-full">
@@ -129,7 +129,7 @@ export function CompoundInterestCalculator() {
                     <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
                       Si no inviertes tu dinero:
                     </div>
-                    <div className="text-lg font-bold text-red-500 dark:text-red-400">
+                    <div className="text-lg font-bold text-red-700 dark:text-red-400">
                       {formatCurrency(nonInvestedValue)}
                     </div>
                     <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">
@@ -143,7 +143,7 @@ export function CompoundInterestCalculator() {
                       <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
                         Con inflación, tu inversión valdría:
                       </div>
-                      <div className="text-lg font-bold text-finanzas dark:text-finanzas-light">{formatCurrency(summary.balanceNet)}</div>
+                      <div className="text-lg font-bold text-finanzas-dark dark:text-finanzas-lighter">{formatCurrency(summary.balanceNet)}</div>
                     </div>
                   </div>
 
@@ -239,7 +239,7 @@ export function CompoundInterestCalculator() {
               </h3>
 
               <div aria-live="polite" className="animate-result-in text-3xl font-bold mb-4 flex items-center">
-                <span className="text-xl mr-2 opacity-90">
+                <span className="text-xl mr-2">
                   Balance final:
                 </span>
                 {formatCurrency(animatedBalance)}
@@ -262,7 +262,7 @@ export function CompoundInterestCalculator() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-white/30">
-                  <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm">
+                  <div className="bg-black/20 p-3 rounded-lg backdrop-blur-sm">
                     <div className="flex items-center gap-2 text-xs mb-1">
                       <DollarSign size={14} />
                       <span>Ganancia neta</span>
@@ -272,7 +272,7 @@ export function CompoundInterestCalculator() {
                     </div>
                   </div>
 
-                  <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm">
+                  <div className="bg-black/20 p-3 rounded-lg backdrop-blur-sm">
                     <div className="flex items-center gap-2 text-xs mb-1">
                       <DollarSign size={14} />
                       <span>Aportes totales</span>
@@ -282,7 +282,7 @@ export function CompoundInterestCalculator() {
                     </div>
                   </div>
 
-                  <div className="bg-white/20 p-3 rounded-lg backdrop-blur-sm">
+                  <div className="bg-black/20 p-3 rounded-lg backdrop-blur-sm">
                     <div className="flex items-center gap-2 text-xs mb-1">
                       <Calendar size={14} />
                       <span>Tiempo en duplicar</span>

@@ -33,7 +33,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
       grid: resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.1)",
       text: resolvedTheme === "dark" ? "#e0e0e0" : "#1E3A2E",
       tooltipBg: resolvedTheme === "dark" ? "rgba(30, 30, 30, 0.9)" : "rgba(255, 255, 255, 0.9)",
-      tooltipBorder: resolvedTheme === "dark" ? "#4caf50" : "#388e3c",
+      tooltipBorder: resolvedTheme === "dark" ? "#66bb6a" : "#388e3c",
     }),
     [resolvedTheme],
   )
@@ -84,7 +84,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
             order: 1,
             yAxisID: "y",
             borderRadius: 4,
-            hoverBackgroundColor: resolvedTheme === "dark" ? "#4caf50" : "#388e3c",
+            hoverBackgroundColor: resolvedTheme === "dark" ? "#66bb6a" : "#388e3c",
           },
           {
             type: "bar",
@@ -235,7 +235,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
     const getColors = () => {
       if (resolvedTheme === "dark") {
         return [
-          "#4caf50", // Verde para inversión inicial
+          "#66bb6a", // Verde para inversión inicial
           "#388e3c", // Verde oscuro para contribuciones
           "#a5d6a7", // Verde claro para ganancias
           "#e8f5e9", // Verde muy claro para inflación
@@ -368,7 +368,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
     <div className="space-y-8">
       {/* Gráfico de línea */}
       <motion.div
-        className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-sm border border-gray-200 dark:border-gray-700"
+        className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -386,7 +386,7 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
       {/* Gráfico de pastel - solo mostrar en escritorio o si showPieChart es true */}
       {showPieChart && (
         <motion.div
-          className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-sm border border-gray-200 dark:border-gray-700"
+          className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}

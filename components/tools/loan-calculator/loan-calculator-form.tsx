@@ -231,7 +231,7 @@ export function LoanCalculatorForm({
             <label htmlFor="loan-amount" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Monto del Préstamo
             </label>
-            <span className="text-sm font-semibold text-finanzas dark:text-finanzas-light">
+            <span className="text-sm font-semibold text-finanzas-dark dark:text-finanzas-lighter">
               {new Intl.NumberFormat("es-DO", { style: "currency", currency: "DOP" }).format(loanAmount)}
             </span>
           </div>
@@ -244,7 +244,7 @@ export function LoanCalculatorForm({
               onChange={handleLoanAmountChange}
               onBlur={handleLoanAmountBlur}
               onFocus={() => setIsEditingLoanAmount(true)}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
+              className="h-auto w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold text-gray-800 md:text-lg placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
               data-interactive="true"
             />
             <Slider
@@ -264,7 +264,7 @@ export function LoanCalculatorForm({
             <label htmlFor="interest-rate" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Tasa de Interés Anual
             </label>
-            <span className="text-sm font-semibold text-finanzas dark:text-finanzas-light">
+            <span className="text-sm font-semibold text-finanzas-dark dark:text-finanzas-lighter">
               {interestRate}%
             </span>
           </div>
@@ -277,7 +277,7 @@ export function LoanCalculatorForm({
               onChange={handleInterestRateChange}
               onBlur={handleInterestRateBlur}
               onFocus={() => setIsEditingInterestRate(true)}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
+              className="h-auto w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold text-gray-800 md:text-lg placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
               data-interactive="true"
             />
             <Slider
@@ -297,7 +297,7 @@ export function LoanCalculatorForm({
             <label htmlFor="loan-term" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Plazo (meses)
             </label>
-            <span className="text-sm font-semibold text-finanzas dark:text-finanzas-light">
+            <span className="text-sm font-semibold text-finanzas-dark dark:text-finanzas-lighter">
               {loanTerm} {loanTerm === 1 ? "mes" : "meses"}
             </span>
           </div>
@@ -310,7 +310,7 @@ export function LoanCalculatorForm({
               onChange={handleLoanTermChange}
               onBlur={handleLoanTermBlur}
               onFocus={() => setIsEditingLoanTerm(true)}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
+              className="h-auto w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold text-gray-800 md:text-lg placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
               data-interactive="true"
             />
             <Slider
@@ -330,8 +330,8 @@ export function LoanCalculatorForm({
         <button
           onClick={onSaveSimulation}
           disabled={disableSave}
-          className={`px-4 py-2 rounded-md bg-finanzas-dark text-white font-medium transition-colors flex items-center gap-2 ${
-            disableSave ? "opacity-50 cursor-not-allowed" : ""
+          className={`px-4 py-2.5 rounded-md bg-finanzas-dark text-white font-medium transition-[colors,transform] duration-150 active:scale-[0.97] flex items-center gap-2 ${
+            disableSave ? "opacity-50 cursor-not-allowed" : "hover:bg-finanzas-darkest"
           }`}
           data-interactive="true"
         >
@@ -341,7 +341,7 @@ export function LoanCalculatorForm({
 
         <button
           onClick={onResetForm}
-          className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium transition-colors flex items-center gap-2"
+          className="px-4 py-2.5 rounded-md bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium transition-[colors,transform] duration-150 active:scale-[0.97] flex items-center gap-2"
           data-interactive="true"
         >
           <RefreshCw size={16} />

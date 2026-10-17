@@ -125,7 +125,7 @@ export function CalculatorInputs({
 
   // Función para manejar cambios en inputs numéricos (para años, tasa de interés e inflación)
   const handleNumberChange = (setter: (value: number) => void, value: string) => {
-    const numValue = Number.parseFloat(value)
+    const numValue = Number.parseFloat(value.replace(",", "."))
     if (!isNaN(numValue)) {
       setter(numValue)
     } else {
@@ -145,7 +145,7 @@ export function CalculatorInputs({
 
   return (
     <motion.div
-      className="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700"
+      className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -182,7 +182,7 @@ export function CalculatorInputs({
           </div>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <DollarSign size={16} className="text-gray-400" />
+              <DollarSign size={16} className="text-gray-500 dark:text-gray-400" />
             </div>
             <input
               type="text"
@@ -190,7 +190,7 @@ export function CalculatorInputs({
               value={formattedInitialDeposit}
               onChange={handleInitialDepositChange}
               onBlur={() => handleBlur(setFormattedInitialDeposit, initialDeposit)}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              className="block w-full rounded-md border border-gray-300 bg-white py-2.5 pl-10 pr-3 text-lg font-semibold text-gray-800 placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
               placeholder="0"
               data-interactive="true"
             />
@@ -222,7 +222,7 @@ export function CalculatorInputs({
           </div>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <DollarSign size={16} className="text-gray-400" />
+              <DollarSign size={16} className="text-gray-500 dark:text-gray-400" />
             </div>
             <input
               type="text"
@@ -230,7 +230,7 @@ export function CalculatorInputs({
               value={formattedContribution}
               onChange={handleContributionChange}
               onBlur={() => handleBlur(setFormattedContribution, contribution)}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              className="block w-full rounded-md border border-gray-300 bg-white py-2.5 pl-10 pr-3 text-lg font-semibold text-gray-800 placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
               placeholder="0"
               data-interactive="true"
             />
@@ -266,9 +266,9 @@ export function CalculatorInputs({
           <div className="flex space-x-2">
             <button
               onClick={() => setContributionFrequency(12)}
-              className={`flex-1 py-2 px-4 rounded-md transition-colors ${
+              className={`flex-1 py-2.5 px-4 rounded-md transition-[colors,transform] duration-150 active:scale-[0.97] ${
                 contributionFrequency === 12
-                  ? "bg-finanzas text-white shadow-sm"
+                  ? "bg-finanzas-dark text-white"
                   : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
               data-interactive="true"
@@ -277,9 +277,9 @@ export function CalculatorInputs({
             </button>
             <button
               onClick={() => setContributionFrequency(1)}
-              className={`flex-1 py-2 px-4 rounded-md transition-colors ${
+              className={`flex-1 py-2.5 px-4 rounded-md transition-[colors,transform] duration-150 active:scale-[0.97] ${
                 contributionFrequency === 1
-                  ? "bg-finanzas text-white shadow-sm"
+                  ? "bg-finanzas-dark text-white"
                   : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
               data-interactive="true"
@@ -315,18 +315,16 @@ export function CalculatorInputs({
             </div>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Calendar size={16} className="text-gray-400" />
+                <Calendar size={16} className="text-gray-500 dark:text-gray-400" />
               </div>
               <input
-                type="number"
+                type="text"
                 id="years"
                 value={years || ""}
-                onChange={(e) => handleNumberChange(setYears, e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                onChange={(e) => handleNumberChange(setYears, e.target.value.replace(/[^\d]/g, ""))}
+                className="block w-full rounded-md border border-gray-300 bg-white py-2.5 pl-10 pr-3 text-lg font-semibold text-gray-800 placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
                 placeholder="5"
-                min="1"
-                max="100"
-                step="1"
+                inputMode="numeric"
                 data-interactive="true"
               />
             </div>
@@ -356,18 +354,16 @@ export function CalculatorInputs({
             </div>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Percent size={16} className="text-gray-400" />
+                <Percent size={16} className="text-gray-500 dark:text-gray-400" />
               </div>
               <input
-                type="number"
+                type="text"
                 id="interestRate"
                 value={interestRate || ""}
-                onChange={(e) => handleNumberChange(setInterestRate, e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                onChange={(e) => handleNumberChange(setInterestRate, e.target.value.replace(/[^\d.,]/g, ""))}
+                className="block w-full rounded-md border border-gray-300 bg-white py-2.5 pl-10 pr-3 text-lg font-semibold text-gray-800 placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
                 placeholder="0"
-                min="0"
-                max="100"
-                step="0.1"
+                inputMode="decimal"
                 data-interactive="true"
               />
             </div>
@@ -397,18 +393,16 @@ export function CalculatorInputs({
             </div>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Percent size={16} className="text-gray-400" />
+                <Percent size={16} className="text-gray-500 dark:text-gray-400" />
               </div>
               <input
-                type="number"
+                type="text"
                 id="inflation"
                 value={inflation || ""}
-                onChange={(e) => handleNumberChange(setInflation, e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                onChange={(e) => handleNumberChange(setInflation, e.target.value.replace(/[^\d.,]/g, ""))}
+                className="block w-full rounded-md border border-gray-300 bg-white py-2.5 pl-10 pr-3 text-lg font-semibold text-gray-800 placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
                 placeholder="0"
-                min="0"
-                max="100"
-                step="0.1"
+                inputMode="decimal"
                 data-interactive="true"
               />
             </div>
@@ -422,8 +416,8 @@ export function CalculatorInputs({
           <button
             onClick={onSaveSimulation}
             disabled={disableSave}
-            className={`px-4 py-2 rounded-md text-white font-medium transition-colors flex items-center gap-2 ${
-              disableSave ? "opacity-50 cursor-not-allowed bg-gray-400" : "bg-finanzas hover:bg-finanzas-dark"
+            className={`px-4 py-2.5 rounded-md text-white font-medium transition-[colors,transform] duration-150 active:scale-[0.97] flex items-center gap-2 ${
+              disableSave ? "opacity-50 cursor-not-allowed bg-gray-400" : "bg-finanzas-dark hover:bg-finanzas-darkest"
             }`}
             data-interactive="true"
           >

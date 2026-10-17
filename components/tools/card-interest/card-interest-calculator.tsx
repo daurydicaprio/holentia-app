@@ -120,17 +120,17 @@ export function CardInterestCalculator() {
   }, [balanceInput, rateInput, paymentInput, cardName, cardLast4])
 
   const balance = useMemo(() => {
-    const n = Number.parseFloat(balanceInput)
+    const n = Number.parseFloat(balanceInput.replace(/,/g, ""))
     return isNaN(n) || n <= 0 ? 0 : n
   }, [balanceInput])
 
   const annualRate = useMemo(() => {
-    const n = Number.parseFloat(rateInput)
+    const n = Number.parseFloat(rateInput.replace(/,/g, ""))
     return isNaN(n) || n < 0 ? 0 : n
   }, [rateInput])
 
   const payment = useMemo(() => {
-    const n = Number.parseFloat(paymentInput)
+    const n = Number.parseFloat(paymentInput.replace(/,/g, ""))
     return isNaN(n) || n <= 0 ? 0 : n
   }, [paymentInput])
 
@@ -160,7 +160,10 @@ export function CardInterestCalculator() {
   }
 
   const inputClass =
-    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
+    "w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold text-gray-800 placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
+
+  const inputClassText =
+    "w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-base text-gray-800 placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
 
   const monthlyRatePct = annualRate / 12
 
@@ -187,7 +190,7 @@ export function CardInterestCalculator() {
                 value={cardName}
                 onChange={(e) => setCardName(e.target.value)}
                 placeholder="Ej: Visa-BHD"
-                className={inputClass}
+                className={inputClassText}
                 data-interactive="true"
               />
             </div>
@@ -200,7 +203,7 @@ export function CardInterestCalculator() {
                 onChange={(e) => setCardLast4(e.target.value.replace(/\D/g, "").slice(0, 4))}
                 placeholder="1234"
                 maxLength={4}
-                className={inputClass}
+                className={inputClassText}
                 data-interactive="true"
               />
             </div>
@@ -209,11 +212,10 @@ export function CardInterestCalculator() {
           <div>
             <label className="block text-sm font-medium mb-2">Saldo de la tarjeta</label>
             <input
-              type="number"
-              min={0}
+              type="text"
               inputMode="decimal"
               value={balanceInput}
-              onChange={(e) => setBalanceInput(e.target.value)}
+              onChange={(e) => setBalanceInput(e.target.value.replace(/[^\d.,]/g, ""))}
               placeholder="Ej: 25000"
               className={inputClass}
               data-interactive="true"
@@ -223,13 +225,10 @@ export function CardInterestCalculator() {
           <div>
             <label className="block text-sm font-medium mb-2">Tasa de interés anual (%)</label>
             <input
-              type="number"
-              min={0}
-              max={200}
-              step={0.1}
+              type="text"
               inputMode="decimal"
               value={rateInput}
-              onChange={(e) => setRateInput(e.target.value)}
+              onChange={(e) => setRateInput(e.target.value.replace(/[^\d.,]/g, ""))}
               placeholder="Ej: 60"
               className={inputClass}
               data-interactive="true"
@@ -240,11 +239,10 @@ export function CardInterestCalculator() {
           <div>
             <label className="block text-sm font-medium mb-2">Pago mensual que piensas dar</label>
             <input
-              type="number"
-              min={0}
+              type="text"
               inputMode="decimal"
               value={paymentInput}
-              onChange={(e) => setPaymentInput(e.target.value)}
+              onChange={(e) => setPaymentInput(e.target.value.replace(/[^\d.,]/g, ""))}
               placeholder="Ej: 3000"
               className={inputClass}
               data-interactive="true"
@@ -279,7 +277,7 @@ export function CardInterestCalculator() {
           <div aria-live="polite" className="animate-result-in space-y-6 h-full">
             {/* Héroe */}
             <div
-              className={`rounded-xl p-8 text-white text-center shadow-lg ${
+              className={`rounded-xl p-6 sm:p-8 text-white text-center shadow-lg ${
                 result.neverPaysOff
                   ? "bg-gradient-to-br from-red-700 to-red-900"
                   : "bg-gradient-to-br from-finanzas to-finanzas-dark dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text"
@@ -289,35 +287,35 @@ export function CardInterestCalculator() {
                 <>
                   <div className="flex items-center justify-center gap-2 mb-3">
                     <AlertTriangle className="h-5 w-5" />
-                    <div className="text-sm uppercase tracking-widest opacity-90">Con ese pago no bajas el saldo</div>
+                    <div className="text-sm uppercase tracking-widest">Con ese pago no bajas el saldo</div>
                   </div>
                   <div className="text-4xl sm:text-5xl font-bold tabular-nums mb-3">{formatAmount(animatedMonthlyInterest)}</div>
-                  <p className="text-sm opacity-90 max-w-md mx-auto leading-relaxed">
+                  <p className="text-sm max-w-md mx-auto leading-relaxed">
                     Este mes se genera solo en intereses {formatAmount(result.monthlyInterest)}. Con tu pago de{" "}
                     {formatAmount(payment)} no abonas capital: la deuda no baja.
                   </p>
                 </>
               ) : (
                 <>
-                  <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Liquidas en</div>
+                  <div className="text-sm uppercase tracking-widest mb-2">Liquidas en</div>
                   <div className="text-6xl font-bold tabular-nums">{animatedMonths}</div>
-                  <div className="text-lg opacity-90 mt-1">{result.months === 1 ? "mes" : "meses"}</div>
-                  <div className="text-sm opacity-80 mt-1">{cardTitle}</div>
+                  <div className="text-lg mt-1">{result.months === 1 ? "mes" : "meses"}</div>
+                  <div className="text-sm mt-1">{cardTitle}</div>
 
                   <div className="grid grid-cols-3 gap-3 mt-6 max-w-lg mx-auto">
-                    <div className="rounded-lg bg-white/15 px-2 py-3">
+                    <div className="rounded-lg bg-black/20 px-2 py-3">
                       <div className="text-lg sm:text-xl font-bold tabular-nums">{formatAmount(result.totalInterest)}</div>
-                      <div className="text-[11px] opacity-90 mt-1 leading-tight">Interés total</div>
+                      <div className="text-xs mt-1 leading-tight">Interés total</div>
                     </div>
-                    <div className="rounded-lg bg-white/15 px-2 py-3">
+                    <div className="rounded-lg bg-black/20 px-2 py-3">
                       <div className="text-lg sm:text-xl font-bold tabular-nums">{formatAmount(result.totalPaid)}</div>
-                      <div className="text-[11px] opacity-90 mt-1 leading-tight">Total pagado</div>
+                      <div className="text-xs mt-1 leading-tight">Total pagado</div>
                     </div>
-                    <div className="rounded-lg bg-white/15 px-2 py-3">
+                    <div className="rounded-lg bg-black/20 px-2 py-3">
                       <div className="text-lg sm:text-xl font-bold tabular-nums text-yellow-300 dark:text-yellow-300">
                         {balance > 0 ? `+${Math.round((result.totalInterest / balance) * 100)}%` : "—"}
                       </div>
-                      <div className="text-[11px] opacity-90 mt-1 leading-tight text-yellow-300 dark:text-yellow-300">Costo extra</div>
+                      <div className="text-xs mt-1 leading-tight text-yellow-300 dark:text-yellow-300">Costo extra</div>
                     </div>
                   </div>
                 </>
@@ -326,7 +324,7 @@ export function CardInterestCalculator() {
 
             {/* Desglose */}
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-              <h3 className="font-bold mb-4">El costo de financiar</h3>
+              <h3 className="text-xl font-bold mb-4">El costo de financiar</h3>
               <div className="space-y-3 font-mono text-sm tabular-nums">
                 <div className="flex justify-between py-1">
                   <span className="text-gray-600 dark:text-gray-400">Tasa anual</span>

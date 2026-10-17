@@ -62,7 +62,7 @@ export function AmortizationTable({
 
   // Asegurar que los bordes de la tabla sean visibles y redondeados
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700">
+    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
       <h2 className="text-xl font-bold text-center text-finanzas mb-6 dark:text-finanzas-light">
         Tabla de amortización
         <span className="block w-16 h-1 bg-finanzas mx-auto mt-2"></span>
@@ -73,9 +73,9 @@ export function AmortizationTable({
         <button
           data-interactive="true"
           onClick={() => setTableView("annual")}
-          className={`px-6 py-2 rounded-md transition-colors min-w-[120px] ${
+          className={`px-6 py-2.5 rounded-md transition-[colors,transform] duration-150 active:scale-[0.97] min-w-[120px] ${
             tableView === "annual"
-              ? "bg-finanzas text-white shadow-sm"
+              ? "bg-finanzas-dark text-white"
               : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
           }`}
         >
@@ -85,9 +85,9 @@ export function AmortizationTable({
           data-interactive="true"
           onClick={() => setTableView("monthly")}
           disabled={contributionFrequency !== 12}
-          className={`px-6 py-2 rounded-md transition-colors min-w-[120px] ${
+          className={`px-6 py-2.5 rounded-md transition-[colors,transform] duration-150 active:scale-[0.97] min-w-[120px] ${
             tableView === "monthly"
-              ? "bg-finanzas text-white shadow-sm"
+              ? "bg-finanzas-dark text-white"
               : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
           } ${contributionFrequency !== 12 ? "opacity-50 cursor-not-allowed" : ""}`}
         >
@@ -189,7 +189,7 @@ export function AmortizationTable({
             data-interactive="true"
             onClick={() => changePage(1)}
             disabled={currentPage === 1}
-            className={`px-3 py-1 rounded-md ${
+            className={`px-3 py-2.5 rounded-md ${
               currentPage === 1
                 ? "bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed"
                 : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
@@ -201,7 +201,7 @@ export function AmortizationTable({
             data-interactive="true"
             onClick={() => changePage(currentPage - 1)}
             disabled={currentPage === 1}
-            className={`px-3 py-1 rounded-md ${
+            className={`px-3 py-2.5 rounded-md ${
               currentPage === 1
                 ? "bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed"
                 : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
@@ -216,7 +216,7 @@ export function AmortizationTable({
             data-interactive="true"
             onClick={() => changePage(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className={`px-3 py-1 rounded-md ${
+            className={`px-3 py-2.5 rounded-md ${
               currentPage === totalPages
                 ? "bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed"
                 : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
@@ -228,7 +228,7 @@ export function AmortizationTable({
             data-interactive="true"
             onClick={() => changePage(totalPages)}
             disabled={currentPage === totalPages}
-            className={`px-3 py-1 rounded-md ${
+            className={`px-3 py-2.5 rounded-md ${
               currentPage === totalPages
                 ? "bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed"
                 : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"

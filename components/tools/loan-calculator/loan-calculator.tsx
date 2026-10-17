@@ -164,7 +164,7 @@ export function LoanCalculator() {
         {/* Añadir navegación por swipe para las pestañas */}
         <TabSwipeNavigation activeTab={activeTab} tabs={availableTabs} onTabChange={handleTabChange} />
 
-        <div className="p-5">
+        <div className="p-6">
           {saveError && (
             <div className="mb-4 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-sm text-red-700 dark:text-red-300 flex items-center justify-between gap-2">
               <span>{saveError}</span>
