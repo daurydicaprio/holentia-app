@@ -403,6 +403,15 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 - **Patrón D**: borrador `holentia:calculadora-imc:draft:v1` ({weight, height, unit}) autoguardado tras la primera edición (`touched` ref) + «Borrar mis datos».
 - **Móvil + contraste (17-Oct-2026)**: peso y estatura se **apilan a ancho completo** (el sufijo kg/lb no cabe a 2 columnas en pantallas ≤360px) y recuperan `sm:grid-cols-2`; inputs con la receta de §3.3 (foco `ring-2` canónico) y botón kg/lb `text-gray-900` sobre `bg-cuerpo-lighter` con hover `hover:bg-cuerpo-light dark:hover:bg-cuerpo` (los `/opacidad` previos eran clases muertas).
 
+### Calculadora de sueldo neto (descuentos laborales RD, 17-Oct-2026, ref. `components/tools/net-salary-calculator/`)
+
+Evolución de «ingreso único»: bruto → neto con dos capas (porcentaje con tope + impuesto por tramos).
+
+- **Formulario**: salario bruto con la receta canónica (`DollarSign` + `pl-10`) + chips de preset monetario (RD$25,000/50,000/100,000, activo outline) + campo opcional «otros descuentos» con tooltip ⓘ; patrón D (`holentia:calculadora-sueldo-neto:draft:v1`).
+- **Resultado**: hero ToolCard (neto mensual con count-up a 2 decimales, «≈ por quincena» y tasa efectiva) + tarjeta de desglose con sub-labels `text-xs` por fila (tope de SFS/AFP cuando aplica, tramo de ISR), neta `font-bold text-finanzas-dark dark:text-finanzas-lighter` y caja interna `rounded-lg bg-gray-50 p-4 dark:bg-gray-700/50` («Cómo se calculó tu ISR»: base anual, tramo, anual ÷ 12).
+- **Cifras vigentes**: strip `grid sm:grid-cols-3` con la receta de mini-chips del aguinaldo (SFS 3.04%, AFP 2.87%, escala ISR) + nota legal con fuentes (Resolución 01-2025 TSS · escala DGII 2026).
+- **Dominio**: constantes (tasas, topes y tramos) en el módulo del componente con comentario de fuente; ISR sobre `bruto anual − TSS` (exento hasta 416,220.01 · 15% · 31,216+20% · 79,776+25%).
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.

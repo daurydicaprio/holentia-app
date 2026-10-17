@@ -85,6 +85,10 @@ const localStorageKeys = [
     desc: "Borrador de la calculadora de aguinaldo",
   },
   {
+    key: "holentia:calculadora-sueldo-neto:draft:v1",
+    desc: "Borrador de la calculadora de sueldo neto (salario y otros descuentos)",
+  },
+  {
     key: "holentia:calculadora-itbis:draft:v1",
     desc: "Borrador de la calculadora de ITBIS",
   },

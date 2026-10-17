@@ -17,7 +17,7 @@ holentia/
 │   ├── relaciones/           # Página de la sección relaciones
 │   ├── cuerpo/               # Página de la sección cuerpo
 │   ├── finanzas/             # Página de la sección finanzas
-│   ├── {slug}/               # Páginas de las 27 herramientas (una carpeta por slug)
+│   ├── {slug}/               # Páginas de las 28 herramientas (una carpeta por slug)
 │   ├── que-es-holentia/      # Página informativa sobre Holentia
 │   ├── aviso-legal/          # Página con el aviso legal
 │   ├── politica-cookies/     # Página con la política de cookies
@@ -30,7 +30,7 @@ holentia/
 │   │                         # mobile-fab, scroll-to-top, tab-swipe-navigation, clear-all-data
 │   ├── sections/             # Hub de sección: section-page, section-tabs, section-header,
 │   │                         # section-swipe-navigation, tool-card, tools-grid
-│   ├── tools/                # 27 componentes client de herramientas (+ subcomponentes)
+│   ├── tools/                # 28 componentes client de herramientas (+ subcomponentes)
 │   ├── tool-seo/             # Shell server: tool-page-shell, tool-faq (acordeón), json-ld
 │   ├── seo/                  # og-template (plantilla compartida de las imágenes OG)
 │   ├── ui/                   # Primitivas de interfaz (button, input, slider, count-up)
@@ -46,7 +46,7 @@ holentia/
 │   └── utils.ts              # Funciones de utilidad
 ├── types/                    # Definiciones de tipos
 │   └── index.ts              # Tipos principales
-├── app/sitemap.ts            # Sitemap XML (37 URLs)
+├── app/sitemap.ts            # Sitemap XML (38 URLs)
 ├── app/robots.ts             # Robots.txt
 ├── app/manifest.ts           # Manifest PWA (iconos 192/512/maskable)
 ├── app/error.tsx             # Página de error de ruta
@@ -89,12 +89,12 @@ holentia/
 ## SEO y Rendimiento
 
 - **Páginas de herramienta server-rendered**: cada herramienta usa `ToolPageShell` (server component) con H1, descripción y FAQ en el HTML inicial; la interactividad vive dentro como client components
-- **Metadata por página**: `generateMetadata` en las 27 herramientas, las 4 secciones, el home y las páginas informativas (title, description, canonical, openGraph, twitter) con template global `{página} | HOLENTIA` en `app/layout.tsx`
+- **Metadata por página**: `generateMetadata` en las 28 herramientas, las 4 secciones, el home y las páginas informativas (title, description, canonical, openGraph, twitter) con template global `{página} | HOLENTIA` en `app/layout.tsx`
 - **Datos estructurados JSON-LD**: `WebApplication` + `BreadcrumbList` + `FAQPage` por herramienta, `CollectionPage` + `BreadcrumbList` por sección, `WebSite` + `Organization` en el home, `FAQPage` en Ayuda
-- **FAQ visible en el HTML inicial** de las 27 herramientas (acordeón, no escondido tras hydration gates) y de `/ayuda` — los hubs de sección no llevan FAQ
-- **`app/sitemap.ts`**: 37 URLs (home, 4 secciones, 27 herramientas, 5 informativas)
+- **FAQ visible en el HTML inicial** de las 28 herramientas (acordeón, no escondido tras hydration gates) y de `/ayuda` — los hubs de sección no llevan FAQ
+- **`app/sitemap.ts`**: 38 URLs (home, 4 secciones, 28 herramientas, 5 informativas)
 - **`app/robots.ts`**: permite todo y apunta al sitemap
-- **`public/llms.txt`**: índice legible por LLMs con las 27 herramientas y sus fórmulas
+- **`public/llms.txt`**: índice legible por LLMs con las 28 herramientas y sus fórmulas
 - **Enlaces a herramientas en el HTML inicial** de las secciones (tabs y tarjetas server-rendered, sin `mounted` guard)
 - **Errores**: `app/error.tsx` + `app/global-error.tsx`; `app/ayuda/loading.tsx` con skeleton real
 
@@ -127,7 +127,7 @@ La aplicación está dividida en cuatro secciones principales, cada una con su p
 - **Plan de pasos 5-10-20**: objetivo diario, plan por bloques de minutos y registro con racha
 - **Calculadora de IMC**: peso, estatura, banda OMS, rango saludable y contexto honesto
 
-### Finanzas (15)
+### Finanzas (16)
 - **Crear presupuesto personal**: ingresos y gastos con tablas editables y visualización
 - **Calculadora de interés compuesto**: rendimiento de inversiones con aportes, inflación y gráfico
 - **Calculadora de préstamo**: cuota mensual, interés total y tabla de amortización
@@ -139,6 +139,7 @@ La aplicación está dividida en cuatro secciones principales, cada una con su p
 - **Glosario financiero**: términos de ahorro, crédito, intereses, fondos, bolsa y depósitos
 - **Tracker de gastos hormiga**: gastos pequeños anualizados con proporción y tips de ahorro
 - **Calculadora de aguinaldo**: doble sueldo de diciembre, proporcional y exento de ISR/TSS
+- **Calculadora de sueldo neto**: de bruto a neto con TSS (SFS/AFP) e ISR por tramos
 - **Calculadora de ITBIS**: agrega o quita el 18% (y 16% reducido) con base, impuesto y total
 - **Calculadora de certificado financiero**: interés, retención del 10% y ganancia neta
 - **Planificador de ahorros**: cuándo llegas a tu meta y cuánto aportar al mes
@@ -176,7 +177,7 @@ La fuente única de verdad es **`design.md`** (paleta completa, tipografía Inte
 - No utilizamos cookies de seguimiento o análisis
 - No compartimos información con terceros
 - No creamos perfiles de usuario
-- Los datos de herramientas se guardan solo en localStorage del navegador, bajo claves `holentia:{herramienta}:{draft|simulations|entries}:v1` (31 claves activas, listadas en la Política de Cookies)
+- Los datos de herramientas se guardan solo en localStorage del navegador, bajo claves `holentia:{herramienta}:{draft|simulations|entries}:v1` (32 claves activas, listadas en la Política de Cookies)
 - Cada herramienta tiene botón «Borrar mis datos» y Ayuda permite borrarlo todo
 - No hay servidores backend que almacenen información personal
 - Solo usamos cookies técnicas esenciales (preferencias de tema)
@@ -229,4 +230,4 @@ Este proyecto es propiedad de Daury DiCaprio. Todos los derechos reservados.
 
 ---
 
-**Última actualización**: Octubre 2026 (27 herramientas y 37 URLs, pase UI/UX móvil completo —contraste AA, tap targets, inputs sin zoom iOS—, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`)
+**Última actualización**: Octubre 2026 (28 herramientas y 38 URLs, pase UI/UX móvil completo —contraste AA, tap targets, inputs sin zoom iOS—, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`)

@@ -4,10 +4,10 @@
 > Prod `holentia.com → main`. No tocar dominios.
 > Principios: sin DB, sin registro, local-first privado (`holentia:*` en navegador), cero tracking.
 
-## Estado actual (17-Oct-2026) — 27 herramientas en `dev` y en `main`; SEO/GEO y pase UI/UX móvil completos
+## Estado actual (17-Oct-2026) — 28 herramientas en `dev` y en `main`; SEO/GEO y pase UI/UX móvil completos
 - [x] Stack: Next 15.5.26 + React 19.3 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
-- [x] Cobertura: **27 herramientas** activas + 17 tarjetas «Próximamente» intactas en `lib/data.ts`; sitio de **37 URLs** (home + 4 hubs + 27 herramientas + 5 informativas)
-- [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite), OG por ruta (**37 archivos**), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 37 URLs con lastmod fijo, llms.txt 27 tools; auditorías registradas en la skill `seo-geo-audit`
+- [x] Cobertura: **28 herramientas** activas + 17 tarjetas «Próximamente» intactas en `lib/data.ts`; sitio de **38 URLs** (home + 4 hubs + 28 herramientas + 5 informativas)
+- [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite), OG por ruta (**38 archivos**), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 38 URLs con lastmod fijo, llms.txt 28 tools; auditorías registradas en la skill `seo-geo-audit`
 - [x] UI/UX móvil: pase completo por herramientas (cuerpo, mente, relaciones, finanzas ×3) y superficies globales (chrome, hubs, informativas, shell) — contraste AA con tiers por sección, tap targets ≥40/44px, inputs ≥16px sin zoom iOS, recetas en `design.md`
 - [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` actualizado a `1afe1a0` (17-Oct)**
 - [x] `tsc 0 errores + next build OK + pnpm lint 0` en estricto
@@ -409,6 +409,15 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AY — Herramienta nueva: calculadora de sueldo neto (TSS + ISR 2026) (17-Oct-2026) — HECHA
+
+- [x] **Herramienta nueva** (28ª, card `calculadora-sueldo-neto`): de bruto a neto con desglose de la TSS (SFS 3.04% tope RD$232,230 · AFP 2.87% tope RD$464,460 — Resolución 01-2025, vigente desde feb-2026) y retención de ISR por tramos de la DGII (base anual = bruto − TSS, ÷ 12); héroe con neto mensual, «≈ por quincena», neto anual y tasa efectiva de descuentos; presets de salario y campo opcional de otros descuentos fijos. Patrón D (`holentia:calculadora-sueldo-neto:draft:v1`).
+- [x] **SEO/GEO**: metaTitle «Calculadora de sueldo neto RD 2026 (TSS e ISR)» (47 ch) · metaDescription 144 ch; FAQ ×6 (bruto vs. neto, topes TSS 2026, cálculo del ISR, quincena, bonificaciones, privacidad); OG propia (`app/calculadora-sueldo-neto/opengraph-image.tsx`); hub de finanzas actualizado automáticamente.
+- [x] **Verificación**: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` (smoke completo del sitio, OG runtime `200 image/png`).
+- [x] **Docs/recuentos**: llms.txt 28 (header + sección Finanzas + línea), README y architecture con los recuentos al día (28 herramientas / 38 URLs / 32 claves), clave nueva en `politica-cookies`; receta `design.md` §4 «Calculadora de sueldo neto (descuentos laborales RD)».
+
+---
+
 ## Backlog propuesto (17-Oct-2026, pendiente de decisión)
 
 Sin fase asignada; se convierte en fase al aprobar el frente. Candidatos analizados tras cerrar el pase UI/UX:
@@ -416,10 +425,10 @@ Sin fase asignada; se convierte en fase al aprobar el frente. Candidatos analiza
 1. ~~Auditoría integral de cierre~~ **HECHA (Fase AW)**: `pnpm audit:seo` valida las 37 rutas en un paso (SEO/GEO + estructura a11y + runtime OG); barrido 37/37 PASS.
 2. **Accesibilidad más allá del color**: skip link, landmarks y `<main>` único **ya hechos (Fase AW)**; pendiente el barrido axe/DOM en navegador real (este entorno no trae Chrome: se hará en dispositivo) y la revisión de foco/orden de tabulación.
 3. ~~Rendimiento móvil~~ **HECHO (Fase AX)**: lazy-load de Chart.js y de paneles pesados (compuesto 251→139 kB, riesgo 220→151 kB, préstamo 186→145 kB First Load) + framer-motion fuera del camino crítico. Pendiente de campo: CWV reales (Lighthouse/PSI) sobre `dev.holentia.com` tras el deploy.
-4. **Directorio `/herramientas`**: índice de las 27 con filtro por sección (server-rendered) + enlaces desde home/footer — descubribilidad y SEO interno.
+4. **Directorio `/herramientas`**: índice de las 28 con filtro por sección (server-rendered) + enlaces desde home/footer — descubribilidad y SEO interno.
 5. **«Mis datos»**: exportar/importar JSON de las claves `holentia:*` (respaldo local, sin nube) + enlace en `/ayuda`.
 6. **PWA offline**: service worker para que las herramientas funcionen sin conexión (manifest y iconos ya existen).
-7. **Nuevas herramientas** (a especificar con el dueño; keywords RD): sueldo neto (TSS + ISR), prestaciones laborales/indemnización, proteína diaria… — con la receta `create-tool`.
+7. **Nuevas herramientas** (a especificar con el dueño; keywords RD): ~~sueldo neto (TSS + ISR)~~ **HECHA (Fase AY)**; pendientes: prestaciones laborales/indemnización, proteína diaria… — con la receta `create-tool`.
 8. **Infra de calidad**: CI (GitHub Actions: `tsc` + `lint` + `build` en push a `dev`) y Vitest para los parsers/formatters (hoy sus casos se prueban ad hoc).
 
 ---

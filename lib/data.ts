@@ -459,6 +459,17 @@ export const sectionsData: Record<string, SectionData> = {
           "Calcula tu aguinaldo o doble sueldo de diciembre en RD: 1/12 del salario del año, proporcional a los meses trabajados, exento de ISR y TSS. Gratis.",
       },
       {
+        id: "calculadora-sueldo-neto",
+        title: "Calculadora de Sueldo Neto",
+        description: "De bruto a neto: TSS, ISR y otros descuentos.",
+        slug: "calculadora-sueldo-neto",
+        isAvailable: true,
+        category: "finanzas",
+        metaTitle: "Calculadora de sueldo neto RD 2026 (TSS e ISR)",
+        metaDescription:
+          "Calcula tu sueldo neto en RD al instante: descuentos de TSS (SFS y AFP) y retención de ISR con las tasas y topes vigentes en 2026. Sin registro.",
+      },
+      {
         id: "calculadora-itbis",
         title: "Calculadora de ITBIS",
         description: "Agrega o quita el ITBIS de un precio.",
