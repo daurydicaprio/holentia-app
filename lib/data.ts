@@ -257,7 +257,7 @@ export const sectionsData: Record<string, SectionData> = {
       "El control de tu dinero empieza hoy. Organiza tus gastos, descubre cuánto puede rendir tu ahorro, compara préstamos y tarjetas antes de firmar y entiende al detalle tu factura de luz. Cada paso te acerca a tus metas.",
     text: "Domina tus finanzas. Herramientas para presupuestar, invertir y alcanzar tus metas económicas.",
     metaDescription:
-      "Presupuesto 50/30/20, interés compuesto, préstamos, tarjetas, gasto de combustible y factura eléctrica. Calculadoras gratuitas en tu navegador.",
+      "Presupuesto, interés compuesto, préstamos, tarjetas, combustible, factura eléctrica y aguinaldo. Calculadoras gratuitas en tu navegador.",
     cards: [
       {
         id: "crear-presupuesto-personal",
@@ -384,6 +384,17 @@ export const sectionsData: Record<string, SectionData> = {
         metaTitle: "Tracker de gastos hormiga: cuánto gastas al año",
         metaDescription:
           "Registra café, delivery, snacks y otros gastos pequeños: mira cuánto suman al día, al mes y al año. Gratis y sin registro.",
+      },
+      {
+        id: "calculadora-aguinaldo",
+        title: "Calculadora de Aguinaldo",
+        description: "Calcula tu doble sueldo de diciembre.",
+        slug: "calculadora-aguinaldo",
+        isAvailable: true,
+        category: "finanzas",
+        metaTitle: "Calculadora de aguinaldo RD: doble sueldo 2026",
+        metaDescription:
+          "Calcula tu aguinaldo o doble sueldo de diciembre en RD: 1/12 del salario del año, proporcional a los meses trabajados, exento de ISR y TSS. Gratis.",
       },
     ],
   },

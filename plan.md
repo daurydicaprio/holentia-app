@@ -132,6 +132,17 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase W — Finanzas: Calculadora de Aguinaldo (17-Oct-2026) — HECHA
+
+- [x] **Nueva herramienta `/calculadora-aguinaldo` (15ª del sitio)**: salario mensual ordinario + meses trabajados (slider 1–12) → aguinaldo = salario × meses ÷ 12; hero gradiente con count-up, desglose contable (salario del año, duodécima parte, «Descuentos RD$ 0.00 — exento»), mini-chips legales (exento de ISR, sin AFP ni ARS, pago antes del 20 de dic) y nota legal.
+- [x] **Investigación previa (fuentes)**: arts. 219–222 del Código de Trabajo (1/12, proporcional, pago a más tardar el 20 dic), Ley 30-26 jun-2026 (exención completa de ISR), TSS no cotizable, DGII. Fuentes: DGII, Pellerano & Herrera, Revista Mercado, Siempre Al Día.
+- [x] **Persistencia** patrón D draft: `holentia:calculadora-aguinaldo:draft:v1` (registrada en `politica-cookies`; FAQ de privacidad incluida). Card activada en `lib/data.ts` (metaTitle 46 ch · metaDescription 147 ch) → sitemap y hub automáticos; `LAST_UPDATED` → 2026-10-17; `metaDescription` del hub finanzas sin «50/30/20» y con aguinaldo.
+- [x] **SEO/GEO**: `app/calculadora-aguinaldo/opengraph-image.tsx` propia; `llms.txt` 14→15 herramientas; FAQ ×6 (qué es y cuándo, proporcional, ISR, AFP/ARS, qué salarios cuentan, privacidad).
+- [x] **Docs**: `design.md` §4 receta «Calculadora de ingreso único (aguinaldo)»; README/architecture recuentos 15 herramientas / 25 URLs.
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke (title/desc/canonical/FAQ JSON-LD, sitemap 25 URLs, og runtime 200 image/png).
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

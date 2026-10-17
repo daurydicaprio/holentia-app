@@ -222,6 +222,15 @@ Receta canónica para calculadoras/tests con varios campos (refs: `compound-inte
 - **Bloque de tips de ahorro** (cuando la herramienta los tenga): tarjeta a ancho del grid con icono `Lightbulb text-{s}` + título `text-lg font-bold`, lista en `grid sm:grid-cols-2` con bullets `h-1.5 w-1.5 rounded-full bg-{s}` y líneas `text-sm text-gray-600 dark:text-gray-300` (breve: 4–6 tips de una línea).
 - **Lista de entradas con proporción** (trackers tipo gastos hormiga): filas `rounded-xl border border-gray-200 dark:border-gray-700` con nombre + frecuencia, monto anual `font-semibold tabular-nums text-{s}-dark dark:text-{s}-light`, `%` sobre el total en `text-xs` y barra `h-1.5 rounded-full bg-gray-100 dark:bg-gray-700` con relleno `bg-{s} dark:bg-{s}-light`; acciones de fila (editar/borrar) con hit area `h-11 w-11` (`aria-label` por fila). Hero de total anual en panel gradiente con `aria-live="polite"` + stats `rounded-lg bg-black/10 p-3`.
 
+### Calculadora de ingreso único (aguinaldo, ref. `components/tools/aguinaldo-calculator/`)
+
+Patrón de un dato económico + resultado desglosado (2 columnas: form `lg:col-span-2` `h-fit` / resultado `lg:col-span-3`):
+
+- **Formulario**: input de dinero formateado con comas (`DollarSign` + `pl-10`) y slider 1–12 con número grande `text-4xl font-bold text-{s} dark:text-{s}-light` + leyendas `1 / 12` en `text-xs`.
+- **Resultado**: hero gradiente ToolCard (`aria-live="polite"` + count-up, dato único) + tarjeta de desglose contable: filas `justify-between py-1.5 text-sm tabular-nums`, fila de exención («Descuentos: RD$ 0.00»), divisor `border-t border-gray-200 dark:border-gray-700` y fila neta `font-bold text-{s}-dark dark:text-{s}-light`.
+- **Mini-chips legales** (`grid sm:grid-cols-3 gap-3`): celda `rounded-lg border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-800` con icono `h-4 w-4 text-{s}`, título `text-sm font-semibold` y detalle `text-xs text-gray-500 dark:text-gray-400`.
+- **Nota legal**: `rounded-lg bg-finanzas-lighter p-3 text-xs text-gray-800 dark:bg-finanzas-dark dark:text-gray-200` + icono `Info`.
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.

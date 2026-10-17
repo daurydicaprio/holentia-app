@@ -76,6 +76,10 @@ const localStorageKeys = [
     key: "holentia:tracker-gastos-hormiga:entries:v1",
     desc: "Tus gastos anotados en el tracker de gastos hormiga",
   },
+  {
+    key: "holentia:calculadora-aguinaldo:draft:v1",
+    desc: "Borrador de la calculadora de aguinaldo",
+  },
 ]
 
 const notUsedItems = [
