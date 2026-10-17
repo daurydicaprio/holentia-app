@@ -302,6 +302,15 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AO — Cuerpo: pulido de la calculadora de hidratación (17-Oct-2026) — HECHA
+
+- [x] **FAQ ×6**: nueva «¿El café, el té o las infusiones cuentan como agua?» (EFSA: todas las bebidas cuentan; azucaradas con moderación).
+- [x] **Meta corregida**: la metaDescription decía «fórmula de Watson ajustada» y el cálculo real es 35 ml/kg + ajustes aditivos EFSA/NASEM; metaTitle ahora cita la referencia (46 ch) y la meta describe el plan por horas (142 ch).
+- [x] **Consistencia**: números a `es-DO`, 0 clases `amber-*` (tokens `cuerpo`), héroe con variante dark y chips internos con contraste corregido (texto oscuro sobre el gradiente ámbar).
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke + auditoría targeted PASS.
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

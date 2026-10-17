@@ -134,8 +134,8 @@ export function HydrationCalculator() {
   const chipClass = (active: boolean) =>
     `p-3 rounded-xl border-2 font-medium transition-[colors,transform] duration-150 active:scale-[0.97] text-center flex flex-col items-center gap-1 ${
       active
-        ? "border-cuerpo-dark bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 shadow-sm"
-        : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-amber-300 dark:hover:border-amber-700"
+        ? "border-cuerpo bg-cuerpo-lighter text-cuerpo-darkest shadow-sm dark:border-cuerpo-light dark:bg-cuerpo-dark dark:text-cuerpo-lighter"
+        : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-cuerpo-light dark:hover:border-cuerpo-light"
     }`
 
   const glasses = result ? Math.round(result.direct / 250) : 0
@@ -225,23 +225,23 @@ export function HydrationCalculator() {
               <p className="text-sm mt-1">y aquí verás cuánta agua necesitas hoy.</p>
             </div>
           ) : (
-            <div aria-live="polite" className="animate-result-in bg-gradient-to-br from-cuerpo to-cuerpo-dark rounded-xl p-8 shadow-lg text-black text-center h-full flex flex-col justify-center">
+            <div aria-live="polite" className="animate-result-in bg-gradient-to-br from-cuerpo to-cuerpo-dark rounded-xl p-8 shadow-lg text-black text-center h-full flex flex-col justify-center dark:bg-none dark:bg-cuerpo-glass dark:text-cuerpo-text">
               <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Tu hidratación diaria</div>
-              <div className="text-6xl font-bold tabular-nums">{animatedDirect.toLocaleString("es-ES")}</div>
+              <div className="text-6xl font-bold tabular-nums">{animatedDirect.toLocaleString("es-DO")}</div>
               <div className="text-lg opacity-90 mt-1">
-                ml a beber al día · agua total {animatedTotal.toLocaleString("es-ES")} ml
+                ml a beber al día · agua total {animatedTotal.toLocaleString("es-DO")} ml
               </div>
 
               <div className="grid grid-cols-3 gap-2 mt-6 text-center">
-                <div className="bg-white text-amber-900 font-bold shadow-md border border-white rounded-lg py-2 px-1 text-sm">
+                <div className="bg-white text-cuerpo-darkest font-bold shadow-md border border-white rounded-lg py-2 px-1 text-sm">
                   <div className="text-xs opacity-70">Vasos 250 ml</div>
                   <div className="font-bold tabular-nums">{glasses}</div>
                 </div>
-                <div className="bg-white/10 text-white border border-white/30 rounded-lg py-2 px-1 text-sm">
+                <div className="bg-black/10 text-black/80 border border-black/15 dark:bg-white/10 dark:text-cuerpo-lighter dark:border-white/20 rounded-lg py-2 px-1 text-sm">
                   <div className="text-xs opacity-90">Botellas 500 ml</div>
                   <div className="font-bold tabular-nums">{bottles}</div>
                 </div>
-                <div className="bg-white/10 text-white border border-white/30 rounded-lg py-2 px-1 text-sm">
+                <div className="bg-black/10 text-black/80 border border-black/15 dark:bg-white/10 dark:text-cuerpo-lighter dark:border-white/20 rounded-lg py-2 px-1 text-sm">
                   <div className="text-xs opacity-90">Litros</div>
                   <div className="font-bold tabular-nums">{liters} L</div>
                 </div>
@@ -293,7 +293,7 @@ export function HydrationCalculator() {
                     {step.time}
                   </div>
                   <div className="font-bold text-sky-700 dark:text-sky-300 tabular-nums text-lg leading-tight">
-                    {ml.toLocaleString("es-ES")} ml
+                    {ml.toLocaleString("es-DO")} ml
                   </div>
                   <div className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">{step.label}</div>
                 </div>

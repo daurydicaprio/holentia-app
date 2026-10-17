@@ -22,6 +22,11 @@ const faq: FaqItem[] = [
       "Alrededor del 20% del agua que necesitas la aportan los alimentos sólidos (frutas, sopas, etc.). Por eso la calculadora separa el agua total del agua potable directa, que es la que realmente tienes que beber.",
   },
   {
+    question: "¿El café, el té o las infusiones cuentan como agua?",
+    answer:
+      "Sí, cuentan: la EFSA incluye todas las bebidas en el agua del día. El café y el té hidratan en cantidades normales; las bebidas azucaradas también aportan líquido, pero suman azúcar de más: mejor moderarlas.",
+  },
+  {
     question: "¿Los ajustes de actividad y clima se multiplican?",
     answer:
       "No. Son ajustes aditivos en mililitros: se suman al base de 35 ml/kg, pero no se multiplican entre sí, tal como recomiendan las guías de referencia.",

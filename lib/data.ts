@@ -221,9 +221,9 @@ export const sectionsData: Record<string, SectionData> = {
         slug: "calculadora-hidratacion",
         isAvailable: true,
         category: "cuerpo",
-        metaTitle: "Calculadora de hidratación diaria",
+        metaTitle: "Calculadora de hidratación diaria (EFSA/NASEM)",
         metaDescription:
-          "Calcula cuánta agua necesitas al día según tu peso, nivel de actividad y clima (fórmula de Watson ajustada). Resultado inmediato en tu navegador.",
+          "Calcula cuánta agua necesitas al día según tu peso, nivel de actividad y clima (35 ml/kg + ajustes EFSA/NASEM). Con plan de reparto por horas.",
       },
       {
         id: "calculadora-imc",
