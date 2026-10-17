@@ -396,6 +396,17 @@ export const sectionsData: Record<string, SectionData> = {
         metaDescription:
           "Calcula tu aguinaldo o doble sueldo de diciembre en RD: 1/12 del salario del año, proporcional a los meses trabajados, exento de ISR y TSS. Gratis.",
       },
+      {
+        id: "calculadora-itbis",
+        title: "Calculadora de ITBIS",
+        description: "Agrega o quita el ITBIS de un precio.",
+        slug: "calculadora-itbis",
+        isAvailable: true,
+        category: "finanzas",
+        metaTitle: "Calculadora de ITBIS 18% (agregar y quitar)",
+        metaDescription:
+          "Agrega o quita el ITBIS de un precio con la tasa general del 18% o la reducida del 16%: obtén base, impuesto y total al instante. Gratis.",
+      },
     ],
   },
 }

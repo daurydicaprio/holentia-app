@@ -13,7 +13,7 @@ lib/data.ts (catálogo: sectionsData)
    ├── app/{mente,relaciones,cuerpo,finanzas}/page.tsx  → SectionPage (server)
    │       └── ToolsGrid → ToolCard (client, gradiente por sección)
    │
-   ├── app/{slug}/page.tsx  (15 herramientas)
+   ├── app/{slug}/page.tsx  (16 herramientas)
    │       ├── generateMetadata() ← lib/seo.ts (title/canonical/OG)
    │       └── ToolPageShell (server: H1, botones, FAQ acordeón, JsonLd)
    │               └── children = componente client de la herramienta
@@ -37,7 +37,7 @@ Regla: nada de `useEffect`/`mounted` guard para decidir si se renderiza contenid
 - **Metadata**: `lib/seo.ts` expone `toolMetadata`, `sectionMetadata`, `pageMetadata` (construyen title + description + canonical + OG + Twitter). `app/layout.tsx` pone `metadataBase`, `title.template` ("{página} | HOLENTIA") y `viewport`.
 - **JSON-LD**: `toolJsonLd` (WebApplication + BreadcrumbList + FAQPage), `sectionJsonLd` (CollectionPage + BreadcrumbList), home (WebSite + Organization), `/ayuda` (FAQPage). Se emite vía `<JsonLd>` (script `application/ld+json`).
 - **FAQ visible**: cada herramienta renderiza su FAQ en el HTML (acordeón, pero el texto está en el DOM) y `/ayuda`. Los hubs de sección **no** llevan FAQ (corrección 14-Oct-2026).
-- **Indexación**: `app/sitemap.ts` (25 URLs: home + 4 secciones + 15 herramientas + 5 informativas), `app/robots.ts` (allow all + sitemap), `public/llms.txt` (índice legible por LLMs).
+- **Indexación**: `app/sitemap.ts` (26 URLs: home + 4 secciones + 16 herramientas + 5 informativas), `app/robots.ts` (allow all + sitemap), `public/llms.txt` (índice legible por LLMs).
 - El breadcrumb **no se muestra al usuario**; solo existe como `BreadcrumbList` en JSON-LD.
 
 ## 4. Color y theming
@@ -55,12 +55,12 @@ Regla: nada de `useEffect`/`mounted` guard para decidir si se renderiza contenid
 ## 6. Estructura de directorios
 
 ```
-app/           páginas (server-first): 4 hubs, 15 herramientas, 5 informativas, layout, error, sitemap, robots
+app/           páginas (server-first): 4 hubs, 16 herramientas, 5 informativas, layout, error, sitemap, robots
 components/
   common/      header, footer, logo, menu-button, scroll-to-top, clear-all-data, tab-swipe-navigation
   sections/    section-page, section-tabs, section-header, section-swipe-navigation, tool-card, tools-grid
   tool-seo/    tool-page-shell, tool-faq (acordeón), json-ld
-  tools/       15 componentes client de herramientas (+ subcomponentes)
+  tools/       16 componentes client de herramientas (+ subcomponentes)
   ui/          primitivas shadcn (button, count-up, input, slider)
 hooks/         lógica por herramienta + use-count-up, use-haptic-feedback, use-media-query
 lib/           data.ts (catálogo), seo.ts, storage.ts, utils.ts

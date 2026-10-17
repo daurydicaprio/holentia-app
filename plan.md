@@ -143,6 +143,16 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase X — Finanzas: Calculadora de ITBIS (17-Oct-2026) — HECHA
+
+- [x] **Nueva herramienta `/calculadora-itbis` (16ª del sitio)**: modos agregar (base × 1.18) y quitar (total ÷ 1.18 — evita el error de multiplicar por 0.82) con tasas 18% general / 16% reducida (café, azúcar, cacao y chocolate, yogurt, mantequilla y grasas); hero con count-up adaptado al modo, desglose base/ITBIS/total y mini-chips de tasas.
+- [x] **Persistencia** patrón D draft: `holentia:calculadora-itbis:draft:v1` (registrada en `politica-cookies`; FAQ de privacidad incluida). Card activada en `lib/data.ts` (metaTitle 43 ch · metaDescription 137 ch) → sitemap y hub automáticos (26 URLs).
+- [x] **SEO/GEO**: `app/calculadora-itbis/opengraph-image.tsx` propia; `llms.txt` 15→16 herramientas; FAQ ×6 (qué es, agregar, quitar sin ×0.82, 16% reducido, precios al público, privacidad).
+- [x] **Docs**: `design.md` §4 receta «Calculadora de impuesto con modo agregar/quitar»; recuentos 16 herramientas / 26 URLs.
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke (title/desc/canonical/FAQ JSON-LD, sitemap 26 URLs, og runtime 200 image/png).
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

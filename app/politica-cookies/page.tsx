@@ -80,6 +80,10 @@ const localStorageKeys = [
     key: "holentia:calculadora-aguinaldo:draft:v1",
     desc: "Borrador de la calculadora de aguinaldo",
   },
+  {
+    key: "holentia:calculadora-itbis:draft:v1",
+    desc: "Borrador de la calculadora de ITBIS",
+  },
 ]
 
 const notUsedItems = [

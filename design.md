@@ -231,6 +231,12 @@ Patrón de un dato económico + resultado desglosado (2 columnas: form `lg:col-s
 - **Mini-chips legales** (`grid sm:grid-cols-3 gap-3`): celda `rounded-lg border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-800` con icono `h-4 w-4 text-{s}`, título `text-sm font-semibold` y detalle `text-xs text-gray-500 dark:text-gray-400`.
 - **Nota legal**: `rounded-lg bg-finanzas-lighter p-3 text-xs text-gray-800 dark:bg-finanzas-dark dark:text-gray-200` + icono `Info`.
 
+### Calculadora de impuesto con modo agregar/quitar (ITBIS, ref. `components/tools/itbis-calculator/`)
+
+- **Modo**: segmented de 2 botones (`grid grid-cols-2 gap-2`): activo `bg-{s} text-white shadow-sm`, inactivo `bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600`; helper `text-xs` que explica el modo.
+- **Chips de tasa**: outline `{s}` activo / neutro inactivo (patrón tracker), con `aria-pressed` + haptic `light`.
+- **Resultado**: hero con count-up cuyo número es el «resultado del modo» (agregar → total; quitar → impuesto) + desglose base/impuesto/total con la fila total en `font-bold text-{s}-dark dark:text-{s}-light` (misma tarjeta de desglose del aguinaldo).
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.

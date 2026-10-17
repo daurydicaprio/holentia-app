@@ -4,7 +4,7 @@
 > Calculadoras, simuladores y tests que funcionan directamente en el navegador del usuario,
 > sin cuenta, sin registro y sin enviar datos a servidores.
 
-Las 15 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
+Las 16 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
 de cada herramienta, y los resultados son estimaciones educativas, no asesoramiento profesional
 (médico, financiero ni psicológico).
 
@@ -15,7 +15,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 - [Cuerpo](https://holentia.com/cuerpo): calculadora de calorías (Mifflin-St Jeor) e hidratación (EFSA/NASEM).
 - [Finanzas](https://holentia.com/finanzas): presupuesto, interés compuesto, préstamo, consumo eléctrico,
   gasto de combustible, corte/vencimiento de tarjeta, interés de tarjeta, perfil de riesgo, glosario financiero,
-  tracker de gastos hormiga y calculadora de aguinaldo.
+  tracker de gastos hormiga, calculadora de aguinaldo y calculadora de ITBIS.
 
 ## Herramientas
 
@@ -34,6 +34,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 - [Glosario financiero](https://holentia.com/glosario-financiero): términos de ahorro, crédito, intereses, fondos, bolsa y depósitos explicados con ejemplos.
 - [Tracker de gastos hormiga](https://holentia.com/tracker-gastos-hormiga): anota gastos pequeños y repetidos (café, delivery, recargas) y mira cuánto suman al día, al mes y al año.
 - [Calculadora de aguinaldo](https://holentia.com/calculadora-aguinaldo): el doble sueldo de diciembre: 1/12 del salario ordinario del año, proporcional a los meses trabajados y exento de ISR y TSS.
+- [Calculadora de ITBIS](https://holentia.com/calculadora-itbis): agrega o quita el ITBIS de un precio (18% general y 16% reducido) con base, impuesto y total al instante.
 
 ## Páginas informativas
 
