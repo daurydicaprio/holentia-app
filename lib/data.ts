@@ -284,10 +284,13 @@ export const sectionsData: Record<string, SectionData> = {
       {
         id: "planificador-ahorros",
         title: "Planificador de ahorros",
-        description: "Define objetivos y cómo alcanzarlos.",
+        description: "Cuándo llegas a tu meta y cuánto aportar.",
         slug: "planificador-ahorros",
-        isAvailable: false,
+        isAvailable: true,
         category: "finanzas",
+        metaTitle: "Planificador de ahorros: cuándo llegas a tu meta",
+        metaDescription:
+          "Planifica tu meta de ahorro: cuánto aportar al mes o cuánto tardarás, con rendimiento anual e interés compuesto. Gratis y sin registro.",
       },
       {
         id: "calculadora-prestamo",

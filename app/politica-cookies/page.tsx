@@ -88,6 +88,10 @@ const localStorageKeys = [
     key: "holentia:calculadora-certificado-financiero:draft:v1",
     desc: "Borrador de la calculadora de certificado financiero",
   },
+  {
+    key: "holentia:planificador-ahorros:draft:v1",
+    desc: "Borrador del planificador de ahorros",
+  },
 ]
 
 const notUsedItems = [

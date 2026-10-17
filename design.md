@@ -242,6 +242,12 @@ Patrón de un dato económico + resultado desglosado (2 columnas: form `lg:col-s
 - **Formulario**: monto (input moneda), tasa anual (input + `Percent`) y plazo con segmented de unidad (Días/Meses) + modalidad (Cada mes/Al vencimiento) en `grid grid-cols-2 gap-2`; helpers `text-xs` con referencias reales (7%–11% anual, 30–910 días).
 - **Desglose con retención**: filas depósito / interés bruto / retención en negativo (`− RD$…`) / ganancia neta `font-bold` + fila extra según modalidad (total al vencer o pago mensual `≈` + nº de meses) y cierre `text-xs` con rendimiento neto anual (tasa × 0.9).
 
+### Planificador de ahorros (meta + tiempo, ref. `components/tools/savings-planner/`)
+
+- **Modo** (¿Cuándo llego? / ¿Cuánto aporto?) con segmented `grid-cols-2`; inputs de dinero formateados + plazo en meses + tasa con helper «0% si solo guardas».
+- **Resultado**: hero con count-up cuyo dato es el tiempo (`X meses` + `≈ a años y b meses · llegas en {mes}`) o el aporte mensual; desglose meta/ya tienes/aportes/intereses con fila «Sale de tu bolsillo» en `font-bold`.
+- **Fecha objetivo solo en el cliente** (`mounted` + `Intl.DateTimeFormat("es-DO")`) para evitar desajustes de hidratación; estados borde «¡Ya alcanzaste tu meta!» y «plan > 100 años»; nota con enlace cruzado a la calculadora de interés compuesto.
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.

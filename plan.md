@@ -173,6 +173,17 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AA — Finanzas: Planificador de Ahorros (17-Oct-2026) — HECHA
+
+- [x] **Herramienta `/planificador-ahorros` activada (18ª del sitio)** (la card existía como «Próximamente»): dos modos — «¿Cuándo llego?» (meta + ahorro inicial + aporte mensual + rendimiento → meses y fecha estimada) y «¿Cuánto aporto?» (meta + plazo → aporte mensual necesario), con interés compuesto mensual.
+- [x] **Resultado**: hero con count-up (tiempo en meses o aporte mensual), desglose meta/ya tienes/aportes/intereses y «Sale de tu bolsillo»; estados borde (meta cubierta, plan > 100 años); fecha objetivo renderizada solo en el cliente; enlace cruzado a interés compuesto.
+- [x] **Persistencia** patrón D draft: `holentia:planificador-ahorros:draft:v1` (en `politica-cookies`; FAQ de privacidad). Card activada en `lib/data.ts` (metaTitle 48 ch · metaDescription 135 ch) → sitemap y hub automáticos (28 URLs).
+- [x] **SEO/GEO**: OG propia («Cuándo llegas a tu meta»); `llms.txt` 17→18; FAQ ×6 (cálculo, qué rendimiento, por qué invertir, aporte bajo, compras, privacidad).
+- [x] **Docs**: receta `design.md` §4 «Planificador de ahorros»; recuentos 18 herramientas / 28 URLs.
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke (title/desc/canonical/FAQ JSON-LD, sitemap 28 URLs, og runtime 200 image/png).
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit
