@@ -194,6 +194,15 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AC — Auditoría SEO/GEO/llms de todo el sitio + skill de auditoría (17-Oct-2026) — HECHA
+
+- [x] **Auditoría completa 29/29 PASS** (19 herramientas + 4 hubs + 5 informativas + home): títulos ≤60, descripciones 120–155 únicas, canonical/og:image/twitter propios, JSON-LD completo (WebApplication + BreadcrumbList + FAQPage), FAQ 5–6 visibles, línea en llms.txt, `<loc>` en sitemap, 0 `noindex`, 0 `new Date()` en estáticas; OG runtime **29/29 `200 image/png`**. Sin correcciones necesarias.
+- [x] **Skill nueva `seo-geo-audit`** (`.opencode/skills/seo-geo-audit/SKILL.md`): checklist de 16 puntos por herramienta, barrido estático + extras + runtime, severidad FAIL/WARN, flujo de corrección y registro de auditorías (primera fila: 17-Oct-2026).
+- [x] **Enganches al proceso**: `create-tool` §8 exige la auditoría antes del push; fila nueva en la tabla de skills de `AGENTS.md`; referencia cruzada en `seo-geo` §6.
+- Verificado: barrido completo estático + runtime OG 29/29 `200 image/png`.
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

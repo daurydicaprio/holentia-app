@@ -5,7 +5,7 @@ description: Use when creating a new HOLENTIA tool (herramienta nueva, nueva cal
 
 # Crear una herramienta nueva
 
-Receta canónica de punta a punta. Complementos: skill `section-ui` (UI/colores), `tool-persistence` (si guarda datos), `chart-chartsjs` (si tiene gráficos), **`seo-geo` (metadata, OG image, llms.txt, checklist SEO/GEO — OBLIGATORIO)**. Fuente de verdad de estilos: `design.md`.
+Receta canónica de punta a punta. Complementos: skill `section-ui` (UI/colores), `tool-persistence` (si guarda datos), `chart-chartsjs` (si tiene gráficos), **`seo-geo` (metadata, OG image, llms.txt, checklist SEO/GEO — OBLIGATORIO)** y **`seo-geo-audit` (auditoría final de 16 puntos — OBLIGATORIA antes del push)**. Fuente de verdad de estilos: `design.md`.
 
 ## 1. Elegir slug y sección
 
@@ -101,6 +101,8 @@ pnpm exec tsc --noEmit && pnpm lint && pnpm build
 ```
 
 Smoke SEO (skill `seo-geo` §6–7): en `.next/server/app/{slug}.html` comprobar `<title>`, `meta description`, `canonical`, `og:image`, `twitter:card` y JSON-LD con FAQPage. Y **smoke runtime del OG** (la URL en el HTML no garantiza que la imagen se genere): `pnpm start` + `curl -o /dev/null -w '%{http_code} %{content_type}' localhost:3000/{slug}/opengraph-image` → `200 image/png`.
+
+**Auditoría final de 16 puntos (obligatoria)**: cargar la skill `seo-geo-audit` y pasar su checklist §1 + barrido §2 sobre la herramienta nueva antes del push; ninguna herramienta se considera terminada sin los 16 puntos en PASS (y anotar la fila en su registro §4).
 
 ## 9. Mantenimiento de docs
 

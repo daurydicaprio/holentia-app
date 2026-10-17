@@ -57,6 +57,8 @@ Miguita: **solo en JSON-LD** (no UI visible — los botones Volver y el footer c
 
 ## 6. Checklist por herramienta nueva (obligatorio antes del push)
 
+> Procedimiento ampliado (16 puntos + barrido automatizado + criterios FAIL/WARN + registro): skill `seo-geo-audit`. Este es el mínimo.
+
 1. `metaTitle` ≤60 chars + `metaDescription` 120–155 chars en `lib/data.ts`.
 2. FAQ ≥5 preguntas reales en `app/{slug}/page.tsx` (`const faq` + `faq={faq}` al shell; una responde privacidad/local).
 3. `app/{slug}/opengraph-image.tsx` con `ogTemplate` (title/subtitle/alt propios).
