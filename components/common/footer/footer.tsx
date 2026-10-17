@@ -20,6 +20,7 @@ const fallbackLinkClass =
   "text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 underline underline-offset-2"
 
 const siteLinks = [
+  { href: "/herramientas", label: "Directorio de herramientas" },
   { href: "/que-es-holentia", label: "Qué es HOLENTIA" },
   { href: "/ayuda", label: "Ayuda" },
   { href: "/apoyar", label: "Apoyar" },

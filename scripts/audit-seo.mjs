@@ -28,7 +28,16 @@ const BASE = (process.env.AUDIT_BASE ?? `http://127.0.0.1:${PORT}`).replace(/\/$
 const USE_SERVER = !process.env.AUDIT_BASE;
 
 const HUBS = new Set(["/mente", "/relaciones", "/cuerpo", "/finanzas"]);
-const NON_TOOL = new Set(["/", ...HUBS, "/que-es-holentia", "/ayuda", "/apoyar", "/aviso-legal", "/politica-cookies"]);
+const COLLECTIONS = new Set([...HUBS, "/herramientas"]);
+const NON_TOOL = new Set([
+  "/",
+  ...COLLECTIONS,
+  "/que-es-holentia",
+  "/ayuda",
+  "/apoyar",
+  "/aviso-legal",
+  "/politica-cookies",
+]);
 
 const llms = readFileSync("public/llms.txt", "utf8");
 
@@ -120,7 +129,7 @@ function auditPage(path, html) {
   if (path === "/") {
     if (!has("WebSite")) fails.push("JSON-LD sin WebSite");
     if (!has("Organization")) fails.push("JSON-LD sin Organization");
-  } else if (HUBS.has(path)) {
+  } else if (COLLECTIONS.has(path)) {
     if (!has("CollectionPage")) fails.push("JSON-LD sin CollectionPage");
     if (!has("BreadcrumbList")) fails.push("JSON-LD sin BreadcrumbList");
   } else if (path === "/ayuda") {

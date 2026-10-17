@@ -210,6 +210,35 @@ export function sectionJsonLd(section: string) {
   }
 }
 
+/** JSON-LD del directorio de herramientas: CollectionPage + BreadcrumbList */
+export function directoryJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        name: `Directorio de herramientas | ${SITE_NAME}`,
+        url: `${SITE_URL}/herramientas`,
+        inLanguage: "es-DO",
+        description:
+          "Todas las herramientas de HOLENTIA en un solo lugar: calculadoras, simuladores y tests por sección, gratuitos y sin registro.",
+        isPartOf: {
+          "@type": "WebSite",
+          name: SITE_NAME,
+          url: SITE_URL,
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Inicio", item: SITE_URL },
+          { "@type": "ListItem", position: 2, name: "Directorio de herramientas", item: `${SITE_URL}/herramientas` },
+        ],
+      },
+    ],
+  }
+}
+
 /** JSON-LD mínimo para páginas informativas (AboutPage + BreadcrumbList) */
 export function pageJsonLd(name: string, path: string) {
   return {
