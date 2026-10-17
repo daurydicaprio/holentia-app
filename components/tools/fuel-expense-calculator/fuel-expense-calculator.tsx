@@ -79,12 +79,12 @@ function parseNum(input: string): number {
 }
 
 const inputClass =
-  "block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+  "block w-full rounded-md border border-gray-300 bg-white py-2.5 pl-10 pr-3 text-lg font-semibold text-gray-800 placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
 
 const chipClass = (selected: boolean) =>
-  `px-2.5 py-1 text-xs rounded-md font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
+  `px-2.5 py-2.5 text-xs rounded-md font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
     selected
-      ? "border border-finanzas text-finanzas dark:border-finanzas-light dark:text-finanzas-light"
+      ? "border border-finanzas text-finanzas-dark dark:border-finanzas-light dark:text-finanzas-lighter"
       : "border border-gray-200 text-gray-700 hover:border-gray-300 dark:border-gray-600 dark:text-gray-300 dark:hover:border-gray-500"
   }`
 
@@ -238,24 +238,23 @@ export function FuelExpenseCalculator() {
   return (
     <div className="grid lg:grid-cols-5 gap-6">
       {/* Controles */}
-      <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl p-5 shadow-lg">
+      <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
         <div className="space-y-4">
           {/* Precio por galón */}
           <Field
             id="precio-combustible"
             label="Precio del combustible"
             tooltipKey="precio"
-            icon={<DollarSign size={16} className="text-gray-400" />}
+            icon={<DollarSign size={16} className="text-gray-500 dark:text-gray-400" />}
             activeTooltip={activeTooltip}
             setActiveTooltip={setActiveTooltip}
           >
             <input
               id="precio-combustible"
-              type="number"
-              min={0}
+              type="text"
               inputMode="decimal"
               value={precioInput}
-              onChange={(e) => setPrecioInput(e.target.value)}
+              onChange={(e) => setPrecioInput(e.target.value.replace(/[^\d.,]/g, ""))}
               placeholder="Ej: 358"
               className={inputClass}
               data-interactive="true"
@@ -276,17 +275,16 @@ export function FuelExpenseCalculator() {
             id="distancia-viaje"
             label="Distancia por viaje"
             tooltipKey="distancia"
-            icon={<MapPin size={16} className="text-gray-400" />}
+            icon={<MapPin size={16} className="text-gray-500 dark:text-gray-400" />}
             activeTooltip={activeTooltip}
             setActiveTooltip={setActiveTooltip}
           >
             <input
               id="distancia-viaje"
-              type="number"
-              min={0}
+              type="text"
               inputMode="decimal"
               value={distanciaInput}
-              onChange={(e) => setDistanciaInput(e.target.value)}
+              onChange={(e) => setDistanciaInput(e.target.value.replace(/[^\d.,]/g, ""))}
               placeholder="Ej: 12"
               className={inputClass}
               data-interactive="true"
@@ -312,17 +310,16 @@ export function FuelExpenseCalculator() {
               id="viajes-dia"
               label="Viajes por día"
               tooltipKey="viajes"
-              icon={<Car size={16} className="text-gray-400" />}
+              icon={<Car size={16} className="text-gray-500 dark:text-gray-400" />}
               activeTooltip={activeTooltip}
               setActiveTooltip={setActiveTooltip}
             >
               <input
                 id="viajes-dia"
-                type="number"
-                min={1}
+                type="text"
                 inputMode="numeric"
                 value={viajesInput}
-                onChange={(e) => setViajesInput(e.target.value)}
+                onChange={(e) => setViajesInput(e.target.value.replace(/[^\d]/g, ""))}
                 placeholder="2"
                 className={inputClass}
                 data-interactive="true"
@@ -332,18 +329,16 @@ export function FuelExpenseCalculator() {
               id="dias-semana"
               label="Días por semana"
               tooltipKey="dias"
-              icon={<Calendar size={16} className="text-gray-400" />}
+              icon={<Calendar size={16} className="text-gray-500 dark:text-gray-400" />}
               activeTooltip={activeTooltip}
               setActiveTooltip={setActiveTooltip}
             >
               <input
                 id="dias-semana"
-                type="number"
-                min={1}
-                max={7}
+                type="text"
                 inputMode="numeric"
                 value={diasInput}
-                onChange={(e) => setDiasInput(e.target.value)}
+                onChange={(e) => setDiasInput(e.target.value.replace(/[^\d]/g, ""))}
                 placeholder="5"
                 className={inputClass}
                 data-interactive="true"
@@ -381,7 +376,7 @@ export function FuelExpenseCalculator() {
                     data-interactive="true"
                     className={`flex flex-col items-center gap-0.5 rounded-xl p-2 text-center transition-[colors,transform] duration-150 active:scale-[0.97] ${
                       selected
-                        ? "border-2 border-finanzas text-finanzas dark:border-finanzas-light dark:text-finanzas-light"
+                        ? "border-2 border-finanzas text-finanzas-dark dark:border-finanzas-light dark:text-finanzas-lighter"
                         : "border border-gray-200 text-gray-600 hover:border-gray-300 dark:border-gray-600 dark:text-gray-300 dark:hover:border-gray-500"
                     }`}
                   >
@@ -399,17 +394,16 @@ export function FuelExpenseCalculator() {
             id="consumo-kml"
             label="Consumo"
             tooltipKey="consumo"
-            icon={<Gauge size={16} className="text-gray-400" />}
+            icon={<Gauge size={16} className="text-gray-500 dark:text-gray-400" />}
             activeTooltip={activeTooltip}
             setActiveTooltip={setActiveTooltip}
           >
             <input
               id="consumo-kml"
-              type="number"
-              min={1}
+              type="text"
               inputMode="decimal"
               value={consumoInput}
-              onChange={(e) => setConsumoInput(e.target.value)}
+              onChange={(e) => setConsumoInput(e.target.value.replace(/[^\d.,]/g, ""))}
               placeholder="Ej: 13"
               className={inputClass}
               data-interactive="true"
@@ -443,10 +437,10 @@ export function FuelExpenseCalculator() {
           </div>
         ) : (
           <div aria-live="polite" className="animate-result-in bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border-2 border-finanzas-border flex flex-col">
-            <div className="bg-finanzas px-5 py-3 sm:px-6 sm:py-3.5 text-white text-center font-bold tracking-wide text-base">
+            <div className="bg-finanzas-dark px-5 py-3 sm:px-6 sm:py-3.5 text-white text-center font-bold tracking-wide text-base">
               TU GASTO DE COMBUSTIBLE
             </div>
-            <div className="p-5 sm:p-6">
+            <div className="p-6">
               <div className="text-center mb-4">
                 <span className="block text-4xl sm:text-5xl font-bold text-finanzas dark:text-finanzas-light tabular-nums">
                   {formatRD(animatedGastoMes)}
@@ -491,7 +485,7 @@ export function FuelExpenseCalculator() {
             </div>
 
             <div className="px-5 py-2.5 flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800">
-              <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-finanzas" />
+              <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-finanzas dark:text-finanzas-light" />
               <span>
                 Estimación con <strong>52 semanas al año</strong>; el precio es <strong>por galón</strong> y el
                 consumo en km/L. El gasto real varía con tráfico, clima y precio del día. Todo queda en tu
@@ -503,7 +497,7 @@ export function FuelExpenseCalculator() {
       </div>
 
       {/* Cómo ahorrar combustible */}
-      <div className="lg:col-span-5 bg-white dark:bg-gray-800 rounded-xl p-5 shadow-lg">
+      <div className="lg:col-span-5 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
         <div className="flex items-center gap-2 mb-3">
           <Lightbulb className="h-5 w-5 text-finanzas dark:text-finanzas-light flex-shrink-0" />
           <h2 className="text-xl font-bold">Cómo ahorrar combustible</h2>

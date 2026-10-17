@@ -94,7 +94,7 @@ Un rol = una clase. Ante la duda, copiar el valor del componente de referencia, 
 
 - UI densa (herramientas, listas, tablas): `text-sm` · hero/landing y buscadores: `text-base` · captions/micro: `text-xs`.
 - Labels de input: `text-sm font-medium` (los inputs grandes de buscador usan `text-base`).
-- **Inputs de herramienta (canónico, 17-Oct-2026)**: `w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold` + `placeholder:font-normal placeholder:text-gray-400` y foco de §3.4 · `dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500`. `text-lg` (18px ≥ 16px) evita el zoom de iOS y da peso al dato; los selects con etiquetas largas usan `text-base` (a 18px se clipean). `type="text"` + `inputMode` (`numeric`/`decimal`) con saneado: el `type="number"` rompe la escritura de decimales parciales en móvil. Referencia: `components/tools/bmi-calculator/bmi-calculator.tsx`.
+- **Inputs de herramienta (canónico, 17-Oct-2026)**: `w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold` + `placeholder:font-normal placeholder:text-gray-400` y foco de §3.4 · `dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500`. `text-lg` (18px ≥ 16px) evita el zoom de iOS y da peso al dato; los selects con etiquetas largas usan `text-base` (a 18px se clipean). `type="text"` + `inputMode` (`numeric`/`decimal`) con saneado: el `type="number"` rompe la escritura de decimales parciales en móvil. Con icono interior (`DollarSign`, `Percent`…): `py-2.5 pl-10 pr-3`, icono `text-gray-500 dark:text-gray-400`. Referencia: `components/tools/bmi-calculator/bmi-calculator.tsx`.
 
 ### 3.4 Foco (canónico, un solo patrón)
 
@@ -232,17 +232,30 @@ Patrón de un dato económico + resultado desglosado (2 columnas: form `lg:col-s
 - **Resultado**: hero gradiente ToolCard (`aria-live="polite"` + count-up, dato único) + tarjeta de desglose contable: filas `justify-between py-1.5 text-sm tabular-nums`, fila de exención («Descuentos: RD$ 0.00»), divisor `border-t border-gray-200 dark:border-gray-700` y fila neta `font-bold text-{s}-dark dark:text-{s}-light`.
 - **Mini-chips legales** (`grid sm:grid-cols-3 gap-3`): celda `rounded-lg border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-800` con icono `h-4 w-4 text-{s}`, título `text-sm font-semibold` y detalle `text-xs text-gray-500 dark:text-gray-400`.
 - **Nota legal**: `rounded-lg bg-finanzas-lighter p-3 text-xs text-gray-800 dark:bg-finanzas-dark dark:text-gray-200` + icono `Info`.
+- **Pase UI/UX móvil (17-Oct-2026)**: input a la receta canónica con icono (fuera `p-3`/`md:text-sm`/`shadow-sm`), etiquetas del hero a `text-white` sólido (el `/85` bajaba a ~4.2:1 en móvil), neta del desglose a `dark:text-finanzas-lighter` (el `finanzas-light` quedaba en 3.6:1) y tarjeta de desglose a `p-6`.
 
 ### Calculadora de impuesto con modo agregar/quitar (ITBIS, ref. `components/tools/itbis-calculator/`)
 
-- **Modo**: segmented de 2 botones (`grid grid-cols-2 gap-2`): activo `bg-{s} text-white shadow-sm`, inactivo `bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600`; helper `text-xs` que explica el modo.
+- **Modo**: segmented de 2 botones (`grid grid-cols-2 gap-2`, `py-2.5`): activo `bg-{s}-dark text-white` (el sólido directo solo si pasa AA con blanco: mente 4.6, relaciones 5.7; finanzas 4.1 → `finanzas-dark`), inactivo `bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600`; helper `text-xs` que explica el modo.
 - **Chips de tasa**: outline `{s}` activo / neutro inactivo (patrón tracker), con `aria-pressed` + haptic `light`.
 - **Resultado**: hero con count-up cuyo número es el «resultado del modo» (agregar → total; quitar → impuesto) + desglose base/impuesto/total con la fila total en `font-bold text-{s}-dark dark:text-{s}-light` (misma tarjeta de desglose del aguinaldo).
+- **Pase UI/UX móvil (17-Oct-2026)**: input canónico con icono; segmented activo a `bg-finanzas-dark` (ver §7), chips de tasa a `py-2.5` y texto `finanzas-dark`/`finanzas-lighter`; héroes `text-white`, neta `dark:text-finanzas-lighter` y desglose `p-6`.
 
 ### Calculadora de tasa con retención (certificado financiero, ref. `components/tools/certificate-calculator/`)
 
 - **Formulario**: monto (input moneda), tasa anual (input + `Percent`) y plazo con segmented de unidad (Días/Meses) + modalidad (Cada mes/Al vencimiento) en `grid grid-cols-2 gap-2`; helpers `text-xs` con referencias reales (7%–11% anual, 30–910 días).
 - **Desglose con retención**: filas depósito / interés bruto / retención en negativo (`− RD$…`) / ganancia neta `font-bold` + fila extra según modalidad (total al vencer o pago mensual `≈` + nº de meses) y cierre `text-xs` con rendimiento neto anual (tasa × 0.9).
+- **Pase UI/UX móvil (17-Oct-2026)**: monto/tasa/plazo con la receta canónica con icono; segmented (unidad y modalidad) a `py-2.5` + activo `bg-finanzas-dark`; héroes `text-white`, neta `dark:text-finanzas-lighter` y desglose `p-6`.
+
+### Calculadora de gasto de combustible (17-Oct-2026, ref. `components/tools/fuel-expense-calculator/`)
+
+- **Formulario**: 5 inputs numéricos con la receta canónica + icono (`py-2.5 pl-10 pr-3`, icono `text-gray-500 dark:text-gray-400`), `type="text"` + `inputMode` con saneado (`[^\d.,]` precio/km/L; `[^\d]` viajes/días), burbuja ámbar «Verifícalo» para el precio del día, chips (presets Corto/Medio/Largo y días) con `chipClass` y tarjetas de vehículo en 3 columnas (`border-2` seleccionado, `text-finanzas-dark`/`dark:text-finanzas-lighter`).
+- **Resultado ticket**: banda `bg-finanzas-dark text-white` (blanco sobre `finanzas` = 4.1:1, no pasa), cuerpo `p-6` con hero de gasto mensual, filas `font-mono tabular-nums`, banda anual `bg-gray-900 dark:bg-gray-100` y nota final; tarjeta de ahorro con h2 `text-xl` y bullets.
+
+### Calculadora de consumo eléctrico (17-Oct-2026, ref. `components/tools/electricity-calculator/`)
+
+- **Entrada**: slider 0–1000 kWh + input numérico canónico (saneado `[^\d]`) + quick chips (150/300/445/700) en tinte `bg-[#388e3c]/10` con texto `finanzas-dark`/`finanzas-lighter`.
+- **Resultado ticket**: cabecera `bg-sky-200 dark:bg-sky-900/60`, cuerpo `p-6 font-mono` con desglose por tramos y subsidio, fila total `bg-yellow-300 dark:bg-yellow-500/90 text-gray-900` y nota de estimación.
 
 ### Planificador de ahorros (meta + tiempo, ref. `components/tools/savings-planner/`)
 
@@ -372,3 +385,4 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
   - Nunca `/opacidad` sobre tokens de sección (clase muerta, §1) ni `text-white` sobre ámbar pequeño.
 - **Contraste mente (azul `#1976d2`)**: `text-mente` sobre blanco pasa AA justo (4.6:1) para texto ≥14px; sobre `-lighter` el texto base (`#212529`, 10:1) es seguro, pero el **texto secundario nunca en `text-gray-500` sobre `bg-mente-lighter`** (2.7:1): en filas seleccionadas subir a `text-gray-700` / `dark:text-gray-200` (`dark:bg-mente-dark` + texto base queda en 4.67:1, el mínimo AA). `text-white/85` sobre `#1976d2` cae a ~3.8:1 → sobre el extremo claro del gradiente, `text-white` sólido (4.6:1).
 - **Contraste relaciones (violeta `#7c3aed`)**: `text-relaciones` sobre blanco 5.7:1 y `text-relaciones-dark` 9:1 ✓. En oscuro, **`relaciones-light` (`#a78bfa`) sobre `gray-800` = 3.1:1 → solo iconos, barras y texto ≥20px (large)**; para texto pequeño/mediano, `dark:text-relaciones-lighter` (`#c4b5fd`, 5.0:1). Subtexto secundario sobre `bg-relaciones-lighter`/`dark:bg-relaciones-dark` (filas seleccionadas): `text-gray-700`/`dark:text-gray-200` (el `gray-500` cae a 2.6:1).
+- **Caso finanzas (verde `#388e3c`)**: sobre blanco 4.1:1 → `text-finanzas` solo ≥20px o iconos; texto pequeño en claro → `text-finanzas-dark` (7.9:1). En oscuro, `finanzas-light` (`#66bb6a`) sobre `gray-800` = 3.6:1 → iconos/≥20px; texto pequeño → `dark:text-finanzas-lighter` (5.2:1). Blanco sobre `bg-finanzas` = 4.1:1 (falla a 16px): bandas de ticket y sólidos seleccionados usan `bg-finanzas-dark` (7.9:1 con blanco). Chips seleccionados: borde `finanzas`/`finanzas-light` + texto `finanzas-dark`/`finanzas-lighter`.

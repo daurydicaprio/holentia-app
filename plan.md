@@ -345,6 +345,17 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AS — Finanzas tanda 1: pase UI/UX móvil de las 5 calculadoras de cálculo rápido (17-Oct-2026) — HECHA
+
+- [x] **Receta de input con icono** (aguinaldo, ITBIS, certificado): el `inputClass` compartido (`p-3 pl-10 text-base md:text-sm shadow-sm`) pasa a la canónica (`py-2.5 pl-10 pr-3 text-lg font-semibold`, placeholder en ambos modos, foco `ring-2`); combustible reescribe su `inputClass` (orden viejo, `py-2`, `shadow-sm`) y sus 5 campos pasan de `type="number"` a `type="text"` + `inputMode` con saneado (`[^\d.,]` precio/distancia/consumo; `[^\d]` viajes/días); eléctrico igual en el kWh (saneado `[^\d]`).
+- [x] **Contraste verde (fallos AA)**: etiquetas de los héroes en `text-white/85` (~4.2:1 en móvil; el blanco sólido queda en ~5.0) → `text-white`; `finanzas-light` a 14px en oscuro (3.6:1) → `dark:text-finanzas-lighter` en la fila neta de las 3 calculadoras; texto pequeño en claro (`text-finanzas` = 4.1:1) → `text-finanzas-dark`/`finanzas-lighter` en chips de tasa y quick chips; segmented activo y banda del ticket de combustible de `bg-finanzas`+blanco (4.1:1) → `bg-finanzas-dark` (7.9:1); icono Info del ticket de combustible con `dark:text-finanzas-light`.
+- [x] **Táctil**: chips de tasa/presets/días (36–40px con `py-2.5`), iconos de campo de combustible a `gray-500 dark:text-gray-400`.
+- [x] **Respiración**: tarjetas `p-5`/`p-5 sm:p-6` → `p-6` (desgloses de aguinaldo/ITBIS/certificado, tarjeta de formulario, ticket y tips de combustible, ticket eléctrico).
+- [x] **Docs**: `design.md` §3.3 (variante con icono), §7 (caso finanzas), recetas (pase en aguinaldo/ITBIS/certificado + nuevas de combustible y eléctrico); skill `section-ui` §3c/§7.
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke (5 páginas SSR con H1 ×1 y 0 `noindex` + OG `200 image/png`) + auditoría targeted PASS.
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

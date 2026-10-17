@@ -139,13 +139,12 @@ export function ElectricityCalculator() {
 
         <label className="block text-sm font-medium mt-4 mb-2">O escribe el número exacto</label>
         <input
-          type="number"
-          min={0}
-          inputMode="decimal"
+          type="text"
+          inputMode="numeric"
           value={kwhInput}
-          onChange={(e) => setKwhInput(e.target.value)}
+          onChange={(e) => setKwhInput(e.target.value.replace(/[^\d]/g, ""))}
           placeholder="Ej: 445"
-          className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
+          className="w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold text-gray-800 placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
           data-interactive="true"
         />
 
@@ -154,7 +153,7 @@ export function ElectricityCalculator() {
             <button
               key={v}
               onClick={() => setQuick(v)}
-              className="px-3 py-1.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 hover:text-finanzas-dark dark:hover:text-finanzas-lighter text-finanzas dark:text-finanzas-light font-medium transition-colors"
+              className="px-3 py-2.5 text-sm rounded-md bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-finanzas-dark dark:text-finanzas-lighter font-medium transition-[colors,transform] duration-150 active:scale-[0.97]"
               data-interactive="true"
             >
               {v} kWh
@@ -190,7 +189,7 @@ export function ElectricityCalculator() {
             <div className="bg-sky-200 dark:bg-sky-900/60 px-5 py-3.5 sm:px-6 sm:py-4 text-center font-bold tracking-wide text-base sm:text-lg">
               CÁLCULO DE LA FACTURA
             </div>
-            <div className="p-5 sm:p-6 font-mono text-sm tabular-nums flex-1">
+            <div className="p-6 font-mono text-sm tabular-nums flex-1">
               <div className="flex justify-between py-1.5">
                 <span>Cargo fijo</span>
                 <span>RD$ {CARGO_FIJO.toFixed(2)}</span>
