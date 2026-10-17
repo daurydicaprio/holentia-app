@@ -249,6 +249,15 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AI — Relaciones: test de estilo de apego (17-Oct-2026) — HECHA
+
+- [x] **Herramienta nueva** (23ª, card `test-apego` activada): 12 afirmaciones 0–3, 4 estilos (seguro/ansioso/evitativo/temeroso), dominante + distribución + consejos, patrón D reanudable (`holentia:test-apego:draft:v1`), copiar resultado y enlace cruzado a lenguajes del amor; disclaimer educativo.
+- [x] **SEO**: metaTitle «Test de estilo de apego: ¿seguro, ansioso o evitativo?» (54 ch) · metaDescription 151 ch; FAQ ×6; OG propia; hub de relaciones actualizado (subtitle + metaDescription).
+- [x] **Docs/recuentos**: llms.txt 23 (header + sección Relaciones + línea), README (×5), architecture (×3), `seo-geo` (33 archivos OG); receta `design.md` §4 «Test de estilo de apego».
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke + auditoría 16 puntos PASS.
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

@@ -116,6 +116,10 @@ const localStorageKeys = [
     key: "holentia:test-lenguajes-amor:draft:v1",
     desc: "Tu avance y último resultado del test de lenguajes del amor",
   },
+  {
+    key: "holentia:test-apego:draft:v1",
+    desc: "Tu avance y último resultado del test de estilo de apego",
+  },
 ]
 
 const notUsedItems = [

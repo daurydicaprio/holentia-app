@@ -110,10 +110,10 @@ export const sectionsData: Record<string, SectionData> = {
     title: "Fortalece tus",
     highlightText: "relaciones",
     subtitle:
-      "Las relaciones que importan se cuidan con intención. Descubre cómo das y recibes cariño con el test de los lenguajes del amor y fortalece los vínculos con tu pareja, familia o amistades.",
+      "Las relaciones que importan se cuidan con intención. Descubre cómo das y recibes cariño con el test de los lenguajes del amor, entiende tus patrones con el test de apego y fortalece tus vínculos con pareja, familia y amistades.",
     text: "Fortalece tus relaciones. Herramientas para mejorar la comunicación, resolver conflictos y construir vínculos significativos.",
     metaDescription:
-      "Test de lenguajes del amor y guías para comunicarte mejor, resolver conflictos y fortalecer tus vínculos. Gratuitas, sin registro y en tu navegador.",
+      "Test de lenguajes del amor y test de estilo de apego: entiende cómo amas y cómo te vinculas. Herramientas gratuitas, sin registro y en tu navegador.",
     cards: [
       {
         id: "test-lenguajes-amor",
@@ -155,8 +155,11 @@ export const sectionsData: Record<string, SectionData> = {
         title: "Test de estilo de apego",
         description: "Entiende tus patrones relacionales.",
         slug: "test-apego",
-        isAvailable: false,
+        isAvailable: true,
         category: "relaciones",
+        metaTitle: "Test de estilo de apego: ¿seguro, ansioso o evitativo?",
+        metaDescription:
+          "Descubre tu estilo de apego en 12 preguntas: seguro, ansioso, evitativo o temeroso. Entiende tus patrones en las relaciones y qué puedes hacer. Gratis.",
       },
       {
         id: "limites-saludables",

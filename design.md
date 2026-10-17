@@ -291,6 +291,12 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 - **Reescritura a estándar**: tokens `relaciones` en todo el componente (se eliminaron los `purple-*` sueltos, incluidos `hover:bg-purple-700` y `bg-purple-50`); quiz una pregunta a la vez con **auto-avance 300 ms** y «← Atrás» que conserva la selección (`aria-pressed`).
 - **Patrón D reanudable**: respuestas parciales → vuelve a la primera sin responder; completas → resultado directo (`holentia:test-lenguajes-amor:draft:v1`). Resultado con **copiar resumen** (`navigator.clipboard` + check 1,5 s) y acciones Repetir / Borrar.
 
+### Test de estilo de apego (17-Oct-2026, ref. `components/tools/attachment-test/`)
+
+- **Likert por afirmación** (Nada/Poco/Bastante/Mucho = 0–3) con una afirmación por pantalla, auto-avance 300 ms y «← Atrás»; 12 afirmaciones → 4 estilos (3 ítems cada uno, máx. 9 puntos por estilo).
+- **Sin semáforos**: los estilos no se colorean por «mejor/peor» — todos los acentos en tokens `relaciones` y el dominante se destaca con `bg-relaciones-lighter dark:bg-relaciones-dark`.
+- **Patrón D** reanudable con copiar resultado; disclaimer educativo en ámbar («no es un test clínico ni una etiqueta») + nota de continuo al pie. Enlace cruzado al test de lenguajes del amor.
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.
