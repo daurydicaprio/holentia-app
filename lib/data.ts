@@ -18,9 +18,9 @@ export const sectionsData: Record<string, SectionData> = {
         slug: "diario-guiado",
         isAvailable: true,
         category: "mente",
-        metaTitle: "Diario guiado de emociones",
+        metaTitle: "Diario guiado para escribir emociones y gratitud",
         metaDescription:
-          "Escribe una entrada guiada en 3 pasos: qué sentiste, qué aprendiste y tu gratitud del día. Reflexión personal que queda en tu navegador. Gratis.",
+          "Escribe cada día en tu diario guiado: qué sentiste, qué aprendiste y tu gratitud. Refuerza tu bienestar emocional, 100% privado en tu navegador. Gratis.",
       },
       {
         id: "meditacion-mindfulness",

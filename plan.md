@@ -203,6 +203,16 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AD — Mente: mejoras del Diario Guiado (17-Oct-2026) — HECHA
+
+- [x] **Modernización del Diario** (`guided-journal`): chips de ánimo con emoji, confirmación de borrado en 2 pasos (auto-cancel a 4 s), racha de días + tira de ánimo (≤7), borrador autosave del formulario (incluye `editingId`), copiar entrada, estado vacío con `Feather`, fechas `es-DO`, edición que conserva la fecha original y carga de entradas en cliente (sin desajuste de hidratación); fuera azules sueltos (tokens `mente`).
+- [x] **SEO**: metaTitle «Diario guiado para escribir emociones y gratitud» (48 ch) y metaDescription nueva (152 ch); FAQ ×6 (nueva «¿Escribir un diario ayuda de verdad?» y privacidad con claves `entries` + `draft`).
+- [x] **Persistencia**: nueva clave `holentia:diario-guiado:draft:v1` en `politica-cookies` (la de entradas ya existía).
+- [x] **Docs**: receta `design.md` §4 «Diario guiado» + patrón transversal «Confirmación de borrado en 2 pasos»; auditoría targeted registrada en `seo-geo-audit`.
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke (title/desc/canonical/FAQ JSON-LD ×6, OG runtime 200).
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

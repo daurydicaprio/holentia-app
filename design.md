@@ -253,6 +253,17 @@ Patrón de un dato económico + resultado desglosado (2 columnas: form `lg:col-s
 - **Formulario**: precio (input moneda) + slider de meses 1–60 con número grande + rendimiento anual (helper 7%–11% ref.).
 - **Resultado**: hero «La paciencia te paga» con count-up; comparativa de 3 filas («Comprar hoy» / «Esperar e invertir» / «Al comprar te quedan `+RD$…`» en `font-bold`) con supuestos en `text-xs`; estado educativo a tasa 0% («sin invertir, esperar no gana nada») y nota con enlace a interés compuesto.
 
+### Confirmación de borrado en 2 pasos (patrón transversal)
+
+Acción destructiva sobre datos del usuario: el primer toque **no borra**. El elemento cambia a estado rojo (`bg-red-600 text-white` + `Check` + «¿Seguro?») y se autodescancela a los 4 s (timer único con `clearTimeout` previo); el segundo toque ejecuta. Aplicado en `guided-journal` (borrado por entrada y «Borrar todo»). Usarlo en cualquier acción irreversible nueva.
+
+### Diario guiado (modernizado 17-Oct-2026, ref. `components/tools/guided-journal/`)
+
+- **Chips de ánimo** (5, `grid grid-cols-5 gap-2` con emoji, `aria-pressed`, re-toque quita la selección) en vez de `<select>`.
+- **Racha + tira de ánimo**: tarjeta con `Flame` (días consecutivos, clave de día local vía `toLocaleDateString("en-CA")`) y últimos ≤7 ánimos en emojis con `title` de fecha.
+- **Borrador del formulario** (patrón D ampliado): `draftKey(slug)` guarda el borrador **y el `editingId`**; se limpia al guardar/cancelar/borrar; indicador «Borrador guardado».
+- **Copiar entrada** (`navigator.clipboard` + check temporal 1,5 s) como respaldo manual; estado vacío con `Feather`; fechas `es-DO`; editar **conserva la fecha original** (la racha y el historial no se mueven).
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.

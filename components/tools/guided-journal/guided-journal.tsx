@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
-import { Calendar, Save, Trash2, Edit2, X } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
+import { Calendar, Check, Copy, Feather, Flame, PencilLine, Save, Trash2, X } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
-import { storageGet, storageSet, storageRemove } from "@/lib/storage"
+import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
 
 interface JournalEntry {
   id: string
@@ -17,6 +17,19 @@ interface JournalEntry {
 
 const JOURNAL_KEY = "holentia:diario-guiado:entries:v1"
 const JOURNAL_KEY_LEGACY = "holentia-journal-entries"
+const DRAFT_KEY = draftKey("diario-guiado")
+
+const EMPTY_ENTRY = { mood: "", gratitude: "", challenges: "", achievements: "", tomorrow: "" }
+
+const MOODS = [
+  { value: "Muy bien", emoji: "😄" },
+  { value: "Bien", emoji: "🙂" },
+  { value: "Normal", emoji: "😐" },
+  { value: "Algo mal", emoji: "🙁" },
+  { value: "Mal", emoji: "😢" },
+] as const
+
+const MOOD_EMOJI: Record<string, string> = Object.fromEntries(MOODS.map((m) => [m.value, m.emoji]))
 
 function loadEntries(): JournalEntry[] {
   // Migra la clave legada una sola vez
@@ -33,37 +46,123 @@ function persistEntries(entries: JournalEntry[]) {
   storageSet(JOURNAL_KEY, entries)
 }
 
+// Días consecutivos con entrada, contando desde hoy (o ayer si hoy no hay).
+// Usa la fecha local del dispositivo (en-CA → YYYY-MM-DD) para no cruzar husos.
+function computeStreak(entries: JournalEntry[]): number {
+  if (entries.length === 0) return 0
+  const dayKey = (d: Date) => d.toLocaleDateString("en-CA")
+  const days = new Set(entries.map((e) => dayKey(new Date(e.date))))
+  const cursor = new Date()
+  if (!days.has(dayKey(cursor))) {
+    cursor.setDate(cursor.getDate() - 1)
+    if (!days.has(dayKey(cursor))) return 0
+  }
+  let streak = 0
+  while (days.has(dayKey(cursor))) {
+    streak++
+    cursor.setDate(cursor.getDate() - 1)
+  }
+  return streak
+}
+
+function formatEntryText(entry: JournalEntry): string {
+  const fecha = new Date(entry.date).toLocaleDateString("es-DO", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
+  const lines = [`Diario guiado — ${fecha}`]
+  if (entry.mood) lines.push(`Ánimo: ${entry.mood}`)
+  if (entry.gratitude) lines.push(`Gratitud: ${entry.gratitude}`)
+  if (entry.challenges) lines.push(`Desafíos: ${entry.challenges}`)
+  if (entry.achievements) lines.push(`Logros: ${entry.achievements}`)
+  if (entry.tomorrow) lines.push(`Intención para mañana: ${entry.tomorrow}`)
+  return lines.join("\n\n")
+}
+
 export function GuidedJournal() {
   const { triggerHapticFeedback } = useHapticFeedback()
-  const [entries, setEntries] = useState<JournalEntry[]>(() => {
-    if (typeof window !== "undefined") return loadEntries()
-    return []
-  })
-
-  const [currentEntry, setCurrentEntry] = useState<Partial<JournalEntry>>({
-    mood: "",
-    gratitude: "",
-    challenges: "",
-    achievements: "",
-    tomorrow: "",
-  })
-
+  const [entries, setEntries] = useState<JournalEntry[]>([])
+  const [mounted, setMounted] = useState(false)
+  const [currentEntry, setCurrentEntry] = useState<Partial<JournalEntry>>(EMPTY_ENTRY)
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
+  const [confirmClearAll, setConfirmClearAll] = useState(false)
+  const [copiedId, setCopiedId] = useState<string | null>(null)
+  const [draftFlash, setDraftFlash] = useState(false)
+  const pendingTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const firstSave = useRef(true)
 
-  const saveEntry = () => {
-    if (
-      !currentEntry.mood &&
-      !currentEntry.gratitude &&
-      !currentEntry.challenges &&
-      !currentEntry.achievements &&
-      !currentEntry.tomorrow
-    ) {
+  // Carga las entradas en el cliente (evita desajustes de hidratación y el
+  // destello del estado vacío: hasta montar no se pinta el historial)
+  useEffect(() => {
+    setEntries(loadEntries())
+    setMounted(true)
+  }, [])
+
+  // Restaura el borrador en curso (formulario + edición pendiente)
+  useEffect(() => {
+    const draft = storageGet<Partial<JournalEntry> & { editingId?: string | null }>(DRAFT_KEY, {})
+    const hasContent = Boolean(
+      draft.mood || draft.gratitude || draft.challenges || draft.achievements || draft.tomorrow,
+    )
+    if (!hasContent) return
+    setCurrentEntry({
+      mood: draft.mood ?? "",
+      gratitude: draft.gratitude ?? "",
+      challenges: draft.challenges ?? "",
+      achievements: draft.achievements ?? "",
+      tomorrow: draft.tomorrow ?? "",
+    })
+    if (draft.editingId && loadEntries().some((e) => e.id === draft.editingId)) {
+      setEditingId(draft.editingId)
+    }
+  }, [])
+
+  // Autoguarda el borrador con debounce 500ms (se salta el primer render)
+  useEffect(() => {
+    if (firstSave.current) {
+      firstSave.current = false
       return
     }
+    const hasContent = Boolean(
+      currentEntry.mood || currentEntry.gratitude || currentEntry.challenges || currentEntry.achievements || currentEntry.tomorrow,
+    )
+    if (saveTimer.current) clearTimeout(saveTimer.current)
+    saveTimer.current = setTimeout(() => {
+      if (hasContent) {
+        if (storageSet(DRAFT_KEY, { ...currentEntry, editingId })) {
+          setDraftFlash(true)
+          setTimeout(() => setDraftFlash(false), 1500)
+        }
+      } else {
+        storageRemove(DRAFT_KEY)
+      }
+    }, 500)
+    return () => {
+      if (saveTimer.current) clearTimeout(saveTimer.current)
+    }
+  }, [currentEntry, editingId])
 
+  const resetForm = () => {
+    setCurrentEntry(EMPTY_ENTRY)
+    setEditingId(null)
+    storageRemove(DRAFT_KEY)
+  }
+
+  const saveEntry = () => {
+    const hasContent = Boolean(
+      currentEntry.mood || currentEntry.gratitude || currentEntry.challenges || currentEntry.achievements || currentEntry.tomorrow,
+    )
+    if (!hasContent) return
+
+    const original = editingId ? entries.find((e) => e.id === editingId) : undefined
     const entry: JournalEntry = {
       id: editingId || Date.now().toString(),
-      date: new Date().toISOString(),
+      // Al editar se conserva la fecha original: el historial y la racha no se mueven
+      date: original?.date ?? new Date().toISOString(),
       mood: currentEntry.mood || "",
       gratitude: currentEntry.gratitude || "",
       challenges: currentEntry.challenges || "",
@@ -71,30 +170,43 @@ export function GuidedJournal() {
       tomorrow: currentEntry.tomorrow || "",
     }
 
-    let updatedEntries: JournalEntry[]
-    if (editingId) {
-      updatedEntries = entries.map((e) => (e.id === editingId ? entry : e))
-    } else {
-      updatedEntries = [entry, ...entries]
-    }
-
+    const updatedEntries = editingId ? entries.map((e) => (e.id === editingId ? entry : e)) : [entry, ...entries]
     setEntries(updatedEntries)
     persistEntries(updatedEntries)
-    setCurrentEntry({ mood: "", gratitude: "", challenges: "", achievements: "", tomorrow: "" })
-    setEditingId(null)
+    resetForm()
     triggerHapticFeedback("medium")
+  }
+
+  const requestDelete = (id: string) => {
+    setConfirmDeleteId(id)
+    setConfirmClearAll(false)
+    if (pendingTimer.current) clearTimeout(pendingTimer.current)
+    pendingTimer.current = setTimeout(() => setConfirmDeleteId(null), 4000)
+    triggerHapticFeedback("light")
   }
 
   const deleteEntry = (id: string) => {
     const updatedEntries = entries.filter((e) => e.id !== id)
     setEntries(updatedEntries)
     persistEntries(updatedEntries)
+    setConfirmDeleteId(null)
+    if (editingId === id) resetForm()
     triggerHapticFeedback("medium")
+  }
+
+  const requestClearAll = () => {
+    setConfirmClearAll(true)
+    setConfirmDeleteId(null)
+    if (pendingTimer.current) clearTimeout(pendingTimer.current)
+    pendingTimer.current = setTimeout(() => setConfirmClearAll(false), 4000)
+    triggerHapticFeedback("light")
   }
 
   const clearAllEntries = () => {
     setEntries([])
     persistEntries([])
+    setConfirmClearAll(false)
+    resetForm()
     triggerHapticFeedback("medium")
   }
 
@@ -105,188 +217,325 @@ export function GuidedJournal() {
   }
 
   const cancelEdit = () => {
-    setCurrentEntry({ mood: "", gratitude: "", challenges: "", achievements: "", tomorrow: "" })
-    setEditingId(null)
+    resetForm()
     triggerHapticFeedback("light")
   }
 
+  const selectMood = (value: string) => {
+    setCurrentEntry((prev) => ({ ...prev, mood: prev.mood === value ? "" : value }))
+    triggerHapticFeedback("light")
+  }
+
+  const copyEntry = async (entry: JournalEntry) => {
+    try {
+      await navigator.clipboard.writeText(formatEntryText(entry))
+      setCopiedId(entry.id)
+      setTimeout(() => setCopiedId(null), 1500)
+      triggerHapticFeedback("light")
+    } catch {
+      // Portapapeles no disponible (contexto no seguro): sin acción
+    }
+  }
+
+  const streak = computeStreak(entries)
+  const recentMoods = entries.filter((e) => e.mood && MOOD_EMOJI[e.mood]).slice(0, 7)
+
   return (
-    <div className="space-y-6">
-      {/* Formulario de entrada */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-        <h2 className="text-xl font-bold text-mente dark:text-mente-light mb-6">
-          {editingId ? "Editar entrada" : "Nueva entrada"}
-        </h2>
+    <div className="grid gap-6 lg:grid-cols-5">
+      {/* Formulario */}
+      <div className="h-fit rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800 lg:col-span-2">
+        <h2 className="text-xl font-bold">{editingId ? "Editar entrada" : "Nueva entrada"}</h2>
+        <p className="mb-6 mt-1 text-sm text-gray-600 dark:text-gray-400">
+          Tus respuestas quedan solo en tu navegador.
+        </p>
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-2">¿Cómo te sientes hoy?</label>
-            <select
-              data-interactive="true"
-              value={currentEntry.mood}
-              onChange={(e) => setCurrentEntry({ ...currentEntry, mood: e.target.value })}
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-mente dark:focus:border-transparent dark:focus:ring-mente-light"
-            >
-              <option value="">Selecciona tu estado de ánimo</option>
-              <option value="Muy bien">😄 Muy bien</option>
-              <option value="Bien">🙂 Bien</option>
-              <option value="Normal">😐 Normal</option>
-              <option value="Algo mal">🙁 Algo mal</option>
-              <option value="Mal">😢 Mal</option>
-            </select>
+            <span className="mb-2 block text-sm font-medium">¿Cómo te sientes hoy?</span>
+            <div className="grid grid-cols-5 gap-2">
+              {MOODS.map((m) => (
+                <button
+                  key={m.value}
+                  type="button"
+                  onClick={() => selectMood(m.value)}
+                  aria-pressed={currentEntry.mood === m.value}
+                  aria-label={m.value}
+                  data-interactive="true"
+                  className={`flex flex-col items-center gap-1 rounded-md px-1 py-2 text-center text-[11px] font-medium leading-tight transition-[colors,transform] duration-150 active:scale-[0.97] ${
+                    currentEntry.mood === m.value
+                      ? "bg-mente text-white shadow-sm"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                  }`}
+                >
+                  <span className="text-lg" aria-hidden="true">
+                    {m.emoji}
+                  </span>
+                  {m.value}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">¿Por qué estás agradecido/a hoy?</label>
+            <label htmlFor="journal-gratitude" className="mb-2 block text-sm font-medium">
+              ¿Por qué estás agradecido/a hoy?
+            </label>
             <textarea
+              id="journal-gratitude"
               value={currentEntry.gratitude}
               onChange={(e) => setCurrentEntry({ ...currentEntry, gratitude: e.target.value })}
               placeholder="Escribe al menos tres cosas por las que estás agradecido..."
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-mente dark:focus:border-transparent dark:focus:ring-mente-light min-h-[100px]"
+              className="min-h-[100px] w-full rounded-md border border-gray-300 bg-white p-3 focus:border-transparent focus:ring-2 focus:ring-mente dark:border-gray-600 dark:bg-gray-700 dark:focus:border-transparent dark:focus:ring-mente-light"
               data-interactive="true"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">¿Qué desafíos enfrentaste hoy?</label>
+            <label htmlFor="journal-challenges" className="mb-2 block text-sm font-medium">
+              ¿Qué desafíos enfrentaste hoy?
+            </label>
             <textarea
+              id="journal-challenges"
               value={currentEntry.challenges}
               onChange={(e) => setCurrentEntry({ ...currentEntry, challenges: e.target.value })}
               placeholder="Describe los retos o dificultades del día..."
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-mente dark:focus:border-transparent dark:focus:ring-mente-light min-h-[100px]"
+              className="min-h-[100px] w-full rounded-md border border-gray-300 bg-white p-3 focus:border-transparent focus:ring-2 focus:ring-mente dark:border-gray-600 dark:bg-gray-700 dark:focus:border-transparent dark:focus:ring-mente-light"
               data-interactive="true"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">¿Qué lograste hoy?</label>
+            <label htmlFor="journal-achievements" className="mb-2 block text-sm font-medium">
+              ¿Qué lograste hoy?
+            </label>
             <textarea
+              id="journal-achievements"
               value={currentEntry.achievements}
               onChange={(e) => setCurrentEntry({ ...currentEntry, achievements: e.target.value })}
               placeholder="Celebra tus logros, grandes y pequeños..."
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-mente dark:focus:border-transparent dark:focus:ring-mente-light min-h-[100px]"
+              className="min-h-[100px] w-full rounded-md border border-gray-300 bg-white p-3 focus:border-transparent focus:ring-2 focus:ring-mente dark:border-gray-600 dark:bg-gray-700 dark:focus:border-transparent dark:focus:ring-mente-light"
               data-interactive="true"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">¿Qué harás mañana para cuidarte?</label>
+            <label htmlFor="journal-tomorrow" className="mb-2 block text-sm font-medium">
+              ¿Qué harás mañana para cuidarte?
+            </label>
             <textarea
+              id="journal-tomorrow"
               value={currentEntry.tomorrow}
               onChange={(e) => setCurrentEntry({ ...currentEntry, tomorrow: e.target.value })}
               placeholder="Establece una intención para mañana..."
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-mente dark:focus:border-transparent dark:focus:ring-mente-light min-h-[100px]"
+              className="min-h-[100px] w-full rounded-md border border-gray-300 bg-white p-3 focus:border-transparent focus:ring-2 focus:ring-mente dark:border-gray-600 dark:bg-gray-700 dark:focus:border-transparent dark:focus:ring-mente-light"
               data-interactive="true"
             />
           </div>
 
           <div className="flex gap-3">
             <button
+              type="button"
               data-interactive="true"
               onClick={saveEntry}
-              className="flex-1 flex items-center justify-center gap-2 bg-mente hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+              className="flex flex-1 items-center justify-center gap-2 rounded-md bg-mente px-6 py-3 font-medium text-white transition-colors hover:bg-mente-dark active:scale-[0.98]"
             >
               <Save className="h-5 w-5" />
               {editingId ? "Actualizar entrada" : "Guardar entrada"}
             </button>
             {editingId && (
               <button
+                type="button"
                 data-interactive="true"
                 onClick={cancelEdit}
-                className="flex items-center justify-center gap-2 bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-700 text-gray-800 dark:text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                className="flex items-center justify-center gap-2 rounded-md bg-gray-300 px-6 py-3 font-medium text-gray-800 transition-colors hover:bg-gray-400 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-700"
               >
                 <X className="h-5 w-5" />
                 Cancelar
               </button>
             )}
           </div>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            {draftFlash ? "Borrador guardado" : "El borrador se guarda mientras escribes"}
+          </p>
         </div>
       </div>
 
-      {/* Lista de entradas */}
-      {entries.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-mente dark:text-mente-light">Entradas anteriores</h2>
-            <button
-              data-interactive="true"
-              onClick={clearAllEntries}
-              className="text-xs text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors"
-            >
-              Borrar todo
-            </button>
+      {/* Historial */}
+      <div className="space-y-6 lg:col-span-3">
+        {!mounted ? (
+          <div aria-hidden="true" className="min-h-[220px] rounded-xl bg-white shadow-lg dark:bg-gray-800" />
+        ) : entries.length === 0 ? (
+          <div className="flex flex-col items-center justify-center rounded-xl bg-white p-10 text-center text-gray-500 shadow-lg dark:bg-gray-800 dark:text-gray-400">
+            <Feather className="mx-auto mb-4 h-12 w-12 opacity-40" />
+            <p className="font-medium">Tu diario está en blanco</p>
+            <p className="mt-1 text-sm">
+              Escribe tu primera entrada con el formulario y guárdala. Con el tiempo verás tu progreso.
+            </p>
           </div>
-          <div className="space-y-4">
-            {entries.map((entry) => (
-              <div
-                key={entry.id}
-                className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow"
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-gray-500" />
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                      {new Date(entry.date).toLocaleDateString("es-ES", {
-                        weekday: "long",
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
+        ) : (
+          <>
+            {(streak >= 2 || recentMoods.length >= 2) && (
+              <div className="rounded-xl bg-white p-5 shadow-lg dark:bg-gray-800">
+                {streak >= 2 && (
+                  <div className="flex items-center justify-between">
+                    <span className="flex items-center gap-2 text-sm font-medium">
+                      <Flame className="h-4 w-4 text-mente dark:text-mente-light" />
+                      Racha
+                    </span>
+                    <span className="text-sm font-semibold">
+                      {streak} {streak === 1 ? "día" : "días"} seguidos
                     </span>
                   </div>
-                  <div className="flex gap-2">
-                    <button
-                      data-interactive="true"
-                      onClick={() => editEntry(entry)}
-                      className="p-2 text-mente dark:text-mente-light hover:text-mente-dark dark:hover:text-mente-lighter hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
-                    >
-                      <Edit2 className="h-4 w-4" />
-                    </button>
-                    <button
-                      data-interactive="true"
-                      onClick={() => deleteEntry(entry.id)}
-                      className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-
-                {entry.mood && (
-                  <div className="mb-2">
-                    <span className="text-sm font-medium">Estado de ánimo:</span>{" "}
-                    <span className="text-sm">{entry.mood}</span>
-                  </div>
                 )}
-                {entry.gratitude && (
-                  <div className="mb-2">
-                    <span className="text-sm font-medium">Gratitud:</span>{" "}
-                    <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">{entry.gratitude}</p>
-                  </div>
-                )}
-                {entry.challenges && (
-                  <div className="mb-2">
-                    <span className="text-sm font-medium">Desafíos:</span>{" "}
-                    <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">{entry.challenges}</p>
-                  </div>
-                )}
-                {entry.achievements && (
-                  <div className="mb-2">
-                    <span className="text-sm font-medium">Logros:</span>{" "}
-                    <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">{entry.achievements}</p>
-                  </div>
-                )}
-                {entry.tomorrow && (
-                  <div>
-                    <span className="text-sm font-medium">Intención para mañana:</span>{" "}
-                    <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">{entry.tomorrow}</p>
+                {recentMoods.length >= 2 && (
+                  <div className={streak >= 2 ? "mt-4" : ""}>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Ánimo de tus últimas entradas</p>
+                    <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                      {recentMoods.map((entry) => (
+                        <span
+                          key={entry.id}
+                          className="text-xl"
+                          title={new Date(entry.date).toLocaleDateString("es-DO", {
+                            day: "numeric",
+                            month: "short",
+                          })}
+                        >
+                          {MOOD_EMOJI[entry.mood]}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+            )}
+
+            <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
+              <div className="mb-6 flex items-center justify-between gap-3">
+                <h2 className="text-xl font-bold">Entradas anteriores</h2>
+                <button
+                  type="button"
+                  data-interactive="true"
+                  onClick={confirmClearAll ? clearAllEntries : requestClearAll}
+                  aria-label={confirmClearAll ? "Confirmar borrado de todas las entradas" : "Borrar todas las entradas"}
+                  className={`rounded-md text-xs font-medium transition-colors ${
+                    confirmClearAll
+                      ? "flex items-center gap-1 bg-red-600 px-2.5 py-1.5 text-white hover:bg-red-700"
+                      : "px-2 py-1 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400"
+                  }`}
+                >
+                  {confirmClearAll ? (
+                    <>
+                      <Check className="h-3.5 w-3.5" />
+                      ¿Seguro? Borrar todo
+                    </>
+                  ) : (
+                    "Borrar todo"
+                  )}
+                </button>
+              </div>
+              <div className="space-y-4">
+                {entries.map((entry) => {
+                  const isConfirming = confirmDeleteId === entry.id
+                  return (
+                    <div
+                      key={entry.id}
+                      className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md dark:border-gray-700"
+                    >
+                      <div className="mb-3 flex items-start justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <Calendar className="h-4 w-4 text-gray-500" />
+                          <span className="text-sm capitalize text-gray-600 dark:text-gray-400">
+                            {new Date(entry.date).toLocaleDateString("es-DO", {
+                              weekday: "long",
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            })}
+                          </span>
+                        </div>
+                        <div className="flex gap-1">
+                          <button
+                            type="button"
+                            data-interactive="true"
+                            onClick={() => void copyEntry(entry)}
+                            aria-label="Copiar entrada"
+                            className="rounded-lg p-2 text-mente transition-colors hover:bg-mente-lighter dark:text-mente-light dark:hover:bg-mente-dark"
+                          >
+                            {copiedId === entry.id ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                          </button>
+                          <button
+                            type="button"
+                            data-interactive="true"
+                            onClick={() => editEntry(entry)}
+                            aria-label="Editar entrada"
+                            className="rounded-lg p-2 text-mente transition-colors hover:bg-mente-lighter dark:text-mente-light dark:hover:bg-mente-dark"
+                          >
+                            <PencilLine className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            data-interactive="true"
+                            onClick={() => (isConfirming ? deleteEntry(entry.id) : requestDelete(entry.id))}
+                            aria-label={isConfirming ? "Confirmar borrado de la entrada" : "Borrar entrada"}
+                            className={`rounded-lg transition-colors ${
+                              isConfirming
+                                ? "flex items-center gap-1 bg-red-600 px-2.5 py-2 text-xs font-medium text-white hover:bg-red-700"
+                                : "p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                            }`}
+                          >
+                            {isConfirming ? (
+                              <>
+                                <Check className="h-3.5 w-3.5" />
+                                ¿Seguro?
+                              </>
+                            ) : (
+                              <Trash2 className="h-4 w-4" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+
+                      {entry.mood && (
+                        <div className="mb-2">
+                          <span className="text-sm font-medium">Estado de ánimo:</span>{" "}
+                          <span className="text-sm">
+                            {MOOD_EMOJI[entry.mood] ? `${MOOD_EMOJI[entry.mood]} ` : ""}
+                            {entry.mood}
+                          </span>
+                        </div>
+                      )}
+                      {entry.gratitude && (
+                        <div className="mb-2">
+                          <span className="text-sm font-medium">Gratitud:</span>
+                          <p className="mt-1 text-sm text-gray-700 dark:text-gray-300">{entry.gratitude}</p>
+                        </div>
+                      )}
+                      {entry.challenges && (
+                        <div className="mb-2">
+                          <span className="text-sm font-medium">Desafíos:</span>
+                          <p className="mt-1 text-sm text-gray-700 dark:text-gray-300">{entry.challenges}</p>
+                        </div>
+                      )}
+                      {entry.achievements && (
+                        <div className="mb-2">
+                          <span className="text-sm font-medium">Logros:</span>
+                          <p className="mt-1 text-sm text-gray-700 dark:text-gray-300">{entry.achievements}</p>
+                        </div>
+                      )}
+                      {entry.tomorrow && (
+                        <div>
+                          <span className="text-sm font-medium">Intención para mañana:</span>
+                          <p className="mt-1 text-sm text-gray-700 dark:text-gray-300">{entry.tomorrow}</p>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   )
 }

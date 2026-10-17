@@ -25,6 +25,10 @@ const localStorageKeys = [
     desc: "Tus entradas del Diario Guiado",
   },
   {
+    key: "holentia:diario-guiado:draft:v1",
+    desc: "Borrador de la entrada en curso del Diario Guiado",
+  },
+  {
     key: "holentia:crear-presupuesto-personal:draft:v1",
     desc: "Borrador de tu presupuesto personal",
   },

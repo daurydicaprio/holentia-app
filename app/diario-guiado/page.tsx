@@ -24,12 +24,17 @@ const faq: FaqItem[] = [
   {
     question: "¿Quién puede leer mis entradas?",
     answer:
-      "Solo tú. Las entradas se guardan en el almacenamiento local de tu navegador (clave holentia:diario-guiado:entries:v1); no se envían a servidores ni se comparten. El botón «Borrar todo» elimina todas las entradas de inmediato.",
+      "Solo tú. Las entradas se guardan en el almacenamiento local de tu navegador (clave holentia:diario-guiado:entries:v1) y el borrador en curso en holentia:diario-guiado:draft:v1; no se envían a servidores ni se comparten. Los botones de borrar piden confirmación antes de eliminar nada.",
   },
   {
     question: "¿Qué pasa si borro los datos del navegador?",
     answer:
-      "Se perderán las entradas guardadas, ya que no existe copia en la nube. Si quieres conservar algún texto, cópialo y guárdalo en otro lugar.",
+      "Se perderán las entradas guardadas, ya que no existe copia en la nube. Si quieres conservar algún texto, usa el botón «Copiar» de cada entrada o guárdalo en otro lugar.",
+  },
+  {
+    question: "¿Escribir un diario ayuda de verdad?",
+    answer:
+      "Llevar un diario ayuda a ordenar lo que sientes, detectar patrones y cerrar el día con perspectiva. El beneficio llega con la constancia: con 5–10 minutos al día basta, y la práctica de gratitud suma con las semanas.",
   },
   {
     question: "¿Este diario sustituye terapia psicológica?",
