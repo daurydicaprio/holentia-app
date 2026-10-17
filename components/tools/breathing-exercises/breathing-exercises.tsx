@@ -242,7 +242,7 @@ export function BreathingExercises() {
                 onClick={() => selectPattern(p.id)}
                 aria-pressed={selected}
                 data-interactive="true"
-                className={`w-full rounded-lg border p-3 text-left transition-colors ${
+                className={`w-full rounded-lg border p-3 text-left transition-[colors,transform] duration-150 active:scale-[0.97] ${
                   selected
                     ? "border-mente bg-mente-lighter dark:border-mente-light dark:bg-mente-dark"
                     : "border-gray-200 hover:border-mente-light dark:border-gray-700 dark:hover:border-mente-light"
@@ -260,7 +260,13 @@ export function BreathingExercises() {
                     {p.tag}
                   </span>
                 </span>
-                <span className="mt-1 block text-xs text-gray-500 dark:text-gray-400">{p.detail}</span>
+                <span
+                  className={`mt-1 block text-xs ${
+                    selected ? "text-gray-700 dark:text-gray-200" : "text-gray-500 dark:text-gray-400"
+                  }`}
+                >
+                  {p.detail}
+                </span>
               </button>
             )
           })}
@@ -276,7 +282,7 @@ export function BreathingExercises() {
               onClick={() => selectRondas(r)}
               aria-pressed={rondas === r}
               data-interactive="true"
-              className={`rounded-md px-2 py-2 text-sm font-medium transition-colors ${
+              className={`rounded-md px-2 py-2.5 text-sm font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
                 rondas === r
                   ? "bg-mente text-white shadow-sm"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
@@ -298,7 +304,7 @@ export function BreathingExercises() {
                 type="button"
                 onClick={status === "running" ? pause : resume}
                 data-interactive="true"
-                className="flex flex-1 items-center justify-center gap-2 rounded-md bg-mente px-6 py-3 font-medium text-white transition-colors hover:bg-mente-dark active:scale-[0.98]"
+                className="flex flex-1 items-center justify-center gap-2 rounded-md bg-mente px-6 py-3 font-medium text-white transition-[colors,transform] duration-150 hover:bg-mente-dark active:scale-[0.97]"
               >
                 {status === "running" ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
                 {status === "running" ? "Pausar" : "Reanudar"}
@@ -307,7 +313,7 @@ export function BreathingExercises() {
                 type="button"
                 onClick={stop}
                 data-interactive="true"
-                className="flex items-center justify-center gap-2 rounded-md bg-gray-200 px-4 py-3 font-medium text-gray-800 transition-colors hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                className="flex items-center justify-center gap-2 rounded-md bg-gray-200 px-4 py-3 font-medium text-gray-800 transition-[colors,transform] duration-150 hover:bg-gray-300 active:scale-[0.97] dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
               >
                 <Square className="h-4 w-4" />
                 Detener
@@ -318,7 +324,7 @@ export function BreathingExercises() {
               type="button"
               onClick={start}
               data-interactive="true"
-              className="flex flex-1 items-center justify-center gap-2 rounded-md bg-mente px-6 py-3 font-medium text-white transition-colors hover:bg-mente-dark active:scale-[0.98]"
+              className="flex flex-1 items-center justify-center gap-2 rounded-md bg-mente px-6 py-3 font-medium text-white transition-[colors,transform] duration-150 hover:bg-mente-dark active:scale-[0.97]"
             >
               {status === "done" ? <RotateCcw className="h-5 w-5" /> : <Play className="h-5 w-5" />}
               {status === "done" ? "Repetir" : "Iniciar práctica"}
@@ -413,8 +419,8 @@ export function BreathingExercises() {
         </div>
 
         {/* Cómo hacerlo bien */}
-        <div className="rounded-xl bg-white p-5 shadow-lg dark:bg-gray-800">
-          <h3 className="text-sm font-semibold">Cómo hacerlo bien</h3>
+        <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
+          <h2 className="text-xl font-bold">Cómo hacerlo bien</h2>
           <ol className="mt-3 space-y-2">
             {PASOS.map((paso, i) => (
               <li key={paso} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-400">

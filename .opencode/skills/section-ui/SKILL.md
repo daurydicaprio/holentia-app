@@ -99,6 +99,7 @@ Receta para cualquier calculadora/test con varios campos numéricos (referencias
 - `{s}-light` + texto negro para superficies de hover/fulles en modo oscuro (7–10:1).
 - Texto `{s}` sobre blanco pasa para bold/títulos; para 14px usa `{s}-dark` si dudas (finanzas `#388e3c` sobre blanco ≈ 3.7:1 — borderline).
 - **Caso cuerpo (ámbar medio, no pasa AA para texto pequeño en claro)**: pequeño sobre blanco/gris-800 → `text-cuerpo-darkest` (5.6:1) / `dark:text-cuerpo-light` (8.3:1) — `text-cuerpo-dark` (3.8:1) solo iconos y bordes. Sobre `bg-cuerpo-lighter`/`dark:bg-cuerpo-dark` (chips, bloques de total) → texto `text-gray-900` (12:1/4.6:1), iconos `text-cuerpo-darkest`/`dark:text-white`, borde de chip seleccionado `border-cuerpo-dark` (`border-cuerpo` = 2:1). Detalle: design.md §7.
+- **Caso mente (azul `#1976d2`)**: `text-mente` en blanco pasa justo (4.6:1, ≥14px). Sobre `bg-mente-lighter`/`dark:bg-mente-dark` (filas seleccionadas) el texto base es seguro, pero el **secundario nunca `text-gray-500`** (2.7:1) → `text-gray-700`/`dark:text-gray-200`. Nada de `text-white/85` sobre `#1976d2` (3.8:1): `text-white` sólido. Detalle: design.md §7.
 - Probar siempre ambos modos: `:root` y `.dark` en `app/globals.css`.
 
 ## 8. Movimiento, haptics, accesibilidad
@@ -106,7 +107,7 @@ Receta para cualquier calculadora/test con varios campos numéricos (referencias
 - Entrada de tarjetas `animate-fadeIn` + `animationDelay = index * 0.1s`.
 - **Entrada de resultados**: `animate-result-in` (0.3s, fade+sube 6px) en el contenedor del bloque de resultado de cada herramienta, con `aria-live="polite"` (los lectores de pantalla anuncian el resultado al calcular). CSS puro, sin framer.
 - **Count-up en números hero**: `useCountUp(value, {duration?, decimals?})` (`hooks/use-count-up.ts`) envuelto en el formateador propio; en JSX condicional (tests/fases) usar `<CountUp value format />` (`components/ui/count-up.tsx`). Solo heroes/totales, nunca filas secundarias. Detalle completo: `design.md` §6.
-- **Press**: `transition-[colors,transform] duration-150 active:scale-[0.97]` en botones sólidos y chips (máx. escala 0.97). Base ya lo trae `components/ui/button.tsx`.
+- **Press**: `transition-[colors,transform] duration-150 active:scale-[0.97]` en botones sólidos, chips y filas de opción seleccionables (opciones de quiz, tarjetas de técnica, modos segmentados) — máx. escala 0.97. Base ya lo trae `components/ui/button.tsx`.
 - **Guarda `prefers-reduced-motion`**: global en `globals.css` + salto en `useCountUp` (las dos vías, obligatorias).
 - `data-interactive="true"` en todo interactivo; `useHapticFeedback` (`medium` guardar/navegar, `light` tabs).
 - `aria-expanded`/`aria-controls` en acordeones; `aria-hidden` en paneles colapsados.

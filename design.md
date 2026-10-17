@@ -265,6 +265,7 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 - **Racha + tira de ánimo**: tarjeta con `Flame` (días consecutivos, clave de día local vía `toLocaleDateString("en-CA")`) y últimos ≤7 ánimos en emojis con `title` de fecha.
 - **Borrador del formulario** (patrón D ampliado): `draftKey(slug)` guarda el borrador **y el `editingId`**; se limpia al guardar/cancelar/borrar; indicador «Borrador guardado».
 - **Copiar entrada** (`navigator.clipboard` + check temporal 1,5 s) como respaldo manual; estado vacío con `Feather`; fechas `es-DO`; editar **conserva la fecha original** (la racha y el historial no se mueven).
+- **Pase UI/UX móvil (17-Oct-2026)**: textareas con la receta de input (16px, foco `ring-2`, `placeholder:text-gray-400 dark:placeholder:text-gray-500`); acciones de tarjeta `h-9 w-9` centradas con press feedback; tarjetas a `p-6`.
 
 ### Respiración guiada (17-Oct-2026, ref. `components/tools/breathing-exercises/`)
 
@@ -273,6 +274,7 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 - **Controles**: tarjetas de técnica (nombre + etiqueta + detalle, `aria-pressed`) y chips de rondas; cambiar la configuración detiene y resetea la práctica. Las cuentas de segundos van en `aria-hidden` (el `aria-live` anuncia solo el nombre de la fase, no cada segundo).
 - **Preferencias** en `draftKey(slug)` (patrón D): técnica y rondas.
 - **Seguridad**: aviso visible de que no sustituye tratamiento y de no retener el aire en el agua o conduciendo.
+- **Pase UI/UX móvil (17-Oct-2026)**: detalle de la técnica seleccionada en `text-gray-700 dark:text-gray-200` (el `gray-500` caía a 2.7:1 sobre `mente-lighter`); tarjetas de técnica y chips de rondas con press feedback (rondas a `py-2.5`, 40px); tarjetas `p-6` y tips con h2 `text-xl`.
 
 ### Test de ansiedad GAD-7 (17-Oct-2026, ref. `components/tools/anxiety-test/`)
 
@@ -280,6 +282,7 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 - **Resultado**: héroe gradiente `mente` con puntaje `useCountUp` sobre 21 + banda (badge por tramo) y **escala de severidad** de 4 segmentos (23/23/23/resto: emerald/amber/orange/red) con marcador en `left: calc((score/21)*100% − 2px)`.
 - **Contenido por banda**: resumen + 3 tips + enlaces cruzados a respiración y diario; **aviso de crisis solo en banda grave** (`AlertTriangle` + 911/emergencias). Nunca ocultar el «no es un diagnóstico».
 - **Tokens**: acciones y acentos en `mente`; los semáforos de severidad usan la paleta Tailwind estándar (emerald/amber/orange/red), no tokens de sección.
+- **Pase UI/UX móvil (17-Oct-2026)**: etiquetas del héroe en `text-white` sólido (el `/85` y `/75` sobre `#1976d2` caían a 3.8/3.2:1); h2 de resultado («¿qué hago ahora?») a `text-xl`; aviso de crisis a `p-4 text-sm`; opciones de quiz y botones con press feedback; paneles de resultado a `p-6`.
 
 ### Calculadora del sueño (17-Oct-2026, ref. `components/tools/sleep-calculator/`)
 
@@ -287,6 +290,7 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 - **3 filas de ciclos** (6/5/4 × 90 min) con la de 5 ciclos resaltada como «Recomendado» (7 h 30 min); margen fijo de 15 min para conciliar el sueño.
 - **Formato 12 h `a.m./p.m.`** con `formatTime` (normaliza cruzando medianoche con `((t % 1440) + 1440) % 1440`); nada de `Date` para aritmética de horas.
 - **Patrón D** con `{mode, wakeTime, bedTime}`; validar con regex `HH:MM` al restaurar.
+- **Pase UI/UX móvil (17-Oct-2026)**: input de hora con la receta unificada (`px-3 py-2.5 text-lg font-semibold`, foco `ring-2`); subtexto de la fila «Recomendado» en `text-gray-700 dark:text-gray-200` (antes `gray-500` sobre `mente-lighter`); botones de modo con press feedback; tarjetas `p-6` y h2 de resultado a `text-xl`.
 
 ### Test de lenguajes del amor (mejoras 17-Oct-2026, ref. `components/tools/love-languages-test/`)
 
@@ -347,7 +351,7 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
   - Render inicial = valor final (sin hydration mismatch); anima **al cambiar el valor**, no en el primer mount.
   - En JSX condicional (tests con fases, ramas ternarias) usar el componente `<CountUp value format duration />` (`components/ui/count-up.tsx`) — así el hook nunca se llama condicionalmente.
   - `decimals: 0` default (enteros al volar); negativos soportados.
-- **Press feedback**: `transition-[colors,transform] duration-150 active:scale-[0.97]` en botones sólidos y grupos de chips (base de `components/ui/button.tsx`, botones del shell, `chipClass()` de combustible/hidratación/riesgo, tarjetas de meta de calorías). Nunca escala mayor a `0.97`.
+- **Press feedback**: `transition-[colors,transform] duration-150 active:scale-[0.97]` en botones sólidos, grupos de chips/filas seleccionables (opciones de quiz, tarjetas de técnica, modos segmentados, chips de rondas) y la base de `components/ui/button.tsx`, botones del shell, `chipClass()` de combustible/hidratación/riesgo y tarjetas de meta de calorías. Nunca escala mayor a `0.97`.
 - **Haptics en móviles**: `useHapticFeedback` (`medium` en guardar/navegar, `light` en tabs/chips).
 - **Guarda `prefers-reduced-motion`**: bloque global en `app/globals.css` (anula animaciones/transiciones CSS) + `useCountUp` salta al final vía `matchMedia`. Ambas vías son obligatorias: el CSS no corta un loop de rAF.
 - **Prohibido (anti-slop)**: confetti al calcular, parallax, scroll-reveal por sección, animar todo el texto, framer-motion donde baste CSS.
@@ -362,3 +366,4 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
   - Sobre blanco/gris-800: texto pequeño de acento = `text-cuerpo-darkest` (5.6:1) / `dark:text-cuerpo-light` (8.3:1). `text-cuerpo-dark` (#e65100) queda en 3.8:1 → solo iconos y bordes (≥3:1).
   - Sobre `bg-cuerpo-lighter` / `dark:bg-cuerpo-dark` (chips seleccionados, bloques de total, píldoras de nivel): texto = `text-gray-900` (12:1 / 4.6:1); iconos = `text-cuerpo-darkest` / `dark:text-white` (3.8:1). El borde de chip seleccionado usa `border-cuerpo-dark` (`border-cuerpo` se queda en 2:1 sobre blanco).
   - Nunca `/opacidad` sobre tokens de sección (clase muerta, §1) ni `text-white` sobre ámbar pequeño.
+- **Contraste mente (azul `#1976d2`)**: `text-mente` sobre blanco pasa AA justo (4.6:1) para texto ≥14px; sobre `-lighter` el texto base (`#212529`, 10:1) es seguro, pero el **texto secundario nunca en `text-gray-500` sobre `bg-mente-lighter`** (2.7:1): en filas seleccionadas subir a `text-gray-700` / `dark:text-gray-200` (`dark:bg-mente-dark` + texto base queda en 4.67:1, el mínimo AA). `text-white/85` sobre `#1976d2` cae a ~3.8:1 → sobre el extremo claro del gradiente, `text-white` sólido (4.6:1).

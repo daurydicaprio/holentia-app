@@ -323,6 +323,17 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AQ — Mente: pase UI/UX móvil de las 4 herramientas (espaciado, tipografía y contraste) (17-Oct-2026) — HECHA
+
+- [x] **Test de ansiedad (GAD-7)**: etiquetas del héroe a `text-white` sólido (el `/85` y `/75` sobre `#1976d2` caían a 3.8/3.2:1; el `/ 21` grande conserva su `/80` por ser texto grande ≥3:1), h2 del resultado a `text-xl` (era `font-semibold` a 16px), aviso de crisis a `p-4 text-sm leading-relaxed` (era `text-xs`), paneles de resultado a `p-6`, opciones de quiz y botones con press feedback `active:scale-[0.97]`, «Empezar» a `rounded-md`.
+- [x] **Sueño**: input de hora con la receta unificada (era `p-3 text-base md:text-sm` → `px-3 py-2.5 text-lg font-semibold`, foco `ring-2`, sin `shadow-sm`), subtexto de la fila «Recomendado» a `text-gray-700 dark:text-gray-200` (el `gray-500` sobre `mente-lighter` quedaba en 2.7:1), h2 del resultado a `text-xl`, tarjetas a `p-6` y modos segmentados con press feedback.
+- [x] **Respiración**: detalle de la técnica seleccionada con color condicional (`gray-700`/`gray-200`; el `gray-500` sobre `mente-lighter` fallaba AA), rondas a `py-2.5` (40px), tarjetas de técnica y segmentados con press feedback, tarjetas `p-6` y tips con h2 `text-xl`.
+- [x] **Diario**: textareas con la receta canónica (16px, `focus:outline-none`, placeholder `gray-400`/`gray-500` en ambos modos — antes sin color de placeholder), acciones de tarjeta `h-9 w-9` centradas (antes `p-2` = 32px) con press feedback, tarjeta de racha a `p-6`.
+- [x] **Docs**: `design.md` §6 (press en filas de opción), §7 (caso mente) y recetas de las 4; skill `section-ui` §7/§8.
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke (4 páginas SSR con H1 ×1 y 0 `noindex` + OG `200 image/png`) + auditoría targeted PASS.
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

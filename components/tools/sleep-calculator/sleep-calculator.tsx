@@ -125,7 +125,7 @@ export function SleepCalculator() {
             onClick={() => selectMode("wake")}
             aria-pressed={mode === "wake"}
             data-interactive="true"
-            className={`flex items-center justify-center gap-1.5 rounded-md px-2 py-2.5 text-sm font-medium transition-colors ${
+            className={`flex items-center justify-center gap-1.5 rounded-md px-2 py-2.5 text-sm font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
               mode === "wake"
                 ? "bg-mente text-white shadow-sm"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
@@ -139,7 +139,7 @@ export function SleepCalculator() {
             onClick={() => selectMode("bed")}
             aria-pressed={mode === "bed"}
             data-interactive="true"
-            className={`flex items-center justify-center gap-1.5 rounded-md px-2 py-2.5 text-sm font-medium transition-colors ${
+            className={`flex items-center justify-center gap-1.5 rounded-md px-2 py-2.5 text-sm font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
               mode === "bed"
                 ? "bg-mente text-white shadow-sm"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
@@ -158,7 +158,7 @@ export function SleepCalculator() {
           type="time"
           value={baseTime}
           onChange={(e) => (mode === "wake" ? setWakeTime(e.target.value) : setBedTime(e.target.value))}
-          className="block w-full rounded-md border border-gray-300 bg-white p-3 text-base text-gray-900 shadow-sm focus:border-transparent focus:ring-2 focus:ring-mente dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:focus:border-transparent dark:focus:ring-mente-light md:text-sm"
+          className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold text-gray-800 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-mente dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:focus:border-transparent dark:focus:ring-mente-light"
           data-interactive="true"
         />
         <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
@@ -191,14 +191,14 @@ export function SleepCalculator() {
           </div>
         ) : (
           <div aria-live="polite" className="animate-result-in space-y-4">
-            <div className="rounded-xl bg-white p-5 shadow-lg dark:bg-gray-800 sm:p-6">
+            <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
               <div className="flex items-center gap-2">
                 {mode === "wake" ? (
                   <Moon className="h-5 w-5 text-mente dark:text-mente-light" />
                 ) : (
                   <Sunrise className="h-5 w-5 text-mente dark:text-mente-light" />
                 )}
-                <h2 className="text-lg font-bold">
+                <h2 className="text-xl font-bold">
                   {mode === "wake" ? "Tus horas para dormir" : "Tus horas para despertar"}
                 </h2>
               </div>
@@ -229,7 +229,11 @@ export function SleepCalculator() {
                           )}
                           {mode === "wake" ? "Acuéstate a las" : "Despiértate a las"}
                         </p>
-                        <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                        <p
+                          className={`mt-0.5 text-xs ${
+                            recommended ? "text-gray-700 dark:text-gray-200" : "text-gray-500 dark:text-gray-400"
+                          }`}
+                        >
                           {row.cycles} ciclos · {formatDuration(row.sleepMinutes)} de sueño
                         </p>
                       </div>
@@ -251,8 +255,8 @@ export function SleepCalculator() {
             </div>
 
             {/* Cómo dormir mejor */}
-            <div className="rounded-xl bg-white p-5 shadow-lg dark:bg-gray-800">
-              <h3 className="text-sm font-semibold">Cómo dormir mejor</h3>
+            <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
+              <h2 className="text-xl font-bold">Cómo dormir mejor</h2>
               <ol className="mt-3 space-y-2">
                 {TIPS.map((tip, i) => (
                   <li key={tip} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-400">

@@ -197,7 +197,7 @@ export function AnxietyTest() {
       <div aria-live="polite" className="animate-result-in space-y-4">
         {/* Héroe */}
         <div className="rounded-2xl border border-mente-border bg-gradient-to-br from-mente to-mente-dark p-6 text-center text-white shadow-lg dark:bg-none dark:bg-mente-glass dark:text-mente-text sm:p-8">
-          <p className="text-sm text-white/85 dark:text-mente-lighter">Tu resultado</p>
+          <p className="text-sm text-white dark:text-mente-lighter">Tu resultado</p>
           <p className="mt-2 text-5xl font-bold tabular-nums">
             {animatedScore}
             <span className="text-2xl font-semibold text-white/80 dark:text-mente-lighter"> / 21</span>
@@ -206,12 +206,12 @@ export function AnxietyTest() {
             {band.name}
           </span>
           {restored && (
-            <p className="mt-3 text-xs text-white/75 dark:text-mente-lighter">Recuperado de tu último test guardado.</p>
+            <p className="mt-3 text-xs text-white dark:text-mente-lighter">Recuperado de tu último test guardado.</p>
           )}
         </div>
 
         {/* Escala */}
-        <div className="rounded-xl bg-white p-5 shadow-lg dark:bg-gray-800">
+        <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
           <div className="relative">
             <div className="flex h-3 w-full overflow-hidden rounded-full">
               <div className="w-[23%] bg-emerald-400 dark:bg-emerald-500" />
@@ -250,8 +250,8 @@ export function AnxietyTest() {
         </div>
 
         {/* Qué sigue */}
-        <div className="rounded-xl bg-white p-5 shadow-lg dark:bg-gray-800">
-          <h2 className="font-semibold">{band.name}: ¿qué hago ahora?</h2>
+        <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
+          <h2 className="text-xl font-bold">{band.name}: ¿qué hago ahora?</h2>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{band.summary}</p>
           <ul className="mt-4 space-y-2">
             {band.tips.map((tip) => (
@@ -283,8 +283,8 @@ export function AnxietyTest() {
 
         {/* Aviso de crisis (solo banda grave) */}
         {score >= 15 && (
-          <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200">
-            <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0" />
+          <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-4 text-sm leading-relaxed text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200">
+            <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0" />
             <span>
               Si estás en crisis o tienes pensamientos de hacerte daño, busca ayuda ahora: llama al 911 o acude al
               servicio de emergencia más cercano. No tienes que enfrentarlo solo/a.
@@ -293,13 +293,13 @@ export function AnxietyTest() {
         )}
 
         {/* Acciones + aviso */}
-        <div className="rounded-xl bg-white p-5 shadow-lg dark:bg-gray-800">
+        <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
           <div className="flex flex-col gap-3 sm:flex-row">
             <button
               type="button"
               onClick={startQuiz}
               data-interactive="true"
-              className="flex flex-1 items-center justify-center gap-2 rounded-md bg-mente px-6 py-3 font-medium text-white transition-colors hover:bg-mente-dark active:scale-[0.98]"
+              className="flex flex-1 items-center justify-center gap-2 rounded-md bg-mente px-6 py-3 font-medium text-white transition-[colors,transform] duration-150 hover:bg-mente-dark active:scale-[0.97]"
             >
               <RotateCcw className="h-5 w-5" />
               Repetir el test
@@ -308,7 +308,7 @@ export function AnxietyTest() {
               type="button"
               onClick={clearData}
               data-interactive="true"
-              className="flex items-center justify-center gap-2 rounded-md bg-gray-200 px-4 py-3 font-medium text-gray-800 transition-colors hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+              className="flex items-center justify-center gap-2 rounded-md bg-gray-200 px-4 py-3 font-medium text-gray-800 transition-[colors,transform] duration-150 hover:bg-gray-300 active:scale-[0.97] dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
             >
               <Trash2 className="h-4 w-4" />
               Borrar mis datos
@@ -368,7 +368,7 @@ export function AnxietyTest() {
                   onClick={() => handleAnswer(currentQuestion, option.value)}
                   aria-pressed={isSelected}
                   data-interactive="true"
-                  className={`w-full rounded-lg border-2 p-4 text-left transition-all ${
+                  className={`w-full rounded-lg border-2 p-4 text-left transition-all active:scale-[0.97] ${
                     isSelected
                       ? "border-mente bg-mente-lighter dark:border-mente-light dark:bg-mente-dark"
                       : "border-gray-200 hover:border-mente-light hover:bg-mente-lighter dark:border-gray-700 dark:hover:border-mente-light dark:hover:bg-mente-dark"
@@ -428,7 +428,7 @@ export function AnxietyTest() {
           type="button"
           onClick={startQuiz}
           data-interactive="true"
-          className="w-full rounded-lg bg-mente px-6 py-4 font-semibold text-white transition-colors hover:bg-mente-dark active:scale-[0.99]"
+          className="w-full rounded-md bg-mente px-6 py-4 font-semibold text-white transition-[colors,transform] duration-150 hover:bg-mente-dark active:scale-[0.97]"
         >
           Empezar el test
         </button>
