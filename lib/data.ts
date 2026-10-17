@@ -198,10 +198,10 @@ export const sectionsData: Record<string, SectionData> = {
     title: "Energiza tu",
     highlightText: "cuerpo",
     subtitle:
-      "Tu energía empieza con pequeños cambios. Calcula tus calorías diarias y la hidratación que necesita tu cuerpo, y convierte tus minutos de caminata en pasos con un objetivo propio: la ciencia del movimiento, sin mitos ni promesas vacías.",
+      "Tu energía empieza con pequeños cambios. Calcula tus calorías diarias, la hidratación que necesita tu cuerpo y tu índice de masa corporal, y convierte tus minutos de caminata en pasos con un objetivo propio: la ciencia del movimiento, sin mitos ni promesas vacías.",
     text: "Energiza tu cuerpo. Accede a rutinas, nutrición y consejos para un estilo de vida activo y un bienestar integral.",
     metaDescription:
-      "Calculadora de calorías, hidratación diaria y plan de pasos: objetivo, plan 5-10-20 de minutos y beneficios. Gratuitas, en tu navegador y sin registro.",
+      "Calculadora de calorías, hidratación, IMC y plan de pasos 5-10-20. Tus datos y resultados se quedan en tu navegador: gratis y sin registro.",
     cards: [
       {
         id: "calculadora-calorias",
@@ -224,6 +224,17 @@ export const sectionsData: Record<string, SectionData> = {
         metaTitle: "Calculadora de hidratación diaria",
         metaDescription:
           "Calcula cuánta agua necesitas al día según tu peso, nivel de actividad y clima (fórmula de Watson ajustada). Resultado inmediato en tu navegador.",
+      },
+      {
+        id: "calculadora-imc",
+        title: "Calculadora de IMC",
+        description: "Conoce tu rango saludable.",
+        slug: "calculadora-imc",
+        isAvailable: true,
+        category: "cuerpo",
+        metaTitle: "¿Cuál es mi IMC? Calculadora de índice de masa corporal",
+        metaDescription:
+          "Calcula tu IMC al instante: rango saludable según tu estatura, tu peso ideal y lo que el índice de masa corporal no puede decirte. En tu navegador.",
       },
       {
         id: "rutinas-hiit",

@@ -318,6 +318,15 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 - **Trucos que suman pasos**: grid `sm:grid-cols-2` de 10 micro-hábitos (icono + título + una línea): caminar 10-15 min tras comer, levantarse cada hora, parqueo lejos «si es seguro», bájate una parada antes, escaleras, caminar en llamadas, madrugar/atardecer (clima), compañía, música/pódcast y tenis a la vista.
 - **Formato de miles**: coma (`toLocaleString("es-DO")`, «7,000»), coherente con el resto del sitio.
 
+### Calculadora de IMC (17-Oct-2026, ref. `components/tools/bmi-calculator/`)
+
+- **Dos datos, resultado al instante**: peso + estatura (rango realista 20-400 kg / 100-250 cm; si no, estado «Revisa tus datos»). **Toggle kg/lb dentro del input** (botón sufijo con `ChevronsUpDown` que convierte el valor al cambiar; útil en RD, donde se piensa en libras). Inputs `type="text"` + `inputMode` (el `type="number"` rompe la escritura de decimales parciales).
+- **Héroe gradiente `cuerpo`** con IMC a un decimal (`useCountUp` + `toFixed(1)`, `tabular-nums`) + badge de banda OMS (bajo peso sky / normal emerald / sobrepeso amber / obesidad red — semáforos en paleta Tailwind estándar) + mensaje de la banda.
+- **Escala proporcional** (14/26/20/40 sobre 15-40): segmentos por banda con marcador `left: calc(...% - 2px)` (patrón GAD-7, aquí con anchos proporcionales a los rangos IMC) y etiquetas `<18.5 · 18.5–24.9 · 25–29.9 · ≥30` con los mismos anchos.
+- **Peso saludable** por estatura (18.5-24.9 × estatura²) en la unidad activa + mensaje de diferencia («te faltan ≈ X» / «estás ≈ X por encima» / «dentro del rango»).
+- **Honestidad primero**: tarjeta «El IMC no lo dice todo» (`AlertTriangle` + 4 items: músculo ≠ grasa, cintura OMS 88/102 cm, embarazo/niños/mayores, tendencia) y tarjeta «Del número a la acción» con 3 tarjetas-enlace (`Link` + haptic medium + ArrowRight) a calorías, hidratación y pasos.
+- **Patrón D**: borrador `holentia:calculadora-imc:draft:v1` ({weight, height, unit}) autoguardado tras la primera edición (`touched` ref) + «Borrar mis datos».
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.

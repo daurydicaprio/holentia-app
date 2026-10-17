@@ -4,7 +4,7 @@
 > Calculadoras, simuladores y tests que funcionan directamente en el navegador del usuario,
 > sin cuenta, sin registro y sin enviar datos a servidores.
 
-Las 26 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
+Las 27 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
 de cada herramienta, y los resultados son estimaciones educativas, no asesoramiento profesional
 (médico, financiero ni psicológico).
 
@@ -12,7 +12,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 
 - [Mente](https://holentia.com/mente): diario guiado, respiración guiada (4-7-8, caja y calma), test de ansiedad GAD-7 y calculadora del sueño.
 - [Relaciones](https://holentia.com/relaciones): test de los 5 lenguajes del amor, test de estilo de apego, 45 preguntas profundas para conversar y diario para parejas.
-- [Cuerpo](https://holentia.com/cuerpo): calculadora de calorías (Mifflin-St Jeor), hidratación (EFSA/NASEM) y plan de pasos 5-10-20 con objetivo y registro diario.
+- [Cuerpo](https://holentia.com/cuerpo): calculadora de calorías (Mifflin-St Jeor), hidratación (EFSA/NASEM), IMC y plan de pasos 5-10-20 con objetivo y registro diario.
 - [Finanzas](https://holentia.com/finanzas): presupuesto, interés compuesto, préstamo, consumo eléctrico,
   gasto de combustible, corte/vencimiento de tarjeta, interés de tarjeta, perfil de riesgo, glosario financiero,
   tracker de gastos hormiga, calculadora de aguinaldo, calculadora de ITBIS, certificado financiero,
@@ -46,6 +46,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 - [Preguntas profundas](https://holentia.com/preguntas-profundas): 45 preguntas para conversaciones significativas (pareja, familia y amigos), con mezcla y copiado.
 - [Diario para parejas](https://holentia.com/diario-parejas): una pregunta diaria para responder juntos, con historial y racha de días seguidos.
 - [Plan de pasos 5-10-20](https://holentia.com/pasos-al-dia): define tu objetivo diario, reparte la caminata en bloques de minutos y mira los beneficios de cada nivel.
+- [Calculadora de IMC](https://holentia.com/calculadora-imc): peso, estatura y rango saludable al instante, con contexto honesto (músculo, cintura y etapas de la vida).
 
 ## Páginas informativas
 

@@ -285,6 +285,15 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AM — Cuerpo: calculadora de IMC (17-Oct-2026) — HECHA
+
+- [x] **Herramienta nueva** (27ª, card `calculadora-imc` activada): peso + estatura al instante con toggle kg/lb dentro del input, bandas OMS (bajo peso/normal/sobrepeso/obesidad) con héroe gradiente y escala proporcional 15-40 con marcador, peso saludable por estatura con mensaje de diferencia, tarjeta «El IMC no lo dice todo» (músculo, cintura 88/102 cm, etapas de la vida, tendencia) y «Del número a la acción» con enlaces a calorías, hidratación y pasos; disclaimers educativos. Patrón D (`holentia:calculadora-imc:draft:v1`), inputs de texto con `inputMode` (decimales sin glitches).
+- [x] **SEO**: metaTitle «¿Cuál es mi IMC? Calculadora de índice de masa corporal» (55 ch) · metaDescription 147 ch; FAQ ×6; OG propia; hub de cuerpo actualizado (4 herramientas vivas).
+- [x] **Docs/recuentos**: llms.txt 27 (header + sección Cuerpo + línea), README (×5), architecture (×3), `seo-geo` (37 archivos OG); clave nueva en politica-cookies; receta `design.md` §4 «Calculadora de IMC».
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke + auditoría 16 puntos PASS.
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

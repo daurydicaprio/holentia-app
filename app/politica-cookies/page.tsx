@@ -140,6 +140,10 @@ const localStorageKeys = [
     key: "holentia:pasos-al-dia:entries:v1",
     desc: "Tus pasos registrados por día (fecha y total)",
   },
+  {
+    key: "holentia:calculadora-imc:draft:v1",
+    desc: "Tu borrador de la calculadora de IMC (peso, estatura y unidad)",
+  },
 ]
 
 const notUsedItems = [
