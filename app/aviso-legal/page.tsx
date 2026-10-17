@@ -24,7 +24,7 @@ export default function AvisoLegalPage() {
           <Link
             href="/"
             data-interactive="true"
-            className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+            className="inline-flex items-center gap-2 py-3 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
           >
             <ArrowLeft className="h-4 w-4" />
             Volver
@@ -43,7 +43,7 @@ export default function AvisoLegalPage() {
           </p>
         </div>
 
-        <div className="space-y-10">
+        <div className="space-y-12">
           <section>
             <div className="flex items-center gap-3 mb-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-900 text-white dark:bg-white dark:text-gray-900">

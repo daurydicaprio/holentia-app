@@ -19,12 +19,12 @@ const sectionFaqStyles: Record<string, { hover: string; iconWrap: string; icon: 
     icon: "text-white dark:text-black",
   },
   cuerpo: {
-    hover: "hover:bg-black/5 hover:text-cuerpo-dark dark:hover:bg-white/10 dark:hover:text-cuerpo-light",
+    hover: "hover:bg-black/5 hover:text-cuerpo-darkest dark:hover:bg-white/10 dark:hover:text-cuerpo-light",
     iconWrap: "bg-cuerpo-dark group-hover:bg-cuerpo-darkest dark:bg-cuerpo-light dark:group-hover:bg-cuerpo-lighter",
     icon: "text-white dark:text-black",
   },
   finanzas: {
-    hover: "hover:bg-black/5 hover:text-finanzas dark:hover:bg-white/10 dark:hover:text-finanzas-light",
+    hover: "hover:bg-black/5 hover:text-finanzas-dark dark:hover:bg-white/10 dark:hover:text-finanzas-light",
     iconWrap: "bg-finanzas group-hover:bg-finanzas-dark dark:bg-finanzas-light dark:group-hover:bg-finanzas-lighter",
     icon: "text-white dark:text-black",
   },

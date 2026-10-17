@@ -14,7 +14,7 @@ import { sectionLabel, toolJsonLd, type FaqItem } from "@/lib/seo"
 const sectionTitleClass: Record<string, string> = {
   mente: "text-mente dark:text-mente-light",
   relaciones: "text-relaciones dark:text-relaciones-light",
-  cuerpo: "text-cuerpo-dark dark:text-cuerpo-light",
+  cuerpo: "text-cuerpo-darkest dark:text-cuerpo-light",
   finanzas: "text-finanzas dark:text-finanzas-light",
 }
 
@@ -31,9 +31,9 @@ const sectionButtonClass: Record<string, string> = {
   relaciones:
     "border-relaciones text-relaciones hover:bg-relaciones-dark hover:text-white dark:border-relaciones-light dark:text-relaciones-light dark:hover:bg-relaciones-light dark:hover:text-black",
   cuerpo:
-    "border-cuerpo-dark text-cuerpo-dark hover:bg-cuerpo hover:text-black dark:border-cuerpo-light dark:text-cuerpo-light dark:hover:bg-cuerpo-light dark:hover:text-black",
+    "border-cuerpo-dark text-cuerpo-darkest hover:bg-cuerpo hover:text-black dark:border-cuerpo-light dark:text-cuerpo-light dark:hover:bg-cuerpo-light dark:hover:text-black",
   finanzas:
-    "border-finanzas text-finanzas hover:bg-finanzas-dark hover:text-white dark:border-finanzas-light dark:text-finanzas-light dark:hover:bg-finanzas-light dark:hover:text-black",
+    "border-finanzas text-finanzas-dark hover:bg-finanzas-dark hover:text-white dark:border-finanzas-light dark:text-finanzas-light dark:hover:bg-finanzas-light dark:hover:text-black",
 }
 
 interface ToolPageShellProps {
@@ -63,7 +63,9 @@ export default function ToolPageShell({ section, tool, faq = [], children }: Too
       <div className="flex-1 p-4 sm:p-6 max-w-6xl mx-auto w-full">
         <header className="mb-6 pt-6 text-center">
           <h1 className={`mb-1 text-2xl font-bold sm:text-3xl ${titleClass}`}>{tool.title}</h1>
-          <p className="mb-2 text-gray-600 dark:text-gray-300">{tool.description}</p>
+          <p className="mx-auto mb-2 max-w-2xl leading-relaxed text-gray-600 dark:text-gray-300">
+            {tool.description}
+          </p>
           <div aria-hidden="true" className={`mx-auto mb-4 h-[0.175rem] w-16 rounded-full ${underlineClass}`} />
         </header>
 

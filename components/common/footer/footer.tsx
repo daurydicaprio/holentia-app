@@ -7,12 +7,13 @@ interface FooterProps {
 }
 
 // Enlace del crédito por sección (tokens, sin hex). Sin sección: neutro de la base.
+// Claro: cuerpo arranca en `-darkest` y finanzas en `-dark` (la base no llega a 4.5:1 a 12px).
 const linkClassBySection: Record<string, string> = {
   mente: "text-mente hover:text-mente-dark dark:text-mente-light dark:hover:text-mente-lighter",
   relaciones:
     "text-relaciones hover:text-relaciones-dark dark:text-relaciones-light dark:hover:text-relaciones-lighter",
-  cuerpo: "text-cuerpo-dark hover:text-cuerpo-darkest dark:text-cuerpo-light dark:hover:text-cuerpo-lighter",
-  finanzas: "text-finanzas hover:text-finanzas-dark dark:text-finanzas-light dark:hover:text-finanzas-lighter",
+  cuerpo: "text-cuerpo-darkest dark:text-cuerpo-light dark:hover:text-cuerpo-lighter",
+  finanzas: "text-finanzas-dark hover:text-finanzas-darkest dark:text-finanzas-light dark:hover:text-finanzas-lighter",
 }
 
 const fallbackLinkClass =
@@ -37,7 +38,7 @@ export default function Footer({ section }: FooterProps) {
             key={link.href}
             href={link.href}
             data-interactive="true"
-            className="transition-colors duration-200 hover:text-gray-900 dark:hover:text-gray-100"
+            className="inline-block py-1.5 transition-colors duration-200 hover:text-gray-900 dark:hover:text-gray-100"
           >
             {link.label}
           </Link>
@@ -49,7 +50,7 @@ export default function Footer({ section }: FooterProps) {
           href="https://daurydicaprio.com"
           target="_blank"
           data-interactive="true"
-          className={`transition-colors duration-200 ${linkClass}`}
+          className={`inline-block py-1 transition-colors duration-200 ${linkClass}`}
         >
           Daury DiCaprio
         </Link>

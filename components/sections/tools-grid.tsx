@@ -19,9 +19,9 @@ const sectionButtonClasses: Record<SectionType, string> = {
   relaciones:
     "text-relaciones hover:text-relaciones-darkest dark:text-relaciones-light dark:hover:text-relaciones-lighter focus-visible:ring-relaciones dark:focus-visible:ring-relaciones-light",
   cuerpo:
-    "text-cuerpo-dark hover:text-cuerpo-darkest dark:text-cuerpo-light dark:hover:text-cuerpo-lighter focus-visible:ring-cuerpo dark:focus-visible:ring-cuerpo-light",
+    "text-cuerpo-darkest dark:text-cuerpo-light dark:hover:text-cuerpo-lighter focus-visible:ring-cuerpo dark:focus-visible:ring-cuerpo-light",
   finanzas:
-    "text-finanzas hover:text-finanzas-darkest dark:text-finanzas-light dark:hover:text-finanzas-lighter focus-visible:ring-finanzas dark:focus-visible:ring-finanzas-light",
+    "text-finanzas-dark hover:text-finanzas-darkest dark:text-finanzas-light dark:hover:text-finanzas-lighter focus-visible:ring-finanzas dark:focus-visible:ring-finanzas-light",
 }
 
 export default function ToolsGrid({ cards, section }: ToolsGridProps) {

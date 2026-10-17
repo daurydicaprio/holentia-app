@@ -26,7 +26,7 @@ const TABS = [
     href: "/cuerpo",
     label: "Cuerpo",
     section: "cuerpo",
-    activeClass: "text-cuerpo-dark dark:text-cuerpo-light",
+    activeClass: "text-cuerpo-darkest dark:text-cuerpo-light",
     hoverClass: "hover:text-cuerpo-darkest dark:hover:text-cuerpo-light",
     focusClass: "focus-visible:ring-cuerpo dark:focus-visible:ring-cuerpo-light",
   },
@@ -34,7 +34,7 @@ const TABS = [
     href: "/finanzas",
     label: "Finanzas",
     section: "finanzas",
-    activeClass: "text-finanzas dark:text-finanzas-light",
+    activeClass: "text-finanzas-dark dark:text-finanzas-light",
     hoverClass: "hover:text-finanzas-darkest dark:hover:text-finanzas-light",
     focusClass: "focus-visible:ring-finanzas dark:focus-visible:ring-finanzas-light",
   },
@@ -64,7 +64,7 @@ export default function SectionTabs({ neutral = false }: SectionTabsProps) {
             data-interactive="true"
             aria-current={isActive ? "page" : undefined}
             className={cn(
-              "rounded-md px-4 py-2 text-sm transition-colors duration-200",
+              "rounded-md px-4 py-2.5 text-sm transition-colors duration-200",
               "text-gray-600 dark:text-gray-400",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
               tab.focusClass,

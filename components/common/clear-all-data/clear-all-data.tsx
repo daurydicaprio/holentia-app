@@ -29,7 +29,7 @@ export function ClearAllData() {
       <button
         onClick={handleClear}
         data-interactive="true"
-        className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-gray-900 px-5 text-sm font-medium text-white transition-colors hover:bg-red-600 dark:bg-white dark:text-gray-900 dark:hover:bg-red-500 dark:hover:text-white"
+        className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-gray-900 px-5 text-sm font-medium text-white transition-colors hover:bg-red-600 dark:bg-white dark:text-gray-900 dark:hover:text-white"
       >
         <Trash2 className="h-4 w-4" />
         {done ? "Datos borrados" : "Borrar todos mis datos"}

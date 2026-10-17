@@ -26,12 +26,14 @@ const sectionCardClasses: Record<SectionType, string> = {
     "bg-gradient-to-br from-finanzas to-finanzas-dark group-hover:to-finanzas text-white dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text border-finanzas-border hover:border-finanzas-light",
 }
 
-// Color de la etiqueta de categoría (texto secundario dentro de la tarjeta)
+// Color de la etiqueta de categoría (texto secundario dentro de la tarjeta).
+// Blanco sólido en el gradiente: el `/85` sobre `from-{s}` da 3.4–3.8:1 en mente/finanzas
+// (12.8px no es texto grande); cuerpo usa negro translúcido sobre ámbar (6.2:1).
 const sectionCategoryClasses: Record<SectionType, string> = {
-  mente: "text-white/85 dark:text-mente-lighter",
-  relaciones: "text-white/85 dark:text-relaciones-lighter",
+  mente: "text-white dark:text-mente-lighter",
+  relaciones: "text-white dark:text-relaciones-lighter",
   cuerpo: "text-black/70 dark:text-cuerpo-lighter",
-  finanzas: "text-white/85 dark:text-finanzas-lighter",
+  finanzas: "text-white dark:text-finanzas-lighter",
 }
 
 export default function ToolCard({ card, index }: ToolCardProps) {

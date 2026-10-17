@@ -162,7 +162,7 @@ export default function PoliticaCookiesPage() {
           <Link
             href="/"
             data-interactive="true"
-            className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+            className="inline-flex items-center gap-2 py-3 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
           >
             <ArrowLeft className="h-4 w-4" />
             Volver
@@ -196,7 +196,7 @@ export default function PoliticaCookiesPage() {
           </div>
         </div>
 
-        <div className="space-y-10">
+        <div className="space-y-12">
           <section>
             <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3">¿Qué son las cookies?</h2>
             <p className="text-base leading-relaxed text-gray-700 dark:text-gray-300">

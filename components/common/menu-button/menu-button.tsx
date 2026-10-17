@@ -13,12 +13,14 @@ interface MenuButtonProps {
   isCompact?: boolean
 }
 
-// Mapa estático para que Tailwind genere las clases por sección
+// Mapa estático para que Tailwind genere las clases por sección.
+// El ítem activo va sobre `bg-gray-100`/`dark:bg-gray-800`: tiers oscurecidos para AA a 14px
+// (mente base cae a 4.2:1 sobre gray-100; relaciones base a 2.6:1 sobre gray-800).
 const sectionLinkClass: Record<string, string> = {
-  mente: "text-mente",
-  relaciones: "text-relaciones",
-  cuerpo: "text-cuerpo-dark dark:text-cuerpo",
-  finanzas: "text-finanzas",
+  mente: "text-mente-dark dark:text-mente-light",
+  relaciones: "text-relaciones dark:text-relaciones-light",
+  cuerpo: "text-cuerpo-darkest dark:text-cuerpo",
+  finanzas: "text-finanzas-dark dark:text-finanzas-light",
 }
 
 const linkClass =

@@ -378,6 +378,17 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AV — Superficies globales: pase UI/UX móvil del chrome, hubs, informativas y shell de herramientas (17-Oct-2026) — HECHA
+
+- [x] **Contraste AA (textos 12–14px)**: la base de sección no siempre llega → tiers en claro: tabs de sección activas (cuerpo `-darkest` 3.8→5.6; finanzas `-dark` 4.1→7.9), botón «Ver todas» del hub, botones del shell de herramienta (`Volver a {sección}` / `Hacer donación`), crédito del footer (12px) e ítem activo del menú (mente sobre `gray-100` 4.2→7.9; en oscuro `relaciones` sobre `gray-800` 2.6→5.4 vía `-light`); H1 del shell en cuerpo `-darkest`; categoría de ToolCard a `text-white` sólido (3.4–3.8→4.6–5.7; cuerpo conserva `text-black/70` sobre ámbar, 6.2); hover del FAQ con los mismos tiers; `hover:bg-red-500` del borrado total → `hover:bg-red-600` (3.8→4.8 con blanco).
+- [x] **Tipografía**: descripción del shell con `mx-auto max-w-2xl leading-relaxed` (la medida se estiraba a lo ancho en escritorio).
+- [x] **Tap targets y ritmo**: tabs de sección `py-2.5` (40px); nav del footer `inline-block py-1.5` y crédito `py-1`; «Volver» de las 5 informativas `py-3` (44px; sin cambio visual, la fila ya mide 44 por el menú); `space-y-10` → `space-y-12` en aviso-legal y política de cookies.
+- [x] **Identidad monocroma**: `app/error.tsx` fuera el `bg-blue-600` genérico → receta primaria `h-10` gray-900/blanco (§4c) en «Reintentar» e «Ir al inicio».
+- [x] **Docs**: `design.md` §3.7 (enlaces de texto con área táctil), §4 (ToolCard, ToolsGrid, SectionTabs, ToolPageShell, FAQ acordeón), §4b (footer), §4c (Volver, botón primario/error, ritmo `space-y-12`), §4d (ítem activo del menú), §7 (caso chrome global); skill `section-ui` §3b (radio de páginas de contenido corregido a `rounded-2xl`/`rounded-xl`) y §7.
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke (13 rutas SSR con H1 ×1, canonical ×1 y 0 `noindex`; clases nuevas en el CSS compilado) + runtime 7 páginas `200` + OG `200 image/png` + auditoría targeted PASS.
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

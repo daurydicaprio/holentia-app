@@ -37,7 +37,7 @@ const sectionCards = [
     href: "/cuerpo",
     icon: Dumbbell,
     iconClass: "text-cuerpo-dark dark:text-cuerpo-light",
-    titleClass: "text-cuerpo-dark dark:text-cuerpo-light",
+    titleClass: "text-cuerpo-darkest dark:text-cuerpo-light",
     desc: "Energiza tu cuerpo con rutinas de ejercicio, planes nutricionales y consejos para un estilo de vida activo. Cuida tu salud física y descubre tu mejor versión.",
   },
   {
@@ -101,7 +101,7 @@ export default function QueEsHolentiaPage() {
           <Link
             href="/"
             data-interactive="true"
-            className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+            className="inline-flex items-center gap-2 py-3 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
           >
             <ArrowLeft className="h-4 w-4" />
             Volver
