@@ -224,7 +224,7 @@ export function BmiCalculator() {
   }
 
   const inputClass =
-    "w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 font-semibold text-gray-800 placeholder:font-normal placeholder:text-gray-400 focus:border-cuerpo focus:outline-none focus:ring-1 focus:ring-cuerpo dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500"
+    "w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold text-gray-800 placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-cuerpo dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-cuerpo-light"
 
   return (
     <div className="space-y-6">
@@ -236,7 +236,7 @@ export function BmiCalculator() {
             Con tu peso y tu estatura basta: el IMC los cruza al instante.
           </p>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label htmlFor="imc-weight" className="mb-2 block text-sm font-medium">
                 Peso
@@ -251,14 +251,14 @@ export function BmiCalculator() {
                   onChange={(e) => handleWeight(e.target.value)}
                   placeholder={unit === "kg" ? "70" : "154"}
                   data-interactive="true"
-                  className={`${inputClass} pr-16 text-lg`}
+                  className={`${inputClass} pr-16`}
                 />
                 <button
                   type="button"
                   onClick={() => switchUnit(unit === "kg" ? "lb" : "kg")}
                   aria-label={unit === "kg" ? "Cambiar a libras" : "Cambiar a kilogramos"}
                   data-interactive="true"
-                  className="absolute inset-y-1 right-1 flex items-center gap-1 rounded-md bg-cuerpo-lighter px-2.5 text-sm font-semibold text-cuerpo-darkest transition-colors hover:bg-cuerpo-light/60 dark:bg-cuerpo-dark dark:text-cuerpo-lighter dark:hover:bg-cuerpo-light/20"
+                  className="absolute inset-y-1 right-1 flex items-center gap-1 rounded-md bg-cuerpo-lighter px-2.5 text-sm font-semibold text-gray-900 transition-colors hover:bg-cuerpo-light dark:bg-cuerpo-dark dark:text-gray-900 dark:hover:bg-cuerpo"
                 >
                   {unit}
                   <ChevronsUpDown className="h-3.5 w-3.5" />
@@ -282,9 +282,9 @@ export function BmiCalculator() {
                   onChange={(e) => handleHeight(e.target.value)}
                   placeholder="170"
                   data-interactive="true"
-                  className={`${inputClass} pr-11 text-lg`}
+                  className={`${inputClass} pr-11`}
                 />
-                <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-sm text-gray-400 dark:text-gray-500">
+                <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-sm text-gray-500 dark:text-gray-400">
                   cm
                 </span>
               </div>
@@ -367,19 +367,19 @@ export function BmiCalculator() {
       {/* El IMC no lo dice todo */}
       <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
         <div className="mb-1 flex items-center gap-2">
-          <AlertTriangle className="h-5 w-5 text-amber-500 dark:text-amber-400" />
+          <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
           <h2 className="text-xl font-bold">El IMC no lo dice todo</h2>
         </div>
         <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
           Es una referencia útil, pero no cuenta toda tu historia.
         </p>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-x-4 gap-y-5 sm:grid-cols-2 lg:grid-cols-4">
           {HONESTY.map((item) => {
             const Icon = item.icon
             return (
               <div key={item.title} className="flex items-start gap-3">
                 <div className="rounded-lg bg-cuerpo-lighter p-1.5 dark:bg-cuerpo-dark">
-                  <Icon className="h-4 w-4 text-cuerpo-dark dark:text-cuerpo-light" />
+                  <Icon className="h-4 w-4 text-cuerpo-darkest dark:text-white" />
                 </div>
                 <div>
                   <span className="block text-sm font-semibold">{item.title}</span>
@@ -406,11 +406,11 @@ export function BmiCalculator() {
                 href={step.href}
                 data-interactive="true"
                 onClick={() => triggerHapticFeedback("medium")}
-                className="group flex flex-col rounded-xl border border-gray-200 p-4 transition-colors hover:border-cuerpo hover:bg-black/5 dark:border-gray-700 dark:hover:border-cuerpo-light dark:hover:bg-white/10"
+                className="group flex flex-col rounded-xl border border-gray-200 p-4 transition-colors hover:border-cuerpo-dark hover:bg-black/5 dark:border-gray-700 dark:hover:border-cuerpo-light dark:hover:bg-white/10"
               >
                 <div className="mb-2 flex items-center justify-between">
                   <Icon className="h-5 w-5 text-cuerpo-dark dark:text-cuerpo-light" />
-                  <ArrowRight className="h-4 w-4 text-cuerpo transition-transform group-hover:translate-x-0.5 dark:text-cuerpo-light" />
+                  <ArrowRight className="h-4 w-4 text-cuerpo-darkest transition-transform group-hover:translate-x-0.5 dark:text-cuerpo-light" />
                 </div>
                 <span className="text-sm font-semibold group-hover:text-cuerpo-darkest dark:group-hover:text-cuerpo-lighter">
                   {step.title}

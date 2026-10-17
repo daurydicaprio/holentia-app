@@ -44,6 +44,12 @@ const ENTRIES_KEY = "holentia:pasos-al-dia:entries:v1"
 const CADENCE = 100 // pasos por minuto a paso moderado
 const DEFAULT_GOAL = 7000
 
+// Entradas numéricas con type="text" + inputMode: el type="number" rompe la
+// escritura de números parciales en móvil, y text-lg (18px ≥ 16px) evita el
+// zoom de iOS al enfocar.
+const inputClass =
+  "w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold text-gray-800 placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-cuerpo dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-cuerpo-light"
+
 const GOAL_PRESETS = [
   { value: 4000, label: "Base", sub: "≈40 min" },
   { value: 7000, label: "Recomendado", sub: "≈70 min" },
@@ -390,16 +396,16 @@ export function StepsPlan() {
         <div className="h-fit rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800 lg:col-span-2">
           <div className="mb-3 flex items-center gap-3">
             <div className="rounded-lg bg-cuerpo-lighter p-1.5 dark:bg-cuerpo-dark">
-              <Target className="h-5 w-5 text-cuerpo-dark dark:text-cuerpo-light" />
+              <Target className="h-5 w-5 text-cuerpo-darkest dark:text-white" />
             </div>
-            <h2 className="text-lg font-bold">Tu objetivo</h2>
+            <h2 className="text-xl font-bold">Tu objetivo</h2>
           </div>
           <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
             ¿Cuántos pasos quieres lograr cada día? La ciencia ya marca la diferencia en 6,000-8,000; los 10,000 no
             son obligatorios.
           </p>
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid gap-2 sm:grid-cols-3">
             {GOAL_PRESETS.map((preset) => {
               const selected = isGoalPreset(preset.value)
               return (
@@ -409,17 +415,29 @@ export function StepsPlan() {
                   data-interactive="true"
                   onClick={() => selectGoal(preset.value)}
                   aria-pressed={selected}
-                  className={`rounded-lg border p-3 text-center transition-colors ${
+                  className={`flex items-center justify-between gap-3 rounded-lg border px-3.5 py-3 text-left transition-[colors,transform] duration-150 active:scale-[0.97] sm:flex-col sm:justify-center sm:gap-0 sm:text-center ${
                     selected
-                      ? "border-cuerpo bg-cuerpo-lighter dark:border-cuerpo-light dark:bg-cuerpo-dark"
-                      : "border-gray-200 hover:border-cuerpo-light dark:border-gray-700 dark:hover:border-cuerpo-light"
+                      ? "border-cuerpo-dark bg-cuerpo-lighter text-gray-900 dark:border-cuerpo-light dark:bg-cuerpo-dark dark:text-gray-900"
+                      : "border-gray-200 text-gray-700 hover:border-cuerpo-dark dark:border-gray-700 dark:text-gray-200 dark:hover:border-cuerpo-light"
                   }`}
                 >
-                  <span className="block text-xs font-semibold text-gray-700 dark:text-gray-200">{preset.label}</span>
-                  <span className="mt-1 block text-sm font-bold text-cuerpo-dark dark:text-cuerpo-light">
-                    {formatNumber(preset.value)}
+                  <span className="text-xs font-semibold">{preset.label}</span>
+                  <span className="text-right sm:mt-1 sm:text-center">
+                    <span
+                      className={`block text-sm font-bold ${
+                        selected ? "" : "text-cuerpo-darkest dark:text-cuerpo-light"
+                      }`}
+                    >
+                      {formatNumber(preset.value)}
+                    </span>
+                    <span
+                      className={`block text-[11px] ${
+                        selected ? "text-gray-700 dark:text-gray-900" : "text-gray-500 dark:text-gray-400"
+                      }`}
+                    >
+                      {preset.sub}
+                    </span>
                   </span>
-                  <span className="mt-0.5 block text-[11px] text-gray-500 dark:text-gray-400">{preset.sub}</span>
                 </button>
               )
             })}
@@ -428,18 +446,16 @@ export function StepsPlan() {
           <label htmlFor="goal-input" className="mt-4 block text-sm font-medium">
             Otro objetivo
           </label>
-          <div className="mt-1 flex items-center gap-2">
+          <div className="mt-1.5 flex items-center gap-2">
             <input
               id="goal-input"
-              type="number"
+              type="text"
               inputMode="numeric"
-              min={1000}
-              max={30000}
-              step={500}
+              autoComplete="off"
               value={goalInput}
               onChange={(e) => handleGoalInput(e.target.value)}
               onBlur={normalizeGoalInput}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 focus:border-cuerpo focus:outline-none focus:ring-1 focus:ring-cuerpo dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              className={`${inputClass} min-w-0 flex-1`}
             />
             <span className="text-sm text-gray-500 dark:text-gray-400">pasos</span>
           </div>
@@ -448,7 +464,7 @@ export function StepsPlan() {
           </p>
 
           <div className="mt-4 flex items-start gap-2 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
-            <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-400" />
+            <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-500 dark:text-gray-400" />
             <p className="text-xs leading-relaxed text-gray-500 dark:text-gray-400">
               Los famosos 10,000 pasos nacieron en 1965 de un podómetro japonés («Manpo-kei»), no de un estudio. Hoy la
               ciencia apunta a que 6,000-8,000 ya concentran gran parte del beneficio.
@@ -474,16 +490,16 @@ export function StepsPlan() {
         <div className="h-fit rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800 lg:col-span-3">
           <div className="mb-3 flex items-center gap-3">
             <div className="rounded-lg bg-cuerpo-lighter p-1.5 dark:bg-cuerpo-dark">
-              <Footprints className="h-5 w-5 text-cuerpo-dark dark:text-cuerpo-light" />
+              <Footprints className="h-5 w-5 text-cuerpo-darkest dark:text-white" />
             </div>
-            <h2 className="text-lg font-bold">Tu plan 5-10-20</h2>
+            <h2 className="text-xl font-bold">Tu plan 5-10-20</h2>
           </div>
           <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
             Suma bloques de minutos durante el día: 5 para empezar, 10 para sumar, 20 para transformar. Algunas cosas
             se hacen en 5 minutos; para caminar, apunta a 40 o más.
           </p>
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid gap-2 sm:grid-cols-3">
             {PLAN_PRESETS.map((preset) => {
               const selected =
                 plan.morning === preset.split.morning &&
@@ -496,14 +512,18 @@ export function StepsPlan() {
                   data-interactive="true"
                   onClick={() => applyPlanPreset(preset.split)}
                   aria-pressed={selected}
-                  className={`rounded-lg border p-2.5 text-center transition-colors ${
+                  className={`flex items-center justify-between gap-3 rounded-lg border px-3.5 py-2.5 text-left transition-[colors,transform] duration-150 active:scale-[0.97] sm:flex-col sm:justify-center sm:gap-0 sm:py-3 sm:text-center ${
                     selected
-                      ? "border-cuerpo bg-cuerpo-lighter dark:border-cuerpo-light dark:bg-cuerpo-dark"
-                      : "border-gray-200 hover:border-cuerpo-light dark:border-gray-700 dark:hover:border-cuerpo-light"
+                      ? "border-cuerpo-dark bg-cuerpo-lighter text-gray-900 dark:border-cuerpo-light dark:bg-cuerpo-dark dark:text-gray-900"
+                      : "border-gray-200 text-gray-700 hover:border-cuerpo-dark dark:border-gray-700 dark:text-gray-200 dark:hover:border-cuerpo-light"
                   }`}
                 >
-                  <span className="block text-xs font-semibold text-gray-700 dark:text-gray-200">{preset.label}</span>
-                  <span className="mt-0.5 block text-sm font-bold text-cuerpo-dark dark:text-cuerpo-light">
+                  <span className="text-sm font-semibold">{preset.label}</span>
+                  <span
+                    className={`text-sm font-bold sm:mt-0.5 ${
+                      selected ? "" : "text-cuerpo-darkest dark:text-cuerpo-light"
+                    }`}
+                  >
                     {preset.total}
                   </span>
                 </button>
@@ -533,7 +553,7 @@ export function StepsPlan() {
                     data-interactive="true"
                     aria-label={`Menos minutos en la ${block.label.toLowerCase()}`}
                     onClick={() => setBlock(block.key, -5)}
-                    className="rounded-md border border-gray-300 p-2 text-gray-600 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                    className="flex h-10 w-10 items-center justify-center rounded-md border border-gray-300 text-gray-600 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
                   >
                     <Minus className="h-4 w-4" />
                   </button>
@@ -543,7 +563,7 @@ export function StepsPlan() {
                     data-interactive="true"
                     aria-label={`Más minutos en la ${block.label.toLowerCase()}`}
                     onClick={() => setBlock(block.key, 5)}
-                    className="rounded-md border border-gray-300 p-2 text-gray-600 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                    className="flex h-10 w-10 items-center justify-center rounded-md border border-gray-300 text-gray-600 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
                   >
                     <Plus className="h-4 w-4" />
                   </button>
@@ -554,15 +574,15 @@ export function StepsPlan() {
 
           <div className="mt-4 rounded-lg bg-cuerpo-lighter p-4 dark:bg-cuerpo-dark">
             <div className="flex items-center justify-between gap-2">
-              <span className="text-sm font-medium text-cuerpo-darkest dark:text-cuerpo-lighter">Total del día</span>
-              <span className="rounded-full bg-white/70 px-2.5 py-0.5 text-xs font-medium text-cuerpo-dark dark:bg-black/20 dark:text-cuerpo-lighter">
+              <span className="text-sm font-medium text-gray-900">Total del día</span>
+              <span className="rounded-full bg-white/70 px-2.5 py-0.5 text-xs font-medium text-gray-900 dark:bg-white/10 dark:text-gray-900">
                 {levelName}
               </span>
             </div>
-            <p className="mt-1 text-2xl font-bold text-cuerpo-darkest dark:text-cuerpo-lighter">
+            <p className="mt-1 text-2xl font-bold text-gray-900">
               {planMinutes} min ≈ {formatNumber(planSteps)} pasos
             </p>
-            <p className="mt-1 text-xs text-cuerpo-dark dark:text-cuerpo-lighter">
+            <p className="mt-1 text-xs text-gray-700 dark:text-gray-900">
               {covered
                 ? "✓ Tu plan cubre tu objetivo del día."
                 : `Te faltan ≈ ${missingMin} min para cubrir tu objetivo de ${formatNumber(goal)} pasos.`}
@@ -577,7 +597,7 @@ export function StepsPlan() {
           <div className="mb-4 flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4 text-gray-500" />
-              <h2 className="text-lg font-bold">Hoy</h2>
+              <h2 className="text-xl font-bold">Hoy</h2>
             </div>
             <span className="text-xs text-gray-500 dark:text-gray-400">{dayKey ? formatDay(dayKey) : "…"}</span>
           </div>
@@ -588,21 +608,19 @@ export function StepsPlan() {
           <div className="flex items-center gap-2">
             <input
               id="today-steps"
-              type="number"
+              type="text"
               inputMode="numeric"
-              min={0}
-              max={999999}
+              autoComplete="off"
               placeholder="0"
               value={todayInput}
               onChange={(e) => handleTodayInput(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold text-gray-800 focus:border-cuerpo focus:outline-none focus:ring-1 focus:ring-cuerpo dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              className={`${inputClass} min-w-0 flex-1`}
             />
-            <span className="text-sm text-gray-500 dark:text-gray-400">pasos</span>
             <button
               type="button"
               data-interactive="true"
               onClick={addThousand}
-              className="whitespace-nowrap rounded-md bg-gray-100 px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+              className="whitespace-nowrap rounded-md bg-gray-100 px-3 py-2.5 text-sm font-medium text-gray-700 transition-[colors,transform] duration-150 hover:bg-gray-200 active:scale-[0.97] dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
             >
               +1,000
             </button>
@@ -611,7 +629,7 @@ export function StepsPlan() {
           <div className="mt-4">
             <div className="mb-1 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
               <span>Progreso hacia {formatNumber(goal)} pasos</span>
-              <span className="font-semibold text-cuerpo-dark dark:text-cuerpo-light">{pct}%</span>
+              <span className="font-semibold text-cuerpo-darkest dark:text-cuerpo-light">{pct}%</span>
             </div>
             <div className="h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700">
               <div
@@ -624,7 +642,7 @@ export function StepsPlan() {
 
           <div className="mt-4 flex items-center justify-between gap-2">
             {streak > 0 ? (
-              <span className="flex items-center gap-1 rounded-full bg-cuerpo-lighter px-2.5 py-1 text-xs font-medium text-cuerpo-dark dark:bg-cuerpo-dark dark:text-cuerpo-lighter">
+              <span className="flex items-center gap-1 rounded-full bg-cuerpo-lighter px-2.5 py-1 text-xs font-medium text-gray-900 dark:bg-cuerpo-dark dark:text-gray-900">
                 <Flame className="h-3.5 w-3.5" />
                 {streak === 1 ? "1 día cumpliendo" : `${streak} días cumpliendo`}
               </span>
@@ -646,11 +664,11 @@ export function StepsPlan() {
                       title={day.steps !== null ? `${formatNumber(day.steps)} pasos` : "Sin registro"}
                       className={`flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-bold ${
                         day.met
-                          ? "bg-cuerpo text-white dark:bg-cuerpo-light dark:text-gray-900"
+                          ? "bg-cuerpo text-gray-900 dark:bg-cuerpo-light dark:text-gray-900"
                           : day.steps !== null
-                            ? "border-2 border-cuerpo/40 text-cuerpo-dark dark:border-cuerpo-light/40 dark:text-cuerpo-lighter"
+                            ? "border-2 border-cuerpo-dark dark:border-cuerpo-light"
                             : "border border-dashed border-gray-300 dark:border-gray-600"
-                      } ${i === 6 ? "ring-2 ring-cuerpo/30 ring-offset-1 dark:ring-cuerpo-light/30 dark:ring-offset-gray-800" : ""}`}
+                      } ${i === 6 ? "ring-2 ring-cuerpo-dark ring-offset-1 dark:ring-cuerpo-light dark:ring-offset-gray-800" : ""}`}
                     >
                       {day.met ? <Check className="h-3.5 w-3.5" /> : day.steps !== null ? "" : "·"}
                     </span>
@@ -665,15 +683,15 @@ export function StepsPlan() {
 
         <div className="h-fit rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
           <div className="mb-3 flex items-center gap-2">
-            <h2 className="text-lg font-bold">Lo que ganas con {formatNumber(goal)} pasos</h2>
+            <h2 className="text-xl font-bold">Lo que ganas con {formatNumber(goal)} pasos</h2>
           </div>
-          <span className="mb-4 inline-block rounded-full bg-cuerpo-lighter px-2.5 py-0.5 text-xs font-medium text-cuerpo-dark dark:bg-cuerpo-dark dark:text-cuerpo-lighter">
+          <span className="mb-4 inline-block rounded-full bg-cuerpo-lighter px-2.5 py-0.5 text-xs font-medium text-gray-900 dark:bg-cuerpo-dark dark:text-gray-900">
             Nivel {benefitsLevel.name}
           </span>
           <ul className="space-y-2">
             {benefitsLevel.items.map((item, index) => (
               <li key={index} className="flex items-start gap-2">
-                <span className="mt-1 text-cuerpo dark:text-cuerpo-light">•</span>
+                <span className="mt-1 text-cuerpo-dark dark:text-cuerpo-light">•</span>
                 <span className="text-sm text-gray-700 dark:text-gray-300">{item}</span>
               </li>
             ))}
@@ -686,17 +704,17 @@ export function StepsPlan() {
 
       {/* Trucos + base */}
       <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
-        <h2 className="mb-1 text-lg font-bold">Trucos que suman pasos</h2>
+        <h2 className="mb-1 text-xl font-bold">Trucos que suman pasos</h2>
         <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
           Pequeños ajustes del día a día que no se sienten como ejercicio.
         </p>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-x-4 gap-y-5 sm:grid-cols-2">
           {TIPS.map((tip) => {
             const Icon = tip.icon
             return (
               <div key={tip.title} className="flex items-start gap-3">
                 <div className="rounded-lg bg-cuerpo-lighter p-1.5 dark:bg-cuerpo-dark">
-                  <Icon className="h-4 w-4 text-cuerpo-dark dark:text-cuerpo-light" />
+                  <Icon className="h-4 w-4 text-cuerpo-darkest dark:text-white" />
                 </div>
                 <div>
                   <span className="block text-sm font-semibold">{tip.title}</span>
@@ -709,11 +727,11 @@ export function StepsPlan() {
       </div>
 
       <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
-        <h2 className="mb-1 text-lg font-bold">Los pasos son el primer paso, no el único</h2>
+        <h2 className="mb-1 text-xl font-bold">Los pasos son el primer paso, no el único</h2>
         <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
           Caminar es la base más fácil de sostener; el resto se construye encima.
         </p>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-x-4 gap-y-5 sm:grid-cols-2 lg:grid-cols-4">
           <div className="flex items-start gap-3">
             <HeartPulse className="mt-0.5 h-5 w-5 flex-shrink-0 text-cuerpo-dark dark:text-cuerpo-light" />
             <div>

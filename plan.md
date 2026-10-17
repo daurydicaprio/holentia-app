@@ -311,6 +311,18 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AP — Cuerpo: pase UI/UX móvil de las 4 herramientas (espaciado, tipografía y contraste) (17-Oct-2026) — HECHA
+
+- [x] **Receta de input unificada** (las 4): `rounded-md border bg-white px-3 py-2.5 text-lg font-semibold` + foco canónico `ring-2` (las hermanas usaban `ring-1`/`p-3` dispares), `type="text"` + `inputMode` con saneado (el `type="number"` rompía decimales parciales en móvil), selects largos en `text-base`.
+- [x] **Calorías**: objetivo en filas de ancho completo en móvil (3 columnas desde `sm`, `aria-pressed`), héroe `rounded-2xl` + borde `cuerpo-border` + `p-6 sm:p-8`, sección editorial sin `uppercase`, contraste de chips seleccionados (`border-cuerpo-dark`, texto `gray-900`).
+- [x] **Hidratación**: chips con contraste corregido, héroe `rounded-2xl` + borde + `p-6 sm:p-8` con las 3 celdas igualadas (una salía blanca sin motivo), plan del día con la última celda a ancho completo en móvil, fuera `animate-pulse` decorativo, tips a `sky-600` (3:1).
+- [x] **Pasos**: h2 internos a `text-xl` (eran `text-lg`, únicos de la sección), presets de objetivo/plan como filas en móvil (label + valor), steppers `h-10 w-10` (40px), registro de hoy sin el «pasos» redundante y `+1,000` con feedback `active`, clases muertas por `/opacidad` (`border-cuerpo/40`, `ring-cuerpo/30`) sustituidas por tokens sólidos, puntos de la semana con contraste AA.
+- [x] **IMC**: peso y estatura apilados en móvil (`sm:grid-cols-2`; el sufijo kg/lb no cabía a 2 columnas ≤360px), botón kg/lb AA con hover funcional (los `/opacidad` previos eran clases muertas), iconos de aviso a `amber-600`.
+- [x] **Docs**: `design.md` §3.3 (inputs), §3.7 (filas que no caben, steppers), §7 (caso cuerpo sobre ámbar) y recetas de pasos/IMC; skill `section-ui` §3c/§7.
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke (4 páginas 200 + OG `200 image/png`) + auditoría targeted PASS.
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

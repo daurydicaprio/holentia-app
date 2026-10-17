@@ -24,6 +24,15 @@ type GoalId = (typeof GOALS)[number]["id"]
 
 const DRAFT_KEY = draftKey("calculadora-calorias")
 
+// Entradas numéricas con type="text" + inputMode (el type="number" rompe la
+// escritura de decimales parciales en algunos teclados móviles).
+const sanitizeDecimal = (raw: string) => {
+  const clean = raw.replace(/[^\d.]/g, "")
+  const [head, ...rest] = clean.split(".")
+  return (rest.length ? `${head}.${rest.join("")}` : head).slice(0, 6)
+}
+const sanitizeInt = (raw: string) => raw.replace(/\D/g, "").slice(0, 3)
+
 interface CalorieDraft {
   weight?: string
   height?: string
@@ -114,7 +123,9 @@ export function CalorieCalculator() {
   const goalLabel = GOALS.find((g) => g.id === goal)?.label.toLowerCase() ?? ""
 
   const inputClass =
-    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-cuerpo dark:focus:border-transparent dark:focus:ring-cuerpo-light"
+    "w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold text-gray-800 placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-cuerpo dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-cuerpo-light"
+  const selectClass =
+    "w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-base text-gray-800 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-cuerpo dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:focus:border-transparent dark:focus:ring-cuerpo-light"
 
   return (
     <div className="space-y-6">
@@ -122,23 +133,29 @@ export function CalorieCalculator() {
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
         <h2 className="text-xl font-bold mb-1">¿Cuál es tu objetivo?</h2>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">El resultado se calcula para lo que elijas.</p>
-        <div className="grid grid-cols-3 gap-3">
-          {GOALS.map((g) => (
-            <button
-              key={g.id}
-              onClick={() => pickGoal(g.id)}
-              className={`p-4 rounded-xl border-2 font-medium transition-[colors,transform] duration-150 active:scale-[0.97] text-center ${
-                goal === g.id
-                  ? "border-cuerpo bg-cuerpo-lighter text-cuerpo-darkest shadow-sm dark:border-cuerpo-light dark:bg-cuerpo-dark dark:text-cuerpo-lighter"
-                  : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-cuerpo-light dark:hover:border-cuerpo-light"
-              }`}
-              data-interactive="true"
-            >
-              <g.icon className="h-6 w-6 mx-auto mb-1" />
-              <div className="font-bold">{g.label}</div>
-              <div className="text-xs opacity-75 mt-0.5">{g.hint}</div>
-            </button>
-          ))}
+        <div className="grid gap-3 sm:grid-cols-3">
+          {GOALS.map((g) => {
+            const selected = goal === g.id
+            return (
+              <button
+                key={g.id}
+                onClick={() => pickGoal(g.id)}
+                aria-pressed={selected}
+                className={`flex items-center gap-3 rounded-xl border-2 p-4 text-left font-medium transition-[colors,transform] duration-150 active:scale-[0.97] sm:block sm:text-center ${
+                  selected
+                    ? "border-cuerpo-dark bg-cuerpo-lighter text-gray-900 shadow-sm dark:border-cuerpo-light dark:bg-cuerpo-dark"
+                    : "border-gray-200 text-gray-600 hover:border-cuerpo-dark dark:border-gray-700 dark:text-gray-300 dark:hover:border-cuerpo-light"
+                }`}
+                data-interactive="true"
+              >
+                <g.icon className="h-6 w-6 flex-shrink-0 sm:mx-auto sm:mb-1" />
+                <span className="min-w-0">
+                  <span className="block font-bold">{g.label}</span>
+                  <span className="mt-0.5 block text-xs">{g.hint}</span>
+                </span>
+              </button>
+            )
+          })}
         </div>
       </div>
 
@@ -150,11 +167,11 @@ export function CalorieCalculator() {
             <div>
               <label className="block text-sm font-medium mb-2">Peso (kg)</label>
               <input
-                type="number"
-                min={0}
+                type="text"
                 inputMode="decimal"
+                autoComplete="off"
                 value={weight}
-                onChange={(e) => setWeight(e.target.value)}
+                onChange={(e) => setWeight(sanitizeDecimal(e.target.value))}
                 placeholder="70"
                 className={inputClass}
                 data-interactive="true"
@@ -163,11 +180,11 @@ export function CalorieCalculator() {
             <div>
               <label className="block text-sm font-medium mb-2">Altura (cm)</label>
               <input
-                type="number"
-                min={0}
+                type="text"
                 inputMode="decimal"
+                autoComplete="off"
                 value={height}
-                onChange={(e) => setHeight(e.target.value)}
+                onChange={(e) => setHeight(sanitizeDecimal(e.target.value))}
                 placeholder="170"
                 className={inputClass}
                 data-interactive="true"
@@ -176,11 +193,11 @@ export function CalorieCalculator() {
             <div>
               <label className="block text-sm font-medium mb-2">Edad</label>
               <input
-                type="number"
-                min={0}
+                type="text"
                 inputMode="numeric"
+                autoComplete="off"
                 value={age}
-                onChange={(e) => setAge(e.target.value)}
+                onChange={(e) => setAge(sanitizeInt(e.target.value))}
                 placeholder="30"
                 className={inputClass}
                 data-interactive="true"
@@ -196,7 +213,8 @@ export function CalorieCalculator() {
                   <button
                     key={opt.value}
                     onClick={() => setSex(opt.value)}
-                    className={`flex-1 py-3 px-2 rounded-lg font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
+                    aria-pressed={sex === opt.value}
+                    className={`flex-1 rounded-md py-3 px-2 font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
                       sex === opt.value
                         ? "bg-cuerpo-dark text-white shadow-sm"
                         : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
@@ -215,7 +233,7 @@ export function CalorieCalculator() {
             <select
               value={activity}
               onChange={(e) => setActivity(e.target.value)}
-              className={inputClass}
+              className={selectClass}
               data-interactive="true"
             >
               {Object.entries(ACTIVITY).map(([value, opt]) => (
@@ -249,7 +267,7 @@ export function CalorieCalculator() {
               <p className="text-sm mt-1">y verás tus calorías para {goalLabel}.</p>
             </div>
           ) : (
-            <div aria-live="polite" className="animate-result-in bg-gradient-to-br from-cuerpo to-cuerpo-dark rounded-xl p-8 shadow-lg text-black text-center h-full flex flex-col justify-center dark:bg-none dark:bg-cuerpo-glass dark:text-cuerpo-text">
+            <div aria-live="polite" className="animate-result-in flex h-full flex-col justify-center rounded-2xl border border-cuerpo-border bg-gradient-to-br from-cuerpo to-cuerpo-dark p-6 text-center text-black shadow-lg dark:bg-none dark:bg-cuerpo-glass dark:text-cuerpo-text sm:p-8">
               <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Para {goalLabel} necesitas</div>
               <div className="text-6xl font-bold">{animatedHeroValue.toLocaleString("es-DO")}</div>
               <div className="text-lg opacity-90 mt-1">kcal al día</div>
@@ -263,7 +281,7 @@ export function CalorieCalculator() {
                         : "bg-black/10 text-black/80 border-black/15 dark:bg-white/10 dark:text-cuerpo-lighter dark:border-white/20"
                     }`}
                   >
-                    <div className={`text-xs ${id === goal ? "opacity-70" : "opacity-90"}`}>
+                    <div className={`text-xs ${id === goal ? "" : "opacity-90"}`}>
                       {id === "lose" ? "Bajar −20%" : id === "maintain" ? "Mantener" : "Subir +10%"}
                     </div>
                     <div className="font-bold tabular-nums">{result[id].toLocaleString("es-DO")}</div>
@@ -280,8 +298,8 @@ export function CalorieCalculator() {
       </div>
 
       {/* Guía: el equilibrio es la clave */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-10 shadow-lg">
-        <h2 className="text-xl sm:text-2xl font-bold mb-2 text-center uppercase tracking-wide">
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
+        <h2 className="text-xl sm:text-2xl font-bold text-balance text-center mb-2">
           El equilibrio es la clave
         </h2>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-8 text-center max-w-2xl mx-auto leading-relaxed">
@@ -312,7 +330,7 @@ export function CalorieCalculator() {
             },
           ].map((leg) => (
             <div key={leg.title} className="bg-cuerpo-lighter dark:bg-cuerpo-dark rounded-xl px-5 py-4 flex items-start gap-3">
-              <leg.icon className="h-5 w-5 mt-0.5 flex-shrink-0 text-cuerpo-dark dark:text-cuerpo-light" />
+              <leg.icon className="h-5 w-5 mt-0.5 flex-shrink-0 text-cuerpo-darkest dark:text-white" />
               <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                 <strong>{leg.title}:</strong> {leg.text}
               </p>

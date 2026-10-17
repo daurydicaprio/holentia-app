@@ -94,6 +94,7 @@ Un rol = una clase. Ante la duda, copiar el valor del componente de referencia, 
 
 - UI densa (herramientas, listas, tablas): `text-sm` · hero/landing y buscadores: `text-base` · captions/micro: `text-xs`.
 - Labels de input: `text-sm font-medium` (los inputs grandes de buscador usan `text-base`).
+- **Inputs de herramienta (canónico, 17-Oct-2026)**: `w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold` + `placeholder:font-normal placeholder:text-gray-400` y foco de §3.4 · `dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500`. `text-lg` (18px ≥ 16px) evita el zoom de iOS y da peso al dato; los selects con etiquetas largas usan `text-base` (a 18px se clipean). `type="text"` + `inputMode` (`numeric`/`decimal`) con saneado: el `type="number"` rompe la escritura de decimales parciales en móvil. Referencia: `components/tools/bmi-calculator/bmi-calculator.tsx`.
 
 ### 3.4 Foco (canónico, un solo patrón)
 
@@ -120,8 +121,9 @@ El borde se vuelve transparente al enfocar: solo el anillo de sección marca el 
 ### 3.7 Mobile (reglas rápidas, 16-Oct-2026)
 
 - **Breakpoint de móvil**: `<768px` (`md`) — swipe entre secciones, FAB `MobileFab`, header compacto de herramienta.
-- **Inputs**: nunca `text-sm` a secas en un input — iOS Safari hace zoom al enfocar (<16px). Patrón canónico: `text-base md:text-sm` (como `components/ui/input.tsx`). Añadir `inputMode` (`numeric`/`decimal`) en inputs numéricos.
-- **Tap targets ≥44px** en acciones táctiles (botones de header, menú); el resto de controles ≥40px.
+- **Inputs**: nunca `text-sm` a secas en un input — iOS Safari hace zoom al enfocar (<16px). Patrón canónico: `text-base md:text-sm` (como `components/ui/input.tsx`); los **numéricos de herramienta** usan `text-lg font-semibold` (§3.3) y `type="text"` + `inputMode` con saneado. Añadir `inputMode` (`numeric`/`decimal`) en inputs numéricos.
+- **Filas que no caben**: presets/chips de 3 columnas y parejas de inputs con sufijo (p. ej. kg/lb del IMC) se apilan a ancho completo en móvil (`grid gap-*` + `sm:grid-cols-*`); en `sm+` recuperan la rejilla. Un preset en fila = label a la izquierda + valor a la derecha (≥44px de alto).
+- **Tap targets ≥44px** en acciones táctiles (botones de header, menú); el resto de controles ≥40px (steppers `h-10 w-10`).
 - **Formato local**: moneda siempre con `formatDOP` de `lib/format.ts` (es-DO/DOP, `Intl.NumberFormat`) — nunca `es-MX`/`MXN` ni `$` pelado.
 - **Charts**: leyendas de doughnut/radial → `position: isMobile ? "bottom" : "left"` (a la izquierda aplastan el gráfico en móvil).
 - **Tablas**: siempre `overflow-x-auto` en contenedor.
@@ -313,6 +315,7 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 
 - **Objetivo configurable**: 3 presets (`Base` 4,000 / `Recomendado` 7,000 / `Ideal` 10,000, `aria-pressed`) + input libre (1,000-30,000) con normalización al `blur`; conversión documentada **100 pasos/min** (cadencia moderada) y recuadro `Info` que desmonta el mito Manpo-kei. Autoguardado **solo tras la primera edición** (`dirty` ref) en `holentia:pasos-al-dia:draft:v1`.
 - **Plan por bloques (steppers)**: presets `Mínimo 40′` / `Recomendado 60′` / `Ideal 80′` + bloques Mañana/Tarde/Noche con `−`/`+` de 5 en 5 (0-90, `aria-label` por bloque); resumen con total, equivalencia en pasos y chip de nivel por minutos (<40 · 40-59 · 60-69 · 70-100 · +100).
+- **Móvil + contraste (17-Oct-2026)**: presets de objetivo y de plan como **filas de ancho completo** (label izquierda + valor derecha, ≥44px) y 3 columnas desde `sm`; steppers `h-10 w-10`; input «Otro objetivo» con la receta de §3.3 (`text-lg`, `type="text"` + saneado) y registro de hoy con `+1,000` pegado al input. Texto sobre ámbar según §7 (gray-900 / darkest); círculos de la semana: cumplido `bg-cuerpo text-gray-900`, registrado `border-cuerpo-dark`, hoy `ring-cuerpo-dark` (los `/opacidad` sobre tokens eran clases muertas).
 - **Registro de hoy** (patrón diario-parejas): fecha local calculada tras el montaje (páginas estáticas), `touched` ref, upsert por día en `holentia:pasos-al-dia:entries:v1` con `entriesRef` para no re-disparar el efecto; barra de progreso vs. objetivo, racha (`Flame`, días seguidos cumpliendo) y fila de últimos 7 días (punto lleno con `Check` = cumplido, anillo = registrado, punteado = sin registro; hoy con `ring`).
 - **Beneficios por banda de objetivo** (`<4000` arranque · `4000-5999` base · `6000-7999` recomendado · `8000+` ideal) + tarjeta «Los pasos son el primer paso, no el único» (OMS 150-300 min/semana, fuerza 2 días, alimentación, descanso).
 - **Trucos que suman pasos**: grid `sm:grid-cols-2` de 10 micro-hábitos (icono + título + una línea): caminar 10-15 min tras comer, levantarse cada hora, parqueo lejos «si es seguro», bájate una parada antes, escaleras, caminar en llamadas, madrugar/atardecer (clima), compañía, música/pódcast y tenis a la vista.
@@ -326,6 +329,7 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 - **Peso saludable** por estatura (18.5-24.9 × estatura²) en la unidad activa + mensaje de diferencia («te faltan ≈ X» / «estás ≈ X por encima» / «dentro del rango»).
 - **Honestidad primero**: tarjeta «El IMC no lo dice todo» (`AlertTriangle` + 4 items: músculo ≠ grasa, cintura OMS 88/102 cm, embarazo/niños/mayores, tendencia) y tarjeta «Del número a la acción» con 3 tarjetas-enlace (`Link` + haptic medium + ArrowRight) a calorías, hidratación y pasos.
 - **Patrón D**: borrador `holentia:calculadora-imc:draft:v1` ({weight, height, unit}) autoguardado tras la primera edición (`touched` ref) + «Borrar mis datos».
+- **Móvil + contraste (17-Oct-2026)**: peso y estatura se **apilan a ancho completo** (el sufijo kg/lb no cabe a 2 columnas en pantallas ≤360px) y recuperan `sm:grid-cols-2`; inputs con la receta de §3.3 (foco `ring-2` canónico) y botón kg/lb `text-gray-900` sobre `bg-cuerpo-lighter` con hover `hover:bg-cuerpo-light dark:hover:bg-cuerpo` (los `/opacidad` previos eran clases muertas).
 
 ## 5. Modo oscuro
 
@@ -354,3 +358,7 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 - Opciones de quiz con `aria-pressed`; elementos navegables con `role="button" tabIndex` + Enter/Espacio.
 - `data-interactive="true"` en todo elemento que deba ignorar el swipe navigation. El guard de `SectionSwipeNavigation` también excluye por tag (`input, button, a, select, textarea`) y exige dirección horizontal dominante; el de `TabSwipeNavigation` consume `data-interactive`. Mantener ambos: defensa en profundidad.
 - Contraste: texto blanco solo sobre fondos con alpha efectivo ≥ ~0.75 sobre blanco (gradiente sólido) o sobre dark glass. Nunca blanco sobre glass claro.
+- **Contraste cuerpo (ámbar `#ffa000` — caso especial, 17-Oct-2026)**: el ámbar es un color medio que no pasa AA para texto pequeño en fondos claros. Reglas por superficie:
+  - Sobre blanco/gris-800: texto pequeño de acento = `text-cuerpo-darkest` (5.6:1) / `dark:text-cuerpo-light` (8.3:1). `text-cuerpo-dark` (#e65100) queda en 3.8:1 → solo iconos y bordes (≥3:1).
+  - Sobre `bg-cuerpo-lighter` / `dark:bg-cuerpo-dark` (chips seleccionados, bloques de total, píldoras de nivel): texto = `text-gray-900` (12:1 / 4.6:1); iconos = `text-cuerpo-darkest` / `dark:text-white` (3.8:1). El borde de chip seleccionado usa `border-cuerpo-dark` (`border-cuerpo` se queda en 2:1 sobre blanco).
+  - Nunca `/opacidad` sobre tokens de sección (clase muerta, §1) ni `text-white` sobre ámbar pequeño.

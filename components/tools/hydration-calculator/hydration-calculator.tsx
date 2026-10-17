@@ -26,6 +26,14 @@ import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
 const DRAFT_KEY = draftKey("calculadora-hidratacion")
 
+// Entrada numérica con type="text" + inputMode (el type="number" rompe la
+// escritura de decimales parciales en algunos teclados móviles).
+const sanitizeDecimal = (raw: string) => {
+  const clean = raw.replace(/[^\d.]/g, "")
+  const [head, ...rest] = clean.split(".")
+  return (rest.length ? `${head}.${rest.join("")}` : head).slice(0, 6)
+}
+
 interface HydrationDraft {
   weight?: string
   activityLevel?: string
@@ -129,13 +137,13 @@ export function HydrationCalculator() {
   }
 
   const inputClass =
-    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-cuerpo dark:focus:border-transparent dark:focus:ring-cuerpo-light"
+    "w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold text-gray-800 placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-cuerpo dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-cuerpo-light"
 
   const chipClass = (active: boolean) =>
-    `p-3 rounded-xl border-2 font-medium transition-[colors,transform] duration-150 active:scale-[0.97] text-center flex flex-col items-center gap-1 ${
+    `flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
       active
-        ? "border-cuerpo bg-cuerpo-lighter text-cuerpo-darkest shadow-sm dark:border-cuerpo-light dark:bg-cuerpo-dark dark:text-cuerpo-lighter"
-        : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-cuerpo-light dark:hover:border-cuerpo-light"
+        ? "border-cuerpo-dark bg-cuerpo-lighter text-gray-900 shadow-sm dark:border-cuerpo-light dark:bg-cuerpo-dark"
+        : "border-gray-200 text-gray-600 hover:border-cuerpo-dark dark:border-gray-700 dark:text-gray-300 dark:hover:border-cuerpo-light"
     }`
 
   const glasses = result ? Math.round(result.direct / 250) : 0
@@ -156,11 +164,11 @@ export function HydrationCalculator() {
           <div className="mb-5">
             <label className="block text-sm font-medium mb-2">Tu peso (kg)</label>
             <input
-              type="number"
-              min={0}
+              type="text"
               inputMode="decimal"
+              autoComplete="off"
               value={weight}
-              onChange={(e) => setWeight(e.target.value)}
+              onChange={(e) => setWeight(sanitizeDecimal(e.target.value))}
               placeholder="Ej: 70"
               className={inputClass}
               data-interactive="true"
@@ -225,7 +233,7 @@ export function HydrationCalculator() {
               <p className="text-sm mt-1">y aquí verás cuánta agua necesitas hoy.</p>
             </div>
           ) : (
-            <div aria-live="polite" className="animate-result-in bg-gradient-to-br from-cuerpo to-cuerpo-dark rounded-xl p-8 shadow-lg text-black text-center h-full flex flex-col justify-center dark:bg-none dark:bg-cuerpo-glass dark:text-cuerpo-text">
+            <div aria-live="polite" className="animate-result-in flex h-full flex-col justify-center rounded-2xl border border-cuerpo-border bg-gradient-to-br from-cuerpo to-cuerpo-dark p-6 text-center text-black shadow-lg dark:bg-none dark:bg-cuerpo-glass dark:text-cuerpo-text sm:p-8">
               <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Tu hidratación diaria</div>
               <div className="text-6xl font-bold tabular-nums">{animatedDirect.toLocaleString("es-DO")}</div>
               <div className="text-lg opacity-90 mt-1">
@@ -233,8 +241,8 @@ export function HydrationCalculator() {
               </div>
 
               <div className="grid grid-cols-3 gap-2 mt-6 text-center">
-                <div className="bg-white text-cuerpo-darkest font-bold shadow-md border border-white rounded-lg py-2 px-1 text-sm">
-                  <div className="text-xs opacity-70">Vasos 250 ml</div>
+                <div className="rounded-lg bg-black/10 text-black/80 border border-black/15 dark:bg-white/10 dark:text-cuerpo-lighter dark:border-white/20 py-2 px-1 text-sm">
+                  <div className="text-xs opacity-90">Vasos 250 ml</div>
                   <div className="font-bold tabular-nums">{glasses}</div>
                 </div>
                 <div className="bg-black/10 text-black/80 border border-black/15 dark:bg-white/10 dark:text-cuerpo-lighter dark:border-white/20 rounded-lg py-2 px-1 text-sm">
@@ -268,7 +276,7 @@ export function HydrationCalculator() {
             <div className="flex-shrink-0 w-12 h-16 mx-auto sm:mx-0">
               <div className="relative w-12 h-16 rounded-b-2xl rounded-t-md border-2 border-sky-400 dark:border-sky-500 overflow-hidden bg-sky-50 dark:bg-sky-900/20">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4 h-2 bg-sky-400 dark:bg-sky-500 rounded-b" />
-                <div className="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-sky-500 to-sky-400 dark:from-sky-600 dark:to-sky-500 animate-pulse" />
+                <div className="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-sky-500 to-sky-400 dark:from-sky-600 dark:to-sky-500" />
                 <div className="absolute bottom-[26%] left-0 right-0 h-1 bg-white/50" />
               </div>
             </div>
@@ -281,12 +289,14 @@ export function HydrationCalculator() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-            {DAY_PLAN.map((step) => {
+            {DAY_PLAN.map((step, index) => {
               const ml = Math.round((result.direct * step.pct) / 25) * 25
               return (
                 <div
                   key={step.label}
-                  className="bg-sky-50 dark:bg-sky-900/15 border border-sky-200 dark:border-sky-800 rounded-xl px-3 py-4 text-center"
+                  className={`bg-sky-50 dark:bg-sky-900/15 border border-sky-200 dark:border-sky-800 rounded-xl px-3 py-4 text-center ${
+                    index === DAY_PLAN.length - 1 ? "col-span-2 sm:col-span-1" : ""
+                  }`}
                 >
                   <step.icon className="h-6 w-6 mx-auto mb-1.5 text-sky-600 dark:text-sky-400" />
                   <div className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
@@ -309,7 +319,7 @@ export function HydrationCalculator() {
               "Come frutas y verduras con alto contenido de agua.",
             ].map((tip) => (
               <div key={tip} className="flex items-start gap-2">
-                <Droplets className="h-4 w-4 mt-0.5 flex-shrink-0 text-sky-500" />
+                <Droplets className="h-4 w-4 mt-0.5 flex-shrink-0 text-sky-600 dark:text-sky-400" />
                 <span>{tip}</span>
               </div>
             ))}

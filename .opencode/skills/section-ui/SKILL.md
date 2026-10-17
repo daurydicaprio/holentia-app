@@ -67,7 +67,7 @@ Receta para cualquier calculadora/test con varios campos numéricos (referencias
 - **Chips de preset** debajo de su campo relacionado (distancia corta/media/larga, días 5/6/7): `chipClass(selected)` = outline con `border-finanzas text-finanzas dark:border-finanzas-light dark:text-finanzas-light` si activo, neutro si no; `data-interactive="true"` + haptic `light`.
 - Sin títulos redundantes dentro del panel ("Tu rutina" y similares sobran: el label de la herramienta ya da contexto; ahorra pantalla).
 - **Selector de vehículo** (si existe): `grid grid-cols-3 gap-2`, celdas `p-2 gap-0.5 rounded-xl` con icono `h-4 w-4`, nombre `text-xs` y dato clave `text-[11px]`; seleccionado = `border-2 border-{s} text-{s} dark:border-{s}-light dark:text-{s}-light` (radiogroup accesible).
-- **Mobile (obligatorio)**: input con `text-base md:text-sm` (nunca `text-sm` a secas: iOS hace zoom al enfocar); `inputMode` (`numeric`/`decimal`) en numéricos; tap targets ≥44px; tabla en `overflow-x-auto`.
+- **Mobile (obligatorio)**: input nunca `text-sm` a secas (iOS hace zoom al enfocar): genérico `text-base md:text-sm`, **numéricos de herramienta `text-lg font-semibold`** + `type="text"` + `inputMode` (`numeric`/`decimal`) con saneado (el `type="number"` rompe decimales parciales). Filas que no caben (presets de 3 columnas, inputs con sufijo tipo kg/lb) → apiladas a ancho completo en móvil (`grid gap-*` + `sm:grid-cols-*`; preset en fila = label izquierda + valor derecha). Tap targets ≥44px (steppers `h-10 w-10`); tabla en `overflow-x-auto`.
 - **Moneda**: siempre `formatDOP` de `lib/format.ts` (es-DO/DOP) — nunca locales/monedas ajenas (`es-MX`/`MXN`) ni `$` pelado. Botones de resultado con `animate-result-in` llevan `aria-live="polite"`.
 
 ## 4. Iconos (`lucide-react`)
@@ -98,6 +98,7 @@ Receta para cualquier calculadora/test con varios campos numéricos (referencias
 - Blanco solo sobre fondos sólidos oscuros (gradiente, `{s}-dark`, `{s}`). Mente/relaciones/finanzas blanco ✓; **cuerpo usa texto negro**.
 - `{s}-light` + texto negro para superficies de hover/fulles en modo oscuro (7–10:1).
 - Texto `{s}` sobre blanco pasa para bold/títulos; para 14px usa `{s}-dark` si dudas (finanzas `#388e3c` sobre blanco ≈ 3.7:1 — borderline).
+- **Caso cuerpo (ámbar medio, no pasa AA para texto pequeño en claro)**: pequeño sobre blanco/gris-800 → `text-cuerpo-darkest` (5.6:1) / `dark:text-cuerpo-light` (8.3:1) — `text-cuerpo-dark` (3.8:1) solo iconos y bordes. Sobre `bg-cuerpo-lighter`/`dark:bg-cuerpo-dark` (chips, bloques de total) → texto `text-gray-900` (12:1/4.6:1), iconos `text-cuerpo-darkest`/`dark:text-white`, borde de chip seleccionado `border-cuerpo-dark` (`border-cuerpo` = 2:1). Detalle: design.md §7.
 - Probar siempre ambos modos: `:root` y `.dark` en `app/globals.css`.
 
 ## 8. Movimiento, haptics, accesibilidad
