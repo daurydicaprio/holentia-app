@@ -4,7 +4,7 @@
 > Calculadoras, simuladores y tests que funcionan directamente en el navegador del usuario,
 > sin cuenta, sin registro y sin enviar datos a servidores.
 
-Las 28 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
+Las 29 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
 de cada herramienta, y los resultados son estimaciones educativas, no asesoramiento profesional
 (médico, financiero ni psicológico).
 
@@ -15,8 +15,12 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 - [Cuerpo](https://holentia.com/cuerpo): calculadora de calorías (Mifflin-St Jeor), hidratación (EFSA/NASEM), IMC y plan de pasos 5-10-20 con objetivo y registro diario.
 - [Finanzas](https://holentia.com/finanzas): presupuesto, interés compuesto, préstamo, consumo eléctrico,
   gasto de combustible, corte/vencimiento de tarjeta, interés de tarjeta, perfil de riesgo, glosario financiero,
-  tracker de gastos hormiga, calculadora de sueldo neto, calculadora de aguinaldo, calculadora de ITBIS, certificado financiero,
-  planificador de ahorros y planificador de compras.
+  tracker de gastos hormiga, calculadora de sueldo neto, calculadora de prestaciones laborales, calculadora de aguinaldo,
+  calculadora de ITBIS, certificado financiero, planificador de ahorros y planificador de compras.
+
+## Directorio
+
+- [Directorio de herramientas](https://holentia.com/herramientas): índice completo de las 29 herramientas por sección, con enlaces directos a cada una.
 
 ## Herramientas
 
@@ -36,6 +40,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 - [Tracker de gastos hormiga](https://holentia.com/tracker-gastos-hormiga): anota gastos pequeños y repetidos (café, delivery, recargas) y mira cuánto suman al día, al mes y al año.
 - [Calculadora de aguinaldo](https://holentia.com/calculadora-aguinaldo): el doble sueldo de diciembre: 1/12 del salario ordinario del año, proporcional a los meses trabajados y exento de ISR y TSS.
 - [Calculadora de sueldo neto](https://holentia.com/calculadora-sueldo-neto): de sueldo bruto a neto: descuentos de TSS (SFS 3.04% y AFP 2.87%), retención de ISR por tramos y otros descuentos fijos.
+- [Calculadora de prestaciones laborales](https://holentia.com/calculadora-prestaciones-laborales): tu liquidación en RD: cesantía (art. 80), preaviso (art. 76), vacaciones (arts. 177/180) y salario de Navidad proporcional, con salario diario ÷23.83.
 - [Calculadora de ITBIS](https://holentia.com/calculadora-itbis): agrega o quita el ITBIS de un precio (18% general y 16% reducido) con base, impuesto y total al instante.
 - [Calculadora de certificado financiero](https://holentia.com/calculadora-certificado-financiero): cuánto rinde un depósito a plazo fijo: interés bruto, retención del 10% y ganancia neta.
 - [Planificador de ahorros](https://holentia.com/planificador-ahorros): cuándo llegas a tu meta y cuánto aportar al mes, con rendimiento anual e interés compuesto.

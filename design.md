@@ -412,6 +412,25 @@ Evolución de «ingreso único»: bruto → neto con dos capas (porcentaje con t
 - **Cifras vigentes**: strip `grid sm:grid-cols-3` con la receta de mini-chips del aguinaldo (SFS 3.04%, AFP 2.87%, escala ISR) + nota legal con fuentes (Resolución 01-2025 TSS · escala DGII 2026).
 - **Dominio**: constantes (tasas, topes y tramos) en el módulo del componente con comentario de fuente; ISR sobre `bruto anual − TSS` (exento hasta 416,220.01 · 15% · 31,216+20% · 79,776+25%).
 
+### Directorio de herramientas (17-Oct-2026, ref. `app/herramientas/`)
+
+Superficie de navegación: índice server-rendered de las herramientas por sección, sin JS propio (las `ToolCard` son las mismas de los hubs).
+
+- **Chrome**: `main#contenido` + fila superior «Volver» (44px) + `MenuButton`, encabezado centrado con `Logo size="lg"` + `BrandDots` + H1 + intro con el contador real de herramientas, con contenedor `max-w-6xl` (§4c se queda para páginas de texto).
+- **Chips ancla** por sección (`<a href="#mente">`…): `rounded-full border px-4 py-2 text-sm font-medium` con los tiers de texto de §4d «Chrome global» (`text-mente`, `text-cuerpo-darkest`, `text-finanzas-dark`, `dark:text-{s}-light`) + contador `· N` en `gray-500`; el `nav` ancla lleva `aria-label`.
+- **Grupos por sección**: `<section id={id} className="scroll-mt-6">` con h2 + «N herramientas disponibles» + enlace «Ver sección →» (mismo tier de color) y grid `grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4` con las `ToolCard` **disponibles** (las «Próximamente» no se listan: el índice es de lo usable).
+- **Enlace**: primera posición del footer, server-rendered (§4b).
+
+### Calculadora de prestaciones laborales (17-Oct-2026, ref. `components/tools/severance-calculator/`)
+
+Variante laboral de la calculadora salarial para una liquidación (Código de Trabajo, Ley 16-92): el resultado es un desglose de **días de salario**, no de porcentajes.
+
+- **Formulario**: salario mensual con la receta canónica (`DollarSign` + `pl-10` + presets 25/50/100k) + dos `type="date"` con la variante de texto de §3.3 (`px-3 py-2.5 text-base`) + motivo como **radiogroup apilado** (`role="radiogroup"`/`role="radio"` + `aria-checked`; fila activa `border-2 border-finanzas`, press `active:scale-[0.99]`) con título + subtítulo por opción; patrón D (`holentia:calculadora-prestaciones-laborales:draft:v1` con `{salario, ingreso, salida, motivo}`).
+- **Dominio**: salario diario = mensual ÷ 23.83 (criterio del Ministerio de Trabajo); preaviso 7/14/28 días (art. 76); cesantía 6/13/21 por año/23 por año con la fracción de año mayor de 3 meses pagada como 6 o 13 días (art. 80); vacaciones con escala 6–12 días hasta el año y 14/18 después (arts. 177/180); Navidad = meses del año ÷ 12 (art. 219). Constantes y fórmulas en el módulo, con comentario de fuente.
+- **Resultado**: hero de la sección con el total (count-up) + «≈ N meses de salario · antigüedad: …»; desglose con las filas «Antigüedad» y «Salario diario de prestaciones» arriba (sub `text-xs`, cierre con `border-b`) y las 4 partidas con sub citando artículo y días; las partidas que no aplican muestran **«—»** (no RD$0) según el motivo elegido; fila de total + línea del plazo de pago (10 días).
+- **Notas condicionales** (caja `rounded-lg bg-gray-50 p-4 dark:bg-gray-700/50` como «Cómo se calculó tu ISR»): fracción del art. 80 pagada o no, antigüedad <3 meses, escala de 23 días; además strip de cifras vigentes y nota legal.
+- **Móvil**: fechas en `grid-cols-1 sm:grid-cols-2`; empty state con `Briefcase` que guía por pasos (salario → fechas → resultado) y mensaje propio cuando el rango de fechas es inválido.
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.

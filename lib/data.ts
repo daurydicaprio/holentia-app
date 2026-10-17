@@ -470,6 +470,17 @@ export const sectionsData: Record<string, SectionData> = {
           "Calcula tu sueldo neto en RD al instante: descuentos de TSS (SFS y AFP) y retención de ISR con las tasas y topes vigentes en 2026. Sin registro.",
       },
       {
+        id: "calculadora-prestaciones-laborales",
+        title: "Calculadora de Prestaciones Laborales",
+        description: "Tu liquidación: cesantía, preaviso y vacaciones.",
+        slug: "calculadora-prestaciones-laborales",
+        isAvailable: true,
+        category: "finanzas",
+        metaTitle: "Calculadora de prestaciones laborales RD (cesantía)",
+        metaDescription:
+          "Estima tu liquidación en RD: cesantía, preaviso, vacaciones y salario de Navidad proporcional según el Código de Trabajo. Gratis y sin registro.",
+      },
+      {
         id: "calculadora-itbis",
         title: "Calculadora de ITBIS",
         description: "Agrega o quita el ITBIS de un precio.",

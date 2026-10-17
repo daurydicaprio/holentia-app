@@ -29,7 +29,7 @@ Reglas de referencia (SSOT): skill `seo-geo` §1–5. Esta skill es el **procedi
 | 8 | JSON-LD | los 3 tipos presentes: WebApplication + BreadcrumbList + FAQPage | HTML |
 | 9 | FAQ | 5–6 preguntas **visibles en el HTML inicial**; incluye la de privacidad con la clave `holentia:` real | `app/{slug}/page.tsx` |
 | 10 | `llms.txt` | línea `- [Nombre](https://holentia.com/{slug}): …` + recuento del header coherente | `public/llms.txt` |
-| 11 | Sitemap | `<loc>` presente; total = 5 informativas + 4 secciones + n herramientas | `sitemap.xml.body` |
+| 11 | Sitemap | `<loc>` presente; total = 5 informativas + 4 secciones + directorio + n herramientas | `sitemap.xml.body` |
 | 12 | Hub | tarjeta visible y enlazada en la sección correcta | `app/{seccion}.html` |
 | 13 | `noindex` | 0 apariciones (salvo `_not-found`, que lo lleva a propósito) | HTML |
 | 14 | Persistencia (si aplica) | clave en la tabla de `politica-cookies` + botón «Borrar mis datos» + FAQ de privacidad coherente | `app/politica-cookies/page.tsx` |
@@ -44,13 +44,13 @@ Reglas de referencia (SSOT): skill `seo-geo` §1–5. Esta skill es el **procedi
 pnpm build && pnpm audit:seo
 ```
 
-`scripts/audit-seo.mjs` arranca `next start` en un puerto de auditoría y valida **cada ruta del sitemap** (hoy 38): title/description (rango en herramientas), canonical autorreferencial, 0 `noindex`, `og:image` propia, twitter, JSON-LD por tipo de página, FAQ ≥5 (herramientas), línea en `llms.txt`, H1 ×1, estructura a11y (`lang="es-DO"`, skip link `#contenido`, `<main>` único) y **runtime OG** (`200 image/png`), más cobertura cruzada `llms.txt ⊆ sitemap`. Exit 1 si hay FAIL. `AUDIT_BASE=http://127.0.0.1:3000` reutiliza un server ya en marcha (p. ej. `pnpm start` en otra terminal). Los barridos manuales de §2.1–2.3 quedan para auditorías puntuales (una sola herramienta) o diagnóstico fino.
+`scripts/audit-seo.mjs` arranca `next start` en un puerto de auditoría y valida **cada ruta del sitemap** (hoy 40): title/description (rango en herramientas), canonical autorreferencial, 0 `noindex`, `og:image` propia, twitter, JSON-LD por tipo de página, FAQ ≥5 (herramientas), línea en `llms.txt`, H1 ×1, estructura a11y (`lang="es-DO"`, skip link `#contenido`, `<main>` único) y **runtime OG** (`200 image/png`), más cobertura cruzada `llms.txt ⊆ sitemap`. Exit 1 si hay FAIL. `AUDIT_BASE=http://127.0.0.1:3000` reutiliza un server ya en marcha (p. ej. `pnpm start` en otra terminal). Los barridos manuales de §2.1–2.3 quedan para auditorías puntuales (una sola herramienta) o diagnóstico fino.
 
 ### 2.1 Estático (HTML prerenderado)
 
 ```bash
 slugs=$(ls .next/server/app/*.html | sed 's|.*/||;s|\.html$||' \
-  | grep -vE '^(index|finanzas|mente|cuerpo|relaciones|ayuda|apoyar|aviso-legal|politica-cookies|que-es-holentia|_not-found)$' | sort)
+  | grep -vE '^(index|finanzas|mente|cuerpo|relaciones|herramientas|ayuda|apoyar|aviso-legal|politica-cookies|que-es-holentia|_not-found)$' | sort)
 
 printf "%-38s %4s %4s %5s %4s %4s %4s %4s %4s %5s %4s %4s\n" "slug" "tLe" "dLe" "canon" "og" "tw" "ld+g" "tips" "Qs" "h1" "llms" "map"
 for s in $slugs; do
@@ -83,10 +83,10 @@ grep -l 'noindex' .next/server/app/*.html | grep -v '_not-found' || echo "ningun
 for s in $slugs; do [ -f "app/$s/opengraph-image.tsx" ] || echo "FALTA $s"; done
 # new Date() prohibido en estáticas (debe salir vacío)
 grep -n 'new Date()' app/sitemap.ts app/layout.tsx || echo "ninguno"
-# Total sitemap = 9 + nº de herramientas (5 informativas + 4 hubs)
+# Total sitemap = 10 + nº de herramientas (5 informativas + 4 hubs + directorio)
 grep -c '<loc>' .next/server/app/sitemap.xml.body
-# Hubs + informativas + home: og:image y canonical presentes
-for r in index finanzas mente cuerpo relaciones ayuda apoyar aviso-legal politica-cookies que-es-holentia; do
+# Hubs + directorio + informativas + home: og:image y canonical presentes
+for r in index finanzas mente cuerpo relaciones herramientas ayuda apoyar aviso-legal politica-cookies que-es-holentia; do
   f=".next/server/app/$r.html"
   printf "%-22s og:%s canonical:%s\n" "$r" "$(grep -o 'property="og:image"' "$f" | wc -l | tr -d ' ')" "$(grep -o 'rel="canonical"' "$f" | wc -l | tr -d ' ')"
 done
@@ -148,6 +148,9 @@ Esperado: `og:200 image/png` en las 19. Comprobar también las no-herramienta: `
 | 17-Oct-2026 | Superficies globales (chrome: tabs de sección · menú · footer · shell de herramienta · home/hubs · 5 informativas) — pase UI/UX móvil (espaciado, tipografía, contraste, tap targets) | ✅ PASS: metadata/canonical/OG/twitter/JSON-LD intactos · contenido clave en SSR (H1 ×1, canonical ×1, 0 `noindex`; 13 rutas) · base de sección a 12–14px corregida a tiers AA (tabs activas: cuerpo `-darkest` 3.8→5.6 y finanzas `-dark` 4.1→7.9; botón «Ver todas»; botones del shell; crédito del footer; ítem activo del menú: mente sobre `gray-100` 4.2→7.9 y en oscuro relaciones sobre `gray-800` 2.6→5.4) · categoría de ToolCard `text-white` sólido (3.4–3.8→4.6–5.7; cuerpo conserva `text-black/70` 6.2) · hover del FAQ con tiers · H1 del shell en cuerpo `-darkest` · descripción del shell `max-w-2xl leading-relaxed` (medida estirada en escritorio) · tap targets en enlaces de texto (tabs `py-2.5` 40px, nav del footer `py-1.5`, «Volver» `py-3` 44px) · `hover:bg-red-500`→`red-600` en el borrado total (3.8→4.8) · `error.tsx` monocromo (fuera `bg-blue-600`) · ritmo de informativas `space-y-12` · OG runtime `200 image/png` | Ninguna |
 | 17-Oct-2026 | Barrido automatizado completo (37 rutas) — Fase AW | ✅ 37/37 PASS · 0 FAIL · 0 WARN: title/description, canonical ×1, 0 `noindex`, `og:image` propia, twitter, JSON-LD por tipo de página, FAQ ≥5, H1 ×1, estructura a11y (`lang="es-DO"`, skip link `#contenido`, `<main>` único) y runtime OG `200 image/png`; cobertura `llms.txt ⊆ sitemap`; script nuevo `pnpm audit:seo` (`scripts/audit-seo.mjs`) | Skip link + `#contenido` + `<main>` del 404 + `lang` del `global-error` (Fase AW); sin hallazgos SEO/GEO |
 | 17-Oct-2026 | `calculadora-sueldo-neto` (nueva, 28ª) — auditoría 16 puntos | ✅ PASS: metaTitle 46 ch · metaDescription 144 ch única · H1 ×1 · canonical/OG/twitter propias · JSON-LD ×3 (WebApplication + Breadcrumb + FAQPage) · FAQ ×6 visibles (bruto vs. neto, topes TSS 2026, ISR por tramos, quincena, bonificaciones, privacidad con clave) · estado vacío en SSR (0 cálculos prerenderados) · llms.txt línea 1/1 · sitemap 38 `<loc>` (hub finanzas enlaza) · 0 `noindex` · clave `holentia:calculadora-sueldo-neto:draft:v1` en politica-cookies · presupuesto 132 kB First Load · OG runtime `200 image/png` | Ninguna |
+| 17-Oct-2026 | Directorio `/herramientas` (ruta nueva de índice, Fase AZ) — targeted | ✅ PASS: metadata propia · H1 ×1 · canonical/OG/twitter propias · JSON-LD `CollectionPage + BreadcrumbList` (`directoryJsonLd`) · clasificación nueva `COLLECTIONS` en `scripts/audit-seo.mjs` (hubs + directorio) · 29 herramientas por sección en SSR (chips ancla + «Ver sección») · llms.txt `## Directorio` 1/1 · sitemap 40 `<loc>` · enlace en el footer (server-rendered) · 0 `noindex` · OG runtime `200 image/png` | Ninguna |
+| 17-Oct-2026 | `calculadora-prestaciones-laborales` (nueva, 29ª) — auditoría 16 puntos | ✅ PASS: metaTitle 51 ch · metaDescription 144 ch única · H1 ×1 · canonical/OG/twitter propias · JSON-LD ×3 · FAQ ×6 visibles (motivo, cesantía con ejemplo 2a4m→48 días, preaviso, vacaciones+Navidad, ÷23.83, privacidad con clave) · estado vacío en SSR (0 cálculos prerenderados) · llms.txt línea 1/1 · sitemap 40 `<loc>` (hub finanzas enlaza) · 0 `noindex` · clave `holentia:calculadora-prestaciones-laborales:draft:v1` en politica-cookies · OG runtime `200 image/png` | Ninguna |
+| 17-Oct-2026 | Barrido automatizado completo (40 rutas) — Fases AZ + BA | ✅ 40/40 PASS · 0 FAIL · 0 WARN: title/description, canonical ×1, 0 `noindex`, `og:image` propia, twitter, JSON-LD por tipo de página, FAQ ≥5, H1 ×1, estructura a11y y runtime OG `200 image/png`; cobertura `llms.txt ⊆ sitemap` | Sin hallazgos |
 
 > Añadir una fila por auditoría (barrido completo o por herramienta). El registro vive aquí.
 

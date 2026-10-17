@@ -89,6 +89,10 @@ const localStorageKeys = [
     desc: "Borrador de la calculadora de sueldo neto (salario y otros descuentos)",
   },
   {
+    key: "holentia:calculadora-prestaciones-laborales:draft:v1",
+    desc: "Borrador de la calculadora de prestaciones laborales (salario, fechas y motivo)",
+  },
+  {
     key: "holentia:calculadora-itbis:draft:v1",
     desc: "Borrador de la calculadora de ITBIS",
   },
