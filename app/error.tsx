@@ -9,7 +9,7 @@ interface ErrorProps {
 
 export default function Error({ reset }: ErrorProps) {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-6 text-center">
+    <main id="contenido" tabIndex={-1} className="flex min-h-screen flex-col items-center justify-center p-6 text-center focus:outline-none">
       <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-gray-100">Algo salió mal</h1>
       <p className="mb-6 max-w-md text-gray-600 dark:text-gray-300">
         Ocurrió un error inesperado al cargar esta página. Puedes intentar de nuevo o volver al inicio.

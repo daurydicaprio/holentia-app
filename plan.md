@@ -390,12 +390,22 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AW — Accesibilidad estructural + auditoría automatizada (17-Oct-2026) — HECHA
+
+- [x] **Enlace «Saltar al contenido»** global (`app/layout.tsx`, primero en el DOM): oculto fuera del viewport (`-translate-y-20`) y visible al foco (`focus:translate-y-0`) con la receta del botón primario monocromo + `focus:ring-2`.
+- [x] **Destino `#contenido`**: todos los `<main>` llevan `id="contenido" tabIndex={-1} focus:outline-none` (home, hubs, 27 herramientas, error y 404 — el 404 pasa de `<div>` a `<main>`); `global-error` corrige `lang="es"` → `es-DO`.
+- [x] **Script `pnpm audit:seo`** (`scripts/audit-seo.mjs`): arranca `next start` en puerto de auditoría y valida las 37 rutas del sitemap (title/description con rango en herramientas, canonical autorreferencial, 0 `noindex`, `og:image` propia, twitter, JSON-LD por tipo de página, FAQ ≥5, llms.txt, H1 ×1, estructura a11y) + runtime OG (`200 image/png`) + cobertura cruzada `llms.txt ⊆ sitemap`; exit 1 con FAIL. `AUDIT_BASE` reutiliza un server existente.
+- [x] **Docs**: `design.md` §4d (skip link), skill `section-ui` §8, skill `seo-geo-audit` §2.0 + §4 (fila nueva), `create-tool` §8 (atajo), README (comando), architecture §8.
+- Verificado: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` → **37/37 rutas PASS, 0 FAIL, 0 WARN** (OG runtime `200 image/png` en las 37).
+
+---
+
 ## Backlog propuesto (17-Oct-2026, pendiente de decisión)
 
 Sin fase asignada; se convierte en fase al aprobar el frente. Candidatos analizados tras cerrar el pase UI/UX:
 
-1. **Auditoría integral de cierre**: barrido 37 rutas (estático + runtime OG) y **automatizarlo como script** (`pnpm audit:seo`) reutilizando el checklist de la skill `seo-geo-audit` — hoy el barrido se hace a mano.
-2. **Accesibilidad más allá del color**: enlace «Saltar al contenido», landmarks (`main`/`nav`), barrido con axe en las 27 herramientas, foco visible y orden de tabulación; registro de auditoría.
+1. ~~Auditoría integral de cierre~~ **HECHA (Fase AW)**: `pnpm audit:seo` valida las 37 rutas en un paso (SEO/GEO + estructura a11y + runtime OG); barrido 37/37 PASS.
+2. **Accesibilidad más allá del color**: skip link, landmarks y `<main>` único **ya hechos (Fase AW)**; pendiente el barrido axe/DOM en navegador real (este entorno no trae Chrome: se hará en dispositivo) y la revisión de foco/orden de tabulación.
 3. **Rendimiento móvil (Core Web Vitals)**: medir LCP/CLS/INP en home, un hub y 2–3 herramientas (interés compuesto y perfil de riesgo son las pesadas por Chart.js) y aplicar lazy-load del gráfico si hace falta.
 4. **Directorio `/herramientas`**: índice de las 27 con filtro por sección (server-rendered) + enlaces desde home/footer — descubribilidad y SEO interno.
 5. **«Mis datos»**: exportar/importar JSON de las claves `holentia:*` (respaldo local, sin nube) + enlace en `/ayuda`.

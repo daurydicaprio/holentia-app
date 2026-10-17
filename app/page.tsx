@@ -40,7 +40,7 @@ const homeJsonLd = {
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
+    <main id="contenido" tabIndex={-1} className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 focus:outline-none">
       <JsonLd data={homeJsonLd} />
       <SectionSwipeNavigation />
 

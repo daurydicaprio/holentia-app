@@ -43,6 +43,13 @@ export default function RootLayout({
     <html lang="es-DO" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <a
+            href="#contenido"
+            data-interactive="true"
+            className="fixed left-4 top-4 z-[100] -translate-y-20 rounded-md bg-gray-900 px-4 py-2.5 text-sm font-medium text-white shadow-lg transition-transform duration-150 focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:bg-white dark:text-gray-900 dark:focus:ring-gray-400 dark:focus:ring-offset-gray-900"
+          >
+            Saltar al contenido
+          </a>
           {children}
         </ThemeProvider>
       </body>

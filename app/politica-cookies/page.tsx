@@ -155,7 +155,7 @@ const notUsedItems = [
 
 export default function PoliticaCookiesPage() {
   return (
-    <main className="min-h-screen flex flex-col">
+    <main id="contenido" tabIndex={-1} className="min-h-screen flex flex-col focus:outline-none">
       <JsonLd data={pageJsonLd("Política de cookies", "/politica-cookies")} />
       <div className="flex-1 max-w-3xl w-full mx-auto p-4 sm:p-6">
         <div className="flex items-center justify-between mb-10">

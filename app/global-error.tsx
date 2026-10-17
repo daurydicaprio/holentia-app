@@ -2,7 +2,7 @@
 
 export default function GlobalError({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
-    <html lang="es">
+    <html lang="es-DO">
       <body style={{ fontFamily: "system-ui, sans-serif", background: "#f8f9fa", color: "#212529" }}>
         <main
           style={{

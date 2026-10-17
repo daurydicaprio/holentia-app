@@ -20,7 +20,7 @@ export default function SectionPage({ section }: SectionPageProps) {
   const sectionData = sectionsData[section]
 
   return (
-    <main className="min-h-screen flex flex-col items-center p-4 sm:p-6">
+    <main id="contenido" tabIndex={-1} className="min-h-screen flex flex-col items-center p-4 sm:p-6 focus:outline-none">
       <JsonLd data={sectionJsonLd(section)} />
       <SectionSwipeNavigation />
 

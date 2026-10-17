@@ -114,6 +114,7 @@ Receta para cualquier calculadora/test con varios campos numéricos (referencias
 - **Press**: `transition-[colors,transform] duration-150 active:scale-[0.97]` en botones sólidos, chips y filas de opción seleccionables (opciones de quiz, tarjetas de técnica, modos segmentados) — máx. escala 0.97. Base ya lo trae `components/ui/button.tsx`.
 - **Guarda `prefers-reduced-motion`**: global en `globals.css` + salto en `useCountUp` (las dos vías, obligatorias).
 - `data-interactive="true"` en todo interactivo; `useHapticFeedback` (`medium` guardar/navegar, `light` tabs).
+- **A11y estructural (17-Oct-2026)**: skip link «Saltar al contenido» en el layout y `<main id="contenido" tabIndex={-1} focus:outline-none>` en cada página (un solo `<main>` por página; `lang="es-DO"` incluso en `global-error`). Validación automatizada: `pnpm audit:seo` (SEO/GEO + estructura + OG runtime).
 - `aria-expanded`/`aria-controls` en acordeones; `aria-hidden` en paneles colapsados.
 - Chart.js: ver skill `chart-chartsjs` (la leyenda necesita `fontColor` por item en oscuro).
 - **Anti-slop**: sin confetti, parallax ni scroll-reveal; no meter framer-motion donde baste CSS.

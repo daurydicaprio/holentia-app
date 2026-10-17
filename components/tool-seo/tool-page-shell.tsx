@@ -54,7 +54,7 @@ export default function ToolPageShell({ section, tool, faq = [], children }: Too
     "inline-flex h-10 items-center gap-2 rounded-md border bg-white/60 px-5 text-sm font-medium backdrop-blur-sm transition-[colors,transform] duration-150 active:scale-[0.97] dark:bg-black/20"
 
   return (
-    <main className="min-h-screen flex flex-col">
+    <main id="contenido" tabIndex={-1} className="min-h-screen flex flex-col focus:outline-none">
       {jsonLd && <JsonLd data={jsonLd} />}
 
       <UnifiedHeader section={section} />

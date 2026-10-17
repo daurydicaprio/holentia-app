@@ -198,6 +198,9 @@ pnpm exec tsc --noEmit
 # Construir para producción
 pnpm build
 
+# Auditoría SEO/GEO + estructura a11y (usa el build; arranca `next start` solo)
+pnpm audit:seo
+
 # Iniciar en modo producción
 pnpm start
 ```

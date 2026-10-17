@@ -164,6 +164,7 @@ Reglas del armazón compartido, en línea con la identidad monocroma:
 - **Ítem activo del menú** (`bg-gray-100 dark:bg-gray-800`): texto en tier AA a 14px — claro `text-mente-dark` / `text-relaciones` / `text-cuerpo-darkest` / `text-finanzas-dark`; oscuro `-light` (cuerpo `text-cuerpo`). La base no pasa sobre esos fondos (`text-mente` sobre `gray-100` = 4.2:1; `text-relaciones` sobre `gray-800` = 2.6:1; corregido 17-Oct-2026).
 - **Header móvil de herramienta** (`unified-header.tsx`, sticky <768px): fondo **sólido** con el token `--color-{s}-active-dark` de la sección (mapa estático; fallback `rgb(17,24,39)`), texto/iconos blancos — los `-active-dark` garantizan ≥4.5:1 en ambos temas (el glass al 70% no cumplía AA en claro, cuerpo ≈1.9:1; retirado 16-Oct-2026). **Sin `backdrop-blur`** (con fondo sólido no aporta). Tap targets de 44px (`h-11 w-11`) en volver y menú; chip de logo con `py-2`.
 - `data-interactive="true"` en botones, enlaces y toggle del menú.
+- **Skip link «Saltar al contenido»** (`app/layout.tsx`, primero en el DOM): oculto sobre el viewport (`fixed left-4 top-4 -translate-y-20`) y visible al foco (`focus:translate-y-0`) con la receta del botón primario monocromo (`rounded-md bg-gray-900 text-white shadow-lg dark:bg-white dark:text-gray-900`) + `focus:ring-2` (`ring-gray-500` / `dark:ring-gray-400` con offset). El destino `#contenido` vive en `<main id="contenido" tabIndex={-1} focus:outline-none>` de cada página (home, hubs, herramientas, error y 404). Añadido 17-Oct-2026 (Fase AW).
 
 ## 4. Recetas de componente
 
