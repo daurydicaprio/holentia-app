@@ -40,12 +40,15 @@ const TIPS = [
 ]
 
 const inputClass =
-  "w-full rounded-md border border-gray-300 bg-white p-3 text-base text-gray-900 shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:focus:border-transparent dark:focus:ring-finanzas-light md:text-sm"
+  "w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold text-gray-800 placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
+
+const inputClassText =
+  "w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-base text-gray-800 placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
 
 const chipClass = (active: boolean) =>
-  `rounded-md px-2.5 py-1 text-xs font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
+  `rounded-md px-3 py-2.5 text-xs font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
     active
-      ? "border border-finanzas text-finanzas dark:border-finanzas-light dark:text-finanzas-light"
+      ? "border border-finanzas text-finanzas-dark dark:border-finanzas-light dark:text-finanzas-lighter"
       : "border border-gray-200 text-gray-700 hover:border-gray-300 dark:border-gray-600 dark:text-gray-300 dark:hover:border-gray-500"
   }`
 
@@ -74,7 +77,7 @@ export function AntExpensesTracker() {
   }, [])
 
   const amountValue = useMemo(() => {
-    const parsed = Number.parseFloat(amount)
+    const parsed = Number.parseFloat(amount.replace(/,(?=\d{1,2}$)/, ".").replace(/,/g, ""))
     return Number.isFinite(parsed) && parsed > 0 ? parsed : 0
   }, [amount])
 
@@ -163,7 +166,7 @@ export function AntExpensesTracker() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Ej: Café de la esquina"
-            className={inputClass}
+            className={inputClassText}
             data-interactive="true"
           />
           <div className="mt-2 flex flex-wrap gap-2">
@@ -193,12 +196,10 @@ export function AntExpensesTracker() {
             </span>
             <input
               id="ant-amount"
-              type="number"
+              type="text"
               inputMode="decimal"
-              min={0}
-              step="0.01"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) => setAmount(e.target.value.replace(/[^\d.,]/g, ""))}
               placeholder="Ej: 80"
               className={`${inputClass} pl-10`}
               data-interactive="true"
@@ -230,7 +231,7 @@ export function AntExpensesTracker() {
           <button
             type="submit"
             disabled={!canSubmit}
-            className="mt-5 flex h-11 w-full items-center justify-center gap-2 rounded-md bg-finanzas font-medium text-white transition-[colors,transform] duration-150 hover:bg-finanzas-dark active:scale-[0.97] disabled:pointer-events-none disabled:opacity-40"
+            className="mt-5 flex h-11 w-full items-center justify-center gap-2 rounded-md bg-finanzas-dark font-medium text-white transition-[colors,transform] duration-150 hover:bg-finanzas-darkest active:scale-[0.97] disabled:pointer-events-none disabled:opacity-40"
             data-interactive="true"
           >
             {editingId ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
@@ -279,7 +280,7 @@ export function AntExpensesTracker() {
                 aria-live="polite"
                 className="animate-result-in rounded-2xl border border-finanzas-border bg-gradient-to-br from-finanzas to-finanzas-dark p-6 text-white shadow-lg dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text sm:p-8"
               >
-                <p className="text-sm text-white/85 dark:text-finanzas-lighter">Tus gastos hormiga suman</p>
+                <p className="text-sm text-white dark:text-finanzas-lighter">Tus gastos hormiga suman</p>
                 <p className="mt-1 text-3xl font-bold tabular-nums sm:text-4xl">
                   {formatDOP(animatedAnnual, 0)} <span className="text-base font-medium sm:text-lg">al año</span>
                 </p>
@@ -291,14 +292,14 @@ export function AntExpensesTracker() {
                   ].map((stat) => (
                     <div key={stat.label} className="rounded-lg bg-black/10 p-3 text-center dark:bg-black/20">
                       <p className="text-lg font-bold tabular-nums">{formatDOP(stat.value, 0)}</p>
-                      <p className="text-xs text-white/80 dark:text-finanzas-lighter">{stat.label}</p>
+                      <p className="text-xs text-white dark:text-finanzas-lighter">{stat.label}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Detalle por gasto */}
-              <div className="rounded-xl bg-white p-5 shadow-lg dark:bg-gray-800">
+              <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
                 <ul aria-label="Gastos anotados" className="space-y-3">
                   {entries.map((entry) => {
                     const annual = annualOf(entry)
@@ -337,7 +338,7 @@ export function AntExpensesTracker() {
                           </div>
                         </div>
                         <div className="mt-2 flex items-center justify-between gap-3 text-sm">
-                          <span className="font-semibold tabular-nums text-finanzas-dark dark:text-finanzas-light">
+                          <span className="font-semibold tabular-nums text-finanzas-dark dark:text-finanzas-lighter">
                             {formatDOP(annual, 0)}/año
                           </span>
                           <span className="text-xs text-gray-500 dark:text-gray-400">{pct}% del total</span>

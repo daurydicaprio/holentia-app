@@ -793,11 +793,11 @@ function SectionHeader({
     <div className="text-center mb-6">
       <div className="inline-flex items-center justify-center gap-2 mb-2">
         {badge && (
-          <span className="inline-block rounded-full bg-finanzas text-white text-xs font-bold px-3 py-1 leading-normal">
+          <span className="inline-block rounded-full bg-finanzas-dark text-white text-xs font-bold px-3 py-1.5 leading-normal">
             {badge}
           </span>
         )}
-        <Icon className="h-6 w-6 text-finanzas dark:text-finanzas-light" aria-hidden />
+        <Icon className="h-6 w-6 text-finanzas-dark dark:text-finanzas-lighter" aria-hidden />
         <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">{title}</h3>
       </div>
       {subtitle !== undefined && (
@@ -1167,13 +1167,13 @@ export function RiskProfileTest() {
   }
 
   const inputClass =
-    "w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
+    "w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold text-gray-800 placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
 
   const chipClass = (active: boolean) =>
-    `px-3 py-1.5 text-sm rounded-md font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
+    `rounded-md px-3 py-2.5 text-sm font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
       active
-        ? "bg-finanzas text-white"
-        : "bg-[#388e3c]/10 hover:bg-[#388e3c]/20 text-finanzas dark:text-finanzas-light"
+        ? "bg-finanzas-dark text-white"
+        : "bg-[#388e3c]/10 text-finanzas-dark hover:bg-[#388e3c]/20 dark:text-finanzas-lighter"
     }`
 
   /* ---------- INTRO ---------- */
@@ -1183,7 +1183,7 @@ export function RiskProfileTest() {
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
           <div className="flex items-center gap-3 mb-3">
             <div className="p-2 rounded-lg bg-[#388e3c]/10 dark:bg-[#388e3c]/20">
-              <Gauge className="h-6 w-6 text-finanzas dark:text-finanzas-light" />
+              <Gauge className="h-6 w-6 text-finanzas-dark dark:text-finanzas-lighter" />
             </div>
             <h2 className="text-xl font-bold">Test de perfil de riesgo</h2>
           </div>
@@ -1208,7 +1208,7 @@ export function RiskProfileTest() {
 
           <button
             onClick={startQuiz}
-            className="w-full bg-finanzas hover:bg-finanzas-dark text-white px-6 py-4 rounded-lg font-semibold transition-colors"
+            className="w-full rounded-lg bg-finanzas-dark px-6 py-4 font-semibold text-white transition-[colors,transform] duration-150 hover:bg-finanzas-darkest active:scale-[0.97]"
             data-interactive="true"
           >
             Empezar el test
@@ -1245,7 +1245,7 @@ export function RiskProfileTest() {
               <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 Pregunta {currentQuestion + 1} de {questions.length}
               </span>
-              <span className="text-sm font-medium text-finanzas dark:text-finanzas-light">{pct}%</span>
+              <span className="text-sm font-medium text-finanzas-dark dark:text-finanzas-lighter">{pct}%</span>
             </div>
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
               <div
@@ -1267,7 +1267,7 @@ export function RiskProfileTest() {
                   key={option.key}
                   onClick={() => handleAnswer(question.id, option.key)}
                   aria-pressed={isSelected}
-                  className={`w-full text-left p-4 border-2 rounded-lg transition-all ${
+                  className={`w-full text-left p-4 border-2 rounded-lg transition-[colors,transform] duration-150 active:scale-[0.97] ${
                     isSelected
                       ? "border-finanzas bg-[#388e3c]/10 dark:bg-[#388e3c]/20"
                       : "border-gray-200 dark:border-gray-700 hover:border-finanzas hover:bg-[#388e3c]/5 dark:hover:bg-[#388e3c]/10"
@@ -1286,7 +1286,7 @@ export function RiskProfileTest() {
                 setCurrentQuestion(currentQuestion - 1)
                 triggerHapticFeedback("light")
               }}
-              className="mt-4 text-sm font-medium text-gray-500 hover:text-finanzas dark:text-gray-400 transition-colors"
+              className="mt-4 text-sm font-medium text-gray-500 hover:text-finanzas-dark dark:text-gray-400 dark:hover:text-finanzas-lighter transition-colors"
               data-interactive="true"
             >
               ← Atrás
@@ -1304,7 +1304,7 @@ export function RiskProfileTest() {
         <p className="text-gray-500 dark:text-gray-400 mb-4">Responde las 12 preguntas para ver tu perfil.</p>
         <button
           onClick={startQuiz}
-          className="bg-finanzas hover:bg-finanzas-dark text-white px-6 py-3 rounded-lg font-medium"
+          className="rounded-lg bg-finanzas-dark px-6 py-3 font-medium text-white transition-[colors,transform] duration-150 hover:bg-finanzas-darkest active:scale-[0.97]"
           data-interactive="true"
         >
           Empezar
@@ -1388,38 +1388,38 @@ export function RiskProfileTest() {
             triggerHapticFeedback("light")
           }}
           aria-expanded={showLevels}
-          className="absolute right-3 top-3 sm:right-5 sm:top-5 inline-flex items-center gap-1.5 rounded-full border border-white/40 bg-white/15 px-2.5 py-1.5 text-xs sm:text-sm font-semibold text-white hover:bg-white/25 transition-colors"
+          className="absolute right-3 top-3 sm:right-5 sm:top-5 inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-black/20 px-3 py-2 text-xs sm:text-sm font-semibold text-white transition-[colors,transform] duration-150 hover:bg-black/30 active:scale-[0.97]"
           data-interactive="true"
         >
           <PieChart className="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden />
           Ver niveles
           <ChevronDown className={`h-3.5 w-3.5 transition-transform ${showLevels ? "rotate-180" : ""}`} />
         </button>
-        <div className="text-xs font-semibold uppercase tracking-widest opacity-80 mb-2">Tu resultado</div>
+        <div className="text-xs font-semibold uppercase tracking-widest mb-2">Tu resultado</div>
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 max-w-3xl mx-auto leading-tight">
           {levelDef.profileName}
         </h2>
         <div className="mb-4">
-          <span className="inline-flex items-center gap-2 bg-white/15 rounded-full px-4 py-1.5 text-sm font-semibold">
+          <span className="inline-flex items-center gap-2 bg-black/20 rounded-full px-4 py-2 text-sm font-semibold">
             Quédate en el nivel {effectiveLevel}
           </span>
         </div>
         <p className="text-sm sm:text-base max-w-xl mx-auto leading-relaxed mb-4">
           <span className="text-base sm:text-lg font-semibold">{result.reason}</span>{" "}
-          <span className="opacity-90">{levelDef.blurb}</span>
+          <span>{levelDef.blurb}</span>
         </p>
         {lowCapital && (
-          <div className="mb-4 inline-flex items-center gap-2 bg-white/15 rounded-full px-4 py-2 text-sm">
+          <div className="mb-4 inline-flex items-center gap-2 bg-black/20 rounded-full px-4 py-2 text-sm">
             <AlertTriangle className="h-4 w-4" />
             Capital pequeño (menos de {formatMoney(levelCap, currency)}): te conviene el nivel 1–2
           </div>
         )}
         <div className="max-w-xl mx-auto">
           <Disclosure label="Aprende qué significa tu nivel" align="center" tone="light">
-            <div className="rounded-lg border border-white/30 bg-white/15 px-4 py-3">
+            <div className="rounded-lg border border-white/20 bg-black/20 px-4 py-3">
               <strong className="block mb-1 text-white">{levelDef.name}</strong>
-              <span className="block mb-2 text-white/90">{levelDef.short}</span>
-              <span className="block text-white/85">{levelDef.desc}</span>
+              <span className="block mb-2 text-white">{levelDef.short}</span>
+              <span className="block text-white">{levelDef.desc}</span>
             </div>
           </Disclosure>
         </div>
@@ -1469,7 +1469,7 @@ export function RiskProfileTest() {
                       }
                     }}
                     data-interactive="true"
-                    className={`cursor-pointer rounded-lg border p-3 transition-[colors,transform] duration-150 active:scale-[0.97] ${
+                    className={`cursor-pointer rounded-lg border p-4 transition-[colors,transform] duration-150 active:scale-[0.97] ${
                       isActive
                         ? "border-finanzas bg-[#388e3c]/5 dark:bg-[#388e3c]/10 ring-1 ring-finanzas"
                         : isColored && lvl.danger
@@ -1485,7 +1485,7 @@ export function RiskProfileTest() {
                           isActive || isColored
                             ? lvl.danger
                               ? "bg-red-600 text-white"
-                              : "bg-finanzas text-white"
+                              : "bg-finanzas-dark text-white"
                             : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
                         }`}
                       >
@@ -1503,7 +1503,7 @@ export function RiskProfileTest() {
                         {lvl.name}
                       </span>
                       {isActive && (
-                        <span className="text-[10px] font-bold uppercase bg-finanzas text-white px-2 py-0.5 rounded-full">
+                        <span className="text-[10px] font-bold uppercase bg-finanzas-dark text-white px-2 py-0.5 rounded-full">
                           Tuyo
                         </span>
                       )}
@@ -1531,7 +1531,7 @@ export function RiskProfileTest() {
                               ? "text-red-700 dark:text-red-400"
                               : "text-red-700/70 dark:text-red-400/70"
                             : isColored
-                              ? "text-finanzas dark:text-finanzas-light"
+                              ? "text-finanzas-dark dark:text-finanzas-lighter"
                               : "text-gray-500 dark:text-gray-400"
                         }
                       >
@@ -1625,7 +1625,7 @@ export function RiskProfileTest() {
             <div className="rounded-xl border border-[#388e3c]/30 bg-[#388e3c]/5 p-4 sm:p-5 dark:bg-[#388e3c]/10">
               {/* A · Qué es */}
               <div className="flex items-start gap-3">
-                <PiggyBank className="mt-0.5 h-5 w-5 flex-shrink-0 text-finanzas dark:text-finanzas-light" aria-hidden />
+                <PiggyBank className="mt-0.5 h-5 w-5 flex-shrink-0 text-finanzas-dark dark:text-finanzas-lighter" aria-hidden />
                 <div>
                   <p className="text-sm font-bold text-gray-900 dark:text-gray-100">
                     Primero: tu fondo de emergencia
@@ -1723,9 +1723,9 @@ export function RiskProfileTest() {
                             setChartMode(m)
                             triggerHapticFeedback("light")
                           }}
-                          className={`rounded-md px-2.5 py-1 text-xs font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
+                          className={`rounded-md px-3 py-2.5 text-xs font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
                             chartMode === m
-                              ? "bg-finanzas text-white"
+                              ? "bg-finanzas-dark text-white"
                               : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                           }`}
                           data-interactive="true"
@@ -1816,7 +1816,7 @@ export function RiskProfileTest() {
           {/* Ya tiene colchón */}
           {hasFund && fundSize > 0 && (
             <div className="rounded-lg border border-[#388e3c]/40 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 p-4 flex items-start gap-3">
-              <CheckCircle2 className="h-5 w-5 text-finanzas flex-shrink-0 mt-0.5 dark:text-finanzas-light" />
+              <CheckCircle2 className="h-5 w-5 text-finanzas-dark flex-shrink-0 mt-0.5 dark:text-finanzas-lighter" />
               <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                 <strong className="text-gray-900 dark:text-gray-100">¡Excelente! Ya tienes tu colchón financiero ✓</strong>
               </p>
@@ -1833,7 +1833,7 @@ export function RiskProfileTest() {
           {hasFund && fundSize > 0 && (
             <div className="rounded-xl border border-[#388e3c]/40 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 p-5">
               <div className="flex items-center gap-2 mb-3">
-                <PiggyBank className="h-5 w-5 text-finanzas flex-shrink-0 dark:text-finanzas-light" aria-hidden />
+                <PiggyBank className="h-5 w-5 text-finanzas-dark flex-shrink-0 dark:text-finanzas-lighter" aria-hidden />
                 <p className="text-sm font-bold text-gray-900 dark:text-gray-100">
                   Sugerencia para tu colchón de {formatMoney(fundSize, currency)}
                 </p>
@@ -1873,7 +1873,7 @@ export function RiskProfileTest() {
                     </div>
                     <p className="mt-1.5 text-base font-bold tabular-nums text-gray-900 dark:text-gray-100">
                       {formatMoney(p.amount, currency)}{" "}
-                      <span className="text-sm font-semibold text-finanzas dark:text-finanzas-light">({p.pct}%)</span>
+                      <span className="text-sm font-semibold text-finanzas-dark dark:text-finanzas-lighter">({p.pct}%)</span>
                     </p>
                     <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">{p.why}</p>
                   </li>
@@ -1929,12 +1929,12 @@ export function RiskProfileTest() {
           {/* Simulador de presupuesto: de dónde sale el ahorro */}
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[#388e3c]/40 bg-[#388e3c]/5 p-4 dark:bg-[#388e3c]/10">
             <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-              <ClipboardList className="h-5 w-5 flex-shrink-0 text-finanzas dark:text-finanzas-light" aria-hidden />
+              <ClipboardList className="h-5 w-5 flex-shrink-0 text-finanzas-dark dark:text-finanzas-lighter" aria-hidden />
               <span>Para ahorrar más al mes y llegar antes a tu colchón, organiza tus ingresos y gastos.</span>
             </div>
             <Link
               href="/crear-presupuesto-personal"
-              className="inline-flex items-center gap-2 whitespace-nowrap rounded-lg bg-finanzas px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-finanzas-dark"
+              className="inline-flex items-center gap-2 whitespace-nowrap rounded-lg bg-finanzas-dark px-5 py-3 text-base font-semibold text-white transition-[colors,transform] duration-150 hover:bg-finanzas-darkest active:scale-[0.97]"
               data-interactive="true"
             >
               Aprende a crear tu presupuesto →
@@ -1950,14 +1950,14 @@ export function RiskProfileTest() {
                   <ul className="space-y-3">
                     {currency === "DOP" && fundSize >= INSTR_MIN.DOP.liquid && (
                       <li>
-                        <strong className="text-finanzas dark:text-finanzas-light">AFI líquido</strong> — mín.{" "}
+                        <strong className="text-finanzas-dark dark:text-finanzas-lighter">AFI líquido</strong> — mín.{" "}
                         {formatMoney(INSTR_MIN.DOP.liquid, "DOP")}. Retiro lun–vie 9am–3pm (sin feriados ni festivos).
                         Para emergencias que aceptan tarjeta o retiros parciales.
                       </li>
                     )}
                     {currency === "DOP" && fundSize >= INSTR_MIN.DOP.cert && (
                       <li>
-                        <strong className="text-finanzas dark:text-finanzas-light">Certificado</strong> — mín.{" "}
+                        <strong className="text-finanzas-dark dark:text-finanzas-lighter">Certificado</strong> — mín.{" "}
                         {formatMoney(INSTR_MIN.DOP.cert, "DOP")}. App, web o sucursal. Plazos 30/90/180/360 días.
                         <span className="mt-1 block text-amber-700 dark:text-amber-400">
                           Cancelar antes de tiempo: <strong>3% anual sobre el capital</strong> (solo los días que
@@ -1968,14 +1968,14 @@ export function RiskProfileTest() {
                     )}
                     {currency === "DOP" && fundSize >= INSTR_MIN.DOP.d30 && (
                       <li>
-                        <strong className="text-finanzas dark:text-finanzas-light">Fondo a 30 días</strong> — mín.{" "}
+                        <strong className="text-finanzas-dark dark:text-finanzas-lighter">Fondo a 30 días</strong> — mín.{" "}
                         {formatMoney(INSTR_MIN.DOP.d30, "DOP")}. Retiro en ventana de ~5 días fijados por el fondo
                         (ej. del 25 al 30). Penalidad si sacas antes del plazo.
                       </li>
                     )}
                     {currency === "USD" && fundSize >= INSTR_MIN.USD.d30 && (
                       <li>
-                        <strong className="text-finanzas dark:text-finanzas-light">Fondo 30 días (USD)</strong> — mín.{" "}
+                        <strong className="text-finanzas-dark dark:text-finanzas-lighter">Fondo 30 días (USD)</strong> — mín.{" "}
                         {formatMoney(INSTR_MIN.USD.d30, "USD")}. En dólares no hay AFI líquido: el mínimo es plazo
                         de 30 días. Penalidad si retiras antes.
                       </li>
@@ -2022,14 +2022,14 @@ export function RiskProfileTest() {
           {/* 3 · CTA: fechas de corte y vencimiento (texto a la izquierda, botón a la derecha) */}
           <div className="flex flex-col gap-3 rounded-xl border border-[#388e3c]/40 bg-[#388e3c]/5 p-4 dark:bg-[#388e3c]/10 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-2 text-sm leading-snug text-gray-700 dark:text-gray-300 sm:flex-1">
-              <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-finanzas dark:text-finanzas-light" aria-hidden />
+              <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-finanzas-dark dark:text-finanzas-lighter" aria-hidden />
               <span className="sm:max-w-md">
                 ¿No dominas tus fechas de corte y vencimiento? Aprende a usar la tarjeta a tu favor.
               </span>
             </div>
             <Link
               href="/tarjeta-corte-vencimiento"
-              className="inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg border border-finanzas bg-white px-4 py-2.5 text-sm font-semibold text-finanzas transition-colors hover:bg-[#388e3c]/10 dark:bg-gray-900/40 dark:text-finanzas-light"
+              className="inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg border border-finanzas bg-white px-4 py-2.5 text-sm font-semibold text-finanzas-dark transition-colors hover:bg-[#388e3c]/10 dark:bg-gray-900/40 dark:text-finanzas-lighter"
               data-interactive="true"
             >
               Comprende tu fecha de corte y vencimiento →
@@ -2058,7 +2058,7 @@ export function RiskProfileTest() {
                 value={capitalInput}
                 onChange={(e) => setCapitalInput(formatWithCommas(filterNumeric(e.target.value)))}
                 placeholder={currency === "DOP" ? "Ej: 25,000" : "Ej: 1,500"}
-                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-base md:text-sm shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 sm:w-auto sm:max-w-[13rem]"
+                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-lg font-semibold text-gray-800 placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light sm:w-auto sm:max-w-[13rem]"
                 data-interactive="true"
               />
               <div className="flex gap-2">
@@ -2068,8 +2068,8 @@ export function RiskProfileTest() {
                     onClick={() => handleCurrency(c)}
                     className={`px-4 py-3 rounded-lg font-medium text-sm transition-[colors,transform] duration-150 active:scale-[0.97] ${
                       currency === c
-                        ? "bg-finanzas text-white"
-                        : "bg-[#388e3c]/10 text-finanzas dark:text-finanzas-light hover:bg-[#388e3c]/20"
+                        ? "bg-finanzas-dark text-white"
+                        : "bg-[#388e3c]/10 text-finanzas-dark dark:text-finanzas-lighter hover:bg-[#388e3c]/20"
                     }`}
                     data-interactive="true"
                   >
@@ -2112,7 +2112,7 @@ export function RiskProfileTest() {
                     </label>
                     <button
                       type="button"
-                      className="shrink-0 rounded-full p-0.5 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
+                      className="shrink-0 rounded-full p-1.5 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
                       onMouseEnter={() => setRateTip(k)}
                       onMouseLeave={() => setRateTip(null)}
                       onFocus={() => setRateTip(k)}
@@ -2146,7 +2146,7 @@ export function RiskProfileTest() {
                           }
                         })
                       }
-                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 pr-7 text-sm placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500"
+                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 pr-7 text-base text-gray-800 placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
                       data-interactive="true"
                     />
                     <span className="absolute inset-y-0 right-2.5 flex items-center text-xs text-gray-400">%</span>
@@ -2257,7 +2257,7 @@ export function RiskProfileTest() {
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <h4 className="font-semibold text-base text-gray-800 dark:text-gray-100 leading-snug">{title}</h4>
                     {isRecommended && (
-                      <span className="text-[10px] font-bold uppercase bg-finanzas text-white px-2 py-0.5 rounded-full whitespace-nowrap">
+                      <span className="text-[10px] font-bold uppercase bg-finanzas-dark text-white px-2 py-0.5 rounded-full whitespace-nowrap">
                         Para ti
                       </span>
                     )}
@@ -2313,14 +2313,14 @@ export function RiskProfileTest() {
                 return (
                   <div key={group} className="mb-4 last:mb-0">
                     <p className="mb-2.5 flex justify-center">
-                      <span className="inline-flex items-center rounded-full border border-[#388e3c]/40 bg-[#388e3c]/15 px-4 py-1 text-sm font-bold uppercase tracking-wider text-finanzas dark:text-finanzas-light">
+                      <span className="inline-flex items-center rounded-full border border-[#388e3c]/40 bg-[#388e3c]/15 px-4 py-1 text-sm font-bold uppercase tracking-wider text-finanzas-dark dark:text-finanzas-lighter">
                         {group}
                       </span>
                     </p>
                     <ul className="space-y-2">
                       {items.map((inst) => (
                         <li key={inst.name} className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                          <strong className="text-finanzas dark:text-finanzas-light">{inst.name}</strong>
+                          <strong className="text-finanzas-dark dark:text-finanzas-lighter">{inst.name}</strong>
                           {inst.min > 0 && <> (mín. {formatMoney(inst.min, currency)})</>} — {inst.note}
                         </li>
                       ))}
@@ -2336,7 +2336,7 @@ export function RiskProfileTest() {
         {capital > 0 && maxTogether > 0 && (
           <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <TrendingUp className="h-5 w-5 text-finanzas dark:text-finanzas-light" aria-hidden />
+              <TrendingUp className="h-5 w-5 text-finanzas-dark dark:text-finanzas-lighter" aria-hidden />
               <h4 className="text-lg font-bold text-gray-800 dark:text-gray-100">Proyección</h4>
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 text-center mb-4 leading-relaxed max-w-2xl mx-auto">
@@ -2367,14 +2367,14 @@ export function RiskProfileTest() {
 
             <div className="flex items-center justify-between gap-3 flex-wrap rounded-lg border border-[#388e3c]/40 bg-[#388e3c]/5 dark:bg-[#388e3c]/10 p-4">
               <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-                <Calculator className="h-5 w-5 text-finanzas flex-shrink-0 dark:text-finanzas-light" />
+                <Calculator className="h-5 w-5 text-finanzas-dark flex-shrink-0 dark:text-finanzas-lighter" />
                 <span>
                   Tasa combinada de tu distribución: <strong>~{blendedRate.toFixed(1)}%</strong> anual.
                 </span>
               </div>
               <Link
                 href="/calculadora-interes-compuesto"
-                className="inline-flex items-center gap-2 bg-finanzas hover:bg-finanzas-dark text-white px-5 py-3 rounded-lg text-base font-semibold transition-colors"
+                className="inline-flex items-center gap-2 rounded-lg bg-finanzas-dark px-5 py-3 text-base font-semibold text-white transition-[colors,transform] duration-150 hover:bg-finanzas-darkest active:scale-[0.97]"
                 data-interactive="true"
               >
                 Abrir calculadora de interés compuesto →
@@ -2405,7 +2405,7 @@ export function RiskProfileTest() {
             href="https://www.sb.gob.do/supervisados/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-finanzas hover:bg-finanzas-dark text-white px-5 py-3 text-base font-semibold transition-colors"
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-finanzas-dark px-5 py-3 text-base font-semibold text-white transition-[colors,transform] duration-150 hover:bg-finanzas-darkest active:scale-[0.97]"
             data-interactive="true"
           >
             Ver instituciones reguladas en República Dominicana →
@@ -2417,7 +2417,7 @@ export function RiskProfileTest() {
       <div className="flex flex-col sm:flex-row gap-3">
         <button
           onClick={startQuiz}
-          className="flex-1 flex items-center justify-center gap-2 bg-finanzas hover:bg-finanzas-dark text-white px-6 py-3.5 rounded-lg font-medium text-base transition-colors"
+          className="flex-1 flex items-center justify-center gap-2 bg-finanzas-dark hover:bg-finanzas-darkest text-white px-6 py-3.5 rounded-lg font-medium text-base transition-[colors,transform] duration-150 active:scale-[0.97]"
           data-interactive="true"
         >
           <RotateCcw className="h-5 w-5" />
@@ -2429,7 +2429,7 @@ export function RiskProfileTest() {
             triggerHapticFeedback("light")
             router.push("/finanzas")
           }}
-          className="flex-1 flex items-center justify-center gap-2 border border-finanzas text-finanzas hover:bg-finanzas hover:text-white dark:hover:bg-finanzas-light dark:hover:text-black px-6 py-3.5 rounded-lg font-medium text-base transition-colors dark:text-finanzas-light"
+          className="flex-1 flex items-center justify-center gap-2 border border-finanzas text-finanzas-dark hover:bg-finanzas-dark hover:text-white dark:hover:bg-finanzas-light dark:hover:text-black px-6 py-3.5 rounded-lg font-medium text-base transition-[colors,transform] duration-150 active:scale-[0.97] dark:text-finanzas-lighter"
           data-interactive="true"
         >
           Volver a finanzas

@@ -16,22 +16,22 @@ export function BudgetTips() {
 
   return (
     <div className="space-y-5">
-      <div className="bg-gradient-to-br from-[#a4c3a2]/30 to-[#6a9c77]/20 dark:from-[#a4c3a2]/20 dark:to-[#6a9c77]/10 rounded-xl p-4 border border-[#6a9c77]/30 dark:border-[#6a9c77]/20 shadow-sm mb-5">
-        <h3 className="text-[#1e3a2b] dark:text-[#6a9c77] font-medium text-sm mb-2">
+      <div className="bg-gradient-to-br from-[#a4c3a2]/30 to-[#6a9c77]/20 dark:from-[#a4c3a2]/20 dark:to-[#6a9c77]/10 rounded-xl p-5 border border-[#6a9c77]/30 dark:border-[#6a9c77]/20 shadow-sm mb-5">
+        <h3 className="text-[#1e3a2b] dark:text-[#a5d6a7] font-medium text-sm mb-2">
           Aprende a construir tu propio presupuesto
         </h3>
         <p className="text-gray-600 dark:text-gray-400 text-xs">Obtén tu plantilla de Excel o Google Sheet gratis</p>
-        <div className="text-finanzas dark:text-[#6a9c77] font-medium text-xs mt-2">Acceder ahora →</div>
+        <div className="text-finanzas-dark dark:text-[#a5d6a7] font-medium text-xs mt-2">Acceder ahora →</div>
       </div>
 
-      <h2 className="text-xl font-bold text-[#1e3a2b] dark:text-[#6a9c77] mb-3">Consejos financieros</h2>
+      <h2 className="text-xl font-bold text-[#1e3a2b] dark:text-[#a5d6a7] mb-3">Consejos financieros</h2>
 
       <div className="relative">
         {/* Página 1 */}
         <div
           className={`space-y-3 transition-opacity duration-500 ${activePage === 0 ? "opacity-100" : "opacity-0 hidden"}`}
         >
-          <div className="bg-[#1e3a2b] dark:bg-[#1e3a2b]/80 rounded-xl p-4 shadow-md border border-[#a4c3a2]/30 backdrop-blur-sm">
+          <div className="bg-[#1e3a2b] dark:bg-[#1e3a2b]/80 rounded-xl p-5 shadow-md border border-[#a4c3a2]/30 backdrop-blur-sm">
             <h3 className="text-white font-medium text-sm mb-1">Identifica gastos hormiga</h3>
             <p className="text-gray-100/90 text-xs">
               Los pequeños gastos diarios suman más de lo que piensas. Registra todos tus gastos durante un mes para
@@ -39,7 +39,7 @@ export function BudgetTips() {
             </p>
           </div>
 
-          <div className="bg-[#1e3a2b] dark:bg-[#1e3a2b]/80 rounded-xl p-4 shadow-md border border-[#a4c3a2]/30 backdrop-blur-sm">
+          <div className="bg-[#1e3a2b] dark:bg-[#1e3a2b]/80 rounded-xl p-5 shadow-md border border-[#a4c3a2]/30 backdrop-blur-sm">
             <h3 className="text-white font-medium text-sm mb-1">Metas de ahorro claras</h3>
             <p className="text-gray-100/90 text-xs">
               Define objetivos específicos y realistas con plazos determinados. Por ejemplo: ahorrar $5,000 en 6 meses
@@ -47,7 +47,7 @@ export function BudgetTips() {
             </p>
           </div>
 
-          <div className="bg-[#1e3a2b] dark:bg-[#1e3a2b]/80 rounded-xl p-4 shadow-md border border-[#a4c3a2]/30 backdrop-blur-sm">
+          <div className="bg-[#1e3a2b] dark:bg-[#1e3a2b]/80 rounded-xl p-5 shadow-md border border-[#a4c3a2]/30 backdrop-blur-sm">
             <h3 className="text-white font-medium text-sm mb-1">Revisa suscripciones</h3>
             <p className="text-gray-100/90 text-xs">
               Cancela los servicios que no utilizas regularmente y evalúa si realmente necesitas todos los que mantienes
@@ -60,7 +60,7 @@ export function BudgetTips() {
         <div
           className={`space-y-3 transition-opacity duration-500 ${activePage === 1 ? "opacity-100" : "opacity-0 hidden"}`}
         >
-          <div className="bg-[#1e3a2b] dark:bg-[#1e3a2b]/80 rounded-xl p-4 shadow-md border border-[#a4c3a2]/30 backdrop-blur-sm">
+          <div className="bg-[#1e3a2b] dark:bg-[#1e3a2b]/80 rounded-xl p-5 shadow-md border border-[#a4c3a2]/30 backdrop-blur-sm">
             <h3 className="text-white font-medium text-sm mb-1">Prioriza deudas</h3>
             <p className="text-gray-100/90 text-xs">
               Paga primero las deudas con mayor tasa de interés mientras mantienes los pagos mínimos en las demás para
@@ -68,7 +68,7 @@ export function BudgetTips() {
             </p>
           </div>
 
-          <div className="bg-[#1e3a2b] dark:bg-[#1e3a2b]/80 rounded-xl p-4 shadow-md border border-[#a4c3a2]/30 backdrop-blur-sm">
+          <div className="bg-[#1e3a2b] dark:bg-[#1e3a2b]/80 rounded-xl p-5 shadow-md border border-[#a4c3a2]/30 backdrop-blur-sm">
             <h3 className="text-white font-medium text-sm mb-1">Automatiza tus ahorros</h3>
             <p className="text-gray-100/90 text-xs">
               Configura transferencias automáticas a tu cuenta de ahorros el día que recibes tu sueldo para asegurar que
@@ -76,7 +76,7 @@ export function BudgetTips() {
             </p>
           </div>
 
-          <div className="bg-[#1e3a2b] dark:bg-[#1e3a2b]/80 rounded-xl p-4 shadow-md border border-[#a4c3a2]/30 backdrop-blur-sm">
+          <div className="bg-[#1e3a2b] dark:bg-[#1e3a2b]/80 rounded-xl p-5 shadow-md border border-[#a4c3a2]/30 backdrop-blur-sm">
             <h3 className="text-white font-medium text-sm mb-1">Regla 50/30/20</h3>
             <p className="text-gray-100/90 text-xs">
               Destina el 50% de tus ingresos a necesidades, 30% a deseos y 20% a ahorro y pago de deudas para mantener
@@ -90,16 +90,28 @@ export function BudgetTips() {
       <div className="flex justify-center gap-2 mt-3">
         <button
           onClick={() => setActivePage(0)}
-          className={`w-2 h-2 rounded-full transition-all ${activePage === 0 ? "bg-[#1e3a2b] scale-125" : "bg-[#1e3a2b]/30"}`}
+          className="flex h-10 w-10 items-center justify-center"
           aria-label="Página 1"
           data-interactive="true"
-        />
+        >
+          <span
+            className={`h-2.5 w-2.5 rounded-full transition-all ${
+              activePage === 0 ? "bg-[#1e3a2b] dark:bg-[#a5d6a7] scale-125" : "bg-[#1e3a2b]/30 dark:bg-gray-600"
+            }`}
+          />
+        </button>
         <button
           onClick={() => setActivePage(1)}
-          className={`w-2 h-2 rounded-full transition-all ${activePage === 1 ? "bg-[#1e3a2b] scale-125" : "bg-[#1e3a2b]/30"}`}
+          className="flex h-10 w-10 items-center justify-center"
           aria-label="Página 2"
           data-interactive="true"
-        />
+        >
+          <span
+            className={`h-2.5 w-2.5 rounded-full transition-all ${
+              activePage === 1 ? "bg-[#1e3a2b] dark:bg-[#a5d6a7] scale-125" : "bg-[#1e3a2b]/30 dark:bg-gray-600"
+            }`}
+          />
+        </button>
       </div>
     </div>
   )

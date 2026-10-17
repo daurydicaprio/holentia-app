@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import type { BudgetItem } from "@/hooks/use-budget-simulator"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { X } from "lucide-react"
@@ -22,11 +23,29 @@ export function IncomeTable({
   onUpdateAmount,
 }: IncomeTableProps) {
   const isMobile = useMediaQuery("(max-width: 480px)")
+  const [drafts, setDrafts] = useState<Record<string, string>>({})
+
+  // Borrador local: permite teclear puntos/comas parciales sin que el valor
+  // controlado (number) los borre a mitad de edición en móvil.
+  const handleDraftChange = (key: string, raw: string, commit: (value: number) => void) => {
+    const clean = raw.replace(/[^\d.,]/g, "")
+    const parsed = Number.parseFloat(clean.replace(/,(?=\d{1,2}$)/, ".").replace(/,/g, ""))
+    setDrafts((prev) => ({ ...prev, [key]: clean }))
+    commit(Number.isFinite(parsed) && parsed > 0 ? parsed : 0)
+  }
+
+  const clearDraft = (key: string) => {
+    setDrafts((prev) => {
+      const next = { ...prev }
+      delete next[key]
+      return next
+    })
+  }
 
   return (
     <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden">
       <div className="bg-gray-50 dark:bg-gray-800 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-        <h2 className="text-xl font-bold text-[#1e3a2b] dark:text-[#6a9c77]">Ingresos mensuales</h2>
+        <h2 className="text-xl font-bold text-[#1e3a2b] dark:text-[#a5d6a7]">Ingresos mensuales</h2>
       </div>
 
       <div className="overflow-x-auto">
@@ -66,11 +85,14 @@ export function IncomeTable({
                 <td className="py-2 px-3 text-sm text-gray-800 dark:text-gray-200">{item.concept}</td>
                 <td className="py-2 px-3">
                   <input
-                    type="number"
-                    value={item.amount}
-                    onChange={(e) => onUpdateAmount(item.id, Number(e.target.value))}
-                    min="0"
-                    className="w-full p-1.5 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:focus:border-transparent dark:focus:ring-finanzas-light"
+                    type="text"
+                    inputMode="decimal"
+                    value={drafts[`v-${item.id}`] ?? String(item.amount)}
+                    onChange={(e) =>
+                      handleDraftChange(`v-${item.id}`, e.target.value, (value) => onUpdateAmount(item.id, value))
+                    }
+                    onBlur={() => clearDraft(`v-${item.id}`)}
+                    className="w-full rounded-md border border-gray-300 bg-white px-2 py-2 text-base tabular-nums text-gray-800 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-transparent dark:focus:ring-finanzas-light"
                     data-interactive="true"
                   />
                 </td>
@@ -80,7 +102,7 @@ export function IncomeTable({
                 <td className="py-2 px-3">
                   <button
                     onClick={() => onRemoveIncome(item.id)}
-                    className="w-6 h-6 flex items-center justify-center rounded-md bg-[#388e3c]/10 dark:bg-[#388e3c]/20 text-finanzas hover:bg-[#388e3c]/20 hover:text-finanzas-dark dark:hover:text-finanzas-lighter dark:hover:bg-[#388e3c]/30 border border-[#388e3c]/20 dark:border-[#388e3c]/30 dark:text-finanzas-light"
+                    className="flex h-10 w-10 items-center justify-center rounded-md border border-[#388e3c]/20 bg-[#388e3c]/10 text-finanzas-dark transition-[colors,transform] duration-150 hover:bg-[#388e3c]/20 hover:text-finanzas-darkest active:scale-[0.97] dark:border-[#388e3c]/30 dark:bg-[#388e3c]/20 dark:text-finanzas-lighter dark:hover:bg-[#388e3c]/30"
                     aria-label="Eliminar"
                     data-interactive="true"
                   >
@@ -90,20 +112,20 @@ export function IncomeTable({
               </tr>
             ))}
             <tr className="bg-gray-50 dark:bg-gray-800 font-medium">
-              <td className="py-2 px-3 text-sm text-[#1e3a2b] dark:text-[#6a9c77]">Total</td>
-              <td className="py-2 px-3 text-sm text-[#1e3a2b] dark:text-[#6a9c77]">{formatCurrency(totalIncome)}</td>
-              <td className="py-2 px-3 text-sm text-[#1e3a2b] dark:text-[#6a9c77]">100%</td>
+              <td className="py-2 px-3 text-sm text-[#1e3a2b] dark:text-[#a5d6a7]">Total</td>
+              <td className="py-2 px-3 text-sm text-[#1e3a2b] dark:text-[#a5d6a7]">{formatCurrency(totalIncome)}</td>
+              <td className="py-2 px-3 text-sm text-[#1e3a2b] dark:text-[#a5d6a7]">100%</td>
               <td className="py-2 px-3"></td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <div className="p-3">
+      <div className="p-4">
         <button
           data-interactive="true"
           onClick={onAddIncome}
-          className="flex items-center justify-center gap-2 w-full sm:w-auto px-3 py-1.5 text-sm bg-finanzas hover:bg-finanzas-dark text-white font-medium rounded-md transition-colors"
+          className="flex w-full items-center justify-center gap-2 rounded-md bg-finanzas-dark px-3 py-2.5 text-sm font-medium text-white transition-[colors,transform] duration-150 hover:bg-finanzas-darkest active:scale-[0.97] sm:w-auto"
         >
           <span className="font-bold">+</span> Añadir ingreso
         </button>

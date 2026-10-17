@@ -135,7 +135,7 @@ export function BudgetSimulator() {
               <button
                 data-interactive="true"
                 onClick={toggleTips}
-                className="w-full mt-6 px-4 py-2 bg-finanzas hover:bg-finanzas-dark text-white font-medium rounded-md transition-colors"
+                className="w-full mt-6 px-4 py-2.5 bg-finanzas-dark hover:bg-finanzas-darkest text-white font-medium rounded-md transition-[colors,transform] duration-150 active:scale-[0.97]"
               >
                 {showTips ? "Ocultar consejos financieros" : "Mostrar consejos financieros"}
               </button>
@@ -153,7 +153,7 @@ export function BudgetSimulator() {
               <button
                 data-interactive="true"
                 onClick={goToPreviousTab}
-                className={`px-4 py-2 rounded-md transition-colors ${
+                className={`px-4 py-2.5 rounded-md transition-[colors,transform] duration-150 active:scale-[0.97] ${
                   activeTab === "income"
                     ? "opacity-50 cursor-not-allowed bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
                     : "bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200"
@@ -170,10 +170,10 @@ export function BudgetSimulator() {
               <button
                 data-interactive="true"
                 onClick={goToNextTab}
-                className={`flex items-center gap-1 px-4 py-2 rounded-md transition-colors ${
+                className={`flex items-center gap-1 px-4 py-2.5 rounded-md transition-[colors,transform] duration-150 active:scale-[0.97] ${
                   activeTab === "summary"
                     ? "opacity-50 cursor-not-allowed bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
-                    : "bg-finanzas hover:bg-finanzas-dark text-white"
+                    : "bg-finanzas-dark hover:bg-finanzas-darkest text-white"
                 }`}
                 disabled={activeTab === "summary"}
               >

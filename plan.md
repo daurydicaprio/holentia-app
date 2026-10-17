@@ -367,6 +367,17 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AU — Finanzas tanda 3: pase UI/UX móvil de presupuesto y hábitos (presupuesto, gastos hormiga, ahorros, compras, perfil de riesgo, glosario) (17-Oct-2026) — HECHA
+
+- [x] **Tablas editables con borrador local** (budget-simulator): los 3 `type="number"` controlados restantes (objetivo, consumido, ingreso) → `type="text"` + `inputMode="decimal"` + estado `drafts` por celda (commit al parsear con coma decimal, limpieza en `onBlur`); inputs de celda `px-2 py-2 text-base`; botones de fila `w-6 h-6` → `h-10 w-10`.
+- [x] **Contraste (fallos AA)**: textos salvia `dark:text-[#6a9c77]` (2.7:1, no pasa ni a ≥20px) → `dark:text-[#a5d6a7]` (5.2:1) en budget (insights, summary, tips, tablas); `text-finanzas` a 12px → `text-finanzas-dark`; ahorro `green-600` (3.3:1) → `green-700`; sólidos `bg-finanzas text-white` (tabs del simulador, CTAs y badges del perfil de riesgo, añadir ingreso/gasto) → `bg-finanzas-dark` + hover `finanzas-darkest` (4.1→7.9:1); héroe del test: píldoras/cajas `bg-white/15` → `bg-black/20` y `text-white/85–90`/`opacity-80–90` → blanco sólido; `Disclosure` `tone="light"` en blanco sólido; h3 del glosario 18px/600 → `finanzas-lighter`; puntos de paginación de tips invisibles en dark → tokens.
+- [x] **Tap targets y respiración**: cierres de modal/advertencia `h-11 w-11`; acciones de fila del presupuesto `h-10 w-10`; dots de tips de 8px → botón `h-10 w-10`; chips del glosario/tracker/perfil a `py-2.5`; toggle de curva del gráfico `px-3 py-2.5`; «Ver niveles» `px-3 py-2`; tarjetas `p-4`/`p-5` → `p-5`/`p-6` donde había inconsistencia; inputs nuevos con la receta canónica (tracker, compras, ahorros, perfil: campos propios a `text-base`/`text-lg`, foco canónico, sin `shadow-sm`).
+- [x] **Parsers tolerantes**: `"60,000"`/`"8,5"` — coma decimal vs. miles resuelta con `,(?=\d{1,2}$)` → `.` antes de quitar miles (tracker, compras, ahorros y tablas del presupuesto).
+- [x] **Docs**: `design.md` §3.3 (borrador en celdas de tabla), §3.6 (salvia dark → `#a5d6a7`), §4 (recetas simulador de presupuesto y perfil de riesgo; glosario y tracker actualizados), §7 (tanda 3); skill `section-ui` §3c/§7; registro en `seo-geo-audit`.
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke (6 páginas SSR con H1 ×1 y 0 `noindex` + OG `200 image/png`) + auditoría targeted PASS.
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

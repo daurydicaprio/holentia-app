@@ -12,7 +12,7 @@ export function BudgetWarning({ onClose }: BudgetWarningProps) {
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-red-500 dark:border-red-400 max-w-md w-[90%] p-6 animate-pulse relative">
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-xl p-1"
+          className="absolute right-2 top-2 flex h-11 w-11 items-center justify-center rounded-md text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200"
           aria-label="Cerrar advertencia"
           data-interactive="true"
         >

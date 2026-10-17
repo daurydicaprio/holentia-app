@@ -13,9 +13,9 @@ export function BudgetTabs({ activeTab, onTabChange }: BudgetTabsProps) {
       <button
         data-interactive="true"
         onClick={() => onTabChange("income")}
-        className={`flex items-center justify-center gap-2 py-2 px-3 text-sm font-medium flex-1 rounded-md transition-colors ${
+        className={`flex items-center justify-center gap-2 py-2.5 px-3 text-sm font-medium flex-1 rounded-md transition-[colors,transform] duration-150 active:scale-[0.97] ${
           activeTab === "income"
-            ? "bg-finanzas text-white shadow-sm"
+            ? "bg-finanzas-dark text-white"
             : "bg-white/80 dark:bg-gray-700/80 text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700"
         }`}
       >
@@ -26,9 +26,9 @@ export function BudgetTabs({ activeTab, onTabChange }: BudgetTabsProps) {
       <button
         data-interactive="true"
         onClick={() => onTabChange("expenses")}
-        className={`flex items-center justify-center gap-2 py-2 px-3 text-sm font-medium flex-1 rounded-md transition-colors ${
+        className={`flex items-center justify-center gap-2 py-2.5 px-3 text-sm font-medium flex-1 rounded-md transition-[colors,transform] duration-150 active:scale-[0.97] ${
           activeTab === "expenses"
-            ? "bg-finanzas text-white shadow-sm"
+            ? "bg-finanzas-dark text-white"
             : "bg-white/80 dark:bg-gray-700/80 text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700"
         }`}
       >
@@ -39,9 +39,9 @@ export function BudgetTabs({ activeTab, onTabChange }: BudgetTabsProps) {
       <button
         data-interactive="true"
         onClick={() => onTabChange("summary")}
-        className={`flex items-center justify-center gap-2 py-2 px-3 text-sm font-medium flex-1 rounded-md transition-colors ${
+        className={`flex items-center justify-center gap-2 py-2.5 px-3 text-sm font-medium flex-1 rounded-md transition-[colors,transform] duration-150 active:scale-[0.97] ${
           activeTab === "summary"
-            ? "bg-finanzas text-white shadow-sm"
+            ? "bg-finanzas-dark text-white"
             : "bg-white/80 dark:bg-gray-700/80 text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700"
         }`}
       >

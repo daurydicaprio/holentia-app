@@ -13,7 +13,7 @@ function normalize(value: string): string {
 }
 
 const OUTLINE_BUTTON =
-  "inline-flex h-9 items-center gap-2 rounded-md border border-finanzas bg-white/60 px-4 text-sm font-medium text-finanzas transition-colors dark:border-finanzas-light dark:bg-black/20 dark:text-finanzas-light hover:bg-finanzas-dark hover:text-white dark:hover:bg-finanzas-light dark:hover:text-black"
+  "inline-flex h-10 items-center gap-2 rounded-md border border-finanzas bg-white/60 px-4 text-sm font-medium text-finanzas-dark transition-colors dark:border-finanzas-light dark:bg-black/20 dark:text-finanzas-lighter hover:bg-finanzas-dark hover:text-white dark:hover:bg-finanzas-light dark:hover:text-black"
 
 /** Glosario filtrable (búsqueda + categorías). Ephemeral: nada se guarda (patrón E). */
 export function Glossary() {
@@ -63,7 +63,7 @@ export function Glossary() {
       <div className="rounded-2xl border border-finanzas-border bg-gradient-to-br from-finanzas to-finanzas-dark p-6 text-white dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text sm:p-8">
         <div className="mx-auto max-w-2xl">
           <h2 className="text-center text-xl font-bold sm:text-2xl">Aprende y busca un nuevo término</h2>
-          <p className="mt-1.5 text-center text-sm text-white/85 dark:text-finanzas-lighter">
+          <p className="mt-1.5 text-center text-sm text-white dark:text-finanzas-lighter">
             Ahorro, crédito, intereses, inversiones y bolsa: todo explicado con ejemplos.
           </p>
           <div className="relative mt-4">
@@ -82,7 +82,7 @@ export function Glossary() {
             placeholder="Busca un término… (ej. interés compuesto)"
             autoComplete="off"
             data-interactive="true"
-            className="h-12 w-full rounded-md border border-gray-300 bg-white py-2 pl-12 pr-12 text-base text-gray-900 placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
+            className="h-12 w-full rounded-md border border-gray-300 bg-white py-2 pl-12 pr-12 text-base text-gray-900 placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
           />
           {query && (
             <button
@@ -108,7 +108,7 @@ export function Glossary() {
             onClick={() => handleCategory("all")}
             data-interactive="true"
             className={cn(
-              "rounded-md border px-3 py-1.5 text-sm font-medium transition-colors",
+              "rounded-md border px-3 py-2.5 text-sm font-medium transition-[colors,transform] duration-150 active:scale-[0.97]",
               category === "all"
                 ? "border-finanzas-dark bg-finanzas-dark text-white dark:border-finanzas-light dark:bg-finanzas-light dark:text-black"
                 : "border-gray-300 text-gray-600 hover:bg-black/5 hover:text-finanzas dark:border-gray-600 dark:text-gray-400 dark:hover:bg-white/10 dark:hover:text-finanzas-light",
@@ -124,7 +124,7 @@ export function Glossary() {
               onClick={() => handleCategory(cat.id)}
               data-interactive="true"
               className={cn(
-                "rounded-md border px-3 py-1.5 text-sm font-medium transition-colors",
+                "rounded-md border px-3 py-2.5 text-sm font-medium transition-[colors,transform] duration-150 active:scale-[0.97]",
                 category === cat.id
                   ? "border-finanzas-dark bg-finanzas-dark text-white dark:border-finanzas-light dark:bg-finanzas-light dark:text-black"
                   : "border-gray-300 text-gray-600 hover:bg-black/5 hover:text-finanzas dark:border-gray-600 dark:text-gray-400 dark:hover:bg-white/10 dark:hover:text-finanzas-light",
@@ -162,7 +162,7 @@ export function Glossary() {
                     className="group animate-fadeIn rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-colors hover:border-finanzas hover:bg-black/5 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-finanzas-light dark:hover:bg-white/10"
                     style={{ animationDelay: `${Math.min(index, 8) * 0.05}s` }}
                   >
-                    <h3 className="text-lg font-semibold text-finanzas-dark transition-colors group-hover:text-finanzas-darkest dark:text-finanzas-light dark:group-hover:text-finanzas-lighter">
+                    <h3 className="text-lg font-semibold text-finanzas-dark transition-colors group-hover:text-finanzas-darkest dark:text-finanzas-lighter dark:group-hover:text-finanzas-lighter">
                       {item.term}
                     </h3>
                     <p className="mt-2 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
@@ -179,7 +179,7 @@ export function Glossary() {
                         href={`/${item.related.slug}`}
                         onClick={handleToolLink}
                         data-interactive="true"
-                        className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-finanzas transition-colors hover:text-finanzas-dark dark:text-finanzas-light dark:hover:text-finanzas-lighter"
+                        className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-finanzas-dark transition-colors hover:text-finanzas-darkest dark:text-finanzas-lighter dark:hover:text-finanzas-lighter"
                       >
                         {item.related.label}
                         <ArrowRight aria-hidden="true" className="h-4 w-4" />

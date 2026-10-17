@@ -39,12 +39,12 @@ const DATOS_AHORRO = [
 ]
 
 const inputClass =
-  "block w-full rounded-md border border-gray-300 bg-white p-3 pl-10 text-base text-gray-900 shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:focus:border-transparent dark:focus:ring-finanzas-light md:text-sm"
+  "block w-full rounded-md border border-gray-300 bg-white py-2.5 pl-10 pr-3 text-lg font-semibold text-gray-800 placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
 
 const segClass = (active: boolean) =>
-  `rounded-md px-4 py-2 text-sm font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
+  `rounded-md px-4 py-2.5 text-sm font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
     active
-      ? "bg-finanzas text-white shadow-sm"
+      ? "bg-finanzas-dark text-white"
       : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
   }`
 
@@ -53,7 +53,7 @@ function formatNumber(value: number): string {
 }
 
 function parseNumber(formatted: string): number {
-  const n = Number.parseFloat(formatted.replace(/,/g, ""))
+  const n = Number.parseFloat(formatted.replace(/,(?=\d{1,2}$)/, ".").replace(/,/g, ""))
   return Number.isNaN(n) ? 0 : n
 }
 
@@ -423,28 +423,28 @@ export function SavingsPlanner() {
             <div className="rounded-2xl border border-finanzas-border bg-gradient-to-br from-finanzas to-finanzas-dark p-6 text-white shadow-lg dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text sm:p-8">
               {result.kind === "cuando" ? (
                 <>
-                  <p className="flex items-center justify-center gap-2 text-sm text-white/85 dark:text-finanzas-lighter">
+                  <p className="flex items-center justify-center gap-2 text-sm text-white dark:text-finanzas-lighter">
                     <Target className="h-4 w-4" />
                     Tiempo para tu meta
                   </p>
                   <p className="mt-2 text-center text-4xl font-bold tabular-nums sm:text-5xl">
                     {mesesRedondos} <span className="text-2xl">{mesesRedondos === 1 ? "mes" : "meses"}</span>
                   </p>
-                  <p className="mt-3 text-center text-sm text-white/85 dark:text-finanzas-lighter">
+                  <p className="mt-3 text-center text-sm text-white dark:text-finanzas-lighter">
                     ≈ {tiempoTexto}
                     {fechaTexto ? ` · llegas en ${fechaTexto}` : ""}
                   </p>
                 </>
               ) : (
                 <>
-                  <p className="flex items-center justify-center gap-2 text-sm text-white/85 dark:text-finanzas-lighter">
+                  <p className="flex items-center justify-center gap-2 text-sm text-white dark:text-finanzas-lighter">
                     <PiggyBank className="h-4 w-4" />
                     Aporte mensual necesario
                   </p>
                   <p className="mt-2 text-center text-4xl font-bold tabular-nums sm:text-5xl">
                     {formatDOP(animatedPmt, 0)}
                   </p>
-                  <p className="mt-3 text-center text-sm text-white/85 dark:text-finanzas-lighter">
+                  <p className="mt-3 text-center text-sm text-white dark:text-finanzas-lighter">
                     Durante {result.meses} {result.meses === 1 ? "mes" : "meses"}
                     {fechaTexto ? ` · meta en ${fechaTexto}` : ""}
                   </p>
@@ -453,7 +453,7 @@ export function SavingsPlanner() {
             </div>
 
             {/* Desglose */}
-            <div className="rounded-xl bg-white p-5 shadow-lg dark:bg-gray-800">
+            <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
               <div className="flex justify-between gap-3 py-1.5 text-sm">
                 <span>Meta de ahorro</span>
                 <span className="whitespace-nowrap font-semibold tabular-nums">{formatDOP(meta)}</span>
@@ -472,7 +472,7 @@ export function SavingsPlanner() {
               </div>
               <div className="mt-2 flex justify-between gap-3 border-t border-gray-200 py-2 dark:border-gray-700">
                 <span className="font-semibold">Sale de tu bolsillo</span>
-                <span className="whitespace-nowrap font-bold tabular-nums text-finanzas-dark dark:text-finanzas-light">
+                <span className="whitespace-nowrap font-bold tabular-nums text-finanzas-dark dark:text-finanzas-lighter">
                   {formatDOP(inicial + result.aportes)}
                 </span>
               </div>

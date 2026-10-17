@@ -23,14 +23,14 @@ const DATOS_COMPRA = [
 ]
 
 const inputClass =
-  "block w-full rounded-md border border-gray-300 bg-white p-3 pl-10 text-base text-gray-900 shadow-sm focus:border-transparent focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:focus:border-transparent dark:focus:ring-finanzas-light md:text-sm"
+  "block w-full rounded-md border border-gray-300 bg-white py-2.5 pl-10 pr-3 text-lg font-semibold text-gray-800 placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-finanzas dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-transparent dark:focus:ring-finanzas-light"
 
 function formatNumber(value: number): string {
   return new Intl.NumberFormat("es-DO", { minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(value)
 }
 
 function parseNumber(formatted: string): number {
-  const n = Number.parseFloat(formatted.replace(/,/g, ""))
+  const n = Number.parseFloat(formatted.replace(/,(?=\d{1,2}$)/, ".").replace(/,/g, ""))
   return Number.isNaN(n) ? 0 : n
 }
 
@@ -223,19 +223,19 @@ export function PurchasePlanner() {
           <div aria-live="polite" className="animate-result-in space-y-4">
             {/* Hero */}
             <div className="rounded-2xl border border-finanzas-border bg-gradient-to-br from-finanzas to-finanzas-dark p-6 text-white shadow-lg dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text sm:p-8">
-              <p className="flex items-center justify-center gap-2 text-sm text-white/85 dark:text-finanzas-lighter">
+              <p className="flex items-center justify-center gap-2 text-sm text-white dark:text-finanzas-lighter">
                 <Clock className="h-4 w-4" />
                 La paciencia te paga
               </p>
               <p className="mt-2 text-center text-4xl font-bold tabular-nums sm:text-5xl">{formatDOP(animated, 0)}</p>
-              <p className="mt-3 text-center text-sm text-white/85 dark:text-finanzas-lighter">
+              <p className="mt-3 text-center text-sm text-white dark:text-finanzas-lighter">
                 Inviertes el precio mientras esperas {meses} {meses === 1 ? "mes" : "meses"} · ≈{" "}
                 {result.pct.toFixed(1)}% de la compra.
               </p>
             </div>
 
             {/* Comparativa */}
-            <div className="rounded-xl bg-white p-5 shadow-lg dark:bg-gray-800">
+            <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
               <div className="flex justify-between gap-3 py-1.5 text-sm">
                 <span>Comprar hoy</span>
                 <span className="whitespace-nowrap font-semibold tabular-nums">Pagas {formatDOP(precio)}</span>
@@ -248,7 +248,7 @@ export function PurchasePlanner() {
               </div>
               <div className="mt-2 flex justify-between gap-3 border-t border-gray-200 py-2 dark:border-gray-700">
                 <span className="font-semibold">Al comprar te quedan</span>
-                <span className="whitespace-nowrap font-bold tabular-nums text-finanzas-dark dark:text-finanzas-light">
+                <span className="whitespace-nowrap font-bold tabular-nums text-finanzas-dark dark:text-finanzas-lighter">
                   + {formatDOP(result.ganancia)}
                 </span>
               </div>

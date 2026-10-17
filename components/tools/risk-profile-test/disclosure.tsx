@@ -28,9 +28,9 @@ export function Disclosure({ label, children, align = "left", tone = "green", cl
 
   const summaryTone =
     tone === "light"
-      ? "text-white/90 hover:text-white"
-      : "text-finanzas dark:text-finanzas-light hover:text-finanzas-dark dark:hover:text-finanzas-lighter"
-  const contentTone = tone === "light" ? "text-white/85" : "text-gray-600 dark:text-gray-400"
+      ? "text-white hover:text-finanzas-lighter"
+      : "text-finanzas-dark hover:text-finanzas-darkest dark:text-finanzas-lighter"
+  const contentTone = tone === "light" ? "text-white" : "text-gray-600 dark:text-gray-400"
 
   return (
     <details ref={detailsRef} className={`group ${className}`}>
