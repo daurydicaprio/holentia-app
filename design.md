@@ -309,6 +309,15 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 - **Dos campos** (tú / tu pareja) con borrador autoguardado **solo tras la primera edición** (`touched` ref: evita el flash «Borrador guardado» al precargar), upsert por día en `holentia:diario-parejas:entries:v1` y limpieza del borrador al guardar.
 - **Historial con racha** (misma semántica que el diario guiado), copiar con clipboard + check y borrado en 2 pasos; «Borrar todo» con temporizador de 4 s.
 
+### Plan de pasos 5-10-20 (17-Oct-2026, ref. `components/tools/steps-plan/`)
+
+- **Objetivo configurable**: 3 presets (`Base` 4,000 / `Recomendado` 7,000 / `Ideal` 10,000, `aria-pressed`) + input libre (1,000-30,000) con normalización al `blur`; conversión documentada **100 pasos/min** (cadencia moderada) y recuadro `Info` que desmonta el mito Manpo-kei. Autoguardado **solo tras la primera edición** (`dirty` ref) en `holentia:pasos-al-dia:draft:v1`.
+- **Plan por bloques (steppers)**: presets `Mínimo 40′` / `Recomendado 60′` / `Ideal 80′` + bloques Mañana/Tarde/Noche con `−`/`+` de 5 en 5 (0-90, `aria-label` por bloque); resumen con total, equivalencia en pasos y chip de nivel por minutos (<40 · 40-59 · 60-69 · 70-100 · +100).
+- **Registro de hoy** (patrón diario-parejas): fecha local calculada tras el montaje (páginas estáticas), `touched` ref, upsert por día en `holentia:pasos-al-dia:entries:v1` con `entriesRef` para no re-disparar el efecto; barra de progreso vs. objetivo, racha (`Flame`, días seguidos cumpliendo) y fila de últimos 7 días (punto lleno con `Check` = cumplido, anillo = registrado, punteado = sin registro; hoy con `ring`).
+- **Beneficios por banda de objetivo** (`<4000` arranque · `4000-5999` base · `6000-7999` recomendado · `8000+` ideal) + tarjeta «Los pasos son el primer paso, no el único» (OMS 150-300 min/semana, fuerza 2 días, alimentación, descanso).
+- **Trucos que suman pasos**: grid `sm:grid-cols-2` de 10 micro-hábitos (icono + título + una línea): caminar 10-15 min tras comer, levantarse cada hora, parqueo lejos «si es seguro», bájate una parada antes, escaleras, caminar en llamadas, madrugar/atardecer (clima), compañía, música/pódcast y tenis a la vista.
+- **Formato de miles**: coma (`toLocaleString("es-DO")`, «7,000»), coherente con el resto del sitio.
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.

@@ -276,6 +276,15 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AL — Cuerpo: plan de pasos 5-10-20 (17-Oct-2026) — HECHA
+
+- [x] **Herramienta nueva** (26ª, card `monitor-pasos` → `pasos-al-dia` activada): objetivo diario con presets (4,000/7,000/10,000) + input libre, plan 5-10-20 repartido en bloques Mañana/Tarde/Noche (steppers de 5 en 5 + presets de 40/60/80 min), registro del día con progreso vs. objetivo, racha y últimos 7 días, beneficios por banda de objetivo, 10 trucos para sumar pasos y tarjeta «los pasos son el primer paso, no el único» (OMS: cardio, fuerza, alimentación, descanso); conversión 100 pasos/min; mito Manpo-kei desmontado. Patrón D doble (`holentia:pasos-al-dia:draft:v1` + `:entries:v1`), fecha local tras el montaje, formato de miles con coma.
+- [x] **SEO**: metaTitle «¿Cuántos pasos al día? Plan 5-10-20 y beneficios» (48 ch) · metaDescription 154 ch; FAQ ×6; OG propia; hub de cuerpo actualizado (3 herramientas vivas).
+- [x] **Docs/recuentos**: llms.txt 26 (header + sección Cuerpo + línea), README (×5), architecture (×3), `seo-geo` (36 archivos OG); claves nuevas en politica-cookies (×2); receta `design.md` §4 «Plan de pasos 5-10-20».
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke + auditoría 16 puntos PASS.
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

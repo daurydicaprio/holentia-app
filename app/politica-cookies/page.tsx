@@ -132,6 +132,14 @@ const localStorageKeys = [
     key: "holentia:diario-parejas:draft:v1",
     desc: "El borrador sin guardar de la entrada de hoy del diario para parejas",
   },
+  {
+    key: "holentia:pasos-al-dia:draft:v1",
+    desc: "Tu objetivo diario de pasos y tu plan de caminata (bloques de mañana, tarde y noche)",
+  },
+  {
+    key: "holentia:pasos-al-dia:entries:v1",
+    desc: "Tus pasos registrados por día (fecha y total)",
+  },
 ]
 
 const notUsedItems = [

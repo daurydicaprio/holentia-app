@@ -198,10 +198,10 @@ export const sectionsData: Record<string, SectionData> = {
     title: "Energiza tu",
     highlightText: "cuerpo",
     subtitle:
-      "Tu energía empieza con pequeños cambios. Calcula tus calorías diarias con un método científico y descubre cuánta agua necesita tu cuerpo; usa esos datos para ajustar lo que comes y cómo te mueves, sin dietas imposibles ni promesas vacías.",
+      "Tu energía empieza con pequeños cambios. Calcula tus calorías diarias y la hidratación que necesita tu cuerpo, y convierte tus minutos de caminata en pasos con un objetivo propio: la ciencia del movimiento, sin mitos ni promesas vacías.",
     text: "Energiza tu cuerpo. Accede a rutinas, nutrición y consejos para un estilo de vida activo y un bienestar integral.",
     metaDescription:
-      "Calculadora de calorías Mifflin-St Jeor, hidratación diaria y hábitos para un estilo de vida activo. Gratuitas, en tu navegador y sin registro.",
+      "Calculadora de calorías, hidratación diaria y plan de pasos: objetivo, plan 5-10-20 de minutos y beneficios. Gratuitas, en tu navegador y sin registro.",
     cards: [
       {
         id: "calculadora-calorias",
@@ -250,12 +250,15 @@ export const sectionsData: Record<string, SectionData> = {
         category: "cuerpo",
       },
       {
-        id: "monitor-pasos",
-        title: "Monitor de Pasos",
-        description: "Registra tu actividad diaria.",
-        slug: "monitor-pasos",
-        isAvailable: false,
+        id: "pasos-al-dia",
+        title: "Plan de Pasos 5-10-20",
+        description: "Define tu objetivo y camina con propósito.",
+        slug: "pasos-al-dia",
+        isAvailable: true,
         category: "cuerpo",
+        metaTitle: "¿Cuántos pasos al día? Plan 5-10-20 y beneficios",
+        metaDescription:
+          "Define tu objetivo de pasos, arma tu plan 5-10-20 de minutos y descubre los beneficios de cada nivel. La ciencia marca la diferencia en 6,000-8,000 pasos.",
       },
       {
         id: "recetario-saludable",
