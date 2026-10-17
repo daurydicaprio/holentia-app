@@ -84,6 +84,10 @@ const localStorageKeys = [
     key: "holentia:calculadora-itbis:draft:v1",
     desc: "Borrador de la calculadora de ITBIS",
   },
+  {
+    key: "holentia:calculadora-certificado-financiero:draft:v1",
+    desc: "Borrador de la calculadora de certificado financiero",
+  },
 ]
 
 const notUsedItems = [

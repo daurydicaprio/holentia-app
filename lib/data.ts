@@ -407,6 +407,17 @@ export const sectionsData: Record<string, SectionData> = {
         metaDescription:
           "Agrega o quita el ITBIS de un precio con la tasa general del 18% o la reducida del 16%: obtén base, impuesto y total al instante. Gratis.",
       },
+      {
+        id: "calculadora-certificado-financiero",
+        title: "Certificado financiero",
+        description: "Calcula intereses, retención y ganancia neta.",
+        slug: "calculadora-certificado-financiero",
+        isAvailable: true,
+        category: "finanzas",
+        metaTitle: "Calculadora de certificado financiero RD",
+        metaDescription:
+          "Calcula cuánto rinde tu certificado financiero o depósito a plazo fijo: intereses según tasa y plazo, retención del 10% y ganancia neta. Gratis.",
+      },
     ],
   },
 }

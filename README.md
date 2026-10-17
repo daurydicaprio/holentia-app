@@ -109,12 +109,12 @@ holentia/
 ## SEO y Rendimiento
 
 - **Páginas de herramienta server-rendered**: cada herramienta usa `ToolPageShell` (server component) con H1, descripción y breadcrumb en el HTML inicial; la interactividad vive dentro como client components
-- **Metadata por página**: `generateMetadata` en las 16 herramientas, las 4 secciones, el home y las páginas informativas (title, description, canonical, openGraph, twitter) con template global `{página} | HOLENTIA` en `app/layout.tsx`
+- **Metadata por página**: `generateMetadata` en las 17 herramientas, las 4 secciones, el home y las páginas informativas (title, description, canonical, openGraph, twitter) con template global `{página} | HOLENTIA` en `app/layout.tsx`
 - **Datos estructurados JSON-LD**: `WebApplication` + `BreadcrumbList` + `FAQPage` por herramienta, `CollectionPage` + `BreadcrumbList` por sección, `WebSite` + `Organization` en el home, `FAQPage` en Ayuda
-- **FAQ visible en el HTML inicial** de las 16 herramientas (acordeón, no escondido tras hydration gates) y de `/ayuda` — los hubs de sección no llevan FAQ
-- **`app/sitemap.ts`**: 26 URLs (home, 4 secciones, 16 herramientas, 5 informativas)
+- **FAQ visible en el HTML inicial** de las 17 herramientas (acordeón, no escondido tras hydration gates) y de `/ayuda` — los hubs de sección no llevan FAQ
+- **`app/sitemap.ts`**: 27 URLs (home, 4 secciones, 17 herramientas, 5 informativas)
 - **`app/robots.ts`**: permite todo y apunta al sitemap
-- **`public/llms.txt`**: índice legible por LLMs con las 16 herramientas y sus fórmulas
+- **`public/llms.txt`**: índice legible por LLMs con las 17 herramientas y sus fórmulas
 - **Enlaces a herramientas en el HTML inicial** de las secciones (tabs y tarjetas server-rendered, sin `mounted` guard)
 - **Errores**: `app/error.tsx` + `app/global-error.tsx`; `app/ayuda/loading.tsx` con skeleton real
 
@@ -232,4 +232,4 @@ Este proyecto es propiedad de Daury DiCaprio. Todos los derechos reservados.
 
 ---
 
-**Última actualización**: Octubre 2026 (16 herramientas, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`)
+**Última actualización**: Octubre 2026 (17 herramientas, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`)

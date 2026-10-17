@@ -162,6 +162,17 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase Z — Finanzas: Calculadora de Certificado Financiero (17-Oct-2026) — HECHA
+
+- [x] **Nueva herramienta `/calculadora-certificado-financiero` (17ª del sitio)**: monto + tasa anual + plazo (días/meses) + modalidad (interés mensual o al vencimiento) → interés bruto (simple, año 365), retención ISR 10% (Norma General 07-2019) y ganancia neta; hero con count-up, desglose contable y fila por modalidad (total al vencer / pago mensual ≈).
+- [x] **Investigación previa**: plazos 30–910 días (BHD) y 2–60 meses (Banreservas), tasas de referencia 2026 7%–11%, retención 10% sobre intereses (DGII), protección del Fondo de Contingencia (Ley 92-04).
+- [x] **Persistencia** patrón D draft: `holentia:calculadora-certificado-financiero:draft:v1` (en `politica-cookies`; FAQ de privacidad). Card en `lib/data.ts` (metaTitle 40 ch · metaDescription 144 ch) → sitemap y hub automáticos (27 URLs).
+- [x] **SEO/GEO**: OG propia («Intereses, retención y ganancia neta»); `llms.txt` 16→17; FAQ ×6 (qué es, cálculo por modalidad, qué tasa/plazo, retención ISR, cancelación anticipada, privacidad).
+- [x] **Docs**: receta `design.md` §4 «Calculadora de tasa con retención»; recuentos 17 herramientas / 27 URLs.
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke (title/desc/canonical/FAQ JSON-LD, sitemap 27 URLs, og runtime 200 image/png).
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

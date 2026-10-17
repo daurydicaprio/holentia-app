@@ -237,6 +237,11 @@ Patrón de un dato económico + resultado desglosado (2 columnas: form `lg:col-s
 - **Chips de tasa**: outline `{s}` activo / neutro inactivo (patrón tracker), con `aria-pressed` + haptic `light`.
 - **Resultado**: hero con count-up cuyo número es el «resultado del modo» (agregar → total; quitar → impuesto) + desglose base/impuesto/total con la fila total en `font-bold text-{s}-dark dark:text-{s}-light` (misma tarjeta de desglose del aguinaldo).
 
+### Calculadora de tasa con retención (certificado financiero, ref. `components/tools/certificate-calculator/`)
+
+- **Formulario**: monto (input moneda), tasa anual (input + `Percent`) y plazo con segmented de unidad (Días/Meses) + modalidad (Cada mes/Al vencimiento) en `grid grid-cols-2 gap-2`; helpers `text-xs` con referencias reales (7%–11% anual, 30–910 días).
+- **Desglose con retención**: filas depósito / interés bruto / retención en negativo (`− RD$…`) / ganancia neta `font-bold` + fila extra según modalidad (total al vencer o pago mensual `≈` + nº de meses) y cierre `text-xs` con rendimiento neto anual (tasa × 0.9).
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.
