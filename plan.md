@@ -213,6 +213,15 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AE — Mente: Respiración guiada (17-Oct-2026) — HECHA
+
+- [x] **Herramienta nueva** (20ª): card `tecnicas-respiracion` activada; 3 técnicas (4-7-8 para dormir · caja 4-4-4-4 concentración · calma 4-6 relajación), rondas 3/5/10, círculo guía animado con `requestAnimationFrame`, pausa/reanudar, haptics por fase y aviso de seguridad; preferencias con patrón D (`holentia:tecnicas-respiracion:draft:v1`).
+- [x] **SEO**: metaTitle «Respiración guiada 4-7-8 para calmar la ansiedad» (48 ch) · metaDescription 138 ch; FAQ ×6; OG propia; hub de mente actualizado (subtitle + metaDescription).
+- [x] **Docs/recuentos**: llms.txt 20 herramientas (header + sección Mente + línea), README (×5), architecture (×3), `seo-geo` (30 archivos OG); receta `design.md` §4 «Respiración guiada».
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke + auditoría 16 puntos PASS.
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

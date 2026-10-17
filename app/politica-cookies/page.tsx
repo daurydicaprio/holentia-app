@@ -100,6 +100,10 @@ const localStorageKeys = [
     key: "holentia:planificador-compras:draft:v1",
     desc: "Borrador del planificador de compras",
   },
+  {
+    key: "holentia:tecnicas-respiracion:draft:v1",
+    desc: "Preferencias del ejercicio de respiración (técnica y rondas)",
+  },
 ]
 
 const notUsedItems = [

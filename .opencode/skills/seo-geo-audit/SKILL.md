@@ -120,6 +120,7 @@ Esperado: `og:200 image/png` en las 19. Comprobar también las no-herramienta: `
 |---|---|---|---|
 | 17-Oct-2026 | 19 herramientas + 4 hubs + 5 informativas + home (29 rutas) | ✅ 29/29 PASS: metadata en rango, canonical/OG/twitter propios, JSON-LD completo, FAQ 5–6 visibles, llms.txt y sitemap al día, 0 `noindex`, 0 `new Date()`; OG runtime 29/29 `200 image/png` | Ninguna |
 | 17-Oct-2026 | `diario-guiado` (mejoras) — targeted | ✅ PASS: metaTitle 48 ch · metaDescription 152 ch · FAQ ×6 visibles (nueva «¿Escribir un diario ayuda de verdad?» + privacidad con claves `entries` + `draft`) · canonical/OG/twitter/JSON-LD intactos · OG runtime `200 image/png` | Ninguna |
+| 17-Oct-2026 | `tecnicas-respiracion` (nueva, 20ª) — auditoría 16 puntos | ✅ PASS: metaTitle 48 ch · metaDescription 138 ch única · H1 ×1 · canonical/OG/twitter propias · JSON-LD ×3 (WebApplication + Breadcrumb + FAQPage) · FAQ ×6 visibles · llms.txt línea 1/1 · sitemap 30 `<loc>` (hub mente enlaza) · 0 `noindex` · clave `holentia:tecnicas-respiracion:draft:v1` en politica-cookies · OG runtime `200 image/png` | Ninguna |
 
 > Añadir una fila por auditoría (barrido completo o por herramienta). El registro vive aquí.
 

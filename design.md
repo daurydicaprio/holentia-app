@@ -264,6 +264,14 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 - **Borrador del formulario** (patrón D ampliado): `draftKey(slug)` guarda el borrador **y el `editingId`**; se limpia al guardar/cancelar/borrar; indicador «Borrador guardado».
 - **Copiar entrada** (`navigator.clipboard` + check temporal 1,5 s) como respaldo manual; estado vacío con `Feather`; fechas `es-DO`; editar **conserva la fecha original** (la racha y el historial no se mueven).
 
+### Respiración guiada (17-Oct-2026, ref. `components/tools/breathing-exercises/`)
+
+- **Motor por `requestAnimationFrame`**: el círculo interpola su escala según el progreso de la fase (`{name, seconds, from, to}`) escribiendo `style.transform` directo por ref (sin re-render por frame); pausar congela y reanudar continúa donde iba (el progreso vive en un ref con `phaseStart` acumulado).
+- **Haptics**: `light` en cada cambio de fase, `medium` al completar las rondas.
+- **Controles**: tarjetas de técnica (nombre + etiqueta + detalle, `aria-pressed`) y chips de rondas; cambiar la configuración detiene y resetea la práctica. Las cuentas de segundos van en `aria-hidden` (el `aria-live` anuncia solo el nombre de la fase, no cada segundo).
+- **Preferencias** en `draftKey(slug)` (patrón D): técnica y rondas.
+- **Seguridad**: aviso visible de que no sustituye tratamiento y de no retener el aire en el agua o conduciendo.
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.

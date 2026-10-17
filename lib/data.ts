@@ -6,10 +6,10 @@ export const sectionsData: Record<string, SectionData> = {
     title: "Cultiva tu",
     highlightText: "mente",
     subtitle:
-      "Tu mente también merece un espacio cada día. Con el diario guiado escribes qué sentiste, qué aprendiste y una gratitud, y poco a poco ganas claridad, resiliencia y más calma en tu día a día.",
+      "Tu mente también merece un espacio cada día. Escribe en el diario guiado y calma el ritmo con ejercicios de respiración; poco a poco ganas claridad, resiliencia y más calma en tu día a día.",
     text: "Cultiva claridad y resiliencia. Descubre herramientas para tu bienestar emocional y cognitivo.",
     metaDescription:
-      "Diario guiado, reflexión y hábitos para ganar claridad, resiliencia emocional y equilibrio. Herramientas gratuitas, sin registro y en tu navegador.",
+      "Diario guiado y respiración guiada (4-7-8, caja y calma) para ganar claridad y calmar la ansiedad. Herramientas gratuitas, sin registro y en tu navegador.",
     cards: [
       {
         id: "diario-guiado",
@@ -57,10 +57,13 @@ export const sectionsData: Record<string, SectionData> = {
       {
         id: "tecnicas-respiracion",
         title: "Técnicas de Respiración",
-        description: "Controla la ansiedad al instante.",
+        description: "Calma la ansiedad con ejercicios guiados.",
         slug: "tecnicas-respiracion",
-        isAvailable: false,
+        isAvailable: true,
         category: "mente",
+        metaTitle: "Respiración guiada 4-7-8 para calmar la ansiedad",
+        metaDescription:
+          "Respiración guiada en tiempo real: técnica 4-7-8 para dormir, caja 4-4-4-4 para concentrarte y calma 4-6 para relajarte. Elige tus rondas.",
       },
       {
         id: "mapas-mentales",
