@@ -272,6 +272,13 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 - **Preferencias** en `draftKey(slug)` (patrón D): técnica y rondas.
 - **Seguridad**: aviso visible de que no sustituye tratamiento y de no retener el aire en el agua o conduciendo.
 
+### Test de ansiedad GAD-7 (17-Oct-2026, ref. `components/tools/anxiety-test/`)
+
+- **Flujo de test instrumentado**: intro (aviso de cribado, no diagnóstico) → quiz de una pregunta a la vez con auto-avance a 300 ms y «← Atrás» → resultado; patrón D con reanudación a medias (vuelve a la primera pregunta sin responder).
+- **Resultado**: héroe gradiente `mente` con puntaje `useCountUp` sobre 21 + banda (badge por tramo) y **escala de severidad** de 4 segmentos (23/23/23/resto: emerald/amber/orange/red) con marcador en `left: calc((score/21)*100% − 2px)`.
+- **Contenido por banda**: resumen + 3 tips + enlaces cruzados a respiración y diario; **aviso de crisis solo en banda grave** (`AlertTriangle` + 911/emergencias). Nunca ocultar el «no es un diagnóstico».
+- **Tokens**: acciones y acentos en `mente`; los semáforos de severidad usan la paleta Tailwind estándar (emerald/amber/orange/red), no tokens de sección.
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.

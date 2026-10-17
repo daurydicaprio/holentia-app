@@ -66,6 +66,17 @@ export const sectionsData: Record<string, SectionData> = {
           "Respiración guiada en tiempo real: técnica 4-7-8 para dormir, caja 4-4-4-4 para concentrarte y calma 4-6 para relajarte. Elige tus rondas.",
       },
       {
+        id: "test-ansiedad",
+        title: "Test de Ansiedad GAD-7",
+        description: "Mide tu nivel de ansiedad en 2 minutos.",
+        slug: "test-ansiedad",
+        isAvailable: true,
+        category: "mente",
+        metaTitle: "Test de ansiedad GAD-7: mide tu nivel en 7 preguntas",
+        metaDescription:
+          "Cuestionario GAD-7 validado: 7 preguntas sobre tus últimas 2 semanas, puntaje 0–21 y orientación según tu nivel (mínima, leve, moderada o grave). Gratis.",
+      },
+      {
         id: "mapas-mentales",
         title: "Mapas Mentales",
         description: "Organiza ideas y potencia la creatividad.",

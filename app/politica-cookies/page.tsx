@@ -104,6 +104,10 @@ const localStorageKeys = [
     key: "holentia:tecnicas-respiracion:draft:v1",
     desc: "Preferencias del ejercicio de respiración (técnica y rondas)",
   },
+  {
+    key: "holentia:test-ansiedad:draft:v1",
+    desc: "Tu último test de ansiedad GAD-7 (respuestas y puntaje)",
+  },
 ]
 
 const notUsedItems = [

@@ -222,6 +222,15 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AF — Mente: Test de ansiedad GAD-7 (17-Oct-2026) — HECHA
+
+- [x] **Herramienta nueva** (21ª, card `test-ansiedad`): cuestionario de cribado GAD-7 (7 ítems 0–3), flujo intro → quiz (una pregunta a la vez) → resultado con puntaje 0–21 y 4 bandas (mínima/leve/moderada/grave), escala visual con marcador, aviso de crisis en banda grave, enlaces cruzados a respiración y diario; patrón D con reanudación a medias (`holentia:test-ansiedad:draft:v1`).
+- [x] **SEO**: metaTitle «Test de ansiedad GAD-7: mide tu nivel en 7 preguntas» (52 ch) · metaDescription 152 ch; FAQ ×6; OG propia.
+- [x] **Docs/recuentos**: llms.txt 21 (header + sección Mente + línea), README (×5), architecture (×3), `seo-geo` (31 archivos OG); receta `design.md` §4 «Test de ansiedad GAD-7».
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke + auditoría 16 puntos PASS.
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit
