@@ -9,7 +9,7 @@ export const contentType = "image/png"
 export default async function Image() {
   const font = Buffer.from(INTER_BOLD_BASE64, "base64")
 
-  return new ImageResponse(ogTemplate({ title: "Interés compuesto", subtitle: "Aportaciones, inflación y gráficos" }), {
+  return new ImageResponse(ogTemplate({ title: "Interés compuesto", subtitle: "Rendimiento de tus inversiones, paso a paso" }), {
     ...size,
     fonts: [{ name: "Inter", data: font, style: "normal", weight: 700 }],
   })

@@ -153,6 +153,15 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase Y — SEO: interés compuesto como rendimiento de inversiones (17-Oct-2026) — HECHA
+
+- [x] **Card `lib/data.ts`**: `metaTitle` → «Calculadora de interés compuesto y rendimiento» (46 ch), `metaDescription` (144 ch) y blurb «Simula el rendimiento de tus inversiones.»
+- [x] **FAQ ×6**: nueva pregunta «¿Sirve para calcular el rendimiento de mis inversiones?» (simulador: aportes + tasa esperada + inflación).
+- [x] **OG** de la tool: subtítulo → «Rendimiento de tus inversiones, paso a paso»; línea de `llms.txt` alineada.
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke (title/desc/og actualizados en HTML prerenderado, og runtime 200).
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

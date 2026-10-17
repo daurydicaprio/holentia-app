@@ -273,13 +273,13 @@ export const sectionsData: Record<string, SectionData> = {
       {
         id: "calculadora-interes-compuesto",
         title: "Calculadora interés compuesto",
-        description: "Visualiza el crecimiento de ahorros.",
+        description: "Simula el rendimiento de tus inversiones.",
         slug: "calculadora-interes-compuesto",
         isAvailable: true,
         category: "finanzas",
-        metaTitle: "Calculadora de interés compuesto",
+        metaTitle: "Calculadora de interés compuesto y rendimiento",
         metaDescription:
-          "Simula el crecimiento de tus ahorros con aportaciones e inflación: gráfico, tabla de amortización y comparativa de escenarios. Sin registro.",
+          "Calcula el rendimiento de tus inversiones con interés compuesto: aportaciones, inflación, gráficos y comparación de escenarios. En tu navegador.",
       },
       {
         id: "planificador-ahorros",

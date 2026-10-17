@@ -22,6 +22,11 @@ const faq: FaqItem[] = [
       "Simula mes a mes (o año a año) tu inversión aplicando la tasa que indiques sobre el saldo acumulado, sumando tu depósito inicial y tus aportaciones periódicas. Puedes elegir aportaciones mensuales o anuales y ver la curva de crecimiento en el gráfico.",
   },
   {
+    question: "¿Sirve para calcular el rendimiento de mis inversiones?",
+    answer:
+      "Sí. Es un simulador de rendimiento: indica cuánto tienes invertido hoy, tus aportaciones y la tasa anual esperada (por ejemplo, la de un depósito a plazo, un fondo o un negocio) y verás cuánto capital tendrías y cuánto de eso son rendimientos ganados. Ajusta también la inflación para verlo en dinero de hoy.",
+  },
+  {
     question: "¿Qué es la regla de 72?",
     answer:
       "Es una aproximación para saber en cuántos años duplicarás tu dinero: divides 72 entre la tasa de rendimiento anual. Por ejemplo, con un 8% anual, 72 / 8 = 9 años. La calculadora la muestra como referencia rápida en el resumen.",
