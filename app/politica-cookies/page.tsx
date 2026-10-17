@@ -120,6 +120,10 @@ const localStorageKeys = [
     key: "holentia:test-apego:draft:v1",
     desc: "Tu avance y último resultado del test de estilo de apego",
   },
+  {
+    key: "holentia:preguntas-profundas:draft:v1",
+    desc: "Tu categoría preferida del generador de preguntas profundas",
+  },
 ]
 
 const notUsedItems = [

@@ -258,6 +258,15 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase AJ — Relaciones: preguntas profundas (17-Oct-2026) — HECHA
+
+- [x] **Herramienta nueva** (24ª, card `preguntas-profundas` activada): 45 preguntas en 3 categorías (Pareja / Familia y amistad / Para conocerte tú), orden curado + «Mezclar el orden» (Fisher–Yates en cliente, nunca en SSR), «← Anterior» / «Otra pregunta» con contador, copiar pregunta; patrón D mínimo (solo categoría, `holentia:preguntas-profundas:draft:v1`).
+- [x] **SEO**: metaTitle «Preguntas profundas para parejas, familia y amigos» (50 ch) · metaDescription 154 ch; FAQ ×6; OG propia; hub de relaciones actualizado (3 herramientas vivas).
+- [x] **Docs/recuentos**: llms.txt 24 (header + sección Relaciones + línea), README (×5), architecture (×3), `seo-geo` (34 archivos OG); receta `design.md` §4 «Preguntas profundas».
+- Verificado: `tsc 0 · lint 0 · build OK` + smoke + auditoría 16 puntos PASS.
+
+---
+
 ## Comandos de verificación (solo lectura)
 ```bash
 pnpm exec tsc --noEmit

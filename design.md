@@ -297,6 +297,12 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 - **Sin semáforos**: los estilos no se colorean por «mejor/peor» — todos los acentos en tokens `relaciones` y el dominante se destaca con `bg-relaciones-lighter dark:bg-relaciones-dark`.
 - **Patrón D** reanudable con copiar resultado; disclaimer educativo en ámbar («no es un test clínico ni una etiqueta») + nota de continuo al pie. Enlace cruzado al test de lenguajes del amor.
 
+### Preguntas profundas (17-Oct-2026, ref. `components/tools/deep-questions/`)
+
+- **Deck mezclado en cliente**: orden curado por categoría; «Mezclar el orden» usa Fisher–Yates solo dentro del handler (nunca en el `useState` inicial, para no romper la hidratación SSR). `aria-live="polite"` en la tarjeta de la pregunta.
+- **Navegación**: «← Anterior» (deshabilitado en la primera) / «Otra pregunta» con contador «Pregunta X de 15»; copiar con clipboard + check.
+- **Patrón D mínimo**: solo la categoría preferida (`holentia:preguntas-profundas:draft:v1`); tarjetas de categoría con `aria-pressed` y badge de conteo.
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.

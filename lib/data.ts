@@ -110,10 +110,10 @@ export const sectionsData: Record<string, SectionData> = {
     title: "Fortalece tus",
     highlightText: "relaciones",
     subtitle:
-      "Las relaciones que importan se cuidan con intención. Descubre cómo das y recibes cariño con el test de los lenguajes del amor, entiende tus patrones con el test de apego y fortalece tus vínculos con pareja, familia y amistades.",
+      "Las relaciones que importan se cuidan con intención. Descubre cómo das y recibes cariño con el test de los lenguajes del amor, entiende tus patrones con el test de apego y abre conversaciones que valen con las 45 preguntas profundas.",
     text: "Fortalece tus relaciones. Herramientas para mejorar la comunicación, resolver conflictos y construir vínculos significativos.",
     metaDescription:
-      "Test de lenguajes del amor y test de estilo de apego: entiende cómo amas y cómo te vinculas. Herramientas gratuitas, sin registro y en tu navegador.",
+      "Test de lenguajes del amor, test de estilo de apego y preguntas profundas para conversar. Herramientas gratuitas, sin registro y en tu navegador.",
     cards: [
       {
         id: "test-lenguajes-amor",
@@ -174,8 +174,11 @@ export const sectionsData: Record<string, SectionData> = {
         title: "Preguntas profundas",
         description: "Generador de conversaciones significativas.",
         slug: "preguntas-profundas",
-        isAvailable: false,
+        isAvailable: true,
         category: "relaciones",
+        metaTitle: "Preguntas profundas para parejas, familia y amigos",
+        metaDescription:
+          "45 preguntas profundas para conversaciones que valen: en pareja, con familia y amigos o contigo mismo/a. Mezcla, copia y túrnense para escuchar de verdad.",
       },
       {
         id: "ejercicios-empatia",
