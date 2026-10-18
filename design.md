@@ -434,9 +434,17 @@ Variante laboral de la calculadora salarial para una liquidación (Código de Tr
 ### Calculadora de proteína diaria (18-Oct-2026, ref. `components/tools/protein-calculator/`)
 
 - **Formulario**: peso con sufijo kg/lb dentro del input (convierte al cambiar, patrón IMC) + 5 perfiles como tarjetas (`Sedentario 0,8–1,0`, `Activo 1,2–1,6`, `Fuerza / ganar músculo 1,2–1,6`, `Pérdida de grasa 1,6–2,2`, `60+ 1,0–1,2` g/kg) + comidas 3/4/5; patrón D (`holentia:calculadora-proteina-diaria:draft:v1` con `{weight, unit, profile, meals}`, debounce 500 ms tras la primera edición).
-- **Dominio**: g/kg con comentario de fuente (RDA IOM; 1,2–1,6 en actividad/fuerza —con la aclaración de que, bien repartida, suele bastar para ganar músculo salvo fisiculturismo—; 1,6–2,2 en déficit; 1,0–1,2 desde los 60 con PROT-AGE/ESPEN); peso válido 20–350 kg; reparto de 20–40 g por comida (ISSN 2017).
-- **Resultado**: héroe `cuerpo` con gramos medios (count-up) + rango diario y perfil; desglose «por kilo / rango diario / peso usado / por comida»; tarjeta de 6 fuentes con aporte por porción; 3 mini-chips de referencia; nota legal.
+- **Dominio**: g/kg con comentario de fuente (RDA IOM; 1,2–1,6 en actividad/fuerza —con la aclaración de que, bien repartida, suele bastar para ganar músculo salvo fisiculturismo—; 1,6–2,2 en déficit; 1,0–1,2 desde los 60 con PROT-AGE/ESPEN); peso válido 20–350 kg; reparto de 20–40 g por comida (ISSN 2017). La lógica vive en `lib/protein.ts` y la comparte la calculadora de calorías (tarjeta resumen), así los rangos no divergen.
+- **Resultado**: héroe `cuerpo` con gramos medios (count-up) + rango diario y perfil; desglose «por kilo / rango diario / peso usado / por comida»; tarjeta de 6 fuentes con aporte por porción y enlace cruzado a `/calculadora-calorias`; 3 mini-chips de referencia; nota legal.
 - **Contraste**: héroe en negro sobre ámbar (§7), acentos `text-cuerpo-darkest` / `dark:text-cuerpo-light`; tarjetas `p-6`.
+
+### Calculadora de calorías + proteína (18-Oct-2026, ref. `components/tools/calorie-calculator/`)
+
+- **Corrección**: la guía decía «desde 0,8 g/kg es suficiente»; la RDA es un mínimo para adultos sedentarios, no una meta para gente activa. La tarjeta «Tu proteína diaria» muestra un rango orientativo según objetivo/actividad/edad, calculado con `lib/protein.ts` (misma fuente que la calculadora dedicada).
+- **Selección de perfil**: bajar grasa → déficit (1,6–2,2); subir músculo → fuerza (1,2–1,6); mantener → sedentario (0,8–1,0), activo (1,2–1,6) o 60+ sedentario (1,0–1,2).
+- **Diferenciación SEO**: se mantienen dos páginas con intenciones distintas (calorías/TDEE vs proteína). Calorías resume y enlaza; proteína detalla perfiles, reparto y fuentes. Fusionarlas alargaría una página y diluiría ambas queries.
+- **UI**: panel `rounded-xl bg-white p-6`, icono `Utensils` sobre `bg-cuerpo-lighter`, rango `text-3xl tabular-nums`, línea de perfil/g/kg/4 comidas y enlace subrayado; tokens `cuerpo` y variantes dark.
+- **FAQ/SEO**: 7 preguntas (nueva «¿Cuánta proteína debo comer al día?»), metaDescription con «rango de proteína según tu objetivo» y `llms.txt` actualizado.
 
 ### Test de calidad del sueño (18-Oct-2026, ref. `components/tools/sleep-quality-test/`)
 

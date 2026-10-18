@@ -42,6 +42,7 @@ holentia/
 │   ├── data.ts               # Catálogo de secciones y herramientas (SSOT)
 │   ├── seo.ts                # Metadata + JSON-LD (WebApplication, Breadcrumb, FAQPage, sitemap)
 │   ├── storage.ts            # Helper localStorage namespaced holentia:*
+│   ├── protein.ts            # Perfiles y rangos de proteína compartidos (g/kg)
 │   ├── format.ts             # formatDOP (es-DO/DOP) — fuente única de moneda
 │   └── utils.ts              # Funciones de utilidad
 ├── types/                    # Definiciones de tipos

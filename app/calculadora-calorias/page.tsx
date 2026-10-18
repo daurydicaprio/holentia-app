@@ -32,6 +32,11 @@ const faq: FaqItem[] = [
       "Con el déficit moderado del 20% (unas 500 kcal al día) apuntas a unos 0.5 kg por semana, el ritmo que recomienda la ACSM. Bajar más rápido normalmente cuesta músculo y se recupera: mejor lento y sostenido.",
   },
   {
+    question: "¿Cuánta proteína debo comer al día?",
+    answer:
+      "Depende de tu peso y tu actividad. La RDA de 0,8 g/kg es el mínimo para adultos sedentarios, no la meta si entrenas: con actividad o entrenamiento de fuerza, 1,2–1,6 g/kg suele ser suficiente, y en déficit calórico 1,6–2,2 g/kg ayuda a conservar músculo. Esta calculadora te muestra un rango orientativo según tu objetivo; para el reparto por comida y las fuentes, usa la calculadora de proteína diaria.",
+  },
+  {
     question: "¿Esta calculadora reemplaza a un nutricionista?",
     answer:
       "No, es una estimación educativa. Tus necesidades reales dependen de tu composición corporal, historial y salud. La báscula y la guía profesional mandan sobre cualquier número.",

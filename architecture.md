@@ -5,7 +5,7 @@
 
 ## 1. Modelo mental
 
-**Catálogo → páginas → hooks → localStorage.** Toda la información de herramientas (título, descripción, slug, sección, disponibilidad) vive en un único catálogo (`lib/data.ts`). Las páginas son delgadas: componen un shell server-rendered + el componente client de la herramienta. La lógica de cálculo vive en `hooks/`; la persistencia en `lib/storage.ts` con claves namespaced `holentia:{slug}:{draft|simulations|entries}:v1` (localStorage, solo navegador).
+**Catálogo → páginas → hooks → localStorage.** Toda la información de herramientas (título, descripción, slug, sección, disponibilidad) vive en un único catálogo (`lib/data.ts`). Las páginas son delgadas: componen un shell server-rendered + el componente client de la herramienta. La lógica de cálculo vive en `hooks/` y los dominios compartidos en `lib/` (p. ej. `protein.ts`, usado por dos herramientas); la persistencia en `lib/storage.ts` con claves namespaced `holentia:{slug}:{draft|simulations|entries}:v1` (localStorage, solo navegador).
 
 ```
 lib/data.ts (catálogo: sectionsData)
@@ -68,7 +68,7 @@ components/
   seo/         og-template (plantilla compartida de las imágenes OG)
   ui/          primitivas shadcn (button, count-up, input, slider)
 hooks/         lógica por herramienta + use-count-up, use-haptic-feedback, use-media-query
-lib/           data.ts (catálogo), seo.ts, storage.ts, format.ts (formatDOP), utils.ts
+lib/           data.ts (catálogo), seo.ts, storage.ts, protein.ts (perfiles/rangos), format.ts (formatDOP), utils.ts
 types/         index.ts (CardData, SectionType, AmortizationRow, …)
 ```
 

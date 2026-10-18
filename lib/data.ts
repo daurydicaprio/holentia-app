@@ -223,7 +223,7 @@ export const sectionsData: Record<string, SectionData> = {
         category: "cuerpo",
         metaTitle: "Calculadora de calorías diarias (Mifflin-St Jeor)",
         metaDescription:
-          "Calcula tu gasto basal (TMB), calorías diarias y déficit o superávit según tu objetivo. Fórmula de Mifflin-St Jeor, en español y sin registro.",
+          "Calcula tus calorías diarias (TDEE) con Mifflin-St Jeor y tu rango de proteína según tu objetivo. Déficit, mantenimiento o superávit. Gratis.",
       },
       {
         id: "calculadora-hidratacion",

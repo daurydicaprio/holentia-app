@@ -1,9 +1,11 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { Flame, Trash2, Info, Minus, Equal, Plus, Salad, Footprints, Dumbbell, BedDouble, Scale } from "lucide-react"
+import Link from "next/link"
+import { ArrowRight, Flame, Trash2, Info, Minus, Equal, Plus, Salad, Footprints, Dumbbell, BedDouble, Scale, Utensils } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
+import { getProteinProfile } from "@/lib/protein"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
 // Mifflin-St Jeor + factor de actividad. Estimación educativa, no plan médico.
@@ -32,6 +34,7 @@ const sanitizeDecimal = (raw: string) => {
   return (rest.length ? `${head}.${rest.join("")}` : head).slice(0, 6)
 }
 const sanitizeInt = (raw: string) => raw.replace(/\D/g, "").slice(0, 3)
+const formatDecimal = (value: number) => value.toLocaleString("es-DO", { maximumFractionDigits: 1 })
 
 interface CalorieDraft {
   weight?: string
@@ -96,11 +99,39 @@ export function CalorieCalculator() {
     // Son porcentajes distintos a propósito: perder y ganar no son simétricos.
     return {
       bmr: Math.round(bmr),
+      weightKg: w,
       lose: Math.max(Math.round(tdee * 0.8), Math.round(bmr)),
       maintain: tdee,
       gain: Math.round(tdee * 1.1),
     }
   }, [weight, height, age, sex, activity])
+
+  // Rango de proteína orientativo según el objetivo y el contexto. La lógica de
+  // perfiles vive en lib/protein.ts para no divergir de la calculadora dedicada.
+  const protein = useMemo(() => {
+    if (!result) return null
+    const ageValue = Number.parseFloat(age)
+    const profileId =
+      goal === "lose"
+        ? "deficit"
+        : goal === "gain"
+          ? "fuerza"
+          : activity === "sedentary"
+            ? ageValue >= 60
+              ? "mayor"
+              : "sedentario"
+            : "activo"
+    const profile = getProteinProfile(profileId)
+    const minG = Math.round(result.weightKg * profile.min)
+    const maxG = Math.round(result.weightKg * profile.max)
+    return {
+      profile,
+      minG,
+      maxG,
+      perMealMin: Math.round(minG / 4),
+      perMealMax: Math.round(maxG / 4),
+    }
+  }, [result, goal, age, activity])
 
   const pickGoal = (id: GoalId) => {
     setGoal(id)
@@ -297,6 +328,43 @@ export function CalorieCalculator() {
         </div>
       </div>
 
+      {/* Proteína: resumen orientativo; el detalle vive en su herramienta */}
+      {result && protein && (
+        <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
+          <div className="flex items-start gap-3">
+            <div className="rounded-lg bg-cuerpo-lighter p-2 dark:bg-cuerpo-dark">
+              <Utensils className="h-5 w-5 text-cuerpo-darkest dark:text-cuerpo-light" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold">Tu proteína diaria</h2>
+              <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                Un rango orientativo según tu objetivo y actividad:
+              </p>
+            </div>
+          </div>
+          <p className="mt-4 text-3xl font-bold tabular-nums text-cuerpo-darkest dark:text-cuerpo-light">
+            {protein.minG.toLocaleString("es-DO")}–{protein.maxG.toLocaleString("es-DO")} g
+            <span className="ml-2 text-base font-medium text-gray-500 dark:text-gray-400">al día</span>
+          </p>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            Perfil {protein.profile.label.toLowerCase()} · {formatDecimal(protein.profile.min)}–
+            {formatDecimal(protein.profile.max)} g/kg · ≈ {protein.perMealMin}–{protein.perMealMax} g en 4 comidas
+          </p>
+          <p className="mt-3 text-xs leading-relaxed text-gray-600 dark:text-gray-400">
+            0,8 g/kg es el mínimo para adultos sedentarios, no la meta si entrenas. Con entrenamiento, 1,2–1,6 g/kg
+            suele bastar; en déficit, 1,6–2,2 g/kg ayuda a conservar músculo.
+          </p>
+          <Link
+            href="/calculadora-proteina-diaria"
+            data-interactive="true"
+            className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cuerpo-darkest underline underline-offset-2 dark:text-cuerpo-light"
+          >
+            Calcula tu proteína por perfil y reparto
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+      )}
+
       {/* Guía: el equilibrio es la clave */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">
         <h2 className="text-xl sm:text-2xl font-bold text-balance text-center mb-2">
@@ -311,7 +379,7 @@ export function CalorieCalculator() {
             {
               icon: Salad,
               title: "Alimentación",
-              text: "Llega a tus calorías sin obsesionarte: desde 0.8 g de proteína por kg es suficiente, y que la mitad o más venga de vegetales (fibra y micronutrientes).",
+              text: "Llega a tus calorías sin obsesionarte: cubre tu proteína, llena la mitad del plato de vegetales y prioriza comida real.",
             },
             {
               icon: Footprints,

@@ -1,7 +1,9 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
+import Link from "next/link"
 import {
+  ArrowRight,
   ChevronsUpDown,
   Dumbbell,
   HeartPulse,
@@ -12,60 +14,16 @@ import {
 } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
+import {
+  KG_PER_LB,
+  LB_PER_KG,
+  PROTEIN_PROFILES,
+  getProteinProfile,
+  type ProteinProfileId,
+} from "@/lib/protein"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
 
-// Rango de proteína diaria por perfil (g/kg de peso corporal), para adultos sanos:
-// · 0.8 g/kg: RDA de proteína (IOM/NAM).
-// · 1.2–1.6 g/kg: actividad moderada y entrenamiento de fuerza. Con una buena
-//   distribución de comidas suele ser suficiente para ganar músculo; los rangos
-//   más altos de la literatura (hasta 2.0 g/kg, ACSM/AND/DC 2016 e ISSN 2017)
-//   son para deportistas avanzados o fisiculturismo.
-// · 1.6–2.2 g/kg: déficit calórico, para conservar masa muscular.
-// · 1.0–1.2 g/kg: adultos mayores (PROT-AGE/ESPEN) para prevenir sarcopenia.
-// El total del día es lo que más importa; repartir 20–40 g por comida ayuda a
-// estimular la síntesis proteica (ISSN 2017).
-const KG_PER_LB = 0.45359237
-const LB_PER_KG = 2.2046226218
-
-const PROFILES = [
-  {
-    id: "sedentario",
-    label: "Sedentario",
-    hint: "Poco o ningún ejercicio",
-    min: 0.8,
-    max: 1,
-  },
-  {
-    id: "activo",
-    label: "Activo",
-    hint: "Ejercicio moderado 3–5 días/semana",
-    min: 1.2,
-    max: 1.6,
-  },
-  {
-    id: "fuerza",
-    label: "Fuerza / ganar músculo",
-    hint: "Con buena distribución, suele ser suficiente",
-    min: 1.2,
-    max: 1.6,
-  },
-  {
-    id: "deficit",
-    label: "Pérdida de grasa",
-    hint: "Déficit calórico, cuidando el músculo",
-    min: 1.6,
-    max: 2.2,
-  },
-  {
-    id: "mayor",
-    label: "60 años o más",
-    hint: "Prevenir la pérdida de masa muscular",
-    min: 1,
-    max: 1.2,
-  },
-] as const
-
-type ProfileId = (typeof PROFILES)[number]["id"]
+// Rangos y fuentes en lib/protein.ts (compartidos con la calculadora de calorías).
 type WeightUnit = "kg" | "lb"
 type Meals = 3 | 4 | 5
 
@@ -83,7 +41,7 @@ const FOODS = [
 ]
 
 const REFERENCES = [
-  { icon: Scale, title: "0,8 g/kg", sub: "Base para adultos (RDA)" },
+  { icon: Scale, title: "0,8 g/kg", sub: "Mínimo para sedentarios (RDA)" },
   { icon: Dumbbell, title: "1,2–1,6 g/kg", sub: "Ejercicio y fuerza" },
   { icon: HeartPulse, title: "1,0–1,2 g/kg", sub: "Desde los 60 años" },
 ]
@@ -122,7 +80,7 @@ export function ProteinCalculator() {
   const { triggerHapticFeedback } = useHapticFeedback()
   const [weight, setWeight] = useState("")
   const [unit, setUnit] = useState<WeightUnit>("kg")
-  const [profile, setProfile] = useState<ProfileId>("activo")
+  const [profile, setProfile] = useState<ProteinProfileId>("activo")
   const [meals, setMeals] = useState<Meals>(4)
   const [savedFlash, setSavedFlash] = useState(false)
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -133,8 +91,8 @@ export function ProteinCalculator() {
     const draft = storageGet<ProteinDraft>(DRAFT_KEY, {})
     if (typeof draft.weight === "string") setWeight(draft.weight)
     if (draft.unit === "kg" || draft.unit === "lb") setUnit(draft.unit)
-    if (typeof draft.profile === "string" && PROFILES.some((p) => p.id === draft.profile)) {
-      setProfile(draft.profile as ProfileId)
+    if (typeof draft.profile === "string" && PROTEIN_PROFILES.some((p) => p.id === draft.profile)) {
+      setProfile(draft.profile as ProteinProfileId)
     }
     if (draft.meals === 3 || draft.meals === 4 || draft.meals === 5) setMeals(draft.meals)
   }, [])
@@ -165,7 +123,7 @@ export function ProteinCalculator() {
 
   const result = useMemo(() => {
     if (weightKg === null || weightKg < 20 || weightKg > 350) return null
-    const activeProfile = PROFILES.find((p) => p.id === profile) ?? PROFILES[1]
+    const activeProfile = getProteinProfile(profile)
     const minG = weightKg * activeProfile.min
     const maxG = weightKg * activeProfile.max
     return {
@@ -191,7 +149,7 @@ export function ProteinCalculator() {
     triggerHapticFeedback("light")
   }
 
-  const pickProfile = (id: ProfileId) => {
+  const pickProfile = (id: ProteinProfileId) => {
     setProfile(id)
     triggerHapticFeedback("light")
   }
@@ -269,7 +227,7 @@ export function ProteinCalculator() {
         <div className="mt-6">
           <span className="mb-2 block text-sm font-medium">Tu perfil de actividad</span>
           <div role="radiogroup" aria-label="Tu perfil de actividad" className="space-y-2">
-            {PROFILES.map((p) => {
+            {PROTEIN_PROFILES.map((p) => {
               const selected = profile === p.id
               return (
                 <button
@@ -407,8 +365,8 @@ export function ProteinCalculator() {
 
               <p className="mt-3 text-xs leading-relaxed text-gray-600 dark:text-gray-400">
                 El total del día es lo que más importa. Para estimular el músculo, reparte 20–40 g en las comidas
-                principales (ISSN 2017). Si ya cubres 1,2–1,6 g/kg y repartes bien la proteína, no necesitas más para
-                ganar músculo salvo que busques fisiculturismo.
+                principales (ISSN 2017); si tu meta es alta, usa 4–5 comidas. Si ya cubres 1,2–1,6 g/kg y repartes
+                bien la proteína, no necesitas más para ganar músculo salvo que busques fisiculturismo.
               </p>
             </div>
 
@@ -430,6 +388,17 @@ export function ProteinCalculator() {
                   </div>
                 ))}
               </div>
+              <p className="mt-4 border-t border-gray-200 pt-3 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-400">
+                La proteína es una pieza del día.{" "}
+                <Link
+                  href="/calculadora-calorias"
+                  data-interactive="true"
+                  className="inline-flex items-center gap-1 font-semibold text-cuerpo-darkest underline underline-offset-2 dark:text-cuerpo-light"
+                >
+                  Calcula tus calorías diarias
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </p>
             </div>
 
             {/* Referencias */}
@@ -448,7 +417,8 @@ export function ProteinCalculator() {
               <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-cuerpo-darkest dark:text-white" />
               <span>
                 Estimación educativa para adultos sanos: 0,8 g/kg (RDA, IOM/NAM) · 1,2–1,6 g/kg para actividad y
-                fuerza (los rangos de hasta 2,0 g/kg de ACSM/AND/DC 2016 e ISSN 2017 son para deportistas avanzados) ·
+                fuerza (para ganar músculo, los rangos de hasta 2,0 g/kg de ACSM/AND/DC 2016 e ISSN 2017 son para
+                deportistas avanzados) · 1,6–2,2 g/kg en déficit calórico (el extremo alto, para personas entrenadas) ·
                 1,0–1,2 g/kg desde los 60 años (PROT-AGE/ESPEN). Con enfermedad renal, embarazo, lactancia u otra
                 condición médica, consulta a un profesional. No es consejo médico.
               </span>

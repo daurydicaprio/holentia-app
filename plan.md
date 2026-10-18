@@ -4,12 +4,12 @@
 > Prod `holentia.com → main`. No tocar dominios.
 > Principios: sin DB, sin registro, local-first privado (`holentia:*` en navegador), cero tracking.
 
-## Estado actual (18-Oct-2026) — 31 herramientas (proteína + test de calidad del sueño) en `dev`; SEO/GEO y pase UI/UX móvil completos
+## Estado actual (18-Oct-2026) — 31 herramientas (proteína + test de calidad del sueño) en `dev`; proteína de la calculadora de calorías corregida; SEO/GEO y pase UI/UX móvil completos
 - [x] Stack: Next 15.5.26 + React 19.3 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
 - [x] Cobertura: **31 herramientas** activas + 17 tarjetas «Próximamente» intactas en `lib/data.ts`; sitio de **42 URLs** (home + 4 hubs + directorio + 31 herramientas + 5 informativas)
 - [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite), OG por ruta (**42 archivos**), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 42 URLs con lastmod fijo, llms.txt 31 tools; auditorías registradas en la skill `seo-geo-audit`
 - [x] UI/UX móvil: pase completo por herramientas (cuerpo, mente, relaciones, finanzas ×3) y superficies globales (chrome, hubs, informativas, shell) — contraste AA con tiers por sección, tap targets ≥40/44px, inputs ≥16px sin zoom iOS, recetas en `design.md`
-- [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` se sincroniza con `dev` al cierre de cada fase (sync previa: Fase BC)**
+- [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` se sincroniza con `dev` al cierre de cada fase (sync previa: Fase BD)**
 - [x] `tsc 0 errores + next build OK + pnpm lint 0` en estricto
 - [ ] **Próximo**: siguiente frente a decisión del usuario — ver «Backlog propuesto» al pie
 
@@ -452,6 +452,17 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 - [x] **Enlaces cruzados**: tarjeta «¿Y la calidad de tu sueño?» en el resultado de la calculadora del sueño; desde el test, enlaces a la calculadora de ciclos y a respiración 4-7-8.
 - [x] **SEO/GEO**: metaTitle «Test de calidad del sueño: ¿cómo duermes?» (41 ch) · metaDescription 152 ch; FAQ ×6 (qué mide, puntuación, despertares, horas recomendadas, apnea/insomnio, privacidad); OG propia; llms.txt 31 herramientas.
 - [x] **Docs/recuentos**: claves nuevas en `politica-cookies` (proteína + test); recetas en `design.md` §4; recuentos **31 herramientas / 42 URLs / 42 OG / 35 claves** en README, architecture y skills.
+- Verificado: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` **42/42 rutas PASS**.
+
+---
+
+## Fase BD — Corrección de proteína en la calculadora de calorías y diferenciación SEO (18-Oct-2026) — HECHA
+
+- [x] **Corrección**: la guía de calorías afirmaba que «desde 0,8 g/kg es suficiente». Ahora la tarjeta «Tu proteína diaria» muestra un rango según objetivo/actividad/edad y aclara que 0,8 g/kg es el mínimo para sedentarios, no la meta si entrenas. La lógica de perfiles se movió a `lib/protein.ts` y la comparten ambas calculadoras.
+- [x] **Perfiles en calorías**: bajar grasa → déficit 1,6–2,2; subir músculo → fuerza 1,2–1,6; mantener → sedentario 0,8–1,0, activo 1,2–1,6 o 60+ sedentario 1,0–1,2.
+- [x] **Decisión SEO**: se mantienen las dos páginas porque responden a intenciones distintas (calorías/TDEE vs proteína). Calorías resume y enlaza; proteína detalla perfiles, reparto y fuentes. Enlaces cruzados en ambos resultados; no se fusionan.
+- [x] **SEO/GEO**: FAQ ×7 (nueva «¿Cuánta proteína debo comer al día?»), metaDescription 141 ch con «rango de proteína según tu objetivo» y `llms.txt` actualizado.
+- [x] **Docs**: receta «Calculadora de calorías + proteína» en `design.md` §4 y auditoría registrada en `seo-geo-audit`.
 - Verificado: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` **42/42 rutas PASS**.
 
 ---

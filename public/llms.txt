@@ -32,7 +32,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 - [Corte y vencimiento de tarjeta](https://holentia.com/tarjeta-corte-vencimiento): fechas de corte, días restantes y vencimiento.
 - [Calculadora de interés de tarjeta](https://holentia.com/calculadora-interes-tarjeta): costo de financiar el saldo mínimo o total.
 - [Test de perfil de riesgo](https://holentia.com/test-perfil-riesgo): cuestionario de tolerancia al riesgo para inversiones.
-- [Calculadora de calorías](https://holentia.com/calculadora-calorias): gasto diario (TDEE) y planes con déficit o superávit.
+- [Calculadora de calorías](https://holentia.com/calculadora-calorias): gasto diario (TDEE), planes con déficit o superávit y rango orientativo de proteína según objetivo.
 - [Calculadora de hidratación](https://holentia.com/calculadora-hidratacion): agua diaria según peso, actividad y clima.
 - [Diario guiado](https://holentia.com/diario-guiado): entradas de reflexión guardadas en el navegador.
 - [Test de lenguajes del amor](https://holentia.com/test-lenguajes-amor): descubre tu lenguaje principal de cariño.
