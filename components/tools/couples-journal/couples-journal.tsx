@@ -371,9 +371,56 @@ export function CouplesJournal() {
         </div>
 
         {!mounted ? null : entries.length === 0 ? (
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Aún no hay entradas guardadas. La primera puede ser la de hoy.
-          </p>
+          <div>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Aún no hay entradas guardadas. La primera puede ser la de hoy.
+            </p>
+
+            <div className="mt-5 border-t border-gray-200 pt-5 dark:border-gray-700">
+              <h3 className="text-lg font-semibold">Para que la conversación fluya</h3>
+              <ul className="mt-3 grid gap-3 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                <li>
+                  <strong className="text-gray-800 dark:text-gray-200">Escuchen sin arreglar.</strong> La primera
+                  respuesta no busca soluciones; busca entender.
+                </li>
+                <li>
+                  <strong className="text-gray-800 dark:text-gray-200">Una frase corta vale.</strong> No tienen que
+                  escribir un ensayo ni responder todo de una vez.
+                </li>
+                <li>
+                  <strong className="text-gray-800 dark:text-gray-200">No hace falta estar de acuerdo.</strong> La
+                  pregunta abre una conversación, no una discusión que haya que ganar.
+                </li>
+              </ul>
+            </div>
+
+            <div className="mt-5 border-t border-gray-200 pt-4 dark:border-gray-700">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Las respuestas quedan solo en este navegador. Si comparten el dispositivo, pueden borrar todo desde
+                el historial.
+              </p>
+              <p className="mt-3 text-sm text-gray-600 dark:text-gray-400">
+                Entender cómo se vinculan también ayuda:{" "}
+                <Link
+                  href="/test-apego"
+                  data-interactive="true"
+                  className="font-semibold text-relaciones-dark underline underline-offset-2 dark:text-relaciones-lighter"
+                >
+                  hagan el test de apego
+                </Link>
+                .
+              </p>
+            </div>
+
+            <div className="mt-5 border-t border-gray-200 pt-4 dark:border-gray-700">
+              <h3 className="text-sm font-semibold">Si hoy no fluye, empiecen por una frase</h3>
+              <ul className="mt-2 space-y-1.5 text-sm italic text-gray-600 dark:text-gray-400">
+                <li>«Hoy me sentí…»</li>
+                <li>«Algo que aprecié de ti fue…»</li>
+                <li>«Una cosa que necesito esta semana es…»</li>
+              </ul>
+            </div>
+          </div>
         ) : (
           <div className="space-y-4">
             {entries.map((entry) => {

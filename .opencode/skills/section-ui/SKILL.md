@@ -73,15 +73,29 @@ Receta para cualquier calculadora/test con varios campos numéricos (referencias
 - **Dos variantes del input canónico (17-Oct-2026)**: numéricos `text-lg font-semibold`; texto libre (nombre, y también `type="date"`) → `text-base` sin semibold (`inputClassText`). El `inputMode`/saneado aplica igual a días, años y tasas (coma decimal normalizada en el parser: `"60,5"` → 60.5). Sobre `components/ui/input.tsx`: el base trae `h-10`/`md:text-sm` y gana en el merge → el override debe anular con `h-auto` y `md:text-lg`. **Celdas de tabla editables** (budget-simulator): borrador local por celda (`Record<string,string>` con commit al parsear y limpieza en `onBlur`) + `type="text"`; medidas compactas `px-2 py-2 text-base` (≥16px anti-zoom).
 - **Moneda**: siempre `formatDOP` de `lib/format.ts` (es-DO/DOP) — nunca locales/monedas ajenas (`es-MX`/`MXN`) ni `$` pelado. Botones de resultado con `animate-result-in` llevan `aria-live="polite"`.
 
-## 3d. Bloque «Sigue por aquí» (enlaces internos de cuerpo)
+## 3d. Bloque «Sigue por aquí» (enlaces internos sutiles)
 
-Componente compartido: `components/tools/related-tools/related-tools.tsx`. Úsalo al cerrar una herramienta de cuerpo; no inventes otra rejilla de enlaces.
+Componente compartido: `components/tools/related-tools/related-tools.tsx`. Úsalo al cerrar una herramienta; no inventes otra rejilla de enlaces.
 
-- Superficie `rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800` · grid `gap-4 sm:grid-cols-2 lg:grid-cols-4`.
-- Tarjeta = `<Link>` completo (`data-interactive="true"`, haptic `medium`): `rounded-xl border border-gray-200 p-4`; icono `text-cuerpo-dark dark:text-cuerpo-light`; flecha `ArrowRight`; título `text-sm font-semibold`; texto `text-xs text-gray-500 dark:text-gray-400`.
-- Hover: `hover:border-cuerpo-dark hover:bg-black/5 dark:hover:border-cuerpo-light dark:hover:bg-white/10` (sin tokens con `/opacidad`).
-- Solo relaciones reales (calorías ↔ proteína ↔ pasos ↔ hidratación ↔ IMC; test de sueño desde calorías/pasos). No enlaces de relleno ni 5+ tarjetas en una fila.
+- **Formato compacto**: superficie `rounded-xl border border-gray-200 bg-white px-5 py-4 shadow-sm dark:border-gray-700 dark:bg-gray-800`, título `text-sm font-semibold` + intro opcional `text-xs`, y enlaces en línea `text-sm` con icono `h-4 w-4` + `ArrowRight h-3.5 w-3.5`.
+- **Máximo 3 enlaces** (2 es lo ideal). Sin descripciones por enlace, sin tarjetas-enlace grandes, sin rejillas de 4. Cada enlace conserva `data-interactive="true"`, haptic `medium` y `py-2.5` (área táctil ~40 px).
+- Hover neutro: texto `text-gray-600 dark:text-gray-300` → acento de sección; no cambiar el fondo de toda la superficie.
+- Solo relaciones reales (calorías ↔ proteína ↔ pasos ↔ hidratación ↔ IMC; test de sueño desde calorías/pasos). No enlaces de relleno ni “todo con todo”.
 - **Acento**: por defecto `cuerpo` (ámbar). Hidratación usa `accent="sky"` (sky-600/400) porque su tema de agua es una excepción semántica ya establecida; no mezclar ámbar en esa herramienta.
+- **Enlaces contextuales primero**: cuando el texto ya menciona la relación (p. ej. «cubre tu proteína», «8,000–10,000 pasos», «usa la calculadora de hidratación»), convierte esas palabras en `Link` inline y no añadas un bloque extra. El bloque compacto es el cierre, no la única vía de enlazado.
+
+## 3e. Layout de herramienta sin huecos (18-Oct-2026)
+
+Regla obligatoria para calculadoras con formulario + resultado. Nace del hueco enorme que dejaba la calculadora de proteína al apilar 4 tarjetas secundarias en la columna derecha mientras la izquierda solo tenía el formulario.
+
+- **Fila principal = formulario + héroe de resultado**. El héroe va compacto (alto natural); si el formulario es más alto, cierra la columna derecha con **una sola tarjeta secundaria útil** debajo del héroe (proteína: fuentes; hidratación: de dónde sale el agua; combustible: gasto en perspectiva). Debe aportar información real, no relleno. Si no existe esa tarjeta, deja el formulario `h-fit` y un hueco pequeño de página, nunca un panel de color gigante semivacío.
+- **Contenido secundario pesado (desglose, referencias, notas legales) va a ancho completo**, debajo de la fila principal. Agrúpalo en **una tarjeta** con subgrid interno (`lg:grid-cols-2` o una fila de stats) en vez de una pila larga al lado del formulario.
+- **Prohibido**: columna derecha con 3+ tarjetas apiladas + columna izquierda corta con `h-fit` → hueco de cientos de píxeles. Si detectas huecos > ~100 px, mueve un bloque a ancho completo o añade **una** tarjeta útil; no rellenes con texto de relleno.
+- **Resultado corto + formulario alto** (combustible, corte de tarjeta): añade debajo del resultado una tarjeta compacta de perspectiva/ayuda (2–4 filas) o traslada una guía al formulario. No dejes 200–400 px vacíos.
+- **Empty states**: ocupan el alto disponible (`h-full`/`flex-1`), pero incluyen una frase útil y, si aporta, 2–3 viñetas de lo que verá el usuario. Nunca un panel gigante con solo un icono.
+- **Editores (diarios)**: la columna de escritura es la principal; el historial vacío puede ser corto. Se permite onboarding útil dentro del empty state (cómo empezar, progreso, privacidad), pero no tarjetas de relleno. La regla estricta de alturas aplica sobre todo a calculadoras formulario + resultado.
+- **Móvil**: orden natural formulario → resultado → detalle → referencias → enlaces. El contenido secundario no debe adelantarse al resultado.
+- **Verificación visual obligatoria** con Playwright/Chromium si está disponible: desktop 1440 px y móvil 390 px, claro y oscuro, con resultado y sin resultado. Revisar que no haya huecos > ~100 px dentro de una columna y que el primer pantallazo móvil no quede vacío. El barrido automatizado puede medir la diferencia entre alto de columna y contenido visible de sus hijos.
 
 ## 4. Iconos (`lucide-react`)
 

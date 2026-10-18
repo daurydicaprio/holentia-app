@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { CreditCard, Trash2, Info, ShoppingBag, Scissors, Wallet, BellRing, Lightbulb } from "lucide-react"
+import Link from "next/link"
+import { CheckCircle2, CreditCard, Trash2, Info, ShoppingBag, Scissors, Wallet, BellRing, Lightbulb } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
@@ -286,6 +287,18 @@ function WhySection({
           de pagar. Tus datos no salen de este navegador.
         </span>
       </div>
+
+      <p className="mt-3 text-center text-sm text-gray-600 dark:text-gray-400">
+        Si no puedes pagar el total,{" "}
+        <Link
+          href="/calculadora-interes-tarjeta"
+          data-interactive="true"
+          className="font-semibold text-finanzas-dark underline underline-offset-2 dark:text-finanzas-lighter"
+        >
+          calcula cuánto te costaría financiar el saldo
+        </Link>
+        .
+      </p>
     </div>
   )
 }
@@ -534,15 +547,36 @@ export function CardCutoffCalculator() {
             Borrar mis datos
           </button>
         </div>
+
+        <div className="mt-5 border-t border-gray-200 pt-4 dark:border-gray-700">
+          <p className="text-sm font-semibold">¿No encuentras tus fechas?</p>
+          <ul className="mt-2 space-y-2 text-xs leading-relaxed text-gray-600 dark:text-gray-400">
+            <li>Busca «fecha de corte» y «fecha límite de pago» en tu estado de cuenta o en la app del banco.</li>
+            <li>El corte suele caer el mismo día cada mes; si es feriado, el banco puede moverlo.</li>
+            <li>Paga unos días antes del vencimiento para evitar atrasos y cargos por mora.</li>
+          </ul>
+        </div>
       </div>
 
       {/* Columna derecha: la historia de tu compra */}
       <div className="lg:col-span-3">
         {!result ? (
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-10 shadow-lg text-center text-gray-500 dark:text-gray-400">
+          <div className="flex h-full flex-col items-center justify-center rounded-xl bg-white p-8 text-center text-gray-500 shadow-lg dark:bg-gray-800 dark:text-gray-400">
             <CreditCard className="h-12 w-12 mx-auto mb-4 opacity-40" />
             <p className="font-medium">Escribe tu día de corte y vencimiento</p>
             <p className="text-sm mt-1">y te cuento cuándo pagarías cada compra.</p>
+            <ul className="mt-5 grid max-w-sm gap-2 text-left text-xs leading-relaxed">
+              {[
+                "Cuántos días tienes para comprar antes del próximo corte.",
+                "La fecha sugerida para pagar sin intereses.",
+                "Cuántos días gratis te da tu tarjeta en cada compra.",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-2">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-finanzas dark:text-finanzas-light" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         ) : (
           <div aria-live="polite" className="animate-result-in bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-lg">

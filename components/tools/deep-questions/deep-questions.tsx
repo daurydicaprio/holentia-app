@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import Link from "next/link"
 import { ArrowRight, Check, Copy, Shuffle, Trash2 } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
@@ -326,6 +327,17 @@ export function DeepQuestions() {
               </li>
             ))}
           </ol>
+          <p className="mt-4 border-t border-gray-200 pt-3 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-400">
+            Para convertir una pregunta en un ritual diario,{" "}
+            <Link
+              href="/diario-parejas"
+              data-interactive="true"
+              className="font-semibold text-relaciones-dark underline underline-offset-2 dark:text-relaciones-lighter"
+            >
+              prueba el diario para parejas
+            </Link>
+            .
+          </p>
         </div>
       </div>
     </div>

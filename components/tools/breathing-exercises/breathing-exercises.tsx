@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
+import Link from "next/link"
 import { Check, Info, Pause, Play, RotateCcw, Square, Trash2 } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
@@ -431,6 +432,17 @@ export function BreathingExercises() {
               </li>
             ))}
           </ol>
+          <p className="mt-4 border-t border-gray-200 pt-3 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-400">
+            Si el problema es conciliar el sueño,{" "}
+            <Link
+              href="/calculadora-sueno"
+              data-interactive="true"
+              className="font-semibold text-mente-dark underline underline-offset-2 dark:text-mente-light"
+            >
+              calcula tu hora de acostarte
+            </Link>{" "}
+            y usa la técnica 4-7-8 al final del día.
+          </p>
         </div>
 
         {/* Aviso */}

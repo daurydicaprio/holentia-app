@@ -227,7 +227,7 @@ export const sectionsData: Record<string, SectionData> = {
       },
       {
         id: "calculadora-hidratacion",
-        title: "Calculadora Hidratación",
+        title: "Calculadora de Hidratación",
         description: "Asegura tu ingesta de agua.",
         slug: "calculadora-hidratacion",
         isAvailable: true,

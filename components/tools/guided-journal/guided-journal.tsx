@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import Link from "next/link"
 import { Calendar, Check, Copy, Feather, Flame, PencilLine, Save, Trash2, X } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
@@ -365,12 +366,76 @@ export function GuidedJournal() {
         {!mounted ? (
           <div aria-hidden="true" className="min-h-[220px] rounded-xl bg-white shadow-lg dark:bg-gray-800" />
         ) : entries.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-xl bg-white p-10 text-center text-gray-500 shadow-lg dark:bg-gray-800 dark:text-gray-400">
-            <Feather className="mx-auto mb-4 h-12 w-12 opacity-40" />
-            <p className="font-medium">Tu diario está en blanco</p>
-            <p className="mt-1 text-sm">
-              Escribe tu primera entrada con el formulario y guárdala. Con el tiempo verás tu progreso.
+          <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
+            <div className="flex flex-col items-center justify-center text-center text-gray-500 dark:text-gray-400">
+              <Feather className="mx-auto mb-4 h-12 w-12 opacity-40" />
+              <p className="font-medium">Tu diario está en blanco</p>
+              <p className="mt-1 text-sm">
+                Escribe tu primera entrada con el formulario y guárdala. Con el tiempo verás tu progreso.
+              </p>
+            </div>
+
+            <div className="mt-6 border-t border-gray-200 pt-5 dark:border-gray-700">
+              <h3 className="flex items-center gap-2 text-lg font-semibold">
+                <PencilLine className="h-4 w-4 text-mente-dark dark:text-mente-light" />
+                Para empezar sin bloquearte
+              </h3>
+              <ul className="mt-3 grid gap-3 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                <li>
+                  <strong className="text-gray-800 dark:text-gray-200">Un momento, no el día entero.</strong> Elige
+                  una escena concreta y descríbela en dos o tres frases.
+                </li>
+                <li>
+                  <strong className="text-gray-800 dark:text-gray-200">Escribe sin corregir.</strong> La primera
+                  versión no tiene que quedar bonita; solo tiene que ser tuya.
+                </li>
+                <li>
+                  <strong className="text-gray-800 dark:text-gray-200">Cierra con una intención.</strong> Una acción
+                  pequeña para mañana vale más que un plan perfecto.
+                </li>
+              </ul>
+            </div>
+
+            <div className="mt-5 border-t border-gray-200 pt-4 dark:border-gray-700">
+              <div className="grid grid-cols-3 gap-2 text-center">
+                <div className="rounded-lg bg-gray-50 p-3 dark:bg-gray-700/40">
+                  <p className="text-xl font-bold tabular-nums">0</p>
+                  <p className="text-[11px] leading-tight text-gray-500 dark:text-gray-400">Días de racha</p>
+                </div>
+                <div className="rounded-lg bg-gray-50 p-3 dark:bg-gray-700/40">
+                  <p className="text-xl font-bold tabular-nums">0</p>
+                  <p className="text-[11px] leading-tight text-gray-500 dark:text-gray-400">Entradas</p>
+                </div>
+                <div className="rounded-lg bg-gray-50 p-3 dark:bg-gray-700/40">
+                  <p className="text-xl font-bold">—</p>
+                  <p className="text-[11px] leading-tight text-gray-500 dark:text-gray-400">Ánimo frecuente</p>
+                </div>
+              </div>
+              <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
+                Cuando guardes tu primera entrada, aquí verás tu racha y la evolución de tu ánimo.
+              </p>
+            </div>
+
+            <p className="mt-4 border-t border-gray-200 pt-4 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-400">
+              Si hoy pesa mucho,{" "}
+              <Link
+                href="/test-ansiedad"
+                data-interactive="true"
+                className="font-semibold text-mente-dark underline underline-offset-2 dark:text-mente-light"
+              >
+                el test de ansiedad
+              </Link>{" "}
+              puede ayudarte a ponerle nombre a lo que sientes.
             </p>
+
+            <div className="mt-5 border-t border-gray-200 pt-4 dark:border-gray-700">
+              <h3 className="text-sm font-semibold">Si no sabes por dónde empezar</h3>
+              <ul className="mt-2 space-y-1.5 text-sm italic text-gray-600 dark:text-gray-400">
+                <li>«Hoy me di cuenta de que…»</li>
+                <li>«Lo que más me costó fue…»</li>
+                <li>«Mañana quiero cuidarme así:…»</li>
+              </ul>
+            </div>
           </div>
         ) : (
           <>

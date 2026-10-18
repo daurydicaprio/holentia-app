@@ -479,6 +479,20 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase BF — Layout equilibrado y enlaces contextuales (18-Oct-2026) — HECHA
+
+- [x] **Proteína**: se eliminó la pila de tarjetas de la columna derecha. Fila principal = formulario (2/5) + héroe compacto + tarjeta de fuentes (3/5); debajo, tarjeta full-width con 4 stats, referencias y nota legal. Empty state con 3 viñetas y `h-full`. Cierre compacto de 3 enlaces.
+- [x] **Hidratación**: H1 «Calculadora de Hidratación»; inputs asociados, `aria-pressed` y `type="button"`; actividad/clima en 4 chips por fila desde `sm`; héroe + tarjeta «De dónde sale tu agua» que cierra la altura; empty state útil; cierre `sky` de 3 enlaces.
+- [x] **Combustible**: resultado corto cerrado con tarjeta «Tu gasto en perspectiva» (por viaje, por día, ahorro al reducir 10% y al mejorar 1 km/L); consejos a ancho completo; enlace inline a consumo eléctrico.
+- [x] **Corte de tarjeta**: empty state `h-full` con 3 viñetas; bloque «¿No encuentras tus fechas?» en el formulario para equilibrar la timeline; enlace a interés de tarjeta.
+- [x] **Diarios**: onboarding útil en el empty state (cómo empezar, progreso, privacidad, frases de arranque) para reducir el hueco de la columna de historial; sin tarjetas de relleno.
+- [x] **Enlaces contextuales sutiles**: calorías → proteína/pasos/hidratación/sueño; respiración ↔ sueño; lenguajes → apego; preguntas → diario de parejas; combustible → luz; interés tarjeta → préstamo; corte → interés tarjeta; aguinaldo → ahorros; sueldo neto → presupuesto; certificado → interés compuesto. `RelatedTools` compacto de 2–3 enlaces, sin rejillas de 4.
+- [x] **Auditoría de layout**: barrido Playwright 1440/390 px, claro/oscuro, con y sin resultado. Huecos de columna resultantes ≤ ~100 px; sin overflow móvil; sin errores de consola.
+- [x] **Docs**: `design.md` §3.9/§4 (proteína, hidratación, combustible, corte), `section-ui` §3e y `create-tool`.
+- Verificado: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` **42/42 rutas PASS** · 31 herramientas / 42 URLs / 42 OG / 17 «Próximamente» · 43 enlaces internos únicos, 0 rotos.
+
+---
+
 ## Backlog propuesto (17-Oct-2026, pendiente de decisión)
 
 Sin fase asignada; se convierte en fase al aprobar el frente. Candidatos analizados tras cerrar el pase UI/UX:

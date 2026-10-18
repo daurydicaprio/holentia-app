@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import Link from "next/link"
 import { Check, Copy, Heart, RotateCcw, Trash2 } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { CountUp } from "@/components/ui/count-up"
@@ -350,6 +351,18 @@ export function LoveLanguagesTest() {
               Borrar mis datos
             </button>
           </div>
+
+          <p className="mt-4 border-t border-gray-200 pt-4 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-400">
+            Cómo das y recibes cariño también se relaciona con tu forma de vincularte.{" "}
+            <Link
+              href="/test-apego"
+              data-interactive="true"
+              className="font-semibold text-relaciones-dark underline underline-offset-2 dark:text-relaciones-lighter"
+            >
+              Haz el test de apego
+            </Link>
+            .
+          </p>
         </div>
       </div>
     )

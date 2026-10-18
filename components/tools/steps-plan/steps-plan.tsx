@@ -9,7 +9,6 @@ import {
   Car,
   Check,
   Clock,
-  Droplets,
   Dumbbell,
   Flame,
   Footprints,
@@ -777,30 +776,9 @@ export function StepsPlan() {
         title="Sigue por aquí"
         intro="Caminar es la base; estas herramientas completan el plan."
         items={[
-          {
-            href: "/calculadora-calorias",
-            icon: Flame,
-            title: "Tus calorías diarias",
-            text: "La energía que gastas y la que comes.",
-          },
-          {
-            href: "/calculadora-proteina-diaria",
-            icon: Dumbbell,
-            title: "Tu proteína diaria",
-            text: "El músculo también se alimenta.",
-          },
-          {
-            href: "/calculadora-hidratacion",
-            icon: Droplets,
-            title: "Tu hidratación",
-            text: "Antes, durante y después de caminar.",
-          },
-          {
-            href: "/test-calidad-sueno",
-            icon: Moon,
-            title: "Tu calidad de sueño",
-            text: "Dormir bien también entrena.",
-          },
+          { href: "/calculadora-calorias", icon: Flame, title: "Tus calorías diarias" },
+          { href: "/calculadora-proteina-diaria", icon: Dumbbell, title: "Tu proteína diaria" },
+          { href: "/test-calidad-sueno", icon: Moon, title: "Tu calidad de sueño" },
         ]}
       />
     </div>

@@ -43,6 +43,8 @@ Con `isAvailable: true`, `app/sitemap.ts` la incluye **automáticamente** (deriv
 - Resultado hero numérico: `animate-result-in` + `aria-live="polite"` en el contenedor + `useCountUp` (o `<CountUp>` en JSX condicional) sobre el valor formateado — receta `design.md` §6 / skill `section-ui` §8.
 - **Moneda**: `formatDOP` de `lib/format.ts` (es-DO/DOP) — nunca `es-MX`/`MXN` ni `$` pelado.
 - **Mobile**: inputs con `text-base md:text-sm` (evita el zoom de iOS) + `inputMode` en numéricos; tap targets ≥44px; tablas en `overflow-x-auto`; leyenda de doughnut `position: isMobile ? "bottom" : "left"`. Detalle: `design.md` §3.7.
+- **Layout sin huecos** (skill `section-ui` §3e): fila principal = formulario + héroe compacto. Si el formulario es más alto, cierra la columna derecha con **una sola tarjeta secundaria útil** (fuentes, desglose del cálculo, perspectiva); el resto del detalle/referencias/legal va **a ancho completo** debajo. Nunca apiles 3+ tarjetas en la columna derecha ni dejes huecos > ~100 px. Empty states con `h-full`/`flex-1` y 2–3 viñetas útiles.
+- **Enlaces internos sutiles**: 2–3 enlaces contextuales como máximo; usa `RelatedTools` compacto al cierre o, mejor, convierte menciones naturales del texto en `Link`. No añadas rejillas de 4 tarjetas ni “todo con todo”.
 
 ## 4. Página — `app/{slug}/page.tsx` (server component)
 

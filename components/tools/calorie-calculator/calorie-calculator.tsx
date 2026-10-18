@@ -2,11 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
-import { ArrowRight, Flame, Trash2, Info, Minus, Equal, Plus, Salad, Footprints, Dumbbell, BedDouble, Scale, Utensils, Droplets } from "lucide-react"
+import { ArrowRight, Flame, Trash2, Info, Minus, Equal, Plus, Salad, Footprints, Dumbbell, BedDouble, Scale, Utensils } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
 import { getProteinProfile } from "@/lib/protein"
-import RelatedTools from "@/components/tools/related-tools/related-tools"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
 // Mifflin-St Jeor + factor de actividad. Estimación educativa, no plan médico.
@@ -376,35 +375,60 @@ export function CalorieCalculator() {
         </p>
 
         <div className="grid sm:grid-cols-2 gap-4">
-          {[
-            {
-              icon: Salad,
-              title: "Alimentación",
-              text: "Llega a tus calorías sin obsesionarte: cubre tu proteína, llena la mitad del plato de vegetales y prioriza comida real.",
-            },
-            {
-              icon: Footprints,
-              title: "Actividad física",
-              text: "Muévete en el día sin que sea ejercicio: caminar, escaleras, jugar. Apunta a 8,000–10,000 pasos.",
-            },
-            {
-              icon: Dumbbell,
-              title: "Ejercicio físico",
-              text: "Fuerza 2–3 veces por semana para cuidar el músculo, más algo de cardio para el corazón.",
-            },
-            {
-              icon: BedDouble,
-              title: "Descanso e hidratación",
-              text: "Duerme 7–9 horas, toma agua — usa la calculadora de hidratación — y controla el estrés.",
-            },
-          ].map((leg) => (
-            <div key={leg.title} className="bg-cuerpo-lighter dark:bg-cuerpo-dark rounded-xl px-5 py-4 flex items-start gap-3">
-              <leg.icon className="h-5 w-5 mt-0.5 flex-shrink-0 text-cuerpo-darkest dark:text-white" />
-              <p className="text-sm text-gray-700 dark:text-gray-900 leading-relaxed">
-                <strong>{leg.title}:</strong> {leg.text}
-              </p>
-            </div>
-          ))}
+          <div className="bg-cuerpo-lighter dark:bg-cuerpo-dark rounded-xl px-5 py-4 flex items-start gap-3">
+            <Salad className="h-5 w-5 mt-0.5 flex-shrink-0 text-cuerpo-darkest dark:text-white" />
+            <p className="text-sm text-gray-700 dark:text-gray-900 leading-relaxed">
+              <strong>Alimentación:</strong> llega a tus calorías sin obsesionarte:{" "}
+              <Link
+                href="/calculadora-proteina-diaria"
+                data-interactive="true"
+                className="font-semibold underline underline-offset-2"
+              >
+                cubre tu proteína
+              </Link>
+              , llena la mitad del plato de vegetales y prioriza comida real.
+            </p>
+          </div>
+          <div className="bg-cuerpo-lighter dark:bg-cuerpo-dark rounded-xl px-5 py-4 flex items-start gap-3">
+            <Footprints className="h-5 w-5 mt-0.5 flex-shrink-0 text-cuerpo-darkest dark:text-white" />
+            <p className="text-sm text-gray-700 dark:text-gray-900 leading-relaxed">
+              <strong>Actividad física:</strong> muévete en el día sin que sea ejercicio: caminar, escaleras, jugar.
+              Apunta a{" "}
+              <Link href="/pasos-al-dia" data-interactive="true" className="font-semibold underline underline-offset-2">
+                8,000–10,000 pasos
+              </Link>
+              .
+            </p>
+          </div>
+          <div className="bg-cuerpo-lighter dark:bg-cuerpo-dark rounded-xl px-5 py-4 flex items-start gap-3">
+            <Dumbbell className="h-5 w-5 mt-0.5 flex-shrink-0 text-cuerpo-darkest dark:text-white" />
+            <p className="text-sm text-gray-700 dark:text-gray-900 leading-relaxed">
+              <strong>Ejercicio físico:</strong> fuerza 2–3 veces por semana para cuidar el músculo, más algo de cardio
+              para el corazón.
+            </p>
+          </div>
+          <div className="bg-cuerpo-lighter dark:bg-cuerpo-dark rounded-xl px-5 py-4 flex items-start gap-3">
+            <BedDouble className="h-5 w-5 mt-0.5 flex-shrink-0 text-cuerpo-darkest dark:text-white" />
+            <p className="text-sm text-gray-700 dark:text-gray-900 leading-relaxed">
+              <strong>Descanso e hidratación:</strong> duerme 7–9 horas,{" "}
+              <Link
+                href="/test-calidad-sueno"
+                data-interactive="true"
+                className="font-semibold underline underline-offset-2"
+              >
+                mide tu descanso
+              </Link>
+              ,{" "}
+              <Link
+                href="/calculadora-hidratacion"
+                data-interactive="true"
+                className="font-semibold underline underline-offset-2"
+              >
+                calcula tu agua
+              </Link>{" "}
+              y controla el estrés.
+            </p>
+          </div>
         </div>
         <p className="text-sm text-gray-600 dark:text-gray-400 mt-6 text-center">
           ¿Quieres profundizar? Sigo este tema en{" "}
@@ -452,36 +476,6 @@ export function CalorieCalculator() {
         </p>
       </div>
 
-      <RelatedTools
-        title="Cierra el círculo"
-        intro="Estas herramientas comparten el mismo objetivo: que el plan sea fácil de sostener."
-        items={[
-          {
-            href: "/calculadora-proteina-diaria",
-            icon: Utensils,
-            title: "Tu proteína diaria",
-            text: "Ajusta los gramos por comida y las fuentes.",
-          },
-          {
-            href: "/pasos-al-dia",
-            icon: Footprints,
-            title: "Tu plan de pasos",
-            text: "Convierte la actividad en un objetivo diario.",
-          },
-          {
-            href: "/calculadora-hidratacion",
-            icon: Droplets,
-            title: "Tu hidratación",
-            text: "El agua que necesitas según tu día.",
-          },
-          {
-            href: "/test-calidad-sueno",
-            icon: BedDouble,
-            title: "Tu calidad de sueño",
-            text: "Mide cómo descansas y qué puedes mejorar.",
-          },
-        ]}
-      />
     </div>
   )
 }

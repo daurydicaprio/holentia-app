@@ -8,7 +8,6 @@ export interface RelatedTool {
   href: string
   icon: LucideIcon
   title: string
-  text: string
 }
 
 interface RelatedToolsProps {
@@ -22,55 +21,58 @@ interface RelatedToolsProps {
 
 const ACCENTS = {
   cuerpo: {
-    icon: "text-cuerpo-dark dark:text-cuerpo-light",
+    icon: "text-cuerpo-darkest dark:text-cuerpo-light",
     arrow: "text-cuerpo-darkest dark:text-cuerpo-light",
-    title: "group-hover:text-cuerpo-darkest dark:group-hover:text-cuerpo-lighter",
-    border: "hover:border-cuerpo-dark dark:hover:border-cuerpo-light",
+    hover: "hover:text-cuerpo-darkest dark:hover:text-cuerpo-light",
   },
   sky: {
     icon: "text-sky-600 dark:text-sky-400",
     arrow: "text-sky-700 dark:text-sky-300",
-    title: "group-hover:text-sky-700 dark:group-hover:text-sky-300",
-    border: "hover:border-sky-500 dark:hover:border-sky-400",
+    hover: "hover:text-sky-700 dark:hover:text-sky-300",
   },
 } as const
 
 /**
- * Bloque «Sigue por aquí» de las herramientas de cuerpo.
- * Mantiene el acento de la sección y un target táctil de tarjeta completa.
+ * Cierre sutil de herramienta: 2–3 enlaces contextuales, no una rejilla de tarjetas.
+ * La tarjeta entera no es el target; cada enlace mantiene un área táctil propia.
  */
 export default function RelatedTools({ title, intro, items, note, accent = "cuerpo" }: RelatedToolsProps) {
   const { triggerHapticFeedback } = useHapticFeedback()
   const palette = ACCENTS[accent]
 
   return (
-    <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
-      <h2 className="mb-1 text-xl font-bold">{title}</h2>
-      {intro ? <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">{intro}</p> : null}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {items.map((item) => {
-          const Icon = item.icon
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              data-interactive="true"
-              onClick={() => triggerHapticFeedback("medium")}
-              className={`group flex flex-col rounded-xl border border-gray-200 p-4 transition-colors hover:bg-black/5 dark:border-gray-700 dark:hover:bg-white/10 ${palette.border}`}
-            >
-              <div className="mb-2 flex items-center justify-between">
-                <Icon className={`h-5 w-5 ${palette.icon}`} />
-                <ArrowRight className={`h-4 w-4 transition-transform group-hover:translate-x-0.5 ${palette.arrow}`} />
-              </div>
-              <span className={`text-sm font-semibold ${palette.title}`}>
+    <div className="rounded-xl border border-gray-200 bg-white px-5 py-4 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">{title}</p>
+          {intro ? <p className="mt-0.5 text-xs leading-relaxed text-gray-500 dark:text-gray-400">{intro}</p> : null}
+        </div>
+        <nav aria-label={title} className="flex flex-wrap gap-x-5 gap-y-1 sm:justify-end">
+          {items.map((item) => {
+            const Icon = item.icon
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                data-interactive="true"
+                onClick={() => triggerHapticFeedback("medium")}
+                className={`group inline-flex items-center gap-1.5 py-2.5 text-sm font-medium text-gray-600 transition-colors dark:text-gray-300 ${palette.hover}`}
+              >
+                <Icon className={`h-4 w-4 flex-shrink-0 ${palette.icon}`} />
                 {item.title}
-              </span>
-              <span className="mt-1 text-xs leading-relaxed text-gray-500 dark:text-gray-400">{item.text}</span>
-            </Link>
-          )
-        })}
+                <ArrowRight
+                  className={`h-3.5 w-3.5 flex-shrink-0 transition-transform group-hover:translate-x-0.5 ${palette.arrow}`}
+                />
+              </Link>
+            )
+          })}
+        </nav>
       </div>
-      {note ? <p className="mt-4 text-xs text-gray-500 dark:text-gray-400">{note}</p> : null}
+      {note ? (
+        <p className="mt-2 border-t border-gray-200 pt-2 text-xs text-gray-500 dark:border-gray-700 dark:text-gray-400">
+          {note}
+        </p>
+      ) : null}
     </div>
   )
 }

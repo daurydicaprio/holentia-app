@@ -268,6 +268,17 @@ export function SleepCalculator() {
                   </li>
                 ))}
               </ol>
+              <p className="mt-4 border-t border-gray-200 pt-3 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-400">
+                Si te cuesta relajarte, prueba la{" "}
+                <Link
+                  href="/tecnicas-respiracion"
+                  data-interactive="true"
+                  className="font-semibold text-mente-dark underline underline-offset-2 dark:text-mente-light"
+                >
+                  respiración guiada 4-7-8
+                </Link>{" "}
+                antes de acostarte.
+              </p>
             </div>
 
             {/* Enlace al test de calidad */}

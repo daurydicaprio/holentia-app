@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
+import Link from "next/link"
 import { CreditCard, Trash2, Info, Lightbulb, AlertTriangle } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
@@ -371,6 +372,18 @@ export function CardInterestCalculator() {
                 navegador.
               </span>
             </div>
+
+            <p className="px-1 text-sm text-gray-600 dark:text-gray-400">
+              Si el saldo se te acumula,{" "}
+              <Link
+                href="/calculadora-prestamo"
+                data-interactive="true"
+                className="font-semibold text-finanzas-dark underline underline-offset-2 dark:text-finanzas-lighter"
+              >
+                compara la cuota de un préstamo personal
+              </Link>{" "}
+              antes de seguir financiando.
+            </p>
           </div>
         )}
       </div>

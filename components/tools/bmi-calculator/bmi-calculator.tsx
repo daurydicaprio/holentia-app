@@ -4,7 +4,6 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import {
   AlertTriangle,
   ChevronsUpDown,
-  Droplets,
   Dumbbell,
   Flame,
   Footprints,
@@ -113,30 +112,9 @@ const HONESTY = [
 ]
 
 const NEXT_STEPS = [
-  {
-    href: "/calculadora-calorias",
-    icon: Flame,
-    title: "Tus calorías diarias",
-    text: "Ajusta lo que comes a tu objetivo real, sin dietas imposibles.",
-  },
-  {
-    href: "/calculadora-hidratacion",
-    icon: Droplets,
-    title: "Tu hidratación",
-    text: "El agua también es parte del plan: calcula cuánta necesitas.",
-  },
-  {
-    href: "/pasos-al-dia",
-    icon: Footprints,
-    title: "Tu plan de pasos",
-    text: "El primer paso fácil de sostener: objetivo + plan 5-10-20.",
-  },
-  {
-    href: "/calculadora-proteina-diaria",
-    icon: Dumbbell,
-    title: "Tu proteína diaria",
-    text: "Cuánto necesitas para cuidar el músculo según tu objetivo.",
-  },
+  { href: "/calculadora-calorias", icon: Flame, title: "Tus calorías diarias" },
+  { href: "/calculadora-proteina-diaria", icon: Dumbbell, title: "Tu proteína diaria" },
+  { href: "/pasos-al-dia", icon: Footprints, title: "Tu plan de pasos" },
 ]
 
 export function BmiCalculator() {

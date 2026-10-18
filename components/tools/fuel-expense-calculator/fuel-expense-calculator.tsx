@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 import type { ReactNode } from "react"
+import Link from "next/link"
 import {
   Car,
   CarFront,
@@ -15,6 +16,7 @@ import {
   Gauge,
   HelpCircle,
   Lightbulb,
+  TrendingDown,
 } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
@@ -205,6 +207,9 @@ export function FuelExpenseCalculator() {
 
   const animatedGastoMes = useCountUp(result?.gastoMes ?? 0)
   const animatedGastoAno = useCountUp(result?.gastoAno ?? 0)
+  const costoViaje = result && viajes > 0 ? result.gastoDia / viajes : 0
+  const costoKmMejor = result ? precio / ((consumo + 1) * LITROS_POR_GALON) : 0
+  const ahorroConsumo = result ? result.kmMes * 12 * (result.costoKm - costoKmMejor) : 0
 
   const selectVehicle = (id: string) => {
     const v = VEHICLES.find((item) => item.id === id)
@@ -428,9 +433,9 @@ export function FuelExpenseCalculator() {
       </div>
 
       {/* Resultados */}
-      <div className="lg:col-span-3">
+      <div className="lg:col-span-3 flex flex-col gap-6">
         {!result ? (
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-10 shadow-lg text-center text-gray-500 dark:text-gray-400 flex flex-col items-center justify-center">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-10 shadow-lg text-center text-gray-500 dark:text-gray-400 flex flex-1 flex-col items-center justify-center">
             <Fuel className="h-12 w-12 mx-auto mb-4 opacity-40" />
             <p className="font-medium">Completa los datos</p>
             <p className="text-sm mt-1">y aquí aparece tu gasto estimado de combustible.</p>
@@ -494,6 +499,34 @@ export function FuelExpenseCalculator() {
             </div>
           </div>
         )}
+
+        {/* Gasto en perspectiva: cierra la altura del formulario */}
+        {result && (
+          <div className="rounded-xl bg-white p-5 shadow-lg dark:bg-gray-800">
+            <h3 className="flex items-center gap-2 text-sm font-semibold">
+              <TrendingDown className="h-4 w-4 text-finanzas dark:text-finanzas-light" />
+              Tu gasto en perspectiva
+            </h3>
+            <dl className="mt-3 space-y-2 text-sm">
+              <div className="flex items-center justify-between gap-3">
+                <dt className="text-gray-600 dark:text-gray-400">Costo por viaje</dt>
+                <dd className="font-semibold tabular-nums">{formatRD(costoViaje)}</dd>
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <dt className="text-gray-600 dark:text-gray-400">Costo por día de trabajo</dt>
+                <dd className="font-semibold tabular-nums">{formatRD(result.gastoDia)}</dd>
+              </div>
+              <div className="flex items-center justify-between gap-3 border-t border-gray-200 pt-2 dark:border-gray-700">
+                <dt className="text-gray-600 dark:text-gray-400">Si reduces 10% los km</dt>
+                <dd className="font-semibold tabular-nums">{formatRD(result.gastoAno * 0.1)}/año</dd>
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <dt className="text-gray-600 dark:text-gray-400">Si mejoras 1 km/L</dt>
+                <dd className="font-semibold tabular-nums">{formatRD(ahorroConsumo)}/año</dd>
+              </div>
+            </dl>
+          </div>
+        )}
       </div>
 
       {/* Cómo ahorrar combustible */}
@@ -513,6 +546,17 @@ export function FuelExpenseCalculator() {
             </li>
           ))}
         </ul>
+        <p className="mt-4 border-t border-gray-200 pt-3 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-400">
+          ¿También quieres recortar la factura de la luz?{" "}
+          <Link
+            href="/calculadora-consumo-electrico"
+            data-interactive="true"
+            className="font-semibold text-finanzas-dark underline underline-offset-2 dark:text-finanzas-lighter"
+          >
+            Calcula tu consumo eléctrico
+          </Link>
+          .
+        </p>
       </div>
     </div>
   )

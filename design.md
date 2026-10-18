@@ -138,6 +138,19 @@ El borde se vuelve transparente al enfocar: solo el anillo de sección marca el 
 - **framer-motion**: solo en chunks diferidos; donde basta CSS se usa `animate-result-in` (fade + 6px). Regla: no añadir framer al camino crítico.
 - **Medición**: la tabla de `pnpm build` (Route Size / First Load JS) es la referencia antes/después. Resultado de este pase: interés compuesto 251→139 kB · perfil de riesgo 220→151 kB · préstamo 186→145 kB.
 
+### 3.9 Layout de herramienta sin huecos (18-Oct-2026)
+
+Regla derivada del hueco de la calculadora de proteína: la columna izquierda (formulario) terminaba mucho antes que la derecha (héroe + desglose + fuentes + referencias + nota legal), dejando cientos de píxeles vacíos.
+
+- **Fila principal**: formulario (`lg:col-span-2`) + columna derecha (`lg:col-span-3`) con héroe compacto. Si el formulario es más alto, la columna se cierra con **una sola tarjeta secundaria útil** debajo del héroe (proteína: fuentes; hidratación: desglose del cálculo; combustible: gasto en perspectiva). No es relleno: aporta información real y evita el panel de color semivacío.
+- **Secundarios pesados a ancho completo**: desglose, referencias y nota legal van debajo en **una tarjeta** con subgrid interno (`lg:grid-cols-2` o fila de stats). Nunca una pila de 3+ tarjetas en la columna derecha mientras la izquierda es solo el formulario.
+- **Prohibido** dejar huecos > ~100 px dentro de una columna. Si las alturas no cuadran, mueve un bloque a ancho completo o añade **una** tarjeta útil; no añadas relleno.
+- **Resultado corto + formulario alto**: añade debajo del resultado una tarjeta de perspectiva/ayuda compacta (2–4 filas) o lleva una guía al formulario. Aplica a combustible y corte de tarjeta.
+- **Empty states**: ocupan el alto disponible (`h-full`/`flex-1`), con una frase útil y 2–3 viñetas de lo que verá el usuario. No un panel gigante con solo un icono.
+- **Editores (diarios)**: la escritura manda; el historial vacío puede ser corto. Se permite onboarding útil dentro del empty state (cómo empezar, progreso, privacidad), no tarjetas de relleno. La regla estricta de alturas aplica sobre todo a calculadoras formulario + resultado.
+- **Móvil**: orden formulario → resultado → detalle → referencias → enlaces. El detalle nunca se adelanta al resultado.
+- **Verificación visual**: Playwright/Chromium a 1440 px y 390 px, claro/oscuro, con y sin resultado; medir columna vs contenido visible de sus hijos y comprobar que no haya huecos > ~100 px ni el primer pantallazo móvil en blanco.
+
 ### 4b. Página de sección (hub mente/relaciones/cuerpo/finanzas)
 
 `SectionPage` = Logo + `SectionTabs` + `SectionHeader` (H1 + `subtitle` inspiracional; el copy factual vive en `metaDescription`, **sin `intro` renderizada**) + `ToolsGrid` + `Footer`, todo con tokens. **Sin FAQ en los hubs** (decisión 14-Oct-2026: el FAQ vive en cada herramienta y en `/ayuda`), sin «¿Qué quieres aprender?» ni otros títulos de relleno:
@@ -146,13 +159,15 @@ El borde se vuelve transparente al enfocar: solo el anillo de sección marca el 
 - **Subtitle del hub** (`section.subtitle`): copy **inspiracional de 3 líneas o un poquito menos** (~185–240 chars) que nombra herramientas concretas y su beneficio; **sin la frase repetida** «gratuitas, en tu navegador y sin registro» y sin fórmulas ajenas al sitio (p.ej. «regla 50/30/20») — ese gancho vive solo en los `metaDescription` de las tools, no en el copy visible de los hubs. Estilo: `max-w-2xl mx-auto leading-relaxed` (`text-sm sm:text-base`) centrado bajo el H1. Aire: header `mt-8` (tabs→H1) y grid `mt-10 sm:mt-12` (subtitle→tarjetas) para que el copy no quede pegado ni al título ni a las cards.
 - **Footer** (`footer.tsx`): nav server-rendered de enlaces internos (`/que-es-holentia`, `/ayuda`, `/apoyar`, `/aviso-legal`, `/politica-cookies` — obligatorio para rastreo de páginas legales) + enlace de crédito por sección con clases `text-{s} hover:text-{s}-dark dark:text-{s}-light dark:hover:text-{s}-lighter`; en claro cuerpo arranca en `-darkest` y finanzas en `-dark` (crédito a 12px: la base no llega a 4.5:1 — 17-Oct-2026); sin sección → neutro `text-gray-600 dark:text-gray-300` + `underline underline-offset-2`. Enlaces del nav con `inline-block py-1.5` y crédito `py-1` (área táctil en móvil, sin cambio visual). Sin estilos inline ni opacidades que hundan contraste. **Excepción**: el footer es el ÚNICO lugar del sitio permitido para emoticones decorativos (`❤ 🇩🇴` en la línea de crédito — decisión explícita del dueño del proyecto; la lista "sin emojis" de §4c aplica al resto del contenido).
 
-### 4b-bis. Bloque «Sigue por aquí» (herramientas de cuerpo, 18-Oct-2026)
+### 4b-bis. Bloque «Sigue por aquí» y enlaces internos sutiles (18-Oct-2026)
 
-`components/tools/related-tools/related-tools.tsx` — red de enlaces internos con relaciones reales, sin relleno:
+`components/tools/related-tools/related-tools.tsx` — cierre de herramienta discreto, no una rejilla de tarjetas:
 
-- **Superficie**: `rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800`; grid `gap-4 sm:grid-cols-2 lg:grid-cols-4`; tarjeta-enlace completa `rounded-xl border border-gray-200 p-4`.
-- **Acento de sección**: icono `text-cuerpo-dark dark:text-cuerpo-light`, flecha `text-cuerpo-darkest dark:text-cuerpo-light`, título con hover `group-hover:text-cuerpo-darkest dark:group-hover:text-cuerpo-lighter`, borde/fondo `hover:border-cuerpo-dark hover:bg-black/5 dark:hover:border-cuerpo-light dark:hover:bg-white/10`.
-- **Interacción**: `data-interactive="true"` + haptic `medium`; la tarjeta entera es el target (≥44 px). Se usa en **calorías, proteína, IMC, pasos e hidratación**; el test de calidad del sueño aparece donde el descanso es realmente relevante (calorías y pasos). Hidratación pasa `accent="sky"` para conservar su semántica de agua (sky-600/400), documentada en §7.
+- **Formato**: `rounded-xl border border-gray-200 bg-white px-5 py-4 shadow-sm dark:border-gray-700 dark:bg-gray-800`; título `text-sm font-semibold`, intro opcional `text-xs`, enlaces `text-sm` en una fila que envuelve. **Máximo 3 enlaces** (2 ideal).
+- **Enlace**: icono `h-4 w-4` + texto + `ArrowRight h-3.5 w-3.5`; `data-interactive="true"`, haptic `medium`, `py-2.5` (~40 px). El target es el enlace, no toda la superficie.
+- **Acento**: icono/flecha `text-cuerpo-darkest dark:text-cuerpo-light`; hover del texto al mismo acento. Hidratación usa `accent="sky"` (sky-600/400) para conservar su semántica de agua. Sin fondos de tarjeta que cambien en bloque.
+- **Regla editorial**: solo relaciones reales y 2–3 por herramienta. Prioriza enlaces inline dentro de una frase que ya menciona la relación (p. ej. «cubre tu proteína», «8,000–10,000 pasos», «calcula tu agua») y deja el bloque compacto como cierre. Nunca “todo con todo”.
+- **Cobertura**: cuerpo (calorías, proteína, IMC, pasos, hidratación); mente (sueño ↔ respiración, ansiedad → respiración/diario); relaciones (lenguajes → apego, preguntas → diario de pareja); finanzas (combustible → luz, corte → interés de tarjeta → préstamo, aguinaldo → ahorro, sueldo neto → presupuesto, certificado → interés compuesto).
 
 ### 4c. Páginas básicas (home, ayuda, apoyar, legales, qué-es) — monocromo de marca
 
@@ -272,6 +287,7 @@ Patrón de un dato económico + resultado desglosado (2 columnas: form `lg:col-s
 
 - **Formulario**: 5 inputs numéricos con la receta canónica + icono (`py-2.5 pl-10 pr-3`, icono `text-gray-500 dark:text-gray-400`), `type="text"` + `inputMode` con saneado (`[^\d.,]` precio/km/L; `[^\d]` viajes/días), burbuja ámbar «Verifícalo» para el precio del día, chips (presets Corto/Medio/Largo y días) con `chipClass` y tarjetas de vehículo en 3 columnas (`border-2` seleccionado, `text-finanzas-dark`/`dark:text-finanzas-lighter`).
 - **Resultado ticket**: banda `bg-finanzas-dark text-white` (blanco sobre `finanzas` = 4.1:1, no pasa), cuerpo `p-6` con hero de gasto mensual, filas `font-mono tabular-nums`, banda anual `bg-gray-900 dark:bg-gray-100` y nota final; tarjeta de ahorro con h2 `text-xl` y bullets.
+- **Layout (corregido 18-Oct-2026)**: el resultado corto se cierra con una tarjeta **«Tu gasto en perspectiva»** debajo (costo por viaje, por día de trabajo, ahorro al reducir 10% los km y al mejorar 1 km/L) para igualar el formulario. Los 6 consejos siguen a ancho completo; el enlace a consumo eléctrico es inline y sutil.
 
 ### Calculadora de consumo eléctrico (17-Oct-2026, ref. `components/tools/electricity-calculator/`)
 
@@ -295,6 +311,7 @@ Patrón de un dato económico + resultado desglosado (2 columnas: form `lg:col-s
 - **Formulario**: 5 campos con la receta canónica; texto libre (nombre) y `type="date"` con `inputClassText` (`text-base`); días de corte/vencimiento `type="text"` + `inputMode="numeric"` + saneado y `slice(0,2)`.
 - **Badge celebratorio**: el verde Tailwind `#22c55e` con blanco (2.3:1) → `bg-finanzas-dark text-white dark:bg-finanzas-light dark:text-gray-900`.
 - **Héroe/timeline**: `p-6 sm:p-8` con etiquetas `text-white` sólido; quick chips `py-2.5` con press; notas de pasos y marcas a `finanzas-dark`/`finanzas-lighter` (iconos en `finanzas`/`finanzas-light`).
+- **Empty state + ayuda (18-Oct-2026)**: el empty state ocupa el alto (`h-full`) y añade 3 viñetas de lo que verá el usuario; el formulario incluye «¿No encuentras tus fechas?» con 3 pistas (estado de cuenta, día fijo, pagar antes) para que la columna izquierda no quede corta frente a la timeline.
 
 ### Calculadora de interés compuesto (17-Oct-2026, ref. `components/tools/compound-interest/`)
 
@@ -408,7 +425,7 @@ Acción destructiva sobre datos del usuario: el primer toque **no borra**. El el
 - **Héroe gradiente `cuerpo`** con IMC a un decimal (`useCountUp` + `toFixed(1)`, `tabular-nums`) + badge de banda OMS (bajo peso sky / normal emerald / sobrepeso amber / obesidad red — semáforos en paleta Tailwind estándar) + mensaje de la banda.
 - **Escala proporcional** (14/26/20/40 sobre 15-40): segmentos por banda con marcador `left: calc(...% - 2px)` (patrón GAD-7, aquí con anchos proporcionales a los rangos IMC) y etiquetas `<18.5 · 18.5–24.9 · 25–29.9 · ≥30` con los mismos anchos.
 - **Peso saludable** por estatura (18.5-24.9 × estatura²) en la unidad activa + mensaje de diferencia («te faltan ≈ X» / «estás ≈ X por encima» / «dentro del rango»).
-- **Honestidad primero**: tarjeta «El IMC no lo dice todo» (`AlertTriangle` + 4 items: músculo ≠ grasa, cintura OMS 88/102 cm, embarazo/niños/mayores, tendencia) y tarjeta «Del número a la acción» con 4 tarjetas-enlace (`RelatedTools` + haptic medium) a calorías, hidratación, pasos y proteína.
+- **Honestidad primero**: tarjeta «El IMC no lo dice todo» (`AlertTriangle` + 4 items: músculo ≠ grasa, cintura OMS 88/102 cm, embarazo/niños/mayores, tendencia) y cierre compacto «Del número a la acción» (`RelatedTools` + haptic medium) con 3 enlaces: calorías, proteína y pasos.
 - **Patrón D**: borrador `holentia:calculadora-imc:draft:v1` ({weight, height, unit}) autoguardado tras la primera edición (`touched` ref) + «Borrar mis datos».
 - **Móvil + contraste (17-Oct-2026)**: peso y estatura se **apilan a ancho completo** (el sufijo kg/lb no cabe a 2 columnas en pantallas ≤360px) y recuperan `sm:grid-cols-2`; inputs con la receta de §3.3 (foco `ring-2` canónico) y botón kg/lb `text-gray-900` sobre `bg-cuerpo-lighter` con hover `hover:bg-cuerpo-light dark:hover:bg-cuerpo` (los `/opacidad` previos eran clases muertas).
 
@@ -444,15 +461,23 @@ Variante laboral de la calculadora salarial para una liquidación (Código de Tr
 
 - **Formulario**: peso con sufijo kg/lb dentro del input (convierte al cambiar, patrón IMC) + 5 perfiles como tarjetas (`Sedentario 0,8–1,0`, `Activo 1,2–1,6`, `Fuerza / ganar músculo 1,2–1,6`, `Pérdida de grasa 1,6–2,2`, `60+ 1,0–1,2` g/kg) + comidas 3/4/5; patrón D (`holentia:calculadora-proteina-diaria:draft:v1` con `{weight, unit, profile, meals}`, debounce 500 ms tras la primera edición).
 - **Dominio**: g/kg con comentario de fuente (RDA IOM; 1,2–1,6 en actividad/fuerza —con la aclaración de que, bien repartida, suele bastar para ganar músculo salvo fisiculturismo—; 1,6–2,2 en déficit; 1,0–1,2 desde los 60 con PROT-AGE/ESPEN); peso válido 20–350 kg; reparto de 20–40 g por comida (ISSN 2017). La lógica vive en `lib/protein.ts` y la comparte la calculadora de calorías (tarjeta resumen), así los rangos no divergen.
-- **Resultado**: héroe `cuerpo` con gramos medios (count-up) + rango diario y perfil; desglose «por kilo / rango diario / peso usado / por comida»; tarjeta de 6 fuentes con aporte por porción y enlace cruzado a `/calculadora-calorias`; bloque «Completa tu día» con calorías, IMC, hidratación y pasos; 3 mini-chips de referencia; nota legal.
+- **Layout (corregido 18-Oct-2026)**: fila principal formulario (2/5) + columna derecha (3/5) con héroe compacto + **tarjeta de fuentes** que cierra la altura del formulario. Debajo, a ancho completo, una tarjeta de detalle con 4 stats («por kilo / rango diario / peso usado / por comida»), las 3 referencias y la nota legal. Se eliminó la pila de 5 tarjetas que dejaba el héroe de ~600 px semivacío. El empty state incluye 3 viñetas de lo que verá el usuario.
+- **Resultado**: héroe `cuerpo` con gramos medios (count-up) + rango diario y perfil + reparto por comida; tarjeta de fuentes con 6 alimentos y enlace cruzado inline a `/calculadora-calorias`; desglose/referencias/legal full-width; cierre compacto con IMC, hidratación y pasos (3 enlaces).
 - **Contraste**: héroe en negro sobre ámbar (§7), acentos `text-cuerpo-darkest` / `dark:text-cuerpo-light`; tarjetas `p-6`. En las tarjetas de perfil seleccionadas, hint y rango usan `text-gray-900` en ambos modos (sobre `bg-cuerpo-lighter`/`dark:bg-cuerpo-dark`); la nota legal en dark también `text-gray-900`.
+
+### Calculadora de hidratación (18-Oct-2026, ref. `components/tools/hydration-calculator/`)
+
+- **Título y accesibilidad**: H1 «Calculadora de Hidratación» (el slug y la metadata no cambian); inputs asociados con `label htmlFor`, botones de actividad/clima con `type="button"` y `aria-pressed`, sufijo kg dentro del campo.
+- **Layout**: formulario (2/5) con actividad y clima en `grid-cols-2 sm:grid-cols-4` (4 chips compactos por fila) + columna derecha (3/5) con héroe y **tarjeta «De dónde sale tu agua»** (peso × 35 ml/kg, ajustes, total, −20% alimentos). El desglose evita el hueco del héroe y hace transparente el cálculo. Plan de 5 momentos y señales quedan a ancho completo.
+- **Empty state**: ocupa el alto (`flex-1`), explica qué verá el usuario y añade 3 viñetas. El héroe solo se estira cuando hay resultado; no se usa `justify-between` para fingir altura.
+- **Cierre**: `RelatedTools` compacto con acento `sky` (2–3 enlaces), nunca la rejilla de 4 tarjetas.
 
 ### Calculadora de calorías + proteína (18-Oct-2026, ref. `components/tools/calorie-calculator/`)
 
 - **Corrección**: la guía decía «desde 0,8 g/kg es suficiente»; la RDA es un mínimo para adultos sedentarios, no una meta para gente activa. La tarjeta «Tu proteína diaria» muestra un rango orientativo según objetivo/actividad/edad, calculado con `lib/protein.ts` (misma fuente que la calculadora dedicada).
 - **Selección de perfil**: bajar grasa → déficit (1,6–2,2); subir músculo → fuerza (1,2–1,6); mantener → sedentario (0,8–1,0), activo (1,2–1,6) o 60+ sedentario (1,0–1,2).
 - **Diferenciación SEO**: se mantienen dos páginas con intenciones distintas (calorías/TDEE vs proteína). Calorías resume y enlaza; proteína detalla perfiles, reparto y fuentes. Fusionarlas alargaría una página y diluiría ambas queries.
-- **UI**: panel `rounded-xl bg-white p-6`, icono `Utensils` sobre `bg-cuerpo-lighter`, rango `text-3xl tabular-nums`, línea de perfil/g/kg/4 comidas y enlace subrayado; tokens `cuerpo` y variantes dark. Cierra con el bloque «Cierra el círculo» (proteína, pasos, hidratación y test de sueño) y el formulario de datos pasa a una columna en móvil (`sm:grid-cols-2`), evitando el sexo apretado en 320 px.
+- **UI**: panel `rounded-xl bg-white p-6`, icono `Utensils` sobre `bg-cuerpo-lighter`, rango `text-3xl tabular-nums`, línea de perfil/g/kg/4 comidas y enlace subrayado; tokens `cuerpo` y variantes dark. La guía «El equilibrio es la clave» enlaza **inline** proteína, pasos, hidratación y test de sueño; no lleva bloque de 4 tarjetas al cierre. El formulario de datos pasa a una columna en móvil (`sm:grid-cols-2`), evitando el sexo apretado en 320 px.
 - **FAQ/SEO**: 7 preguntas (nueva «¿Cuánta proteína debo comer al día?»), metaDescription con «rango de proteína según tu objetivo» y `llms.txt` actualizado.
 
 ### Test de calidad del sueño (18-Oct-2026, ref. `components/tools/sleep-quality-test/`)
@@ -495,7 +520,7 @@ Variante laboral de la calculadora salarial para una liquidación (Código de Tr
   - Sobre blanco/gris-800: texto pequeño de acento = `text-cuerpo-darkest` (5.6:1) / `dark:text-cuerpo-light` (8.3:1). `text-cuerpo-dark` (#e65100) queda en 3.8:1 → solo iconos y bordes (≥3:1).
   - Sobre `bg-cuerpo-lighter` / `dark:bg-cuerpo-dark` (chips seleccionados, bloques de total, píldoras de nivel): texto = `text-gray-900` (12:1 / 4.6:1); iconos = `text-cuerpo-darkest` / `dark:text-white` (3.8:1). El borde de chip seleccionado usa `border-cuerpo-dark` (`border-cuerpo` se queda en 2:1 sobre blanco). Los textos secundarios dentro de `dark:bg-cuerpo-dark` (hints, rangos, notas legales) también van en `gray-900`: `gray-200/300` cae a 3.1/2.6 y falla AA a 12 px.
   - Nunca `/opacidad` sobre tokens de sección (clase muerta, §1) ni `text-white` sobre ámbar pequeño.
-- **Excepción sky (hidratación)**: la calculadora de hidratación conserva `sky-600`/`dark:sky-400` en su contenido y en el bloque `RelatedTools` (`accent="sky"`) como semántica de agua, no como color de sección. No usar sky en las demás herramientas de cuerpo; su acento es `cuerpo`.
+- **Excepción sky (hidratación)**: la calculadora de hidratación conserva `sky-600`/`dark:sky-400` en su contenido y en la barra compacta `RelatedTools` (`accent="sky"`) como semántica de agua, no como color de sección. No usar sky en las demás herramientas de cuerpo; su acento es `cuerpo`.
 - **Contraste mente (azul `#1976d2`)**: `text-mente` sobre blanco pasa AA justo (4.6:1) para texto ≥14px; sobre `-lighter` el texto base (`#212529`, 10:1) es seguro, pero el **texto secundario nunca en `text-gray-500` sobre `bg-mente-lighter`** (2.7:1): en filas seleccionadas subir a `text-gray-700` / `dark:text-gray-200` (`dark:bg-mente-dark` + texto base queda en 4.67:1, el mínimo AA). `text-white/85` sobre `#1976d2` cae a ~3.8:1 → sobre el extremo claro del gradiente, `text-white` sólido (4.6:1).
 - **Contraste relaciones (violeta `#7c3aed`)**: `text-relaciones` sobre blanco 5.7:1 y `text-relaciones-dark` 9:1 ✓. En oscuro, **`relaciones-light` (`#a78bfa`) sobre `gray-800` = 3.1:1 → solo iconos, barras y texto ≥20px (large)**; para texto pequeño/mediano, `dark:text-relaciones-lighter` (`#c4b5fd`, 5.0:1). Subtexto secundario sobre `bg-relaciones-lighter`/`dark:bg-relaciones-dark` (filas seleccionadas): `text-gray-700`/`dark:text-gray-200` (el `gray-500` cae a 2.6:1).
 - **Caso finanzas (verde `#388e3c`)**: sobre blanco 4.1:1 → `text-finanzas` solo ≥20px o iconos; texto pequeño en claro → `text-finanzas-dark` (7.9:1). En oscuro, `finanzas-light` (`#66bb6a`) sobre `gray-800` = 3.6:1 → iconos/≥20px; texto pequeño → `dark:text-finanzas-lighter` (5.2:1). Blanco sobre `bg-finanzas` = 4.1:1 (falla a 16px): bandas de ticket y sólidos seleccionados usan `bg-finanzas-dark` (7.9:1 con blanco). Chips seleccionados: borde `finanzas`/`finanzas-light` + texto `finanzas-dark`/`finanzas-lighter`.

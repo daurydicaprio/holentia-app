@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 import type { ChangeEvent } from "react"
+import Link from "next/link"
 import { CalendarDays, DollarSign, Info, Landmark, Percent, ShieldCheck, Trash2, Wallet } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
@@ -374,6 +375,18 @@ export function CertificateCalculator() {
                 renovaciones. No es asesoría financiera.
               </span>
             </div>
+
+            <p className="px-1 text-sm text-gray-600 dark:text-gray-400">
+              ¿Quieres comparar con otras opciones?{" "}
+              <Link
+                href="/calculadora-interes-compuesto"
+                data-interactive="true"
+                className="font-semibold text-finanzas-dark underline underline-offset-2 dark:text-finanzas-lighter"
+              >
+                Simula tu dinero a interés compuesto
+              </Link>
+              .
+            </p>
           </div>
         )}
       </div>

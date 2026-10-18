@@ -17,7 +17,6 @@ import {
   Utensils,
   Cookie,
   Moon,
-  Scale,
   CheckCircle2,
   AlertTriangle,
 } from "lucide-react"
@@ -151,6 +150,9 @@ export function HydrationCalculator() {
   const glasses = result ? Math.round(result.direct / 250) : 0
   const bottles = result ? Math.round(result.direct / 500) : 0
   const liters = result ? (result.direct / 1000).toFixed(1) : "0"
+  const selectedActivity = ACTIVITY[activityLevel] ?? ACTIVITY.sedentary
+  const selectedClimate = CLIMATE[climate] ?? CLIMATE.temperate
+  const baseMl = result ? Math.round(result.weight * 35) : 0
 
   return (
     <div className="space-y-6">
@@ -164,25 +166,38 @@ export function HydrationCalculator() {
           </p>
 
           <div className="mb-5">
-            <label className="block text-sm font-medium mb-2">Tu peso (kg)</label>
-            <input
-              type="text"
-              inputMode="decimal"
-              autoComplete="off"
-              value={weight}
-              onChange={(e) => setWeight(sanitizeDecimal(e.target.value))}
-              placeholder="Ej: 70"
-              className={inputClass}
-              data-interactive="true"
-            />
+            <label htmlFor="hidratacion-weight" className="block text-sm font-medium mb-2">
+              Tu peso
+            </label>
+            <div className="relative">
+              <input
+                id="hidratacion-weight"
+                type="text"
+                inputMode="decimal"
+                autoComplete="off"
+                value={weight}
+                onChange={(e) => setWeight(sanitizeDecimal(e.target.value))}
+                placeholder="Ej: 70"
+                className={`${inputClass} pr-12`}
+                data-interactive="true"
+              />
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-sm font-semibold text-gray-500 dark:text-gray-400"
+              >
+                kg
+              </span>
+            </div>
           </div>
 
           <div className="mb-5">
-            <label className="block text-sm font-medium mb-2">Nivel de actividad física</label>
-            <div className="grid grid-cols-2 gap-3">
+            <span className="block text-sm font-medium mb-2">Nivel de actividad física</span>
+            <div role="group" aria-label="Nivel de actividad física" className="grid grid-cols-2 gap-2 sm:grid-cols-4">
               {Object.entries(ACTIVITY).map(([id, act]) => (
                 <button
                   key={id}
+                  type="button"
+                  aria-pressed={activityLevel === id}
                   onClick={() => pickActivity(id)}
                   className={chipClass(activityLevel === id)}
                   data-interactive="true"
@@ -195,11 +210,13 @@ export function HydrationCalculator() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Clima donde vives</label>
-            <div className="grid grid-cols-2 gap-3">
+            <span className="block text-sm font-medium mb-2">Clima donde vives</span>
+            <div role="group" aria-label="Clima donde vives" className="grid grid-cols-2 gap-2 sm:grid-cols-4">
               {Object.entries(CLIMATE).map(([id, cli]) => (
                 <button
                   key={id}
+                  type="button"
+                  aria-pressed={climate === id}
                   onClick={() => pickClimate(id)}
                   className={chipClass(climate === id)}
                   data-interactive="true"
@@ -227,44 +244,97 @@ export function HydrationCalculator() {
         </div>
 
         {/* Columna derecha: el héroe */}
-        <div className="lg:col-span-3">
+        <div className="lg:col-span-3 flex flex-col gap-6">
           {!result ? (
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-10 shadow-lg text-center text-gray-500 dark:text-gray-400 h-full flex flex-col items-center justify-center">
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-8 sm:p-10 shadow-lg text-center text-gray-500 dark:text-gray-400 flex-1 flex flex-col items-center justify-center">
               <Droplets className="h-12 w-12 mx-auto mb-4 opacity-40" />
               <p className="font-medium">Escribe tu peso</p>
               <p className="text-sm mt-1">y aquí verás cuánta agua necesitas hoy.</p>
+              <ul className="mt-5 grid max-w-sm gap-2 text-left text-xs leading-relaxed">
+                {[
+                  "Agua directa que te toca beber y agua total con alimentos.",
+                  "Reparto en 5 momentos del día, de la mañana a la noche.",
+                  "Equivalencia en vasos de 250 ml, botellas de 500 ml y litros.",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-sky-600 dark:text-sky-400" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           ) : (
-            <div aria-live="polite" className="animate-result-in flex h-full flex-col justify-center rounded-2xl border border-cuerpo-border bg-gradient-to-br from-cuerpo to-cuerpo-dark p-6 text-center text-black shadow-lg dark:bg-none dark:bg-cuerpo-glass dark:text-cuerpo-text sm:p-8">
-              <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Tu hidratación diaria</div>
-              <div className="text-6xl font-bold tabular-nums">{animatedDirect.toLocaleString("es-DO")}</div>
-              <div className="text-lg opacity-90 mt-1">
-                ml a beber al día · agua total {animatedTotal.toLocaleString("es-DO")} ml
-              </div>
-
-              <div className="grid grid-cols-3 gap-2 mt-6 text-center">
-                <div className="rounded-lg bg-black/10 text-black/80 border border-black/15 dark:bg-white/10 dark:text-cuerpo-lighter dark:border-white/20 py-2 px-1 text-sm">
-                  <div className="text-xs opacity-90">Vasos 250 ml</div>
-                  <div className="font-bold tabular-nums">{glasses}</div>
-                </div>
-                <div className="bg-black/10 text-black/80 border border-black/15 dark:bg-white/10 dark:text-cuerpo-lighter dark:border-white/20 rounded-lg py-2 px-1 text-sm">
-                  <div className="text-xs opacity-90">Botellas 500 ml</div>
-                  <div className="font-bold tabular-nums">{bottles}</div>
-                </div>
-                <div className="bg-black/10 text-black/80 border border-black/15 dark:bg-white/10 dark:text-cuerpo-lighter dark:border-white/20 rounded-lg py-2 px-1 text-sm">
-                  <div className="text-xs opacity-90">Litros</div>
-                  <div className="font-bold tabular-nums">{liters} L</div>
+            <div aria-live="polite" className="animate-result-in flex flex-col justify-center rounded-2xl border border-cuerpo-border bg-gradient-to-br from-cuerpo to-cuerpo-dark p-6 text-center text-black shadow-lg dark:bg-none dark:bg-cuerpo-glass dark:text-cuerpo-text sm:p-8">
+              <div>
+                <div className="text-sm uppercase tracking-widest opacity-90 mb-2">Tu hidratación diaria</div>
+                <div className="text-6xl font-bold tabular-nums">{animatedDirect.toLocaleString("es-DO")}</div>
+                <div className="text-lg opacity-90 mt-1">
+                  ml a beber al día · agua total {animatedTotal.toLocaleString("es-DO")} ml
                 </div>
               </div>
 
-              <div className="text-xs opacity-85 mt-4 font-medium">
-                Basado en tu peso (35 ml/kg) + ajustes por actividad y clima. Incluye el descuento del 20%
-                aportado por alimentos sólidos.
-              </div>
+              <div>
+                <div className="grid grid-cols-3 gap-2 mt-6 text-center">
+                  <div className="rounded-lg bg-black/10 text-black/80 border border-black/15 dark:bg-white/10 dark:text-cuerpo-lighter dark:border-white/20 py-2 px-1 text-sm">
+                    <div className="text-xs opacity-90">Vasos 250 ml</div>
+                    <div className="font-bold tabular-nums">{glasses}</div>
+                  </div>
+                  <div className="bg-black/10 text-black/80 border border-black/15 dark:bg-white/10 dark:text-cuerpo-lighter dark:border-white/20 rounded-lg py-2 px-1 text-sm">
+                    <div className="text-xs opacity-90">Botellas 500 ml</div>
+                    <div className="font-bold tabular-nums">{bottles}</div>
+                  </div>
+                  <div className="bg-black/10 text-black/80 border border-black/15 dark:bg-white/10 dark:text-cuerpo-lighter dark:border-white/20 rounded-lg py-2 px-1 text-sm">
+                    <div className="text-xs opacity-90">Litros</div>
+                    <div className="font-bold tabular-nums">{liters} L</div>
+                  </div>
+                </div>
 
-              <div className="border-t border-white/25 mt-4 pt-3 text-[11px] leading-relaxed opacity-90">
-                Estimación educativa. No es consejo médico. Todo queda en tu navegador.
+                <div className="text-xs opacity-85 mt-4 font-medium">
+                  Basado en tu peso (35 ml/kg) + ajustes por actividad y clima. Incluye el descuento del 20%
+                  aportado por alimentos sólidos.
+                </div>
+
+                <div className="border-t border-white/25 mt-4 pt-3 text-[11px] leading-relaxed opacity-90">
+                  Estimación educativa. No es consejo médico. Todo queda en tu navegador.
+                </div>
               </div>
+            </div>
+          )}
+
+          {result && (
+            <div className="rounded-xl bg-white p-5 shadow-lg dark:bg-gray-800">
+              <h3 className="flex items-center gap-2 text-sm font-semibold">
+                <Droplets className="h-4 w-4 text-sky-600 dark:text-sky-400" />
+                De dónde sale tu agua
+              </h3>
+              <dl className="mt-3 space-y-2 text-sm">
+                <div className="flex items-center justify-between gap-3">
+                  <dt className="text-gray-600 dark:text-gray-400">Peso × 35 ml/kg</dt>
+                  <dd className="font-semibold tabular-nums">{baseMl.toLocaleString("es-DO")} ml</dd>
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <dt className="text-gray-600 dark:text-gray-400">Actividad: {selectedActivity.short.toLowerCase()}</dt>
+                  <dd className="font-semibold tabular-nums">
+                    {selectedActivity.adj >= 0 ? "+" : ""}
+                    {selectedActivity.adj.toLocaleString("es-DO")} ml
+                  </dd>
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <dt className="text-gray-600 dark:text-gray-400">Clima: {selectedClimate.short.toLowerCase()}</dt>
+                  <dd className="font-semibold tabular-nums">
+                    {selectedClimate.adj >= 0 ? "+" : ""}
+                    {selectedClimate.adj.toLocaleString("es-DO")} ml
+                  </dd>
+                </div>
+                <div className="flex items-center justify-between gap-3 border-t border-gray-200 pt-2 dark:border-gray-700">
+                  <dt className="font-medium">Agua total</dt>
+                  <dd className="font-bold tabular-nums">{result.total.toLocaleString("es-DO")} ml</dd>
+                </div>
+                <div className="flex items-center justify-between gap-3 text-xs text-gray-500 dark:text-gray-400">
+                  <dt>− 20% de alimentos</dt>
+                  <dd className="tabular-nums">{result.direct.toLocaleString("es-DO")} ml a beber</dd>
+                </div>
+              </dl>
             </div>
           )}
         </div>
@@ -382,30 +452,9 @@ export function HydrationCalculator() {
         intro="El agua es una pieza; estas herramientas completan el plan."
         accent="sky"
         items={[
-          {
-            href: "/calculadora-calorias",
-            icon: Flame,
-            title: "Tus calorías diarias",
-            text: "Comida y agua van juntas.",
-          },
-          {
-            href: "/calculadora-proteina-diaria",
-            icon: Dumbbell,
-            title: "Tu proteína diaria",
-            text: "Cuánto necesitas para tu objetivo.",
-          },
-          {
-            href: "/calculadora-imc",
-            icon: Scale,
-            title: "Tu IMC",
-            text: "El punto de partida del cuerpo.",
-          },
-          {
-            href: "/pasos-al-dia",
-            icon: Footprints,
-            title: "Tu plan de pasos",
-            text: "Moverse también pide agua.",
-          },
+          { href: "/calculadora-calorias", icon: Flame, title: "Tus calorías diarias" },
+          { href: "/calculadora-proteina-diaria", icon: Dumbbell, title: "Tu proteína diaria" },
+          { href: "/pasos-al-dia", icon: Footprints, title: "Tu plan de pasos" },
         ]}
       />
     </div>

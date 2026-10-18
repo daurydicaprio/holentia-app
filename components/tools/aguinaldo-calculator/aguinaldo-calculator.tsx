@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 import type { ChangeEvent } from "react"
+import Link from "next/link"
 import { BadgeCheck, CalendarDays, DollarSign, Gift, HelpCircle, Info, ShieldCheck, Trash2, Wallet } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
@@ -283,6 +284,18 @@ export function AguinaldoCalculator() {
                 el salario ordinario devengado en el año; no incluye horas extras ni bonificaciones.
               </span>
             </div>
+
+            <p className="px-1 text-sm text-gray-600 dark:text-gray-400">
+              ¿Ya sabes qué hacer con él?{" "}
+              <Link
+                href="/planificador-ahorros"
+                data-interactive="true"
+                className="font-semibold text-finanzas-dark underline underline-offset-2 dark:text-finanzas-lighter"
+              >
+                Convierte el aguinaldo en una meta de ahorro
+              </Link>
+              .
+            </p>
           </div>
         )}
       </div>

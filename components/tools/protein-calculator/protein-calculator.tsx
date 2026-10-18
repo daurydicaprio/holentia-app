@@ -4,10 +4,10 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
 import {
   ArrowRight,
+  CheckCircle2,
   ChevronsUpDown,
   Droplets,
   Dumbbell,
-  Flame,
   Footprints,
   HeartPulse,
   Info,
@@ -191,7 +191,7 @@ export function ProteinCalculator() {
     <>
       <div className="grid gap-6 lg:grid-cols-5">
         {/* Datos */}
-        <div className="h-fit rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800 lg:col-span-2">
+        <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800 lg:col-span-2">
           <h2 className="text-xl font-bold">Tus datos</h2>
           <p className="mb-6 mt-1 text-sm text-gray-600 dark:text-gray-400">
             Tu peso y tu contexto: el rango se ajusta a los dos.
@@ -299,83 +299,45 @@ export function ProteinCalculator() {
           </div>
         </div>
 
-        {/* Resultado */}
-        <div className="lg:col-span-3">
+        {/* Resultado principal */}
+        <div className="lg:col-span-3 flex flex-col gap-6">
           {!result ? (
-            <div className="flex h-full flex-col items-center justify-center rounded-xl bg-white p-10 text-center text-gray-500 shadow-lg dark:bg-gray-800 dark:text-gray-400">
+            <div className="flex h-full flex-col items-center justify-center rounded-xl bg-white p-8 text-center text-gray-500 shadow-lg dark:bg-gray-800 dark:text-gray-400">
               <Dumbbell className="mx-auto mb-4 h-12 w-12 opacity-40" />
               <p className="font-medium">{emptyState.title}</p>
               <p className="mt-1 text-sm">{emptyState.sub}</p>
+              <ul className="mt-5 grid gap-2 text-left text-xs leading-relaxed">
+                {[
+                  "Tu rango diario según perfil y objetivo.",
+                  "Cuántos gramos te tocan en cada comida.",
+                  "Ideas de fuentes y referencias para llegar.",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-cuerpo-darkest dark:text-cuerpo-light" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           ) : (
-            <div aria-live="polite" className="animate-result-in space-y-4">
-              {/* Hero */}
-              <div className="rounded-2xl border border-cuerpo-border bg-gradient-to-br from-cuerpo to-cuerpo-dark p-6 text-center text-black shadow-lg dark:bg-none dark:bg-cuerpo-glass dark:text-cuerpo-text sm:p-8">
-                <p className="flex items-center justify-center gap-2 text-sm opacity-90">
-                  <Dumbbell className="h-4 w-4" />
-                  Proteína recomendada al día
-                </p>
-                <p className="mt-2 text-5xl font-bold tabular-nums sm:text-6xl">≈ {animated.toLocaleString("es-DO")} g</p>
-                <p className="mt-3 text-sm opacity-90">
-                  Rango: {formatGrams(result.minG)}–{formatGrams(result.maxG)} g · perfil {result.profile.label.toLowerCase()}
-                </p>
-                <div className="mt-5 rounded-lg bg-black/10 px-4 py-3 text-sm dark:bg-white/10">
-                  En {meals} comidas: <strong className="tabular-nums">{formatGrams(result.perMealMin)}–{formatGrams(result.perMealMax)} g</strong> por comida
+            <>
+              <div aria-live="polite" className="animate-result-in">
+                <div className="rounded-2xl border border-cuerpo-border bg-gradient-to-br from-cuerpo to-cuerpo-dark p-6 text-center text-black shadow-lg dark:bg-none dark:bg-cuerpo-glass dark:text-cuerpo-text sm:p-8">
+                  <p className="flex items-center justify-center gap-2 text-sm opacity-90">
+                    <Dumbbell className="h-4 w-4" />
+                    Proteína recomendada al día
+                  </p>
+                  <p className="mt-2 text-5xl font-bold tabular-nums sm:text-6xl">≈ {animated.toLocaleString("es-DO")} g</p>
+                  <p className="mt-3 text-sm opacity-90">
+                    Rango: {formatGrams(result.minG)}–{formatGrams(result.maxG)} g · perfil {result.profile.label.toLowerCase()}
+                  </p>
+                  <div className="mt-5 rounded-lg bg-black/10 px-4 py-3 text-sm dark:bg-white/10">
+                    En {meals} comidas: <strong className="tabular-nums">{formatGrams(result.perMealMin)}–{formatGrams(result.perMealMax)} g</strong> por comida
+                  </div>
                 </div>
               </div>
 
-              {/* Desglose */}
-              <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
-                <div className="flex justify-between gap-3 py-1.5 text-sm text-gray-600 dark:text-gray-400">
-                  <span>
-                    Por kilo de peso
-                    <span className="block text-xs text-gray-500 dark:text-gray-400">Rango de tu perfil ({result.profile.label.toLowerCase()})</span>
-                  </span>
-                  <span className="whitespace-nowrap font-medium tabular-nums text-gray-800 dark:text-gray-200">
-                    {formatDecimal(result.profile.min)}–{formatDecimal(result.profile.max)} g/kg
-                  </span>
-                </div>
-                <div className="flex justify-between gap-3 py-1.5 text-sm text-gray-600 dark:text-gray-400">
-                  <span>
-                    Rango diario
-                    <span className="block text-xs text-gray-500 dark:text-gray-400">Peso × gramos por kilo</span>
-                  </span>
-                  <span className="whitespace-nowrap font-medium tabular-nums text-gray-800 dark:text-gray-200">
-                    {formatGrams(result.minG)}–{formatGrams(result.maxG)} g
-                  </span>
-                </div>
-                <div className="flex justify-between gap-3 py-1.5 text-sm text-gray-600 dark:text-gray-400">
-                  <span>
-                    Peso usado
-                    <span className="block text-xs text-gray-500 dark:text-gray-400">
-                      {unit === "lb" ? `Escribiste ${weight} lb` : "En kilogramos"}
-                    </span>
-                  </span>
-                  <span className="whitespace-nowrap font-medium tabular-nums text-gray-800 dark:text-gray-200">
-                    {formatWeight(result.weightKg, "kg")}
-                    <span className="block text-right text-xs font-normal text-gray-500 dark:text-gray-400">
-                      ≈ {formatWeight(result.weightKg, "lb")}
-                    </span>
-                  </span>
-                </div>
-                <div className="flex justify-between gap-3 border-b border-gray-200 py-1.5 pb-3 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-400">
-                  <span>
-                    Por comida
-                    <span className="block text-xs text-gray-500 dark:text-gray-400">Repartido en {meals} comidas</span>
-                  </span>
-                  <span className="whitespace-nowrap font-medium tabular-nums text-gray-800 dark:text-gray-200">
-                    {formatGrams(result.perMealMin)}–{formatGrams(result.perMealMax)} g
-                  </span>
-                </div>
-
-                <p className="mt-3 text-xs leading-relaxed text-gray-600 dark:text-gray-400">
-                  El total del día es lo que más importa. Para estimular el músculo, reparte 20–40 g en las comidas
-                  principales (ISSN 2017); si tu meta es alta, usa 4–5 comidas. Si ya cubres 1,2–1,6 g/kg y repartes
-                  bien la proteína, no necesitas más para ganar músculo salvo que busques fisiculturismo.
-                </p>
-              </div>
-
-              {/* Fuentes de proteína */}
+              {/* Fuentes de proteína: cierra la altura del formulario en la misma fila */}
               <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
                 <h3 className="flex items-center gap-2 text-lg font-semibold">
                   <Utensils className="h-4 w-4 text-cuerpo-darkest dark:text-cuerpo-light" />
@@ -393,8 +355,8 @@ export function ProteinCalculator() {
                     </div>
                   ))}
                 </div>
-                <p className="mt-4 border-t border-gray-200 pt-3 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-400">
-                  La proteína es una pieza del día.{" "}
+                <p className="mt-4 flex flex-wrap items-center gap-x-1 text-sm text-gray-600 dark:text-gray-400">
+                  <span>La proteína es una pieza del día.</span>
                   <Link
                     href="/calculadora-calorias"
                     data-interactive="true"
@@ -405,63 +367,95 @@ export function ProteinCalculator() {
                   </Link>
                 </p>
               </div>
-
-              {/* Referencias */}
-              <div className="grid gap-3 sm:grid-cols-3">
-                {REFERENCES.map((ref) => (
-                  <div key={ref.title} className="rounded-lg border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-800">
-                    <ref.icon className="h-4 w-4 text-cuerpo-darkest dark:text-cuerpo-light" />
-                    <p className="mt-1.5 text-sm font-semibold">{ref.title}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">{ref.sub}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Nota legal */}
-              <div className="flex items-start gap-2 rounded-lg bg-cuerpo-lighter p-3 text-xs text-gray-800 dark:bg-cuerpo-dark dark:text-gray-900">
-                <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-cuerpo-darkest dark:text-white" />
-                <span>
-                  Estimación educativa para adultos sanos: 0,8 g/kg (RDA, IOM/NAM) · 1,2–1,6 g/kg para actividad y
-                  fuerza (para ganar músculo, los rangos de hasta 2,0 g/kg de ACSM/AND/DC 2016 e ISSN 2017 son para
-                  deportistas avanzados) · 1,6–2,2 g/kg en déficit calórico (el extremo alto, para personas entrenadas) ·
-                  1,0–1,2 g/kg desde los 60 años (PROT-AGE/ESPEN). Con enfermedad renal, embarazo, lactancia u otra
-                  condición médica, consulta a un profesional. No es consejo médico.
-                </span>
-              </div>
-            </div>
+            </>
           )}
         </div>
       </div>
 
+      {result && (
+        <section className="mt-6 rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
+          <div className="flex items-center gap-2">
+            <Scale className="h-5 w-5 text-cuerpo-darkest dark:text-cuerpo-light" />
+            <h2 className="text-xl font-bold">Tu proteína en detalle</h2>
+          </div>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            Las cuentas detrás de tu rango y las referencias que lo sostienen.
+          </p>
+
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-lg bg-gray-50 p-4 dark:bg-gray-700/40">
+              <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">Por kilo de peso</p>
+              <p className="mt-1 text-lg font-bold tabular-nums text-gray-800 dark:text-gray-100">
+                {formatDecimal(result.profile.min)}–{formatDecimal(result.profile.max)} g/kg
+              </p>
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Rango de tu perfil ({result.profile.label.toLowerCase()})</p>
+            </div>
+            <div className="rounded-lg bg-gray-50 p-4 dark:bg-gray-700/40">
+              <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">Rango diario</p>
+              <p className="mt-1 text-lg font-bold tabular-nums text-gray-800 dark:text-gray-100">
+                {formatGrams(result.minG)}–{formatGrams(result.maxG)} g
+              </p>
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Peso × gramos por kilo</p>
+            </div>
+            <div className="rounded-lg bg-gray-50 p-4 dark:bg-gray-700/40">
+              <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">Peso usado</p>
+              <p className="mt-1 text-lg font-bold tabular-nums text-gray-800 dark:text-gray-100">
+                {formatWeight(result.weightKg, "kg")}
+              </p>
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                {unit === "lb" ? `Escribiste ${weight} lb` : `≈ ${formatWeight(result.weightKg, "lb")}`}
+              </p>
+            </div>
+            <div className="rounded-lg bg-gray-50 p-4 dark:bg-gray-700/40">
+              <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">Por comida</p>
+              <p className="mt-1 text-lg font-bold tabular-nums text-gray-800 dark:text-gray-100">
+                {formatGrams(result.perMealMin)}–{formatGrams(result.perMealMax)} g
+              </p>
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Repartido en {meals} comidas</p>
+            </div>
+          </div>
+
+          <p className="mt-4 text-xs leading-relaxed text-gray-600 dark:text-gray-400">
+            El total del día es lo que más importa. Para estimular el músculo, reparte 20–40 g en las comidas
+            principales (ISSN 2017); si tu meta es alta, usa 4–5 comidas. Si ya cubres 1,2–1,6 g/kg y repartes
+            bien la proteína, no necesitas más para ganar músculo salvo que busques fisiculturismo.
+          </p>
+
+          {/* Referencias */}
+          <div className="mt-5 border-t border-gray-200 pt-4 dark:border-gray-700">
+            <div className="grid gap-3 sm:grid-cols-3">
+              {REFERENCES.map((ref) => (
+                <div key={ref.title} className="rounded-lg bg-gray-50 p-3 dark:bg-gray-700/40">
+                  <ref.icon className="h-4 w-4 text-cuerpo-darkest dark:text-cuerpo-light" />
+                  <p className="mt-1.5 text-sm font-semibold">{ref.title}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{ref.sub}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Nota legal */}
+          <div className="mt-4 flex items-start gap-2 rounded-lg bg-cuerpo-lighter p-3 text-xs text-gray-800 dark:bg-cuerpo-dark dark:text-gray-900">
+            <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-cuerpo-darkest dark:text-white" />
+            <span>
+              Estimación educativa para adultos sanos: 0,8 g/kg (RDA, IOM/NAM) · 1,2–1,6 g/kg para actividad y
+              fuerza (para ganar músculo, los rangos de hasta 2,0 g/kg de ACSM/AND/DC 2016 e ISSN 2017 son para
+              deportistas avanzados) · 1,6–2,2 g/kg en déficit calórico (el extremo alto, para personas entrenadas) ·
+              1,0–1,2 g/kg desde los 60 años (PROT-AGE/ESPEN). Con enfermedad renal, embarazo, lactancia u otra
+              condición médica, consulta a un profesional. No es consejo médico.
+            </span>
+          </div>
+        </section>
+      )}
+
       <div className="mt-6">
         <RelatedTools
-          title="Completa tu día"
-          intro="La proteína es una pieza; estas herramientas te ayudan con el resto."
+          title="Sigue por aquí"
+          intro="La proteína es una pieza; el resto también cuenta."
           items={[
-            {
-              href: "/calculadora-calorias",
-              icon: Flame,
-              title: "Tus calorías diarias",
-              text: "Mira cuánto necesitas según tu objetivo.",
-            },
-            {
-              href: "/calculadora-imc",
-              icon: Scale,
-              title: "Tu IMC",
-              text: "Una foto rápida de tu peso y estatura.",
-            },
-            {
-              href: "/calculadora-hidratacion",
-              icon: Droplets,
-              title: "Tu hidratación",
-              text: "El agua también forma parte del rendimiento.",
-            },
-            {
-              href: "/pasos-al-dia",
-              icon: Footprints,
-              title: "Tu plan de pasos",
-              text: "Muévete a diario con un plan realista.",
-            },
+            { href: "/calculadora-imc", icon: Scale, title: "Tu IMC" },
+            { href: "/calculadora-hidratacion", icon: Droplets, title: "Tu hidratación" },
+            { href: "/pasos-al-dia", icon: Footprints, title: "Tu plan de pasos" },
           ]}
         />
       </div>
