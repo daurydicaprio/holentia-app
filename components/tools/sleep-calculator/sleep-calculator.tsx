@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { AlarmClock, Info, Moon, Sunrise, Trash2 } from "lucide-react"
+import Link from "next/link"
+import { AlarmClock, ArrowRight, Info, Moon, Sunrise, Trash2 } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
 
@@ -267,6 +268,23 @@ export function SleepCalculator() {
                   </li>
                 ))}
               </ol>
+            </div>
+
+            {/* Enlace al test de calidad */}
+            <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
+              <h2 className="text-xl font-bold">¿Y la calidad de tu sueño?</h2>
+              <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                El horario es la mitad del plan: con el test de 11 preguntas verás cómo está tu descanso y recibirás
+                consejos según lo que te despierta.
+              </p>
+              <Link
+                href="/test-calidad-sueno"
+                data-interactive="true"
+                className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-mente-dark underline underline-offset-2 dark:text-mente-light"
+              >
+                Hacer el test de calidad del sueño
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </div>
           </div>
         )}

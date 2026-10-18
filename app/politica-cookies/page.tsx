@@ -121,6 +121,10 @@ const localStorageKeys = [
     desc: "Tu configuración de la calculadora del sueño (modo y horas)",
   },
   {
+    key: "holentia:test-calidad-sueno:draft:v1",
+    desc: "Tu avance y último resultado del test de calidad del sueño",
+  },
+  {
     key: "holentia:test-lenguajes-amor:draft:v1",
     desc: "Tu avance y último resultado del test de lenguajes del amor",
   },
@@ -151,6 +155,10 @@ const localStorageKeys = [
   {
     key: "holentia:calculadora-imc:draft:v1",
     desc: "Tu borrador de la calculadora de IMC (peso, estatura y unidad)",
+  },
+  {
+    key: "holentia:calculadora-proteina-diaria:draft:v1",
+    desc: "Tu borrador de la calculadora de proteína (peso, unidad, perfil y comidas)",
   },
 ]
 

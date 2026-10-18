@@ -4,12 +4,12 @@
 > Prod `holentia.com → main`. No tocar dominios.
 > Principios: sin DB, sin registro, local-first privado (`holentia:*` en navegador), cero tracking.
 
-## Estado actual (17-Oct-2026) — 29 herramientas + directorio de herramientas en `dev`; SEO/GEO y pase UI/UX móvil completos
+## Estado actual (18-Oct-2026) — 31 herramientas (proteína + test de calidad del sueño) en `dev`; SEO/GEO y pase UI/UX móvil completos
 - [x] Stack: Next 15.5.26 + React 19.3 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
-- [x] Cobertura: **29 herramientas** activas + 17 tarjetas «Próximamente» intactas en `lib/data.ts`; sitio de **40 URLs** (home + 4 hubs + directorio + 29 herramientas + 5 informativas)
-- [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite), OG por ruta (**40 archivos**), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 40 URLs con lastmod fijo, llms.txt 29 tools; auditorías registradas en la skill `seo-geo-audit`
+- [x] Cobertura: **31 herramientas** activas + 17 tarjetas «Próximamente» intactas en `lib/data.ts`; sitio de **42 URLs** (home + 4 hubs + directorio + 31 herramientas + 5 informativas)
+- [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite), OG por ruta (**42 archivos**), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 42 URLs con lastmod fijo, llms.txt 31 tools; auditorías registradas en la skill `seo-geo-audit`
 - [x] UI/UX móvil: pase completo por herramientas (cuerpo, mente, relaciones, finanzas ×3) y superficies globales (chrome, hubs, informativas, shell) — contraste AA con tiers por sección, tap targets ≥40/44px, inputs ≥16px sin zoom iOS, recetas en `design.md`
-- [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` se sincroniza con `dev` al cierre de cada fase (sync previa: Fase AY `eaf2866`)**
+- [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` se sincroniza con `dev` al cierre de cada fase (sync previa: Fase BC)**
 - [x] `tsc 0 errores + next build OK + pnpm lint 0` en estricto
 - [ ] **Próximo**: siguiente frente a decisión del usuario — ver «Backlog propuesto» al pie
 
@@ -438,6 +438,24 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase BB — Herramienta nueva: calculadora de proteína diaria (18-Oct-2026) — HECHA
+
+- [x] **Herramienta nueva** (30ª, card `calculadora-proteina-diaria`, sección Cuerpo): peso kg/lb + perfil (`Sedentario 0,8–1,0`, `Activo 1,2–1,6`, `Fuerza / ganar músculo 1,2–1,6`, `Pérdida de grasa 1,6–2,2`, `60+ 1,0–1,2` g/kg) + 3/4/5 comidas → rango diario y por comida. Corrección explícita: **1,2–1,6 g/kg suele bastar para ganar músculo** con buena distribución de comidas, salvo fisiculturismo. Patrón D (`holentia:calculadora-proteina-diaria:draft:v1`).
+- [x] **SEO/GEO**: metaTitle «Calculadora de proteína diaria: cuánta necesitas» (48 ch) · metaDescription 147 ch; FAQ ×6 (cuánta, ganar músculo, exceso, reparto, suplementos, privacidad); OG propia; llms.txt.
+- [x] **Docs**: clave nueva en `politica-cookies`; receta `design.md` §4 «Calculadora de proteína diaria».
+
+---
+
+## Fase BC — Herramienta nueva: test de calidad del sueño (18-Oct-2026) — HECHA
+
+- [x] **Herramienta nueva** (31ª, card `test-calidad-sueno`, sección Mente, separada de la calculadora del sueño): 11 preguntas (duración, latencia, despertares, volver a dormirse, causa —baño/ruido/estrés/dolor—, sensación al despertar, ronquidos, cafeína, pantallas, regularidad y somnolencia diurna) → 0–33 normalizado a 0–100, 4 bandas, consejos según respuestas y bandera de consulta por posible apnea. Inspirado en PSQI/ISI/STOP-BANG e higiene del sueño (AASM), sin diagnosticar. Patrón D (`holentia:test-calidad-sueno:draft:v1`).
+- [x] **Enlaces cruzados**: tarjeta «¿Y la calidad de tu sueño?» en el resultado de la calculadora del sueño; desde el test, enlaces a la calculadora de ciclos y a respiración 4-7-8.
+- [x] **SEO/GEO**: metaTitle «Test de calidad del sueño: ¿cómo duermes?» (41 ch) · metaDescription 152 ch; FAQ ×6 (qué mide, puntuación, despertares, horas recomendadas, apnea/insomnio, privacidad); OG propia; llms.txt 31 herramientas.
+- [x] **Docs/recuentos**: claves nuevas en `politica-cookies` (proteína + test); recetas en `design.md` §4; recuentos **31 herramientas / 42 URLs / 42 OG / 35 claves** en README, architecture y skills.
+- Verificado: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` **42/42 rutas PASS**.
+
+---
+
 ## Backlog propuesto (17-Oct-2026, pendiente de decisión)
 
 Sin fase asignada; se convierte en fase al aprobar el frente. Candidatos analizados tras cerrar el pase UI/UX:
@@ -448,7 +466,7 @@ Sin fase asignada; se convierte en fase al aprobar el frente. Candidatos analiza
 4. ~~Directorio `/herramientas`~~ **HECHO (Fase AZ)**: índice server-rendered de las 29 por sección (chips ancla) + enlace en el footer; como mejora opcional queda el filtro interactivo y un enlace desde el chrome de home.
 5. **«Mis datos»**: exportar/importar JSON de las claves `holentia:*` (respaldo local, sin nube) + enlace en `/ayuda`.
 6. **PWA offline**: service worker para que las herramientas funcionen sin conexión (manifest y iconos ya existen).
-7. **Nuevas herramientas** (a especificar con el dueño; keywords RD): ~~sueldo neto (TSS + ISR)~~ **HECHA (Fase AY)**; ~~prestaciones laborales/indemnización~~ **HECHA (Fase BA)**; pendientes: proteína diaria… — con la receta `create-tool`.
+7. **Nuevas herramientas** (a especificar con el dueño; keywords RD): ~~sueldo neto (TSS + ISR)~~ **HECHA (Fase AY)**; ~~prestaciones laborales/indemnización~~ **HECHA (Fase BA)**; ~~proteína diaria~~ **HECHA (Fase BB)**; ~~test de calidad del sueño~~ **HECHA (Fase BC)**; pendientes por decidir — con la receta `create-tool`.
 8. **Infra de calidad**: CI (GitHub Actions: `tsc` + `lint` + `build` en push a `dev`) y Vitest para los parsers/formatters (hoy sus casos se prueban ad hoc).
 
 ---

@@ -4,15 +4,15 @@
 > Calculadoras, simuladores y tests que funcionan directamente en el navegador del usuario,
 > sin cuenta, sin registro y sin enviar datos a servidores.
 
-Las 29 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
+Las 31 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
 de cada herramienta, y los resultados son estimaciones educativas, no asesoramiento profesional
 (médico, financiero ni psicológico).
 
 ## Secciones
 
-- [Mente](https://holentia.com/mente): diario guiado, respiración guiada (4-7-8, caja y calma), test de ansiedad GAD-7 y calculadora del sueño.
+- [Mente](https://holentia.com/mente): diario guiado, respiración guiada (4-7-8, caja y calma), test de ansiedad GAD-7, calculadora del sueño y test de calidad del sueño.
 - [Relaciones](https://holentia.com/relaciones): test de los 5 lenguajes del amor, test de estilo de apego, 45 preguntas profundas para conversar y diario para parejas.
-- [Cuerpo](https://holentia.com/cuerpo): calculadora de calorías (Mifflin-St Jeor), hidratación (EFSA/NASEM), IMC y plan de pasos 5-10-20 con objetivo y registro diario.
+- [Cuerpo](https://holentia.com/cuerpo): calculadora de calorías (Mifflin-St Jeor), hidratación (EFSA/NASEM), IMC, proteína diaria (0,8–2,2 g/kg según objetivo) y plan de pasos 5-10-20 con objetivo y registro diario.
 - [Finanzas](https://holentia.com/finanzas): presupuesto, interés compuesto, préstamo, consumo eléctrico,
   gasto de combustible, corte/vencimiento de tarjeta, interés de tarjeta, perfil de riesgo, glosario financiero,
   tracker de gastos hormiga, calculadora de sueldo neto, calculadora de prestaciones laborales, calculadora de aguinaldo,
@@ -20,7 +20,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 
 ## Directorio
 
-- [Directorio de herramientas](https://holentia.com/herramientas): índice completo de las 29 herramientas por sección, con enlaces directos a cada una.
+- [Directorio de herramientas](https://holentia.com/herramientas): índice completo de las 31 herramientas por sección, con enlaces directos a cada una.
 
 ## Herramientas
 
@@ -48,11 +48,13 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 - [Respiración guiada](https://holentia.com/tecnicas-respiracion): ejercicios con círculo en tiempo real (4-7-8 para dormir, caja para concentrarte y calma) con rondas y temporizador.
 - [Test de ansiedad GAD-7](https://holentia.com/test-ansiedad): cuestionario de cribado de 7 preguntas con puntaje 0–21 y orientación por nivel (mínima, leve, moderada o grave).
 - [Calculadora del sueño](https://holentia.com/calculadora-sueno): hora ideal para acostarte o despertarte según los ciclos de sueño (4–6 ciclos de 90 minutos).
+- [Test de calidad del sueño](https://holentia.com/test-calidad-sueno): 11 preguntas sobre duración, despertares, ronquidos y hábitos, con puntuación 0–100 y consejos personalizados.
 - [Test de estilo de apego](https://holentia.com/test-apego): 12 afirmaciones para descubrir tu patrón de vínculo (seguro, ansioso, evitativo o temeroso).
 - [Preguntas profundas](https://holentia.com/preguntas-profundas): 45 preguntas para conversaciones significativas (pareja, familia y amigos), con mezcla y copiado.
 - [Diario para parejas](https://holentia.com/diario-parejas): una pregunta diaria para responder juntos, con historial y racha de días seguidos.
 - [Plan de pasos 5-10-20](https://holentia.com/pasos-al-dia): define tu objetivo diario, reparte la caminata en bloques de minutos y mira los beneficios de cada nivel.
 - [Calculadora de IMC](https://holentia.com/calculadora-imc): peso, estatura y rango saludable al instante, con contexto honesto (músculo, cintura y etapas de la vida).
+- [Calculadora de proteína diaria](https://holentia.com/calculadora-proteina-diaria): gramos de proteína al día según peso, actividad y objetivo (0,8–2,2 g/kg), con reparto por comida y fuentes.
 
 ## Páginas informativas
 

@@ -88,6 +88,17 @@ export const sectionsData: Record<string, SectionData> = {
           "Calcula a qué hora acostarte (o despertar) según los ciclos de sueño de 90 minutos: de 4 a 6 ciclos por noche, con hora recomendada. Gratis.",
       },
       {
+        id: "test-calidad-sueno",
+        title: "Test de Calidad del Sueño",
+        description: "Puntúa tu descanso y recibe consejos a tu medida.",
+        slug: "test-calidad-sueno",
+        isAvailable: true,
+        category: "mente",
+        metaTitle: "Test de calidad del sueño: ¿cómo duermes?",
+        metaDescription:
+          "Evalúa tu sueño con 11 preguntas sobre duración, despertares, ronquidos, cafeína y hábitos. Puntuación 0–100, alertas y consejos personalizados. Gratis.",
+      },
+      {
         id: "mapas-mentales",
         title: "Mapas Mentales",
         description: "Organiza ideas y potencia la creatividad.",
@@ -235,6 +246,17 @@ export const sectionsData: Record<string, SectionData> = {
         metaTitle: "¿Cuál es mi IMC? Calculadora de índice de masa corporal",
         metaDescription:
           "Calcula tu IMC al instante: rango saludable según tu estatura, tu peso ideal y lo que el índice de masa corporal no puede decirte. En tu navegador.",
+      },
+      {
+        id: "calculadora-proteina-diaria",
+        title: "Calculadora de Proteína",
+        description: "Cuánta proteína necesitas según tu peso y objetivo.",
+        slug: "calculadora-proteina-diaria",
+        isAvailable: true,
+        category: "cuerpo",
+        metaTitle: "Calculadora de proteína diaria: cuánta necesitas",
+        metaDescription:
+          "Calcula cuánta proteína necesitas al día según tu peso, actividad y objetivo: rango en gramos, reparto por comida y fuentes. Gratis y sin registro.",
       },
       {
         id: "rutinas-hiit",

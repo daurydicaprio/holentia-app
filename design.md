@@ -431,6 +431,22 @@ Variante laboral de la calculadora salarial para una liquidación (Código de Tr
 - **Notas condicionales** (caja `rounded-lg bg-gray-50 p-4 dark:bg-gray-700/50` como «Cómo se calculó tu ISR»): fracción del art. 80 pagada o no, antigüedad <3 meses, escala de 23 días; además strip de cifras vigentes y nota legal.
 - **Móvil**: fechas en `grid-cols-1 sm:grid-cols-2`; empty state con `Briefcase` que guía por pasos (salario → fechas → resultado) y mensaje propio cuando el rango de fechas es inválido.
 
+### Calculadora de proteína diaria (18-Oct-2026, ref. `components/tools/protein-calculator/`)
+
+- **Formulario**: peso con sufijo kg/lb dentro del input (convierte al cambiar, patrón IMC) + 5 perfiles como tarjetas (`Sedentario 0,8–1,0`, `Activo 1,2–1,6`, `Fuerza / ganar músculo 1,2–1,6`, `Pérdida de grasa 1,6–2,2`, `60+ 1,0–1,2` g/kg) + comidas 3/4/5; patrón D (`holentia:calculadora-proteina-diaria:draft:v1` con `{weight, unit, profile, meals}`, debounce 500 ms tras la primera edición).
+- **Dominio**: g/kg con comentario de fuente (RDA IOM; 1,2–1,6 en actividad/fuerza —con la aclaración de que, bien repartida, suele bastar para ganar músculo salvo fisiculturismo—; 1,6–2,2 en déficit; 1,0–1,2 desde los 60 con PROT-AGE/ESPEN); peso válido 20–350 kg; reparto de 20–40 g por comida (ISSN 2017).
+- **Resultado**: héroe `cuerpo` con gramos medios (count-up) + rango diario y perfil; desglose «por kilo / rango diario / peso usado / por comida»; tarjeta de 6 fuentes con aporte por porción; 3 mini-chips de referencia; nota legal.
+- **Contraste**: héroe en negro sobre ámbar (§7), acentos `text-cuerpo-darkest` / `dark:text-cuerpo-light`; tarjetas `p-6`.
+
+### Test de calidad del sueño (18-Oct-2026, ref. `components/tools/sleep-quality-test/`)
+
+- **Flujo instrumentado** (mismo patrón que el GAD-7): intro con aviso educativo → 11 preguntas de una en una con auto-avance 300 ms y «← Atrás» → resultado; patrón D reanudable (`holentia:test-calidad-sueno:draft:v1`; a medias vuelve a la primera sin responder, completo abre el resultado). Las respuestas se guardan como **índice de opción**, no como valor: hay opciones con el mismo puntaje (causa del despertar) que deben distinguirse para personalizar los consejos.
+- **Preguntas**: duración, latencia, despertares, volver a dormirse, causa (baño / ruido / estrés / dolor), sensación al despertar, ronquidos, cafeína, pantallas, regularidad y somnolencia diurna; 0–3 por pregunta, total 0–33 normalizado a 0–100 (más alto = mejor).
+- **Bandas**: ≥80 buen descanso (emerald), 60–79 a mejorar (amber), 40–59 frágil (orange), <40 calidad baja (red); escala de 4 segmentos proporcionales (40/20/20/20) con marcador `left: calc(percent% − 2px)`.
+- **Consejos personalizados** (`buildTips`): hasta 4 según respuestas (ventana de sueño, control de estímulo si tarda en dormirse, líquidos si se levanta al baño, mente si es estrés, ambiente, dolor, cafeína, pantallas, regularidad, somnolencia diurna); si todo va bien, tip de mantenimiento. **Bandera roja** (caja `AlertTriangle`): ronquido con pausas o somnolencia diurna con ronquido → consultar por posible apnea; el test no diagnostica.
+- **Enlaces cruzados**: tarjeta «¿Y la calidad de tu sueño?» en el resultado de la calculadora del sueño; desde el test, enlaces a la calculadora de ciclos y a respiración 4-7-8.
+- **Tokens**: sección `mente`; semáforos de banda en paleta Tailwind estándar (§7); héroe con `text-white` sólido; acciones con press feedback y `data-interactive`.
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.
