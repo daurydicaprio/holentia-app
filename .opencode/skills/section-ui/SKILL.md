@@ -31,6 +31,8 @@ Si una clase nueva no aparece en el CSS compilado (`.next/static/css/*.css`), ca
 
 Nunca hex suelto en componentes: clases Tailwind o CSS vars (`var(--color-finanzas-active)`).
 
+**Favicon/PWA** (18-Oct-2026): `app/icon.svg` = cuadrado redondeado `#121212` + H geométrica blanca, con inversión clara/oscura vía `prefers-color-scheme`. `app/apple-icon.png` 180×180 y los `public/icon-*` se generan desde la misma marca; no volver al logo heredado de Vercel.
+
 ## 3. Tipografía
 
 - Fuente única: **Inter** (`next/font/google` en `app/layout.tsx`, body hereda). No cargar otras fuentes.
@@ -70,6 +72,16 @@ Receta para cualquier calculadora/test con varios campos numéricos (referencias
 - **Mobile (obligatorio)**: input nunca `text-sm` a secas (iOS hace zoom al enfocar): genérico `text-base md:text-sm`, **numéricos de herramienta `text-lg font-semibold`** + `type="text"` + `inputMode` (`numeric`/`decimal`) con saneado (el `type="number"` rompe decimales parciales). Filas que no caben (presets de 3 columnas, inputs con sufijo tipo kg/lb) → apiladas a ancho completo en móvil (`grid gap-*` + `sm:grid-cols-*`; preset en fila = label izquierda + valor derecha). Tap targets ≥44px (steppers `h-10 w-10`); tabla en `overflow-x-auto`.
 - **Dos variantes del input canónico (17-Oct-2026)**: numéricos `text-lg font-semibold`; texto libre (nombre, y también `type="date"`) → `text-base` sin semibold (`inputClassText`). El `inputMode`/saneado aplica igual a días, años y tasas (coma decimal normalizada en el parser: `"60,5"` → 60.5). Sobre `components/ui/input.tsx`: el base trae `h-10`/`md:text-sm` y gana en el merge → el override debe anular con `h-auto` y `md:text-lg`. **Celdas de tabla editables** (budget-simulator): borrador local por celda (`Record<string,string>` con commit al parsear y limpieza en `onBlur`) + `type="text"`; medidas compactas `px-2 py-2 text-base` (≥16px anti-zoom).
 - **Moneda**: siempre `formatDOP` de `lib/format.ts` (es-DO/DOP) — nunca locales/monedas ajenas (`es-MX`/`MXN`) ni `$` pelado. Botones de resultado con `animate-result-in` llevan `aria-live="polite"`.
+
+## 3d. Bloque «Sigue por aquí» (enlaces internos de cuerpo)
+
+Componente compartido: `components/tools/related-tools/related-tools.tsx`. Úsalo al cerrar una herramienta de cuerpo; no inventes otra rejilla de enlaces.
+
+- Superficie `rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800` · grid `gap-4 sm:grid-cols-2 lg:grid-cols-4`.
+- Tarjeta = `<Link>` completo (`data-interactive="true"`, haptic `medium`): `rounded-xl border border-gray-200 p-4`; icono `text-cuerpo-dark dark:text-cuerpo-light`; flecha `ArrowRight`; título `text-sm font-semibold`; texto `text-xs text-gray-500 dark:text-gray-400`.
+- Hover: `hover:border-cuerpo-dark hover:bg-black/5 dark:hover:border-cuerpo-light dark:hover:bg-white/10` (sin tokens con `/opacidad`).
+- Solo relaciones reales (calorías ↔ proteína ↔ pasos ↔ hidratación ↔ IMC; test de sueño desde calorías/pasos). No enlaces de relleno ni 5+ tarjetas en una fila.
+- **Acento**: por defecto `cuerpo` (ámbar). Hidratación usa `accent="sky"` (sky-600/400) porque su tema de agua es una excepción semántica ya establecida; no mezclar ámbar en esa herramienta.
 
 ## 4. Iconos (`lucide-react`)
 

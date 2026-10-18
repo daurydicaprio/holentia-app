@@ -4,12 +4,12 @@
 > Prod `holentia.com → main`. No tocar dominios.
 > Principios: sin DB, sin registro, local-first privado (`holentia:*` en navegador), cero tracking.
 
-## Estado actual (18-Oct-2026) — 31 herramientas (proteína + test de calidad del sueño) en `dev`; proteína de la calculadora de calorías corregida; SEO/GEO y pase UI/UX móvil completos
+## Estado actual (18-Oct-2026) — 31 herramientas (proteína + test de calidad del sueño) en `dev`; proteína de calorías corregida; red de enlaces de cuerpo, favicon H y pase UI/UX móvil completos
 - [x] Stack: Next 15.5.26 + React 19.3 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
 - [x] Cobertura: **31 herramientas** activas + 17 tarjetas «Próximamente» intactas en `lib/data.ts`; sitio de **42 URLs** (home + 4 hubs + directorio + 31 herramientas + 5 informativas)
 - [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite), OG por ruta (**42 archivos**), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 42 URLs con lastmod fijo, llms.txt 31 tools; auditorías registradas en la skill `seo-geo-audit`
 - [x] UI/UX móvil: pase completo por herramientas (cuerpo, mente, relaciones, finanzas ×3) y superficies globales (chrome, hubs, informativas, shell) — contraste AA con tiers por sección, tap targets ≥40/44px, inputs ≥16px sin zoom iOS, recetas en `design.md`
-- [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` se sincroniza con `dev` al cierre de cada fase (sync previa: Fase BD)**
+- [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` se sincroniza con `dev` al cierre de cada fase (sync previa: Fase BE)**
 - [x] `tsc 0 errores + next build OK + pnpm lint 0` en estricto
 - [ ] **Próximo**: siguiente frente a decisión del usuario — ver «Backlog propuesto» al pie
 
@@ -464,6 +464,18 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 - [x] **SEO/GEO**: FAQ ×7 (nueva «¿Cuánta proteína debo comer al día?»), metaDescription 141 ch con «rango de proteína según tu objetivo» y `llms.txt` actualizado.
 - [x] **Docs**: receta «Calculadora de calorías + proteína» en `design.md` §4 y auditoría registrada en `seo-geo-audit`.
 - Verificado: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` **42/42 rutas PASS**.
+
+---
+
+## Fase BE — Red de enlaces de cuerpo, favicon H y pulido móvil/contraste (18-Oct-2026) — HECHA
+
+- [x] **Enlaces internos**: nuevo `components/tools/related-tools/related-tools.tsx` («Sigue por aquí») con tarjetas-enlace de target completo y haptic `medium`. Calorías enlaza proteína, pasos, hidratación y **test de calidad del sueño**; proteína enlaza calorías, IMC, hidratación y pasos; pasos enlaza calorías, proteína, hidratación y test de sueño; hidratación enlaza calorías, proteína, IMC y pasos; IMC suma proteína a sus 3 enlaces existentes (4 tarjetas).
+- [x] **Favicon**: `app/icon.svg` rediseñado como cuadrado redondeado `#121212` con H geométrica blanca (invierte a fondo claro/H negra en `prefers-color-scheme: dark`); `app/apple-icon.png` 180×180 y `public/icon-192.png`, `icon-512.png`, `icon-512-maskable.png` regenerados desde la misma marca con Sharp. Se retira el icono heredado de Vercel.
+- [x] **Móvil**: formulario de calorías a una columna en <640 px (`sm:grid-cols-2`) para que «Hombre/Mujer» no se apriete; `min-w-0` en la cabecera de la tarjeta de proteína; enlaces cruzados con `py-2.5` (40 px); bloque relacionado apilado en móvil.
+- [x] **Contraste**: botón de sexo seleccionado y textos secundarios sobre `dark:bg-cuerpo-dark` (hint/rango de perfil, guía de calorías, nota legal de proteína) pasan a `text-gray-900`; se elimina `text-white` sobre ámbar pequeño.
+- [x] **SEO**: `metaDescription` del hub Cuerpo (149 ch) incluye proteína; enlaces internos recíprocos entre 5 herramientas + sueño. `pnpm audit:seo` **42/42 PASS**.
+- [x] **Docs**: recetas en `design.md` §4b-bis/§4c/§7 y `section-ui`; esta fase y auditoría en `plan.md` + `seo-geo-audit`.
+- Verificado: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` 42/42 + smoke `/icon.svg` y `/apple-icon.png` 200.
 
 ---
 

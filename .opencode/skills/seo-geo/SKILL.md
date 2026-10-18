@@ -51,7 +51,7 @@ Miguita: **solo en JSON-LD** (no UI visible — los botones Volver y el footer c
 
 - **Canonical + OG url** en el 100% de páginas (viene de `baseMetadata`/`pageMetadata`; home declara `alternates.canonical: "/"`).
 - **Sitemap** (`app/sitemap.ts`): se deriva de `sectionsData` (solo `isAvailable`) + rutas estáticas. `lastModified` usa la constante `LAST_UPDATED` (fecha fija, actualizar a mano al publicar cambios de contenido — NO `new Date()` en cada build).
-- **Enlaces internos server-rendered**: el `Footer` enlaza `/que-es-holentia`, `/ayuda`, `/apoyar`, `/aviso-legal`, `/politica-cookies` (sin esto las legales quedan huérfanas: el menú es client y no cuenta para el HTML inicial). `ToolPageShell` enlaza sección y `/apoyar`. No romper estos enlaces.
+- **Enlaces internos server-rendered**: el `Footer` enlaza `/que-es-holentia`, `/ayuda`, `/apoyar`, `/aviso-legal`, `/politica-cookies` (sin esto las legales quedan huérfanas: el menú es client y no cuenta para el HTML inicial). `ToolPageShell` enlaza sección y `/apoyar`. No romper estos enlaces. **Contextuales (18-Oct-2026)**: las 5 herramientas de cuerpo cierran con `RelatedTools` (calorías ↔ proteína ↔ IMC ↔ pasos ↔ hidratación; test de calidad del sueño desde calorías/pasos); verificar que los `href` aparezcan en `.next/server/app/{slug}.html`, no solo tras hidratar.
 - `app/manifest.ts` (PWA mínima) y `app/not-found.tsx` con `robots: { index: false }`.
 - Contenido fino: las secciones llevan `subtitle` visible (inspiracional) + `metaDescription` factual (120–155) en el catálogo — sin `intro` renderizada y sin FAQ de sección.
 

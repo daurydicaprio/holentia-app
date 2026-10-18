@@ -1,12 +1,11 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import Link from "next/link"
 import {
   AlertTriangle,
-  ArrowRight,
   ChevronsUpDown,
   Droplets,
+  Dumbbell,
   Flame,
   Footprints,
   Ruler,
@@ -18,6 +17,7 @@ import {
 } from "lucide-react"
 import { useCountUp } from "@/hooks/use-count-up"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
+import RelatedTools from "@/components/tools/related-tools/related-tools"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
 
 // Calculadora de IMC: peso ÷ estatura² (m).
@@ -130,6 +130,12 @@ const NEXT_STEPS = [
     icon: Footprints,
     title: "Tu plan de pasos",
     text: "El primer paso fácil de sostener: objetivo + plan 5-10-20.",
+  },
+  {
+    href: "/calculadora-proteina-diaria",
+    icon: Dumbbell,
+    title: "Tu proteína diaria",
+    text: "Cuánto necesitas para cuidar el músculo según tu objetivo.",
   },
 ]
 
@@ -392,38 +398,12 @@ export function BmiCalculator() {
       </div>
 
       {/* Del número a la acción */}
-      <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
-        <h2 className="mb-1 text-xl font-bold">Del número a la acción</h2>
-        <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-          El IMC es una foto; tus hábitos son la película. Sigue por aquí:
-        </p>
-        <div className="grid gap-4 sm:grid-cols-3">
-          {NEXT_STEPS.map((step) => {
-            const Icon = step.icon
-            return (
-              <Link
-                key={step.href}
-                href={step.href}
-                data-interactive="true"
-                onClick={() => triggerHapticFeedback("medium")}
-                className="group flex flex-col rounded-xl border border-gray-200 p-4 transition-colors hover:border-cuerpo-dark hover:bg-black/5 dark:border-gray-700 dark:hover:border-cuerpo-light dark:hover:bg-white/10"
-              >
-                <div className="mb-2 flex items-center justify-between">
-                  <Icon className="h-5 w-5 text-cuerpo-dark dark:text-cuerpo-light" />
-                  <ArrowRight className="h-4 w-4 text-cuerpo-darkest transition-transform group-hover:translate-x-0.5 dark:text-cuerpo-light" />
-                </div>
-                <span className="text-sm font-semibold group-hover:text-cuerpo-darkest dark:group-hover:text-cuerpo-lighter">
-                  {step.title}
-                </span>
-                <span className="mt-1 text-xs leading-relaxed text-gray-500 dark:text-gray-400">{step.text}</span>
-              </Link>
-            )
-          })}
-        </div>
-        <p className="mt-4 text-xs text-gray-500 dark:text-gray-400">
-          Orientación educativa con referencias de la OMS: no sustituye una valoración profesional.
-        </p>
-      </div>
+      <RelatedTools
+        title="Del número a la acción"
+        intro="El IMC es una foto; tus hábitos son la película. Sigue por aquí:"
+        items={NEXT_STEPS}
+        note="Orientación educativa con referencias de la OMS: no sustituye una valoración profesional."
+      />
     </div>
   )
 }

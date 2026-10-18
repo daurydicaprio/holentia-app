@@ -17,11 +17,13 @@ import {
   Utensils,
   Cookie,
   Moon,
+  Scale,
   CheckCircle2,
   AlertTriangle,
 } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
+import RelatedTools from "@/components/tools/related-tools/related-tools"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
 const DRAFT_KEY = draftKey("calculadora-hidratacion")
@@ -374,6 +376,38 @@ export function HydrationCalculator() {
           </div>
         </div>
       </div>
+
+      <RelatedTools
+        title="Sigue por aquí"
+        intro="El agua es una pieza; estas herramientas completan el plan."
+        accent="sky"
+        items={[
+          {
+            href: "/calculadora-calorias",
+            icon: Flame,
+            title: "Tus calorías diarias",
+            text: "Comida y agua van juntas.",
+          },
+          {
+            href: "/calculadora-proteina-diaria",
+            icon: Dumbbell,
+            title: "Tu proteína diaria",
+            text: "Cuánto necesitas para tu objetivo.",
+          },
+          {
+            href: "/calculadora-imc",
+            icon: Scale,
+            title: "Tu IMC",
+            text: "El punto de partida del cuerpo.",
+          },
+          {
+            href: "/pasos-al-dia",
+            icon: Footprints,
+            title: "Tu plan de pasos",
+            text: "Moverse también pide agua.",
+          },
+        ]}
+      />
     </div>
   )
 }

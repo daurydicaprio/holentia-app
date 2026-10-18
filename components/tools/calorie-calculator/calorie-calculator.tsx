@@ -2,10 +2,11 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
-import { ArrowRight, Flame, Trash2, Info, Minus, Equal, Plus, Salad, Footprints, Dumbbell, BedDouble, Scale, Utensils } from "lucide-react"
+import { ArrowRight, Flame, Trash2, Info, Minus, Equal, Plus, Salad, Footprints, Dumbbell, BedDouble, Scale, Utensils, Droplets } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
 import { getProteinProfile } from "@/lib/protein"
+import RelatedTools from "@/components/tools/related-tools/related-tools"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
 // Mifflin-St Jeor + factor de actividad. Estimación educativa, no plan médico.
@@ -194,7 +195,7 @@ export function CalorieCalculator() {
       <div className="grid lg:grid-cols-2 gap-6">
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg h-fit">
           <h2 className="text-xl font-bold mb-4">Tus datos</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="block text-sm font-medium mb-2">Peso (kg)</label>
               <input
@@ -247,7 +248,7 @@ export function CalorieCalculator() {
                     aria-pressed={sex === opt.value}
                     className={`flex-1 rounded-md py-3 px-2 font-medium transition-[colors,transform] duration-150 active:scale-[0.97] ${
                       sex === opt.value
-                        ? "bg-cuerpo-dark text-white shadow-sm"
+                        ? "bg-cuerpo-dark text-gray-900 shadow-sm"
                         : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
                     }`}
                     data-interactive="true"
@@ -335,7 +336,7 @@ export function CalorieCalculator() {
             <div className="rounded-lg bg-cuerpo-lighter p-2 dark:bg-cuerpo-dark">
               <Utensils className="h-5 w-5 text-cuerpo-darkest dark:text-cuerpo-light" />
             </div>
-            <div>
+            <div className="min-w-0">
               <h2 className="text-xl font-bold">Tu proteína diaria</h2>
               <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
                 Un rango orientativo según tu objetivo y actividad:
@@ -357,7 +358,7 @@ export function CalorieCalculator() {
           <Link
             href="/calculadora-proteina-diaria"
             data-interactive="true"
-            className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cuerpo-darkest underline underline-offset-2 dark:text-cuerpo-light"
+            className="mt-1 inline-flex items-center gap-1 py-2.5 text-sm font-semibold text-cuerpo-darkest underline underline-offset-2 dark:text-cuerpo-light"
           >
             Calcula tu proteína por perfil y reparto
             <ArrowRight className="h-3.5 w-3.5" />
@@ -399,7 +400,7 @@ export function CalorieCalculator() {
           ].map((leg) => (
             <div key={leg.title} className="bg-cuerpo-lighter dark:bg-cuerpo-dark rounded-xl px-5 py-4 flex items-start gap-3">
               <leg.icon className="h-5 w-5 mt-0.5 flex-shrink-0 text-cuerpo-darkest dark:text-white" />
-              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+              <p className="text-sm text-gray-700 dark:text-gray-900 leading-relaxed">
                 <strong>{leg.title}:</strong> {leg.text}
               </p>
             </div>
@@ -450,6 +451,37 @@ export function CalorieCalculator() {
           .
         </p>
       </div>
+
+      <RelatedTools
+        title="Cierra el círculo"
+        intro="Estas herramientas comparten el mismo objetivo: que el plan sea fácil de sostener."
+        items={[
+          {
+            href: "/calculadora-proteina-diaria",
+            icon: Utensils,
+            title: "Tu proteína diaria",
+            text: "Ajusta los gramos por comida y las fuentes.",
+          },
+          {
+            href: "/pasos-al-dia",
+            icon: Footprints,
+            title: "Tu plan de pasos",
+            text: "Convierte la actividad en un objetivo diario.",
+          },
+          {
+            href: "/calculadora-hidratacion",
+            icon: Droplets,
+            title: "Tu hidratación",
+            text: "El agua que necesitas según tu día.",
+          },
+          {
+            href: "/test-calidad-sueno",
+            icon: BedDouble,
+            title: "Tu calidad de sueño",
+            text: "Mide cómo descansas y qué puedes mejorar.",
+          },
+        ]}
+      />
     </div>
   )
 }

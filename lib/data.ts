@@ -212,7 +212,7 @@ export const sectionsData: Record<string, SectionData> = {
       "Tu energía empieza con pequeños cambios. Calcula tus calorías diarias, la hidratación que necesita tu cuerpo y tu índice de masa corporal, y convierte tus minutos de caminata en pasos con un objetivo propio: la ciencia del movimiento, sin mitos ni promesas vacías.",
     text: "Energiza tu cuerpo. Accede a rutinas, nutrición y consejos para un estilo de vida activo y un bienestar integral.",
     metaDescription:
-      "Calculadora de calorías, hidratación, IMC y plan de pasos 5-10-20. Tus datos y resultados se quedan en tu navegador: gratis y sin registro.",
+      "Calculadora de calorías, proteína, hidratación, IMC y plan de pasos 5-10-20. Tus datos y resultados se quedan en tu navegador: gratis y sin registro.",
     cards: [
       {
         id: "calculadora-calorias",

@@ -30,7 +30,7 @@ holentia/
 │   │                         # mobile-fab, scroll-to-top, tab-swipe-navigation, clear-all-data
 │   ├── sections/             # Hub de sección: section-page, section-tabs, section-header,
 │   │                         # section-swipe-navigation, tool-card, tools-grid
-│   ├── tools/                # 31 componentes client de herramientas (+ subcomponentes)
+│   ├── tools/                # 31 componentes client de herramientas (+ subcomponentes y `related-tools/`)
 │   ├── tool-seo/             # Shell server: tool-page-shell, tool-faq (acordeón), json-ld
 │   ├── seo/                  # og-template (plantilla compartida de las imágenes OG)
 │   ├── ui/                   # Primitivas de interfaz (button, input, slider, count-up)
