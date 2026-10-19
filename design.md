@@ -500,6 +500,15 @@ Variante laboral de la calculadora salarial para una liquidación (Código de Tr
 - **Persistencia (patrón entries)**: una clave `holentia:seguimiento-habitos:entries:v1` con hábitos + marcas; normalización al cargar, guardado inmediato, aviso si localStorage falla y «Borrar todo» con confirmación. La racha cuenta desde ayer si hoy aún no hay marca.
 - **Onboarding**: empty state con 4 sugerencias (agua, caminar, leer, dormir) que se añaden en un clic; no hay panel vacío grande.
 
+### Rutinas HIIT (19-Oct-2026, ref. `components/tools/hiit-routines/`)
+
+- **Generador determinista**: 4 enfoques (cuerpo completo, piernas/glúteos, core, cardio) con 5 ejercicios cada uno y variante `lowImpact` por ejercicio. Estructura exacta: 4 segmentos de calentamiento × 45 s + `rondas × 5` ciclos trabajo/descanso de 60 s + 4 segmentos de vuelta a la calma × 30 s; 10/15/20/25 min = 1/2/3/4 rondas. Niveles: 30/30 s, 40/20 s y 45/15 s. La duración y la ronda se derivan de un único generador, no se duplican en la UI.
+- **Temporizador basado en `Date.now()`**: `elapsed = (now − startedAt) / 1000`; pausa guarda el elapsed y reanuda con `startedAt = now − elapsed × 1000`; saltar un segmento fija `startedAt = now − segmentEnd × 1000`. **Nunca sumar `elapsedRef` otra vez al tick** (duplicaba el tiempo y completaba la sesión al saltar). El tick corre cada 250 ms y el cambio de segmento se calcula contra los límites acumulados, no con un contador de intervalos.
+- **Estados**: `idle` muestra vista previa y estructura; `running`/`paused` comparten héroe y controles (pausar/reanudar, saltar, detener); `done` muestra resumen (trabajo, descanso, duración) y «Repetir rutina». `role="timer"` con texto «Tiempo restante», `role="progressbar"` con `aria-valuenow/min/max` y `aria-live="polite"` en el bloque actual; el foco pasa al botón de pausa/reanudar sin hacer scroll.
+- **Héroe cuerpo**: gradiente `from-cuerpo to-cuerpo-dark` en claro y `cuerpo-glass` en oscuro; **todo el texto del héroe en negro** en claro (el `gray-800/900` sobre el extremo `#e65100` bajaba a ~4:1) y blanco/gray-100 en oscuro. Botones segmentados con `aria-pressed` y estado seleccionado `bg-cuerpo-lighter`/`dark:bg-cuerpo-dark`; switch de bajo impacto con `role="switch"` + `aria-checked`; circuito en tarjetas con icono, variante y cue; tap targets ≥44 px, press feedback y haptics.
+- **Persistencia (solo preferencias)**: `holentia:rutinas-hiit:draft:v1` con `{level, focus, duration, lowImpact}`; el guardado se activa tras la primera edición (una visita intacta no crea la clave). No hay historial ni sesiones guardadas; «Restablecer» limpia y «Borrar mis datos» borra por prefijo.
+- **Contenido de seguridad**: aviso de parar ante dolor/mareo, consejo de intensidad («poder decir una frase corta»), recomendación de 2 sesiones/semana y descanso de 24–48 h; la FAQ de privacidad nombra la clave real.
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.

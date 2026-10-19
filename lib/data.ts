@@ -140,10 +140,10 @@ export const sectionsData: Record<string, SectionData> = {
     title: "Energiza tu",
     highlightText: "cuerpo",
     subtitle:
-      "Tu energía empieza con pequeños cambios. Calcula tus calorías diarias, la hidratación que necesita tu cuerpo y tu índice de masa corporal, y convierte tus minutos de caminata en pasos con un objetivo propio: la ciencia del movimiento, sin mitos ni promesas vacías.",
+      "Tu energía empieza con pequeños cambios. Calcula tus calorías, hidratación, IMC y proteína, encuentra tu plan de pasos y entrena con rutinas HIIT de 10 a 25 minutos: movimiento real, sin mitos ni promesas vacías.",
     text: "Energiza tu cuerpo. Accede a rutinas, nutrición y consejos para un estilo de vida activo y un bienestar integral.",
     metaDescription:
-      "Calculadora de calorías, proteína, hidratación, IMC y plan de pasos 5-10-20. Tus datos y resultados se quedan en tu navegador: gratis y sin registro.",
+      "Calculadora de calorías, proteína, hidratación, IMC, pasos 5-10-20 y rutinas HIIT. Tus datos se quedan en tu navegador: gratis y sin registro.",
     cards: [
       {
         id: "calculadora-calorias",
@@ -192,10 +192,13 @@ export const sectionsData: Record<string, SectionData> = {
       {
         id: "rutinas-hiit",
         title: "Rutinas HIIT",
-        description: "Entrenamientos cortos y efectivos.",
+        description: "Entrenamientos cortos con temporizador guiado.",
         slug: "rutinas-hiit",
-        isAvailable: false,
+        isAvailable: true,
         category: "cuerpo",
+        metaTitle: "Rutinas HIIT en casa: generador y temporizador",
+        metaDescription:
+          "Genera una rutina HIIT de 10 a 25 min según tu nivel y enfoque. Temporizador guiado, ejercicios en casa y modo bajo impacto. Gratis y sin registro.",
       },
       {
         id: "planificador-comidas",

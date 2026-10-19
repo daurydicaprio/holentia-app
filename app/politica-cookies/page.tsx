@@ -164,6 +164,10 @@ const localStorageKeys = [
     key: "holentia:calculadora-proteina-diaria:draft:v1",
     desc: "Tu borrador de la calculadora de proteína (peso, unidad, perfil y comidas)",
   },
+  {
+    key: "holentia:rutinas-hiit:draft:v1",
+    desc: "Tus preferencias de rutinas HIIT (nivel, enfoque, duración y modo bajo impacto)",
+  },
 ]
 
 const notUsedItems = [

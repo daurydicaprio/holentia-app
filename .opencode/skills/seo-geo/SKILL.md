@@ -21,7 +21,7 @@ Objivo: que Google, Bing y los buscadores generativos (ChatGPT, Claude, Perplexi
 
 - File-convention **por ruta**: `app/{ruta}/opengraph-image.tsx` (1200×630, PNG). Next la inyecta como `og:image` Y `twitter:image` con dims/alt. **No** declarar `images` en metadata (pisa la convención).
 - Plantilla compartida: `components/seo/og-template.tsx` (`ogTemplate({ title, subtitle })`) + fuente `app/og-font.ts` (INTER_BOLD_BASE64). Cada variante: `import { INTER_BOLD_BASE64 } from "../og-font"`.
-- Variantes existentes: raíz (`app/opengraph-image.tsx`), 4 secciones, directorio (`app/herramientas/`), 32 herramientas y 5 informativas (`ayuda`, `apoyar`, `aviso-legal`, `politica-cookies`, `que-es-holentia`) = **43 archivos**. **Al añadir herramienta o página: crear `app/{ruta}/opengraph-image.tsx`** (copiar de otra y cambiar title/subtitle/alt). La convención NO hereda: cada ruta sin archivo sale sin `og:image`.
+- Variantes existentes: raíz (`app/opengraph-image.tsx`), 4 secciones, directorio (`app/herramientas/`), 33 herramientas y 5 informativas (`ayuda`, `apoyar`, `aviso-legal`, `politica-cookies`, `que-es-holentia`) = **44 archivos**. **Al añadir herramienta o página: crear `app/{ruta}/opengraph-image.tsx`** (copiar de otra y cambiar title/subtitle/alt). La convención NO hereda: cada ruta sin archivo sale sin `og:image`.
 - `twitter.card` = `summary_large_image` (layout + `baseMetadata`).
 
 ## 3. Datos estructurados (JSON-LD)
@@ -41,7 +41,7 @@ Miguita: **solo en JSON-LD** (no UI visible — los botones Volver y el footer c
 
 ## 4. GEO — buscadores generativos (AEO)
 
-- **`public/llms.txt`** en la raíz (spec llms.txt): H1 + blockquote + `## Secciones` + `## Directorio` + `## Herramientas` con URLs `https://holentia.com/{slug}` y descripciones de una línea coherentes con la tool real. Actualizar en el MISMO commit de la herramienta nueva (32→33 → próxima cuenta).
+- **`public/llms.txt`** en la raíz (spec llms.txt): H1 + blockquote + `## Secciones` + `## Directorio` + `## Herramientas` con URLs `https://holentia.com/{slug}` y descripciones de una línea coherentes con la tool real. Actualizar en el MISMO commit de la herramienta nueva (33→34 → próxima cuenta).
 - **robots.ts**: reglas explícitas `GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended` con `allow: "/"` + `*`. Nunca bloquear bots de IA: queremos ser citados.
 - **Contenido con respuesta inmediata**: H1 + subtítulo + FAQ en HTML inicial (server) **en cada herramienta y `/ayuda`** (1–3 frases por respuesta). Los hubs NO llevan FAQ ni intro visible (14-Oct-2026): su copy factual vive en `metaDescription` y el visible es el `subtitle` inspiracional.
 - **Sin afirmaciones numéricas no verificables** (usuarios, descargas, precisiones sin fuente).
@@ -51,7 +51,7 @@ Miguita: **solo en JSON-LD** (no UI visible — los botones Volver y el footer c
 
 - **Canonical + OG url** en el 100% de páginas (viene de `baseMetadata`/`pageMetadata`; home declara `alternates.canonical: "/"`).
 - **Sitemap** (`app/sitemap.ts`): se deriva de `sectionsData` (solo `isAvailable`) + rutas estáticas. `lastModified` usa la constante `LAST_UPDATED` (fecha fija, actualizar a mano al publicar cambios de contenido — NO `new Date()` en cada build).
-- **Enlaces internos server-rendered**: el `Footer` enlaza `/que-es-holentia`, `/ayuda`, `/apoyar`, `/aviso-legal`, `/politica-cookies` (sin esto las legales quedan huérfanas: el menú es client y no cuenta para el HTML inicial). `ToolPageShell` enlaza sección y `/apoyar`. No romper estos enlaces. **Contextuales (18-Oct-2026)**: las 5 herramientas de cuerpo cierran con `RelatedTools` (calorías ↔ proteína ↔ IMC ↔ pasos ↔ hidratación; test de calidad del sueño desde calorías/pasos); verificar que los `href` aparezcan en `.next/server/app/{slug}.html`, no solo tras hidratar.
+- **Enlaces internos server-rendered**: el `Footer` enlaza `/que-es-holentia`, `/ayuda`, `/apoyar`, `/aviso-legal`, `/politica-cookies` (sin esto las legales quedan huérfanas: el menú es client y no cuenta para el HTML inicial). `ToolPageShell` enlaza sección y `/apoyar`. No romper estos enlaces. **Contextuales (18-Oct-2026)**: calorías, proteína, IMC, pasos e hidratación cierran con `RelatedTools` (calorías ↔ proteína ↔ IMC ↔ pasos ↔ hidratación; test de calidad del sueño desde calorías/pasos); HIIT usa enlaces internos en su contenido/FAQ y la tarjeta del hub. Verificar que los `href` aparezcan en `.next/server/app/{slug}.html`, no solo tras hidratar.
 - `app/manifest.ts` (PWA mínima) y `app/not-found.tsx` con `robots: { index: false }`.
 - Contenido fino: las secciones llevan `subtitle` visible (inspiracional) + `metaDescription` factual (120–155) en el catálogo — sin `intro` renderizada y sin FAQ de sección.
 

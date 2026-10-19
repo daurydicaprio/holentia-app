@@ -4,14 +4,14 @@
 > Prod `holentia.com → main`. No tocar dominios.
 > Principios: sin DB, sin registro, local-first privado (`holentia:*` en navegador), cero tracking.
 
-## Estado actual (19-Oct-2026) — 32 herramientas (seguimiento de hábitos + proteína + test de calidad del sueño) en `dev`; roadmap con 2 «Próximamente»; proteína de calorías corregida; red de enlaces de cuerpo, favicon H y pase UI/UX móvil completos
+## Estado actual (19-Oct-2026) — 33 herramientas (rutinas HIIT + seguimiento de hábitos + proteína + test de calidad del sueño) en `dev`; roadmap con 1 «Próximamente»; proteína de calorías corregida; red de enlaces de cuerpo, favicon H y pase UI/UX móvil completos
 - [x] Stack: Next 15.5.26 + React 19.3 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
-- [x] Cobertura: **32 herramientas** activas + **2 tarjetas «Próximamente»** (Rutinas HIIT, Planificador de Comidas) en `lib/data.ts`; sitio de **43 URLs** (home + 4 hubs + directorio + 32 herramientas + 5 informativas)
-- [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite), OG por ruta (**43 archivos**), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 43 URLs con lastmod fijo, llms.txt 32 tools; auditorías registradas en la skill `seo-geo-audit`
+- [x] Cobertura: **33 herramientas** activas + **1 tarjeta «Próximamente»** (Planificador de Comidas) en `lib/data.ts`; sitio de **44 URLs** (home + 4 hubs + directorio + 33 herramientas + 5 informativas)
+- [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite), OG por ruta (**44 archivos**), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 44 URLs con lastmod fijo, llms.txt 33 tools; auditorías registradas en la skill `seo-geo-audit`
 - [x] UI/UX móvil: pase completo por herramientas (cuerpo, mente, relaciones, finanzas ×3) y superficies globales (chrome, hubs, informativas, shell) — contraste AA con tiers por sección, tap targets ≥40/44px, inputs ≥16px sin zoom iOS, recetas en `design.md`
 - [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` se sincroniza con `dev` al cierre de cada fase (sync previa: Fase BE)**
 - [x] `tsc 0 errores + next build OK + pnpm lint 0` en estricto
-- [ ] **Próximo**: siguiente frente a decisión del usuario — ver «Backlog propuesto» al pie
+- [ ] **Próximo**: Planificador de Comidas (ver Fase BJ y «Backlog propuesto» al pie)
 
 ---
 
@@ -521,6 +521,17 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 - [x] **Docs**: estado actual, `README`, `architecture`, `design.md` y registro en `seo-geo-audit`.
 - Verificado: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` **43/43 rutas PASS** · 32 herramientas / 43 URLs / 43 OG / **2 «Próximamente»**.
 
+## Fase BJ — Rutinas HIIT: generador y temporizador local-first (19-Oct-2026) — HECHA
+
+- [x] **Producto**: generador de circuitos de 10/15/20/25 min con nivel (principiante, intermedio, avanzado), enfoque (cuerpo completo, piernas y glúteos, core, cardio) y modo bajo impacto opcional. Estructura exacta: 3 min de calentamiento (4 × 45 s) + 5 ejercicios por ronda (trabajo/descanso según nivel) + 2 min de vuelta a la calma (4 × 30 s); 10/15/20/25 min = 1/2/3/4 rondas.
+- [x] **Temporizador**: estados `idle · running · paused · done`; inicio, pausa, reanudación, salto de segmento, detención y repetición; progreso continuo, bloque actual y siguiente, cambio automático de intervalo y resumen final (trabajo, descanso y duración). El reloj deriva de `Date.now()` para no desviarse con pestañas en segundo plano.
+- [x] **Persistencia local (solo preferencias)**: `holentia:rutinas-hiit:draft:v1` guarda nivel, enfoque, duración y bajo impacto. No se guarda historial de entrenamientos; una primera visita sin tocar controles no crea la clave. «Restablecer» y «Borrar mis datos» limpian todo.
+- [x] **UI cuerpo + a11y**: héroe gradiente/glass con texto negro (AA), controles segmentados con `aria-pressed`, switch de bajo impacto, lista de circuito con iconos Lucide, foco gestionado al iniciar/pausar, región `aria-live`, `role="timer"`/`progressbar`, tap targets ≥44 px y haptics; claro/oscuro y móvil 390 px.
+- [x] **SEO/GEO**: card activa con metaTitle (46 ch) y metaDescription (147 ch), FAQ ×6 (incluye privacidad y seguridad), OG propia, `sitemap` 44 rutas, `llms.txt` 33 herramientas, hub de cuerpo actualizado y clave nueva en `politica-cookies`.
+- [x] **QA**: flujo funcional (preferencias, recarga, reset, inicio/pausa/reanudar/saltar/completar/repetir/detener), transición automática real a los 45 s, sin overflow a 390 px y axe-core **12/12 combinaciones sin violaciones** (idle/running/done × claro/oscuro × 1440/390).
+- [x] **Docs**: `README`, `architecture`, `design.md`, `section-ui`, `seo-geo`, `seo-geo-audit` y esta fase.
+- Verificado: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` **44/44 rutas PASS** · 33 herramientas / 44 URLs / 44 OG / **1 «Próximamente»**.
+
 ---
 
 ## Backlog propuesto (17-Oct-2026, pendiente de decisión)
@@ -533,7 +544,7 @@ Sin fase asignada; se convierte en fase al aprobar el frente. Candidatos analiza
 4. ~~Directorio `/herramientas`~~ **HECHO (Fase AZ)**: índice server-rendered de las 29 por sección (chips ancla) + enlace en el footer; como mejora opcional queda el filtro interactivo y un enlace desde el chrome de home.
 5. **«Mis datos»**: exportar/importar JSON de las claves `holentia:*` (respaldo local, sin nube) + enlace en `/ayuda`.
 6. **PWA offline**: service worker para que las herramientas funcionen sin conexión (manifest y iconos ya existen).
-7. **Nuevas herramientas** (a especificar con el dueño; keywords RD): ~~sueldo neto (TSS + ISR)~~ **HECHA (Fase AY)**; ~~prestaciones laborales/indemnización~~ **HECHA (Fase BA)**; ~~proteína diaria~~ **HECHA (Fase BB)**; ~~test de calidad del sueño~~ **HECHA (Fase BC)**; ~~seguimiento de hábitos~~ **HECHA (Fase BI)**; **roadmap podado (Fase BH)**: Rutinas HIIT → Planificador de Comidas, con la receta `create-tool`.
+7. **Nuevas herramientas** (a especificar con el dueño; keywords RD): ~~sueldo neto (TSS + ISR)~~ **HECHA (Fase AY)**; ~~prestaciones laborales/indemnización~~ **HECHA (Fase BA)**; ~~proteína diaria~~ **HECHA (Fase BB)**; ~~test de calidad del sueño~~ **HECHA (Fase BC)**; ~~seguimiento de hábitos~~ **HECHA (Fase BI)**; ~~rutinas HIIT~~ **HECHA (Fase BJ)**; **siguiente**: Planificador de Comidas, con la receta `create-tool`.
 8. **Infra de calidad**: CI (GitHub Actions: `tsc` + `lint` + `build` en push a `dev`) y Vitest para los parsers/formatters (hoy sus casos se prueban ad hoc).
 
 ---

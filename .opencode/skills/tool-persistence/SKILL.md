@@ -26,6 +26,7 @@ storageClearAll()              // borra todo con prefijo `holentia:`
 |---|---|---|---|
 | **E efímero** | Tests de autoevaluación | Sin guardar (o solo último resultado inmediato) | lenguajes-del-amor |
 | **D draft** | Formularios/cálculos | Estado en hook; al cambiar inputs → `storageSet` con debounce ~500 ms + badge «Guardado local ✓» | presupuesto, calorías, corte-tarjeta |
+| **D preferencias** | Configuración de una experiencia (sin historial) | `draftKey(slug)` con solo las opciones; guardado inmediato tras la primera edición; reset limpia y deja la UI en defaults | respiración, rutinas HIIT |
 | **S snapshots** | Listas guardables (simulaciones, entradas) | Array en `simulationsKey`, máx. 3, acciones Guardar/Eliminar | interés-compuesto, préstamo |
 
 - Restauración: `useState` inicial con `storageGet(...)` dentro de `useEffect` de montaje (o lazy con window guard) para evitar hydration mismatch.
