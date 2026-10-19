@@ -168,6 +168,10 @@ const localStorageKeys = [
     key: "holentia:rutinas-hiit:draft:v1",
     desc: "Tus preferencias de rutinas HIIT (nivel, enfoque, duración y modo bajo impacto)",
   },
+  {
+    key: "holentia:planificador-comidas:entries:v1",
+    desc: "Tus planes semanales de comidas y las casillas marcadas de la lista de compras",
+  },
 ]
 
 const notUsedItems = [

@@ -17,7 +17,7 @@ holentia/
 │   ├── relaciones/           # Página de la sección relaciones
 │   ├── cuerpo/               # Página de la sección cuerpo
 │   ├── finanzas/             # Página de la sección finanzas
-│   ├── {slug}/               # Páginas de las 33 herramientas (una carpeta por slug)
+│   ├── {slug}/               # Páginas de las 34 herramientas (una carpeta por slug)
 │   ├── que-es-holentia/      # Página informativa sobre Holentia
 │   ├── aviso-legal/          # Página con el aviso legal
 │   ├── politica-cookies/     # Página con la política de cookies
@@ -30,7 +30,7 @@ holentia/
 │   │                         # mobile-fab, scroll-to-top, tab-swipe-navigation, clear-all-data
 │   ├── sections/             # Hub de sección: section-page, section-tabs, section-header,
 │   │                         # section-swipe-navigation, tool-card, tools-grid
-│   ├── tools/                # 33 componentes client de herramientas (+ subcomponentes y `related-tools/`)
+│   ├── tools/                # 34 componentes client de herramientas (+ subcomponentes y `related-tools/`)
 │   ├── tool-seo/             # Shell server: tool-page-shell, tool-faq (acordeón), json-ld
 │   ├── seo/                  # og-template (plantilla compartida de las imágenes OG)
 │   ├── ui/                   # Primitivas de interfaz (button, input, slider, count-up)
@@ -47,7 +47,7 @@ holentia/
 │   └── utils.ts              # Funciones de utilidad
 ├── types/                    # Definiciones de tipos
 │   └── index.ts              # Tipos principales
-├── app/sitemap.ts            # Sitemap XML (44 URLs)
+├── app/sitemap.ts            # Sitemap XML (45 URLs)
 ├── app/robots.ts             # Robots.txt
 ├── app/manifest.ts           # Manifest PWA (iconos 192/512/maskable)
 ├── app/error.tsx             # Página de error de ruta
@@ -90,12 +90,12 @@ holentia/
 ## SEO y Rendimiento
 
 - **Páginas de herramienta server-rendered**: cada herramienta usa `ToolPageShell` (server component) con H1, descripción y FAQ en el HTML inicial; la interactividad vive dentro como client components
-- **Metadata por página**: `generateMetadata` en las 33 herramientas, las 4 secciones, el home, el directorio y las páginas informativas (title, description, canonical, openGraph, twitter) con template global `{página} | HOLENTIA` en `app/layout.tsx`
+- **Metadata por página**: `generateMetadata` en las 34 herramientas, las 4 secciones, el home, el directorio y las páginas informativas (title, description, canonical, openGraph, twitter) con template global `{página} | HOLENTIA` en `app/layout.tsx`
 - **Datos estructurados JSON-LD**: `WebApplication` + `BreadcrumbList` + `FAQPage` por herramienta, `CollectionPage` + `BreadcrumbList` por sección, `WebSite` + `Organization` en el home, `FAQPage` en Ayuda
-- **FAQ visible en el HTML inicial** de las 33 herramientas (acordeón, no escondido tras hydration gates) y de `/ayuda` — los hubs de sección no llevan FAQ
-- **`app/sitemap.ts`**: 44 URLs (home, 4 secciones, directorio, 33 herramientas, 5 informativas)
+- **FAQ visible en el HTML inicial** de las 34 herramientas (acordeón, no escondido tras hydration gates) y de `/ayuda` — los hubs de sección no llevan FAQ
+- **`app/sitemap.ts`**: 45 URLs (home, 4 secciones, directorio, 34 herramientas, 5 informativas)
 - **`app/robots.ts`**: permite todo y apunta al sitemap
-- **`public/llms.txt`**: índice legible por LLMs con las 33 herramientas y sus fórmulas
+- **`public/llms.txt`**: índice legible por LLMs con las 34 herramientas y sus fórmulas
 - **Enlaces a herramientas en el HTML inicial** de las secciones (tabs y tarjetas server-rendered, sin `mounted` guard)
 - **Errores**: `app/error.tsx` + `app/global-error.tsx`; `app/ayuda/loading.tsx` con skeleton real
 
@@ -124,12 +124,13 @@ La aplicación está dividida en cuatro secciones principales, cada una con su p
 - **Preguntas profundas**: 45 preguntas para conversaciones significativas (pareja, familia y amigos)
 - **Diario para parejas**: una pregunta diaria para responder juntos, con historial y racha
 
-### Cuerpo (6)
+### Cuerpo (7)
 - **Calculadora de Calorías**: TDEE (Mifflin-St Jeor) y objetivos bajar grasa / mantener / subir
 - **Calculadora de Hidratación**: agua diaria según peso, actividad y clima (EFSA/NASEM)
 - **Calculadora de Proteína**: rango diario 0,8–2,2 g/kg según objetivo, peso y contexto
 - **Plan de pasos 5-10-20**: objetivo diario, plan por bloques de minutos y registro con racha
 - **Rutinas HIIT**: circuitos de 10–25 min por nivel y enfoque, con temporizador guiado y modo bajo impacto
+- **Planificador de Comidas**: semana de desayuno, almuerzo y cena con ideas, comidas propias y lista de compras
 - **Calculadora de IMC**: peso, estatura, banda OMS, rango saludable y contexto honesto
 
 ### Finanzas (17)
@@ -154,7 +155,7 @@ La aplicación está dividida en cuatro secciones principales, cada una con su p
 ## Páginas Informativas
 
 - **Home**: Página de inicio con introducción elegante y acceso directo a las secciones
-- **Directorio de herramientas**: índice completo de las 33 herramientas por sección (enlazado desde el footer)
+- **Directorio de herramientas**: índice completo de las 34 herramientas por sección (enlazado desde el footer)
 - **¿Qué es Holentia?**: Información detallada sobre la misión, valores y características de la plataforma con diseño atractivo y moderno
 - **Aviso Legal**: Términos de uso, propiedad intelectual y responsabilidades con presentación clara y profesional
 - **Política de Cookies**: Explicación detallada del uso mínimo de cookies y compromiso con la privacidad
@@ -184,7 +185,7 @@ La fuente única de verdad es **`design.md`** (paleta completa, tipografía Inte
 - No utilizamos cookies de seguimiento o análisis
 - No compartimos información con terceros
 - No creamos perfiles de usuario
-- Los datos de herramientas se guardan solo en localStorage del navegador, bajo claves `holentia:{herramienta}:{draft|simulations|entries}:v1` (37 claves activas, listadas en la Política de Cookies)
+- Los datos de herramientas se guardan solo en localStorage del navegador, bajo claves `holentia:{herramienta}:{draft|simulations|entries}:v1` (38 claves activas, listadas en la Política de Cookies)
 - Cada herramienta tiene botón «Borrar mis datos» y Ayuda permite borrarlo todo
 - No hay servidores backend que almacenen información personal
 - Solo usamos cookies técnicas esenciales (preferencias de tema)
@@ -237,4 +238,4 @@ Este proyecto es propiedad de Daury DiCaprio. Todos los derechos reservados.
 
 ---
 
-**Última actualización**: Octubre 2026 (33 herramientas y 44 URLs, rutinas HIIT + seguimiento de hábitos + calculadora de proteína + test de calidad del sueño, directorio `/herramientas` + calculadora de prestaciones, pase UI/UX móvil completo —contraste AA, tap targets, inputs sin zoom iOS—, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`)
+**Última actualización**: Octubre 2026 (34 herramientas y 45 URLs, planificador de comidas + rutinas HIIT + seguimiento de hábitos + calculadora de proteína + test de calidad del sueño, directorio `/herramientas` + calculadora de prestaciones, pase UI/UX móvil completo —contraste AA, tap targets, inputs sin zoom iOS—, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`)

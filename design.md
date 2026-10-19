@@ -509,6 +509,15 @@ Variante laboral de la calculadora salarial para una liquidación (Código de Tr
 - **Persistencia (solo preferencias)**: `holentia:rutinas-hiit:draft:v1` con `{level, focus, duration, lowImpact}`; el guardado se activa tras la primera edición (una visita intacta no crea la clave). No hay historial ni sesiones guardadas; «Restablecer» limpia y «Borrar mis datos» borra por prefijo.
 - **Contenido de seguridad**: aviso de parar ante dolor/mareo, consejo de intensidad («poder decir una frase corta»), recomendación de 2 sesiones/semana y descanso de 24–48 h; la FAQ de privacidad nombra la clave real.
 
+### Planificador de comidas (19-Oct-2026, ref. `components/tools/meal-planner/`)
+
+- **Semana 7 × 3 a ancho completo**: desayuno, almuerzo y cena; cabecera de columnas en desktop y día apilado en móvil (el label de comida se muestra dentro de cada celda con `sm:hidden`). Cada celda es un `<button>` con `min-h-[84px]`, nombre accesible («Añadir/Editar desayuno del día N») y estado vacío con borde punteado. El planner va a ancho completo y la lista de compras debajo; **no** usar una sidebar estrecha para 40+ ingredientes (dejaba una tarjeta vacía estirada).
+- **Héroe cuerpo**: mismo gradiente/glass que HIIT, texto negro en claro, tres cifras (`comidas/21`, `días completos/7`, `ingredientes`) y barra `role="progressbar"`; las cifras actualizan en `aria-live`. El selector de semana usa `formatWeekRange` con semana que empieza en lunes y `Hoy` deshabilitado en la semana actual.
+- **Editor con `<dialog>` nativo**: `showModal()` da foco atrapado y Escape gratis; cerrar con `onCancel`, clic en el fondo (`event.target === dialog`) y botón X. **Restaurar el foco a la celda que abrió el diálogo** con `requestAnimationFrame` (guardar el `document.activeElement` en un ref antes de abrir); sin esto el foco cae a `<body>` al desmontar. El formulario personalizado va debajo de las sugerencias; las sugerencias se aplican en un clic. Borrar comida usa confirmación en dos pasos.
+- **Lista de compras**: deduplicar por clave normalizada (minúsculas + trim), conservar la primera etiqueta, contar en cuántas comidas aparece y ordenar con `localeCompare("es")`. Los checks viven por semana y se podan al quitar comidas. No mostrar cantidades inventadas: la tarjeta y la FAQ dicen que es una guía de ingredientes, no una pauta nutricional.
+- **Persistencia (entries)**: `holentia:planificador-comidas:entries:v1` = `{ weeks: { [lunesISO]: { meals, checked } } }`; normalización de slots/títulos/ingredientes/checks, límites de longitud y sin clave en la visita intacta. «Rellenar huecos» solo toca celdas vacías y evita repetir `suggestionId` mientras haya variedad. Fechas compartidas en `lib/calendar.ts` (hábitos + comidas).
+- **Responsive**: ingredientes en `sm:grid-cols-2 xl:grid-cols-3`; tips en 3 columnas; botones de semana/acciones con `h-11`. Verificado 390/1440 px en claro/oscuro, sin overflow.
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.

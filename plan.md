@@ -4,14 +4,14 @@
 > Prod `holentia.com → main`. No tocar dominios.
 > Principios: sin DB, sin registro, local-first privado (`holentia:*` en navegador), cero tracking.
 
-## Estado actual (19-Oct-2026) — 33 herramientas (rutinas HIIT + seguimiento de hábitos + proteína + test de calidad del sueño) en `dev`; roadmap con 1 «Próximamente»; proteína de calorías corregida; red de enlaces de cuerpo, favicon H y pase UI/UX móvil completos
+## Estado actual (19-Oct-2026) — 34 herramientas (planificador de comidas + rutinas HIIT + seguimiento de hábitos + proteína + test de calidad del sueño) en `dev`; roadmap de herramientas completado (0 «Próximamente»); proteína de calorías corregida; red de enlaces de cuerpo, favicon H y pase UI/UX móvil completos
 - [x] Stack: Next 15.5.26 + React 19.3 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
-- [x] Cobertura: **33 herramientas** activas + **1 tarjeta «Próximamente»** (Planificador de Comidas) en `lib/data.ts`; sitio de **44 URLs** (home + 4 hubs + directorio + 33 herramientas + 5 informativas)
-- [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite), OG por ruta (**44 archivos**), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 44 URLs con lastmod fijo, llms.txt 33 tools; auditorías registradas en la skill `seo-geo-audit`
+- [x] Cobertura: **34 herramientas** activas + **0 tarjetas «Próximamente»** en `lib/data.ts`; sitio de **45 URLs** (home + 4 hubs + directorio + 34 herramientas + 5 informativas)
+- [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite), OG por ruta (**45 archivos**), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 45 URLs con lastmod fijo, llms.txt 34 tools; auditorías registradas en la skill `seo-geo-audit`
 - [x] UI/UX móvil: pase completo por herramientas (cuerpo, mente, relaciones, finanzas ×3) y superficies globales (chrome, hubs, informativas, shell) — contraste AA con tiers por sección, tap targets ≥40/44px, inputs ≥16px sin zoom iOS, recetas en `design.md`
 - [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` se sincroniza con `dev` al cierre de cada fase (sync previa: Fase BE)**
 - [x] `tsc 0 errores + next build OK + pnpm lint 0` en estricto
-- [ ] **Próximo**: Planificador de Comidas (ver Fase BJ y «Backlog propuesto» al pie)
+- [ ] **Pendiente**: aprobación explícita del usuario para sincronizar `dev` → `main` (prod). Roadmap de herramientas completado; no tocar `main` antes.
 
 ---
 
@@ -532,6 +532,19 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 - [x] **Docs**: `README`, `architecture`, `design.md`, `section-ui`, `seo-geo`, `seo-geo-audit` y esta fase.
 - Verificado: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` **44/44 rutas PASS** · 33 herramientas / 44 URLs / 44 OG / **1 «Próximamente»**.
 
+## Fase BK — Planificador de Comidas: semana + lista de compras local-first (19-Oct-2026) — HECHA
+
+- [x] **Producto**: planificador de 7 días × 3 comidas (desayuno, almuerzo, cena) con 24 ideas curadas (8 por comida) que incluyen ingredientes y etiquetas (rápido, vegetariano, alto en proteína). Permite escribir comidas propias con ingredientes y nota, editar o quitar, rellenar solo los huecos con ideas sin repetir mientras haya variedad y vaciar la semana con confirmación en dos pasos.
+- [x] **Lista de compras**: se genera con los ingredientes de la semana, elimina duplicados, indica en cuántas comidas aparece cada uno y permite marcar lo comprado. No inventa cantidades; el texto lo aclara y la FAQ lo refuerza.
+- [x] **Editor accesible**: `<dialog>` nativo con `showModal()` (foco atrapado, Escape, clic en el fondo), sugerencias que se aplican en un clic y formulario personalizado; el foco vuelve a la celda que abrió el editor. Celdas con nombre accesible y estados vacíos claros.
+- [x] **Persistencia por semanas**: `holentia:planificador-comidas:entries:v1` guarda un mapa de semanas (lunes ISO) con comidas y checks; normaliza datos corruptos, limpia checks huérfanos y no crea la clave en una visita sin cambios. Las semanas se conservan al navegar y la compra marcada es independiente por semana.
+- [x] **UI cuerpo + responsive**: héroe gradiente/glass con texto negro (AA), progreso `role="progressbar"`, estadísticas `aria-live`, planner a ancho completo y en móvil apilado por día; lista de compras en 1/2/3 columnas; tarjetas sin altura forzada; tap targets ≥44 px y haptics.
+- [x] **Refactor compartido**: `lib/calendar.ts` centraliza `localDayKey`, `parseDayKey`, `addDays`, `startOfWeek`, `getWeekDays`, `formatLongDate` y `formatWeekRange`; hábitos y comidas lo consumen. Smoke test de hábitos sin errores.
+- [x] **SEO/GEO**: card activa con metaTitle (52 ch) y metaDescription (151 ch), FAQ ×6 (funcionamiento, comidas propias, lista, semanas, límites nutricionales, privacidad), OG propia, `sitemap` 45 rutas, `llms.txt` 34 herramientas, hub de cuerpo actualizado y clave nueva en `politica-cookies`.
+- [x] **QA**: flujo funcional (idea, comida propia, edición, checks, recarga, semanas, vaciado, relleno), 0 overflow a 390 px, teclado (Escape, clic en fondo, foco restaurado) y axe-core **12/12 combinaciones sin violaciones** (idle/plan/editor × claro/oscuro × 1440/390).
+- [x] **Docs**: `README`, `architecture`, `design.md`, `section-ui`, `tool-persistence`, `seo-geo`, `seo-geo-audit` y esta fase.
+- Verificado: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` **45/45 rutas PASS** · 34 herramientas / 45 URLs / 45 OG / **0 «Próximamente»**.
+
 ---
 
 ## Backlog propuesto (17-Oct-2026, pendiente de decisión)
@@ -544,7 +557,7 @@ Sin fase asignada; se convierte en fase al aprobar el frente. Candidatos analiza
 4. ~~Directorio `/herramientas`~~ **HECHO (Fase AZ)**: índice server-rendered de las 29 por sección (chips ancla) + enlace en el footer; como mejora opcional queda el filtro interactivo y un enlace desde el chrome de home.
 5. **«Mis datos»**: exportar/importar JSON de las claves `holentia:*` (respaldo local, sin nube) + enlace en `/ayuda`.
 6. **PWA offline**: service worker para que las herramientas funcionen sin conexión (manifest y iconos ya existen).
-7. **Nuevas herramientas** (a especificar con el dueño; keywords RD): ~~sueldo neto (TSS + ISR)~~ **HECHA (Fase AY)**; ~~prestaciones laborales/indemnización~~ **HECHA (Fase BA)**; ~~proteína diaria~~ **HECHA (Fase BB)**; ~~test de calidad del sueño~~ **HECHA (Fase BC)**; ~~seguimiento de hábitos~~ **HECHA (Fase BI)**; ~~rutinas HIIT~~ **HECHA (Fase BJ)**; **siguiente**: Planificador de Comidas, con la receta `create-tool`.
+7. **Nuevas herramientas** (a especificar con el dueño; keywords RD): ~~sueldo neto (TSS + ISR)~~ **HECHA (Fase AY)**; ~~prestaciones laborales/indemnización~~ **HECHA (Fase BA)**; ~~proteína diaria~~ **HECHA (Fase BB)**; ~~test de calidad del sueño~~ **HECHA (Fase BC)**; ~~seguimiento de hábitos~~ **HECHA (Fase BI)**; ~~rutinas HIIT~~ **HECHA (Fase BJ)**; ~~planificador de comidas~~ **HECHA (Fase BK)**. Roadmap de herramientas completado: 34 activas y 0 «Próximamente».
 8. **Infra de calidad**: CI (GitHub Actions: `tsc` + `lint` + `build` en push a `dev`) y Vitest para los parsers/formatters (hoy sus casos se prueban ad hoc).
 
 ---

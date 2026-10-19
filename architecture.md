@@ -5,7 +5,7 @@
 
 ## 1. Modelo mental
 
-**Catálogo → páginas → hooks → localStorage.** Toda la información de herramientas (título, descripción, slug, sección, disponibilidad) vive en un único catálogo (`lib/data.ts`). Las páginas son delgadas: componen un shell server-rendered + el componente client de la herramienta. La lógica de cálculo vive en `hooks/` y los dominios compartidos en `lib/` (p. ej. `protein.ts`, usado por dos herramientas); la persistencia en `lib/storage.ts` con claves namespaced `holentia:{slug}:{draft|simulations|entries}:v1` (localStorage, solo navegador).
+**Catálogo → páginas → hooks → localStorage.** Toda la información de herramientas (título, descripción, slug, sección, disponibilidad) vive en un único catálogo (`lib/data.ts`). Las páginas son delgadas: componen un shell server-rendered + el componente client de la herramienta. La lógica de cálculo vive en `hooks/` y los dominios compartidos en `lib/` (p. ej. `protein.ts`, usado por dos herramientas; `calendar.ts`, fechas de semana compartidas por hábitos y comidas); la persistencia en `lib/storage.ts` con claves namespaced `holentia:{slug}:{draft|simulations|entries}:v1` (localStorage, solo navegador).
 
 ```
 lib/data.ts (catálogo: sectionsData)
@@ -13,14 +13,14 @@ lib/data.ts (catálogo: sectionsData)
    ├── app/{mente,relaciones,cuerpo,finanzas}/page.tsx  → SectionPage (server)
    │       └── ToolsGrid → ToolCard (client, gradiente por sección)
    │
-   ├── app/{slug}/page.tsx  (33 herramientas)
+   ├── app/{slug}/page.tsx  (34 herramientas)
    │       ├── generateMetadata() ← lib/seo.ts (title/canonical/OG)
    │       └── ToolPageShell (server: H1, botones, FAQ acordeón, JsonLd)
    │               └── children = componente client de la herramienta
    │                       └── hooks/use-{tool}.ts (lógica pura)
    │                               └── lib/storage.ts (borrador/snapshots)
    │
-   ├── app/herramientas/page.tsx  (directorio: índice server-rendered de las 33)
+   ├── app/herramientas/page.tsx  (directorio: índice server-rendered de las 34)
    │
    └── app/sitemap.ts · app/robots.ts · public/llms.txt  (SEO/GEO)
 ```
@@ -39,8 +39,8 @@ Regla: nada de `useEffect`/`mounted` guard para decidir si se renderiza contenid
 - **Metadata**: `lib/seo.ts` expone `toolMetadata`, `sectionMetadata`, `pageMetadata` (construyen title + description + canonical + OG + Twitter). `app/layout.tsx` pone `metadataBase`, `title.template` ("{página} | HOLENTIA") y `viewport`.
 - **JSON-LD**: `toolJsonLd` (WebApplication + BreadcrumbList + FAQPage), `sectionJsonLd` (CollectionPage + BreadcrumbList), home (WebSite + Organization), `/ayuda` (FAQPage). Se emite vía `<JsonLd>` (script `application/ld+json`).
 - **FAQ visible**: cada herramienta renderiza su FAQ en el HTML (acordeón, pero el texto está en el DOM) y `/ayuda`. Los hubs de sección **no** llevan FAQ (corrección 14-Oct-2026).
-- **Indexación**: `app/sitemap.ts` (44 URLs: home + 4 secciones + directorio + 33 herramientas + 5 informativas), `app/robots.ts` (allow all + sitemap), `public/llms.txt` (índice legible por LLMs).
-- **Imágenes sociales**: `app/{ruta}/opengraph-image.tsx` por ruta (44: raíz + 4 hubs + directorio + 33 herramientas + 5 informativas) sobre `components/seo/og-template.tsx`; la convención **no hereda**, cada ruta nueva necesita su OG propia. `app/manifest.ts` (PWA: iconos 192/512/maskable, themeColor claro/oscuro).
+- **Indexación**: `app/sitemap.ts` (45 URLs: home + 4 secciones + directorio + 34 herramientas + 5 informativas), `app/robots.ts` (allow all + sitemap), `public/llms.txt` (índice legible por LLMs).
+- **Imágenes sociales**: `app/{ruta}/opengraph-image.tsx` por ruta (45: raíz + 4 hubs + directorio + 34 herramientas + 5 informativas) sobre `components/seo/og-template.tsx`; la convención **no hereda**, cada ruta nueva necesita su OG propia. `app/manifest.ts` (PWA: iconos 192/512/maskable, themeColor claro/oscuro).
 - **Auditoría**: checklist de 16 puntos, barrido estático + runtime de OG y registro histórico en la skill `seo-geo-audit` (obligatoria antes de push con rutas nuevas).
 - El breadcrumb **no se muestra al usuario**; solo existe como `BreadcrumbList` en JSON-LD.
 
@@ -59,12 +59,12 @@ Regla: nada de `useEffect`/`mounted` guard para decidir si se renderiza contenid
 ## 6. Estructura de directorios
 
 ```
-app/           páginas (server-first): 4 hubs, 33 herramientas, directorio, 5 informativas, layout, error, manifest, sitemap, robots + OG por ruta
+app/           páginas (server-first): 4 hubs, 34 herramientas, directorio, 5 informativas, layout, error, manifest, sitemap, robots + OG por ruta
 components/
   common/      header, footer, logo, brand-dots, menu-button, scroll-to-top, clear-all-data, tab-swipe-navigation
   sections/    section-page, section-tabs, section-header, section-swipe-navigation, tool-card, tools-grid
   tool-seo/    tool-page-shell, tool-faq (acordeón), json-ld
-  tools/       33 componentes client de herramientas (+ subcomponentes y `related-tools/` compartido)
+  tools/       34 componentes client de herramientas (+ subcomponentes y `related-tools/` compartido)
   seo/         og-template (plantilla compartida de las imágenes OG)
   ui/          primitivas shadcn (button, count-up, input, slider)
 hooks/         lógica por herramienta + use-count-up, use-haptic-feedback, use-media-query

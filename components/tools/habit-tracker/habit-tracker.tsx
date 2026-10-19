@@ -18,24 +18,26 @@ import {
   X,
 } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
+import {
+  addDays,
+  formatLongDate,
+  formatWeekRange,
+  getWeekDays,
+  localDayKey,
+  parseDayKey,
+  startOfWeek,
+} from "@/lib/calendar"
 import { cn } from "@/lib/utils"
 import { storageGet, storageRemove, storageSet } from "@/lib/storage"
 import { HABIT_ICONS, HabitGlyph } from "./habit-icon"
 import {
   EMPTY_HABIT_STATE,
   HABIT_STORAGE_KEY,
-  addDays,
   countHabitWeek,
   createHabitId,
   currentHabitStreak,
-  formatLongDate,
-  formatWeekRange,
-  getWeekDays,
   isChecked,
-  localDayKey,
   normalizeHabitState,
-  parseDayKey,
-  startOfWeek,
   type Habit,
   type HabitIconId,
   type HabitState,

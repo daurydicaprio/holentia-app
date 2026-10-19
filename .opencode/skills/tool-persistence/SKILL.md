@@ -27,9 +27,11 @@ storageClearAll()              // borra todo con prefijo `holentia:`
 | **E efímero** | Tests de autoevaluación | Sin guardar (o solo último resultado inmediato) | lenguajes-del-amor |
 | **D draft** | Formularios/cálculos | Estado en hook; al cambiar inputs → `storageSet` con debounce ~500 ms + badge «Guardado local ✓» | presupuesto, calorías, corte-tarjeta |
 | **D preferencias** | Configuración de una experiencia (sin historial) | `draftKey(slug)` con solo las opciones; guardado inmediato tras la primera edición; reset limpia y deja la UI en defaults | respiración, rutinas HIIT |
+| **E semanas** | Plan recurrente por semanas (comidas, compras) | `holentia:{slug}:entries:v1` con `{weeks:{lunesISO:{...}}}`; normalizar cada semana, checks por clave y poda de huérfanos | planificador de comidas |
 | **S snapshots** | Listas guardables (simulaciones, entradas) | Array en `simulationsKey`, máx. 3, acciones Guardar/Eliminar | interés-compuesto, préstamo |
 
 - Restauración: `useState` inicial con `storageGet(...)` dentro de `useEffect` de montaje (o lazy con window guard) para evitar hydration mismatch.
+- Primera visita sin datos: al cargar, marca un `skipNextSaveRef` para que el efecto de guardado no cree la clave hasta que el usuario cambie algo (hábitos, HIIT y comidas lo usan).
 - Reset explícito: `storageRemove` + estado inicial; el reset NO debe romper el draft automático.
 
 ## Checklist al añadir persistencia

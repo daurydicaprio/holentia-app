@@ -4,7 +4,7 @@
 > Calculadoras, simuladores y tests que funcionan directamente en el navegador del usuario,
 > sin cuenta, sin registro y sin enviar datos a servidores.
 
-Las 33 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
+Las 34 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
 de cada herramienta, y los resultados son estimaciones educativas, no asesoramiento profesional
 (médico, financiero ni psicológico).
 
@@ -12,7 +12,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 
 - [Mente](https://holentia.com/mente): diario guiado, seguimiento de hábitos, respiración guiada (4-7-8, caja y calma), test de ansiedad GAD-7, calculadora del sueño y test de calidad del sueño.
 - [Relaciones](https://holentia.com/relaciones): test de los 5 lenguajes del amor, test de estilo de apego, 45 preguntas profundas para conversar y diario para parejas.
-- [Cuerpo](https://holentia.com/cuerpo): calculadora de calorías (Mifflin-St Jeor), hidratación (EFSA/NASEM), IMC, proteína diaria (0,8–2,2 g/kg según objetivo), plan de pasos 5-10-20 con objetivo y registro diario, y rutinas HIIT de 10 a 25 min con temporizador guiado y modo bajo impacto.
+- [Cuerpo](https://holentia.com/cuerpo): calculadora de calorías (Mifflin-St Jeor), hidratación (EFSA/NASEM), IMC, proteína diaria (0,8–2,2 g/kg según objetivo), plan de pasos 5-10-20 con objetivo y registro diario, rutinas HIIT de 10 a 25 min con temporizador guiado y modo bajo impacto, y planificador de comidas semanal con lista de compras.
 - [Finanzas](https://holentia.com/finanzas): presupuesto, interés compuesto, préstamo, consumo eléctrico,
   gasto de combustible, corte/vencimiento de tarjeta, interés de tarjeta, perfil de riesgo, glosario financiero,
   tracker de gastos hormiga, calculadora de sueldo neto, calculadora de prestaciones laborales, calculadora de aguinaldo,
@@ -20,7 +20,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 
 ## Directorio
 
-- [Directorio de herramientas](https://holentia.com/herramientas): índice completo de las 33 herramientas por sección, con enlaces directos a cada una.
+- [Directorio de herramientas](https://holentia.com/herramientas): índice completo de las 34 herramientas por sección, con enlaces directos a cada una.
 
 ## Herramientas
 
@@ -55,6 +55,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 - [Diario para parejas](https://holentia.com/diario-parejas): una pregunta diaria para responder juntos, con historial y racha de días seguidos.
 - [Plan de pasos 5-10-20](https://holentia.com/pasos-al-dia): define tu objetivo diario, reparte la caminata en bloques de minutos y mira los beneficios de cada nivel.
 - [Rutinas HIIT](https://holentia.com/rutinas-hiit): genera un circuito de 10 a 25 min según nivel y enfoque, con calentamiento, intervalos guiados, vuelta a la calma y modo bajo impacto.
+- [Planificador de comidas](https://holentia.com/planificador-comidas): organiza desayuno, almuerzo y cena de la semana, guarda tus propias comidas y genera una lista de compras con los ingredientes.
 - [Calculadora de IMC](https://holentia.com/calculadora-imc): peso, estatura y rango saludable al instante, con contexto honesto (músculo, cintura y etapas de la vida).
 - [Calculadora de proteína diaria](https://holentia.com/calculadora-proteina-diaria): gramos de proteína al día según peso, actividad y objetivo (0,8–2,2 g/kg), con reparto por comida y fuentes.
 

@@ -140,10 +140,10 @@ export const sectionsData: Record<string, SectionData> = {
     title: "Energiza tu",
     highlightText: "cuerpo",
     subtitle:
-      "Tu energía empieza con pequeños cambios. Calcula tus calorías, hidratación, IMC y proteína, encuentra tu plan de pasos y entrena con rutinas HIIT de 10 a 25 minutos: movimiento real, sin mitos ni promesas vacías.",
+      "Tu energía empieza con pequeños cambios. Calcula tus calorías, hidratación, IMC y proteína, encuentra tu plan de pasos, entrena con rutinas HIIT y organiza tus comidas: movimiento y nutrición, sin mitos.",
     text: "Energiza tu cuerpo. Accede a rutinas, nutrición y consejos para un estilo de vida activo y un bienestar integral.",
     metaDescription:
-      "Calculadora de calorías, proteína, hidratación, IMC, pasos 5-10-20 y rutinas HIIT. Tus datos se quedan en tu navegador: gratis y sin registro.",
+      "Calculadora de calorías, proteína, hidratación, IMC, pasos 5-10-20, rutinas HIIT y planificador de comidas con lista de compras. Gratis y sin registro.",
     cards: [
       {
         id: "calculadora-calorias",
@@ -203,10 +203,13 @@ export const sectionsData: Record<string, SectionData> = {
       {
         id: "planificador-comidas",
         title: "Planificador de Comidas",
-        description: "Organiza tu nutrición semanal.",
+        description: "Planifica tu semana y tu lista de compras.",
         slug: "planificador-comidas",
-        isAvailable: false,
+        isAvailable: true,
         category: "cuerpo",
+        metaTitle: "Planificador de comidas semanal con lista de compras",
+        metaDescription:
+          "Organiza desayuno, almuerzo y cena de toda la semana con ideas listas o tus propias comidas. La lista de compras se genera sola. Gratis y sin registro.",
       },
       {
         id: "pasos-al-dia",
