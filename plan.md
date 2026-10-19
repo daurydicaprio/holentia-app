@@ -4,9 +4,9 @@
 > Prod `holentia.com → main`. No tocar dominios.
 > Principios: sin DB, sin registro, local-first privado (`holentia:*` en navegador), cero tracking.
 
-## Estado actual (18-Oct-2026) — 31 herramientas (proteína + test de calidad del sueño) en `dev`; proteína de calorías corregida; red de enlaces de cuerpo, favicon H y pase UI/UX móvil completos
+## Estado actual (19-Oct-2026) — 31 herramientas (proteína + test de calidad del sueño) en `dev`; roadmap podado a 3 «Próximamente»; proteína de calorías corregida; red de enlaces de cuerpo, favicon H y pase UI/UX móvil completos
 - [x] Stack: Next 15.5.26 + React 19.3 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
-- [x] Cobertura: **31 herramientas** activas + 17 tarjetas «Próximamente» intactas en `lib/data.ts`; sitio de **42 URLs** (home + 4 hubs + directorio + 31 herramientas + 5 informativas)
+- [x] Cobertura: **31 herramientas** activas + **3 tarjetas «Próximamente»** (Seguimiento de Hábitos, Rutinas HIIT, Planificador de Comidas) en `lib/data.ts`; sitio de **42 URLs** (home + 4 hubs + directorio + 31 herramientas + 5 informativas)
 - [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite), OG por ruta (**42 archivos**), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 42 URLs con lastmod fijo, llms.txt 31 tools; auditorías registradas en la skill `seo-geo-audit`
 - [x] UI/UX móvil: pase completo por herramientas (cuerpo, mente, relaciones, finanzas ×3) y superficies globales (chrome, hubs, informativas, shell) — contraste AA con tiers por sección, tap targets ≥40/44px, inputs ≥16px sin zoom iOS, recetas en `design.md`
 - [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` se sincroniza con `dev` al cierre de cada fase (sync previa: Fase BE)**
@@ -502,6 +502,16 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase BH — Poda del roadmap: solo 3 próximas con demanda real (19-Oct-2026) — HECHA
+
+- [x] **Análisis de las 17 tarjetas**: se conservan las 3 con mejor relación entre demanda, intención de uso, encaje local-first y recurrencia: **Seguimiento de Hábitos** (visita diaria y retención), **Planificador de Comidas** (demanda amplia; enlaza nutrición, compras y presupuesto) y **Rutinas HIIT** (entrenamiento corto, formato generador/temporizador sin depender de vídeo).
+- [x] **Descarte de 14 tarjetas** en `lib/data.ts`: Meditación Mindfulness, Visualización Positiva, Ejercicios de Gratitud, Mapas Mentales, Afirmaciones Diarias, Guía de comunicación asertiva, Resolución de conflictos, Establecer límites saludables, Ejercicios de empatía, Yoga para Principiantes, Recetario Saludable, Retos Fitness, Guía de Estiramientos y Comparador Préstamos. Motivos: solapamiento con diario/respiración, formato de artículo sin herramienta, competencia alta con contenido pesado (yoga/recetario) o mantenimiento de tasas bancarias ajeno al modelo local-first (comparador).
+- [x] **UI**: los hubs de mente y cuerpo conservan el toggle «Ver todas» con 1 y 2 tarjetas respectivamente; relaciones y finanzas ya no muestran tarjetas ni botón de próximas. Sin rutas nuevas, sin cambios de sitemap ni de metadata.
+- [x] **Docs**: estado actual, esta fase y registro en `seo-geo-audit`.
+- Verificado: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` **42/42 rutas PASS** · 31 herramientas / 42 URLs / 42 OG / **3 «Próximamente»**.
+
+---
+
 ## Backlog propuesto (17-Oct-2026, pendiente de decisión)
 
 Sin fase asignada; se convierte en fase al aprobar el frente. Candidatos analizados tras cerrar el pase UI/UX:
@@ -512,7 +522,7 @@ Sin fase asignada; se convierte en fase al aprobar el frente. Candidatos analiza
 4. ~~Directorio `/herramientas`~~ **HECHO (Fase AZ)**: índice server-rendered de las 29 por sección (chips ancla) + enlace en el footer; como mejora opcional queda el filtro interactivo y un enlace desde el chrome de home.
 5. **«Mis datos»**: exportar/importar JSON de las claves `holentia:*` (respaldo local, sin nube) + enlace en `/ayuda`.
 6. **PWA offline**: service worker para que las herramientas funcionen sin conexión (manifest y iconos ya existen).
-7. **Nuevas herramientas** (a especificar con el dueño; keywords RD): ~~sueldo neto (TSS + ISR)~~ **HECHA (Fase AY)**; ~~prestaciones laborales/indemnización~~ **HECHA (Fase BA)**; ~~proteína diaria~~ **HECHA (Fase BB)**; ~~test de calidad del sueño~~ **HECHA (Fase BC)**; pendientes por decidir — con la receta `create-tool`.
+7. **Nuevas herramientas** (a especificar con el dueño; keywords RD): ~~sueldo neto (TSS + ISR)~~ **HECHA (Fase AY)**; ~~prestaciones laborales/indemnización~~ **HECHA (Fase BA)**; ~~proteína diaria~~ **HECHA (Fase BB)**; ~~test de calidad del sueño~~ **HECHA (Fase BC)**; **roadmap podado a 3 (Fase BH)**: Seguimiento de Hábitos → Rutinas HIIT → Planificador de Comidas, con la receta `create-tool`.
 8. **Infra de calidad**: CI (GitHub Actions: `tsc` + `lint` + `build` en push a `dev`) y Vitest para los parsers/formatters (hoy sus casos se prueban ad hoc).
 
 ---
