@@ -491,6 +491,15 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 - [x] **Docs**: `design.md` §3.9/§4 (proteína, hidratación, combustible, corte), `section-ui` §3e y `create-tool`.
 - Verificado: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` **42/42 rutas PASS** · 31 herramientas / 42 URLs / 42 OG / 17 «Próximamente» · 43 enlaces internos únicos, 0 rotos.
 
+## Fase BG — Auditoría de accesibilidad real: axe + teclado/foco (18-Oct-2026) — HECHA
+
+- [x] **Barrido axe-core 4.11** con Chromium/Playwright sobre las 42 rutas × claro/oscuro × 1440/390 px. Primer pase: 7 reglas (`color-contrast`, `button-name`, `heading-order`, `label`, `aria-input-field-name`, `empty-table-header`, `select-name`) y 101 combinaciones con avisos; al finalizar las animaciones `fadeIn` desaparecieron los falsos positivos de tarjetas a medio aparecer. **Resultado final: 168/168 combinaciones sin violaciones.**
+- [x] **Estados interactivos**: segunda pasada con resultado/datos en calculadoras (calorías, hidratación, IMC, proteína, pasos, ahorros en ambos modos, compras, aguinaldo, sueldo neto, ITBIS, certificado, tarjeta, préstamo, combustible, corte, compuesto, presupuesto), tests completados (ansiedad, calidad de sueño, lenguajes, apego, perfil de riesgo), diarios con entrada, tracker y glosario filtrado: **0 violaciones**.
+- [x] **Correcciones**: botón «Volver» móvil con `aria-label` (crítico `button-name` en todas las herramientas); header móvil de cuerpo a `-darkest` + logo negro (blanco sobre el velo `#eb7433` = 2.97:1); enlaces mente de 12–14px a `text-mente-dark` (4.37→8.19) en tabs, footer, «Ver todas», directorio y botones del shell; `dark:text-gray-500` de cookies → `gray-400` (3.93→7.49); `heading-order` (h2 oculto en hubs, h2 en el formulario de préstamo, grupos de combustible como `<p>`); labels asociados en calorías/corte/interés tarjeta/electricidad y `select` de actividad; celdas del presupuesto con `aria-label` por fila y cabecera de acciones `sr-only`; sliders de préstamo con `thumbAriaLabel`; sufijos kg/cm en `dark:text-gray-300` (4.06→7.00); pérdidas en oscuro a `red-300` (4.48→6.53).
+- [x] **Teclado/foco**: skip link enfoca `#contenido`; 30 tab stops por flujo en home, hubs, calculadoras, presupuesto y diarios, todos con anillo visible; menú abre/cierra con Enter/Escape devolviendo el foco al botón; back móvil con nombre accesible; 0 overflow horizontal a 390 px.
+- [x] **Docs**: `design.md` §3.3/§3.4/§4/§7, `section-ui` §3c/§6/§7/§8, `architecture.md` §8 y registro en `seo-geo-audit`.
+- Verificado: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` **42/42 rutas PASS** · axe **168/168 + estados, 0 violaciones** · 31 herramientas / 42 URLs / 42 OG / 17 «Próximamente».
+
 ---
 
 ## Backlog propuesto (17-Oct-2026, pendiente de decisión)
@@ -498,7 +507,7 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 Sin fase asignada; se convierte en fase al aprobar el frente. Candidatos analizados tras cerrar el pase UI/UX:
 
 1. ~~Auditoría integral de cierre~~ **HECHA (Fase AW)**: `pnpm audit:seo` valida las 37 rutas en un paso (SEO/GEO + estructura a11y + runtime OG); barrido 37/37 PASS.
-2. **Accesibilidad más allá del color**: skip link, landmarks y `<main>` único **ya hechos (Fase AW)**; pendiente el barrido axe/DOM en navegador real (este entorno no trae Chrome: se hará en dispositivo) y la revisión de foco/orden de tabulación.
+2. ~~Accesibilidad más allá del color~~ **HECHA (Fase BG)**: barrido axe-core 4.11 en navegador real (42 rutas × temas × viewports, 0 violaciones) + estados interactivos + revisión de foco/orden de tabulación; hallazgos corregidos y documentados.
 3. ~~Rendimiento móvil~~ **HECHO (Fase AX)**: lazy-load de Chart.js y de paneles pesados (compuesto 251→139 kB, riesgo 220→151 kB, préstamo 186→145 kB First Load) + framer-motion fuera del camino crítico. Pendiente de campo: CWV reales (Lighthouse/PSI) sobre `dev.holentia.com` tras el deploy.
 4. ~~Directorio `/herramientas`~~ **HECHO (Fase AZ)**: índice server-rendered de las 29 por sección (chips ancla) + enlace en el footer; como mejora opcional queda el filtro interactivo y un enlace desde el chrome de home.
 5. **«Mis datos»**: exportar/importar JSON de las claves `holentia:*` (respaldo local, sin nube) + enlace en `/ayuda`.

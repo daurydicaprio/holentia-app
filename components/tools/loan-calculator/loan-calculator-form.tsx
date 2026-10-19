@@ -223,7 +223,7 @@ export function LoanCalculatorForm({
       className="space-y-6 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700"
       data-interactive="true"
     >
-      <h3 className="text-xl font-semibold text-finanzas dark:text-finanzas-light mb-4">Datos del préstamo</h3>
+      <h2 className="text-xl font-semibold text-finanzas-dark dark:text-finanzas-light mb-4">Datos del préstamo</h2>
 
       <div className="space-y-5">
         <div className="space-y-3">
@@ -253,6 +253,7 @@ export function LoanCalculatorForm({
               step={1000}
               value={[loanAmount]}
               onValueChange={handleLoanAmountSliderChange}
+              thumbAriaLabel="Monto del préstamo"
               className="py-2 loan-calculator-slider"
               data-interactive="true"
             />
@@ -286,6 +287,7 @@ export function LoanCalculatorForm({
               step={0.25}
               value={[interestRate]}
               onValueChange={handleInterestRateSliderChange}
+              thumbAriaLabel="Tasa de interés anual"
               className="py-2 loan-calculator-slider"
               data-interactive="true"
             />
@@ -319,6 +321,7 @@ export function LoanCalculatorForm({
               step={1}
               value={[loanTerm]}
               onValueChange={handleLoanTermSliderChange}
+              thumbAriaLabel="Plazo en meses"
               className="py-2 loan-calculator-slider"
               data-interactive="true"
             />

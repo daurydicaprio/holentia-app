@@ -90,5 +90,6 @@ types/         index.ts (CardData, SectionType, AmortizationRow, …)
 - Build estricto: sin `ignoreBuildErrors`/`ignoreDuringBuilds`.
 - Smoke antes de cada push con rutas nuevas: HTML prerenderado (H1 ×1, canonical, 0 `noindex`, JSON-LD) + runtime de `opengraph-image` (`200 image/png`).
 - Auditoría automatizada: `pnpm audit:seo` (`scripts/audit-seo.mjs`) valida el sitemap completo — SEO/GEO, estructura a11y y runtime OG — en un paso (detalle: skill `seo-geo-audit` §2.0).
+- **Accesibilidad real (Fase BG, 18-Oct-2026)**: barrido `axe-core 4.11` en Chromium (Playwright) sobre las 42 rutas × claro/oscuro × 1440/390 px, finalizando animaciones, más estados de resultado (calculadoras, tests, diarios, presupuesto, glosario): **168 combinaciones + estados, 0 violaciones**. Complemento manual de teclado/foco: skip link, orden de tabulación con anillo visible, menú Enter/Escape y botón «Volver» móvil con nombre accesible. Reglas y hallazgos: `design.md` §7 y `plan.md` Fase BG; el registro de auditorías vive en la skill `seo-geo-audit`.
 - Presupuesto de rendimiento: herramienta ≤ ~150 kB First Load y Chart.js siempre en chunks diferidos (`next/dynamic`); medir con la tabla de `pnpm build` (design.md §3.8).
 - Commits atómicos por fase en `dev`; `main` solo cuando se pide deploy a producción.

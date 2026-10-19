@@ -15,7 +15,7 @@ interface ToolsGridProps {
 // Mapa estático para que Tailwind genere las clases (texto + foco canónico por sección)
 const sectionButtonClasses: Record<SectionType, string> = {
   mente:
-    "text-mente hover:text-mente-darkest dark:text-mente-light dark:hover:text-mente-lighter focus-visible:ring-mente dark:focus-visible:ring-mente-light",
+    "text-mente-dark hover:text-mente-darkest dark:text-mente-light dark:hover:text-mente-lighter focus-visible:ring-mente dark:focus-visible:ring-mente-light",
   relaciones:
     "text-relaciones hover:text-relaciones-darkest dark:text-relaciones-light dark:hover:text-relaciones-lighter focus-visible:ring-relaciones dark:focus-visible:ring-relaciones-light",
   cuerpo:

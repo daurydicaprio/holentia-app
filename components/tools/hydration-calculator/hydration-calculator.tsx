@@ -183,7 +183,7 @@ export function HydrationCalculator() {
               />
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-sm font-semibold text-gray-500 dark:text-gray-400"
+                className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-sm font-semibold text-gray-500 dark:text-gray-300"
               >
                 kg
               </span>

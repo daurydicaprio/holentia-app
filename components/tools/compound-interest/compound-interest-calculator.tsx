@@ -142,7 +142,7 @@ export function CompoundInterestCalculator() {
                     <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
                       Si no inviertes tu dinero:
                     </div>
-                    <div className="text-lg font-bold text-red-700 dark:text-red-400">
+                    <div className="text-lg font-bold text-red-700 dark:text-red-300">
                       {formatCurrency(nonInvestedValue)}
                     </div>
                     <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">

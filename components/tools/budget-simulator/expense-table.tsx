@@ -106,7 +106,9 @@ export function ExpenseTable({
               <th
                 className="text-left py-2 px-3 text-xs font-medium text-gray-600 dark:text-gray-300"
                 style={{ width: "5%" }}
-              ></th>
+              >
+                <span className="sr-only">Acciones</span>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -120,6 +122,7 @@ export function ExpenseTable({
                   <input
                     type="text"
                     inputMode="decimal"
+                    aria-label={`Objetivo de ${item.concept}`}
                     value={drafts[`t-${item.id}`] ?? String(item.target)}
                     onChange={(e) =>
                       handleDraftChange(`t-${item.id}`, e.target.value, (value) => onUpdateTarget(item.id, value))
@@ -142,6 +145,7 @@ export function ExpenseTable({
                   <input
                     type="text"
                     inputMode="decimal"
+                    aria-label={`Consumido de ${item.concept}`}
                     value={drafts[`a-${item.id}`] ?? String(item.amount)}
                     onChange={(e) =>
                       handleDraftChange(`a-${item.id}`, e.target.value, (value) => onUpdateAmount(item.id, value))
@@ -175,7 +179,7 @@ export function ExpenseTable({
                   <button
                     onClick={() => onRemoveExpense(item.id)}
                     className="flex h-10 w-10 items-center justify-center rounded-md border border-[#388e3c]/20 bg-[#388e3c]/10 text-finanzas-dark transition-[colors,transform] duration-150 hover:bg-[#388e3c]/20 hover:text-finanzas-darkest active:scale-[0.97] dark:border-[#388e3c]/30 dark:bg-[#388e3c]/20 dark:text-finanzas-lighter dark:hover:bg-[#388e3c]/30"
-                    aria-label="Eliminar"
+                    aria-label={`Eliminar ${item.concept}`}
                     data-interactive="true"
                   >
                     <X className="h-4 w-4" aria-hidden="true" />

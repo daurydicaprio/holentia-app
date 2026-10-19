@@ -27,7 +27,7 @@ const sectionUnderlineClass: Record<string, string> = {
 
 const sectionButtonClass: Record<string, string> = {
   mente:
-    "border-mente text-mente hover:bg-mente-dark hover:text-white dark:border-mente-light dark:text-mente-light dark:hover:bg-mente-light dark:hover:text-black",
+    "border-mente text-mente-dark hover:bg-mente-dark hover:text-white dark:border-mente-light dark:text-mente-light dark:hover:bg-mente-light dark:hover:text-black",
   relaciones:
     "border-relaciones text-relaciones hover:bg-relaciones-dark hover:text-white dark:border-relaciones-light dark:text-relaciones-light dark:hover:bg-relaciones-light dark:hover:text-black",
   cuerpo:

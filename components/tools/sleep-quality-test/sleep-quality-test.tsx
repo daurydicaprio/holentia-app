@@ -601,7 +601,7 @@ export function SleepQualityTest() {
               <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 Pregunta {currentQuestion + 1} de {QUESTIONS.length}
               </span>
-              <span className="text-sm font-medium text-mente dark:text-mente-light">{pct}%</span>
+              <span className="text-sm font-medium text-mente-dark dark:text-mente-light">{pct}%</span>
             </div>
             <div className="h-2 w-full rounded-full bg-gray-200 dark:bg-gray-700">
               <div

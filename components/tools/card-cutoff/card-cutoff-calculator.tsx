@@ -458,8 +458,11 @@ export function CardCutoffCalculator() {
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div className="col-span-2 sm:col-span-1">
-              <label className="block text-sm font-medium mb-2">Nombre</label>
+              <label htmlFor="cutoff-card-name" className="block text-sm font-medium mb-2">
+                Nombre
+              </label>
               <input
+                id="cutoff-card-name"
                 type="text"
                 value={cardName}
                 onChange={(e) => setCardName(e.target.value)}
@@ -470,8 +473,11 @@ export function CardCutoffCalculator() {
               />
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label className="block text-sm font-medium mb-2">Terminación (opcional)</label>
+              <label htmlFor="cutoff-card-last4" className="block text-sm font-medium mb-2">
+                Terminación (opcional)
+              </label>
               <input
+                id="cutoff-card-last4"
                 type="text"
                 value={cardLast4}
                 onChange={(e) => setCardLast4(e.target.value.replace(/\D/g, "").slice(0, 4))}
@@ -483,8 +489,11 @@ export function CardCutoffCalculator() {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium mb-2">Día de corte (1-31)</label>
+            <label htmlFor="cutoff-day" className="block text-sm font-medium mb-2">
+              Día de corte (1-31)
+            </label>
             <input
+              id="cutoff-day"
               type="text"
               inputMode="numeric"
               value={cutoffDay}
@@ -495,8 +504,11 @@ export function CardCutoffCalculator() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-2">Día de vencimiento (1-31)</label>
+            <label htmlFor="due-day" className="block text-sm font-medium mb-2">
+              Día de vencimiento (1-31)
+            </label>
             <input
+              id="due-day"
               type="text"
               inputMode="numeric"
               value={dueDay}
@@ -507,8 +519,11 @@ export function CardCutoffCalculator() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-2">¿Cuándo compras?</label>
+            <label htmlFor="purchase-date" className="block text-sm font-medium mb-2">
+              ¿Cuándo compras?
+            </label>
             <input
+              id="purchase-date"
               type="date"
               value={purchaseISO}
               onChange={(e) => setPurchaseISO(e.target.value)}

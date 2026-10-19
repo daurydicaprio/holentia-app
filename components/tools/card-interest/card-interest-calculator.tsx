@@ -185,8 +185,11 @@ export function CardInterestCalculator() {
         <div className="space-y-4">
           <div className="grid grid-cols-3 gap-3">
             <div className="col-span-2">
-              <label className="block text-sm font-medium mb-2">Nombre de la tarjeta</label>
+              <label htmlFor="card-interest-name" className="block text-sm font-medium mb-2">
+                Nombre de la tarjeta
+              </label>
               <input
+                id="card-interest-name"
                 type="text"
                 value={cardName}
                 onChange={(e) => setCardName(e.target.value)}
@@ -196,8 +199,11 @@ export function CardInterestCalculator() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Terminación</label>
+              <label htmlFor="card-interest-last4" className="block text-sm font-medium mb-2">
+                Terminación
+              </label>
               <input
+                id="card-interest-last4"
                 type="text"
                 inputMode="numeric"
                 value={cardLast4}
@@ -211,8 +217,11 @@ export function CardInterestCalculator() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Saldo de la tarjeta</label>
+            <label htmlFor="card-interest-balance" className="block text-sm font-medium mb-2">
+              Saldo de la tarjeta
+            </label>
             <input
+              id="card-interest-balance"
               type="text"
               inputMode="decimal"
               value={balanceInput}
@@ -224,8 +233,11 @@ export function CardInterestCalculator() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Tasa de interés anual (%)</label>
+            <label htmlFor="card-interest-rate" className="block text-sm font-medium mb-2">
+              Tasa de interés anual (%)
+            </label>
             <input
+              id="card-interest-rate"
               type="text"
               inputMode="decimal"
               value={rateInput}
@@ -238,8 +250,11 @@ export function CardInterestCalculator() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Pago mensual que piensas dar</label>
+            <label htmlFor="card-interest-payment" className="block text-sm font-medium mb-2">
+              Pago mensual que piensas dar
+            </label>
             <input
+              id="card-interest-payment"
               type="text"
               inputMode="decimal"
               value={paymentInput}

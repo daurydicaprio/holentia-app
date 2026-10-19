@@ -9,7 +9,7 @@ interface FooterProps {
 // Enlace del crédito por sección (tokens, sin hex). Sin sección: neutro de la base.
 // Claro: cuerpo arranca en `-darkest` y finanzas en `-dark` (la base no llega a 4.5:1 a 12px).
 const linkClassBySection: Record<string, string> = {
-  mente: "text-mente hover:text-mente-dark dark:text-mente-light dark:hover:text-mente-lighter",
+  mente: "text-mente-dark hover:text-mente-darkest dark:text-mente-light dark:hover:text-mente-lighter",
   relaciones:
     "text-relaciones hover:text-relaciones-dark dark:text-relaciones-light dark:hover:text-relaciones-lighter",
   cuerpo: "text-cuerpo-darkest dark:text-cuerpo-light dark:hover:text-cuerpo-lighter",

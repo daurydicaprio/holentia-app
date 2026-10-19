@@ -196,8 +196,11 @@ export function CalorieCalculator() {
           <h2 className="text-xl font-bold mb-4">Tus datos</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="block text-sm font-medium mb-2">Peso (kg)</label>
+              <label htmlFor="calorie-weight" className="block text-sm font-medium mb-2">
+                Peso (kg)
+              </label>
               <input
+                id="calorie-weight"
                 type="text"
                 inputMode="decimal"
                 autoComplete="off"
@@ -209,8 +212,11 @@ export function CalorieCalculator() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Altura (cm)</label>
+              <label htmlFor="calorie-height" className="block text-sm font-medium mb-2">
+                Altura (cm)
+              </label>
               <input
+                id="calorie-height"
                 type="text"
                 inputMode="decimal"
                 autoComplete="off"
@@ -222,8 +228,11 @@ export function CalorieCalculator() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Edad</label>
+              <label htmlFor="calorie-age" className="block text-sm font-medium mb-2">
+                Edad
+              </label>
               <input
+                id="calorie-age"
                 type="text"
                 inputMode="numeric"
                 autoComplete="off"
@@ -235,8 +244,10 @@ export function CalorieCalculator() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Sexo biológico</label>
-              <div className="flex gap-2">
+              <span id="calorie-sex-label" className="block text-sm font-medium mb-2">
+                Sexo biológico
+              </span>
+              <div className="flex gap-2" role="group" aria-labelledby="calorie-sex-label">
                 {[
                   { value: "male", label: "Hombre" },
                   { value: "female", label: "Mujer" },
@@ -260,8 +271,11 @@ export function CalorieCalculator() {
           </div>
 
           <div className="mt-4">
-            <label className="block text-sm font-medium mb-2">Actividad física</label>
+            <label htmlFor="calorie-activity" className="block text-sm font-medium mb-2">
+              Actividad física
+            </label>
             <select
+              id="calorie-activity"
               value={activity}
               onChange={(e) => setActivity(e.target.value)}
               className={selectClass}

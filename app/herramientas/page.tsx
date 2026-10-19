@@ -22,7 +22,7 @@ const SECTION_ORDER: SectionType[] = ["mente", "relaciones", "cuerpo", "finanzas
 
 // Mapa estático por sección (texto + borde del chip ancla y del enlace «Ver sección»)
 const sectionLinkClasses: Record<SectionType, string> = {
-  mente: "text-mente hover:text-mente-darkest dark:text-mente-light dark:hover:text-mente-lighter",
+  mente: "text-mente-dark hover:text-mente-darkest dark:text-mente-light dark:hover:text-mente-lighter",
   relaciones:
     "text-relaciones hover:text-relaciones-darkest dark:text-relaciones-light dark:hover:text-relaciones-lighter",
   cuerpo: "text-cuerpo-darkest dark:text-cuerpo-light dark:hover:text-cuerpo-lighter",
@@ -31,7 +31,7 @@ const sectionLinkClasses: Record<SectionType, string> = {
 }
 
 const chipClasses: Record<SectionType, string> = {
-  mente: "border-gray-300 text-mente hover:border-mente dark:border-gray-600 dark:text-mente-light dark:hover:border-mente-light",
+  mente: "border-gray-300 text-mente-dark hover:border-mente dark:border-gray-600 dark:text-mente-light dark:hover:border-mente-light",
   relaciones:
     "border-gray-300 text-relaciones hover:border-relaciones dark:border-gray-600 dark:text-relaciones-light dark:hover:border-relaciones-light",
   cuerpo:

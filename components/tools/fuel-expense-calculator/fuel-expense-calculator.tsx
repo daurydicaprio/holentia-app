@@ -366,8 +366,10 @@ export function FuelExpenseCalculator() {
 
           {/* Vehículo */}
           <div>
-            <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tipo de vehículo</h3>
-            <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Tipo de vehículo">
+            <p id="vehicle-type-label" className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Tipo de vehículo
+            </p>
+            <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-labelledby="vehicle-type-label">
               {VEHICLES.map((v) => {
                 const selected = vehicle === v.id
                 const Icon = v.icon
@@ -503,10 +505,10 @@ export function FuelExpenseCalculator() {
         {/* Gasto en perspectiva: cierra la altura del formulario */}
         {result && (
           <div className="rounded-xl bg-white p-5 shadow-lg dark:bg-gray-800">
-            <h3 className="flex items-center gap-2 text-sm font-semibold">
-              <TrendingDown className="h-4 w-4 text-finanzas dark:text-finanzas-light" />
+            <p className="flex items-center gap-2 text-sm font-semibold">
+              <TrendingDown className="h-4 w-4 text-finanzas dark:text-finanzas-light" aria-hidden="true" />
               Tu gasto en perspectiva
-            </h3>
+            </p>
             <dl className="mt-3 space-y-2 text-sm">
               <div className="flex items-center justify-between gap-3">
                 <dt className="text-gray-600 dark:text-gray-400">Costo por viaje</dt>

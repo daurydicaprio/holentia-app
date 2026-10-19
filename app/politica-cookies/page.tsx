@@ -250,7 +250,7 @@ export default function PoliticaCookiesPage() {
                           {item.key}
                         </code>
                         <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">{item.desc}</p>
-                        <span className="text-xs text-gray-500 dark:text-gray-500">Persistente (localStorage)</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">Persistente (localStorage)</span>
                       </div>
                     </div>
                   ))}

@@ -137,8 +137,11 @@ export function ElectricityCalculator() {
           data-interactive="true"
         />
 
-        <label className="block text-sm font-medium mt-4 mb-2">O escribe el número exacto</label>
+        <label htmlFor="electricity-kwh-exact" className="block text-sm font-medium mt-4 mb-2">
+          O escribe el número exacto
+        </label>
         <input
+          id="electricity-kwh-exact"
           type="text"
           inputMode="numeric"
           value={kwhInput}

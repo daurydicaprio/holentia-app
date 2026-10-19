@@ -10,7 +10,7 @@ const TABS = [
     href: "/mente",
     label: "Mente",
     section: "mente",
-    activeClass: "text-mente dark:text-mente-light",
+    activeClass: "text-mente-dark dark:text-mente-light",
     hoverClass: "hover:text-mente-darkest dark:hover:text-mente-light",
     focusClass: "focus-visible:ring-mente dark:focus-visible:ring-mente-light",
   },

@@ -40,6 +40,8 @@ export default function SectionPage({ section }: SectionPageProps) {
 
         <SectionHeader section={sectionData} />
 
+        {/* H2 de transición para que las tarjetas (h3) no salten desde el h1 */}
+        <h2 className="sr-only">Herramientas de {sectionData.highlightText}</h2>
         <ToolsGrid cards={sectionData.cards} section={section} />
       </div>
 

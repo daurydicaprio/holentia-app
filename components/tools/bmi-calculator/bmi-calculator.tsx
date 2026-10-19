@@ -268,7 +268,7 @@ export function BmiCalculator() {
                   data-interactive="true"
                   className={`${inputClass} pr-11`}
                 />
-                <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-sm text-gray-500 dark:text-gray-400">
+                <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-sm text-gray-500 dark:text-gray-300">
                   cm
                 </span>
               </div>

@@ -55,13 +55,14 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
     isToolPage = true
   }
 
-  // Fondo del header móvil de herramienta: sólido con el tono `-active-dark` de la sección.
-  // El rgba al 70% anterior no alcanzaba AA en modo claro (cuerpo = blanco sobre ámbar ≈ 1.9:1);
-  // los `-active-dark` dan ≥4.5:1 con texto blanco en ambos temas. Fallback: gray-900 de marca.
+  // Fondo del header móvil de herramienta: sólido con el tono más oscuro de la sección.
+  // Cuerpo necesita `-darkest`: el logo lleva un velo blanco/20 y blanco sobre #e65100
+  // se queda en 2.97:1. Con #bf360c el icono blanco supera 3:1 y el texto del logo
+  // usa negro para pasar AA. Fallback: gray-900 de marca.
   const headerBgBySection: Record<string, string> = {
     mente: "var(--color-mente-active-dark)",
     relaciones: "var(--color-relaciones-active-dark)",
-    cuerpo: "var(--color-cuerpo-active-dark)",
+    cuerpo: "var(--color-cuerpo-active-darkest)",
     finanzas: "var(--color-finanzas-active-dark)",
   }
   const headerBgColor = headerBgBySection[toolSection ?? ""] ?? "rgb(17, 24, 39)"
@@ -97,9 +98,10 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
             variant="ghost"
             size="icon"
             onClick={handleBackClick}
+            aria-label="Volver"
             className="h-11 w-11 p-0 flex items-center justify-center text-white hover:bg-white/20 active:bg-white/30 transition-colors"
           >
-            <ChevronLeft className="h-5 w-5" />
+            <ChevronLeft className="h-5 w-5" aria-hidden="true" />
           </Button>
 
           {/* Logo adaptado con recuadro y efectos */}
@@ -108,7 +110,9 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
             className="flex items-center justify-center rounded-md bg-white/20 px-3 py-2 transition-colors duration-200 hover:bg-white/30 active:bg-white/40"
             onClick={() => triggerHapticFeedback("light")}
           >
-            <span className="font-bold text-lg text-white">HOLENTIA</span>
+            <span className={`font-bold text-lg ${toolSection === "cuerpo" ? "text-black" : "text-white"}`}>
+              HOLENTIA
+            </span>
           </Link>
 
           {/* Botón menú con z-index elevado */}
