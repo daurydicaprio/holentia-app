@@ -11,7 +11,7 @@
 - [x] UI/UX móvil: pase completo por herramientas (cuerpo, mente, relaciones, finanzas ×3) y superficies globales (chrome, hubs, informativas, shell) — contraste AA con tiers por sección, tap targets ≥40/44px, inputs ≥16px sin zoom iOS, recetas en `design.md`
 - [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` se sincroniza con `dev` al cierre de cada fase (sync previa: Fase BE)**
 - [x] `tsc 0 errores + next build OK + pnpm lint 0` en estricto
-- [ ] **Pendiente**: aprobación explícita del usuario para sincronizar `dev` → `main` (prod). Roadmap de herramientas completado; no tocar `main` antes.
+- [x] **Sync a `main` aprobada** por el usuario (19-Oct-2026): `dev` → `main` por fast-forward con la Fase BK (planificador de comidas). Producción con **34 herramientas activas y 0 «Próximamente»**; roadmap de herramientas completado. Los cambios siguientes vuelven a requerir aprobación explícita antes de tocar `main`.
 
 ---
 
