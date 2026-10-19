@@ -9,6 +9,7 @@
 - [x] Cobertura: **34 herramientas** activas + **0 tarjetas «Próximamente»** en `lib/data.ts`; sitio de **45 URLs** (home + 4 hubs + directorio + 34 herramientas + 5 informativas)
 - [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite), OG por ruta (**45 archivos**), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 45 URLs con lastmod fijo, llms.txt 34 tools; auditorías registradas en la skill `seo-geo-audit`
 - [x] UI/UX móvil: pase completo por herramientas (cuerpo, mente, relaciones, finanzas ×3) y superficies globales (chrome, hubs, informativas, shell) — contraste AA con tiers por sección, tap targets ≥40/44px, inputs ≥16px sin zoom iOS, recetas en `design.md`
+- [x] Rendimiento de campo (Fase BL, 19-Oct-2026): cabecera y héroe del planificador en SSR, variantes responsive por CSS, CLS **0**, LCP móvil **2.1 s**, Lighthouse **87-88/100** y axe **12/12**
 - [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` se sincroniza con `dev` al cierre de cada fase (sync previa: Fase BE)**
 - [x] `tsc 0 errores + next build OK + pnpm lint 0` en estricto
 - [x] **Sync a `main` aprobada** por el usuario (19-Oct-2026): `dev` → `main` por fast-forward con la Fase BK (planificador de comidas). Producción con **34 herramientas activas y 0 «Próximamente»**; roadmap de herramientas completado. Los cambios siguientes vuelven a requerir aprobación explícita antes de tocar `main`.
@@ -544,6 +545,16 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 - [x] **QA**: flujo funcional (idea, comida propia, edición, checks, recarga, semanas, vaciado, relleno), 0 overflow a 390 px, teclado (Escape, clic en fondo, foco restaurado) y axe-core **12/12 combinaciones sin violaciones** (idle/plan/editor × claro/oscuro × 1440/390).
 - [x] **Docs**: `README`, `architecture`, `design.md`, `section-ui`, `tool-persistence`, `seo-geo`, `seo-geo-audit` y esta fase.
 - Verificado: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` **45/45 rutas PASS** · 34 herramientas / 45 URLs / 45 OG / **0 «Próximamente»**.
+
+## Fase BL — Rendimiento de campo y a11y fina del planificador (19-Oct-2026) — HECHA
+
+- [x] **Auditoría real post-deploy**: Lighthouse 13.5 sobre `holentia.com/planificador-comidas` (Chrome headless de Playwright vía CDP). Baseline: móvil **79** (FCP 0.9 s, LCP 2.5 s, TBT 750 ms, CLS 0), desktop **98** con **CLS 0.093**; `label-content-name-mismatch` en 21 celdas; a11y/BP/SEO 100.
+- [x] **Nombres accesibles**: las celdas del planner pasan de `aria-label` (omitía el texto visible «Rápido · 4 ingredientes») a prefijo `sr-only` + contenido visible, de modo que el nombre incluye todo lo que se ve. Lighthouse: **21 → 0 nodos** con fallo.
+- [x] **CLS del chrome**: `UnifiedHeader` deja de devolver `null` hasta montar y server-renderiza las dos variantes (`md:hidden` móvil / `hidden md:block` desktop). Cabecera visible desde el primer paint, sin insertar 144 px al hidratar: **CLS 0.093 → 0** y desktop **100**.
+- [x] **LCP del héroe**: el héroe del planificador se renderiza en SSR (fallback «Semana actual» y cifras a 0); solo la UI que depende de localStorage/fecha espera al montaje, con skeleton debajo. Element render delay **852 → 412 ms**; LCP móvil **2.5 → 2.1 s** (mediana local); TBT ~750 → ~460 ms.
+- [x] **QA**: `tsc 0`, `lint 0`, build OK; `pnpm audit:seo` **45/45**; axe-core **12/12** (idle/plan/editor × claro/oscuro × 1440/390); flujo funcional completo; teclado (Escape/backdrop/foco restaurado); 0 overflow; capturas claro/oscuro 390/1440; cabecera SSR verificada también en `calculadora-imc`.
+- [x] **Docs**: `design.md` §3.8/§4/§4d, skill `section-ui` y esta fase.
+- Verificado: Lighthouse local móvil **87-88 de mediana** (rango 76-88 por varianza del entorno) y desktop **100**, con a11y/BP/SEO 100. La confirmación de campo (CrUX) queda pendiente del sync a producción.
 
 ---
 

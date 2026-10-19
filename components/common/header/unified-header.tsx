@@ -1,6 +1,5 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { ChevronLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -18,20 +17,6 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
   const router = useRouter()
   const pathname = usePathname()
   const { triggerHapticFeedback } = useHapticFeedback()
-  const [mounted, setMounted] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-    checkMobile()
-    window.addEventListener("resize", checkMobile)
-    return () => {
-      window.removeEventListener("resize", checkMobile)
-    }
-  }, [])
 
   // Verificar si estamos en una página de herramienta
   const pathParts = pathname ? pathname.split("/").filter(Boolean) : []
@@ -80,13 +65,15 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
     router.back()
   }
 
-  if (!mounted) return null
+  if (!isToolPage) return null
 
-  // Header compacto para páginas de herramientas en móvil
-  if (isMobile && isToolPage) {
-    return (
+  // Ambas variantes se renderizan en SSR y se alternan por breakpoint (`md`):
+  // así la cabecera existe desde el primer paint y no empuja el contenido al hidratar.
+  return (
+    <>
+      {/* Header compacto para páginas de herramientas en móvil */}
       <header
-        className="sticky top-0 z-50 w-full"
+        className="sticky top-0 z-50 w-full md:hidden"
         style={{
           backgroundColor: headerBgColor,
           boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
@@ -121,18 +108,9 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
           </div>
         </div>
       </header>
-    )
-  }
 
-  // Header para home o secciones en móvil - no renderizamos nada aquí
-  if (isMobile) {
-    return null
-  }
-
-  // Header para páginas de herramientas en escritorio - ahora con margen reducido
-  if (isToolPage) {
-    return (
-      <div className="w-full py-4 mb-2 relative">
+      {/* Header para páginas de herramientas en escritorio */}
+      <div className="hidden w-full py-4 mb-2 relative md:block">
         <div className="max-w-6xl mx-auto px-6 relative">
           {/* Botón de menú posicionado en la esquina superior derecha */}
           <div className="absolute right-6 top-0 z-50">
@@ -145,9 +123,6 @@ export default function UnifiedHeader({ section }: UnifiedHeaderProps) {
           </div>
         </div>
       </div>
-    )
-  }
-
-  // Header para home o secciones en escritorio (no visible, solo para mantener la estructura)
-  return null
+    </>
+  )
 }
