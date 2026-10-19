@@ -97,6 +97,7 @@ Regla obligatoria para calculadoras con formulario + resultado. Nace del hueco e
 - **Editores (diarios)**: la columna de escritura es la principal; el historial vacío puede ser corto. Se permite onboarding útil dentro del empty state (cómo empezar, progreso, privacidad), pero no tarjetas de relleno. La regla estricta de alturas aplica sobre todo a calculadoras formulario + resultado.
 - **Móvil**: orden natural formulario → resultado → detalle → referencias → enlaces. El contenido secundario no debe adelantarse al resultado.
 - **Verificación visual obligatoria** con Playwright/Chromium si está disponible: desktop 1440 px y móvil 390 px, claro y oscuro, con resultado y sin resultado. Revisar que no haya huecos > ~100 px dentro de una columna y que el primer pantallazo móvil no quede vacío. El barrido automatizado puede medir la diferencia entre alto de columna y contenido visible de sus hijos.
+- **Trackers de hábito (19-Oct-2026)**: héroe de progreso a ancho completo + lista de hábitos (3/5) + formulario `h-fit` (2/5). Semana `grid-cols-7` con botones de día de 40×62 px en móvil 390 (alto suficiente; no añadir min-width que rompa la tira), futuros `disabled`, check circular `h-11 w-11` con `aria-pressed` y label que nombra hábito/fecha; icono sin marcar en `text-gray-500`/`dark:text-gray-400` (no `gray-400` sobre blanco). Confirmación inline para borrar un hábito y para «Borrar todo». Referencia: `design.md` §4 «Seguimiento de hábitos».
 
 ## 4. Iconos (`lucide-react`)
 

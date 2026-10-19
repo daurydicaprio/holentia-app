@@ -4,10 +4,10 @@
 > Prod `holentia.com → main`. No tocar dominios.
 > Principios: sin DB, sin registro, local-first privado (`holentia:*` en navegador), cero tracking.
 
-## Estado actual (19-Oct-2026) — 31 herramientas (proteína + test de calidad del sueño) en `dev`; roadmap podado a 3 «Próximamente»; proteína de calorías corregida; red de enlaces de cuerpo, favicon H y pase UI/UX móvil completos
+## Estado actual (19-Oct-2026) — 32 herramientas (seguimiento de hábitos + proteína + test de calidad del sueño) en `dev`; roadmap con 2 «Próximamente»; proteína de calorías corregida; red de enlaces de cuerpo, favicon H y pase UI/UX móvil completos
 - [x] Stack: Next 15.5.26 + React 19.3 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
-- [x] Cobertura: **31 herramientas** activas + **3 tarjetas «Próximamente»** (Seguimiento de Hábitos, Rutinas HIIT, Planificador de Comidas) en `lib/data.ts`; sitio de **42 URLs** (home + 4 hubs + directorio + 31 herramientas + 5 informativas)
-- [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite), OG por ruta (**42 archivos**), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 42 URLs con lastmod fijo, llms.txt 31 tools; auditorías registradas en la skill `seo-geo-audit`
+- [x] Cobertura: **32 herramientas** activas + **2 tarjetas «Próximamente»** (Rutinas HIIT, Planificador de Comidas) en `lib/data.ts`; sitio de **43 URLs** (home + 4 hubs + directorio + 32 herramientas + 5 informativas)
+- [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite), OG por ruta (**43 archivos**), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 43 URLs con lastmod fijo, llms.txt 32 tools; auditorías registradas en la skill `seo-geo-audit`
 - [x] UI/UX móvil: pase completo por herramientas (cuerpo, mente, relaciones, finanzas ×3) y superficies globales (chrome, hubs, informativas, shell) — contraste AA con tiers por sección, tap targets ≥40/44px, inputs ≥16px sin zoom iOS, recetas en `design.md`
 - [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` se sincroniza con `dev` al cierre de cada fase (sync previa: Fase BE)**
 - [x] `tsc 0 errores + next build OK + pnpm lint 0` en estricto
@@ -510,6 +510,17 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 - [x] **Docs**: estado actual, esta fase y registro en `seo-geo-audit`.
 - Verificado: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` **42/42 rutas PASS** · 31 herramientas / 42 URLs / 42 OG / **3 «Próximamente»**.
 
+## Fase BI — Seguimiento de Hábitos: tracker local-first (19-Oct-2026) — HECHA
+
+- [x] **Producto**: crear/editar/eliminar hábitos con nombre, icono y meta de días por semana; check-in diario con selector de semana (lunes–domingo); navegación a semanas anteriores sin permitir días futuros; sugerencias iniciales para empezar en un clic.
+- [x] **Progreso**: héroe con completados del día, avance semanal y racha activa; barra de progreso del día; cada hábito muestra su semana, racha y meta. La racha cuenta días consecutivos y, si hoy aún no hay marca, arranca desde ayer para no romperse antes de terminar el día.
+- [x] **Persistencia local (patrón entries)**: una sola clave `holentia:seguimiento-habitos:entries:v1` con hábitos + marcas normalizadas al cargar; guardado inmediato, aviso si el navegador bloquea localStorage y confirmaciones inline para eliminar un hábito o borrar todo.
+- [x] **UI mente**: héroe con gradiente/glass, tarjetas de hábito, fila semanal con días deshabilitados si son futuros, iconos Lucide, formulario con selector de icono, metas 1–7, foco visible y tap targets ≥40/44 px; claro/oscuro.
+- [x] **SEO/GEO**: card activa con metaTitle (38 ch) y metaDescription (133 ch), página con FAQ ×6, JSON-LD desde el shell, OG propia, `sitemap` 43 rutas, `llms.txt` 32 herramientas y clave nueva en `politica-cookies`.
+- [x] **Limpieza**: eliminados `components/tools/compound-interest/calculator-summary.tsx` y `calculator-tabs.tsx`, sin referencias (código muerto).
+- [x] **Docs**: estado actual, `README`, `architecture`, `design.md` y registro en `seo-geo-audit`.
+- Verificado: `tsc 0 · lint 0 · build OK` + `pnpm audit:seo` **43/43 rutas PASS** · 32 herramientas / 43 URLs / 43 OG / **2 «Próximamente»**.
+
 ---
 
 ## Backlog propuesto (17-Oct-2026, pendiente de decisión)
@@ -522,7 +533,7 @@ Sin fase asignada; se convierte en fase al aprobar el frente. Candidatos analiza
 4. ~~Directorio `/herramientas`~~ **HECHO (Fase AZ)**: índice server-rendered de las 29 por sección (chips ancla) + enlace en el footer; como mejora opcional queda el filtro interactivo y un enlace desde el chrome de home.
 5. **«Mis datos»**: exportar/importar JSON de las claves `holentia:*` (respaldo local, sin nube) + enlace en `/ayuda`.
 6. **PWA offline**: service worker para que las herramientas funcionen sin conexión (manifest y iconos ya existen).
-7. **Nuevas herramientas** (a especificar con el dueño; keywords RD): ~~sueldo neto (TSS + ISR)~~ **HECHA (Fase AY)**; ~~prestaciones laborales/indemnización~~ **HECHA (Fase BA)**; ~~proteína diaria~~ **HECHA (Fase BB)**; ~~test de calidad del sueño~~ **HECHA (Fase BC)**; **roadmap podado a 3 (Fase BH)**: Seguimiento de Hábitos → Rutinas HIIT → Planificador de Comidas, con la receta `create-tool`.
+7. **Nuevas herramientas** (a especificar con el dueño; keywords RD): ~~sueldo neto (TSS + ISR)~~ **HECHA (Fase AY)**; ~~prestaciones laborales/indemnización~~ **HECHA (Fase BA)**; ~~proteína diaria~~ **HECHA (Fase BB)**; ~~test de calidad del sueño~~ **HECHA (Fase BC)**; ~~seguimiento de hábitos~~ **HECHA (Fase BI)**; **roadmap podado (Fase BH)**: Rutinas HIIT → Planificador de Comidas, con la receta `create-tool`.
 8. **Infra de calidad**: CI (GitHub Actions: `tsc` + `lint` + `build` en push a `dev`) y Vitest para los parsers/formatters (hoy sus casos se prueban ad hoc).
 
 ---

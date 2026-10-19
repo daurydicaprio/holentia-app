@@ -25,10 +25,13 @@ export const sectionsData: Record<string, SectionData> = {
       {
         id: "seguimiento-habitos",
         title: "Seguimiento de Hábitos",
-        description: "Construye rutinas mentales positivas.",
+        description: "Crea hábitos y sigue tu racha día a día.",
         slug: "seguimiento-habitos",
-        isAvailable: false,
+        isAvailable: true,
         category: "mente",
+        metaTitle: "Seguimiento de hábitos diario y rachas",
+        metaDescription:
+          "Crea hábitos, marca tu día y sigue tu racha semana a semana. Un tracker privado que se guarda en tu navegador, sin registro y gratis.",
       },
       {
         id: "tecnicas-respiracion",

@@ -29,6 +29,10 @@ const localStorageKeys = [
     desc: "Borrador de la entrada en curso del Diario Guiado",
   },
   {
+    key: "holentia:seguimiento-habitos:entries:v1",
+    desc: "Tus hábitos, marcas diarias y rachas del seguimiento de hábitos",
+  },
+  {
     key: "holentia:crear-presupuesto-personal:draft:v1",
     desc: "Borrador de tu presupuesto personal",
   },

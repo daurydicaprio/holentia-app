@@ -3,7 +3,7 @@ import { sectionsData } from "@/lib/data"
 import { SITE_URL } from "@/lib/seo"
 
 // Fecha de última actualización real del contenido. Actualizar a mano al publicar cambios de contenido.
-const LAST_UPDATED = new Date("2026-10-18")
+const LAST_UPDATED = new Date("2026-10-19")
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [

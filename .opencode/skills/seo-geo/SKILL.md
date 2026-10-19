@@ -21,7 +21,7 @@ Objivo: que Google, Bing y los buscadores generativos (ChatGPT, Claude, Perplexi
 
 - File-convention **por ruta**: `app/{ruta}/opengraph-image.tsx` (1200×630, PNG). Next la inyecta como `og:image` Y `twitter:image` con dims/alt. **No** declarar `images` en metadata (pisa la convención).
 - Plantilla compartida: `components/seo/og-template.tsx` (`ogTemplate({ title, subtitle })`) + fuente `app/og-font.ts` (INTER_BOLD_BASE64). Cada variante: `import { INTER_BOLD_BASE64 } from "../og-font"`.
-- Variantes existentes: raíz (`app/opengraph-image.tsx`), 4 secciones, directorio (`app/herramientas/`), 31 herramientas y 5 informativas (`ayuda`, `apoyar`, `aviso-legal`, `politica-cookies`, `que-es-holentia`) = **42 archivos**. **Al añadir herramienta o página: crear `app/{ruta}/opengraph-image.tsx`** (copiar de otra y cambiar title/subtitle/alt). La convención NO hereda: cada ruta sin archivo sale sin `og:image`.
+- Variantes existentes: raíz (`app/opengraph-image.tsx`), 4 secciones, directorio (`app/herramientas/`), 32 herramientas y 5 informativas (`ayuda`, `apoyar`, `aviso-legal`, `politica-cookies`, `que-es-holentia`) = **43 archivos**. **Al añadir herramienta o página: crear `app/{ruta}/opengraph-image.tsx`** (copiar de otra y cambiar title/subtitle/alt). La convención NO hereda: cada ruta sin archivo sale sin `og:image`.
 - `twitter.card` = `summary_large_image` (layout + `baseMetadata`).
 
 ## 3. Datos estructurados (JSON-LD)
@@ -41,7 +41,7 @@ Miguita: **solo en JSON-LD** (no UI visible — los botones Volver y el footer c
 
 ## 4. GEO — buscadores generativos (AEO)
 
-- **`public/llms.txt`** en la raíz (spec llms.txt): H1 + blockquote + `## Secciones` + `## Directorio` + `## Herramientas` con URLs `https://holentia.com/{slug}` y descripciones de una línea coherentes con la tool real. Actualizar en el MISMO commit de la herramienta nueva (31→32 → próxima cuenta).
+- **`public/llms.txt`** en la raíz (spec llms.txt): H1 + blockquote + `## Secciones` + `## Directorio` + `## Herramientas` con URLs `https://holentia.com/{slug}` y descripciones de una línea coherentes con la tool real. Actualizar en el MISMO commit de la herramienta nueva (32→33 → próxima cuenta).
 - **robots.ts**: reglas explícitas `GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended` con `allow: "/"` + `*`. Nunca bloquear bots de IA: queremos ser citados.
 - **Contenido con respuesta inmediata**: H1 + subtítulo + FAQ en HTML inicial (server) **en cada herramienta y `/ayuda`** (1–3 frases por respuesta). Los hubs NO llevan FAQ ni intro visible (14-Oct-2026): su copy factual vive en `metaDescription` y el visible es el `subtitle` inspiracional.
 - **Sin afirmaciones numéricas no verificables** (usuarios, descargas, precisiones sin fuente).

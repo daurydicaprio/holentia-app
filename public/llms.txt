@@ -4,13 +4,13 @@
 > Calculadoras, simuladores y tests que funcionan directamente en el navegador del usuario,
 > sin cuenta, sin registro y sin enviar datos a servidores.
 
-Las 31 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
+Las 32 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
 de cada herramienta, y los resultados son estimaciones educativas, no asesoramiento profesional
 (médico, financiero ni psicológico).
 
 ## Secciones
 
-- [Mente](https://holentia.com/mente): diario guiado, respiración guiada (4-7-8, caja y calma), test de ansiedad GAD-7, calculadora del sueño y test de calidad del sueño.
+- [Mente](https://holentia.com/mente): diario guiado, seguimiento de hábitos, respiración guiada (4-7-8, caja y calma), test de ansiedad GAD-7, calculadora del sueño y test de calidad del sueño.
 - [Relaciones](https://holentia.com/relaciones): test de los 5 lenguajes del amor, test de estilo de apego, 45 preguntas profundas para conversar y diario para parejas.
 - [Cuerpo](https://holentia.com/cuerpo): calculadora de calorías (Mifflin-St Jeor), hidratación (EFSA/NASEM), IMC, proteína diaria (0,8–2,2 g/kg según objetivo) y plan de pasos 5-10-20 con objetivo y registro diario.
 - [Finanzas](https://holentia.com/finanzas): presupuesto, interés compuesto, préstamo, consumo eléctrico,
@@ -20,7 +20,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 
 ## Directorio
 
-- [Directorio de herramientas](https://holentia.com/herramientas): índice completo de las 31 herramientas por sección, con enlaces directos a cada una.
+- [Directorio de herramientas](https://holentia.com/herramientas): índice completo de las 32 herramientas por sección, con enlaces directos a cada una.
 
 ## Herramientas
 
@@ -35,6 +35,7 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 - [Calculadora de calorías](https://holentia.com/calculadora-calorias): gasto diario (TDEE), planes con déficit o superávit y rango orientativo de proteína según objetivo.
 - [Calculadora de hidratación](https://holentia.com/calculadora-hidratacion): agua diaria según peso, actividad y clima.
 - [Diario guiado](https://holentia.com/diario-guiado): entradas de reflexión guardadas en el navegador.
+- [Seguimiento de hábitos](https://holentia.com/seguimiento-habitos): crea hábitos, marca tu día y sigue tu progreso semanal y tu racha; todo local y privado.
 - [Test de lenguajes del amor](https://holentia.com/test-lenguajes-amor): descubre tu lenguaje principal de cariño.
 - [Glosario financiero](https://holentia.com/glosario-financiero): términos de ahorro, crédito, intereses, fondos, bolsa y depósitos explicados con ejemplos.
 - [Tracker de gastos hormiga](https://holentia.com/tracker-gastos-hormiga): anota gastos pequeños y repetidos (café, delivery, recargas) y mira cuánto suman al día, al mes y al año.

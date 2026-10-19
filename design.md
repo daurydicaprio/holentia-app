@@ -491,6 +491,15 @@ Variante laboral de la calculadora salarial para una liquidación (Código de Tr
 - **Enlaces cruzados**: tarjeta «¿Y la calidad de tu sueño?» en el resultado de la calculadora del sueño; desde el test, enlaces a la calculadora de ciclos y a respiración 4-7-8.
 - **Tokens**: sección `mente`; semáforos de banda en paleta Tailwind estándar (§7); héroe con `text-white` sólido; acciones con press feedback y `data-interactive`.
 
+### Seguimiento de hábitos (19-Oct-2026, ref. `components/tools/habit-tracker/`)
+
+- **Héroe de progreso**: gradiente `mente` en claro y `mente-glass` en oscuro, a ancho completo; fecha larga (`es-DO`), tres cifras (`hecho/total` del día, avance de la semana y racha activa) y barra de día con `role="progressbar"`. Las cifras usan `tabular-nums` y el bloque actualiza con `aria-live="polite"`.
+- **Semana**: tira `grid grid-cols-7` con día + número + punto de progreso; el día seleccionado va `bg-mente text-white` y los futuros quedan `disabled` con `opacity-40`. La semana empieza en lunes y se navega con `ChevronLeft`/`ChevronRight` + botón «Hoy»; nunca se selecciona un día futuro. En una semana pasada las etiquetas dicen «esa semana», no «esta semana».
+- **Fila de hábito**: icono Lucide en círculo `bg-mente-lighter`/`dark:bg-mente-dark`, nombre, `N/M` de la meta semanal (o «Meta semanal cumplida»), racha actual con `Flame`, tira de 7 puntos y acciones `h-10 w-10` (editar/borrar). El check es un botón circular `h-11 w-11` con `aria-pressed` y `aria-label` que nombra el hábito y la fecha; estado vacío con `border-gray-400`/`text-gray-500` (no `gray-400` sobre blanco, que no llega a 3:1).
+- **Formulario**: nombre (`maxLength=60`), selector de 10 iconos en `grid-cols-5` con `aria-pressed` + label visible, meta 1–7 días en `grid-cols-4 sm:grid-cols-7` con botones `h-11`; guarda y edita en la misma tarjeta `h-fit`, con confirmación inline para eliminar. La copia aclara que la meta es semanal y no limita los check-ins.
+- **Persistencia (patrón entries)**: una clave `holentia:seguimiento-habitos:entries:v1` con hábitos + marcas; normalización al cargar, guardado inmediato, aviso si localStorage falla y «Borrar todo» con confirmación. La racha cuenta desde ayer si hoy aún no hay marca.
+- **Onboarding**: empty state con 4 sugerencias (agua, caminar, leer, dormir) que se añaden en un clic; no hay panel vacío grande.
+
 ## 5. Modo oscuro
 
 - Gestión con `next-themes` (`resolvedTheme`), clase `.dark` en `<html>`.
