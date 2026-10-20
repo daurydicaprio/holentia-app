@@ -140,10 +140,10 @@ export const sectionsData: Record<string, SectionData> = {
     title: "Energiza tu",
     highlightText: "cuerpo",
     subtitle:
-      "Tu energía empieza con pequeños cambios. Calcula tus calorías, hidratación, IMC y proteína, encuentra tu plan de pasos, entrena con rutinas HIIT y organiza tus comidas: movimiento y nutrición, sin mitos.",
+      "Tu energía empieza con pequeños cambios. Calcula tus calorías, hidratación, IMC, grasa corporal y proteína, arma tu plan de pasos, entrena con HIIT y organiza tus comidas: movimiento y nutrición, sin mitos.",
     text: "Energiza tu cuerpo. Accede a rutinas, nutrición y consejos para un estilo de vida activo y un bienestar integral.",
     metaDescription:
-      "Calculadora de calorías, proteína, hidratación, IMC, pasos 5-10-20, rutinas HIIT y planificador de comidas con lista de compras. Gratis y sin registro.",
+      "Calculadoras de calorías, proteína, hidratación, IMC, grasa corporal, pasos 5-10-20, rutinas HIIT y planificador de comidas. Gratis y sin registro.",
     cards: [
       {
         id: "calculadora-calorias",
@@ -177,6 +177,17 @@ export const sectionsData: Record<string, SectionData> = {
         metaTitle: "¿Cuál es mi IMC? Calculadora de índice de masa corporal",
         metaDescription:
           "Calcula tu IMC al instante: rango saludable según tu estatura, tu peso ideal y lo que el índice de masa corporal no puede decirte. En tu navegador.",
+      },
+      {
+        id: "calculadora-grasa-corporal",
+        title: "Calculadora de Grasa Corporal",
+        description: "Estima tu porcentaje de grasa y tu masa magra.",
+        slug: "calculadora-grasa-corporal",
+        isAvailable: true,
+        category: "cuerpo",
+        metaTitle: "Calculadora de grasa corporal (método US Navy)",
+        metaDescription:
+          "Calcula tu porcentaje de grasa corporal con el método US Navy: cintura, cuello y cadera. Mira tu masa magra, masa grasa y categoría. Gratis.",
       },
       {
         id: "calculadora-proteina-diaria",

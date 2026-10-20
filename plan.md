@@ -4,15 +4,16 @@
 > Prod `holentia.com → main`. No tocar dominios.
 > Principios: sin DB, sin registro, local-first privado (`holentia:*` en navegador), cero tracking.
 
-## Estado actual (19-Oct-2026) — 34 herramientas (planificador de comidas + rutinas HIIT + seguimiento de hábitos + proteína + test de calidad del sueño) en `dev`; roadmap de herramientas completado (0 «Próximamente»); proteína de calorías corregida; red de enlaces de cuerpo, favicon H y pase UI/UX móvil completos
+## Estado actual (20-Oct-2026) — 35 herramientas (grasa corporal + planificador de comidas + rutinas HIIT + seguimiento de hábitos + proteína + test de calidad del sueño) en `dev`; roadmap de herramientas completado (0 «Próximamente»); proteína de calorías corregida; red de enlaces de cuerpo, favicon H y pase UI/UX móvil completos
 - [x] Stack: Next 15.5.26 + React 19.3 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
-- [x] Cobertura: **34 herramientas** activas + **0 tarjetas «Próximamente»** en `lib/data.ts`; sitio de **45 URLs** (home + 4 hubs + directorio + 34 herramientas + 5 informativas)
-- [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite), OG por ruta (**45 archivos**), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 45 URLs con lastmod fijo, llms.txt 34 tools; auditorías registradas en la skill `seo-geo-audit`
+- [x] Cobertura: **35 herramientas** activas + **0 tarjetas «Próximamente»** en `lib/data.ts`; sitio de **46 URLs** (home + 4 hubs + directorio + 35 herramientas + 5 informativas)
+- [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite), OG por ruta (**46 archivos**), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 46 URLs con lastmod fijo, llms.txt 35 tools; auditorías registradas en la skill `seo-geo-audit`
 - [x] UI/UX móvil: pase completo por herramientas (cuerpo, mente, relaciones, finanzas ×3) y superficies globales (chrome, hubs, informativas, shell) — contraste AA con tiers por sección, tap targets ≥40/44px, inputs ≥16px sin zoom iOS, recetas en `design.md`
 - [x] Rendimiento de campo (Fase BL, 19-Oct-2026): cabecera y héroe del planificador en SSR, variantes responsive por CSS, CLS **0**, LCP móvil **2.1 s**, Lighthouse **87-88/100** y axe **12/12**
-- [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` se sincroniza con `dev` al cierre de cada fase (sync previa: Fase BE)**
+- [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` se sincroniza con `dev` al cierre de cada fase (sync previa: Fase BK)**
 - [x] `tsc 0 errores + next build OK + pnpm lint 0` en estricto
 - [x] **Sync a `main` aprobada** por el usuario (19-Oct-2026): `dev` → `main` por fast-forward con la Fase BK (planificador de comidas). Producción con **34 herramientas activas y 0 «Próximamente»**; roadmap de herramientas completado. Los cambios siguientes vuelven a requerir aprobación explícita antes de tocar `main`.
+- [ ] **Deploy de producción pendiente (20-Oct-2026)**: Vercel no generó deployment de Production para `fa86ef2`/`55de0e6`; `holentia.com` sigue sirviendo `c0a28a1` con caché antigua. Promover el preview de `fa86ef2` a Production o relanzar el deploy en Vercel; después verificar el header/héroe SSR y repetir Lighthouse de campo.
 
 ---
 
@@ -556,6 +557,18 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 - [x] **Docs**: `design.md` §3.8/§4/§4d, skill `section-ui` y esta fase.
 - Verificado: Lighthouse local móvil **87-88 de mediana** (rango 76-88 por varianza del entorno) y desktop **100**, con a11y/BP/SEO 100. La confirmación de campo (CrUX) queda pendiente del sync a producción.
 
+## Fase BM — Cuerpo: calculadora de grasa corporal (método US Navy) (20-Oct-2026) — HECHA
+
+- [x] **Producto**: nueva herramienta `/calculadora-grasa-corporal` (35ª del sitio) para estimar el porcentaje de grasa y la composición corporal en adultos. Entradas: sexo, altura, peso (kg/lb), cuello, cintura y cadera (solo mujeres). Salidas: % de grasa, categoría de referencia, masa grasa y masa magra, más una escala visual de rangos.
+- [x] **Fórmula**: densidad corporal del método US Navy con medidas en centímetros — hombres `1,0324 − 0,19077·log10(cintura − cuello) + 0,15456·log10(altura)`; mujeres `1,29579 − 0,35004·log10(cintura + cadera − cuello) + 0,22100·log10(altura)` — y conversión a % con la ecuación de Siri (`495 / densidad − 450`). Rangos orientativos ACE (esencial, atlético, fitness, promedio, alto) y estado «Muy bajo» para valores por debajo del rango esencial. Validación de rangos realistas y de la relación cintura/cuello.
+- [x] **Persistencia** patrón D: borrador `holentia:calculadora-grasa-corporal:draft:v1` ({sex, height, weight, unit, neck, waist, hip}) con debounce de 500 ms tras la primera edición, «Guardado local» y «Borrar mis datos» (el borrado no se reescribe solo). Clave añadida a `politica-cookies`.
+- [x] **UI cuerpo**: formulario con sexo como radios nativos accesibles, toggle kg/lb dentro del peso (convierte el valor), cadera condicional en mujeres; héroe gradiente/glass con % y badge; tarjeta con masa grasa/magra y escala ACE activa; guía de medición en la pista sex-specific del formulario y en la FAQ; tarjeta full-width «La fórmula, sin cajas negras» (fórmula, límites y para quién es) y cierre `RelatedTools` con IMC, calorías y proteína. Sin `Chart.js` (CSS/HTML puro).
+- [x] **A11y/móvil**: `fieldset`/`legend`, `label htmlFor`, `aria-invalid` en campos fuera de rango, alerta `role="alert"`, `aria-live` en el resultado, `data-interactive` y haptics; escala con `role="list"` y `aria-label` por rango; inputs `text-lg` sin zoom iOS; layout 1 columna → 2 columnas; contraste AA en ambos temas.
+- [x] **SEO/GEO**: card en `lib/data.ts` con metaTitle (46 ch) y metaDescription (140 ch) única, hub de cuerpo actualizado (subtitle 206 ch · metaDescription 147 ch), FAQ ×6 (fórmula, exactitud, cómo medir, rangos, IMC vs. grasa, privacidad), OG propia, `llms.txt` 35 herramientas, sitemap 46 URLs y `LAST_UPDATED` al 20-Oct-2026.
+- [x] **QA**: `tsc 0`, `lint 0`, build OK; `pnpm audit:seo` **46/46**; axe-core sin violaciones (idle/resultado × claro/oscuro × 1440/390); flujo funcional (hombre/mujer, kg/lb, validaciones, borrado, recarga); teclado (skip link, flechas de sexo, orden de foco, FAQ); 0 overflow; capturas claro/oscuro.
+- [x] **Docs**: `README`, `architecture.md`, `design.md` §4/§4b-bis, `plan.md`, skills `seo-geo`, `seo-geo-audit` y esta fase.
+- Verificado: **35 herramientas / 46 URLs / 46 OG / 0 «Próximamente»**.
+
 ---
 
 ## Backlog propuesto (17-Oct-2026, pendiente de decisión)
@@ -568,7 +581,7 @@ Sin fase asignada; se convierte en fase al aprobar el frente. Candidatos analiza
 4. ~~Directorio `/herramientas`~~ **HECHO (Fase AZ)**: índice server-rendered de las 29 por sección (chips ancla) + enlace en el footer; como mejora opcional queda el filtro interactivo y un enlace desde el chrome de home.
 5. **«Mis datos»**: exportar/importar JSON de las claves `holentia:*` (respaldo local, sin nube) + enlace en `/ayuda`.
 6. **PWA offline**: service worker para que las herramientas funcionen sin conexión (manifest y iconos ya existen).
-7. **Nuevas herramientas** (a especificar con el dueño; keywords RD): ~~sueldo neto (TSS + ISR)~~ **HECHA (Fase AY)**; ~~prestaciones laborales/indemnización~~ **HECHA (Fase BA)**; ~~proteína diaria~~ **HECHA (Fase BB)**; ~~test de calidad del sueño~~ **HECHA (Fase BC)**; ~~seguimiento de hábitos~~ **HECHA (Fase BI)**; ~~rutinas HIIT~~ **HECHA (Fase BJ)**; ~~planificador de comidas~~ **HECHA (Fase BK)**. Roadmap de herramientas completado: 34 activas y 0 «Próximamente».
+7. **Nuevas herramientas** (a especificar con el dueño; keywords RD): ~~sueldo neto (TSS + ISR)~~ **HECHA (Fase AY)**; ~~prestaciones laborales/indemnización~~ **HECHA (Fase BA)**; ~~proteína diaria~~ **HECHA (Fase BB)**; ~~test de calidad del sueño~~ **HECHA (Fase BC)**; ~~seguimiento de hábitos~~ **HECHA (Fase BI)**; ~~rutinas HIIT~~ **HECHA (Fase BJ)**; ~~planificador de comidas~~ **HECHA (Fase BK)**; ~~grasa corporal~~ **HECHA (Fase BM)**. Roadmap de herramientas completado: 35 activas y 0 «Próximamente».
 8. **Infra de calidad**: CI (GitHub Actions: `tsc` + `lint` + `build` en push a `dev`) y Vitest para los parsers/formatters (hoy sus casos se prueban ad hoc).
 
 ---

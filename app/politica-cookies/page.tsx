@@ -161,6 +161,10 @@ const localStorageKeys = [
     desc: "Tu borrador de la calculadora de IMC (peso, estatura y unidad)",
   },
   {
+    key: "holentia:calculadora-grasa-corporal:draft:v1",
+    desc: "Tu borrador de la calculadora de grasa corporal (sexo, medidas y unidad)",
+  },
+  {
     key: "holentia:calculadora-proteina-diaria:draft:v1",
     desc: "Tu borrador de la calculadora de proteína (peso, unidad, perfil y comidas)",
   },

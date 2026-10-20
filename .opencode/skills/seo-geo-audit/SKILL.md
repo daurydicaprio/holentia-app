@@ -44,7 +44,7 @@ Reglas de referencia (SSOT): skill `seo-geo` §1–5. Esta skill es el **procedi
 pnpm build && pnpm audit:seo
 ```
 
-`scripts/audit-seo.mjs` arranca `next start` en un puerto de auditoría y valida **cada ruta del sitemap** (hoy 45): title/description (rango en herramientas), canonical autorreferencial, 0 `noindex`, `og:image` propia, twitter, JSON-LD por tipo de página, FAQ ≥5 (herramientas), línea en `llms.txt`, H1 ×1, estructura a11y (`lang="es-DO"`, skip link `#contenido`, `<main>` único) y **runtime OG** (`200 image/png`), más cobertura cruzada `llms.txt ⊆ sitemap`. Exit 1 si hay FAIL. `AUDIT_BASE=http://127.0.0.1:3000` reutiliza un server ya en marcha (p. ej. `pnpm start` en otra terminal). Los barridos manuales de §2.1–2.3 quedan para auditorías puntuales (una sola herramienta) o diagnóstico fino.
+`scripts/audit-seo.mjs` arranca `next start` en un puerto de auditoría y valida **cada ruta del sitemap** (hoy 46): title/description (rango en herramientas), canonical autorreferencial, 0 `noindex`, `og:image` propia, twitter, JSON-LD por tipo de página, FAQ ≥5 (herramientas), línea en `llms.txt`, H1 ×1, estructura a11y (`lang="es-DO"`, skip link `#contenido`, `<main>` único) y **runtime OG** (`200 image/png`), más cobertura cruzada `llms.txt ⊆ sitemap`. Exit 1 si hay FAIL. `AUDIT_BASE=http://127.0.0.1:3000` reutiliza un server ya en marcha (p. ej. `pnpm start` en otra terminal). Los barridos manuales de §2.1–2.3 quedan para auditorías puntuales (una sola herramienta) o diagnóstico fino.
 
 ### 2.1 Estático (HTML prerenderado)
 
@@ -101,7 +101,7 @@ for s in $slugs; do printf "%-38s " "$s"; curl -s -o /dev/null -w 'og:%{http_cod
 PID=$(ss -ltnp 2>/dev/null | grep ':3000 ' | sed -E 's/.*pid=([0-9]+).*/\1/' | head -1); [ -n "$PID" ] && kill "$PID"
 ```
 
-Esperado: `og:200 image/png` en las 19. Comprobar también las no-herramienta: `/{ruta}/opengraph-image` (home = `/opengraph-image`).
+Esperado: `og:200 image/png` en todas las herramientas. Comprobar también las no-herramienta: `/{ruta}/opengraph-image` (home = `/opengraph-image`).
 
 ## 3. Severidad y flujo de corrección
 
@@ -162,6 +162,7 @@ Esperado: `og:200 image/png` en las 19. Comprobar también las no-herramienta: `
 | 19-Oct-2026 | `rutinas-hiit` (nueva, 33ª) — auditoría 16 puntos | ✅ PASS: metaTitle 46 ch · metaDescription 147 ch única · H1 ×1 · canonical/OG/twitter propias · JSON-LD ×3 · FAQ ×6 visibles (qué es, duración/intervalos, casa sin equipo, frecuencia, seguridad, privacidad con clave) · preferencias en `holentia:rutinas-hiit:draft:v1` sin historial · llms.txt línea 1/1 y total 33 · sitemap 44 `<loc>` (hub cuerpo enlaza) · 0 `noindex` · OG runtime `200 image/png` · audit 44/44 · axe 12/12 estados (idle/running/done × claro/oscuro × 1440/390) | Ninguna |
 | 19-Oct-2026 | `planificador-comidas` (nueva, 34ª) — auditoría 16 puntos | ✅ PASS: metaTitle 52 ch · metaDescription 151 ch única · H1 ×1 · canonical/OG/twitter propias · JSON-LD ×3 · FAQ ×6 visibles (funcionamiento, comidas propias, lista, semanas, límites nutricionales, privacidad con clave) · planner 7×3 y weeks en `holentia:planificador-comidas:entries:v1` sin historial · `<dialog>` nativo con foco restaurado · llms.txt línea 1/1 y total 34 · sitemap 45 `<loc>` (hub cuerpo enlaza) · 0 `noindex` · OG runtime `200 image/png` · audit 45/45 · axe 12/12 estados (idle/plan/editor × claro/oscuro × 1440/390) | Ninguna |
 | 19-Oct-2026 | Rendimiento de campo + a11y fina (Fase BL) — planificador y chrome | ✅ PASS: Lighthouse 13.5 sobre producción y build local (Chrome headless vía CDP) · baseline prod móvil 79 (TBT 750 ms) y desktop 98 (CLS 0.093) · `label-content-name-mismatch` 21→0 nodos, CLS 0.093→0, LCP 2.5→2.1 s · local móvil 87-88 de mediana y desktop 100 · a11y/BP/SEO 100 · axe 12/12 · `audit:seo` 45/45 · header SSR de 60/144 px sin salto | Ninguna |
+| 20-Oct-2026 | `calculadora-grasa-corporal` (nueva, 35ª) — auditoría 16 puntos | ✅ PASS: metaTitle 46 ch · metaDescription 140 ch única · H1 ×1 · canonical/OG/twitter propias · JSON-LD ×3 · FAQ ×6 visibles (fórmula, exactitud, medición, rangos, IMC vs. grasa, privacidad con clave) · estado vacío en SSR · método US Navy (cm) + Siri, rangos ACE y validaciones de rango/relación · llms.txt línea 1/1 y total 35 · sitemap 46 `<loc>` (hub cuerpo enlaza) · 0 `noindex` · clave `holentia:calculadora-grasa-corporal:draft:v1` en politica-cookies · OG runtime `200 image/png` · `audit:seo` 46/46 · axe 8/8 estados (idle/resultado × claro/oscuro × 1440/390) · QA funcional (hombre/mujer, kg/lb, borrado/recarga), teclado y capturas claro/oscuro | Ninguna |
 
 > Añadir una fila por auditoría (barrido completo o por herramienta). El registro vive aquí.
 

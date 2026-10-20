@@ -2,11 +2,11 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 import {
+  Activity,
   AlertTriangle,
   ChevronsUpDown,
   Dumbbell,
   Flame,
-  Footprints,
   Ruler,
   Scale,
   Trash2,
@@ -114,7 +114,7 @@ const HONESTY = [
 const NEXT_STEPS = [
   { href: "/calculadora-calorias", icon: Flame, title: "Tus calorías diarias" },
   { href: "/calculadora-proteina-diaria", icon: Dumbbell, title: "Tu proteína diaria" },
-  { href: "/pasos-al-dia", icon: Footprints, title: "Tu plan de pasos" },
+  { href: "/calculadora-grasa-corporal", icon: Activity, title: "Tu grasa corporal" },
 ]
 
 export function BmiCalculator() {
