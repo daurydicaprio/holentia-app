@@ -4,7 +4,7 @@
 > Prod `holentia.com → main`. No tocar dominios.
 > Principios: sin DB, sin registro, local-first privado (`holentia:*` en navegador), cero tracking.
 
-## Estado actual (20-Oct-2026) — 35 herramientas (grasa corporal + planificador de comidas + rutinas HIIT + seguimiento de hábitos + proteína + test de calidad del sueño) en `dev`; roadmap de herramientas completado (0 «Próximamente»); proteína de calorías corregida; red de enlaces de cuerpo, favicon H y pase UI/UX móvil completos
+## Estado actual (20-Oct-2026) — 35 herramientas (grasa corporal + planificador de comidas + rutinas HIIT + seguimiento de hábitos + proteína + test de calidad del sueño) en `dev` y producción; roadmap de herramientas completado (0 «Próximamente»); proteína de calorías corregida; red de enlaces de cuerpo, favicon H y pase UI/UX móvil completos
 - [x] Stack: Next 15.5.26 + React 19.3 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
 - [x] Cobertura: **35 herramientas** activas + **0 tarjetas «Próximamente»** en `lib/data.ts`; sitio de **46 URLs** (home + 4 hubs + directorio + 35 herramientas + 5 informativas)
 - [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite), OG por ruta (**46 archivos**), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 46 URLs con lastmod fijo, llms.txt 35 tools; auditorías registradas en la skill `seo-geo-audit`
@@ -13,7 +13,7 @@
 - [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` se sincroniza con `dev` al cierre de cada fase (sync previa: Fase BK)**
 - [x] `tsc 0 errores + next build OK + pnpm lint 0` en estricto
 - [x] **Sync a `main` aprobada** por el usuario (19-Oct-2026): `dev` → `main` por fast-forward con la Fase BK (planificador de comidas). Producción con **34 herramientas activas y 0 «Próximamente»**; roadmap de herramientas completado. Los cambios siguientes vuelven a requerir aprobación explícita antes de tocar `main`.
-- [ ] **Deploy de producción pendiente (20-Oct-2026)**: Vercel no generó deployment de Production para `fa86ef2`/`55de0e6`; `holentia.com` sigue sirviendo `c0a28a1` con caché antigua. Promover el preview de `fa86ef2` a Production o relanzar el deploy en Vercel; después verificar el header/héroe SSR y repetir Lighthouse de campo.
+- [x] **Deploy de producción (20-Oct-2026)**: `main` avanzado por fast-forward a `0c59ac1` (Fase BM) y desplegado en Vercel. `holentia.com/calculadora-grasa-corporal` responde **200**, con title, canonical, H1 y OG correctos; sitemap con **46** URLs. Incluye la Fase BL (`fa86ef2`/`55de0e6`), por lo que el header/héroe SSR queda publicado. Queda pendiente repetir Lighthouse de campo sobre producción.
 
 ---
 
