@@ -102,6 +102,17 @@ Regla obligatoria para calculadoras con formulario + resultado. Nace del hueco e
 - **Planificadores semanales (19-Oct-2026)**: grid 7 × 3 a ancho completo (día + 3 comidas), no sidebar estrecha; en móvil cada día apila sus celdas con label `sm:hidden`. Cada celda es un botón de ≥84 px. Editor en `<dialog>` nativo (`showModal` atrapa foco y Escape); restaurar foco al disparador con `requestAnimationFrame` + ref. La lista de compras va debajo en `sm:grid-cols-2 xl:grid-cols-3`; checks por semana. Referencia: `design.md` §4 «Planificador de comidas».
 - **SSR de chrome/héroe y nombres accesibles (Fase BL, 19-Oct-2026)**: no devolver `null` hasta `mounted` en cabeceras ni héroes (provoca CLS y retrasa el LCP). Renderiza las variantes responsive en SSR y altérnalas con `md:hidden` / `hidden md:block`; deja tras el montaje solo lo que lee localStorage/fecha. Para celdas con texto visible rico, **no uses un `aria-label` que omita etiquetas**: prefijo `sr-only` + contenido visible (Lighthouse `label-content-name-mismatch`). Verificado: CLS 0.093→0, LCP 2.5→2.1 s, Lighthouse móvil 87-88 / desktop 100. Referencia: `design.md` §3.8 y §4d.
 
+## 3f. Guías editoriales (`/guias`) — 20-Oct-2026
+
+Receta para el índice y el detalle; superficie monocroma, color de sección solo como acento. Referencias: `app/guias/page.tsx`, `app/guias/[slug]/page.tsx`, `components/guides/`.
+
+- **Índice**: `max-w-5xl`; header centrado `Logo` + `BrandDots` + H1 `text-3xl sm:text-4xl lg:text-5xl`; subtítulo `max-w-2xl text-gray-600 dark:text-gray-300`; grid `sm:grid-cols-2 gap-5`. Banner de borradores `rounded-full border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-700 dark:bg-amber-950/50 dark:text-amber-100` solo en preview.
+- **GuideCard**: `rounded-2xl border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900`; hover borde de categoría + `hover:-translate-y-0.5 hover:shadow-md`; etiqueta `text-xs font-semibold uppercase tracking-[0.12em]` con punto `h-1.5 w-1.5`; texto en tier AA (`finanzas-dark`/`-light`, cuerpo `-darkest`/`-light`); título `text-xl`; pie fecha + `Clock3`; badge borrador ámbar; `data-interactive` + haptic `medium`.
+- **Detalle**: `max-w-3xl`; H1 `text-3xl sm:text-4xl lg:text-[2.75rem]`; cabecera con categoría, badge de borrador y metadatos; `GuideToolLinks` (herramienta principal + hasta 3 relacionadas); cierre con volver/abrir herramienta.
+- **Markdown** (`guide-markdown.tsx`): H2 `text-2xl` con `border-t` (primero sin divisor), H3 `text-lg`, párrafo `text-[1.0625rem] leading-8`, tablas dentro de `overflow-x-auto`, `pre` oscuro, enlaces neutros con underline. **Sin `bg-{s}/n` ni `decoration-{s}/n`**: los tokens no admiten alpha. Blockquote CTA `rounded-r-xl border-l-4` con acento de sección + `bg-gray-50 dark:bg-white/5`; `globals.css` elimina el margen del primer/último párrafo.
+- **Drafts**: `robots: noindex, nofollow`; visibles solo con `NODE_ENV !== "production"`, `VERCEL_ENV=preview` o `GUIDES_PREVIEW=1`. El índice es `noindex` mientras no haya guías publicadas. No añadir drafts a sitemap ni `llms.txt`.
+- **SEO**: `Article` + `BreadcrumbList` + `FAQPage`; OG por guía con `ogTemplate`. El sitemap incluye `/guias` y sus slugs solo cuando `draft: false`.
+
 ## 4. Iconos (`lucide-react`)
 
 - **Por sección** (nivel sección/estados vacíos/acentos): Mente `Brain` · Relaciones `Heart` · Cuerpo `Activity` · Finanzas `Wallet`. Colorear con `text-{s}`.

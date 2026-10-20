@@ -28,7 +28,7 @@ const BASE = (process.env.AUDIT_BASE ?? `http://127.0.0.1:${PORT}`).replace(/\/$
 const USE_SERVER = !process.env.AUDIT_BASE;
 
 const HUBS = new Set(["/mente", "/relaciones", "/cuerpo", "/finanzas"]);
-const COLLECTIONS = new Set([...HUBS, "/herramientas"]);
+const COLLECTIONS = new Set([...HUBS, "/herramientas", "/guias"]);
 const NON_TOOL = new Set([
   "/",
   ...COLLECTIONS,
@@ -92,7 +92,9 @@ function decode(s) {
 function auditPage(path, html) {
   const fails = [];
   const warns = [];
-  const isTool = !NON_TOOL.has(path);
+  const isGuide = path.startsWith("/guias/");
+  const isTool = !NON_TOOL.has(path) && !isGuide;
+  const isContent = isTool || isGuide;
   const expectUrl = path === "/" ? `${SITE}/` : `${SITE}${path}`;
   const ogPrefix = (path === "/" ? SITE : `${SITE}${path}`) + "/opengraph-image";
   const norm = (u) => u.replace(/\/$/, "");
@@ -107,7 +109,7 @@ function auditPage(path, html) {
 
   const desc = decode((html.match(/name="description" content="([^"]*)"/) ?? [])[1] ?? "");
   if (!desc) fails.push("sin meta description");
-  else if (isTool && (desc.length < 120 || desc.length > 155)) warns.push(`metaDescription ${desc.length} ch (120–155)`);
+  else if (isContent && (desc.length < 120 || desc.length > 155)) warns.push(`metaDescription ${desc.length} ch (120–155)`);
 
   const canon = html.match(/rel="canonical" href="([^"]*)"/g) ?? [];
   if (canon.length !== 1) fails.push(`canonical ×${canon.length} (esperado 1)`);
@@ -132,8 +134,16 @@ function auditPage(path, html) {
   } else if (COLLECTIONS.has(path)) {
     if (!has("CollectionPage")) fails.push("JSON-LD sin CollectionPage");
     if (!has("BreadcrumbList")) fails.push("JSON-LD sin BreadcrumbList");
+    if (path === "/guias" && !llms.includes(`](${SITE}/guias)`)) fails.push("sin línea en llms.txt");
   } else if (path === "/ayuda") {
     if (!has("FAQPage")) fails.push("JSON-LD sin FAQPage");
+  } else if (isGuide) {
+    for (const t of ["Article", "BreadcrumbList", "FAQPage"]) {
+      if (!has(t)) fails.push(`JSON-LD sin ${t}`);
+    }
+    const qs = (html.match(/"@type":"Question"/g) ?? []).length;
+    if (qs < 3) fails.push(`FAQ ${qs} preguntas (<3)`);
+    if (!llms.includes(`](${SITE}${path})`)) fails.push("sin línea en llms.txt");
   } else if (isTool) {
     for (const t of ["WebApplication", "BreadcrumbList", "FAQPage"]) {
       if (!has(t)) fails.push(`JSON-LD sin ${t}`);
@@ -193,15 +203,16 @@ async function main() {
     const ogFail = await checkOg(path);
     if (ogFail) fails.push(ogFail);
 
-    const isTool = !NON_TOOL.has(path);
+    const isGuide = path.startsWith("/guias/");
+    const isTool = !NON_TOOL.has(path) && !isGuide;
     const dots = path === "/" ? "/" : path.slice(1);
     if (fails.length) {
       failed += 1;
       routeFails.push([dots, fails]);
-      console.log(`✗ ${dots}${isTool ? "" : " (no-tool)"}`);
+      console.log(`✗ ${dots}${isTool || isGuide ? "" : " (no-tool)"}`);
       for (const f of fails) console.log(`    FAIL: ${f}`);
     } else {
-      console.log(`✓ ${dots}${isTool ? "" : " (no-tool)"}`);
+      console.log(`✓ ${dots}${isTool || isGuide ? "" : " (no-tool)"}`);
     }
     if (warns.length) {
       warned += 1;

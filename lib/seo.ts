@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { sectionsData } from "@/lib/data"
 import type { CardData, SectionType } from "@/types"
+import type { Guide } from "@/types/guide"
 
 export const SITE_URL = "https://holentia.com"
 export const SITE_NAME = "HOLENTIA"
@@ -28,6 +29,15 @@ export function findToolCard(section: string, slug: string): CardData | undefine
   const sectionData = sectionsData[section]
   if (!sectionData) return undefined
   return sectionData.cards.find((card) => card.slug === slug)
+}
+
+/** Busca una herramienta por slug sin conocer la sección (guías con categoría general). */
+export function findToolBySlug(slug: string): CardData | undefined {
+  for (const sectionData of Object.values(sectionsData)) {
+    const card = sectionData.cards.find((item) => item.slug === slug)
+    if (card) return card
+  }
+  return undefined
 }
 
 /** Bloque base de metadata: title, description, canonical, openGraph y twitter */
@@ -120,6 +130,46 @@ export function toolMetadata(section: string, slug: string): Metadata {
   return baseMetadata(title, description, `/${slug}`)
 }
 
+/** Metadata para el índice editorial. Las guías publicadas entran al sitemap cuando existan. */
+export function guidesIndexMetadata(): Metadata {
+  return baseMetadata(
+    "Guías de bienestar y finanzas",
+    "Guías de HOLENTIA con explicaciones claras, ejemplos y fuentes: sueldo neto, grasa corporal y los temas que rodean a cada herramienta.",
+    "/guias",
+  )
+}
+
+/** Metadata de una guía: canónica propia y noindex mientras siga en borrador o en preview. */
+export function guideMetadata(guide: Guide, options?: { noindex?: boolean }): Metadata {
+  const path = `/guias/${guide.slug}`
+
+  return {
+    title: guide.title,
+    description: guide.description,
+    alternates: {
+      canonical: path,
+    },
+    robots: guide.draft || options?.noindex ? { index: false, follow: false } : undefined,
+    openGraph: {
+      title: `${guide.title} | ${SITE_NAME}`,
+      description: guide.description,
+      url: path,
+      siteName: SITE_NAME,
+      locale: "es_DO",
+      type: "article",
+      publishedTime: guide.publishedAt,
+      modifiedTime: guide.updatedAt,
+      authors: [guide.author],
+      section: guide.category,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${guide.title} | ${SITE_NAME}`,
+      description: guide.description,
+    },
+  }
+}
+
 /** Datos estructurados JSON-LD: WebApplication + BreadcrumbList + FAQPage (si hay FAQ) */
 export function toolJsonLd(section: string, slug: string, faq: FaqItem[] = []) {
   const tool = findToolCard(section, slug)
@@ -163,6 +213,119 @@ export function toolJsonLd(section: string, slug: string, faq: FaqItem[] = []) {
     graph.push({
       "@type": "FAQPage",
       mainEntity: faq.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
+        },
+      })),
+    })
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": graph,
+  }
+}
+
+/** JSON-LD del índice de guías: CollectionPage + BreadcrumbList con las guías publicadas. */
+export function guidesIndexJsonLd(guides: Guide[] = []) {
+  const published = guides.filter((guide) => !guide.draft)
+  const url = `${SITE_URL}/guias`
+
+  const graph: Record<string, unknown>[] = [
+    {
+      "@type": "CollectionPage",
+      name: `Guías de bienestar y finanzas | ${SITE_NAME}`,
+      url,
+      inLanguage: "es-DO",
+      description:
+        "Guías de HOLENTIA con explicaciones claras, ejemplos y fuentes sobre dinero, cuerpo y decisiones cotidianas.",
+      isPartOf: {
+        "@type": "WebSite",
+        name: SITE_NAME,
+        url: SITE_URL,
+      },
+      ...(published.length > 0
+        ? {
+            hasPart: published.map((guide) => ({
+              "@type": "Article",
+              headline: guide.title,
+              url: `${SITE_URL}/guias/${guide.slug}`,
+            })),
+          }
+        : {}),
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Inicio", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Guías", item: url },
+      ],
+    },
+  ]
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": graph,
+  }
+}
+
+/** JSON-LD de una guía: Article + BreadcrumbList + FAQPage (si tiene preguntas). */
+export function guideJsonLd(guide: Guide) {
+  const url = `${SITE_URL}/guias/${guide.slug}`
+
+  const graph: Record<string, unknown>[] = [
+    {
+      "@type": "Article",
+      headline: guide.title,
+      description: guide.description,
+      url,
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": url,
+      },
+      datePublished: guide.publishedAt,
+      dateModified: guide.updatedAt,
+      inLanguage: "es-DO",
+      articleSection: guide.category,
+      keywords: guide.keywords,
+      image: `${url}/opengraph-image`,
+      isAccessibleForFree: true,
+      author: {
+        "@type": "Person",
+        name: guide.author,
+      },
+      publisher: {
+        "@type": "Organization",
+        name: SITE_NAME,
+        url: SITE_URL,
+        logo: {
+          "@type": "ImageObject",
+          url: `${SITE_URL}/apple-icon.png`,
+        },
+      },
+      isPartOf: {
+        "@type": "WebSite",
+        name: SITE_NAME,
+        url: SITE_URL,
+      },
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Inicio", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Guías", item: `${SITE_URL}/guias` },
+        { "@type": "ListItem", position: 3, name: guide.title, item: url },
+      ],
+    },
+  ]
+
+  if (guide.faq.length > 0) {
+    graph.push({
+      "@type": "FAQPage",
+      mainEntity: guide.faq.map((item) => ({
         "@type": "Question",
         name: item.question,
         acceptedAnswer: {

@@ -45,6 +45,8 @@ holentia/
 │   ├── protein.ts            # Perfiles y rangos de proteína compartidos (g/kg)
 │   ├── format.ts             # formatDOP (es-DO/DOP) — fuente única de moneda
 │   └── utils.ts              # Funciones de utilidad
+├── content/guias/            # Guías editoriales en Markdown (frontmatter + validación)
+├── scripts/                  # audit-seo.mjs + validate-guides.mjs
 ├── types/                    # Definiciones de tipos
 │   └── index.ts              # Tipos principales
 ├── app/sitemap.ts            # Sitemap XML (46 URLs)
@@ -176,8 +178,16 @@ La fuente única de verdad es **`design.md`** (paleta completa, tipografía Inte
 ## Agentes y skills
 
 - **`AGENTS.md`**: reglas de oro para agentes (rama `dev`, verificación `tsc+lint+build`, privacidad, server-first). Cargado por `opencode.json`.
-- **Skills** en `.opencode/skills/`: `create-tool` (herramienta nueva de punta a punta), `section-ui` (colores/tipografía/iconos/dark), `tool-persistence` (localStorage patrones D/S/E), `chart-chartsjs` (teming de gráficos).
-- **Mantenimiento**: cada modificación de UI o proceso actualiza `design.md` y la skill afectada en el mismo commit.
+- **Skills** en `.opencode/skills/`: `create-tool` (herramienta nueva de punta a punta), `section-ui` (colores/tipografía/iconos/dark), `tool-persistence` (localStorage patrones D/S/E), `chart-chartsjs` (teming de gráficos), `create-guide` (guía editorial en Markdown), `guia-voz` (tono relajado y ejemplos) y `humanizer` (pase final contra patrones AI, MIT).
+- **Mantenimiento**: cada modificación de UI, proceso o flujo editorial actualiza `design.md`, `content/guias/README.md` y/o la skill afectada en el mismo commit.
+
+## Contenido editorial
+
+- Las guías viven en `content/guias/*.md` con frontmatter YAML y Markdown puro; se pueden exportar sin depender del sitio.
+- `draft: true` las mantiene fuera de producción, del sitemap y de `llms.txt`; en desarrollo y previews se ven con `noindex` para revisarlas.
+- `content/guias/_briefs/` guarda la investigación y el outline; `_template.md` es el punto de partida.
+- `pnpm guides:check` valida frontmatter, slug, herramientas, fuentes, FAQ, fechas y enlaces internos.
+- El renderizado vive en `app/guias/` y `components/guides/` (Fase BQ): índice, detalle, `Article` + `FAQPage` + `BreadcrumbList` y OG por guía. El sitemap incluye las guías solo cuando están publicadas.
 
 ## Privacidad y Datos
 
@@ -209,6 +219,9 @@ pnpm exec tsc --noEmit
 # Construir para producción
 pnpm build
 
+# Validar las guías editoriales (frontmatter, fuentes, FAQ, enlaces)
+pnpm guides:check
+
 # Auditoría SEO/GEO + estructura a11y (usa el build; arranca `next start` solo)
 pnpm audit:seo
 
@@ -230,8 +243,8 @@ Para contribuir al proyecto:
 8. Respetar la privacidad del usuario: no añadir tracking ni recopilación de datos
 9. Mantener diseño minimalista y coherente con la esencia de la aplicación
 10. Usar gradientes sutiles y efectos visuales con moderación
-11. **Al cambiar UI o procesos: actualizar `design.md` y la skill afectada en el mismo commit**
-12. Verificar `pnpm exec tsc --noEmit && pnpm lint && pnpm build` antes de cada push (rama `dev`)
+11. **Al cambiar UI, procesos o flujo editorial: actualizar `design.md`, `content/guias/README.md` y la skill afectada en el mismo commit**
+12. Verificar `pnpm exec tsc --noEmit && pnpm lint && pnpm build` antes de cada push (rama `dev`); para guías, además `pnpm guides:check`
 
 ## Licencia
 
@@ -239,4 +252,4 @@ Este proyecto es propiedad de Daury DiCaprio. Todos los derechos reservados.
 
 ---
 
-**Última actualización**: Octubre 2026 (35 herramientas y 46 URLs, calculadora de grasa corporal + planificador de comidas + rutinas HIIT + seguimiento de hábitos + calculadora de proteína + test de calidad del sueño, directorio `/herramientas` + calculadora de prestaciones, pase UI/UX móvil completo —contraste AA, tap targets, inputs sin zoom iOS—, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`)
+**Última actualización**: Octubre 2026 (35 herramientas y 46 URLs, calculadora de grasa corporal + planificador de comidas + rutinas HIIT + seguimiento de hábitos + calculadora de proteína + test de calidad del sueño, directorio `/herramientas` + calculadora de prestaciones, pase UI/UX móvil completo —contraste AA, tap targets, inputs sin zoom iOS—, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`, estructura editorial en `content/guias/` con validación `guides:check` y skills `create-guide`/`guia-voz`/`humanizer`)

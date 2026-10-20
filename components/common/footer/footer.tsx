@@ -21,6 +21,7 @@ const fallbackLinkClass =
 
 const siteLinks = [
   { href: "/herramientas", label: "Directorio de herramientas" },
+  { href: "/guias", label: "Guías" },
   { href: "/que-es-holentia", label: "Qué es HOLENTIA" },
   { href: "/ayuda", label: "Ayuda" },
   { href: "/apoyar", label: "Apoyar" },

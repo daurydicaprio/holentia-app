@@ -3,6 +3,7 @@
 > Repo `daurydicaprio/holentia-app`. Rama trabajo `dev` → preview `dev.holentia.com`.
 > Prod `holentia.com → main`. No tocar dominios.
 > Principios: sin DB, sin registro, local-first privado (`holentia:*` en navegador), cero tracking.
+> Plan de mejoras 2.0 (propuesta, 20-Oct-2026): [`plan-mejoras.md`](plan-mejoras.md).
 
 ## Estado actual (20-Oct-2026) — 35 herramientas (grasa corporal + planificador de comidas + rutinas HIIT + seguimiento de hábitos + proteína + test de calidad del sueño) en `dev` y producción; roadmap de herramientas completado (0 «Próximamente»); proteína de calorías corregida; red de enlaces de cuerpo, favicon H y pase UI/UX móvil completos
 - [x] Stack: Next 15.5.26 + React 19.3 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
@@ -14,6 +15,7 @@
 - [x] `tsc 0 errores + next build OK + pnpm lint 0` en estricto
 - [x] **Sync a `main` aprobada** por el usuario (19-Oct-2026): `dev` → `main` por fast-forward con la Fase BK (planificador de comidas). Producción con **34 herramientas activas y 0 «Próximamente»**; roadmap de herramientas completado. Los cambios siguientes vuelven a requerir aprobación explícita antes de tocar `main`.
 - [x] **Deploy de producción (20-Oct-2026)**: `main` avanzado por fast-forward a `0c59ac1` (Fase BM) y desplegado en Vercel. `holentia.com/calculadora-grasa-corporal` responde **200**, con title, canonical, H1 y OG correctos; sitemap con **46** URLs. Incluye la Fase BL (`fa86ef2`/`55de0e6`), por lo que el header/héroe SSR queda publicado. Queda pendiente repetir Lighthouse de campo sobre producción.
+- [x] **Estructura editorial (20-Oct-2026)**: `content/guias/` con README, plantilla, dos briefs y dos borradores (`sueldo-neto-rd-2027`, `grasa-corporal-como-medirla`), validación `pnpm guides:check` y skills `create-guide`/`guia-voz`/`humanizer`; render `/guias` + `/guias/[slug]` listo en preview (drafts `noindex`), pendiente de aprobación para publicar.
 
 ---
 

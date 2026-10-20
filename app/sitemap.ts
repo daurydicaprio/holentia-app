@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next"
 import { sectionsData } from "@/lib/data"
+import { getPublishedGuides } from "@/lib/guides"
 import { SITE_URL } from "@/lib/seo"
 
 // Fecha de última actualización real del contenido. Actualizar a mano al publicar cambios de contenido.
@@ -31,5 +32,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
       })),
   )
 
-  return [...staticRoutes, ...toolRoutes]
+  // Las guías con draft:true no existen para producción. El índice entra al
+  // sitemap solo cuando hay al menos una guía publicada.
+  const publishedGuides = getPublishedGuides()
+  const guideRoutes: MetadataRoute.Sitemap =
+    publishedGuides.length === 0
+      ? []
+      : [
+          {
+            url: `${SITE_URL}/guias`,
+            lastModified: LAST_UPDATED,
+            changeFrequency: "monthly",
+            priority: 0.6,
+          },
+          ...publishedGuides.map((guide) => ({
+            url: `${SITE_URL}/guias/${guide.slug}`,
+            lastModified: new Date(`${guide.updatedAt}T12:00:00Z`),
+            changeFrequency: "monthly" as const,
+            priority: 0.6,
+          })),
+        ]
+
+  return [...staticRoutes, ...toolRoutes, ...guideRoutes]
 }

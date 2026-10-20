@@ -264,6 +264,16 @@
   }
 }
 
+/* Guías editoriales: el Markdown usa utilidades; el CTA en blockquote no lleva
+   el margen superior del primer párrafo ni el inferior del último. */
+.guide-markdown blockquote > p:first-child {
+  margin-top: 0;
+}
+
+.guide-markdown blockquote > p:last-child {
+  margin-bottom: 0;
+}
+
 /* Accesibilidad: sin microanimaciones para quien pida movimiento reducido.
    (el hook use-count-up también lo respeta por su cuenta, vía matchMedia) */
 @media (prefers-reduced-motion: reduce) {

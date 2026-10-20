@@ -59,17 +59,20 @@ Regla: nada de `useEffect`/`mounted` guard para decidir si se renderiza contenid
 ## 6. Estructura de directorios
 
 ```
-app/           páginas (server-first): 4 hubs, 35 herramientas, directorio, 5 informativas, layout, error, manifest, sitemap, robots + OG por ruta
+app/           páginas (server-first): 4 hubs, 35 herramientas, directorio, 5 informativas, guías `/guias`, layout, error, manifest, sitemap, robots + OG por ruta
 components/
   common/      header, footer, logo, brand-dots, menu-button, scroll-to-top, clear-all-data, tab-swipe-navigation
+  guides/      guide-card, guide-markdown (react-markdown server), guide-tool-links
   sections/    section-page, section-tabs, section-header, section-swipe-navigation, tool-card, tools-grid
   tool-seo/    tool-page-shell, tool-faq (acordeón), json-ld
   tools/       35 componentes client de herramientas (+ subcomponentes y `related-tools/` compartido)
   seo/         og-template (plantilla compartida de las imágenes OG)
   ui/          primitivas shadcn (button, count-up, input, slider)
 hooks/         lógica por herramienta + use-count-up, use-haptic-feedback, use-media-query
-lib/           data.ts (catálogo), seo.ts, storage.ts, protein.ts (perfiles/rangos), format.ts (formatDOP), utils.ts
-types/         index.ts (CardData, SectionType, AmortizationRow, …)
+lib/           data.ts (catálogo), seo.ts, guides.ts (lectura/parseo), guide-format.ts, storage.ts, protein.ts (perfiles/rangos), format.ts (formatDOP), utils.ts
+content/guias/ guías editoriales en Markdown + briefs + plantilla (validación `guides:check`)
+scripts/       audit-seo.mjs, validate-guides.mjs
+types/         index.ts (CardData, SectionType, AmortizationRow, …), guide.ts
 ```
 
 ## 7. Skills y mantenimiento de docs
@@ -82,13 +85,18 @@ types/         index.ts (CardData, SectionType, AmortizationRow, …)
   - `chart-chartsjs` — theming Chart.js por tema + pitfall `fontColor` de leyendas.
   - `seo-geo` — receta SEO/GEO por página y por herramienta (metadata, canonical, JSON-LD, OG, llms.txt).
   - `seo-geo-audit` — checklist de 16 puntos + barrido automatizado + registro de auditorías (obligatoria al añadir herramienta).
-- **Regla**: cualquier cambio de UI/patrón/token/proceso actualiza `design.md` y/o las skills afectadas **en el mismo commit** (docs nunca desincronizados del código).
+  - `create-guide` — flujo editorial completo: brief, frontmatter, CTAs, fuentes, validación, publicación y actualización.
+  - `guia-voz` — tono relajado, sencillo y con ejemplos para las guías.
+  - `humanizer` — pase final contra patrones de escritura AI (MIT, `blader/humanizer`).
+- **Contenido editorial**: `content/guias/README.md` es la fuente de verdad de frontmatter, CTAs, fuentes y flujo. Las guías se escriben en Markdown puro. `pnpm guides:check` valida el contenido. El renderizado vive en `app/guias/` + `components/guides/` (Fase BQ). `draft: true` se muestra solo en desarrollo/preview con `noindex`; en producción queda fuera de páginas, sitemap y `llms.txt` hasta pasar a `draft: false`.
+- **Regla**: cualquier cambio de UI/patrón/token/proceso/flujo editorial actualiza `design.md`, `content/guias/README.md` y/o las skills afectadas **en el mismo commit** (docs nunca desincronizados del código).
 
 ## 8. Calidad
 
 - `pnpm exec tsc --noEmit` · `pnpm lint` (ESLint 8.57 + `next/core-web-vitals`) · `pnpm build` — los tres deben estar en verde antes de cada push.
+- Guías: `pnpm guides:check` valida frontmatter, slug, herramientas, fuentes, FAQ, fechas y enlaces internos.
 - Build estricto: sin `ignoreBuildErrors`/`ignoreDuringBuilds`.
-- Smoke antes de cada push con rutas nuevas: HTML prerenderado (H1 ×1, canonical, 0 `noindex`, JSON-LD) + runtime de `opengraph-image` (`200 image/png`).
+- Smoke antes de cada push con rutas nuevas: HTML prerenderado (H1 ×1, canonical, `noindex` solo esperado en borradores de guía, JSON-LD) + runtime de `opengraph-image` (`200 image/png`).
 - Auditoría automatizada: `pnpm audit:seo` (`scripts/audit-seo.mjs`) valida el sitemap completo — SEO/GEO, estructura a11y y runtime OG — en un paso (detalle: skill `seo-geo-audit` §2.0).
 - **Accesibilidad real (Fase BG, 18-Oct-2026)**: barrido `axe-core 4.11` en Chromium (Playwright) sobre las 42 rutas × claro/oscuro × 1440/390 px, finalizando animaciones, más estados de resultado (calculadoras, tests, diarios, presupuesto, glosario): **168 combinaciones + estados, 0 violaciones**. Complemento manual de teclado/foco: skip link, orden de tabulación con anillo visible, menú Enter/Escape y botón «Volver» móvil con nombre accesible. Reglas y hallazgos: `design.md` §7 y `plan.md` Fase BG; el registro de auditorías vive en la skill `seo-geo-audit`.
 - **Rendimiento de campo (Fase BL, 19-Oct-2026)**: el chrome de herramienta y el héroe crítico se renderizan en SSR; las variantes responsive se alternan por CSS (`md:hidden` / `hidden md:block`) y los gates `mounted` se limitan a datos locales/fecha. Resultado en Lighthouse 13.5: **CLS 0.093 → 0**, LCP móvil **2.5 → 2.1 s**, móvil 87-88 (mediana) y desktop 100; `audit:seo` 45/45, axe 12/12. Detalle: `design.md` §3.8/§4d y `plan.md` Fase BL.
