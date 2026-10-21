@@ -154,7 +154,7 @@ El borrador debe verse, llevar `noindex, nofollow` y no aparecer en `sitemap.xml
 2. Verifica que `publishedAt`, `updatedAt` y `reviewedAt` sean correctos.
 3. Añade la línea de la guía a `public/llms.txt` en `## Guías` (URL + resumen de una frase) y, la primera vez, la línea del índice `https://holentia.com/guias`.
 4. El índice `/guias`, la ruta de la guía, el JSON-LD, la OG y el sitemap se generan solos: no añadas rutas a mano en `app/sitemap.ts`.
-5. Enlaza desde la herramienta principal y, si aplica, desde 1–2 guías relacionadas.
+5. Enlaces bidireccionales: el bloque `RelatedGuides` de `ToolPageShell` muestra automáticamente las guías publicadas cuyo `primaryTool` o `relatedTools` coincide con la herramienta. No edites la página de la herramienta para añadir el enlace; basta con declarar bien el frontmatter. Si la guía enlaza a 1–2 guías relacionadas, usa rutas absolutas en el Markdown.
 6. Ejecuta `pnpm guides:check`, `tsc`, `lint`, `build` y `pnpm audit:seo` (ahora sí incluye la guía en el sitemap).
 7. Revisa la página en móvil, claro/oscuro, teclado y con el HTML inicial (sin JS).
 8. Commit en `dev`; `main` solo cuando el usuario lo pida.

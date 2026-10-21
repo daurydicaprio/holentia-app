@@ -60,6 +60,11 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 - [Calculadora de grasa corporal](https://holentia.com/calculadora-grasa-corporal): porcentaje de grasa y masa magra con el método US Navy (cintura, cuello y cadera), con rangos de referencia y límites claros.
 - [Calculadora de proteína diaria](https://holentia.com/calculadora-proteina-diaria): gramos de proteína al día según peso, actividad y objetivo (0,8–2,2 g/kg), con reparto por comida y fuentes.
 
+## Guías
+
+- [Guías de HOLENTIA](https://holentia.com/guias): explicaciones claras con ejemplos y fuentes sobre dinero, cuerpo y decisiones cotidianas.
+- [Interés compuesto en RD: ahorra 10% o 17% de tu sueldo](https://holentia.com/guias/interes-compuesto-rd): cuánto crecen RD$24,000 y RD$30,000 al mes con aportes de 10% o 17%, una tasa de 10% y el 10% de impuesto sobre la ganancia.
+
 ## Páginas informativas
 
 - [Qué es HOLENTIA](https://holentia.com/que-es-holentia)

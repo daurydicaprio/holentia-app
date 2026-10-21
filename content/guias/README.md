@@ -76,7 +76,7 @@ GUIDES_PREVIEW=1 pnpm start
 # abrir /guias
 ```
 
-- La metadata, los JSON-LD (`Article` + `BreadcrumbList` + `FAQPage`) y la OG por guía se generan solos. El índice y las guías publicadas entran al sitemap cuando al menos una tiene `draft: false`.
+- La metadata, los JSON-LD (`Article` + `BreadcrumbList` + `FAQPage` + `citation` desde `sources`) y la OG por guía se generan solos. El índice y las guías publicadas entran al sitemap cuando al menos una tiene `draft: false`.
 - `public/llms.txt` y los enlaces desde las herramientas se añaden manualmente al publicar. Incluye una línea del índice `/guias` la primera vez.
 
 ## Cuerpo
@@ -138,5 +138,7 @@ Las guías de finanzas y salud caducan. Revisa fuentes y tasas al menos una vez 
 ## Estado
 
 - Contenido y validación: listos.
-- Renderizado `/guias`, JSON-LD y OG: listos y en preview; sitemap/`llms.txt` se activan al publicar.
-- Guías actuales: borradores en `content/guias/`; no publicadas y fuera del sitemap.
+- Renderizado `/guias`, JSON-LD y OG: listos.
+- Guías actuales: `interes-compuesto-rd` publicada (`draft: false`) y en sitemap/`llms.txt`; `sueldo-neto-rd-2027` y `grasa-corporal-como-medirla` siguen en borrador hasta la revisión del autor.
+- El índice `/guias` y la guía publicada entran al sitemap automáticamente. Las herramientas muestran sus guías publicadas con `RelatedGuides` (`primaryTool`/`relatedTools`); no hay que editar TSX al publicar.
+- Las guías en borrador se revisan con `GUIDES_PREVIEW=1 pnpm build` y `GUIDES_PREVIEW=1 pnpm start`; llevan `noindex, nofollow` y no aparecen en sitemap ni `llms.txt`.

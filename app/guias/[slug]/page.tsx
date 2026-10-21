@@ -3,6 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowLeft, ArrowRight, Clock3 } from "lucide-react"
 import Footer from "@/components/common/footer/footer"
+import Logo from "@/components/common/logo/logo"
 import MenuButton from "@/components/common/menu-button/menu-button"
 import GuideMarkdown from "@/components/guides/guide-markdown"
 import GuideToolLinks from "@/components/guides/guide-tool-links"
@@ -55,15 +56,19 @@ export default async function GuiaPage({ params }: { params: Promise<{ slug: str
       <JsonLd data={guideJsonLd(guide)} />
 
       <div className="flex-1 w-full max-w-5xl mx-auto p-4 sm:p-6">
-        <div className="flex items-center justify-between mb-8">
-          <Link
-            href="/guias"
-            data-interactive="true"
-            className="inline-flex items-center gap-2 py-3 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-          >
-            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-            Todas las guías
-          </Link>
+        <div className="mb-8 flex items-center justify-between gap-4">
+          <div className="flex min-w-0 items-center gap-3">
+            <Logo size="sm" />
+            <span aria-hidden="true" className="h-6 w-px bg-gray-200 dark:bg-gray-700" />
+            <Link
+              href="/guias"
+              data-interactive="true"
+              className="inline-flex items-center gap-2 py-3 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+            >
+              <ArrowLeft className="h-4 w-4 shrink-0" aria-hidden="true" />
+              <span className="truncate">Todas las guías</span>
+            </Link>
+          </div>
           <MenuButton />
         </div>
 

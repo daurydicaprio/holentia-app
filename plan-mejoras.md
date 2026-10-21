@@ -5,14 +5,14 @@
 > Base: `main` y `dev` en `3638175`; 35 herramientas, 46 URLs, 46 OG, 39 claves `holentia:*`.
 > Principios: local-first, sin tracking, server-first, español (es-DO) y documentación en el mismo commit.
 >
-> **Estado de ejecución (20-Oct-2026):** Humanizer instalado (MIT); skills `create-guide` y `guia-voz` creadas; `content/guias/` con README, plantilla, dos briefs y dos borradores (`sueldo-neto-rd-2027`, `grasa-corporal-como-medirla`); `pnpm guides:check` en verde. Pendiente: render público `/guias`, revisión editorial del autor y fases BN/BO/BP.
+> **Estado de ejecución (20-Oct-2026):** Humanizer instalado (MIT); skills `create-guide` y `guia-voz` creadas; `content/guias/` con README, plantilla, tres briefs y tres guías (`interes-compuesto-rd` publicada; `sueldo-neto-rd-2027` y `grasa-corporal-como-medirla` en borrador); `/guias`, sitemap, `llms.txt` y `RelatedGuides` activos; `pnpm guides:check` en verde. Pendiente: revisión editorial de los dos borradores y fases BN/BO/BP.
 
 ## 1. Diagnóstico
 
 ### Fortalezas
 
 - Producto completo: 35 herramientas activas, 0 «Próximamente», 4 hubs y directorio.
-- SEO/GEO técnico sólido: auditoría 46/46, FAQ y JSON-LD en SSR, OG por ruta, `llms.txt`, sitemap y `robots` con bots de IA.
+- SEO/GEO técnico sólido: auditoría 48/48, FAQ y JSON-LD en SSR, OG por ruta, `llms.txt`, sitemap y `robots` con bots de IA.
 - Accesibilidad por encima de la media: axe limpio, teclado, foco, contraste y `prefers-reduced-motion`.
 - Producción desplegada y verificada; el problema de deploy de la Fase BL quedó resuelto.
 - Search Console ya conectado. Aún sin datos: las primeras fases no dependen de métricas.
@@ -124,10 +124,10 @@ Entregables:
 - [x] Parser de frontmatter (`lib/guides.ts`) y renderer Markdown server-side (`components/guides/guide-markdown.tsx`).
 - [x] Rutas `/guias` y `/guias/[slug]` con visibilidad de borradores solo en desarrollo/preview.
 - [x] `Article` + `FAQPage` + `BreadcrumbList` JSON-LD y OG dinámica por guía.
-- [ ] Sitemap, `llms.txt` y enlaces desde herramientas: se activan al publicar (`draft: false`).
+- [x] Sitemap, `llms.txt` y enlaces desde herramientas: activos con la primera guía publicada (`interes-compuesto-rd`). `RelatedGuides` enlaza automáticamente las guías publicadas desde sus herramientas.
 - [x] `scripts/validate-guides.mjs`, comando `pnpm guides:check` y soporte de guías en `audit-seo.mjs`.
 - [x] Skills `create-guide` y `guia-voz`; Humanizer instalado.
-- [x] Dos guías `draft: true` para validar el pipeline; no se publican.
+- [x] Tres guías para validar el pipeline: una publicada y dos en borrador para revisión.
 
 Aceptación:
 - Una guía draft renderiza en local/preview, queda `noindex` y no aparece en sitemap/llms.
@@ -186,11 +186,12 @@ Aceptación:
 **Objetivo:** publicar 3 guías sólidas, con apoyo de brief, edición, fuentes y SEO. El autor revisa y corrige; el agente puede escribir el primer borrador.
 
 Candidatas:
-1. Sueldo neto RD 2027: TSS, ISR y ejemplos. **Borrador listo.**
-2. Grasa corporal: cómo medirla y qué hacer con el resultado. **Borrador listo.**
-3. Aguinaldo: cálculo, exención y fecha de pago.
-4. ITBIS: cómo calcularlo y cuándo aplica.
-5. IMC vs. grasa corporal: cuál usar y cuándo.
+1. Interés compuesto en RD: 10% o 17% del sueldo, AFI y test de riesgo. **Publicada.**
+2. Sueldo neto RD 2027: TSS, ISR y ejemplos. **Borrador listo para revisión.**
+3. Grasa corporal: cómo medirla y qué hacer con el resultado. **Borrador listo para revisión.**
+4. Aguinaldo: cálculo, exención y fecha de pago.
+5. ITBIS: cómo calcularlo y cuándo aplica.
+6. IMC vs. grasa corporal: cuál usar y cuándo.
 
 Flujo:
 - Creamos un brief por guía: intención, audiencia, tesis, outline, fuentes a verificar, ejemplos, enlaces y CTA.
@@ -376,16 +377,14 @@ Cada brief debe incluir:
 1. **CI/Vitest**: ¿se mantiene la restricción? Si sí, usar `node:test` + script local y CI mínimo.
 2. **Export/import**: ¿se aprueba «Mis datos»? Si no, saltar BV o dejar solo lectura.
 3. **Humanizer**: instalado. La skill `guia-voz` define el tono y `humanizer` hace el pase final.
-4. **Primera guía**: sueldo neto RD 2027 y grasa corporal ya tienen borrador; falta la revisión del autor.
+4. **Primera guía publicada**: `interes-compuesto-rd` ya está en `/guias`, sitemap y `llms.txt`. Sueldo neto RD 2027 y grasa corporal tienen borrador; falta la revisión del autor.
 5. **Autoría**: nombre y credenciales que aparecerán en las guías para E-E-A-T (por ahora, Daury DiCaprio).
 
 ## 10. Primer paso propuesto
 
-La estructura editorial ya está montada y hay dos borradores. El siguiente paso es:
+La estructura editorial ya está montada, hay una guía publicada y dos borradores. El siguiente paso es:
 
 1. **Revisión editorial del autor** de `sueldo-neto-rd-2027.md` y `grasa-corporal-como-medirla.md`.
-2. **BQ restante**: render público `/guias`, OG, sitemap, `llms.txt` y enlaces desde herramientas.
+2. **Publicar los dos borradores** cuando el autor los apruebe: `draft: false`, línea en `llms.txt`, `guides:check`, `tsc`, `lint`, `build` y `audit:seo`.
 3. **BN — Baseline, dependencias y medición** en paralelo: limpieza de dependencias, baseline PSI/GSC, sin cambios de UI.
 4. **BO/BP** después: a11y de gráficos y red de enlaces internos.
-
-Cuando las guías estén aprobadas, se publican con `draft: false` y se ejecuta `pnpm guides:check`, `tsc`, `lint`, `build` y `audit:seo`.

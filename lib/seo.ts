@@ -134,7 +134,7 @@ export function toolMetadata(section: string, slug: string): Metadata {
 export function guidesIndexMetadata(): Metadata {
   return baseMetadata(
     "Guías de bienestar y finanzas",
-    "Guías de HOLENTIA con explicaciones claras, ejemplos y fuentes: sueldo neto, grasa corporal y los temas que rodean a cada herramienta.",
+    "Guías de HOLENTIA con explicaciones claras, ejemplos con números y fuentes sobre dinero, cuerpo y decisiones cotidianas. Sin registro.",
     "/guias",
   )
 }
@@ -292,6 +292,15 @@ export function guideJsonLd(guide: Guide) {
       articleSection: guide.category,
       keywords: guide.keywords,
       image: `${url}/opengraph-image`,
+      ...(guide.sources.length > 0
+        ? {
+            citation: guide.sources.map((source) => ({
+              "@type": "CreativeWork",
+              name: source.title,
+              url: source.url,
+            })),
+          }
+        : {}),
       isAccessibleForFree: true,
       author: {
         "@type": "Person",

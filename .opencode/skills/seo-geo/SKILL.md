@@ -37,7 +37,7 @@ Todo server-rendered vía `<JsonLd data={...} />`:
 | Informativa | AboutPage + BreadcrumbList | `pageJsonLd(name, path)` |
 | Ayuda | FAQPage + BreadcrumbList (un solo `@graph`) | `faqWithBreadcrumbJsonLd(faq, "/ayuda", "Centro de Ayuda")` |
 | Guías (índice) | CollectionPage + BreadcrumbList | `guidesIndexJsonLd(guides)` |
-| Guía | Article + BreadcrumbList + FAQPage (si hay FAQ) | `guideJsonLd(guide)` |
+| Guía | Article + BreadcrumbList + FAQPage (si hay FAQ) + `citation` de `sources` | `guideJsonLd(guide)` |
 | Glosario | DefinedTermSet | inline en `app/glosario-financiero/page.tsx` |
 
 Miguita: **solo en JSON-LD** (no UI visible — los botones Volver y el footer cubren la navegación).
@@ -71,7 +71,7 @@ Miguita: **solo en JSON-LD** (no UI visible — los botones Volver y el footer c
 7. Enlaces: el footer ya la enlaza indirectamente (catálogo); no hace falta link manual.
 8. Verificación: `pnpm build` + comprobar en `.next/server/app/{slug}.html`: `<title>`, `meta description`, `canonical`, `og:image`, `twitter:card`, `<script type="application/ld+json">` con WebApplication + Breadcrumb + FAQPage y el acordeón «Preguntas frecuentes» en el HTML.
 
-**Guías**: el checklist equivalente vive en `create-guide` §6–7. El índice y el detalle ya generan metadata, canonical, OG, `Article` + `BreadcrumbList` + `FAQPage`; al publicar solo hay que poner `draft: false`, añadir la línea de `llms.txt` y enlazar desde la herramienta. Las drafts quedan `noindex` y fuera del sitemap.
+**Guías**: el checklist equivalente vive en `create-guide` §6–7. El índice y el detalle ya generan metadata, canonical, OG, `Article` + `BreadcrumbList` + `FAQPage` + `citation`; al publicar solo hay que poner `draft: false`, añadir la línea de `llms.txt` y declarar `primaryTool`/`relatedTools` (el bloque `RelatedGuides` enlaza solo). Las drafts quedan `noindex` y fuera del sitemap.
 
 ## 7. Verificación global (tras cambios SEO)
 

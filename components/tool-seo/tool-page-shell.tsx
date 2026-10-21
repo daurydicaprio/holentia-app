@@ -8,6 +8,7 @@ import Footer from "@/components/common/footer/footer"
 import ScrollToTop from "@/components/common/scroll-to-top/scroll-to-top"
 import JsonLd from "./json-ld"
 import ToolFaq from "./tool-faq"
+import RelatedGuides from "@/components/guides/related-guides"
 import { sectionLabel, toolJsonLd, type FaqItem } from "@/lib/seo"
 
 // Mapas estáticos para que Tailwind genere las clases por sección
@@ -88,6 +89,8 @@ export default function ToolPageShell({ section, tool, faq = [], children }: Too
         {children}
 
         <ToolFaq faq={faq} section={section} />
+
+        <RelatedGuides toolSlug={tool.slug} />
       </div>
 
       <Footer section={section} />

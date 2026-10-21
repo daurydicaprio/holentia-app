@@ -27,13 +27,15 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
   }, [])
 
   const sizeClasses = {
-    sm: "w-10 h-10 text-xs",
+    sm: "w-16 h-16 text-[10px]",
     md: "w-24 h-24 text-sm",
     lg: "w-32 h-32 sm:w-40 sm:h-40 text-lg sm:text-2xl",
   }
 
+  const mark = "HOLENTIA"
+
   const auraSizes = {
-    sm: "h-11 w-11",
+    sm: "h-16 w-16",
     md: "h-24 w-24",
     lg: "h-32 w-32 sm:h-48 sm:w-48",
   }
@@ -45,15 +47,23 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
   if (!mounted) {
     return (
       <div
+        aria-label="HOLENTIA"
+        role="img"
         className={`${sizeClasses[size]} rounded-full bg-white font-bold text-gray-800 shadow-lg dark:bg-gray-900 dark:text-white flex items-center justify-center`}
       >
-        HOLENTIA
+        {mark}
       </div>
     )
   }
 
   return (
-    <Link href="/" data-interactive="true" className="group block" onClick={handleLogoClick}>
+    <Link
+      href="/"
+      data-interactive="true"
+      aria-label="HOLENTIA — Inicio"
+      className="group block"
+      onClick={handleLogoClick}
+    >
       <div className="relative flex items-center justify-center">
         {section && auraClass[section] && (
           <div
@@ -64,7 +74,7 @@ export default function Logo({ section = null, size = "lg" }: LogoProps) {
         <div
           className={`${sizeClasses[size]} relative z-10 flex items-center justify-center rounded-full border border-gray-200 bg-white font-bold text-gray-800 shadow-lg transition-shadow duration-300 group-hover:shadow-xl dark:border-gray-700 dark:bg-gray-900 dark:text-white`}
         >
-          HOLENTIA
+          {mark}
         </div>
       </div>
     </Link>

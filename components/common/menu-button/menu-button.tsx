@@ -41,8 +41,10 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
   const currentTheme = mounted ? resolvedTheme : "light"
   const isDark = currentTheme === "dark"
 
-  // Determinar si estamos en una página de herramienta
-  const isToolPage = pathname.split("/").filter(Boolean).length > 1
+  // Las guías viven sobre fondo claro: no usan el botón blanco translúcido
+  // de las herramientas (quedaría casi invisible sobre blanco).
+  const isToolPage =
+    pathname.split("/").filter(Boolean).length > 1 && !pathname.startsWith("/guias")
 
   const handleMenuToggle = () => {
     triggerHapticFeedback(isMenuOpen ? "light" : "medium")
@@ -179,6 +181,24 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
                 <span className="flex items-center">
                   <span className="flex-grow">Inicio</span>
                   {isActive("/") && <span className="h-2 w-2 rounded-full bg-gray-500 dark:bg-gray-400" />}
+                </span>
+              </Link>
+
+              <Link
+                href="/guias"
+                data-interactive="true"
+                className={`${linkClass} ${
+                  isActive("/guias")
+                    ? "bg-gray-100 font-medium dark:bg-gray-800"
+                    : ""
+                }`}
+                onClick={handleLinkClick}
+              >
+                <span className="flex items-center">
+                  <span className="flex-grow">Guías</span>
+                  {isActive("/guias") && (
+                    <span className="h-2 w-2 rounded-full bg-gray-500 dark:bg-gray-400" />
+                  )}
                 </span>
               </Link>
 
