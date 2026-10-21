@@ -35,7 +35,9 @@ publishedAt: "2026-10-20"
 updatedAt: "2026-10-20"
 reviewedAt: "2026-10-20" # obligatorio en finanzas y salud
 author: "Daury DiCaprio"
-cover: "salary" # growth | salary | body | invest | default
+cover: "salary" # fallback si no hay foto: growth | salary | body | invest | default
+image: "/guias/mi-guia.jpg" # foto local en public/guias/
+imageAlt: "Descripción breve de la foto para lectores de pantalla."
 keywords:
   - "sueldo neto RD"
   - "TSS"
@@ -60,15 +62,27 @@ Reglas:
 - `sources`: mínimo 2 en finanzas y salud; mínimo 1 en general. Enlaces `https`.
 - `faq`: 3–6 preguntas. Se usan para `FAQPage`.
 - `reviewedAt`: obligatorio en finanzas y salud.
-- `cover`: variante visual de la portada (`growth`, `salary`, `body`, `invest`). Si falta o es `default`, `GuideCover` usa el color y el icono de la categoría.
+- `image` y `imageAlt`: foto editorial local del índice. Descarga el archivo en `public/guias/` y usa una ruta que empiece por `/guias/`; `imageAlt` describe la foto para lectores de pantalla. Nunca uses URLs remotas en runtime.
+- `cover`: fallback visual (`growth`, `salary`, `body`, `invest`) si la guía todavía no tiene foto. Si falta o es `default`, `GuideCover` usa el color y el icono de la categoría.
 - `draft: true` hasta que el contenido, las fuentes y los enlaces estén revisados.
 - No incluir H1 en el cuerpo: el H1 sale del `title`.
 - Enlaces internos con rutas absolutas (`/calculadora-sueldo-neto`, `/guias/...`).
 
+## Imágenes
+
+Las fotos del índice viven en `public/guias/` y se sirven localmente: el navegador no hace peticiones a Unsplash ni a ningún otro tercero. Son fotografías de [Unsplash](https://unsplash.com/license), usadas bajo su licencia.
+
+- `como-invertir-en-rd-desde-cero.jpg` — `photo-1579621970563-ebec7560ff3e`
+- `sueldo-neto-rd-2027.jpg` — `photo-1554224154-26032ffc0d07`
+- `interes-compuesto-rd.jpg` — `photo-1611974789855-9c2a0a7236a3`
+- `grasa-corporal-como-medirla.jpg` — `photo-1571019613454-1cb2f99b2d8b`
+
+Al añadir una guía, descarga una foto horizontal (1600×1000 aproximado), guárdala con el slug y declara `image` + `imageAlt` en el frontmatter. Si no hay foto, el índice cae en la portada generada con tokens.
+
 ## Renderizado y vista previa
 
 - `lib/guides.ts` lee `content/guias/*.md`, parsea el frontmatter YAML y calcula el tiempo de lectura (220 palabras/minuto).
-- `app/guias/page.tsx` es el índice: una guía destacada + tres recientes y, debajo, el archivo «Últimas guías» con paginación local de cuatro en cuatro (`GuideArchive`). `app/guias/[slug]/page.tsx` renderiza el detalle con `react-markdown` + `remark-gfm` en el servidor y una barra superior con el logo centrado (`GuideNav`).
+- `app/guias/page.tsx` es el índice: una guía destacada con foto + tres recientes en una columna editorial y, debajo, «Últimas guías» con paginación local de cuatro en cuatro (`GuideArchive`). `app/guias/[slug]/page.tsx` renderiza el detalle con `react-markdown` + `remark-gfm` en el servidor y una barra superior con el logo centrado (`GuideNav`).
 - `draft: true` se muestra en desarrollo (`NODE_ENV !== "production"`), en previews de Vercel (`VERCEL_ENV=preview`) o con `GUIDES_PREVIEW=1`. La página lleva `noindex, nofollow`; el índice también es `noindex` mientras no haya publicadas.
 - Para revisar un build de producción en local:
 

@@ -14,6 +14,8 @@ updatedAt: "2026-10-21"
 reviewedAt: "2026-10-21"
 author: "Daury DiCaprio"
 cover: "body"
+image: "/guias/grasa-corporal-como-medirla.jpg"
+imageAlt: "Persona haciendo abdominales en una esterilla junto a una ventana."
 keywords:
   - "grasa corporal"
   - "método US Navy"

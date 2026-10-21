@@ -253,6 +253,7 @@ export function guidesIndexJsonLd(guides: Guide[] = []) {
               "@type": "Article",
               headline: guide.title,
               url: `${SITE_URL}/guias/${guide.slug}`,
+              ...(guide.image ? { image: `${SITE_URL}${guide.image}` } : {}),
             })),
           }
         : {}),
@@ -291,7 +292,7 @@ export function guideJsonLd(guide: Guide) {
       inLanguage: "es-DO",
       articleSection: guide.category,
       keywords: guide.keywords,
-      image: `${url}/opengraph-image`,
+      image: guide.image ? `${SITE_URL}${guide.image}` : `${url}/opengraph-image`,
       ...(guide.sources.length > 0
         ? {
             citation: guide.sources.map((source) => ({

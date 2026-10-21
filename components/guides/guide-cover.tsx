@@ -1,3 +1,4 @@
+import Image from "next/image"
 import { Activity, BookOpen, Brain, Compass, Heart, TrendingUp, Wallet, type LucideIcon } from "lucide-react"
 import type { GuideCategory } from "@/types/guide"
 
@@ -118,28 +119,62 @@ const wordmarkSize: Record<CoverVariant, string> = {
   compact: "hidden",
 }
 
+const defaultSizes: Record<CoverVariant, string> = {
+  featured: "(min-width: 1024px) 720px, 100vw",
+  grid: "(min-width: 1024px) 270px, (min-width: 640px) 50vw, 100vw",
+  compact: "(min-width: 1024px) 144px, (min-width: 640px) 128px, 112px",
+}
+
 interface GuideCoverProps {
   category: GuideCategory
   cover?: string
+  image?: string
+  imageAlt?: string
   variant?: CoverVariant
   className: string
+  sizes?: string
+  priority?: boolean
 }
 
 /**
- * Portada editorial generada con tokens de marca.
- * Es decorativa: el título y la categoría viven en la tarjeta, así que se oculta a lectores de pantalla.
+ * Portada editorial: foto local cuando existe y, si no, gradiente de marca.
+ * La foto se sirve desde `public/guias/`; nunca se hacen llamadas a terceros.
  */
 export default function GuideCover({
   category,
   cover,
+  image,
+  imageAlt,
   variant = "grid",
   className,
+  sizes,
+  priority = false,
 }: GuideCoverProps) {
+  if (image) {
+    return (
+      <div
+        className={`relative isolate overflow-hidden rounded-xl bg-gray-100 ring-1 ring-black/5 dark:bg-gray-800 dark:ring-white/10 ${className}`}
+      >
+        <Image
+          src={image}
+          alt={imageAlt ?? ""}
+          fill
+          priority={priority}
+          sizes={sizes ?? defaultSizes[variant]}
+          className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+        />
+      </div>
+    )
+  }
+
   const theme = (cover && coverThemes[cover]) || categoryFallback[category] || categoryFallback.general
   const Icon = theme.icon
 
   return (
-    <div aria-hidden="true" className={`relative isolate overflow-hidden ${theme.background} ${className}`}>
+    <div
+      aria-hidden="true"
+      className={`relative isolate overflow-hidden rounded-xl ring-1 ring-black/5 dark:ring-white/10 ${theme.background} ${className}`}
+    >
       <span className="guide-cover-grid absolute inset-0" />
       <span
         className={`absolute -right-16 -top-20 h-56 w-56 rounded-full border-[22px] ${theme.ringClass}`}

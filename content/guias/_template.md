@@ -11,7 +11,9 @@ publishedAt: "2026-10-20"
 updatedAt: "2026-10-20"
 reviewedAt: "2026-10-20"
 author: "Daury DiCaprio"
-cover: "default" # growth | salary | body | invest | default
+cover: "default" # fallback: growth | salary | body | invest | default
+image: "/guias/mi-guia.jpg" # foto local en public/guias/
+imageAlt: "Descripción breve de la foto para lectores de pantalla."
 keywords:
   - "palabra clave"
 sources:

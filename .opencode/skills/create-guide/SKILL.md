@@ -12,7 +12,7 @@ Skills de apoyo:
 - **`humanizer`** — pase final para quitar patrones de escritura AI. No añade datos.
 - **`seo-geo`** y **`seo-geo-audit`** — metadata, JSON-LD, OG, sitemap, `llms.txt` y auditoría.
 
-> Estado: 4 guías publicadas e índice rediseñado (destacada + 3 recientes + archivo paginado de 4 en 4). Los borradores se ven en desarrollo y en previews de Vercel con `noindex`; en producción `draft: true` queda fuera de páginas, sitemap y `llms.txt`. La publicación (`draft: false`, `llms.txt` y enlaces desde herramientas) sigue siendo una decisión explícita.
+> Estado: 4 guías publicadas e índice rediseñado (foto destacada + 3 recientes + archivo paginado de 4 en 4, sin etiquetas de categoría ni CTA «Leer guía»). Los borradores se ven en desarrollo y en previews de Vercel con `noindex`; en producción `draft: true` queda fuera de páginas, sitemap y `llms.txt`. La publicación (`draft: false`, `llms.txt` y enlaces desde herramientas) sigue siendo una decisión explícita.
 
 ## 1. Antes de escribir: brief
 
@@ -47,7 +47,8 @@ Reglas mínimas:
 
 - `slug` en kebab-case y **igual al nombre del archivo**.
 - `title`, `description`, `category`, `primaryTool`, `author`, `publishedAt`, `updatedAt`, `sources` y `faq` son obligatorios.
-- `cover` es opcional: `growth`, `salary`, `body`, `invest` o `default`. Elige la variante que mejor represente la guía; si falta o es `default`, `GuideCover` usa el color y el icono de la categoría.
+- `image` y `imageAlt` son la foto editorial local del índice. Descarga el archivo en `public/guias/{slug}.jpg` (horizontal, ~1600×1000), declara la ruta `/guias/{slug}.jpg` y escribe un `imageAlt` real. Nunca uses URLs remotas en runtime.
+- `cover` es el fallback generado: `growth`, `salary`, `body`, `invest` o `default`. Si falta la foto, `GuideCover` usa el color y el icono de la categoría. No es la vía principal del índice.
 - `draft: true` hasta que el contenido y las fuentes estén revisados. En desarrollo/preview se renderiza para revisión con `noindex`; en producción queda fuera del sitio.
 - `description` de 120–155 caracteres; sin clickbait.
 - `sources`: mínimo 2 en finanzas y salud; mínimo 1 en general.
@@ -91,11 +92,12 @@ Cierra con una sección `## Calcula tu caso` (o equivalente) que incluya la herr
 
 El frontmatter `primaryTool` y `relatedTools` alimentan el bloque automático del sitio. El CTA explícito en Markdown se mantiene para que la guía funcione al exportarla.
 
-## 4. Portada e índice
+## 4. Foto e índice
 
-- El índice `/guias` no es una cuadrícula plana: muestra la guía más reciente en `GuideFeaturedCard`, tres `GuideCompactCard` al lado y, debajo, `GuideArchive` con todas las guías de 4 en 4.
-- La portada se genera con `components/guides/guide-cover.tsx` usando tokens de marca. No subas fotos ni assets externos para la portada.
-- `cover` controla la variante visual. Añádelo en el frontmatter al crear la guía; si no, la portada de categoría sigue funcionando.
+- El índice `/guias` es editorial y foto-led: la guía más reciente en `GuideFeaturedCard` (16/9), tres `GuideCompactCard` a la derecha (texto + miniatura 6/5) y, debajo, «Últimas guías» con `GuideArchive` en rejilla de 4 y paginación local.
+- **Sin etiquetas redundantes**: no renderizar categoría, «Guía destacada» ni «Leer guía» en las tarjetas. El título y la foto bastan. Tampoco poner un título visible al bloque lateral de 3 guías.
+- Las fotos se sirven desde `public/guias/` con `next/image` (`fill`, `object-cover`, `sizes`) y caen en la portada generada solo si falta `image`. No uses URLs remotas en runtime: la página debe funcionar sin peticiones a terceros.
+- `content/guias/README.md` §Imágenes registra las fotos y su licencia. Al crear una guía nueva, añade la foto y el `imageAlt` en el mismo commit.
 - El detalle usa `GuideNav` con el logo centrado. No vuelvas a poner la fila manual de logo + «Todas las guías».
 - «Guías» va en el menú justo antes de «¿Qué es Holentia?».
 
@@ -159,13 +161,13 @@ El borrador debe verse, llevar `noindex, nofollow` y no aparecer en `sitemap.xml
 ## 8. Publicar
 
 1. Cambia `draft: false`.
-2. Verifica que `publishedAt`, `updatedAt`, `reviewedAt` y `cover` sean correctos.
+2. Verifica que `publishedAt`, `updatedAt`, `reviewedAt`, `image` y `imageAlt` sean correctos.
 3. Añade la línea de la guía a `public/llms.txt` en `## Guías` (URL + resumen de una frase) y, la primera vez, la línea del índice `https://holentia.com/guias`.
 4. El índice `/guias`, la ruta de la guía, el JSON-LD, la OG y el sitemap se generan solos: no añadas rutas a mano en `app/sitemap.ts`.
 5. Enlaces bidireccionales: el bloque `RelatedGuides` de `ToolPageShell` muestra automáticamente las guías publicadas cuyo `primaryTool` o `relatedTools` coincide con la herramienta. No edites la página de la herramienta para añadir el enlace; basta con declarar bien el frontmatter. Si la guía enlaza a 1–2 guías relacionadas, usa rutas absolutas en el Markdown.
 6. Ejecuta `pnpm guides:check`, `tsc`, `lint`, `build` y `pnpm audit:seo` (ahora sí incluye la guía en el sitemap).
 7. Revisa la página en móvil, claro/oscuro, teclado y con el HTML inicial (sin JS).
-8. Revisa el índice con la guía nueva: debe aparecer como destacada, las tres anteriores al lado y todas en «Últimas guías» con paginación de 4 en 4.
+8. Revisa el índice con la guía nueva: debe aparecer como destacada con su foto, las tres anteriores al lado y todas en «Últimas guías» con paginación de 4 en 4. Comprueba que la foto no deje huecos ni CLS y que el `imageAlt` describa lo que se ve.
 9. Commit en `dev`; `main` solo cuando el usuario lo pida.
 
 ## 9. Actualizar una guía existente
@@ -195,8 +197,9 @@ Checklist de actualización:
 - `content/guias/_template.md` — punto de partida.
 - `lib/guides.ts` — parseo, orden, `isGuidePreview()` y sitemap de publicadas.
 - `app/guias/page.tsx` y `app/guias/[slug]/page.tsx` — índice y detalle.
-- `components/guides/guide-featured-card.tsx`, `guide-compact-card.tsx`, `guide-card.tsx`, `guide-archive.tsx` — tarjetas y paginación.
-- `components/guides/guide-cover.tsx` — portadas generadas con tokens.
+- `components/guides/guide-featured-card.tsx`, `guide-compact-card.tsx`, `guide-card.tsx`, `guide-archive.tsx` — tarjetas foto-led y paginación.
+- `components/guides/guide-cover.tsx` — foto local con `next/image` + fallback generado con tokens.
+- `public/guias/` — fotos editoriales locales (sin llamadas a terceros en runtime).
 - `components/guides/guide-nav.tsx` — barra del detalle con logo centrado.
 - `components/guides/guide-markdown.tsx` — renderer Markdown server-side.
 - `plan-mejoras.md` — Fases BQ, BR y BU.

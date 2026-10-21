@@ -7,8 +7,7 @@ import GuideMarkdown from "@/components/guides/guide-markdown"
 import GuideNav from "@/components/guides/guide-nav"
 import GuideToolLinks from "@/components/guides/guide-tool-links"
 import JsonLd from "@/components/tool-seo/json-ld"
-import { formatGuideDate, guideCategoryLabel } from "@/lib/guide-format"
-import { guideCategoryText } from "@/lib/guide-ui"
+import { formatGuideDate } from "@/lib/guide-format"
 import { getAllGuides, getGuideBySlug, isGuidePreview } from "@/lib/guides"
 import { guideJsonLd, guideMetadata } from "@/lib/seo"
 
@@ -40,8 +39,6 @@ export default async function GuiaPage({ params }: { params: Promise<{ slug: str
 
   if (!guide) notFound()
 
-  const accentClass = guideCategoryText[guide.category] ?? guideCategoryText.general
-
   return (
     <main id="contenido" tabIndex={-1} className="min-h-screen flex flex-col focus:outline-none">
       <JsonLd data={guideJsonLd(guide)} />
@@ -50,20 +47,15 @@ export default async function GuiaPage({ params }: { params: Promise<{ slug: str
       <div className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6 sm:py-10">
         <article className="mx-auto max-w-3xl">
           <header className="border-b border-gray-200 pb-8 dark:border-gray-800">
-            <div className="flex flex-wrap items-center gap-3">
-              <span
-                className={`text-xs font-semibold uppercase tracking-[0.16em] ${accentClass}`}
-              >
-                {guideCategoryLabel(guide.category)}
-              </span>
-              {guide.draft ? (
+            {guide.draft ? (
+              <div className="mb-4">
                 <span className="rounded-full border border-amber-300 bg-amber-50 px-2.5 py-1 text-[11px] font-medium text-amber-800 dark:border-amber-700 dark:bg-amber-950/50 dark:text-amber-200">
                   Borrador · solo vista previa
                 </span>
-              ) : null}
-            </div>
+              </div>
+            ) : null}
 
-            <h1 className="mt-4 text-balance text-3xl font-bold leading-tight tracking-tight text-gray-900 sm:text-4xl lg:text-[2.75rem] dark:text-gray-100">
+            <h1 className="text-balance text-3xl font-bold leading-tight tracking-tight text-gray-900 sm:text-4xl lg:text-[2.75rem] dark:text-gray-100">
               {guide.title}
             </h1>
             <p className="mt-4 text-pretty text-lg leading-relaxed text-gray-600 dark:text-gray-300">

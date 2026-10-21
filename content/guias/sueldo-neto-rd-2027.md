@@ -14,6 +14,8 @@ updatedAt: "2026-10-21"
 reviewedAt: "2026-10-21"
 author: "Daury DiCaprio"
 cover: "salary"
+image: "/guias/sueldo-neto-rd-2027.jpg"
+imageAlt: "Formulario de impuestos, calculadora y café sobre un escritorio."
 keywords:
   - "sueldo neto RD 2027"
   - "TSS 2027"

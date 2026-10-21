@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { readFileSync, readdirSync } from "node:fs"
+import { existsSync, readFileSync, readdirSync } from "node:fs"
 import { basename, join } from "node:path"
 import { parse } from "yaml"
 
@@ -204,6 +204,20 @@ for (const file of entries) {
 
   if (typeof data.draft !== "boolean") {
     addError(relative, "draft debe ser true o false")
+  }
+
+  if (data.image !== undefined) {
+    if (typeof data.image !== "string" || !data.image.startsWith("/guias/")) {
+      addError(relative, "image debe ser una ruta local que empiece por /guias/")
+    } else if (!existsSync(join(ROOT, "public", data.image))) {
+      addError(relative, `no existe la imagen ${data.image} en public`)
+    }
+
+    if (typeof data.imageAlt !== "string" || data.imageAlt.trim().length < 12) {
+      addError(relative, "imageAlt debe describir la foto (mínimo 12 caracteres)")
+    }
+  } else if (data.draft === false) {
+    addWarning(relative, "guía publicada sin foto editorial; usará la portada generada")
   }
 
   const minSources = data.category === "finanzas" || data.category === "cuerpo" ? 2 : 1

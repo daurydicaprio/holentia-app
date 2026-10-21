@@ -14,6 +14,8 @@ updatedAt: "2026-10-21"
 reviewedAt: "2026-10-21"
 author: "Daury DiCaprio"
 cover: "invest"
+image: "/guias/como-invertir-en-rd-desde-cero.jpg"
+imageAlt: "Plántula que crece entre monedas de cobre sobre una mesa clara."
 keywords:
   - "cómo invertir en RD"
   - "invertir desde cero República Dominicana"

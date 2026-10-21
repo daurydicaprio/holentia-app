@@ -14,6 +14,8 @@ updatedAt: "2026-10-20"
 reviewedAt: "2026-10-20"
 author: "Daury DiCaprio"
 cover: "growth"
+image: "/guias/interes-compuesto-rd.jpg"
+imageAlt: "Gráfico de velas con una línea de tendencia sobre fondo oscuro."
 keywords:
   - "interés compuesto RD"
   - "ahorrar 10% del sueldo"

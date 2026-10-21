@@ -69,27 +69,18 @@ export default function GuiasPage() {
         {featured ? (
           <>
             <section
-              aria-label="Guía destacada y guías recientes"
-              className={`mt-12 grid gap-8 lg:gap-10 ${
+              aria-label="Guías principales"
+              className={`mt-12 grid gap-10 lg:mt-14 lg:gap-12 ${
                 secondary.length > 0
-                  ? "lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)]"
+                  ? "lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]"
                   : ""
               }`}
             >
               <GuideFeaturedCard guide={featured} />
 
               {secondary.length > 0 ? (
-                <aside
-                  aria-labelledby="tambien-te-puede-interesar"
-                  className="self-start rounded-2xl border border-gray-200 bg-white p-2 dark:border-gray-700 dark:bg-gray-900"
-                >
-                  <h2
-                    id="tambien-te-puede-interesar"
-                    className="px-3 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-gray-500 dark:text-gray-400"
-                  >
-                    También te puede interesar
-                  </h2>
-                  <div className="divide-y divide-gray-100 dark:divide-gray-800">
+                <aside aria-label="Más guías" className="self-start">
+                  <div className="divide-y divide-gray-200 dark:divide-gray-800">
                     {secondary.map((guide) => (
                       <GuideCompactCard key={guide.slug} guide={guide} />
                     ))}

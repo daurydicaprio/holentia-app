@@ -18,15 +18,12 @@ export default function GuideToolLinks({ primaryTool, relatedTools }: GuideToolL
 
   return (
     <aside
-      aria-label="Herramienta principal de la guía"
+      aria-label="Herramienta para esta guía"
       className="mt-8 rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-900"
     >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-gray-500 dark:text-gray-400">
-            Herramienta principal
-          </p>
-          <p className="mt-1 text-base font-semibold text-gray-900 dark:text-gray-100">{primary.title}</p>
+          <p className="text-base font-semibold text-gray-900 dark:text-gray-100">{primary.title}</p>
         </div>
         <Link
           href={`/${primary.slug}`}
@@ -40,8 +37,7 @@ export default function GuideToolLinks({ primaryTool, relatedTools }: GuideToolL
 
       {related.length > 0 ? (
         <div className="mt-4 border-t border-gray-200 pt-3 dark:border-gray-700">
-          <p className="text-xs font-medium text-gray-500 dark:text-gray-400">También te puede servir</p>
-          <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1">
+          <div className="flex flex-wrap gap-x-5 gap-y-1">
             {related.map((tool) => (
               <Link
                 key={tool.slug}

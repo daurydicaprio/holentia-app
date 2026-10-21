@@ -385,6 +385,6 @@ Cada brief debe incluir:
 La estructura editorial ya está montada, con cuatro guías publicadas y el índice rediseñado (destacada + tres recientes + archivo paginado de 4 en 4). El siguiente paso es:
 
 1. **Mantenimiento editorial**: revisar fuentes, tasas y fechas de las cuatro guías; actualizar `updatedAt`/`reviewedAt` y las calculadoras vinculadas en el mismo cambio.
-2. **Nuevas guías**: usar el brief, la portada generada con `cover` y el flujo de `create-guide`; el archivo crece de cuatro en cuatro sin tocar el índice.
+2. **Nuevas guías**: usar el brief, la foto local `image`/`imageAlt` (con `cover` como respaldo) y el flujo de `create-guide`; el archivo crece de cuatro en cuatro sin tocar el índice.
 3. **BN — Baseline, dependencias y medición** en paralelo: limpieza de dependencias, baseline PSI/GSC, sin cambios de UI.
 4. **BO/BP** después: a11y de gráficos y red de enlaces internos.

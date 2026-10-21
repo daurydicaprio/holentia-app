@@ -23,8 +23,12 @@ export interface GuideFrontmatter {
   updatedAt: string
   reviewedAt?: string
   author: string
-  /** Variante visual de la portada en el índice. */
+  /** Variante visual de la portada generada (fallback si no hay foto). */
   cover?: string
+  /** Foto editorial local en `public/guias/`, servida sin llamadas externas. */
+  image?: string
+  /** Texto alternativo de la foto editorial. */
+  imageAlt?: string
   keywords: string[]
   sources: GuideSource[]
   faq: GuideFaq[]
@@ -48,6 +52,8 @@ export type GuideSummary = Pick<
   | "primaryTool"
   | "author"
   | "cover"
+  | "image"
+  | "imageAlt"
   | "publishedAt"
   | "updatedAt"
   | "draft"

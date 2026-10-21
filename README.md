@@ -187,7 +187,7 @@ La fuente única de verdad es **`design.md`** (paleta completa, tipografía Inte
 - `draft: true` las mantiene fuera de producción, del sitemap y de `llms.txt`; en desarrollo y previews se ven con `noindex` para revisarlas.
 - `content/guias/_briefs/` guarda la investigación y el outline; `_template.md` es el punto de partida.
 - `pnpm guides:check` valida frontmatter, slug, herramientas, fuentes, FAQ, fechas y enlaces internos.
-- El renderizado vive en `app/guias/` y `components/guides/` (Fase BQ): el índice abre con una guía destacada y tres recientes, sigue con «Últimas guías» paginadas de 4 en 4 y portadas generadas con tokens de marca; el detalle usa `GuideNav` con el logo centrado. Incluye `Article` + `FAQPage` + `BreadcrumbList` y OG por guía. El sitemap incluye las guías solo cuando están publicadas. `RelatedGuides` enlaza automáticamente las guías publicadas desde sus herramientas (`primaryTool`/`relatedTools`).
+- El renderizado vive en `app/guias/` y `components/guides/` (Fase BQ): el índice abre con una guía destacada con foto y tres recientes, sigue con «Últimas guías» paginadas de 4 en 4 y usa fotos locales en `public/guias/` (con portada generada de respaldo). Sin etiquetas de categoría ni CTA «Leer guía» en las tarjetas; el detalle usa `GuideNav` con el logo centrado. Incluye `Article` + `FAQPage` + `BreadcrumbList` y OG por guía. El sitemap incluye las guías solo cuando están publicadas. `RelatedGuides` enlaza automáticamente las guías publicadas desde sus herramientas (`primaryTool`/`relatedTools`).
 
 ## Privacidad y Datos
 
