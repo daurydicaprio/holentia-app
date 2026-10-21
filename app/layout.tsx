@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import ScrollProgressBar from "@/components/common/scroll-progress-bar/scroll-progress-bar"
 import { SITE_NAME, SITE_URL } from "@/lib/seo"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -51,6 +52,7 @@ export default function RootLayout({
             Saltar al contenido
           </a>
           {children}
+          <ScrollProgressBar />
         </ThemeProvider>
       </body>
     </html>

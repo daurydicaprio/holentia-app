@@ -12,7 +12,7 @@ Skills de apoyo:
 - **`humanizer`** — pase final para quitar patrones de escritura AI. No añade datos.
 - **`seo-geo`** y **`seo-geo-audit`** — metadata, JSON-LD, OG, sitemap, `llms.txt` y auditoría.
 
-> Estado: contenido, validación, rutas `/guias` y renderer Markdown listos (Fase BQ). Los borradores se ven en desarrollo y en previews de Vercel con `noindex`; en producción `draft: true` queda fuera de páginas, sitemap y `llms.txt`. La publicación (`draft: false`, `llms.txt` y enlaces desde herramientas) sigue siendo una decisión explícita.
+> Estado: 4 guías publicadas e índice rediseñado (destacada + 3 recientes + archivo paginado de 4 en 4). Los borradores se ven en desarrollo y en previews de Vercel con `noindex`; en producción `draft: true` queda fuera de páginas, sitemap y `llms.txt`. La publicación (`draft: false`, `llms.txt` y enlaces desde herramientas) sigue siendo una decisión explícita.
 
 ## 1. Antes de escribir: brief
 
@@ -47,6 +47,7 @@ Reglas mínimas:
 
 - `slug` en kebab-case y **igual al nombre del archivo**.
 - `title`, `description`, `category`, `primaryTool`, `author`, `publishedAt`, `updatedAt`, `sources` y `faq` son obligatorios.
+- `cover` es opcional: `growth`, `salary`, `body`, `invest` o `default`. Elige la variante que mejor represente la guía; si falta o es `default`, `GuideCover` usa el color y el icono de la categoría.
 - `draft: true` hasta que el contenido y las fuentes estén revisados. En desarrollo/preview se renderiza para revisión con `noindex`; en producción queda fuera del sitio.
 - `description` de 120–155 caracteres; sin clickbait.
 - `sources`: mínimo 2 en finanzas y salud; mínimo 1 en general.
@@ -90,7 +91,15 @@ Cierra con una sección `## Calcula tu caso` (o equivalente) que incluya la herr
 
 El frontmatter `primaryTool` y `relatedTools` alimentan el bloque automático del sitio. El CTA explícito en Markdown se mantiene para que la guía funcione al exportarla.
 
-## 4. SEO y GEO
+## 4. Portada e índice
+
+- El índice `/guias` no es una cuadrícula plana: muestra la guía más reciente en `GuideFeaturedCard`, tres `GuideCompactCard` al lado y, debajo, `GuideArchive` con todas las guías de 4 en 4.
+- La portada se genera con `components/guides/guide-cover.tsx` usando tokens de marca. No subas fotos ni assets externos para la portada.
+- `cover` controla la variante visual. Añádelo en el frontmatter al crear la guía; si no, la portada de categoría sigue funcionando.
+- El detalle usa `GuideNav` con el logo centrado. No vuelvas a poner la fila manual de logo + «Todas las guías».
+- «Guías» va en el menú justo antes de «¿Qué es Holentia?».
+
+## 5. SEO y GEO
 
 - `title`: claro, con la consulta principal; sin promesas absolutas.
 - `description`: responde a la consulta en una frase concreta.
@@ -98,15 +107,14 @@ El frontmatter `primaryTool` y `relatedTools` alimentan el bloque automático de
 - FAQ visible y en `FAQPage`; no inventes preguntas para llenar.
 - Fuentes en el frontmatter (para JSON-LD) y, para exportación, una sección `## Fuentes` en el cuerpo. Mantén ambas sincronizadas.
 - `Article` + `FAQPage` + `BreadcrumbList` en la página de guía; `CollectionPage` en el índice.
-- OG propia por guía (título + subtítulo).
+- OG propia por guía (`app/guias/[slug]/opengraph-image.tsx`, automática); el índice tiene la suya en `app/guias/opengraph-image.tsx`.
 - Sitemap con `lastModified` = `updatedAt`; `llms.txt` con una línea por guía publicada.
-- OG propia por guía (`app/guias/[slug]/opengraph-image.tsx`, automática). El índice tiene la suya en `app/guias/opengraph-image.tsx`.
 - Enlaces bidireccionales: la guía enlaza a la herramienta y, al publicar, la herramienta muestra sus guías relacionadas.
 - Canónica automática (`guideMetadata`); no la escribas a mano salvo caso especial.
 - `draft: true` aplica `robots: noindex, nofollow`; no lo quites a mano.
 - No keywords stuffing. Las `keywords` del frontmatter son organización interna, no meta keywords.
 
-## 5. Voz y edición
+## 6. Voz y edición
 
 1. Escribe el borrador con `guia-voz`.
 2. Verifica cada dato, tasa, fecha y fuente. Si no puedes verificar algo, quítalo o dilo como límite.
@@ -123,7 +131,7 @@ Prohibido:
 - Relleno para llegar a una longitud.
 - Prometer resultados («vas a adelgazar», «te vas a ahorrar X») sin contexto.
 
-## 6. Validación
+## 7. Validación
 
 Antes de publicar:
 
@@ -148,18 +156,19 @@ El borrador debe verse, llevar `noindex, nofollow` y no aparecer en `sitemap.xml
 
 `pnpm audit:seo` recorre el sitemap, así que **no audita borradores**. Para que una guía entre a la auditoría hay que publicarla (`draft: false`) en el mismo cambio; si no, valida el HTML y la OG a mano.
 
-## 7. Publicar
+## 8. Publicar
 
 1. Cambia `draft: false`.
-2. Verifica que `publishedAt`, `updatedAt` y `reviewedAt` sean correctos.
+2. Verifica que `publishedAt`, `updatedAt`, `reviewedAt` y `cover` sean correctos.
 3. Añade la línea de la guía a `public/llms.txt` en `## Guías` (URL + resumen de una frase) y, la primera vez, la línea del índice `https://holentia.com/guias`.
 4. El índice `/guias`, la ruta de la guía, el JSON-LD, la OG y el sitemap se generan solos: no añadas rutas a mano en `app/sitemap.ts`.
 5. Enlaces bidireccionales: el bloque `RelatedGuides` de `ToolPageShell` muestra automáticamente las guías publicadas cuyo `primaryTool` o `relatedTools` coincide con la herramienta. No edites la página de la herramienta para añadir el enlace; basta con declarar bien el frontmatter. Si la guía enlaza a 1–2 guías relacionadas, usa rutas absolutas en el Markdown.
 6. Ejecuta `pnpm guides:check`, `tsc`, `lint`, `build` y `pnpm audit:seo` (ahora sí incluye la guía en el sitemap).
 7. Revisa la página en móvil, claro/oscuro, teclado y con el HTML inicial (sin JS).
-8. Commit en `dev`; `main` solo cuando el usuario lo pida.
+8. Revisa el índice con la guía nueva: debe aparecer como destacada, las tres anteriores al lado y todas en «Últimas guías» con paginación de 4 en 4.
+9. Commit en `dev`; `main` solo cuando el usuario lo pida.
 
-## 8. Actualizar una guía existente
+## 9. Actualizar una guía existente
 
 Las guías de finanzas y salud caducan. Mantenimiento:
 
@@ -180,12 +189,15 @@ Checklist de actualización:
 - [ ] La guía no contradice otra guía o herramienta.
 - [ ] `draft` está en `false` solo si está lista para publicar.
 
-## 9. Referencias
+## 10. Referencias
 
 - `content/guias/README.md` — esquema, plantilla y flujo editorial.
 - `content/guias/_template.md` — punto de partida.
 - `lib/guides.ts` — parseo, orden, `isGuidePreview()` y sitemap de publicadas.
 - `app/guias/page.tsx` y `app/guias/[slug]/page.tsx` — índice y detalle.
+- `components/guides/guide-featured-card.tsx`, `guide-compact-card.tsx`, `guide-card.tsx`, `guide-archive.tsx` — tarjetas y paginación.
+- `components/guides/guide-cover.tsx` — portadas generadas con tokens.
+- `components/guides/guide-nav.tsx` — barra del detalle con logo centrado.
 - `components/guides/guide-markdown.tsx` — renderer Markdown server-side.
 - `plan-mejoras.md` — Fases BQ, BR y BU.
 - `.opencode/skills/guia-voz/SKILL.md` — tono.

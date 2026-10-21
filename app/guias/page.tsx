@@ -4,7 +4,9 @@ import BrandDots from "@/components/common/brand-dots/brand-dots"
 import Footer from "@/components/common/footer/footer"
 import Logo from "@/components/common/logo/logo"
 import MenuButton from "@/components/common/menu-button/menu-button"
-import GuideCard from "@/components/guides/guide-card"
+import GuideArchive from "@/components/guides/guide-archive"
+import GuideCompactCard from "@/components/guides/guide-compact-card"
+import GuideFeaturedCard from "@/components/guides/guide-featured-card"
 import JsonLd from "@/components/tool-seo/json-ld"
 import { getAllGuides, getPublishedGuides, isGuidePreview, toGuideSummary } from "@/lib/guides"
 import { guidesIndexJsonLd, guidesIndexMetadata } from "@/lib/seo"
@@ -23,29 +25,31 @@ export default function GuiasPage() {
   const guides = getAllGuides()
   const preview = isGuidePreview() && guides.some((guide) => guide.draft)
   const summaries = guides.map(toGuideSummary)
+  const featured = summaries[0]
+  const secondary = summaries.slice(1, 4)
 
   return (
     <main id="contenido" tabIndex={-1} className="min-h-screen flex flex-col focus:outline-none">
       <JsonLd data={guidesIndexJsonLd(guides)} />
 
-      <div className="flex-1 w-full max-w-6xl mx-auto p-4 sm:p-6">
-        <div className="flex items-center justify-between mb-10">
+      <div className="mx-auto w-full max-w-6xl flex-1 px-4 pb-16 pt-4 sm:px-6 sm:pt-6">
+        <div className="mb-10 flex items-center justify-between">
           <Link
             href="/"
             data-interactive="true"
             className="inline-flex items-center gap-2 py-3 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             Volver
           </Link>
           <MenuButton />
         </div>
 
-        <header className="flex flex-col items-center text-center mb-10">
-          <Logo size="lg" />
-          <BrandDots className="mt-5 mb-6" />
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
-            Guías HOLENTIA
+        <header className="mx-auto flex max-w-3xl flex-col items-center text-center">
+          <Logo size="md" />
+          <BrandDots className="mt-4 mb-5" />
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
+            Biblioteca
           </p>
           <h1 className="mt-2 text-balance text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl dark:text-gray-100">
             Guías de HOLENTIA
@@ -62,14 +66,42 @@ export default function GuiasPage() {
           ) : null}
         </header>
 
-        {summaries.length > 0 ? (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {summaries.map((guide) => (
-              <GuideCard key={guide.slug} guide={guide} />
-            ))}
-          </div>
+        {featured ? (
+          <>
+            <section
+              aria-label="Guía destacada y guías recientes"
+              className={`mt-12 grid gap-8 lg:gap-10 ${
+                secondary.length > 0
+                  ? "lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)]"
+                  : ""
+              }`}
+            >
+              <GuideFeaturedCard guide={featured} />
+
+              {secondary.length > 0 ? (
+                <aside
+                  aria-labelledby="tambien-te-puede-interesar"
+                  className="self-start rounded-2xl border border-gray-200 bg-white p-2 dark:border-gray-700 dark:bg-gray-900"
+                >
+                  <h2
+                    id="tambien-te-puede-interesar"
+                    className="px-3 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-gray-500 dark:text-gray-400"
+                  >
+                    También te puede interesar
+                  </h2>
+                  <div className="divide-y divide-gray-100 dark:divide-gray-800">
+                    {secondary.map((guide) => (
+                      <GuideCompactCard key={guide.slug} guide={guide} />
+                    ))}
+                  </div>
+                </aside>
+              ) : null}
+            </section>
+
+            <GuideArchive guides={summaries} />
+          </>
         ) : (
-          <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center dark:border-gray-700 dark:bg-gray-900">
+          <div className="mx-auto mt-12 max-w-xl rounded-2xl border border-gray-200 bg-white p-8 text-center dark:border-gray-700 dark:bg-gray-900">
             <BookOpen className="mx-auto h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
             <h2 className="mt-4 text-xl font-semibold text-gray-900 dark:text-gray-100">
               Las primeras guías están en revisión
@@ -88,20 +120,6 @@ export default function GuiasPage() {
             </Link>
           </div>
         )}
-
-        <div className="mt-10 flex flex-col gap-4 border-t border-gray-200 pt-6 sm:flex-row sm:items-center sm:justify-between dark:border-gray-800">
-          <p className="max-w-xl text-sm leading-relaxed text-gray-500 dark:text-gray-400">
-            Las guías explican el contexto; las calculadoras hacen la cuenta. Todo funciona en tu navegador.
-          </p>
-          <Link
-            href="/herramientas"
-            data-interactive="true"
-            className="inline-flex items-center gap-2 py-2 text-sm font-medium text-gray-700 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-          >
-            Explorar herramientas
-            <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </Link>
-        </div>
       </div>
 
       <Footer />

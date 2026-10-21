@@ -264,6 +264,37 @@
   }
 }
 
+/* Guías editoriales: portada generada con los cuatro colores de marca. */
+.guide-cover-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(to bottom right, black, transparent 78%);
+  -webkit-mask-image: linear-gradient(to bottom right, black, transparent 78%);
+}
+
+/* Barra de progreso de lectura: los cuatro colores de sección, sin hex en el componente. */
+.scroll-progress-bar {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-mente-active-dark),
+    var(--color-relaciones-active-dark) 34%,
+    var(--color-cuerpo-active) 67%,
+    var(--color-finanzas-active)
+  );
+}
+
+.dark .scroll-progress-bar {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-mente-active-light),
+    var(--color-relaciones-active-light) 34%,
+    var(--color-cuerpo-active-light) 67%,
+    var(--color-finanzas-active-light)
+  );
+}
+
 /* Guías editoriales: el Markdown usa utilidades; el CTA en blockquote no lleva
    el margen superior del primer párrafo ni el inferior del último. */
 .guide-markdown blockquote > p:first-child {

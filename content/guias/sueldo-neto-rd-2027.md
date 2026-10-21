@@ -9,10 +9,11 @@ relatedTools:
   - "calculadora-aguinaldo"
   - "calculadora-prestaciones-laborales"
   - "crear-presupuesto-personal"
-publishedAt: "2026-10-20"
-updatedAt: "2026-10-20"
-reviewedAt: "2026-10-20"
+publishedAt: "2026-10-21"
+updatedAt: "2026-10-21"
+reviewedAt: "2026-10-21"
 author: "Daury DiCaprio"
+cover: "salary"
 keywords:
   - "sueldo neto RD 2027"
   - "TSS 2027"
@@ -36,7 +37,7 @@ sources:
     accessedAt: "2026-10-20"
 faq:
   - question: "¿La calculadora de sueldo neto ya usa las tasas de 2027?"
-    answer: "No. Al momento de esta revisión (20 de octubre de 2026) la calculadora usa la escala de ISR vigente en 2026. Esta guía explica la escala 2027 y se actualizará junto con la herramienta cuando la TSS publique los topes nuevos. Si la usas hoy, toma el resultado como referencia 2026."
+    answer: "No. Al momento de esta revisión (21 de octubre de 2026) la calculadora usa la escala de ISR vigente en 2026. Esta guía explica la escala 2027 y se actualizará junto con la herramienta cuando la TSS publique los topes nuevos. Si la usas hoy, toma el resultado como referencia 2026."
   - question: "¿Desde qué salario se paga ISR en 2027?"
     answer: "La ley fija una renta neta anual exenta de RD$480,000. Como la base se calcula después de la TSS, un salario bruto de unos RD$42,500 al mes puede quedar exento. Un bruto de RD$40,000 también queda exento; uno de RD$50,000 ya paga 15% sobre el excedente. El corte exacto depende de los topes y de tus otros ingresos."
   - question: "¿Los topes de la TSS para 2027 ya están publicados?"
@@ -47,7 +48,7 @@ faq:
     answer: "Puede pasar si tienes comisiones, bonificaciones u horas extras, porque el empleador proyecta tu renta anual con esos pagos. También si tienes otro empleo o ingresos que suman. Pide el desglose a recursos humanos y revisa la base anual que usaron."
   - question: "¿La empresa puede descontarme otras cosas además de TSS e ISR?"
     answer: "Sí. Cooperativa, préstamos, seguros, comedor o adelantos son descuentos fijos que se aplican después de los descuentos legales. Esta guía no los incluye; si los tienes, réstalos al final para obtener tu neto real."
-draft: true
+draft: false
 ---
 
 ## Bruto no es lo que te llega
@@ -56,7 +57,7 @@ Si te ofrecen RD$80,000 brutos, no te están diciendo cuánto te va a llegar. Pr
 
 Para 2027, la escala de ISR ya está definida. Los topes de la TSS todavía no. En la referencia de 2026, la TSS descuenta 5.91% del salario; los topes para 2027 dependen de una resolución que aún no se había publicado al momento de esta revisión. Los ejemplos de aquí usan la escala 2027 y los topes de 2026, y lo dicen claramente.
 
-> **Antes de seguir:** esta guía se revisó el 20 de octubre de 2026. La escala de ISR 2027 ya está en la Ley 30-26. Los topes de la TSS para 2027 todavía no se habían publicado. No inventamos los números que faltan.
+> **Antes de seguir:** esta guía se revisó el 21 de octubre de 2026. La escala de ISR 2027 ya está en la Ley 30-26. Los topes de la TSS para 2027 todavía no se habían publicado. No inventamos los números que faltan.
 
 ## Qué te descuenta la TSS
 
@@ -193,6 +194,8 @@ Sí. Cooperativa, préstamos, seguros, comedor o adelantos son descuentos fijos 
 > **Calculadora de sueldo neto:** [de bruto a neto con TSS e ISR (referencia 2026)](/calculadora-sueldo-neto).
 >
 > **También te puede servir:** [calculadora de aguinaldo](/calculadora-aguinaldo), [calculadora de prestaciones laborales](/calculadora-prestaciones-laborales) y [crear presupuesto personal](/crear-presupuesto-personal).
+>
+> **Para el paso siguiente:** [cómo invertir en RD desde cero](/guias/como-invertir-en-rd-desde-cero).
 
 ## Fuentes
 

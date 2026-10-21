@@ -11,6 +11,7 @@ publishedAt: "2026-10-20"
 updatedAt: "2026-10-20"
 reviewedAt: "2026-10-20"
 author: "Daury DiCaprio"
+cover: "default" # growth | salary | body | invest | default
 keywords:
   - "palabra clave"
 sources:

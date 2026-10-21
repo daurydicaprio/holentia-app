@@ -23,6 +23,8 @@ export interface GuideFrontmatter {
   updatedAt: string
   reviewedAt?: string
   author: string
+  /** Variante visual de la portada en el índice. */
+  cover?: string
   keywords: string[]
   sources: GuideSource[]
   faq: GuideFaq[]
@@ -44,6 +46,8 @@ export type GuideSummary = Pick<
   | "excerpt"
   | "category"
   | "primaryTool"
+  | "author"
+  | "cover"
   | "publishedAt"
   | "updatedAt"
   | "draft"

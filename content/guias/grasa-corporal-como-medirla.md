@@ -9,10 +9,11 @@ relatedTools:
   - "calculadora-imc"
   - "calculadora-proteina-diaria"
   - "calculadora-calorias"
-publishedAt: "2026-10-20"
-updatedAt: "2026-10-20"
-reviewedAt: "2026-10-20"
+publishedAt: "2026-10-21"
+updatedAt: "2026-10-21"
+reviewedAt: "2026-10-21"
 author: "Daury DiCaprio"
+cover: "body"
 keywords:
   - "grasa corporal"
   - "método US Navy"
@@ -53,7 +54,7 @@ faq:
     answer: "Miden cosas distintas. El IMC cruza peso y altura y no distingue músculo de grasa. El porcentaje de grasa estima la composición, pero tampoco dice dónde está la grasa ni cómo está tu salud. Usa ambos como referencias, no como diagnóstico."
   - question: "¿Se guardan mis medidas?"
     answer: "Solo en tu navegador, como borrador local, para que no tengas que escribirlas otra vez. Nada se envía a un servidor. Puedes borrarlas con el botón de la calculadora o desde el Centro de Ayuda."
-draft: true
+draft: false
 ---
 
 ## La balanza no cuenta toda la historia
@@ -199,7 +200,7 @@ Solo en tu navegador, como borrador local, para que no tengas que escribirlas ot
 >
 > **También te puede servir:** [calculadora de IMC](/calculadora-imc), [calculadora de proteína diaria](/calculadora-proteina-diaria) y [calculadora de calorías](/calculadora-calorias).
 
-Última revisión: 20 de octubre de 2026.
+Última revisión: 21 de octubre de 2026.
 
 ## Fuentes
 

@@ -72,7 +72,12 @@ const components: Components = {
   blockquote: ({ children }) => <blockquote>{children}</blockquote>,
   hr: () => <hr className="my-10 border-gray-200 dark:border-gray-800" />,
   table: ({ children }) => (
-    <div className="my-6 overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+    <div
+      role="group"
+      aria-label="Tabla de datos desplazable"
+      tabIndex={0}
+      className="my-6 overflow-x-auto rounded-xl border border-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 dark:border-gray-700 dark:focus-visible:ring-white dark:focus-visible:ring-offset-gray-900"
+    >
       <table className="w-full border-collapse text-left text-sm">{children}</table>
     </div>
   ),
@@ -94,7 +99,12 @@ const components: Components = {
     </td>
   ),
   pre: ({ children }) => (
-    <pre className="my-6 overflow-x-auto rounded-xl bg-gray-900 p-4 text-sm leading-6 text-gray-100 [&>code]:bg-transparent [&>code]:p-0 [&>code]:text-inherit dark:bg-black/60">
+    <pre
+      role="group"
+      aria-label="Bloque de código desplazable"
+      tabIndex={0}
+      className="my-6 overflow-x-auto rounded-xl bg-gray-900 p-4 text-sm leading-6 text-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 [&>code]:bg-transparent [&>code]:p-0 [&>code]:text-inherit dark:bg-black/60 dark:focus-visible:ring-white dark:focus-visible:ring-offset-gray-900"
+    >
       {children}
     </pre>
   ),

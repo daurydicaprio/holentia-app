@@ -35,6 +35,7 @@ publishedAt: "2026-10-20"
 updatedAt: "2026-10-20"
 reviewedAt: "2026-10-20" # obligatorio en finanzas y salud
 author: "Daury DiCaprio"
+cover: "salary" # growth | salary | body | invest | default
 keywords:
   - "sueldo neto RD"
   - "TSS"
@@ -59,6 +60,7 @@ Reglas:
 - `sources`: mínimo 2 en finanzas y salud; mínimo 1 en general. Enlaces `https`.
 - `faq`: 3–6 preguntas. Se usan para `FAQPage`.
 - `reviewedAt`: obligatorio en finanzas y salud.
+- `cover`: variante visual de la portada (`growth`, `salary`, `body`, `invest`). Si falta o es `default`, `GuideCover` usa el color y el icono de la categoría.
 - `draft: true` hasta que el contenido, las fuentes y los enlaces estén revisados.
 - No incluir H1 en el cuerpo: el H1 sale del `title`.
 - Enlaces internos con rutas absolutas (`/calculadora-sueldo-neto`, `/guias/...`).
@@ -66,7 +68,7 @@ Reglas:
 ## Renderizado y vista previa
 
 - `lib/guides.ts` lee `content/guias/*.md`, parsea el frontmatter YAML y calcula el tiempo de lectura (220 palabras/minuto).
-- `app/guias/page.tsx` es el índice; `app/guias/[slug]/page.tsx` renderiza el detalle con `react-markdown` + `remark-gfm` en el servidor.
+- `app/guias/page.tsx` es el índice: una guía destacada + tres recientes y, debajo, el archivo «Últimas guías» con paginación local de cuatro en cuatro (`GuideArchive`). `app/guias/[slug]/page.tsx` renderiza el detalle con `react-markdown` + `remark-gfm` en el servidor y una barra superior con el logo centrado (`GuideNav`).
 - `draft: true` se muestra en desarrollo (`NODE_ENV !== "production"`), en previews de Vercel (`VERCEL_ENV=preview`) o con `GUIDES_PREVIEW=1`. La página lleva `noindex, nofollow`; el índice también es `noindex` mientras no haya publicadas.
 - Para revisar un build de producción en local:
 
@@ -139,6 +141,6 @@ Las guías de finanzas y salud caducan. Revisa fuentes y tasas al menos una vez 
 
 - Contenido y validación: listos.
 - Renderizado `/guias`, JSON-LD y OG: listos.
-- Guías actuales: `interes-compuesto-rd` publicada (`draft: false`) y en sitemap/`llms.txt`; `sueldo-neto-rd-2027` y `grasa-corporal-como-medirla` siguen en borrador hasta la revisión del autor.
-- El índice `/guias` y la guía publicada entran al sitemap automáticamente. Las herramientas muestran sus guías publicadas con `RelatedGuides` (`primaryTool`/`relatedTools`); no hay que editar TSX al publicar.
+- Guías actuales (4 publicadas): `como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027` y `grasa-corporal-como-medirla`. Todas están en sitemap y `llms.txt`.
+- El índice `/guias` y las guías publicadas entran al sitemap automáticamente. Las herramientas muestran sus guías publicadas con `RelatedGuides` (`primaryTool`/`relatedTools`); no hay que editar TSX al publicar.
 - Las guías en borrador se revisan con `GUIDES_PREVIEW=1 pnpm build` y `GUIDES_PREVIEW=1 pnpm start`; llevan `noindex, nofollow` y no aparecen en sitemap ni `llms.txt`.

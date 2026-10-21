@@ -3,23 +3,14 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowLeft, ArrowRight, Clock3 } from "lucide-react"
 import Footer from "@/components/common/footer/footer"
-import Logo from "@/components/common/logo/logo"
-import MenuButton from "@/components/common/menu-button/menu-button"
 import GuideMarkdown from "@/components/guides/guide-markdown"
+import GuideNav from "@/components/guides/guide-nav"
 import GuideToolLinks from "@/components/guides/guide-tool-links"
 import JsonLd from "@/components/tool-seo/json-ld"
 import { formatGuideDate, guideCategoryLabel } from "@/lib/guide-format"
+import { guideCategoryText } from "@/lib/guide-ui"
 import { getAllGuides, getGuideBySlug, isGuidePreview } from "@/lib/guides"
 import { guideJsonLd, guideMetadata } from "@/lib/seo"
-import type { GuideCategory } from "@/types/guide"
-
-const categoryText: Record<GuideCategory, string> = {
-  mente: "text-mente-dark dark:text-mente-light",
-  relaciones: "text-relaciones dark:text-relaciones-light",
-  cuerpo: "text-cuerpo-darkest dark:text-cuerpo-light",
-  finanzas: "text-finanzas-dark dark:text-finanzas-light",
-  general: "text-gray-600 dark:text-gray-300",
-}
 
 export function generateStaticParams() {
   return getAllGuides().map((guide) => ({ slug: guide.slug }))
@@ -49,29 +40,14 @@ export default async function GuiaPage({ params }: { params: Promise<{ slug: str
 
   if (!guide) notFound()
 
-  const accentClass = categoryText[guide.category] ?? categoryText.general
+  const accentClass = guideCategoryText[guide.category] ?? guideCategoryText.general
 
   return (
     <main id="contenido" tabIndex={-1} className="min-h-screen flex flex-col focus:outline-none">
       <JsonLd data={guideJsonLd(guide)} />
+      <GuideNav />
 
-      <div className="flex-1 w-full max-w-5xl mx-auto p-4 sm:p-6">
-        <div className="mb-8 flex items-center justify-between gap-4">
-          <div className="flex min-w-0 items-center gap-3">
-            <Logo size="sm" />
-            <span aria-hidden="true" className="h-6 w-px bg-gray-200 dark:bg-gray-700" />
-            <Link
-              href="/guias"
-              data-interactive="true"
-              className="inline-flex items-center gap-2 py-3 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-            >
-              <ArrowLeft className="h-4 w-4 shrink-0" aria-hidden="true" />
-              <span className="truncate">Todas las guías</span>
-            </Link>
-          </div>
-          <MenuButton />
-        </div>
-
+      <div className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6 sm:py-10">
         <article className="mx-auto max-w-3xl">
           <header className="border-b border-gray-200 pb-8 dark:border-gray-800">
             <div className="flex flex-wrap items-center gap-3">
@@ -96,11 +72,11 @@ export default async function GuiaPage({ params }: { params: Promise<{ slug: str
 
             <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
               <span>{guide.author}</span>
-              <span aria-hidden="true">·</span>
+              <span aria-hidden="true" className="hidden sm:inline">·</span>
               <span>
                 Actualizada el <time dateTime={guide.updatedAt}>{formatGuideDate(guide.updatedAt)}</time>
               </span>
-              <span aria-hidden="true">·</span>
+              <span aria-hidden="true" className="hidden sm:inline">·</span>
               <span className="inline-flex items-center gap-1.5">
                 <Clock3 className="h-4 w-4" aria-hidden="true" />
                 {guide.readingTime} min de lectura
@@ -116,7 +92,7 @@ export default async function GuiaPage({ params }: { params: Promise<{ slug: str
             <Link
               href="/guias"
               data-interactive="true"
-              className="inline-flex items-center gap-2 py-2 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+              className="inline-flex items-center gap-2 py-3 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
             >
               <ArrowLeft className="h-4 w-4" aria-hidden="true" />
               Volver a todas las guías
@@ -124,13 +100,12 @@ export default async function GuiaPage({ params }: { params: Promise<{ slug: str
             <Link
               href={`/${guide.primaryTool}`}
               data-interactive="true"
-              className="inline-flex items-center gap-2 py-2 text-sm font-medium text-gray-700 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+              className="inline-flex items-center gap-2 py-3 text-sm font-medium text-gray-700 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
             >
               Abrir la herramienta
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
-
         </article>
       </div>
 

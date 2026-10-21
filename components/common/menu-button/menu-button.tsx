@@ -104,8 +104,6 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
     return pathname.startsWith(path)
   }
 
-  if (!mounted) return null
-
   // Clases para el botón según el contexto
   const buttonClasses = [
     "relative z-50 flex items-center justify-center transition-colors duration-200",
@@ -117,9 +115,7 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
       ? "bg-white/20 hover:bg-white/30 active:bg-white/40 text-white shadow-none"
       : isToolPage
         ? "bg-white/30 hover:bg-white/40 active:bg-white/50 text-white shadow-none"
-        : isDark
-          ? "bg-gray-800/70 hover:bg-gray-800/90 text-white shadow-none"
-          : "bg-white/70 hover:bg-white/90 text-gray-800",
+        : "bg-white/70 hover:bg-white/90 text-gray-800 dark:bg-gray-800/70 dark:hover:bg-gray-800/90 dark:text-white dark:shadow-none",
     isSquare ? "rounded-md" : "rounded-full",
     "w-11 h-11",
   ]
@@ -162,7 +158,7 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
           />
 
           {/* Menú desplegable */}
-          <div className="absolute right-0 top-12 z-50 w-64 animate-[hol-menu-in_0.15s_ease-out] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
+          <div className="absolute right-0 top-12 z-50 max-h-[calc(100dvh-5rem)] w-64 animate-[hol-menu-in_0.15s_ease-out] overflow-y-auto overscroll-contain rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
             <div className="border-b border-gray-200 px-5 py-3 dark:border-gray-700">
               <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Navegación</h3>
             </div>
@@ -181,24 +177,6 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
                 <span className="flex items-center">
                   <span className="flex-grow">Inicio</span>
                   {isActive("/") && <span className="h-2 w-2 rounded-full bg-gray-500 dark:bg-gray-400" />}
-                </span>
-              </Link>
-
-              <Link
-                href="/guias"
-                data-interactive="true"
-                className={`${linkClass} ${
-                  isActive("/guias")
-                    ? "bg-gray-100 font-medium dark:bg-gray-800"
-                    : ""
-                }`}
-                onClick={handleLinkClick}
-              >
-                <span className="flex items-center">
-                  <span className="flex-grow">Guías</span>
-                  {isActive("/guias") && (
-                    <span className="h-2 w-2 rounded-full bg-gray-500 dark:bg-gray-400" />
-                  )}
                 </span>
               </Link>
 
@@ -235,6 +213,23 @@ export default function MenuButton({ section, isSquare = false, isCompact = fals
             </div>
 
             <div className="mt-1 border-t border-gray-200 py-2 dark:border-gray-700">
+              <Link
+                href="/guias"
+                data-interactive="true"
+                className={`${linkClass} ${
+                  isActive("/guias")
+                    ? "bg-gray-100 font-medium dark:bg-gray-800"
+                    : ""
+                }`}
+                onClick={handleLinkClick}
+              >
+                <span className="flex items-center">
+                  <span className="flex-grow">Guías</span>
+                  {isActive("/guias") && (
+                    <span className="h-2 w-2 rounded-full bg-gray-500 dark:bg-gray-400" />
+                  )}
+                </span>
+              </Link>
               <Link
                 href="/que-es-holentia"
                 data-interactive="true"

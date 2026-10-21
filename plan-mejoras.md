@@ -5,14 +5,14 @@
 > Base: `main` y `dev` en `3638175`; 35 herramientas, 46 URLs, 46 OG, 39 claves `holentia:*`.
 > Principios: local-first, sin tracking, server-first, español (es-DO) y documentación en el mismo commit.
 >
-> **Estado de ejecución (20-Oct-2026):** Humanizer instalado (MIT); skills `create-guide` y `guia-voz` creadas; `content/guias/` con README, plantilla, tres briefs y tres guías (`interes-compuesto-rd` publicada; `sueldo-neto-rd-2027` y `grasa-corporal-como-medirla` en borrador); `/guias`, sitemap, `llms.txt` y `RelatedGuides` activos; `pnpm guides:check` en verde. Pendiente: revisión editorial de los dos borradores y fases BN/BO/BP.
+> **Estado de ejecución (21-Oct-2026):** Humanizer instalado (MIT); skills `create-guide` y `guia-voz` creadas; `content/guias/` con README, plantilla, cuatro briefs y cuatro guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027` y `grasa-corporal-como-medirla`); `/guias` rediseñado (destacada + tres recientes + archivo paginado de 4 en 4), sitemap de 51 URLs, `llms.txt` y `RelatedGuides` activos; barra de progreso de lectura global; `pnpm guides:check` en verde. Pendiente: fases BN/BO/BP.
 
 ## 1. Diagnóstico
 
 ### Fortalezas
 
 - Producto completo: 35 herramientas activas, 0 «Próximamente», 4 hubs y directorio.
-- SEO/GEO técnico sólido: auditoría 48/48, FAQ y JSON-LD en SSR, OG por ruta, `llms.txt`, sitemap y `robots` con bots de IA.
+- SEO/GEO técnico sólido: auditoría 51/51, FAQ y JSON-LD en SSR, OG por ruta, `llms.txt`, sitemap y `robots` con bots de IA.
 - Accesibilidad por encima de la media: axe limpio, teclado, foco, contraste y `prefers-reduced-motion`.
 - Producción desplegada y verificada; el problema de deploy de la Fase BL quedó resuelto.
 - Search Console ya conectado. Aún sin datos: las primeras fases no dependen de métricas.
@@ -377,14 +377,14 @@ Cada brief debe incluir:
 1. **CI/Vitest**: ¿se mantiene la restricción? Si sí, usar `node:test` + script local y CI mínimo.
 2. **Export/import**: ¿se aprueba «Mis datos»? Si no, saltar BV o dejar solo lectura.
 3. **Humanizer**: instalado. La skill `guia-voz` define el tono y `humanizer` hace el pase final.
-4. **Primera guía publicada**: `interes-compuesto-rd` ya está en `/guias`, sitemap y `llms.txt`. Sueldo neto RD 2027 y grasa corporal tienen borrador; falta la revisión del autor.
+4. **Guías publicadas**: el set inicial de cuatro está completo —`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027` y `grasa-corporal-como-medirla`—, todas en `/guias`, sitemap y `llms.txt`. Siguiente: revisión anual de fuentes y ampliación del archivo.
 5. **Autoría**: nombre y credenciales que aparecerán en las guías para E-E-A-T (por ahora, Daury DiCaprio).
 
 ## 10. Primer paso propuesto
 
-La estructura editorial ya está montada, hay una guía publicada y dos borradores. El siguiente paso es:
+La estructura editorial ya está montada, con cuatro guías publicadas y el índice rediseñado (destacada + tres recientes + archivo paginado de 4 en 4). El siguiente paso es:
 
-1. **Revisión editorial del autor** de `sueldo-neto-rd-2027.md` y `grasa-corporal-como-medirla.md`.
-2. **Publicar los dos borradores** cuando el autor los apruebe: `draft: false`, línea en `llms.txt`, `guides:check`, `tsc`, `lint`, `build` y `audit:seo`.
+1. **Mantenimiento editorial**: revisar fuentes, tasas y fechas de las cuatro guías; actualizar `updatedAt`/`reviewedAt` y las calculadoras vinculadas en el mismo cambio.
+2. **Nuevas guías**: usar el brief, la portada generada con `cover` y el flujo de `create-guide`; el archivo crece de cuatro en cuatro sin tocar el índice.
 3. **BN — Baseline, dependencias y medición** en paralelo: limpieza de dependencias, baseline PSI/GSC, sin cambios de UI.
 4. **BO/BP** después: a11y de gráficos y red de enlaces internos.

@@ -49,7 +49,7 @@ holentia/
 ├── scripts/                  # audit-seo.mjs + validate-guides.mjs
 ├── types/                    # Definiciones de tipos
 │   └── index.ts              # Tipos principales
-├── app/sitemap.ts            # Sitemap XML (48 URLs)
+├── app/sitemap.ts            # Sitemap XML (51 URLs)
 ├── app/robots.ts             # Robots.txt
 ├── app/manifest.ts           # Manifest PWA (iconos 192/512/maskable)
 ├── app/error.tsx             # Página de error de ruta
@@ -95,7 +95,7 @@ holentia/
 - **Metadata por página**: `generateMetadata` en las 35 herramientas, las 4 secciones, el home, el directorio y las páginas informativas (title, description, canonical, openGraph, twitter) con template global `{página} | HOLENTIA` en `app/layout.tsx`
 - **Datos estructurados JSON-LD**: `WebApplication` + `BreadcrumbList` + `FAQPage` por herramienta, `CollectionPage` + `BreadcrumbList` por sección, `WebSite` + `Organization` en el home, `FAQPage` en Ayuda
 - **FAQ visible en el HTML inicial** de las 35 herramientas (acordeón, no escondido tras hydration gates) y de `/ayuda` — los hubs de sección no llevan FAQ
-- **`app/sitemap.ts`**: 48 URLs (home, 4 secciones, directorio, 35 herramientas, 5 informativas, `/guias` y 1 guía publicada)
+- **`app/sitemap.ts`**: 51 URLs (home, 4 secciones, directorio, 35 herramientas, 5 informativas, `/guias` y 4 guías publicadas)
 - **`app/robots.ts`**: permite todo y apunta al sitemap
 - **`public/llms.txt`**: índice legible por LLMs con las 35 herramientas, sus fórmulas y las guías publicadas
 - **Enlaces a herramientas en el HTML inicial** de las secciones (tabs y tarjetas server-rendered, sin `mounted` guard)
@@ -187,7 +187,7 @@ La fuente única de verdad es **`design.md`** (paleta completa, tipografía Inte
 - `draft: true` las mantiene fuera de producción, del sitemap y de `llms.txt`; en desarrollo y previews se ven con `noindex` para revisarlas.
 - `content/guias/_briefs/` guarda la investigación y el outline; `_template.md` es el punto de partida.
 - `pnpm guides:check` valida frontmatter, slug, herramientas, fuentes, FAQ, fechas y enlaces internos.
-- El renderizado vive en `app/guias/` y `components/guides/` (Fase BQ): índice, detalle, `Article` + `FAQPage` + `BreadcrumbList` y OG por guía. El sitemap incluye las guías solo cuando están publicadas. `RelatedGuides` enlaza automáticamente las guías publicadas desde sus herramientas (`primaryTool`/`relatedTools`).
+- El renderizado vive en `app/guias/` y `components/guides/` (Fase BQ): el índice abre con una guía destacada y tres recientes, sigue con «Últimas guías» paginadas de 4 en 4 y portadas generadas con tokens de marca; el detalle usa `GuideNav` con el logo centrado. Incluye `Article` + `FAQPage` + `BreadcrumbList` y OG por guía. El sitemap incluye las guías solo cuando están publicadas. `RelatedGuides` enlaza automáticamente las guías publicadas desde sus herramientas (`primaryTool`/`relatedTools`).
 
 ## Privacidad y Datos
 
@@ -252,4 +252,4 @@ Este proyecto es propiedad de Daury DiCaprio. Todos los derechos reservados.
 
 ---
 
-**Última actualización**: Octubre 2026 (35 herramientas y 48 URLs, calculadora de grasa corporal + planificador de comidas + rutinas HIIT + seguimiento de hábitos + calculadora de proteína + test de calidad del sueño, directorio `/herramientas` + calculadora de prestaciones, pase UI/UX móvil completo —contraste AA, tap targets, inputs sin zoom iOS—, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`, estructura editorial en `content/guias/` con validación `guides:check`, guía publicada de interés compuesto y skills `create-guide`/`guia-voz`/`humanizer`)
+**Última actualización**: Octubre 2026 (35 herramientas y 51 URLs, calculadora de grasa corporal + planificador de comidas + rutinas HIIT + seguimiento de hábitos + calculadora de proteína + test de calidad del sueño, directorio `/herramientas` + calculadora de prestaciones, pase UI/UX móvil completo —contraste AA, tap targets, inputs sin zoom iOS—, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`, estructura editorial en `content/guias/` con validación `guides:check`, cuatro guías publicadas —inversión desde cero, interés compuesto, sueldo neto 2027 y grasa corporal—, índice editorial con destacada + archivo paginado, barra de progreso de lectura global y skills `create-guide`/`guia-voz`/`humanizer`)

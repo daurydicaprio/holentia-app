@@ -13,6 +13,7 @@ publishedAt: "2026-10-20"
 updatedAt: "2026-10-20"
 reviewedAt: "2026-10-20"
 author: "Daury DiCaprio"
+cover: "growth"
 keywords:
   - "interés compuesto RD"
   - "ahorrar 10% del sueldo"
@@ -200,6 +201,8 @@ Empieza por el fondo de emergencia y por instrumentos de menor riesgo. Haz el te
 > **Calculadora de interés compuesto:** [simula tus aportes y tus años](/calculadora-interes-compuesto).
 >
 > **También te puede servir:** [test de perfil de riesgo](/test-perfil-riesgo), [calculadora de sueldo neto](/calculadora-sueldo-neto) y [planificador de ahorros](/planificador-ahorros).
+>
+> **Para el mapa completo:** [cómo invertir en RD desde cero](/guias/como-invertir-en-rd-desde-cero).
 
 ## Fuentes
 
