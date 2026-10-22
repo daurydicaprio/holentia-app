@@ -8,6 +8,7 @@ import Footer from "@/components/common/footer/footer"
 import ScrollToTop from "@/components/common/scroll-to-top/scroll-to-top"
 import JsonLd from "./json-ld"
 import ToolFaq from "./tool-faq"
+import ToolRelatedTools from "@/components/tools/related-tools/tool-related-tools"
 import RelatedGuides from "@/components/guides/related-guides"
 import { sectionLabel, toolJsonLd, type FaqItem } from "@/lib/seo"
 
@@ -87,6 +88,8 @@ export default function ToolPageShell({ section, tool, faq = [], children }: Too
         </div>
 
         {children}
+
+        <ToolRelatedTools slug={tool.slug} />
 
         <ToolFaq faq={faq} section={section} />
 

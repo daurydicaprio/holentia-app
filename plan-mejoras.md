@@ -1,13 +1,13 @@
 # HOLENTIA — Plan de mejoras 2.0
 
 > Fecha: 20-Oct-2026 · Actualizado: 22-Oct-2026
-> Estado: propuesta en ejecución. BQ, BU y BN completas; BP/BS en curso. Los cambios nuevos van por `dev`; `main` solo se toca con aprobación explícita.
+> Estado: propuesta en ejecución. BQ, BU, BN y BP completas; BS en curso. Los cambios nuevos van por `dev`; `main` solo se toca con aprobación explícita.
 > Base: `main` y `dev` en `448c529`; 35 herramientas, 52 URLs, 48 rutas OG y 5 guías publicadas.
 > Principios: local-first, sin tracking, server-first, español (es-DO) y documentación en el mismo commit.
 >
 > **Estado de ejecución (22-Oct-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); `/guias` con destacada + 3 recientes + archivo paginado; sitemap de 52 URLs, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` 52/52 y build de 108 páginas. Producción en `448c529`: la guía de prestaciones responde 200 y ya está en sitemap, `llms.txt` e índice. Search Console/Bing verificados e indexación de la guía solicitada por el autor.
 >
-> **Trabajo en curso:** BP (red de enlaces internos) y BS (tests de cálculo + CI). **Pendiente:** BO (a11y de gráficos), BR (tasas centralizadas), BT (metodología/accesibilidad), BV+ (producto local-first).
+> **Trabajo en curso:** BS (tests de cálculo + CI). **Pendiente:** BO (a11y de gráficos), BR (tasas centralizadas), BT (metodología/accesibilidad), BV+ (producto local-first).
 
 ## 0. Checklist de ejecución (22-Oct-2026)
 
@@ -16,7 +16,7 @@
 - [x] ~~Search Console/Bing + indexación de la guía nueva~~
 - [x] ~~BN — Baseline, dependencias y medición~~
 - [ ] BO — Accesibilidad de gráficos
-- [ ] BP — Red de enlaces internos 2.0
+- [x] ~~BP — Red de enlaces internos 2.0~~
 - [ ] BR — Tasas centralizadas y fechas de revisión
 - [ ] BS — Tests de cálculo y CI
 - [ ] BT — Metodología/fuentes y accesibilidad
@@ -112,21 +112,21 @@ Aceptación:
 - Navegación por teclado y lector de pantalla sin callejones.
 - Axe sigue limpio.
 
-### Fase BP — Red de enlaces internos 2.0
+### Fase BP — Red de enlaces internos 2.0 — HECHA (22-Oct-2026)
 
 **Objetivo:** que ninguna herramienta quede aislada y que el usuario encuentre el siguiente paso natural.
 
 Tareas:
-- Crear un mapa de relaciones en `lib/related.ts` (o extender `lib/data.ts`).
-- Garantizar 2–3 enlaces contextuales entrantes y salientes por herramienta.
-- Estandarizar el bloque `RelatedTools`; hoy solo lo usan 6 componentes.
-- Priorizar las 13 herramientas sin enlace contextual entrante: sueldo neto, aguinaldo, ITBIS, prestaciones, certificado, combustible, perfil de riesgo, planificador de compras, planificador de comidas, rutinas HIIT, seguimiento de hábitos, glosario y tracker de gastos.
-- Evitar enlaces aleatorios: cada relación debe tener sentido de uso.
+- [x] Mapa de relaciones dirigidas en `lib/related-tools.ts`: **35/35 herramientas**, 2–3 enlaces salientes y **≥2 entrantes** cada una.
+- [x] Bloque central `ToolRelatedTools` en `ToolPageShell` (server-first, sin JS propio): se renderiza una sola vez, antes del FAQ. Sustituye los bloques sueltos de calorías, proteína, IMC, grasa, pasos e hidratación.
+- [x] Cerrados los huecos de las 13 herramientas que no tenían entrada contextual: sueldo neto, aguinaldo, ITBIS, prestaciones, certificado, combustible, perfil de riesgo, planificador de compras, planificador de comidas, rutinas HIIT, seguimiento de hábitos, glosario y tracker de gastos.
+- [x] Relaciones con sentido de uso por clúster (mente, relaciones, cuerpo, finanzas); hidratación conserva el acento `sky`.
+- [x] `pnpm links:check` valida el grafo, destinos, autorreferencias, 2–3 salientes, ≥2 entrantes y que exista `app/{slug}/page.tsx`.
 
 Aceptación:
-- Todas las herramientas tienen al menos 2 enlaces contextuales entrantes desde otras herramientas.
-- Sin URLs nuevas; auditoría 46/46.
-- `design.md` y `create-tool` actualizados con el patrón.
+- [x] Todas las herramientas tienen al menos 2 enlaces contextuales entrantes desde otras herramientas.
+- [x] Sin URLs nuevas; `audit:seo` **52/52**, 0 FAIL, 0 WARN.
+- [x] `design.md`, `create-tool`, `seo-geo` y `architecture.md` actualizados con el patrón.
 
 ## 5. Ola 2 — Confianza y contenido
 

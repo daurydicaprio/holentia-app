@@ -2,11 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 import {
-  Activity,
   AlertTriangle,
   ChevronsUpDown,
-  Dumbbell,
-  Flame,
   Ruler,
   Scale,
   Trash2,
@@ -16,7 +13,6 @@ import {
 } from "lucide-react"
 import { useCountUp } from "@/hooks/use-count-up"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
-import RelatedTools from "@/components/tools/related-tools/related-tools"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
 
 // Calculadora de IMC: peso ÷ estatura² (m).
@@ -109,12 +105,6 @@ const HONESTY = [
     title: "Mira la tendencia",
     text: "El número de hoy pesa menos que la dirección de los últimos meses. Pésate en condiciones parecidas y mira la curva, no el día.",
   },
-]
-
-const NEXT_STEPS = [
-  { href: "/calculadora-calorias", icon: Flame, title: "Tus calorías diarias" },
-  { href: "/calculadora-proteina-diaria", icon: Dumbbell, title: "Tu proteína diaria" },
-  { href: "/calculadora-grasa-corporal", icon: Activity, title: "Tu grasa corporal" },
 ]
 
 export function BmiCalculator() {
@@ -375,13 +365,6 @@ export function BmiCalculator() {
         </div>
       </div>
 
-      {/* Del número a la acción */}
-      <RelatedTools
-        title="Del número a la acción"
-        intro="El IMC es una foto; tus hábitos son la película. Sigue por aquí:"
-        items={NEXT_STEPS}
-        note="Orientación educativa con referencias de la OMS: no sustituye una valoración profesional."
-      />
     </div>
   )
 }

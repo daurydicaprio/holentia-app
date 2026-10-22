@@ -6,9 +6,7 @@ import {
   ArrowRight,
   CheckCircle2,
   ChevronsUpDown,
-  Droplets,
   Dumbbell,
-  Footprints,
   HeartPulse,
   Info,
   Scale,
@@ -17,7 +15,6 @@ import {
 } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
-import RelatedTools from "@/components/tools/related-tools/related-tools"
 import {
   KG_PER_LB,
   LB_PER_KG,
@@ -448,17 +445,6 @@ export function ProteinCalculator() {
         </section>
       )}
 
-      <div className="mt-6">
-        <RelatedTools
-          title="Sigue por aquí"
-          intro="La proteína es una pieza; el resto también cuenta."
-          items={[
-            { href: "/calculadora-imc", icon: Scale, title: "Tu IMC" },
-            { href: "/calculadora-hidratacion", icon: Droplets, title: "Tu hidratación" },
-            { href: "/pasos-al-dia", icon: Footprints, title: "Tu plan de pasos" },
-          ]}
-        />
-      </div>
     </>
   )
 }

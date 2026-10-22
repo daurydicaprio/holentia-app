@@ -95,6 +95,7 @@ types/         index.ts (CardData, SectionType, AmortizationRow, …), guide.ts
 
 - `pnpm exec tsc --noEmit` · `pnpm lint` (ESLint 8.57 + `next/core-web-vitals`) · `pnpm build` — los tres deben estar en verde antes de cada push.
 - Guías: `pnpm guides:check` valida frontmatter, slug, herramientas, fuentes, FAQ, fechas y enlaces internos.
+- Enlaces internos: `pnpm links:check` valida las 35 herramientas del grafo `lib/related-tools.ts` (2–3 salientes, ≥2 entrantes, destinos existentes, sin autorreferencias).
 - Build estricto: sin `ignoreBuildErrors`/`ignoreDuringBuilds`.
 - Smoke antes de cada push con rutas nuevas: HTML prerenderado (H1 ×1, canonical, `noindex` solo esperado en borradores de guía, JSON-LD) + runtime de `opengraph-image` (`200 image/png`).
 - Auditoría automatizada: `pnpm audit:seo` (`scripts/audit-seo.mjs`) valida el sitemap completo — SEO/GEO, estructura a11y y runtime OG — en un paso (detalle: skill `seo-geo-audit` §2.0).

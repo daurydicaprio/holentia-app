@@ -11,7 +11,8 @@
     "lint": "next lint",
     "start": "next start",
     "audit:seo": "node scripts/audit-seo.mjs",
-    "guides:check": "node scripts/validate-guides.mjs"
+    "guides:check": "node scripts/validate-guides.mjs",
+    "links:check": "node --no-warnings --experimental-strip-types scripts/validate-related-links.mjs"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",

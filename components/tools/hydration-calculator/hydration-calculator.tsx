@@ -22,7 +22,6 @@ import {
 } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
-import RelatedTools from "@/components/tools/related-tools/related-tools"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
 const DRAFT_KEY = draftKey("calculadora-hidratacion")
@@ -446,17 +445,6 @@ export function HydrationCalculator() {
           </div>
         </div>
       </div>
-
-      <RelatedTools
-        title="Sigue por aquí"
-        intro="El agua es una pieza; estas herramientas completan el plan."
-        accent="sky"
-        items={[
-          { href: "/calculadora-calorias", icon: Flame, title: "Tus calorías diarias" },
-          { href: "/calculadora-proteina-diaria", icon: Dumbbell, title: "Tu proteína diaria" },
-          { href: "/pasos-al-dia", icon: Footprints, title: "Tu plan de pasos" },
-        ]}
-      />
     </div>
   )
 }

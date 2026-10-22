@@ -222,6 +222,9 @@ pnpm build
 # Validar las guías editoriales (frontmatter, fuentes, FAQ, enlaces)
 pnpm guides:check
 
+# Red de enlaces internos (2–3 salientes y ≥2 entrantes por herramienta)
+pnpm links:check
+
 # Auditoría SEO/GEO + estructura a11y (usa el build; arranca `next start` solo)
 pnpm audit:seo
 

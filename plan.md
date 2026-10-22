@@ -583,6 +583,17 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase BP — Red de enlaces internos 2.0 (22-Oct-2026) — HECHA
+
+- [x] **Mapa único**: `lib/related-tools.ts` con 35/35 herramientas, 2–3 enlaces salientes contextuales y al menos 2 entrantes por herramienta.
+- [x] **Bloque central**: `components/tools/related-tools/tool-related-tools.tsx` se renderiza desde `ToolPageShell` antes del FAQ; server-first, sin JS propio. Se retiraron los bloques sueltos de las 5 herramientas que los tenían.
+- [x] **Huecos cerrados**: las 13 herramientas sin entrada contextual (sueldo neto, aguinaldo, ITBIS, prestaciones, certificado, combustible, perfil de riesgo, planificador de compras, planificador de comidas, HIIT, hábitos, glosario y tracker) ya reciben enlaces desde otras tools.
+- [x] **Validación**: `pnpm links:check` comprueba destinos, autorreferencias, 2–3 salientes, ≥2 entrantes y la existencia de `app/{slug}/page.tsx`.
+- [x] **Docs**: `design.md` §4b-bis, `create-tool`, `seo-geo` y `architecture.md` actualizados.
+- Verificado: `links:check` 35/35 · `audit:seo` **52/52**, 0 FAIL, 0 WARN · sin URLs nuevas.
+
+---
+
 ## Backlog propuesto (17-Oct-2026, pendiente de decisión)
 
 Sin fase asignada; se convierte en fase al aprobar el frente. Candidatos analizados tras cerrar el pase UI/UX:

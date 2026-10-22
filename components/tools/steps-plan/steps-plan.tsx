@@ -27,7 +27,6 @@ import {
   Utensils,
 } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
-import RelatedTools from "@/components/tools/related-tools/related-tools"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
 
 // Plan de Pasos 5-10-20: objetivo diario, plan de caminata por bloques de
@@ -771,16 +770,6 @@ export function StepsPlan() {
           </div>
         </div>
       </div>
-
-      <RelatedTools
-        title="Sigue por aquí"
-        intro="Caminar es la base; estas herramientas completan el plan."
-        items={[
-          { href: "/calculadora-calorias", icon: Flame, title: "Tus calorías diarias" },
-          { href: "/calculadora-proteina-diaria", icon: Dumbbell, title: "Tu proteína diaria" },
-          { href: "/test-calidad-sueno", icon: Moon, title: "Tu calidad de sueño" },
-        ]}
-      />
     </div>
   )
 }

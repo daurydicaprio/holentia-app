@@ -6,15 +6,11 @@ import {
   Activity,
   AlertTriangle,
   ChevronsUpDown,
-  Dumbbell,
-  Flame,
   Info,
-  Scale,
   Trash2,
 } from "lucide-react"
 import { useCountUp } from "@/hooks/use-count-up"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
-import RelatedTools from "@/components/tools/related-tools/related-tools"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
 
 // Calculadora de grasa corporal: método US Navy (densidad corporal) con
@@ -731,17 +727,6 @@ export function BodyFatCalculator() {
           (ACE). Estimación educativa, no asesoramiento médico.
         </p>
       </div>
-
-      <RelatedTools
-        title="Sigue midiendo tu progreso"
-        intro="La composición es una pieza; energía y proteína completan la foto:"
-        items={[
-          { href: "/calculadora-imc", icon: Scale, title: "Tu IMC" },
-          { href: "/calculadora-calorias", icon: Flame, title: "Tus calorías" },
-          { href: "/calculadora-proteina-diaria", icon: Dumbbell, title: "Tu proteína" },
-        ]}
-        note="Estimación educativa con el método US Navy: no sustituye una valoración profesional."
-      />
     </div>
   )
 }
