@@ -1,11 +1,26 @@
 # HOLENTIA — Plan de mejoras 2.0
 
-> Fecha: 20-Oct-2026
-> Estado: propuesta en ejecución. BQ parcial; ver estado de ejecución abajo. `main` no se toca.
-> Base: `main` y `dev` en `3638175`; 35 herramientas, 46 URLs, 46 OG, 39 claves `holentia:*`.
+> Fecha: 20-Oct-2026 · Actualizado: 22-Oct-2026
+> Estado: propuesta en ejecución. BQ y BU completas; BN/BP/BS en curso. Los cambios nuevos van por `dev`; `main` solo se toca con aprobación explícita.
+> Base: `main` y `dev` en `448c529`; 35 herramientas, 52 URLs, 48 rutas OG y 5 guías publicadas.
 > Principios: local-first, sin tracking, server-first, español (es-DO) y documentación en el mismo commit.
 >
-> **Estado de ejecución (21-Oct-2026):** Humanizer instalado (MIT); skills `create-guide` y `guia-voz` creadas; `content/guias/` con README, plantilla, cuatro briefs y cuatro guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027` y `grasa-corporal-como-medirla`); `/guias` rediseñado (destacada + tres recientes + archivo paginado de 4 en 4), sitemap de 51 URLs, `llms.txt` y `RelatedGuides` activos; barra de progreso de lectura global; `pnpm guides:check` en verde. Pendiente: fases BN/BO/BP.
+> **Estado de ejecución (22-Oct-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); `/guias` con destacada + 3 recientes + archivo paginado; sitemap de 52 URLs, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` 52/52 y build de 108 páginas. Producción en `448c529`: la guía de prestaciones responde 200 y ya está en sitemap, `llms.txt` e índice. Search Console/Bing verificados e indexación de la guía solicitada por el autor.
+>
+> **Trabajo en curso:** BN (dependencias, baseline PSI), BP (red de enlaces internos) y BS (tests de cálculo + CI). **Pendiente:** BO (a11y de gráficos), BR (tasas centralizadas), BT (metodología/accesibilidad), BV+ (producto local-first).
+
+## 0. Checklist de ejecución (22-Oct-2026)
+
+- [x] ~~BQ — Estructura de guías en Markdown~~
+- [x] ~~BU — Primeras guías publicadas (5)~~
+- [x] ~~Search Console/Bing + indexación de la guía nueva~~
+- [ ] BN — Baseline, dependencias y medición
+- [ ] BO — Accesibilidad de gráficos
+- [ ] BP — Red de enlaces internos 2.0
+- [ ] BR — Tasas centralizadas y fechas de revisión
+- [ ] BS — Tests de cálculo y CI
+- [ ] BT — Metodología/fuentes y accesibilidad
+- [ ] BV+ — Producto local-first (decisión pendiente)
 
 ## 1. Diagnóstico
 

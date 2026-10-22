@@ -5,17 +5,17 @@
 > Principios: sin DB, sin registro, local-first privado (`holentia:*` en navegador), cero tracking.
 > Plan de mejoras 2.0 (propuesta, 20-Oct-2026): [`plan-mejoras.md`](plan-mejoras.md).
 
-## Estado actual (20-Oct-2026) — 35 herramientas (grasa corporal + planificador de comidas + rutinas HIIT + seguimiento de hábitos + proteína + test de calidad del sueño) en `dev` y producción; roadmap de herramientas completado (0 «Próximamente»); proteína de calorías corregida; red de enlaces de cuerpo, favicon H y pase UI/UX móvil completos
+## Estado actual (22-Oct-2026) — 35 herramientas, 52 URLs y 5 guías publicadas en `dev` y producción
 - [x] Stack: Next 15.5.26 + React 19.3 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
-- [x] Cobertura: **35 herramientas** activas + **0 tarjetas «Próximamente»** en `lib/data.ts`; sitio de **46 URLs** (home + 4 hubs + directorio + 35 herramientas + 5 informativas)
-- [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite), OG por ruta (**46 archivos**), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 46 URLs con lastmod fijo, llms.txt 35 tools; auditorías registradas en la skill `seo-geo-audit`
-- [x] UI/UX móvil: pase completo por herramientas (cuerpo, mente, relaciones, finanzas ×3) y superficies globales (chrome, hubs, informativas, shell) — contraste AA con tiers por sección, tap targets ≥40/44px, inputs ≥16px sin zoom iOS, recetas en `design.md`
+- [x] Cobertura: **35 herramientas** activas + **0 tarjetas «Próximamente»** en `lib/data.ts`; sitio de **52 URLs** (home + 4 hubs + directorio + 35 herramientas + 5 informativas + `/guias` + 5 guías publicadas)
+- [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite/Article), OG por ruta (**48 rutas**, incluida la OG dinámica de guías), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 52 URLs, `llms.txt` 35 tools + 5 guías; auditorías registradas en la skill `seo-geo-audit`
+- [x] UI/UX móvil: pase completo por herramientas y superficies globales (chrome, hubs, informativas, shell) — contraste AA con tiers por sección, tap targets ≥40/44px, inputs ≥16px sin zoom iOS, recetas en `design.md`
 - [x] Rendimiento de campo (Fase BL, 19-Oct-2026): cabecera y héroe del planificador en SSR, variantes responsive por CSS, CLS **0**, LCP móvil **2.1 s**, Lighthouse **87-88/100** y axe **12/12**
-- [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` se sincroniza con `dev` al cierre de cada fase (sync previa: Fase BK)**
+- [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` solo se sincroniza con `dev` cuando el usuario lo aprueba**
 - [x] `tsc 0 errores + next build OK + pnpm lint 0` en estricto
-- [x] **Sync a `main` aprobada** por el usuario (19-Oct-2026): `dev` → `main` por fast-forward con la Fase BK (planificador de comidas). Producción con **34 herramientas activas y 0 «Próximamente»**; roadmap de herramientas completado. Los cambios siguientes vuelven a requerir aprobación explícita antes de tocar `main`.
-- [x] **Deploy de producción (20-Oct-2026)**: `main` avanzado por fast-forward a `0c59ac1` (Fase BM) y desplegado en Vercel. `holentia.com/calculadora-grasa-corporal` responde **200**, con title, canonical, H1 y OG correctos; sitemap con **46** URLs. Incluye la Fase BL (`fa86ef2`/`55de0e6`), por lo que el header/héroe SSR queda publicado. Queda pendiente repetir Lighthouse de campo sobre producción.
-- [x] **Estructura editorial (20-Oct-2026)**: `content/guias/` con README, plantilla, dos briefs y dos borradores (`sueldo-neto-rd-2027`, `grasa-corporal-como-medirla`), validación `pnpm guides:check` y skills `create-guide`/`guia-voz`/`humanizer`; render `/guias` + `/guias/[slug]` listo en preview (drafts `noindex`), pendiente de aprobación para publicar.
+- [x] **Contenido editorial (22-Oct-2026)**: 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`), índice `/guias` con destacada + 3 recientes + archivo paginado, `guides:check` 5/5, `RelatedGuides` y enlaces bidireccionales activos.
+- [x] **Producción (22-Oct-2026)**: `main` y `dev` en `448c529`; `holentia.com/guias/prestaciones-laborales-rd` responde **200** y aparece en sitemap (52), `llms.txt` e índice. `audit:seo` **52/52**, 0 FAIL, 0 WARN; build de **108 páginas**. Search Console/Bing verificados e indexación de la guía solicitada por el autor.
+- [ ] **En curso (22-Oct-2026)**: BN (dependencias + baseline PSI), BP (red de enlaces internos 2.0) y BS (tests de cálculo + CI). Pendiente: BO (a11y de gráficos), BR (tasas centralizadas), BT (metodología/accesibilidad) y BV+ (producto local-first).
 
 ---
 
