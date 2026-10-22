@@ -93,7 +93,8 @@ types/         index.ts (CardData, SectionType, AmortizationRow, …), guide.ts
 
 ## 8. Calidad
 
-- `pnpm exec tsc --noEmit` · `pnpm lint` (ESLint 8.57 + `next/core-web-vitals`) · `pnpm build` — los tres deben estar en verde antes de cada push.
+- `pnpm test` (22 casos de cálculo) · `pnpm exec tsc --noEmit` · `pnpm lint` (ESLint 8.57 + `next/core-web-vitals`) · `pnpm build` — todo debe estar en verde antes de cada push.
+- CI: `.github/workflows/ci.yml` corre en Node 22 con pnpm 10.34.6: install congelado, tests, `links:check`, `tsc`, `lint`, `guides:check`, `audit --prod`, build y `audit:seo`.
 - Guías: `pnpm guides:check` valida frontmatter, slug, herramientas, fuentes, FAQ, fechas y enlaces internos.
 - Enlaces internos: `pnpm links:check` valida las 35 herramientas del grafo `lib/related-tools.ts` (2–3 salientes, ≥2 entrantes, destinos existentes, sin autorreferencias).
 - Build estricto: sin `ignoreBuildErrors`/`ignoreDuringBuilds`.

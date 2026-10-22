@@ -15,7 +15,7 @@
 - [x] `tsc 0 errores + next build OK + pnpm lint 0` en estricto
 - [x] **Contenido editorial (22-Oct-2026)**: 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`), índice `/guias` con destacada + 3 recientes + archivo paginado, `guides:check` 5/5, `RelatedGuides` y enlaces bidireccionales activos.
 - [x] **Producción (22-Oct-2026)**: `main` y `dev` en `448c529`; `holentia.com/guias/prestaciones-laborales-rd` responde **200** y aparece en sitemap (52), `llms.txt` e índice. `audit:seo` **52/52**, 0 FAIL, 0 WARN; build de **108 páginas**. Search Console/Bing verificados e indexación de la guía solicitada por el autor.
-- [ ] **En curso (22-Oct-2026)**: BN (dependencias + baseline PSI), BP (red de enlaces internos 2.0) y BS (tests de cálculo + CI). Pendiente: BO (a11y de gráficos), BR (tasas centralizadas), BT (metodología/accesibilidad) y BV+ (producto local-first).
+- [x] **Cierre BN/BP/BS (22-Oct-2026)**: BN dejó `audit --prod` en 0 y baseline documentado; BP centralizó la red de enlaces (35/35, `links:check`); BS añadió **22 tests** de cálculo con `node:test` y CI en GitHub Actions. Verificación completa: `tsc`, `lint`, `test`, `links:check`, `guides:check`, build **108 páginas**, `audit:seo` **52/52** y `audit --prod` 0. Pendiente: BO (a11y de gráficos), BR (tasas centralizadas), BT (metodología/accesibilidad), BV+ (producto local-first) y ampliar tests a préstamo/interés compuesto/IMC/grasa/calorías.
 
 ---
 
@@ -594,6 +594,18 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 
 ---
 
+## Fase BS — Tests de cálculo núcleo + CI (22-Oct-2026) — HECHA
+
+- [x] **Funciones puras**: `lib/calculations/net-salary.ts` (SFS, AFP, ISR y tramos), `aguinaldo.ts`, `itbis.ts` y `severance.ts` (fechas, preaviso, cesantía, vacaciones, Navidad y montos). Las calculadoras importan estas funciones; no hay fórmulas duplicadas.
+- [x] **Tests**: 22 casos en `tests/*.test.mjs` con `node:test` + `assert/strict`, incluyendo límites de ISR, topes de TSS, tasas 18/16, fracciones de cesantía y fin de mes.
+- [x] **Script**: `pnpm test` con `--experimental-strip-types`; sin Vitest ni dependencias nuevas.
+- [x] **CI**: `.github/workflows/ci.yml` con Node 22, pnpm 10.34.6, install congelado, tests, `links:check`, `tsc`, `lint`, `guides:check`, `audit --prod`, build y `audit:seo`.
+- [x] **Sin cambios de comportamiento**: las cuatro calculadoras conservan sus fórmulas y resultados.
+- Verificado: `pnpm test` **22/22** · `tsc 0` · `lint 0` · build **108 páginas** · `links:check` 35/35 · `audit:seo` **52/52** · `audit --prod` 0.
+- Pendiente para otra iteración: préstamo, interés compuesto, IMC, grasa corporal y calorías.
+
+---
+
 ## Backlog propuesto (17-Oct-2026, pendiente de decisión)
 
 Sin fase asignada; se convierte en fase al aprobar el frente. Candidatos analizados tras cerrar el pase UI/UX:
@@ -605,12 +617,14 @@ Sin fase asignada; se convierte en fase al aprobar el frente. Candidatos analiza
 5. **«Mis datos»**: exportar/importar JSON de las claves `holentia:*` (respaldo local, sin nube) + enlace en `/ayuda`.
 6. **PWA offline**: service worker para que las herramientas funcionen sin conexión (manifest y iconos ya existen).
 7. **Nuevas herramientas** (a especificar con el dueño; keywords RD): ~~sueldo neto (TSS + ISR)~~ **HECHA (Fase AY)**; ~~prestaciones laborales/indemnización~~ **HECHA (Fase BA)**; ~~proteína diaria~~ **HECHA (Fase BB)**; ~~test de calidad del sueño~~ **HECHA (Fase BC)**; ~~seguimiento de hábitos~~ **HECHA (Fase BI)**; ~~rutinas HIIT~~ **HECHA (Fase BJ)**; ~~planificador de comidas~~ **HECHA (Fase BK)**; ~~grasa corporal~~ **HECHA (Fase BM)**. Roadmap de herramientas completado: 35 activas y 0 «Próximamente».
-8. **Infra de calidad**: CI (GitHub Actions: `tsc` + `lint` + `build` en push a `dev`) y Vitest para los parsers/formatters (hoy sus casos se prueban ad hoc).
+8. ~~**Infra de calidad**: CI (GitHub Actions: `tsc` + `lint` + `build` en push a `dev`) y Vitest para los parsers/formatters (hoy sus casos se prueban ad hoc).~~ **HECHA (Fase BS)**: CI mínimo con `node:test` para sueldo neto, aguinaldo, ITBIS y prestaciones; sin Vitest.
 
 ---
 
 ## Comandos de verificación (solo lectura)
 ```bash
+pnpm test
+pnpm links:check
 pnpm exec tsc --noEmit
 pnpm lint
 pnpm build

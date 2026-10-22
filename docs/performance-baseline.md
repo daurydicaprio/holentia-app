@@ -26,13 +26,13 @@ Medición con `curl` desde el entorno de desarrollo, 3 pasadas por ruta, sin cac
 
 ## Presupuesto de build
 
-Datos de `pnpm build` en `dev` después de BN (Next 15.5.27). First Load JS compartido: **103 kB**.
+Datos de `pnpm build` en `dev` después de BN/BS (Next 15.5.27). First Load JS compartido: **103 kB**.
 
 | Ruta | Tamaño de página | First Load JS |
 |---|---:|---:|
 | `/` | 978 B | 126 kB |
 | `/calculadora-sueldo-neto` | 5,97 kB | 134 kB |
-| `/calculadora-prestaciones-laborales` | 5,82 kB | 135 kB |
+| `/calculadora-prestaciones-laborales` | 5,85 kB | 135 kB |
 | `/planificador-comidas` | 14,2 kB | 139 kB |
 
 ## Search Console / Bing

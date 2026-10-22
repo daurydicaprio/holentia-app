@@ -5,7 +5,7 @@ App de bienestar integral (Next.js 15 App Router · React 19 · TS · Tailwind 3
 ## Reglas de oro
 
 1. **Rama `dev`** para todo el trabajo (preview dev.holentia.com). **`main` NO se toca** hasta que el usuario lo pida (producción holentia.com).
-2. **Verificación obligatoria antes de cada push**: `pnpm exec tsc --noEmit && pnpm lint && pnpm build` — los tres en verde.
+2. **Verificación obligatoria antes de cada push**: `pnpm test && pnpm exec tsc --noEmit && pnpm lint && pnpm links:check && pnpm build` — todo en verde. Si tocas guías, añade `pnpm guides:check`.
 3. **Nunca hex suelto en componentes nuevos**: tokens Tailwind de sección (`text-finanzas`, `bg-mente-light`, …) o CSS vars. La clave `DEFAULT` genera la clase **sin sufijo** (`bg-mente`, NO `bg-mente-DEFAULT`).
 4. **Todo componente con color propio necesita variante `dark:`**. Probar ambos modos conceptualmente (contraste AA).
 5. **Sin tracking, sin envíos de red, sin backend.** Privacidad del usuario por encima de todo.
@@ -45,8 +45,10 @@ Cargar la skill correspondiente antes de la tarea; cada una es la receta canóni
 
 ```bash
 pnpm dev                  # desarrollo
+pnpm test                 # tests de cálculo con node:test
 pnpm exec tsc --noEmit    # typecheck
 pnpm lint                 # ESLint (next/core-web-vitals)
+pnpm links:check          # red de enlaces internos (2–3 salientes, ≥2 entrantes)
 pnpm build                # producción (estricto, sin ignoreBuildErrors)
 pnpm start                # sirve build de producción
 pnpm guides:check         # valida frontmatter, fuentes, FAQ y enlaces de content/guias

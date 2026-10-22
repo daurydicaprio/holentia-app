@@ -1,13 +1,13 @@
 # HOLENTIA — Plan de mejoras 2.0
 
 > Fecha: 20-Oct-2026 · Actualizado: 22-Oct-2026
-> Estado: propuesta en ejecución. BQ, BU, BN y BP completas; BS en curso. Los cambios nuevos van por `dev`; `main` solo se toca con aprobación explícita.
+> Estado: propuesta en ejecución. BQ, BU, BN, BP y BS completas. Los cambios nuevos van por `dev`; `main` solo se toca con aprobación explícita.
 > Base: `main` y `dev` en `448c529`; 35 herramientas, 52 URLs, 48 rutas OG y 5 guías publicadas.
 > Principios: local-first, sin tracking, server-first, español (es-DO) y documentación en el mismo commit.
 >
-> **Estado de ejecución (22-Oct-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); `/guias` con destacada + 3 recientes + archivo paginado; sitemap de 52 URLs, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` 52/52 y build de 108 páginas. Producción en `448c529`: la guía de prestaciones responde 200 y ya está en sitemap, `llms.txt` e índice. Search Console/Bing verificados e indexación de la guía solicitada por el autor.
+> **Estado de ejecución (22-Oct-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); `/guias` con destacada + 3 recientes + archivo paginado; sitemap de 52 URLs, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` 52/52 y build de 108 páginas; red central de enlaces internos (`links:check` 35/35), 22 tests de cálculo y CI en GitHub Actions. Producción en `448c529`: la guía de prestaciones responde 200 y ya está en sitemap, `llms.txt` e índice. Search Console/Bing verificados e indexación de la guía solicitada por el autor.
 >
-> **Trabajo en curso:** BS (tests de cálculo + CI). **Pendiente:** BO (a11y de gráficos), BR (tasas centralizadas), BT (metodología/accesibilidad), BV+ (producto local-first).
+> **Cerrado en esta iteración:** BN (dependencias/baseline), BP (red de enlaces) y BS (tests núcleo + CI). **Pendiente:** BO (a11y de gráficos), BR (tasas centralizadas), BT (metodología/accesibilidad), BV+ (producto local-first), más la ampliación de tests a préstamo, interés compuesto, IMC, grasa y calorías.
 
 ## 0. Checklist de ejecución (22-Oct-2026)
 
@@ -18,7 +18,7 @@
 - [ ] BO — Accesibilidad de gráficos
 - [x] ~~BP — Red de enlaces internos 2.0~~
 - [ ] BR — Tasas centralizadas y fechas de revisión
-- [ ] BS — Tests de cálculo y CI
+- [x] ~~BS — Tests de cálculo núcleo + CI~~
 - [ ] BT — Metodología/fuentes y accesibilidad
 - [ ] BV+ — Producto local-first (decisión pendiente)
 
@@ -166,20 +166,23 @@ Aceptación:
 - Los resultados numéricos no cambian.
 - Cada herramienta financiera muestra fecha de revisión y fuente.
 
-### Fase BS — Tests de cálculo y CI
+### Fase BS — Tests de cálculo núcleo + CI — HECHA (22-Oct-2026)
 
-**Objetivo:** proteger las fórmulas y las tasas con casos dorados.
+**Objetivo:** proteger las fórmulas y las tasas de mayor riesgo con casos dorados y una barrera automática.
 
 Tareas:
-- Extraer funciones puras de los cálculos de mayor riesgo: sueldo neto, aguinaldo, ITBIS, préstamo, interés compuesto, IMC, grasa corporal y calorías.
-- Tests con casos conocidos (entradas → salida esperada).
-- CI con `tsc`, `lint`, `build` y tests.
-- Si no se aprueba Vitest, usar `node:test` y un script `pnpm verify:calc`; CI puede ser un workflow mínimo.
+- [x] Extraer funciones puras a `lib/calculations/`: sueldo neto (`net-salary.ts`), aguinaldo (`aguinaldo.ts`), ITBIS (`itbis.ts`) y prestaciones (`severance.ts`).
+- [x] Tests con `node:test` y `assert/strict`: **22 casos** en `tests/*.test.mjs`, con límites de ISR, topes TSS, tasas 18/16, fechas, preaviso/cesantía/vacaciones/Navidad y montos.
+- [x] Script `pnpm test`; sin Vitest ni dependencias nuevas de test.
+- [x] CI mínimo en `.github/workflows/ci.yml`: Node 22, pnpm 10.34.6, install congelado, tests, `links:check`, `tsc`, `lint`, `guides:check`, `audit --prod`, build y `audit:seo`.
+- [x] Sin cambios de comportamiento: las calculadoras importan las mismas fórmulas extraídas.
 
 Aceptación:
-- Los tests fallan si se cambia una tasa o fórmula sin actualizar el caso.
-- CI verde en `dev`.
-- Sin cambios de comportamiento.
+- [x] Los tests fallan si se cambia una tasa o una fórmula sin actualizar el caso.
+- [x] `pnpm test` 22/22 y CI preparada para `dev`/`main`.
+- [x] `tsc`, `lint`, `build` (108 páginas), `links:check` 35/35, `audit:seo` 52/52 y `audit --prod` 0.
+
+**Siguiente iteración (no incluida aquí):** ampliar la cobertura a préstamo, interés compuesto, IMC, grasa corporal y calorías. Hoy esos cálculos siguen verificados de forma manual; no se tocaron para no mezclar refactors grandes con esta fase.
 
 ### Fase BT — Metodología/fuentes y accesibilidad
 
@@ -389,7 +392,7 @@ Cada brief debe incluir:
 
 ## 9. Decisiones pendientes
 
-1. **CI/Vitest**: ¿se mantiene la restricción? Si sí, usar `node:test` + script local y CI mínimo.
+1. **CI/Vitest**: resuelto con `node:test` + GitHub Actions; no se añadió Vitest. La cobertura inicial cubre sueldo neto, aguinaldo, ITBIS y prestaciones.
 2. **Export/import**: ¿se aprueba «Mis datos»? Si no, saltar BV o dejar solo lectura.
 3. **Humanizer**: instalado. La skill `guia-voz` define el tono y `humanizer` hace el pase final.
 4. **Guías publicadas**: cinco completas —`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`—, todas en `/guias`, sitemap y `llms.txt`. Siguiente: revisión anual de fuentes y ampliación del archivo.
@@ -402,4 +405,4 @@ La estructura editorial ya está montada, con cinco guías publicadas y el índi
 1. **Mantenimiento editorial**: revisar fuentes, tasas y fechas de las cinco guías; actualizar `updatedAt`/`reviewedAt` y las calculadoras vinculadas en el mismo cambio.
 2. **Nuevas guías**: usar el brief, la foto local `image`/`imageAlt` (con `cover` como respaldo) y el flujo de `create-guide`; el archivo crece de cuatro en cuatro sin tocar el índice.
 3. **BN — Baseline, dependencias y medición**: completada. Queda repetir PSI con API key cuando haya cuota.
-4. **BP/BS**: red de enlaces internos y tests de cálculo + CI, en ejecución. Después: BO (a11y de gráficos), BR (tasas centralizadas) y BT (metodología/fuentes).
+4. **BP/BS**: red de enlaces internos y tests núcleo + CI, completadas. Siguiente: BO (a11y de gráficos), BR (tasas centralizadas), BT (metodología/fuentes) y ampliar tests a las cinco calculadoras restantes.

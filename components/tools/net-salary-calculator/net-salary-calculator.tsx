@@ -17,23 +17,13 @@ import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
 import { formatDOP } from "@/lib/format"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
+import { AFP_CAP, SFS_CAP, calculateNetSalary } from "@/lib/calculations/net-salary"
 
 // Estimación del sueldo neto del asalariado en RD.
 // TSS: SFS 3.04% (tope RD$232,230/mes) y AFP 2.87% (tope RD$464,460/mes) sobre
 // el salario cotizable — Resolución 01-2025, vigente desde el 1 de febrero de
 // 2026 (salario mínimo de referencia: RD$23,223.00).
 // ISR: escala anual de retención de asalariados de la DGII; base = bruto − TSS.
-const SFS_RATE = 0.0304
-const AFP_RATE = 0.0287
-const SFS_CAP = 232230
-const AFP_CAP = 464460
-
-const ISR_EXEMPT_UP_TO = 416220.01
-const ISR_15_UP_TO = 624329
-const ISR_20_UP_TO = 867123
-const ISR_20_FIXED = 31216
-const ISR_25_FIXED = 79776
-
 const DRAFT_KEY = draftKey("calculadora-sueldo-neto")
 const PRESETS = [25000, 50000, 100000]
 
@@ -61,20 +51,6 @@ function formatNumber(value: number): string {
 function parseNumber(formatted: string): number {
   const n = Number.parseFloat(formatted.replace(/,/g, ""))
   return Number.isNaN(n) ? 0 : n
-}
-
-function tramoIsr(baseAnual: number): string {
-  if (baseAnual <= ISR_EXEMPT_UP_TO) return "Exento"
-  if (baseAnual <= ISR_15_UP_TO) return "15%"
-  if (baseAnual <= ISR_20_UP_TO) return "20%"
-  return "25%"
-}
-
-function isrAnual(baseAnual: number): number {
-  if (baseAnual <= ISR_EXEMPT_UP_TO) return 0
-  if (baseAnual <= ISR_15_UP_TO) return (baseAnual - ISR_EXEMPT_UP_TO) * 0.15
-  if (baseAnual <= ISR_20_UP_TO) return ISR_20_FIXED + (baseAnual - (ISR_15_UP_TO + 0.01)) * 0.2
-  return ISR_25_FIXED + (baseAnual - (ISR_20_UP_TO + 0.01)) * 0.25
 }
 
 const CIFRAS_VIGENTES = [
@@ -122,33 +98,7 @@ export function NetSalaryCalculator() {
 
   const result = useMemo(() => {
     if (!salarioInput.trim() || salario <= 0) return null
-
-    const otrosDescuentos = otrosInput.trim() ? Math.max(0, otros) : 0
-    const sfs = Math.min(salario, SFS_CAP) * SFS_RATE
-    const afp = Math.min(salario, AFP_CAP) * AFP_RATE
-    const tss = sfs + afp
-    const baseIsrAnual = Math.max(0, (salario - tss) * 12)
-    const isrMensual = isrAnual(baseIsrAnual) / 12
-    const totalDescuentos = tss + isrMensual + otrosDescuentos
-    const netoMensual = salario - totalDescuentos
-
-    return {
-      bruto: salario,
-      otrosDescuentos,
-      sfs,
-      afp,
-      tss,
-      baseIsrAnual,
-      tramo: tramoIsr(baseIsrAnual),
-      isrMensual,
-      totalDescuentos,
-      netoMensual,
-      netoQuincena: netoMensual / 2,
-      netoAnual: netoMensual * 12,
-      tasaDescuentos: (totalDescuentos / salario) * 100,
-      sfsTope: salario > SFS_CAP,
-      afpTope: salario > AFP_CAP,
-    }
+    return calculateNetSalary(salario, otrosInput.trim() ? otros : 0)
   }, [salarioInput, salario, otrosInput, otros])
 
   const animated = useCountUp(result?.netoMensual ?? 0, { duration: 500, decimals: 2 })

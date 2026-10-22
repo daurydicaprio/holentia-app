@@ -7,13 +7,14 @@ import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
 import { formatDOP } from "@/lib/format"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
+import { calculateItbis, type ItbisMode } from "@/lib/calculations/itbis"
 
 // ITBIS RD: tasa general 18% y tasa reducida 16% (café, azúcar, cacao y
 // chocolate, yogurt, mantequilla y grasas comestibles — Guía DGII).
 // Modo «agregar»: base × (1 + tasa). Modo «quitar»: total ÷ (1 + tasa).
 const DRAFT_KEY = draftKey("calculadora-itbis")
 
-type Mode = "add" | "remove"
+type Mode = ItbisMode
 
 const RATES = [
   { value: 18, label: "18% general" },
@@ -93,17 +94,7 @@ export function ItbisCalculator() {
 
   const result = useMemo(() => {
     if (!montoInput.trim() || monto <= 0) return null
-    const r = rate / 100
-    if (mode === "add") {
-      const base = monto
-      const itbis = base * r
-      const total = base + itbis
-      return { base, itbis, total, hero: total }
-    }
-    const total = monto
-    const base = total / (1 + r)
-    const itbis = total - base
-    return { base, itbis, total, hero: itbis }
+    return calculateItbis(monto, rate, mode)
   }, [monto, montoInput, mode, rate])
 
   const animated = useCountUp(result?.hero ?? 0, { duration: 500, decimals: 0 })

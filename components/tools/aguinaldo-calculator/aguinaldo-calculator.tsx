@@ -8,13 +8,13 @@ import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
 import { formatDOP } from "@/lib/format"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
+import { MESES_ANIO, calculateAguinaldo } from "@/lib/calculations/aguinaldo"
 
 // Salario de Navidad (aguinaldo): duodécima parte del salario ordinario
 // devengado en el año (arts. 219–222 del Código de Trabajo). Exento de ISR
 // (Ley 30-26, junio 2026) y fuera de la base cotizable de la TSS.
 // Pago: a más tardar el 20 de diciembre.
 const DRAFT_KEY = draftKey("calculadora-aguinaldo")
-const MESES_ANIO = 12
 
 const TOOLTIPS = {
   salario:
@@ -78,8 +78,7 @@ export function AguinaldoCalculator() {
 
   const result = useMemo(() => {
     if (!salarioInput.trim() || salario <= 0) return null
-    const anual = salario * meses
-    return { anual, aguinaldo: anual / MESES_ANIO }
+    return calculateAguinaldo(salario, meses)
   }, [salario, meses, salarioInput])
 
   const animated = useCountUp(result?.aguinaldo ?? 0, { duration: 500, decimals: 0 })

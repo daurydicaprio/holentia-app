@@ -9,6 +9,7 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
+    "test": "node --no-warnings --experimental-strip-types --test tests/*.test.mjs",
     "start": "next start",
     "audit:seo": "node scripts/audit-seo.mjs",
     "guides:check": "node scripts/validate-guides.mjs",
