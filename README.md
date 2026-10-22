@@ -81,7 +81,7 @@ holentia/
 
 ## Tecnologías Utilizadas
 
-- **Next.js 15.5.26**: Framework React con App Router
+- **Next.js 15.5.27**: Framework React con App Router
 - **TypeScript**: Para tipado estático
 - **Tailwind CSS**: Para estilos
 - **next-themes**: Para gestionar el modo oscuro

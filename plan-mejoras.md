@@ -1,20 +1,20 @@
 # HOLENTIA — Plan de mejoras 2.0
 
 > Fecha: 20-Oct-2026 · Actualizado: 22-Oct-2026
-> Estado: propuesta en ejecución. BQ y BU completas; BN/BP/BS en curso. Los cambios nuevos van por `dev`; `main` solo se toca con aprobación explícita.
+> Estado: propuesta en ejecución. BQ, BU y BN completas; BP/BS en curso. Los cambios nuevos van por `dev`; `main` solo se toca con aprobación explícita.
 > Base: `main` y `dev` en `448c529`; 35 herramientas, 52 URLs, 48 rutas OG y 5 guías publicadas.
 > Principios: local-first, sin tracking, server-first, español (es-DO) y documentación en el mismo commit.
 >
 > **Estado de ejecución (22-Oct-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); `/guias` con destacada + 3 recientes + archivo paginado; sitemap de 52 URLs, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` 52/52 y build de 108 páginas. Producción en `448c529`: la guía de prestaciones responde 200 y ya está en sitemap, `llms.txt` e índice. Search Console/Bing verificados e indexación de la guía solicitada por el autor.
 >
-> **Trabajo en curso:** BN (dependencias, baseline PSI), BP (red de enlaces internos) y BS (tests de cálculo + CI). **Pendiente:** BO (a11y de gráficos), BR (tasas centralizadas), BT (metodología/accesibilidad), BV+ (producto local-first).
+> **Trabajo en curso:** BP (red de enlaces internos) y BS (tests de cálculo + CI). **Pendiente:** BO (a11y de gráficos), BR (tasas centralizadas), BT (metodología/accesibilidad), BV+ (producto local-first).
 
 ## 0. Checklist de ejecución (22-Oct-2026)
 
 - [x] ~~BQ — Estructura de guías en Markdown~~
 - [x] ~~BU — Primeras guías publicadas (5)~~
 - [x] ~~Search Console/Bing + indexación de la guía nueva~~
-- [ ] BN — Baseline, dependencias y medición
+- [x] ~~BN — Baseline, dependencias y medición~~
 - [ ] BO — Accesibilidad de gráficos
 - [ ] BP — Red de enlaces internos 2.0
 - [ ] BR — Tasas centralizadas y fechas de revisión
@@ -27,7 +27,7 @@
 ### Fortalezas
 
 - Producto completo: 35 herramientas activas, 0 «Próximamente», 4 hubs y directorio.
-- SEO/GEO técnico sólido: auditoría 51/51, FAQ y JSON-LD en SSR, OG por ruta, `llms.txt`, sitemap y `robots` con bots de IA.
+- SEO/GEO técnico sólido: auditoría 52/52, FAQ y JSON-LD en SSR, OG por ruta, `llms.txt`, sitemap y `robots` con bots de IA.
 - Accesibilidad por encima de la media: axe limpio, teclado, foco, contraste y `prefers-reduced-motion`.
 - Producción desplegada y verificada; el problema de deploy de la Fase BL quedó resuelto.
 - Search Console ya conectado. Aún sin datos: las primeras fases no dependen de métricas.
@@ -36,7 +36,7 @@
 
 - **Datos sensibles al tiempo**: tasas de TSS/ISR, ITBIS, aguinaldo, tarifas eléctricas, combustible, certificados y tipo de cambio están repartidas en componentes.
 - **Sin red de seguridad**: no hay CI ni tests de cálculo; un cambio en una fórmula o una tasa puede pasar desapercibido.
-- **Dependencias**: `pnpm audit --prod` reporta 29 avisos (18 high), en su mayoría del árbol de build de Tailwind. `tailwindcss-animate` está en `dependencies` aunque solo se usa en `tailwind.config.ts`.
+- **Dependencias**: resuelto en BN. `tailwindcss-animate` pasó a `devDependencies`, Next/React se actualizaron a parches seguros y `pnpm audit --prod` quedó en **0 vulnerabilidades**.
 - **Enlaces internos débiles**: 13 herramientas no reciben ningún enlace contextual desde otra herramienta y solo 6 usan el bloque compartido `RelatedTools`.
 - **Gráficos**: los canvas de interés compuesto no tienen alternativa textual; axe no detecta ese tipo de barrera.
 - **Datos locales sin portabilidad**: 39 claves, incluyendo diarios, hábitos, pasos y planificador; no hay exportación, importación ni panel agregado.
@@ -79,22 +79,22 @@
 
 ## 4. Ola 1 — Quick wins
 
-### Fase BN — Baseline, dependencias y medición
+### Fase BN — Baseline, dependencias y medición — HECHA (22-Oct-2026)
 
 **Objetivo:** dejar una foto del estado actual y quitar ruido técnico antes de tocar nada funcional.
 
 Tareas:
-- Confirmar en Search Console: propiedad, sitemap enviado, cobertura inicial y consultas (aunque todavía no haya datos).
-- Guardar baseline de PageSpeed Insights de producción: home + 3 herramientas clave (móvil y escritorio).
-- Mover `tailwindcss-animate` a `devDependencies` (solo se usa en `tailwind.config.ts`).
-- Actualizar parches seguros: React/React DOM 19.3.1 y el último parche 15.5.x de Next si existe.
-- Revisar `pnpm audit --prod` y documentar qué avisos quedan y por qué.
-- No migrar a Next 16 ni Tailwind 4 en esta fase.
+- [x] Confirmar en Search Console/Bing: propiedad y sitemap revisados por el autor; indexación de la guía nueva solicitada.
+- [x] Baseline de respuesta y build documentado en [`docs/performance-baseline.md`](docs/performance-baseline.md). La API pública de PSI devolvió **429 Quota exceeded**; queda pendiente repetirla con API key o cuando se restablezca la cuota.
+- [x] Mover `tailwindcss-animate` a `devDependencies` (solo se usa en `tailwind.config.ts`).
+- [x] Actualizar parches seguros: React/React DOM **19.3.1**, Next **15.5.27**, `eslint-config-next` **15.5.27**, `autoprefixer` **10.6.1** y `postcss` **8.5.31**.
+- [x] Revisar `pnpm audit --prod`: **27 avisos → 0** (0 high, 0 critical). Se añadió override de PostCSS 8.5.31 para el árbol de Next.
+- [x] No migrar a Next 16 ni Tailwind 4 en esta fase.
 
 Aceptación:
-- `tsc`, `lint` y `build` verdes.
-- `pnpm audit --prod` con menos avisos y sin avisos runtime accionables.
-- Baseline de PSI/GSC documentado en `plan.md` o en un anexo.
+- [x] `tsc`, `lint` y `build` verdes (108 páginas).
+- [x] `pnpm audit --prod` sin avisos runtime accionables: **0 vulnerabilidades**.
+- [x] Baseline de PSI/GSC documentado; PSI pendiente por cuota externa, no por el código.
 
 ### Fase BO — Accesibilidad de gráficos
 
@@ -392,14 +392,14 @@ Cada brief debe incluir:
 1. **CI/Vitest**: ¿se mantiene la restricción? Si sí, usar `node:test` + script local y CI mínimo.
 2. **Export/import**: ¿se aprueba «Mis datos»? Si no, saltar BV o dejar solo lectura.
 3. **Humanizer**: instalado. La skill `guia-voz` define el tono y `humanizer` hace el pase final.
-4. **Guías publicadas**: el set inicial de cuatro está completo —`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027` y `grasa-corporal-como-medirla`—, todas en `/guias`, sitemap y `llms.txt`. Siguiente: revisión anual de fuentes y ampliación del archivo.
+4. **Guías publicadas**: cinco completas —`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`—, todas en `/guias`, sitemap y `llms.txt`. Siguiente: revisión anual de fuentes y ampliación del archivo.
 5. **Autoría**: nombre y credenciales que aparecerán en las guías para E-E-A-T (por ahora, Daury DiCaprio).
 
 ## 10. Primer paso propuesto
 
-La estructura editorial ya está montada, con cuatro guías publicadas y el índice rediseñado (destacada + tres recientes + archivo paginado de 4 en 4). El siguiente paso es:
+La estructura editorial ya está montada, con cinco guías publicadas y el índice rediseñado (destacada + tres recientes + archivo paginado de 4 en 4). El siguiente paso es:
 
-1. **Mantenimiento editorial**: revisar fuentes, tasas y fechas de las cuatro guías; actualizar `updatedAt`/`reviewedAt` y las calculadoras vinculadas en el mismo cambio.
+1. **Mantenimiento editorial**: revisar fuentes, tasas y fechas de las cinco guías; actualizar `updatedAt`/`reviewedAt` y las calculadoras vinculadas en el mismo cambio.
 2. **Nuevas guías**: usar el brief, la foto local `image`/`imageAlt` (con `cover` como respaldo) y el flujo de `create-guide`; el archivo crece de cuatro en cuatro sin tocar el índice.
-3. **BN — Baseline, dependencias y medición** en paralelo: limpieza de dependencias, baseline PSI/GSC, sin cambios de UI.
-4. **BO/BP** después: a11y de gráficos y red de enlaces internos.
+3. **BN — Baseline, dependencias y medición**: completada. Queda repetir PSI con API key cuando haya cuota.
+4. **BP/BS**: red de enlaces internos y tests de cálculo + CI, en ejecución. Después: BO (a11y de gráficos), BR (tasas centralizadas) y BT (metodología/fuentes).
