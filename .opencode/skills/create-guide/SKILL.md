@@ -12,7 +12,7 @@ Skills de apoyo:
 - **`humanizer`** — pase final para quitar patrones de escritura AI. No añade datos.
 - **`seo-geo`** y **`seo-geo-audit`** — metadata, JSON-LD, OG, sitemap, `llms.txt` y auditoría.
 
-> Estado: 4 guías publicadas e índice rediseñado (foto destacada + 3 recientes + archivo paginado de 4 en 4, sin etiquetas de categoría ni CTA «Leer guía»). Los borradores se ven en desarrollo y en previews de Vercel con `noindex`; en producción `draft: true` queda fuera de páginas, sitemap y `llms.txt`. La publicación (`draft: false`, `llms.txt` y enlaces desde herramientas) sigue siendo una decisión explícita.
+> Estado: 5 guías publicadas e índice rediseñado (foto destacada + 3 recientes + archivo paginado de 4 en 4, sin etiquetas de categoría ni CTA «Leer guía»). Los borradores se ven en desarrollo y en previews de Vercel con `noindex`; en producción `draft: true` queda fuera de páginas, sitemap y `llms.txt`. La publicación (`draft: false`, `llms.txt` y enlaces desde herramientas) sigue siendo una decisión explícita.
 
 ## 1. Antes de escribir: brief
 

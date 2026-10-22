@@ -78,6 +78,7 @@ Las fotos del índice viven en `public/guias/` y se sirven localmente: el navega
 - `sueldo-neto-rd-2027.jpg` — `photo-1554224154-26032ffc0d07`
 - `interes-compuesto-rd.jpg` — `photo-1611974789855-9c2a0a7236a3`
 - `grasa-corporal-como-medirla.jpg` — `photo-1571019613454-1cb2f99b2d8b`
+- `prestaciones-laborales-rd.jpg` — `photo-1450101499163-c8848c66ca85`
 
 Al añadir una guía, descarga una foto horizontal (1600×1000 aproximado), guárdala con el slug y declara `image` + `imageAlt` en el frontmatter. Si no hay foto, el índice cae en la portada generada con tokens.
 
@@ -157,6 +158,6 @@ Las guías de finanzas y salud caducan. Revisa fuentes y tasas al menos una vez 
 
 - Contenido y validación: listos.
 - Renderizado `/guias`, JSON-LD y OG: listos.
-- Guías actuales (4 publicadas): `como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027` y `grasa-corporal-como-medirla`. Todas están en sitemap y `llms.txt`.
+- Guías actuales (5 publicadas): `como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`. Todas están en sitemap y `llms.txt`.
 - El índice `/guias` y las guías publicadas entran al sitemap automáticamente. Las herramientas muestran sus guías publicadas con `RelatedGuides` (`primaryTool`/`relatedTools`); no hay que editar TSX al publicar.
 - Las guías en borrador se revisan con `GUIDES_PREVIEW=1 pnpm build` y `GUIDES_PREVIEW=1 pnpm start`; llevan `noindex, nofollow` y no aparecen en sitemap ni `llms.txt`.

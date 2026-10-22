@@ -38,8 +38,8 @@ const MOTIVOS = [
   },
   {
     id: "renuncia",
-    title: "Renuncié (o despido con causa justificada)",
-    sub: "Derechos adquiridos: vacaciones y salario de Navidad",
+    title: "Renuncié sin causa justificada (o despido con causa justificada)",
+    sub: "Vacaciones y Navidad; la dimisión justificada se revisa aparte",
     pagaPreaviso: false,
     pagaCesantia: false,
   },
@@ -106,15 +106,15 @@ function mesesEntre(start: Date, end: Date): { months: number; days: number } {
   return { months: Math.max(0, months), days }
 }
 
-/** Art. 76: 7 días (3–6 meses), 14 (6–12 meses) y 28 (más de 1 año) */
-function diasPreaviso(months: number): number {
+/** Art. 76: 7 días (3–6 meses), 14 (más de 6 meses a 1 año) y 28 (1 año+) */
+function diasPreaviso(months: number, days: number): number {
   if (months < 3) return 0
-  if (months < 6) return 7
+  if (months < 6 || (months === 6 && days === 0)) return 7
   if (months < 12) return 14
   return 28
 }
 
-/** Art. 80: 6 (3–6 meses), 13 (6–12 meses), 21/año (1–5 años) y 23/año (5+); fracción >3 meses según ordinales 1.º y 2.º */
+/** Art. 80: 6 (3 a <6 meses), 13 (6 a <12 meses), 21/año (1 a <5 años) y 23/año (5+); fracción >3 meses según ordinales 1.º y 2.º */
 function diasCesantia(months: number, days: number): number {
   if (months < 3) return 0
   if (months < 6) return 6
@@ -128,13 +128,13 @@ function diasCesantia(months: number, days: number): number {
   return total
 }
 
-/** Arts. 177/180: escala 6–12 días hasta el año; 14 días (1–5 años) y 18 (más de 5) */
+/** Arts. 177/180: escala 6–12 días hasta el año; 14 días (1 a <5 años) y 18 (5 años+) */
 function diasVacaciones(months: number, days: number): number {
   if (months < 12) {
     const efectivo = months + (days > 0 ? 1 : 0)
     return efectivo >= 6 ? efectivo : 0
   }
-  return Math.floor(months / 12) > 5 ? 18 : 14
+  return Math.floor(months / 12) >= 5 ? 18 : 14
 }
 
 /** Meses del año calendario en que trabajó (art. 219) */
@@ -214,7 +214,7 @@ export function SeveranceCalculator() {
     const { months, days } = mesesEntre(ingreso, salida)
     const salarioDiario = salario / DIVISOR_SALARIO_DIARIO
 
-    const preavisoDias = motivoData.pagaPreaviso ? diasPreaviso(months) : 0
+    const preavisoDias = motivoData.pagaPreaviso ? diasPreaviso(months, days) : 0
     const cesantiaDias = motivoData.pagaCesantia ? diasCesantia(months, days) : 0
     const vacacionesDias = diasVacaciones(months, days)
     const navidadMeses = mesesNavidad(ingreso, salida)
@@ -248,6 +248,11 @@ export function SeveranceCalculator() {
     }
     if (vacacionesDias === 0) {
       notes.push("Las vacaciones proporcionales aplican desde los 5 meses de servicio (art. 180).")
+    }
+    if (motivo === "renuncia") {
+      notes.push(
+        "Si la salida fue una dimisión justificada (arts. 97/101), revisa el caso aparte: esta estimación no incluye preaviso ni cesantía.",
+      )
     }
 
     return {
