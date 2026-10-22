@@ -1,6 +1,6 @@
 # HOLENTIA — Arquitectura
 
-> Next.js 15.5.27 (App Router) · React 19.3.1 · TypeScript · Tailwind 3.4 · sin backend, sin BD, sin registro.
+> Next.js 15.5.28 (App Router) · React 19.3.1 · TypeScript · Tailwind 3.4 · sin backend, sin BD, sin registro.
 > Rama `dev` → preview `dev.holentia.com` · `main` → producción `holentia.com`.
 
 ## 1. Modelo mental

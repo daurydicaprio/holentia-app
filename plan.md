@@ -6,7 +6,7 @@
 > Plan de mejoras 2.0 (propuesta, 20-Oct-2026): [`plan-mejoras.md`](plan-mejoras.md).
 
 ## Estado actual (22-Oct-2026) — 35 herramientas, 52 URLs y 5 guías publicadas en `dev` y producción
-- [x] Stack: Next 15.5.27 + React 19.3.1 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
+- [x] Stack: Next 15.5.28 + React 19.3.1 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
 - [x] Cobertura: **35 herramientas** activas + **0 tarjetas «Próximamente»** en `lib/data.ts`; sitio de **52 URLs** (home + 4 hubs + directorio + 35 herramientas + 5 informativas + `/guias` + 5 guías publicadas)
 - [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite/Article), OG por ruta (**48 rutas**, incluida la OG dinámica de guías), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 52 URLs, `llms.txt` 35 tools + 5 guías; auditorías registradas en la skill `seo-geo-audit`
 - [x] UI/UX móvil: pase completo por herramientas y superficies globales (chrome, hubs, informativas, shell) — contraste AA con tiers por sección, tap targets ≥40/44px, inputs ≥16px sin zoom iOS, recetas en `design.md`
@@ -576,8 +576,9 @@ Auditoría triple (secciones / herramientas / infra SEO) + correcciones + skills
 ## Fase BN — Baseline, dependencias y medición (22-Oct-2026) — HECHA
 
 - [x] **Search Console/Bing**: propiedad y sitemap revisados por el autor; indexación de la guía de prestaciones solicitada. Sin métricas históricas todavía.
-- [x] **Dependencias**: `tailwindcss-animate` movido a `devDependencies`; React/React DOM **19.3.1**, Next **15.5.27** y `eslint-config-next` **15.5.27**; `autoprefixer` **10.6.1** y `postcss` **8.5.31**.
-- [x] **Auditoría**: `pnpm audit --prod` pasa de **27 avisos** (19 high) a **0**. El override `postcss@^8.5.31` cubre el árbol de Next 15.5.27.
+- [x] **Dependencias**: `tailwindcss-animate` movido a `devDependencies`; React/React DOM **19.3.1**, Next **15.5.28** y `eslint-config-next` **15.5.28**; `autoprefixer` **10.6.1** y `postcss` **8.5.31**.
+- [x] **Auditoría**: `pnpm audit --prod` pasa de **27 avisos** (19 high) a **0**. El override `postcss@^8.5.31` cubre el árbol de Next 15.5.28.
+- [x] **Parche de seguridad**: el CI de `main` detectó 1 crítico + 1 alto en Next 15.5.27; actualizado a **15.5.28** (`eslint-config-next` incluido) y auditoría de producción de nuevo en **0**.
 - [x] **Baseline**: [`docs/performance-baseline.md`](docs/performance-baseline.md) con TTFB/bytes de producción (home + sueldo neto + prestaciones + planificador de comidas) y First Load JS del build. La API de PSI devolvió **429 Quota exceeded**; se repetirá con API key o al restablecerse la cuota.
 - Verificado: `tsc 0` · `lint 0` · build **108 páginas** · `guides:check` 5/5 · `audit:seo` **52/52**, 0 FAIL, 0 WARN · `pnpm audit --prod` **0 vulnerabilidades**.
 

@@ -87,8 +87,9 @@ Tareas:
 - [x] Confirmar en Search Console/Bing: propiedad y sitemap revisados por el autor; indexación de la guía nueva solicitada.
 - [x] Baseline de respuesta y build documentado en [`docs/performance-baseline.md`](docs/performance-baseline.md). La API pública de PSI devolvió **429 Quota exceeded**; queda pendiente repetirla con API key o cuando se restablezca la cuota.
 - [x] Mover `tailwindcss-animate` a `devDependencies` (solo se usa en `tailwind.config.ts`).
-- [x] Actualizar parches seguros: React/React DOM **19.3.1**, Next **15.5.27**, `eslint-config-next` **15.5.27**, `autoprefixer` **10.6.1** y `postcss` **8.5.31**.
+- [x] Actualizar parches seguros: React/React DOM **19.3.1**, Next **15.5.28**, `eslint-config-next` **15.5.28**, `autoprefixer` **10.6.1** y `postcss` **8.5.31**.
 - [x] Revisar `pnpm audit --prod`: **27 avisos → 0** (0 high, 0 critical). Se añadió override de PostCSS 8.5.31 para el árbol de Next.
+- [x] Parche de seguridad posterior: al promover a `main`, el CI detectó 1 aviso crítico y 1 alto en Next 15.5.27; se subió a **15.5.28** (parche oficial) y `audit --prod` volvió a **0**.
 - [x] No migrar a Next 16 ni Tailwind 4 en esta fase.
 
 Aceptación:
