@@ -164,6 +164,20 @@ for (const file of entries) {
     }
   }
 
+  if (data.seoTitle !== undefined) {
+    if (typeof data.seoTitle !== "string" || data.seoTitle.length < 25 || data.seoTitle.length > 49) {
+      addError(relative, "seoTitle debe tener entre 25 y 49 caracteres")
+    }
+  }
+
+  const metadataTitle = typeof data.seoTitle === "string" ? data.seoTitle : data.title
+  if (typeof metadataTitle === "string" && metadataTitle.length + 11 > 60) {
+    addWarning(
+      relative,
+      `el <title> final pasa de 60 caracteres (${metadataTitle.length + 11}); usa un seoTitle más corto`,
+    )
+  }
+
   if (typeof data.description !== "string" || data.description.length < 120 || data.description.length > 155) {
     addError(relative, "la description debe tener entre 120 y 155 caracteres")
   }

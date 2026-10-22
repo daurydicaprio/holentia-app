@@ -23,6 +23,7 @@ content/guias/
 ```yaml
 ---
 title: "Título claro, con la consulta principal"
+seoTitle: "Título corto para buscadores" # opcional, 25–49; el H1 sigue siendo title
 slug: "slug-en-kebab-case"
 description: "Meta description de 120–155 caracteres, concreta y sin clickbait."
 excerpt: "Una o dos frases para la tarjeta del índice."
@@ -56,6 +57,7 @@ draft: true
 Reglas:
 
 - `slug` debe coincidir con el nombre del archivo.
+- `seoTitle` es opcional (25–49 caracteres). Se usa solo en `<title>` y Open Graph; el H1 y el JSON-LD conservan `title`.
 - `category`: `cuerpo`, `mente`, `relaciones`, `finanzas` o `general`.
 - `primaryTool` y `relatedTools` deben existir en `lib/data.ts`.
 - `description`: 120–155 caracteres; sin promesas absolutas.
@@ -82,7 +84,7 @@ Al añadir una guía, descarga una foto horizontal (1600×1000 aproximado), guá
 ## Renderizado y vista previa
 
 - `lib/guides.ts` lee `content/guias/*.md`, parsea el frontmatter YAML y calcula el tiempo de lectura (220 palabras/minuto).
-- `app/guias/page.tsx` es el índice: una guía destacada con foto + tres recientes en una columna editorial y, debajo, «Últimas guías» con paginación local de cuatro en cuatro (`GuideArchive`). `app/guias/[slug]/page.tsx` renderiza el detalle con `react-markdown` + `remark-gfm` en el servidor y una barra superior con el logo centrado (`GuideNav`).
+- `app/guias/page.tsx` es el índice: una guía destacada con foto + tres recientes en una columna editorial y, si hay más de cuatro, «Últimas guías» con las restantes y paginación local de cuatro en cuatro (`GuideArchive`). `app/guias/[slug]/page.tsx` renderiza el detalle con `react-markdown` + `remark-gfm` en el servidor y una barra superior con el logo centrado (`GuideNav`).
 - `draft: true` se muestra en desarrollo (`NODE_ENV !== "production"`), en previews de Vercel (`VERCEL_ENV=preview`) o con `GUIDES_PREVIEW=1`. La página lleva `noindex, nofollow`; el índice también es `noindex` mientras no haya publicadas.
 - Para revisar un build de producción en local:
 

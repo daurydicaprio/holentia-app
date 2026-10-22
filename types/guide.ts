@@ -13,6 +13,8 @@ export interface GuideFaq {
 
 export interface GuideFrontmatter {
   title: string
+  /** Título corto para `<title>` y OG; el H1 y el JSON-LD conservan `title`. */
+  seoTitle?: string
   slug: string
   description: string
   excerpt: string

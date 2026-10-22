@@ -1,5 +1,6 @@
 ---
 title: "Cómo medir tu grasa corporal en casa (método US Navy)"
+seoTitle: "Cómo medir tu grasa corporal en casa"
 slug: "grasa-corporal-como-medirla"
 description: "Aprende a medir tu grasa corporal con cinta métrica, interpreta el resultado según ACE y evita los errores que arruinan la estimación."
 excerpt: "Qué mide, cómo medirte bien y cómo usar el resultado sin obsesionarte con un decimal."

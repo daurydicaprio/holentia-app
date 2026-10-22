@@ -1,5 +1,6 @@
 ---
 title: "Cómo invertir en RD desde cero: 5 opciones y un ejemplo"
+seoTitle: "Cómo invertir en RD desde cero: 5 opciones"
 slug: "como-invertir-en-rd-desde-cero"
 description: "Guía para empezar a invertir en RD: fondo de emergencia, certificados, fondos, acciones, riesgo y el 10% de ISR. Con un ejemplo en pesos."
 excerpt: "Qué revisar antes de poner tu primer peso, cinco opciones para empezar y un ejemplo con RD$20,000 y RD$5,000 al mes."

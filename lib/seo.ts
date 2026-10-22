@@ -142,16 +142,17 @@ export function guidesIndexMetadata(): Metadata {
 /** Metadata de una guía: canónica propia y noindex mientras siga en borrador o en preview. */
 export function guideMetadata(guide: Guide, options?: { noindex?: boolean }): Metadata {
   const path = `/guias/${guide.slug}`
+  const metadataTitle = guide.seoTitle ?? guide.title
 
   return {
-    title: guide.title,
+    title: metadataTitle,
     description: guide.description,
     alternates: {
       canonical: path,
     },
     robots: guide.draft || options?.noindex ? { index: false, follow: false } : undefined,
     openGraph: {
-      title: `${guide.title} | ${SITE_NAME}`,
+      title: `${metadataTitle} | ${SITE_NAME}`,
       description: guide.description,
       url: path,
       siteName: SITE_NAME,
@@ -164,7 +165,7 @@ export function guideMetadata(guide: Guide, options?: { noindex?: boolean }): Me
     },
     twitter: {
       card: "summary_large_image",
-      title: `${guide.title} | ${SITE_NAME}`,
+      title: `${metadataTitle} | ${SITE_NAME}`,
       description: guide.description,
     },
   }

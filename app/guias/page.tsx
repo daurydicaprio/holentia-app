@@ -27,6 +27,9 @@ export default function GuiasPage() {
   const summaries = guides.map(toGuideSummary)
   const featured = summaries[0]
   const secondary = summaries.slice(1, 4)
+  // El bloque superior ya muestra las cuatro más recientes. El archivo recibe
+  // solo las siguientes para no repetir tarjetas, enlaces ni imágenes.
+  const archive = summaries.slice(4)
 
   return (
     <main id="contenido" tabIndex={-1} className="min-h-screen flex flex-col focus:outline-none">
@@ -89,7 +92,7 @@ export default function GuiasPage() {
               ) : null}
             </section>
 
-            <GuideArchive guides={summaries} />
+            {archive.length > 0 ? <GuideArchive guides={archive} /> : null}
           </>
         ) : (
           <div className="mx-auto mt-12 max-w-xl rounded-2xl border border-gray-200 bg-white p-8 text-center dark:border-gray-700 dark:bg-gray-900">

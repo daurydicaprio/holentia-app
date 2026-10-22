@@ -1,5 +1,6 @@
 ---
 title: "Interés compuesto en RD: ahorra 10% o 17% de tu sueldo"
+seoTitle: "Interés compuesto en RD: ahorra 10% o 17%"
 slug: "interes-compuesto-rd"
 description: "Mira cuánto crecen RD$24,000 y RD$30,000 al mes si ahorras 10% o 17%, con una tasa promedio de 10% y el 10% de impuesto sobre la ganancia."
 excerpt: "Dos sueldos, dos porcentajes de ahorro y una pregunta: ¿cuánto tendrías si invirtieras esa diferencia durante 5, 10, 20 o 30 años?"

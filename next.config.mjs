@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    unoptimized: true,
+    formats: ["image/avif", "image/webp"],
   },
   // Las rutas de guía leen el Markdown con fs en build y en la OG dinámica.
   // Incluimos el contenido en el trazado del servidor para que Vercel no lo omita.

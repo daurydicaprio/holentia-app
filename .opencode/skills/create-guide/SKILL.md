@@ -47,6 +47,7 @@ Reglas mínimas:
 
 - `slug` en kebab-case y **igual al nombre del archivo**.
 - `title`, `description`, `category`, `primaryTool`, `author`, `publishedAt`, `updatedAt`, `sources` y `faq` son obligatorios.
+- `seoTitle` es opcional (25–49 caracteres): se usa solo en `<title>` y OG; el H1 y el JSON-LD conservan `title`.
 - `image` y `imageAlt` son la foto editorial local del índice. Descarga el archivo en `public/guias/{slug}.jpg` (horizontal, ~1600×1000), declara la ruta `/guias/{slug}.jpg` y escribe un `imageAlt` real. Nunca uses URLs remotas en runtime.
 - `cover` es el fallback generado: `growth`, `salary`, `body`, `invest` o `default`. Si falta la foto, `GuideCover` usa el color y el icono de la categoría. No es la vía principal del índice.
 - `draft: true` hasta que el contenido y las fuentes estén revisados. En desarrollo/preview se renderiza para revisión con `noindex`; en producción queda fuera del sitio.
@@ -94,9 +95,9 @@ El frontmatter `primaryTool` y `relatedTools` alimentan el bloque automático de
 
 ## 4. Foto e índice
 
-- El índice `/guias` es editorial y foto-led: la guía más reciente en `GuideFeaturedCard` (16/9), tres `GuideCompactCard` a la derecha (texto + miniatura 6/5) y, debajo, «Últimas guías» con `GuideArchive` en rejilla de 4 y paginación local.
+- El índice `/guias` es editorial y foto-led: la guía más reciente en `GuideFeaturedCard` (16/9), tres `GuideCompactCard` a la derecha (texto + miniatura 6/5) y, si hay más de cuatro, «Últimas guías» con las no destacadas, `GuideArchive` en rejilla de 4 y paginación local.
 - **Sin etiquetas redundantes**: no renderizar categoría, «Guía destacada» ni «Leer guía» en las tarjetas. El título y la foto bastan. Tampoco poner un título visible al bloque lateral de 3 guías.
-- Las fotos se sirven desde `public/guias/` con `next/image` (`fill`, `object-cover`, `sizes`) y caen en la portada generada solo si falta `image`. No uses URLs remotas en runtime: la página debe funcionar sin peticiones a terceros.
+- Las fotos se sirven desde `public/guias/` con `next/image` (`fill`, `object-cover`, `sizes`), optimización activa y variantes AVIF/WebP; caen en la portada generada solo si falta `image`. No uses URLs remotas en runtime: la página debe funcionar sin peticiones a terceros.
 - `content/guias/README.md` §Imágenes registra las fotos y su licencia. Al crear una guía nueva, añade la foto y el `imageAlt` en el mismo commit.
 - El detalle usa `GuideNav` con el logo centrado. No vuelvas a poner la fila manual de logo + «Todas las guías».
 - «Guías» va en el menú justo antes de «¿Qué es Holentia?».
@@ -104,6 +105,7 @@ El frontmatter `primaryTool` y `relatedTools` alimentan el bloque automático de
 ## 5. SEO y GEO
 
 - `title`: claro, con la consulta principal; sin promesas absolutas.
+- `seoTitle`: opcional y ≤49 caracteres para que el `<title>` final no pase de 60 con `| HOLENTIA`; no cambia el H1.
 - `description`: responde a la consulta en una frase concreta.
 - H2 como preguntas o acciones: «Qué te descuentan», «Cómo se calcula el ISR», «Qué hacer con el resultado».
 - FAQ visible y en `FAQPage`; no inventes preguntas para llenar.
@@ -167,7 +169,7 @@ El borrador debe verse, llevar `noindex, nofollow` y no aparecer en `sitemap.xml
 5. Enlaces bidireccionales: el bloque `RelatedGuides` de `ToolPageShell` muestra automáticamente las guías publicadas cuyo `primaryTool` o `relatedTools` coincide con la herramienta. No edites la página de la herramienta para añadir el enlace; basta con declarar bien el frontmatter. Si la guía enlaza a 1–2 guías relacionadas, usa rutas absolutas en el Markdown.
 6. Ejecuta `pnpm guides:check`, `tsc`, `lint`, `build` y `pnpm audit:seo` (ahora sí incluye la guía en el sitemap).
 7. Revisa la página en móvil, claro/oscuro, teclado y con el HTML inicial (sin JS).
-8. Revisa el índice con la guía nueva: debe aparecer como destacada con su foto, las tres anteriores al lado y todas en «Últimas guías» con paginación de 4 en 4. Comprueba que la foto no deje huecos ni CLS y que el `imageAlt` describa lo que se ve.
+8. Revisa el índice con la guía nueva: debe aparecer como destacada con su foto, las tres anteriores al lado y, si hay más de cuatro, las restantes en «Últimas guías» con paginación de 4 en 4. Comprueba que no haya tarjetas repetidas, que la foto no deje huecos ni CLS y que el `imageAlt` describa lo que se ve.
 9. Commit en `dev`; `main` solo cuando el usuario lo pida.
 
 ## 9. Actualizar una guía existente

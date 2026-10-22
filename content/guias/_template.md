@@ -1,5 +1,6 @@
 ---
 title: "Título de la guía"
+# seoTitle: "Título corto para buscadores (opcional, 25–49 caracteres)"
 slug: "slug-de-la-guia"
 description: "Meta description de 120 a 155 caracteres, concreta, con la consulta principal y sin promesas absolutas."
 excerpt: "Una o dos frases para la tarjeta del índice."

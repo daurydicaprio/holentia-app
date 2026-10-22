@@ -47,6 +47,7 @@ function readGuideFile(file: string): Guide {
 
   return {
     title: String(data.title ?? ""),
+    seoTitle: data.seoTitle ? String(data.seoTitle) : undefined,
     slug,
     description: String(data.description ?? ""),
     excerpt: String(data.excerpt ?? ""),
