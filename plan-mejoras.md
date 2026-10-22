@@ -2,10 +2,10 @@
 
 > Fecha: 20-Oct-2026 · Actualizado: 22-Oct-2026
 > Estado: propuesta en ejecución. BQ, BU, BN, BP y BS completas. Los cambios nuevos van por `dev`; `main` solo se toca con aprobación explícita.
-> Base: `main` y `dev` en `448c529`; 35 herramientas, 52 URLs, 48 rutas OG y 5 guías publicadas.
+> Base inicial: `448c529`; estado actual: `main` y `dev` en `2761175`. 35 herramientas, 52 URLs, 48 rutas OG y 5 guías publicadas.
 > Principios: local-first, sin tracking, server-first, español (es-DO) y documentación en el mismo commit.
 >
-> **Estado de ejecución (22-Oct-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); `/guias` con destacada + 3 recientes + archivo paginado; sitemap de 52 URLs, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` 52/52 y build de 108 páginas; red central de enlaces internos (`links:check` 35/35), 22 tests de cálculo y CI en GitHub Actions. Producción en `448c529`: la guía de prestaciones responde 200 y ya está en sitemap, `llms.txt` e índice. Search Console/Bing verificados e indexación de la guía solicitada por el autor.
+> **Estado de ejecución (22-Oct-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); `/guias` con destacada + 3 recientes + archivo paginado; sitemap de 52 URLs, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` 52/52 y build de 108 páginas; red central de enlaces internos (`links:check` 35/35), 22 tests de cálculo y CI en GitHub Actions. Producción en `2761175` (con Next 15.5.28): la guía de prestaciones responde 200 y ya está en sitemap, `llms.txt` e índice; CI de `main` en verde. Search Console/Bing verificados e indexación de la guía solicitada por el autor.
 >
 > **Cerrado en esta iteración:** BN (dependencias/baseline), BP (red de enlaces) y BS (tests núcleo + CI). **Pendiente:** BO (a11y de gráficos), BR (tasas centralizadas), BT (metodología/accesibilidad), BV+ (producto local-first), más la ampliación de tests a préstamo, interés compuesto, IMC, grasa y calorías.
 
