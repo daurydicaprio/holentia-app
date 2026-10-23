@@ -32,6 +32,7 @@ import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { CountUp } from "@/components/ui/count-up"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
+import { RATES } from "@/lib/rates"
 import { RiskLevelsGraphic, LEVELS } from "./risk-levels-graphic"
 import { Disclosure } from "./disclosure"
 
@@ -393,8 +394,9 @@ function singleSliceFor(capital: number, situation: "A" | "B" | "C", currency: "
   return { label: "AFI líquido", pct: 100 }
 }
 
-/** RD$ por US$1. Referencia BCRD (sep-2026 ≈ 59.3), redondeada a 60 para mostrar el cálculo interno. */
-const USD_RATE = 60
+/** RD$ por US$1. Referencia BCRD redondeada para el cálculo interno. */
+const USD_RATE = RATES.exchange.usdToDop
+const INFLACION_ANUAL = RATES.inflation.referenceAnnual * 100
 
 /** Instrumentos que viven en dólares, incluso cuando el capital está en pesos. */
 const USD_LABELS = ["Cuenta en dólares", "Fondo a 30 días (USD)", "ETF global indexado", "Acciones individuales"]
@@ -1086,14 +1088,14 @@ export function RiskProfileTest() {
         name: "Cuenta en dólares",
         min: 500 * USD_RATE,
         group: "En dólares",
-        note: "Balance mínimo ≈ US$500: por debajo cobran ~US$10 al mes. Se compra a ~RD$60 por US$1.",
+        note: `Balance mínimo ≈ US$500: por debajo cobran ~US$10 al mes. Se compra a ~RD$${USD_RATE} por US$1.`,
       })
       if (effectiveLevel >= 2)
         list.push({
           name: "ETF global indexado",
           min: 0,
           group: "En dólares",
-          note: "Bolsa EE.UU./mundial vía fondos indexados (S&P 500 y similares); convertido a ~RD$60 por US$1.",
+          note: `Bolsa EE.UU./mundial vía fondos indexados (S&P 500 y similares); convertido a ~RD$${USD_RATE} por US$1.`,
         })
       if (effectiveLevel >= 3)
         list.push({
@@ -1932,7 +1934,7 @@ export function RiskProfileTest() {
                   −{formatMoney(inflationLoss, currency)}
                 </div>
                 <p className="mt-2 text-xs leading-relaxed text-gray-600 dark:text-gray-400 sm:text-sm">
-                  La inflación (~4%, meta del BCRD) le quita ese poder de compra cada año: quedaría en ~
+                  La inflación (~{INFLACION_ANUAL}%, meta del BCRD) le quita ese poder de compra cada año: quedaría en ~
                   {formatMoney(fundSize - inflationLoss, currency)} de valor real.
                 </p>
               </div>
@@ -2019,10 +2021,10 @@ export function RiskProfileTest() {
                   <>
                     Dejar <strong>{formatMoney(fundSize, currency)}</strong> quietos pierde ~{" "}
                     <strong className="text-red-600 dark:text-red-400">{formatMoney(inflationLoss, currency)}</strong>{" "}
-                    al año por inflación (~4%, meta del BCRD).
+                    al año por inflación (~{INFLACION_ANUAL}%, meta del BCRD).
                   </>
                 ) : (
-                  <>El dinero parado pierde ~4% al año de poder de compra.</>
+                  <>El dinero parado pierde ~{INFLACION_ANUAL}% al año de poder de compra.</>
                 )}
               </p>
               <p>
@@ -2226,7 +2228,7 @@ export function RiskProfileTest() {
           <div className="mt-3 flex justify-end">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-gray-50 px-2.5 py-1 text-[11px] font-medium text-gray-500 dark:border-gray-700 dark:bg-gray-900/50 dark:text-gray-400">
               <DollarSign className="h-3 w-3" aria-hidden />
-              US$1 ≈ RD$60 · el peso pierde ~3–5% anual frente al dólar
+              US$1 ≈ RD${USD_RATE} · el peso pierde ~3–5% anual frente al dólar
             </span>
           </div>
         )}
@@ -2255,7 +2257,7 @@ export function RiskProfileTest() {
                   : "Tu distribución sugerida"
               const singleNote = single
                 ? isUsdLabel(single.label)
-                  ? "Todo en dólares: se convierte a ~RD$60 por US$1 y crece en esa divisa."
+                  ? `Todo en dólares: se convierte a ~RD$${USD_RATE} por US$1 y crece en esa divisa.`
                   : "Un solo instrumento hasta que tu monto alcance para dividir."
                 : "Estructura simple para tu nivel y tu monto."
               return (

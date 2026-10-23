@@ -21,6 +21,7 @@ import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
 import { formatDOP } from "@/lib/format"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
+import { CERTIFICATE_REFERENCE_LABEL } from "@/lib/rates"
 
 // Planificador de ahorros: interés compuesto mensual (tasa anual ÷ 12).
 // Modo «cuándo»: despeja los meses para llegar a la meta con aporte fijo.
@@ -35,7 +36,7 @@ type Mode = "cuando" | "cuanto"
 const DATOS_AHORRO = [
   { icon: TrendingUp, title: "Efecto compuesto", sub: "Tus intereses generan más intereses" },
   { icon: TrendingDown, title: "Sin invertir", sub: "La inflación reduce lo que compras" },
-  { icon: Percent, title: "Rendimiento anual", sub: "Certificados 2026: 7%–11% ref." },
+  { icon: Percent, title: "Rendimiento anual", sub: `Certificados 2026: ${CERTIFICATE_REFERENCE_LABEL} ref.` },
 ]
 
 const inputClass =
@@ -362,7 +363,7 @@ export function SavingsPlanner() {
           />
         </div>
         <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-          0% si solo guardas. Referencia: certificados a plazo 2026, 7%–11% anual.
+          0% si solo guardas. Referencia: certificados a plazo 2026, {CERTIFICATE_REFERENCE_LABEL}.
         </p>
 
         <div className="mt-6 flex items-center justify-between">

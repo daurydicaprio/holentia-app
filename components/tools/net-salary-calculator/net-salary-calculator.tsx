@@ -18,12 +18,10 @@ import { useCountUp } from "@/hooks/use-count-up"
 import { formatDOP } from "@/lib/format"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
 import { AFP_CAP, SFS_CAP, calculateNetSalary } from "@/lib/calculations/net-salary"
+import { RATES } from "@/lib/rates"
 
 // Estimación del sueldo neto del asalariado en RD.
-// TSS: SFS 3.04% (tope RD$232,230/mes) y AFP 2.87% (tope RD$464,460/mes) sobre
-// el salario cotizable — Resolución 01-2025, vigente desde el 1 de febrero de
-// 2026 (salario mínimo de referencia: RD$23,223.00).
-// ISR: escala anual de retención de asalariados de la DGII; base = bruto − TSS.
+// Tasas, topes y escala ISR en lib/rates.ts; base ISR = bruto − TSS.
 const DRAFT_KEY = draftKey("calculadora-sueldo-neto")
 const PRESETS = [25000, 50000, 100000]
 
@@ -54,9 +52,17 @@ function parseNumber(formatted: string): number {
 }
 
 const CIFRAS_VIGENTES = [
-  { icon: ShieldCheck, title: "SFS 3.04%", sub: "Tope: RD$232,230 al mes" },
-  { icon: TrendingUp, title: "AFP 2.87%", sub: "Tope: RD$464,460 al mes" },
-  { icon: Landmark, title: "ISR por tramos", sub: "Exento hasta RD$416,220 al año" },
+  {
+    icon: ShieldCheck,
+    title: `SFS ${(RATES.tss.sfsRate * 100).toFixed(2)}%`,
+    sub: `Tope: ${formatDOP(RATES.tss.sfsCap, 0)} al mes`,
+  },
+  {
+    icon: TrendingUp,
+    title: `AFP ${(RATES.tss.afpRate * 100).toFixed(2)}%`,
+    sub: `Tope: ${formatDOP(RATES.tss.afpCap, 0)} al mes`,
+  },
+  { icon: Landmark, title: "ISR por tramos", sub: `Exento hasta ${formatDOP(RATES.isr.exemptUpTo, 0)} al año` },
 ]
 
 export function NetSalaryCalculator() {

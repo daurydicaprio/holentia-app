@@ -5,20 +5,22 @@ import { Trash2, Info, Zap, CheckCircle2 } from "lucide-react"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
+import { RATES } from "@/lib/rates"
 
 // Tarifa residencial RD actual subsidiada — réplica factura usuario.
-// Cargo fijo base fija, tramos 0-200 / 201-300 / 301+.
+// Valores en lib/rates.ts. Cargo fijo y tramos 0-200 / 201-300 / 301+.
 // El subsidio aplica hasta 700 kWh: desde 700 kWh se aplica la tasa más
 // alta (tramo 3) al total del consumo.
-const CARGO_FIJO = 127.83
-const TRAMO1_LIMITE = 200
-const TRAMO1_PRECIO = 6.17
-const TRAMO2_LIMITE = 100
-const TRAMO2_PRECIO = 8.71
-const TRAMO3_PRECIO = 13.04
-const UMBRAL_SIN_TRAMOS = 700
-// Subsidio estimado global ref. facturas 397 kWh 45.47% / 438 kWh 45.02% / 445 kWh 44.65%.
-const SUBSIDY_FACTOR = 0.819
+const {
+  fixedCharge: CARGO_FIJO,
+  tier1Limit: TRAMO1_LIMITE,
+  tier1Price: TRAMO1_PRECIO,
+  tier2Limit: TRAMO2_LIMITE,
+  tier2Price: TRAMO2_PRECIO,
+  tier3Price: TRAMO3_PRECIO,
+  noTierThreshold: UMBRAL_SIN_TRAMOS,
+  subsidyFactor: SUBSIDY_FACTOR,
+} = RATES.electricity
 
 const DRAFT_KEY = draftKey("calculadora-consumo-electrico")
 
@@ -152,7 +154,7 @@ export function ElectricityCalculator() {
         />
 
         <div className="flex flex-wrap gap-2 mt-3">
-          {[150, 300, 445, 700].map((v) => (
+          {[150, 300, 445, UMBRAL_SIN_TRAMOS].map((v) => (
             <button
               key={v}
               onClick={() => setQuick(v)}
@@ -213,7 +215,7 @@ export function ElectricityCalculator() {
               <div className="flex justify-between py-1 font-sans text-xs text-gray-500 dark:text-gray-400">
                 <span>
                   {result.sinTramos
-                    ? "Sin subsidio desde 700 kWh"
+                    ? `Sin subsidio desde ${UMBRAL_SIN_TRAMOS} kWh`
                     : "Subsidio gobierno (est., ~45%)"}
                 </span>
                 <span>{formatRD(result.subsidio)}</span>

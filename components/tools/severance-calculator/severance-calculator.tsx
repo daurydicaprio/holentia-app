@@ -8,6 +8,7 @@ import { useCountUp } from "@/hooks/use-count-up"
 import { formatDOP } from "@/lib/format"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
 import {
+  DIVISOR_SALARIO_DIARIO,
   calculateSeveranceAmounts,
   diasCesantia,
   diasPreaviso,
@@ -25,7 +26,7 @@ import {
 // · Vacaciones arts. 177/180: escala proporcional hasta el primer año (6–12 días) y
 //   14 días por año hasta 5 (18 días desde más de 5 años).
 // · Salario de Navidad art. 219: meses trabajados del año ÷ 12.
-// · Salario diario de prestaciones: salario mensual ÷ 23.83 (criterio del Ministerio de Trabajo).
+// · Salario diario de prestaciones: salario mensual ÷ divisor del Ministerio de Trabajo (lib/rates.ts).
 const DRAFT_KEY = draftKey("calculadora-prestaciones-laborales")
 const PRESETS = [25000, 50000, 100000]
 
@@ -85,7 +86,7 @@ function parseNumber(formatted: string): number {
 }
 
 const CIFRAS_VIGENTES = [
-  { icon: Scale, title: "÷ 23.83", sub: "Salario diario para prestaciones (MT)" },
+  { icon: Scale, title: `÷ ${DIVISOR_SALARIO_DIARIO}`, sub: "Salario diario para prestaciones (MT)" },
   { icon: CalendarDays, title: "Preaviso 7/14/28", sub: "Días según antigüedad (art. 76)" },
   { icon: Briefcase, title: "Cesantía 6/13/21/23", sub: "Días por año de servicio (art. 80)" },
 ]
@@ -459,7 +460,7 @@ export function SeveranceCalculator() {
               <div className="flex justify-between gap-3 border-b border-gray-200 py-1.5 pb-3 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-400">
                 <span>
                   Salario diario de prestaciones
-                  <span className="block text-xs text-gray-500 dark:text-gray-400">Salario mensual ÷ 23.83</span>
+                  <span className="block text-xs text-gray-500 dark:text-gray-400">Salario mensual ÷ {DIVISOR_SALARIO_DIARIO}</span>
                 </span>
                 <span className="whitespace-nowrap font-medium tabular-nums text-gray-800 dark:text-gray-200">
                   {formatDOP(result.salarioDiario)}

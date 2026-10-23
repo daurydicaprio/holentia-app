@@ -10,6 +10,7 @@ import JsonLd from "./json-ld"
 import ToolFaq from "./tool-faq"
 import ToolRelatedTools from "@/components/tools/related-tools/tool-related-tools"
 import RelatedGuides from "@/components/guides/related-guides"
+import { RatesNote } from "@/components/rates/rates-note"
 import { sectionLabel, toolJsonLd, type FaqItem } from "@/lib/seo"
 
 // Mapas estáticos para que Tailwind genere las clases por sección
@@ -88,6 +89,8 @@ export default function ToolPageShell({ section, tool, faq = [], children }: Too
         </div>
 
         {children}
+
+        <RatesNote slug={tool.slug} />
 
         <ToolRelatedTools slug={tool.slug} />
 

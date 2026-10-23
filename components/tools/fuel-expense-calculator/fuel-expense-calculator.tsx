@@ -21,11 +21,12 @@ import {
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
+import { RATES } from "@/lib/rates"
 
 const DRAFT_KEY = draftKey("calculadora-gasto-combustible")
 
 const DEFAULTS = {
-  precio: "358",
+  precio: String(RATES.fuel.defaultGallonPrice),
   distancia: "12",
   viajes: "2",
   dias: "5",
@@ -33,7 +34,7 @@ const DEFAULTS = {
   consumo: "13",
 }
 
-const LITROS_POR_GALON = 3.78541
+const LITROS_POR_GALON = RATES.fuel.litersPerGallon
 
 const VEHICLES = [
   { id: "pequeno", label: "Pequeño", icon: Car, kmL: 16, desc: "Compacto" },
@@ -49,7 +50,7 @@ const PRESETS = [
 
 const TOOLTIPS: Record<string, string> = {
   precio:
-    "Precio por galón en tu estación. El de referencia (RD$ 358) cambia seguido: siempre usa el precio del día.",
+    `Precio por galón en tu estación. El de referencia (RD$ ${RATES.fuel.defaultGallonPrice}) cambia seguido: siempre usa el precio del día.`,
   distancia: "Kilómetros de tu casa hasta el destino de cada viaje.",
   viajes: "Cuántas veces sales en un día. Una ida y vuelta completa cuenta como 2 viajes.",
   dias: "Cuántos días a la semana conduces. Lo habitual son 5 días laborables.",
@@ -260,7 +261,7 @@ export function FuelExpenseCalculator() {
               inputMode="decimal"
               value={precioInput}
               onChange={(e) => setPrecioInput(e.target.value.replace(/[^\d.,]/g, ""))}
-              placeholder="Ej: 358"
+              placeholder={`Ej: ${RATES.fuel.defaultGallonPrice}`}
               className={inputClass}
               data-interactive="true"
             />
@@ -271,7 +272,7 @@ export function FuelExpenseCalculator() {
                 aria-hidden="true"
                 className="absolute -top-[5px] left-6 h-2.5 w-2.5 rotate-45 border-l border-t border-amber-200 bg-amber-50 dark:border-amber-800/40 dark:bg-amber-900/20"
               />
-              <strong>Verifícalo:</strong> el de referencia (RD$ 358) cambia seguido. Usa el de tu estación.
+              <strong>Verifícalo:</strong> el de referencia (RD$ {RATES.fuel.defaultGallonPrice}) cambia seguido. Usa el de tu estación.
             </div>
           </div>
 

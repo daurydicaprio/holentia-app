@@ -1,5 +1,10 @@
-// ITBIS RD: tasa general 18% y reducida 16%.
+// ITBIS RD: tasas en lib/rates.ts.
 // Modo «agregar»: base × (1 + tasa). Modo «quitar»: total ÷ (1 + tasa).
+import { RATES } from "../rates.ts"
+
+export const ITBIS_GENERAL = RATES.itbis.general * 100
+export const ITBIS_REDUCED = RATES.itbis.reduced * 100
+
 export type ItbisMode = "add" | "remove"
 
 export interface ItbisResult {

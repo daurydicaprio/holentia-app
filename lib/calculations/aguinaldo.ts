@@ -1,6 +1,8 @@
 // Salario de Navidad (aguinaldo): duodécima parte del salario ordinario
 // devengado en el año (arts. 219–222 del Código de Trabajo).
-export const MESES_ANIO = 12
+import { RATES } from "../rates.ts"
+
+export const MESES_ANIO: number = RATES.aguinaldo.monthsPerYear
 
 export interface AguinaldoResult {
   anual: number

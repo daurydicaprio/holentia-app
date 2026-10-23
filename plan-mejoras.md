@@ -7,7 +7,7 @@
 >
 > **Estado de ejecución (22-Oct-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); `/guias` con destacada + 3 recientes + archivo paginado; sitemap de 52 URLs, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` 52/52 y build de 108 páginas; red central de enlaces internos (`links:check` 35/35), 22 tests de cálculo y CI en GitHub Actions. Producción en `2761175` (con Next 15.5.28): la guía de prestaciones responde 200 y ya está en sitemap, `llms.txt` e índice; CI de `main` en verde. Search Console/Bing verificados e indexación de la guía solicitada por el autor.
 >
-> **Cerrado:** BN (dependencias/baseline), BP (red de enlaces), BS (tests núcleo + CI) y BO (a11y de gráficos). **En curso:** BR (tasas centralizadas). **Pendiente:** BT (metodología/accesibilidad), BV+ (producto local-first) y ampliar tests a préstamo, interés compuesto, IMC, grasa y calorías.
+> **Cerrado:** BN (dependencias/baseline), BP (red de enlaces), BS (tests núcleo + CI), BO (a11y de gráficos) y BR (tasas centralizadas). **En curso:** BT (metodología/accesibilidad). **Pendiente:** BV+ (producto local-first) y ampliar tests a préstamo, interés compuesto, IMC, grasa y calorías.
 
 ## 0. Checklist de ejecución (22-Oct-2026)
 
@@ -17,7 +17,7 @@
 - [x] ~~BN — Baseline, dependencias y medición~~
 - [x] ~~BO — Accesibilidad de gráficos~~
 - [x] ~~BP — Red de enlaces internos 2.0~~
-- [ ] BR — Tasas centralizadas y fechas de revisión
+- [x] ~~BR — Tasas centralizadas y fechas de revisión~~
 - [x] ~~BS — Tests de cálculo núcleo + CI~~
 - [ ] BT — Metodología/fuentes y accesibilidad
 - [ ] BV+ — Producto local-first (decisión pendiente)
@@ -151,21 +151,22 @@ Aceptación:
 - `audit:seo` valida también las guías.
 - El autor puede escribir un `.md` y publicarlo sin tocar TSX.
 
-### Fase BR — Tasas centralizadas y fechas de revisión
+### Fase BR — Tasas centralizadas y fechas de revisión — HECHA (23-Oct-2026)
 
 **Objetivo:** que actualizar una tasa sea un cambio de un solo sitio y que el usuario vea cuándo se revisó.
 
 Tareas:
-- Crear `lib/rates.ts` con valores, `effectiveFrom`, `source` y `reviewedAt`.
-- Mover TSS (SFS/AFP y topes), escala ISR, ITBIS, tarifas eléctricas, combustible, referencia de certificados, tipo de cambio y reglas de aguinaldo.
-- Mostrar «Datos revisados: …» en las herramientas financieras.
-- Crear `docs/rates.md` con fuentes oficiales y checklist anual.
-- No cambiar los valores en esta fase; solo centralizarlos.
+- [x] `lib/rates.ts`: valores, `RATE_META` con `effectiveFrom`, `source`, `sourceUrl` y `reviewedAt`, más `RATE_GROUPS_BY_TOOL`.
+- [x] Movidas TSS (SFS/AFP y topes), escala ISR, ITBIS, tarifas eléctricas, combustible, referencia de certificados, tipo de cambio, inflación y reglas de aguinaldo. También el divisor de prestaciones.
+- [x] `RatesNote` en `ToolPageShell`: **17/17 herramientas financieras** muestran «Datos revisados: 23 de octubre de 2026» y enlaces a sus fuentes.
+- [x] `docs/rates.md` con tabla de valores, vigencias, fuentes, proceso de actualización y checklist anual.
+- [x] Sin cambios de valores: los tests de cálculo siguen pasando y `tests/rates.test.mjs` fija los valores base.
+- [x] Para compatibilidad con `node:test`, los módulos puros importan `../rates.ts` y `tsconfig` habilita `allowImportingTsExtensions`.
 
 Aceptación:
-- No quedan tasas duplicadas en componentes.
-- Los resultados numéricos no cambian.
-- Cada herramienta financiera muestra fecha de revisión y fuente.
+- [x] No quedan tasas en componentes: `grep` solo encuentra valores en `lib/rates.ts` (las guías editoriales conservan sus propias cifras revisadas).
+- [x] Resultados numéricos idénticos; 25/25 tests en verde.
+- [x] Cada herramienta financiera muestra fecha de revisión y fuente, sin red en runtime.
 
 ### Fase BS — Tests de cálculo núcleo + CI — HECHA (22-Oct-2026)
 

@@ -1,7 +1,9 @@
 // Prestaciones laborales RD — Código de Trabajo (Ley 16-92).
 // Preaviso art. 76 · cesantía art. 80 · vacaciones arts. 177/180 · Navidad art. 219.
-// Salario diario de prestaciones: mensual ÷ 23.83 (criterio del Ministerio de Trabajo).
-export const DIVISOR_SALARIO_DIARIO = 23.83
+// Salario diario de prestaciones según el criterio del Ministerio de Trabajo.
+import { RATES } from "../rates.ts"
+
+export const DIVISOR_SALARIO_DIARIO = RATES.severance.dailyDivisor
 
 export function parseISODate(iso: string): Date | null {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return null

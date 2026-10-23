@@ -1,4 +1,8 @@
 import type { SectionData } from "@/types"
+import { RATES } from "./rates.ts"
+
+const ITBIS_GENERAL_PCT = RATES.itbis.general * 100
+const ITBIS_REDUCED_PCT = RATES.itbis.reduced * 100
 
 export const sectionsData: Record<string, SectionData> = {
   mente: {
@@ -417,9 +421,8 @@ export const sectionsData: Record<string, SectionData> = {
         slug: "calculadora-itbis",
         isAvailable: true,
         category: "finanzas",
-        metaTitle: "Calculadora de ITBIS 18% (agregar y quitar)",
-        metaDescription:
-          "Agrega o quita el ITBIS de un precio con la tasa general del 18% o la reducida del 16%: obtén base, impuesto y total al instante. Gratis.",
+        metaTitle: `Calculadora de ITBIS ${ITBIS_GENERAL_PCT}% (agregar y quitar)`,
+        metaDescription: `Agrega o quita el ITBIS de un precio con la tasa general del ${ITBIS_GENERAL_PCT}% o la reducida del ${ITBIS_REDUCED_PCT}%: obtén base, impuesto y total al instante. Gratis.`,
       },
       {
         id: "calculadora-certificado-financiero",

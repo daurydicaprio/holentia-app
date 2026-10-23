@@ -7,25 +7,25 @@ import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
 import { formatDOP } from "@/lib/format"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
-import { calculateItbis, type ItbisMode } from "@/lib/calculations/itbis"
+import { ITBIS_GENERAL, ITBIS_REDUCED, calculateItbis, type ItbisMode } from "@/lib/calculations/itbis"
 
-// ITBIS RD: tasa general 18% y tasa reducida 16% (café, azúcar, cacao y
-// chocolate, yogurt, mantequilla y grasas comestibles — Guía DGII).
+// ITBIS RD: tasas en lib/rates.ts (general y reducida). La reducida aplica a
+// café, azúcar, cacao y chocolate, yogurt, mantequilla y grasas comestibles.
 // Modo «agregar»: base × (1 + tasa). Modo «quitar»: total ÷ (1 + tasa).
 const DRAFT_KEY = draftKey("calculadora-itbis")
 
 type Mode = ItbisMode
 
 const RATES = [
-  { value: 18, label: "18% general" },
-  { value: 16, label: "16% reducido" },
+  { value: ITBIS_GENERAL, label: `${ITBIS_GENERAL}% general` },
+  { value: ITBIS_REDUCED, label: `${ITBIS_REDUCED}% reducido` },
 ] as const
 
 type Rate = (typeof RATES)[number]["value"]
 
 const DATOS_ITBIS = [
-  { icon: Percent, title: "18% tasa general", sub: "Bienes y servicios gravados" },
-  { icon: BadgePercent, title: "16% tasa reducida", sub: "Café, azúcar, cacao, yogurt…" },
+  { icon: Percent, title: `${ITBIS_GENERAL}% tasa general`, sub: "Bienes y servicios gravados" },
+  { icon: BadgePercent, title: `${ITBIS_REDUCED}% tasa reducida`, sub: "Café, azúcar, cacao, yogurt…" },
   { icon: Receipt, title: "Precio al público", sub: "Suele incluir el ITBIS" },
 ]
 
@@ -198,7 +198,7 @@ export function ItbisCalculator() {
           ))}
         </div>
         <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-          El 16% aplica a café, azúcar, cacao y chocolate, yogurt, mantequilla y grasas comestibles.
+          El {ITBIS_REDUCED}% aplica a café, azúcar, cacao y chocolate, yogurt, mantequilla y grasas comestibles.
         </p>
 
         <div className="mt-6 flex items-center justify-between">
@@ -277,7 +277,7 @@ export function ItbisCalculator() {
             <div className="flex items-start gap-2 rounded-lg bg-finanzas-lighter p-3 text-xs text-gray-800 dark:bg-finanzas-dark dark:text-gray-200">
               <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-finanzas-dark dark:text-finanzas-light" />
               <span>
-                Estimación con las tasas vigentes de la DGII (18% general y 16% reducida). Resultado redondeado a 2
+                Estimación con las tasas vigentes de la DGII ({ITBIS_GENERAL}% general y {ITBIS_REDUCED}% reducida). Resultado redondeado a 2
                 decimales; para facturación verifica las reglas del comprobante. No es asesoría fiscal.
               </span>
             </div>

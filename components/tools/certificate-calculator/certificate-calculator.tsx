@@ -8,18 +8,20 @@ import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
 import { formatDOP } from "@/lib/format"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
+import { CERTIFICATE_REFERENCE_LABEL, RATES } from "@/lib/rates"
 
 // Certificado financiero (depósito a plazo fijo) RD: interés simple sobre el
-// monto a la tasa anual pactada (año de 365 días). Retención del 10% sobre
-// los intereses (Norma General 07-2019, DGII). Modalidad: interés mensual o
-// al vencimiento. Plazos típicos: 30–910 días o 2–60 meses.
+// monto a la tasa anual pactada. Retención sobre los intereses (Norma General
+// 07-2019, DGII). Modalidad: interés mensual o al vencimiento.
 const DRAFT_KEY = draftKey("calculadora-certificado-financiero")
+const DIAS_POR_ANIO = RATES.certificate.daysPerYear
+const RETENCION = RATES.certificate.withholding
 
 type Unit = "dias" | "meses"
 type Modalidad = "mensual" | "vencimiento"
 
 const DATOS_CERTIFICADO = [
-  { icon: Percent, title: "Tasa según tu banco", sub: "Referencia 2026: 7%–11% anual" },
+  { icon: Percent, title: "Tasa según tu banco", sub: `Referencia 2026: ${CERTIFICATE_REFERENCE_LABEL}` },
   { icon: ShieldCheck, title: "Fondo de Contingencia", sub: "Protección de tus depósitos" },
   { icon: CalendarDays, title: "Plazos típicos", sub: "30–910 días · 2–60 meses" },
 ]
@@ -94,10 +96,10 @@ export function CertificateCalculator() {
 
   const result = useMemo(() => {
     if (monto <= 0 || tasa <= 0 || plazo <= 0) return null
-    const anios = unit === "dias" ? plazo / 365 : plazo / 12
+    const anios = unit === "dias" ? plazo / DIAS_POR_ANIO : plazo / 12
     const meses = Math.max(1, Math.round(anios * 12))
     const bruto = monto * (tasa / 100) * anios
-    const retencion = bruto * 0.1
+    const retencion = bruto * RETENCION
     const neto = bruto - retencion
     return {
       meses,
@@ -199,7 +201,7 @@ export function CertificateCalculator() {
             data-interactive="true"
           />
         </div>
-        <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">La de tu banco: referencia 2026, 7%–11% anual.</p>
+        <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">La de tu banco: referencia 2026, {CERTIFICATE_REFERENCE_LABEL}.</p>
 
         {/* Plazo */}
         <label htmlFor="plazo-certificado" className="mt-5 mb-2 block text-sm font-medium">
@@ -300,7 +302,7 @@ export function CertificateCalculator() {
             <div className="rounded-2xl border border-finanzas-border bg-gradient-to-br from-finanzas to-finanzas-dark p-6 text-white shadow-lg dark:bg-none dark:bg-finanzas-glass dark:text-finanzas-text sm:p-8">
               <p className="flex items-center justify-center gap-2 text-sm text-white dark:text-finanzas-lighter">
                 <Landmark className="h-4 w-4" />
-                Ganancia neta (después del 10%)
+                Ganancia neta (después del {RETENCION * 100}%)
               </p>
               <p className="mt-2 text-center text-4xl font-bold tabular-nums sm:text-5xl">{formatDOP(animated, 0)}</p>
               <p className="mt-3 text-center text-sm text-white dark:text-finanzas-lighter">
@@ -321,7 +323,7 @@ export function CertificateCalculator() {
                 <span className="whitespace-nowrap tabular-nums">{formatDOP(result.bruto)}</span>
               </div>
               <div className="flex justify-between gap-3 py-1.5 text-sm text-gray-600 dark:text-gray-400">
-                <span>Retención ISR (10%)</span>
+                <span>Retención ISR ({RETENCION * 100}%)</span>
                 <span className="whitespace-nowrap tabular-nums">− {formatDOP(result.retencion)}</span>
               </div>
               <div className="mt-2 flex justify-between gap-3 border-t border-gray-200 py-2 dark:border-gray-700">
@@ -370,7 +372,7 @@ export function CertificateCalculator() {
             <div className="flex items-start gap-2 rounded-lg bg-finanzas-lighter p-3 text-xs text-gray-800 dark:bg-finanzas-dark dark:text-gray-200">
               <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-finanzas-dark dark:text-finanzas-light" />
               <span>
-                Estimación educativa: interés simple sobre el monto pactado, año de 365 días y retención del 10% sobre
+                Estimación educativa: interés simple sobre el monto pactado, año de {DIAS_POR_ANIO} días y retención del {RETENCION * 100}% sobre
                 los intereses (Norma General 07-2019). Tu banco puede usar otra convención de días o capitalizar en
                 renovaciones. No es asesoría financiera.
               </span>

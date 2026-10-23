@@ -1,15 +1,17 @@
-// Sueldo neto RD: TSS (SFS 3.04% + AFP 2.87%) e ISR de asalariados.
-// Tasas y topes 2026 (Resolución 01-2025 de la TSS; escala DGII).
-export const SFS_RATE = 0.0304
-export const AFP_RATE = 0.0287
-export const SFS_CAP = 232230
-export const AFP_CAP = 464460
+// Sueldo neto RD: TSS (SFS + AFP) e ISR de asalariados.
+// Valores en lib/rates.ts; se reexportan para los componentes y los tests.
+import { RATES } from "../rates.ts"
 
-export const ISR_EXEMPT_UP_TO = 416220.01
-export const ISR_15_UP_TO = 624329
-export const ISR_20_UP_TO = 867123
-export const ISR_20_FIXED = 31216
-export const ISR_25_FIXED = 79776
+export const SFS_RATE = RATES.tss.sfsRate
+export const AFP_RATE = RATES.tss.afpRate
+export const SFS_CAP = RATES.tss.sfsCap
+export const AFP_CAP = RATES.tss.afpCap
+
+export const ISR_EXEMPT_UP_TO = RATES.isr.exemptUpTo
+export const ISR_15_UP_TO = RATES.isr.bracket15UpTo
+export const ISR_20_UP_TO = RATES.isr.bracket20UpTo
+export const ISR_20_FIXED = RATES.isr.fixed20
+export const ISR_25_FIXED = RATES.isr.fixed25
 
 export interface NetSalaryResult {
   bruto: number

@@ -66,10 +66,12 @@ components/
   sections/    section-page, section-tabs, section-header, section-swipe-navigation, tool-card, tools-grid
   tool-seo/    tool-page-shell, tool-faq (acordeón), json-ld
   tools/       35 componentes client de herramientas (+ subcomponentes y `related-tools/` compartido)
+  charts/      chart-data-table (alternativa textual accesible a los canvas)
+  rates/       rates-note (fecha de revisión y fuentes en herramientas financieras)
   seo/         og-template (plantilla compartida de las imágenes OG)
   ui/          primitivas shadcn (button, count-up, input, slider)
 hooks/         lógica por herramienta + use-count-up, use-haptic-feedback, use-media-query
-lib/           data.ts (catálogo), seo.ts, guides.ts (lectura/parseo), guide-format.ts, storage.ts, protein.ts (perfiles/rangos), format.ts (formatDOP), utils.ts
+lib/           data.ts (catálogo), rates.ts (tasas/fuentes), seo.ts, guides.ts (lectura/parseo), guide-format.ts, storage.ts, protein.ts (perfiles/rangos), format.ts (formatDOP), calculations/ (fórmulas puras), utils.ts
 content/guias/ guías editoriales en Markdown + briefs + plantilla (validación `guides:check`)
 scripts/       audit-seo.mjs, validate-guides.mjs
 types/         index.ts (CardData, SectionType, AmortizationRow, …), guide.ts

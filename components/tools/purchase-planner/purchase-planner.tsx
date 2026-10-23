@@ -8,6 +8,7 @@ import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
 import { formatDOP } from "@/lib/format"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
+import { CERTIFICATE_REFERENCE_LABEL } from "@/lib/rates"
 
 // Planificador de compras: esperar e ir invirtiendo el dinero mientras esperas.
 // Compara comprar hoy (el dinero se va) vs. esperar N meses manteniendo el
@@ -19,7 +20,7 @@ const MESES_DEFAULT = 6
 const DATOS_COMPRA = [
   { icon: Clock, title: "Espera planificada", sub: "Cada mes que esperas, tu dinero rinde" },
   { icon: TrendingUp, title: "Efecto compuesto", sub: "Tus intereses generan más intereses" },
-  { icon: Percent, title: "Rendimiento anual", sub: "Certificados 2026: 7%–11% ref." },
+  { icon: Percent, title: "Rendimiento anual", sub: `Certificados 2026: ${CERTIFICATE_REFERENCE_LABEL} ref.` },
 ]
 
 const inputClass =
@@ -180,7 +181,7 @@ export function PurchasePlanner() {
           />
         </div>
         <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-          Lo que rinde tu dinero mientras esperas. Referencia: certificados 2026, 7%–11% anual.
+          Lo que rinde tu dinero mientras esperas. Referencia: certificados 2026, {CERTIFICATE_REFERENCE_LABEL}.
         </p>
 
         <div className="mt-6 flex items-center justify-between">
@@ -215,7 +216,7 @@ export function PurchasePlanner() {
             <Clock className="mb-4 h-12 w-12 text-finanzas dark:text-finanzas-light" />
             <p className="text-xl font-bold">Sin invertir, esperar no gana nada</p>
             <p className="mt-2 max-w-md text-sm text-gray-600 dark:text-gray-400">
-              Lo que paga la paciencia es el rendimiento. Añade una tasa estimada —referencia 2026: 7%–11% anual— y
+              Lo que paga la paciencia es el rendimiento. Añade una tasa estimada —referencia 2026: {CERTIFICATE_REFERENCE_LABEL}— y
               mira cuánto puede pagarte.
             </p>
           </div>
