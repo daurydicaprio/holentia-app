@@ -1,9 +1,10 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import Chart from "chart.js/auto"
 import { useTheme } from "next-themes"
 import { useMediaQuery } from "@/hooks/use-media-query"
+import { ChartDataTable } from "@/components/charts/chart-data-table"
 
 function formatMoney(value: number, currency: "USD" | "DOP"): string {
   if (currency === "USD") {
@@ -50,15 +51,7 @@ export function FundProjectionChart({
   const { resolvedTheme } = useTheme()
   const isMobile = useMediaQuery("(max-width: 768px)")
 
-  useEffect(() => {
-    if (!canvasRef.current) return
-    if (chartRef.current) {
-      chartRef.current.destroy()
-      chartRef.current = null
-    }
-    const ctx = canvasRef.current.getContext("2d")
-    if (!ctx) return
-
+  const projection = useMemo(() => {
     const last = Math.min(Math.max(Math.round(months), 1), 72)
     const labels: string[] = []
     const values: number[] = []
@@ -69,13 +62,35 @@ export function FundProjectionChart({
       values.push(Math.round(start + monthly * m))
       // Valor futuro de aportes mensuales al AFI líquido (interés compuesto mensual).
       invested.push(
-        Math.round(monthlyRate > 0 ? start * Math.pow(1 + monthlyRate, m) + monthly * ((Math.pow(1 + monthlyRate, m) - 1) / monthlyRate) : start + monthly * m),
+        Math.round(
+          monthlyRate > 0
+            ? start * Math.pow(1 + monthlyRate, m) +
+                monthly * ((Math.pow(1 + monthlyRate, m) - 1) / monthlyRate)
+            : start + monthly * m,
+        ),
       )
     }
-    const targetLine = labels.map(() => target)
+    return {
+      last,
+      labels,
+      values,
+      invested,
+      targetLine: labels.map(() => target),
+      showInvested: mode === "both" && monthlyRate > 0,
+    }
+  }, [start, monthly, target, months, rate, mode])
 
+  useEffect(() => {
+    if (!canvasRef.current) return
+    if (chartRef.current) {
+      chartRef.current.destroy()
+      chartRef.current = null
+    }
+    const ctx = canvasRef.current.getContext("2d")
+    if (!ctx) return
+
+    const { last, labels, values, invested, targetLine, showInvested } = projection
     const isDark = resolvedTheme === "dark"
-    const showInvested = mode === "both" && monthlyRate > 0
     // Un punto por mes visible (grande si hay pocos meses, más pequeño si hay muchos).
     const pt = last <= 24 ? 2.5 : last <= 48 ? 1.8 : 1.2
     // Etiqueta persistente con el valor del último mes de cada curva.
@@ -213,11 +228,39 @@ export function FundProjectionChart({
         chartRef.current = null
       }
     }
-  }, [start, monthly, target, months, currency, rate, rateLabel, mode, resolvedTheme, isMobile])
+  }, [projection, currency, rate, rateLabel, resolvedTheme, isMobile])
+
+  const finalSave = projection.values[projection.last] ?? 0
+  const finalInvested = projection.invested[projection.last] ?? 0
+  const ariaLabel = `Proyección a ${projection.last} meses: ${formatMoney(finalSave, currency)} solo ahorrando${
+    projection.showInvested
+      ? `; ${formatMoney(finalInvested, currency)} con ${rateLabel} al ${rate ?? 0}% anual`
+      : ""
+  }. Meta: ${formatMoney(target, currency)}.`
+
+  const tableColumns = projection.showInvested
+    ? ["Mes", "Solo ahorro", `Ahorro + ${rateLabel}`, "Meta"]
+    : ["Mes", "Solo ahorro", "Meta"]
+  const tableRows = projection.labels.flatMap((label, index) => {
+    const month = Number(label)
+    if (month !== 0 && month % 12 !== 0 && index !== projection.last) return []
+    const row: Array<string | number> = [label, formatMoney(projection.values[index], currency)]
+    if (projection.showInvested) row.push(formatMoney(projection.invested[index], currency))
+    row.push(formatMoney(projection.targetLine[index], currency))
+    return [row]
+  })
 
   return (
-    <div className="h-[240px] w-full mt-3">
-      <canvas ref={canvasRef} aria-hidden />
+    <div className="mt-3">
+      <div className="h-[240px] w-full">
+        <canvas ref={canvasRef} role="img" aria-label={ariaLabel} />
+      </div>
+      <ChartDataTable
+        summary="Ver datos de la proyección"
+        columns={tableColumns}
+        rows={tableRows}
+        caption="Proyección del colchón mes a mes, comparada con la meta y con la alternativa de inversión."
+      />
     </div>
   )
 }

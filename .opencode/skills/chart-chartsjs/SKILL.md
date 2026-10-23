@@ -73,6 +73,15 @@ useEffect(() => {
 4. `options.plugins.legend.labels.color` y `tooltip.{title,body}Color: chartColors.text` — mantener sincronizados con `fontColor`.
 5. **Leyenda en móvil**: los doughnut/radial con `position: "left"` aplastan el gráfico en pantallas <768px → `position: isMobile ? "bottom" : "left"` (el hook `useMediaQuery("(max-width: 768px)")` ya existe en `calculator-charts.tsx`). Las leyendas `"top"`/`"bottom"` pueden quedarse fijas.
 
+## Accesibilidad (23-Oct-2026)
+
+- Todo `<canvas>` de Chart.js lleva `role="img"` y `aria-label` con el mensaje principal; no uses `aria-hidden` si el gráfico aporta información.
+- Añade debajo `ChartDataTable` (`components/charts/chart-data-table.tsx`): `<details>` nativo + tabla con `caption` oculto, `scope="col"` y valores formateados. Es server-safe y no añade JS.
+- La dona `PortfolioPie` del perfil de riesgo ya tiene una lista visible con porcentajes y montos: esa lista es la alternativa textual; el canvas solo necesita `role="img"` + `aria-label`.
+- SVG interactivo (niveles de riesgo): usa `role="group"`, no `role="img"` (img oculta los botones internos). Cada nodo es `role="button"`, `tabIndex={0}`, `aria-label` descriptivo y `aria-pressed`.
+- No codifiques información solo con color: combina línea sólida/discontinua, barras apiladas, números y etiquetas visibles.
+- Verifica el HTML/markup y pasa `pnpm exec tsc --noEmit`, `pnpm lint` y `pnpm build`; no hay axe/Playwright instalado en el repo.
+
 ## Si cambia este patrón
 
 Actualizar esta skill y `design.md` §Modo oscuro en el mismo commit (regla de `AGENTS.md`).

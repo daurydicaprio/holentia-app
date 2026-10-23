@@ -725,6 +725,7 @@ function PortfolioPie({ slices, id }: { slices: Slice[]; id: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { resolvedTheme } = useTheme()
   const isMobile = useMediaQuery("(max-width: 768px)")
+  const pieSummary = slices.map((slice) => `${slice.label} ${Math.round(slice.pct)}%`).join(", ")
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -784,7 +785,7 @@ function PortfolioPie({ slices, id }: { slices: Slice[]; id: string }) {
 
   return (
     <div className="h-[160px] w-full" id={id}>
-      <canvas ref={canvasRef} aria-hidden />
+      <canvas ref={canvasRef} role="img" aria-label={`Distribución del fondo: ${pieSummary}.`} />
     </div>
   )
 }

@@ -5,6 +5,7 @@ import type { ChartData, PieChartData } from "@/hooks/use-compound-interest-calc
 import { useTheme } from "next-themes"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import Chart from "chart.js/auto"
+import { ChartDataTable } from "@/components/charts/chart-data-table"
 
 interface CalculatorChartsProps {
   lineChartData: ChartData
@@ -362,7 +363,27 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
     }
   }, [pieChartData, chartColors, resolvedTheme, showPieChart, formatCurrency, isMobile])
 
-  // Asegurar que los bordes de los gráficos sean visibles
+  const lineRows = lineChartData.labels.map((label, index) => [
+    label,
+    formatCurrency(lineChartData.capitalData[index] ?? 0),
+    formatCurrency(lineChartData.interestData[index] ?? 0),
+    formatCurrency(lineChartData.lineData[index] ?? 0),
+  ])
+  const pieRows = pieChartData.labels.map((label, index) => [
+    label,
+    `${Math.round((pieChartData.data[index] ?? 0) * 10) / 10}%`,
+  ])
+  const lastBalance = lineChartData.lineData[lineChartData.lineData.length - 1]
+  const lineSummary =
+    lastBalance === undefined
+      ? "Composición de la inversión por año. Usa la tabla de datos para ver el detalle."
+      : `Composición de la inversión: balance final ${formatCurrency(lastBalance)}. Usa la tabla de datos para ver capital e interés por año.`
+  const pieSummary = pieChartData.labels.length
+    ? `Distribución de la inversión: ${pieChartData.labels
+        .map((label, index) => `${label} ${Math.round((pieChartData.data[index] ?? 0) * 10) / 10}%`)
+        .join(", ")}.`
+    : "Distribución de la inversión. Usa la tabla de datos para ver el detalle."
+
   return (
     <div className="space-y-8">
       {/* Gráfico de línea */}
@@ -373,8 +394,14 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
         </h2>
 
         <div className="h-[300px] sm:h-[400px] flex items-center justify-center">
-          <canvas ref={lineChartRef}></canvas>
+          <canvas ref={lineChartRef} role="img" aria-label={lineSummary}></canvas>
         </div>
+        <ChartDataTable
+          summary="Ver datos de la composición"
+          columns={["Año", "Capital", "Interés", "Balance"]}
+          rows={lineRows}
+          caption="Capital aportado, interés acumulado y balance final por año."
+        />
       </div>
 
       {/* Gráfico de pastel - solo mostrar en escritorio o si showPieChart es true */}
@@ -386,8 +413,14 @@ export function CalculatorCharts({ lineChartData, pieChartData, formatCurrency, 
           </h2>
 
           <div className="h-[300px] sm:h-[400px] flex items-center justify-center">
-            <canvas ref={pieChartRef}></canvas>
+            <canvas ref={pieChartRef} role="img" aria-label={pieSummary}></canvas>
           </div>
+          <ChartDataTable
+            summary="Ver datos de la distribución"
+            columns={["Rubro", "Porcentaje"]}
+            rows={pieRows}
+            caption="Porcentaje de capital e interés en la distribución final de la inversión."
+          />
         </div>
       )}
     </div>

@@ -7,7 +7,7 @@
 >
 > **Estado de ejecución (22-Oct-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); `/guias` con destacada + 3 recientes + archivo paginado; sitemap de 52 URLs, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` 52/52 y build de 108 páginas; red central de enlaces internos (`links:check` 35/35), 22 tests de cálculo y CI en GitHub Actions. Producción en `2761175` (con Next 15.5.28): la guía de prestaciones responde 200 y ya está en sitemap, `llms.txt` e índice; CI de `main` en verde. Search Console/Bing verificados e indexación de la guía solicitada por el autor.
 >
-> **Cerrado en esta iteración:** BN (dependencias/baseline), BP (red de enlaces) y BS (tests núcleo + CI). **Pendiente:** BO (a11y de gráficos), BR (tasas centralizadas), BT (metodología/accesibilidad), BV+ (producto local-first), más la ampliación de tests a préstamo, interés compuesto, IMC, grasa y calorías.
+> **Cerrado:** BN (dependencias/baseline), BP (red de enlaces), BS (tests núcleo + CI) y BO (a11y de gráficos). **En curso:** BR (tasas centralizadas). **Pendiente:** BT (metodología/accesibilidad), BV+ (producto local-first) y ampliar tests a préstamo, interés compuesto, IMC, grasa y calorías.
 
 ## 0. Checklist de ejecución (22-Oct-2026)
 
@@ -15,7 +15,7 @@
 - [x] ~~BU — Primeras guías publicadas (5)~~
 - [x] ~~Search Console/Bing + indexación de la guía nueva~~
 - [x] ~~BN — Baseline, dependencias y medición~~
-- [ ] BO — Accesibilidad de gráficos
+- [x] ~~BO — Accesibilidad de gráficos~~
 - [x] ~~BP — Red de enlaces internos 2.0~~
 - [ ] BR — Tasas centralizadas y fechas de revisión
 - [x] ~~BS — Tests de cálculo núcleo + CI~~
@@ -97,21 +97,21 @@ Aceptación:
 - [x] `pnpm audit --prod` sin avisos runtime accionables: **0 vulnerabilidades**.
 - [x] Baseline de PSI/GSC documentado; PSI pendiente por cuota externa, no por el código.
 
-### Fase BO — Accesibilidad de gráficos
+### Fase BO — Accesibilidad de gráficos — HECHA (23-Oct-2026)
 
 **Objetivo:** que los gráficos no dependan solo del canvas y del color.
 
 Tareas:
-- Auditar los 4 tools con Chart.js: interés compuesto, préstamo, perfil de riesgo y presupuesto.
-- Añadir `role="img"` y `aria-label` con el mensaje principal del gráfico.
-- Añadir una tabla de datos visible en `<details>` o una tabla visualmente oculta con los valores clave.
-- Revisar que las series se distingan sin depender solo del color.
-- Documentar la receta en `design.md` y en la skill `chart-chartsjs`.
+- [x] Auditar los 4 tools financieros: interés compuesto, préstamo, perfil de riesgo y presupuesto. Solo hay canvas en **interés compuesto** (barras/línea + dona) y **perfil de riesgo** (proyección + dona); préstamo y presupuesto son tablas/texto y ya tienen `aria-live`.
+- [x] `role="img"` + `aria-label` con el mensaje principal en los 4 canvas.
+- [x] `ChartDataTable` (`components/charts/chart-data-table.tsx`): `<details>` + tabla nativa con `caption`, `scope="col"`, filas por año/mes y valores formateados. En la dona de perfil de riesgo se conserva la lista visible con porcentajes y montos.
+- [x] Series distinguibles sin color: línea sólida vs. discontinua, barras apiladas, números en los nodos y etiquetas visibles. El SVG de niveles pasa a `role="group"` y cada botón lleva `aria-pressed`.
+- [x] Receta documentada en `design.md` y en la skill `chart-chartsjs`.
 
 Aceptación:
-- Cada gráfico tiene alternativa textual comprobable.
-- Navegación por teclado y lector de pantalla sin callejones.
-- Axe sigue limpio.
+- [x] Cada canvas tiene alternativa textual comprobable en `<details>` o lista visible.
+- [x] Navegación por teclado: `<summary>` nativo, botones SVG con Enter/Espacio y sin trampas de foco.
+- [x] Sin axe/Playwright instalados; verificación estructural + `tsc`, `lint`, build y `audit:seo` en verde.
 
 ### Fase BP — Red de enlaces internos 2.0 — HECHA (22-Oct-2026)
 

@@ -100,10 +100,16 @@ export function RiskLevelsGraphic({ activeLevel, selectedLevel, onSelect }: Risk
   })
 
   const active = points.find((p) => p.n === activeLevel) ?? points[0]
+  const activeDef = LEVELS.find((level) => level.n === activeLevel) ?? LEVELS[0]
 
   return (
     <div className="flex justify-center">
-      <svg viewBox="0 0 320 170" className="w-full max-w-sm" role="img" aria-label={`Nivel activo: ${activeLevel}`}>
+      <svg
+        viewBox="0 0 320 170"
+        className="w-full max-w-sm"
+        role="group"
+        aria-label={`Selector de nivel de riesgo. Nivel activo: ${activeLevel}, ${activeDef.profileName}. ${activeDef.short}.`}
+      >
         {/* arco base: continuo, fino, une los 5 puntos */}
         <path
           d={`M ${points[0].x} ${points[0].y} A ${r} ${r} 0 0 1 ${points[4].x} ${points[4].y}`}
@@ -131,7 +137,8 @@ export function RiskLevelsGraphic({ activeLevel, selectedLevel, onSelect }: Risk
               onClick={() => onSelect(p.n)}
               role="button"
               tabIndex={0}
-              aria-label={`Nivel ${p.n}`}
+              aria-label={`Nivel ${p.n}: ${LEVELS[p.n - 1].profileName}. ${LEVELS[p.n - 1].short}.`}
+              aria-pressed={p.n === selectedLevel}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault()
