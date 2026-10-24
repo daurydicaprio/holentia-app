@@ -2,10 +2,10 @@
 
 > Fecha: 20-Oct-2026 · Actualizado: 24-Oct-2026
 > Estado: propuesta en ejecución. BO, BR, BT, BS2 y BV completas sobre `dev`; `main` sigue en `f628837` (producción en `2761175`) y solo se toca con aprobación explícita.
-> Base inicial: `448c529`; `main` en `f628837`; `dev` en `2c367f0` (BV + glosario). 35 herramientas, 55 URLs, 51 rutas OG, 60 términos de glosario y 5 guías publicadas.
+> Base inicial: `448c529`; `main` en `f628837`; `dev` en `2c367f0` (BV + glosario). 35 herramientas, 55 URLs, 51 rutas OG, 80 términos de glosario y 5 guías publicadas.
 > Principios: local-first, sin tracking, server-first, español (es-DO) y documentación en el mismo commit.
 >
-> **Estado de ejecución (24-Oct-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); sitemap de **55 URLs**, **51 OG**, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` **55/55** y build de **114 páginas**. `links:check` 35/35, **51 tests** y CI en GitHub Actions. BO (gráficos), BR (tasas), BT (metodología/accesibilidad), BS2 (préstamo, interés compuesto, IMC, grasa y calorías) y BV (`/mis-datos`) están en `dev`; producción sigue en `2761175` con Next 15.5.28 y `main` verde. Glosario con **60 términos** (nueva categoría «Sistema financiero»). Search Console/Bing verificados.
+> **Estado de ejecución (24-Oct-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); sitemap de **55 URLs**, **51 OG**, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` **55/55** y build de **114 páginas**. `links:check` 35/35, **51 tests** y CI en GitHub Actions. BO (gráficos), BR (tasas), BT (metodología/accesibilidad), BS2 (préstamo, interés compuesto, IMC, grasa y calorías) y BV (`/mis-datos`) están en `dev`; producción sigue en `2761175` con Next 15.5.28 y `main` verde. Glosario con **80 términos** (nueva categoría «Sistema financiero»). Search Console/Bing verificados.
 >
 > **Cerrado:** BN (dependencias/baseline), BP (red de enlaces), BS (tests núcleo + CI), BO (a11y de gráficos), BR (tasas centralizadas), BT (metodología/accesibilidad), BS2 (tests ampliados) y BV (backup local). **Pendiente:** panel de progreso BV+ y promoción a `main` con aprobación.
 

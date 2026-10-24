@@ -368,7 +368,7 @@ export const sectionsData: Record<string, SectionData> = {
         category: "finanzas",
         metaTitle: "Glosario financiero: ahorro, crédito, banca e inversión",
         metaDescription:
-          "60 términos de finanzas personales y sistema financiero explicados con ejemplos: ahorro, crédito, intereses, bancos e inversiones. Gratis y en español.",
+          "80 términos de finanzas personales y sistema financiero explicados con ejemplos: ahorro, crédito, intereses, bancos e inversiones. Gratis y en español.",
       },
       {
         id: "tracker-gastos-hormiga",

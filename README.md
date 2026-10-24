@@ -145,7 +145,7 @@ La aplicación está dividida en cuatro secciones principales, cada una con su p
 - **Corte y vencimiento tarjeta**: a qué corte entra tu compra y cuándo la pagas
 - **Calculadora interés tarjeta**: costo de financiar el saldo y meses para liquidarlo
 - **Test de perfil de riesgo**: 12 preguntas, nivel de inversor, colchón y proyección de ahorro
-- **Glosario financiero**: términos de ahorro, crédito, intereses, fondos, bolsa, depósitos y sistema financiero (BCRD, SB, ROE, ROA, morosidad)
+- **Glosario financiero**: 80 términos de ahorro, crédito, intereses, fondos, bolsa, depósitos y sistema financiero (BCRD, SB, ROE, ROA, morosidad)
 - **Tracker de gastos hormiga**: gastos pequeños anualizados con proporción y tips de ahorro
 - **Calculadora de aguinaldo**: doble sueldo de diciembre, proporcional y exento de ISR/TSS
 - **Calculadora de sueldo neto**: de bruto a neto con TSS (SFS/AFP) e ISR por tramos
