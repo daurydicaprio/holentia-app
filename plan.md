@@ -7,7 +7,7 @@
 
 ## Estado actual (24-Oct-2026) — 35 herramientas, 55 URLs y 5 guías publicadas en `dev`
 - [x] Stack: Next 15.5.28 + React 19.3.1 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
-- [x] Cobertura: **35 herramientas** activas + **0 tarjetas «Próximamente»** en `lib/data.ts`; sitio de **55 URLs** (home + 4 hubs + directorio + 35 herramientas + 8 informativas + `/guias` + 5 guías publicadas)
+- [x] Cobertura: **35 herramientas** activas + **0 tarjetas «Próximamente»** en `lib/data.ts`; sitio de **55 URLs** (home + 4 hubs + directorio + 35 herramientas + 8 informativas + `/guias` + 5 guías publicadas); glosario con **60 términos**, incluida la categoría «Sistema financiero»
 - [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite/Article/AboutPage), OG por ruta (**51 rutas**, incluida la OG dinámica de guías), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 55 URLs, `llms.txt` 35 tools + 5 guías; auditoría **55/55**, 0 FAIL, 0 WARN.
 - [x] UI/UX móvil: pase completo por herramientas y superficies globales (chrome, hubs, informativas, shell) — contraste AA con tiers por sección, tap targets ≥40/44px, inputs ≥16px sin zoom iOS, recetas en `design.md`.
 - [x] Accesibilidad de gráficos (BO): los 4 canvas tienen `role="img"`, `aria-label` y tabla plegable (`ChartDataTable`); el selector de riesgo es un grupo de botones con `aria-pressed`.
