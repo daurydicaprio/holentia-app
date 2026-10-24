@@ -2,7 +2,7 @@
 
 > Fecha: 20-Oct-2026 · Actualizado: 24-Oct-2026
 > Estado: propuesta en ejecución. BO, BR, BT y BS2 completas sobre `dev`; `main` sigue en `2761175` y solo se toca con aprobación explícita.
-> Base inicial: `448c529`; `main` en `2761175`; `dev` en `61d5c48` + BS2. 35 herramientas, 54 URLs, 50 rutas OG y 5 guías publicadas.
+> Base inicial: `448c529`; `main` en `2761175`; `dev` en `068de08`. 35 herramientas, 54 URLs, 50 rutas OG y 5 guías publicadas.
 > Principios: local-first, sin tracking, server-first, español (es-DO) y documentación en el mismo commit.
 >
 > **Estado de ejecución (24-Oct-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); sitemap de **54 URLs**, **50 OG**, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` **54/54** y build de **112 páginas**. `links:check` 35/35, **45 tests** de cálculo y CI en GitHub Actions. BO (gráficos), BR (tasas), BT (metodología/accesibilidad) y BS2 (préstamo, interés compuesto, IMC, grasa y calorías) están en `dev`; producción sigue en `2761175` con Next 15.5.28 y `main` verde. Search Console/Bing verificados.
