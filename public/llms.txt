@@ -71,6 +71,7 @@ estimaciones educativas, no asesoramiento profesional (médico, financiero ni ps
 
 ## Páginas informativas
 
+- [Mis datos](https://holentia.com/mis-datos): descarga un backup JSON de tus datos locales y restaura uno anterior; todo ocurre en el navegador.
 - [Metodología y fuentes](https://holentia.com/metodologia): cómo se eligen las fórmulas, fuentes oficiales, tasas vigentes, fecha de revisión y límites de cada cálculo.
 - [Accesibilidad](https://holentia.com/accesibilidad): teclado, lectores de pantalla, contraste, alternativas a los gráficos y limitaciones conocidas.
 - [Qué es HOLENTIA](https://holentia.com/que-es-holentia)

@@ -1,12 +1,12 @@
 import Link from "next/link"
-import { ArrowLeft, ArrowRight, Check, Cookie, Database, Lock, ShieldCheck, X } from "lucide-react"
+import { ArrowLeft, ArrowRight, Check, Cookie, Database, Download, Lock, ShieldCheck, X } from "lucide-react"
 import { pageMetadata, pageJsonLd } from "@/lib/seo"
 import JsonLd from "@/components/tool-seo/json-ld"
 
 export function generateMetadata() {
   return pageMetadata(
     "Política de Cookies",
-    "Política de cookies de HOLENTIA: qué es localStorage, cómo se guardan tus borradores en tu dispositivo y cómo borrarlos en cualquier momento.",
+    "Política de cookies de HOLENTIA: qué es localStorage, cómo se guardan tus borradores en tu dispositivo, cómo descargar un backup y cómo borrarlos.",
     "/politica-cookies",
   )
 }
@@ -281,6 +281,26 @@ export default function PoliticaCookiesPage() {
                 </p>
               </div>
             </div>
+          </section>
+
+          <section>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-900 text-white dark:bg-white dark:text-gray-900">
+                <Download className="h-5 w-5" />
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Backup e importación manual</h2>
+            </div>
+            <p className="text-base leading-relaxed text-gray-700 dark:text-gray-300">
+              En <strong>Mis datos</strong> puedes descargar un archivo JSON con las claves <code>holentia:*</code> de
+              este navegador. El archivo se genera localmente con la API del navegador: no se envía a ningún servidor y
+              no crea una clave nueva de almacenamiento. Si importas un backup, primero se valida el formato y luego se
+              reemplazan solo las claves que coinciden; las demás se conservan.
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+              El backup puede contener datos sensibles (salario, medidas, diarios o hábitos). Guárdalo en un lugar
+              privado y bórralo cuando ya no lo necesites. Esta función es manual: HOLENTIA no sincroniza ni copia tus
+              datos por su cuenta.
+            </p>
           </section>
 
           <section>

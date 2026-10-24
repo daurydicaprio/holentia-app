@@ -33,6 +33,7 @@ const NON_TOOL = new Set([
   "/",
   ...COLLECTIONS,
   "/que-es-holentia",
+  "/mis-datos",
   "/metodologia",
   "/accesibilidad",
   "/ayuda",

@@ -174,7 +174,7 @@ Regla derivada del hueco de la calculadora de proteína: la columna izquierda (f
 - **Validación**: `pnpm links:check` comprueba 35 herramientas, 2–3 salientes, ≥2 entrantes, destinos existentes, cero autorreferencias y que `app/{slug}/page.tsx` exista.
 - **Cobertura**: mente (diario ↔ hábitos ↔ respiración ↔ ansiedad ↔ sueño), relaciones (lenguajes ↔ apego ↔ preguntas ↔ diario de pareja), cuerpo (calorías ↔ proteína ↔ IMC ↔ grasa ↔ pasos ↔ hidratación ↔ HIIT ↔ comidas) y finanzas (sueldo ↔ prestaciones ↔ aguinaldo ↔ presupuesto ↔ ahorro ↔ inversión ↔ deuda ↔ compras ↔ servicios).
 
-### 4c. Páginas básicas (home, ayuda, apoyar, legales, qué-es, metodología, accesibilidad) — monocromo de marca
+### 4c. Páginas básicas (home, ayuda, apoyar, legales, qué-es, metodología, accesibilidad, mis datos) — monocromo de marca
 
 La marca HOLENTIA es **monocroma** (logo negro/blanco, OG `#121212` + blanco). Las páginas genéricas NO usan colores de sección ni degradados: su acento es el motivo de los **4 puntos** (`components/common/brand-dots`, los mismos de la imagen OG) bajo el logo. `/metodologia` y `/accesibilidad` siguen esta receta y añaden tablas con scroll horizontal y enlaces a fuentes. Recetas:
 

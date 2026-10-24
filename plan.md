@@ -5,18 +5,19 @@
 > Principios: sin DB, sin registro, local-first privado (`holentia:*` en navegador), cero tracking.
 > Plan de mejoras 2.0 (propuesta, 20-Oct-2026): [`plan-mejoras.md`](plan-mejoras.md).
 
-## Estado actual (24-Oct-2026) — 35 herramientas, 54 URLs y 5 guías publicadas en `dev`
+## Estado actual (24-Oct-2026) — 35 herramientas, 55 URLs y 5 guías publicadas en `dev`
 - [x] Stack: Next 15.5.28 + React 19.3.1 + Tailwind 3.4 + next-themes 0.4.6 + Framer Motion 12 + Lucide + Chart.js 4.5 — `tsc 0 errores`, build estricto sin ignores, `lint 0`
-- [x] Cobertura: **35 herramientas** activas + **0 tarjetas «Próximamente»** en `lib/data.ts`; sitio de **54 URLs** (home + 4 hubs + directorio + 35 herramientas + 7 informativas + `/guias` + 5 guías publicadas)
-- [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite/Article/AboutPage), OG por ruta (**50 rutas**, incluida la OG dinámica de guías), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 54 URLs, `llms.txt` 35 tools + 5 guías; auditoría **54/54**, 0 FAIL, 0 WARN.
+- [x] Cobertura: **35 herramientas** activas + **0 tarjetas «Próximamente»** en `lib/data.ts`; sitio de **55 URLs** (home + 4 hubs + directorio + 35 herramientas + 8 informativas + `/guias` + 5 guías publicadas)
+- [x] SEO/GEO moderno: metaTitle+metaDescription por tool, JSON-LD (WebApplication/Breadcrumb/FAQPage/Collection/WebSite/Article/AboutPage), OG por ruta (**51 rutas**, incluida la OG dinámica de guías), twitter `summary_large_image`, robots con bots de IA, `lang es-DO`, manifest, footer enlazado (sin páginas huérfanas), sitemap 55 URLs, `llms.txt` 35 tools + 5 guías; auditoría **55/55**, 0 FAIL, 0 WARN.
 - [x] UI/UX móvil: pase completo por herramientas y superficies globales (chrome, hubs, informativas, shell) — contraste AA con tiers por sección, tap targets ≥40/44px, inputs ≥16px sin zoom iOS, recetas en `design.md`.
 - [x] Accesibilidad de gráficos (BO): los 4 canvas tienen `role="img"`, `aria-label` y tabla plegable (`ChartDataTable`); el selector de riesgo es un grupo de botones con `aria-pressed`.
 - [x] Transparencia (BR/BT): `lib/rates.ts` como fuente única con vigencia/fuente/revisión, nota en las **17 herramientas financieras**, páginas `/metodologia` y `/accesibilidad`, enlaces en footer/home y `docs/rates.md`.
-- [x] Tests (BS/BS2): **45/45** con `node:test` y CI en GitHub Actions; cubren sueldo, aguinaldo, ITBIS, prestaciones, préstamo, interés compuesto, IMC, grasa y calorías.
+- [x] Tests (BS/BS2): **51/51** con `node:test` y CI en GitHub Actions; cubren sueldo, aguinaldo, ITBIS, prestaciones, préstamo, interés compuesto, IMC, grasa, calorías y backup local.
 - [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` solo se sincroniza con `dev` cuando el usuario lo aprueba**.
-- [x] **Producción (sin cambios desde 22-Oct-2026)**: `main` en `2761175` (Next **15.5.28**); `holentia.com/guias/prestaciones-laborales-rd` responde **200** y sigue en sitemap, `llms.txt` e índice. CI de `main` en verde. `dev` va por delante con BO/BR/BT/BS2 y se verificó con build de **112 páginas**.
-- [x] **Verificación (24-Oct-2026)**: `pnpm test` 45/45, `tsc`, `lint`, `links:check` 35/35, `guides:check` 5/5, build 112 páginas, `audit:seo` **54/54** y `audit --prod` 0.
-- [ ] **BV+ (decisión pendiente)**: exportación/importación de «Mis datos» y panel de progreso local-first; requiere definir alcance y actualizar la política de privacidad antes de tocar código.
+- [x] **Producción (sin cambios desde 22-Oct-2026)**: `main` en `2761175` (Next **15.5.28**); `holentia.com/guias/prestaciones-laborales-rd` responde **200** y sigue en sitemap, `llms.txt` e índice. CI de `main` en verde. `dev` va por delante con BO/BR/BT/BS2/BV y se verificó con build de **114 páginas**.
+- [x] **Verificación (24-Oct-2026)**: `pnpm test` 51/51, `tsc`, `lint`, `links:check` 35/35, `guides:check` 5/5, build 114 páginas, `audit:seo` **55/55** y `audit --prod` 0.
+- [x] **BV (24-Oct-2026)**: página `/mis-datos` con exportación JSON de claves `holentia:*` e importación validada (5 MB, merge seguro), enlaces en footer/home, privacidad actualizada y tests. Sin backend ni claves nuevas.
+- [ ] **Panel de progreso (BV+)**: pendiente de decisión; no entra en esta entrega.
 
 ---
 

@@ -71,6 +71,16 @@ export default function Home() {
           </p>
           <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
             <Link
+              href="/mis-datos"
+              data-interactive="true"
+              className="inline-block py-1 underline decoration-gray-300 underline-offset-2 hover:text-gray-900 dark:decoration-gray-600 dark:hover:text-gray-100"
+            >
+              Mis datos
+            </Link>
+            <span aria-hidden className="mx-2 text-gray-300 dark:text-gray-600">
+              ·
+            </span>
+            <Link
               href="/metodologia"
               data-interactive="true"
               className="inline-block py-1 underline decoration-gray-300 underline-offset-2 hover:text-gray-900 dark:decoration-gray-600 dark:hover:text-gray-100"

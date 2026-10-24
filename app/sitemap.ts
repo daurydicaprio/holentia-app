@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/cuerpo`, lastModified: LAST_UPDATED, changeFrequency: "weekly", priority: 0.8 },
     { url: `${SITE_URL}/finanzas`, lastModified: LAST_UPDATED, changeFrequency: "weekly", priority: 0.8 },
     { url: `${SITE_URL}/herramientas`, lastModified: LAST_UPDATED, changeFrequency: "weekly", priority: 0.6 },
+    { url: `${SITE_URL}/mis-datos`, lastModified: LAST_UPDATED, changeFrequency: "monthly", priority: 0.4 },
     { url: `${SITE_URL}/metodologia`, lastModified: LAST_UPDATED, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE_URL}/accesibilidad`, lastModified: LAST_UPDATED, changeFrequency: "monthly", priority: 0.4 },
     { url: `${SITE_URL}/que-es-holentia`, lastModified: LAST_UPDATED, changeFrequency: "monthly", priority: 0.5 },

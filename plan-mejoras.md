@@ -2,12 +2,12 @@
 
 > Fecha: 20-Oct-2026 · Actualizado: 24-Oct-2026
 > Estado: propuesta en ejecución. BO, BR, BT y BS2 completas sobre `dev`; `main` sigue en `2761175` y solo se toca con aprobación explícita.
-> Base inicial: `448c529`; `main` en `2761175`; `dev` en `068de08`. 35 herramientas, 54 URLs, 50 rutas OG y 5 guías publicadas.
+> Base inicial: `448c529`; `main` en `2761175`; `dev` en `068de08` + BV. 35 herramientas, 55 URLs, 51 rutas OG y 5 guías publicadas.
 > Principios: local-first, sin tracking, server-first, español (es-DO) y documentación en el mismo commit.
 >
-> **Estado de ejecución (24-Oct-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); sitemap de **54 URLs**, **50 OG**, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` **54/54** y build de **112 páginas**. `links:check` 35/35, **45 tests** de cálculo y CI en GitHub Actions. BO (gráficos), BR (tasas), BT (metodología/accesibilidad) y BS2 (préstamo, interés compuesto, IMC, grasa y calorías) están en `dev`; producción sigue en `2761175` con Next 15.5.28 y `main` verde. Search Console/Bing verificados.
+> **Estado de ejecución (24-Oct-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); sitemap de **55 URLs**, **51 OG**, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` **55/55** y build de **114 páginas**. `links:check` 35/35, **51 tests** y CI en GitHub Actions. BO (gráficos), BR (tasas), BT (metodología/accesibilidad), BS2 (préstamo, interés compuesto, IMC, grasa y calorías) y BV (`/mis-datos`) están en `dev`; producción sigue en `2761175` con Next 15.5.28 y `main` verde. Search Console/Bing verificados.
 >
-> **Cerrado:** BN (dependencias/baseline), BP (red de enlaces), BS (tests núcleo + CI), BO (a11y de gráficos), BR (tasas centralizadas), BT (metodología/accesibilidad) y BS2 (tests ampliados). **Pendiente:** BV+ (producto local-first) y decisión de alcance.
+> **Cerrado:** BN (dependencias/baseline), BP (red de enlaces), BS (tests núcleo + CI), BO (a11y de gráficos), BR (tasas centralizadas), BT (metodología/accesibilidad), BS2 (tests ampliados) y BV (backup local). **Pendiente:** panel de progreso BV+ y promoción a `main` con aprobación.
 
 ## 0. Checklist de ejecución (24-Oct-2026)
 
@@ -21,7 +21,8 @@
 - [x] ~~BS — Tests de cálculo núcleo + CI~~
 - [x] ~~BS2 — Tests de préstamo, interés compuesto, IMC, grasa y calorías~~
 - [x] ~~BT — Metodología/fuentes y accesibilidad~~
-- [ ] BV+ — Producto local-first (decisión pendiente)
+- [x] ~~BV — Exportar/importar «Mis datos» (backup local)~~
+- [ ] BV+ — Panel de progreso (decisión pendiente)
 
 ## 1. Diagnóstico
 
@@ -218,6 +219,23 @@ Aceptación:
 - [x] `pnpm test` **45/45** en verde (25 anteriores + 20 nuevos).
 - [x] `tsc`, `lint` y build **112 páginas** sin errores.
 - [x] Los resultados de las calculadoras no cambian: solo se movió la fórmula a un módulo testeable.
+
+### Fase BV — «Mis datos»: backup local exportable/importable — HECHA (24-Oct-2026)
+
+**Objetivo:** que el usuario pueda llevarse sus datos y restaurarlos sin cuenta, nube ni backend.
+
+Tareas:
+- [x] `lib/data-export.ts`: lectura selectiva de `holentia:*`, formato versionado, validación de app/versión/fecha/claves/tipos y límite de 5 MB.
+- [x] `components/mis-datos/data-backup.tsx`: descarga JSON generada con `Blob`, vista previa antes de importar, confirmación explícita y aviso de datos sensibles.
+- [x] `app/mis-datos/page.tsx`: página pública, metadata, JSON-LD, OG, footer/home/llms/sitemap y `NON_TOOL` en la auditoría.
+- [x] La importación combina: reemplaza claves repetidas y conserva las demás; nunca escribe claves ajenas.
+- [x] `app/politica-cookies/page.tsx`: sección de backup manual, sin claves nuevas y con enlace a «Borrar mis datos».
+- [x] `tests/data-export.test.mjs`: 6 casos (lectura selectiva, round-trip, rechazos y merge).
+
+Aceptación:
+- [x] Sin red, sin backend, sin cuentas y sin claves nuevas de almacenamiento.
+- [x] `pnpm test` **51/51**; `tsc`, `lint`, `links:check`, `guides:check`, build **114 páginas** y `audit:seo` **55/55**.
+- [x] Un archivo inválido no toca el almacenamiento; uno válido se previsualiza antes de escribir.
 
 ### Fase BU — Primeras guías publicadas
 

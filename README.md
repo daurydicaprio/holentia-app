@@ -49,7 +49,7 @@ holentia/
 ├── scripts/                  # audit-seo.mjs + validate-guides.mjs
 ├── types/                    # Definiciones de tipos
 │   └── index.ts              # Tipos principales
-├── app/sitemap.ts            # Sitemap XML (54 URLs)
+├── app/sitemap.ts            # Sitemap XML (55 URLs)
 ├── app/robots.ts             # Robots.txt
 ├── app/manifest.ts           # Manifest PWA (iconos 192/512/maskable)
 ├── app/error.tsx             # Página de error de ruta
@@ -95,7 +95,7 @@ holentia/
 - **Metadata por página**: `generateMetadata` en las 35 herramientas, las 4 secciones, el home, el directorio y las páginas informativas (title, description, canonical, openGraph, twitter) con template global `{página} | HOLENTIA` en `app/layout.tsx`
 - **Datos estructurados JSON-LD**: `WebApplication` + `BreadcrumbList` + `FAQPage` por herramienta, `CollectionPage` + `BreadcrumbList` por sección, `WebSite` + `Organization` en el home, `FAQPage` en Ayuda
 - **FAQ visible en el HTML inicial** de las 35 herramientas (acordeón, no escondido tras hydration gates) y de `/ayuda` — los hubs de sección no llevan FAQ
-- **`app/sitemap.ts`**: 54 URLs (home, 4 secciones, directorio, 35 herramientas, 7 informativas, `/guias` y 5 guías publicadas)
+- **`app/sitemap.ts`**: 55 URLs (home, 4 secciones, directorio, 35 herramientas, 8 informativas, `/guias` y 5 guías publicadas)
 - **`app/robots.ts`**: permite todo y apunta al sitemap
 - **`public/llms.txt`**: índice legible por LLMs con las 35 herramientas, sus fórmulas y las guías publicadas
 - **Enlaces a herramientas en el HTML inicial** de las secciones (tabs y tarjetas server-rendered, sin `mounted` guard)
@@ -258,4 +258,4 @@ Este proyecto es propiedad de Daury DiCaprio. Todos los derechos reservados.
 
 ---
 
-**Última actualización**: Octubre 2026 (35 herramientas y 54 URLs, calculadora de grasa corporal + planificador de comidas + rutinas HIIT + seguimiento de hábitos + calculadora de proteína + test de calidad del sueño, directorio `/herramientas` + calculadora de prestaciones, pase UI/UX móvil completo —contraste AA, tap targets, inputs sin zoom iOS—, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`, estructura editorial en `content/guias/` con validación `guides:check`, cinco guías publicadas —inversión desde cero, interés compuesto, sueldo neto 2027, grasa corporal y prestaciones laborales—, índice editorial con destacada + archivo paginado, barra de progreso de lectura global, red central de enlaces internos, tests de cálculo 45/45 con `node:test` y CI en GitHub Actions, páginas de metodología y accesibilidad con fuentes y fecha de revisión, y skills `create-guide`/`guia-voz`/`humanizer`)
+**Última actualización**: Octubre 2026 (35 herramientas y 55 URLs, calculadora de grasa corporal + planificador de comidas + rutinas HIIT + seguimiento de hábitos + calculadora de proteína + test de calidad del sueño, directorio `/herramientas` + calculadora de prestaciones, pase UI/UX móvil completo —contraste AA, tap targets, inputs sin zoom iOS—, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`, estructura editorial en `content/guias/` con validación `guides:check`, cinco guías publicadas —inversión desde cero, interés compuesto, sueldo neto 2027, grasa corporal y prestaciones laborales—, índice editorial con destacada + archivo paginado, barra de progreso de lectura global, red central de enlaces internos, tests de cálculo 51/51 con `node:test` y CI en GitHub Actions, páginas de metodología y accesibilidad con fuentes y fecha de revisión, y backup local exportable/importable en «Mis datos»; skills `create-guide`/`guia-voz`/`humanizer`)
