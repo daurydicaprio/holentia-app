@@ -14,7 +14,7 @@
 - [x] Transparencia (BR/BT): `lib/rates.ts` como fuente única con vigencia/fuente/revisión, nota en las **17 herramientas financieras**, páginas `/metodologia` y `/accesibilidad`, enlaces en footer/home y `docs/rates.md`.
 - [x] Tests (BS/BS2): **51/51** con `node:test` y CI en GitHub Actions; cubren sueldo, aguinaldo, ITBIS, prestaciones, préstamo, interés compuesto, IMC, grasa, calorías y backup local.
 - [x] Vercel `holentia-app` Node 22.x, env vacío, `dev.holentia.com → dev`, `holentia.com → main` — **`main` solo se sincroniza con `dev` cuando el usuario lo aprueba**.
-- [x] **Producción (sin cambios desde 22-Oct-2026)**: `main` en `f628837` (código de producción `2761175`, Next **15.5.28**); `holentia.com/guias/prestaciones-laborales-rd` responde **200** y sigue en sitemap, `llms.txt` e índice. CI de `main` en verde. `dev` va por delante con BO/BR/BT/BS2/BV y se verificó con build de **114 páginas**.
+- [x] **Producción (sin cambios desde 22-Oct-2026)**: `main` y `dev` sincronizados; producción desplegada desde `28bd01e` (Next **15.5.28**); `holentia.com/guias/prestaciones-laborales-rd` responde **200** y sigue en sitemap, `llms.txt` e índice. CI de `main` en verde. Incluye BO/BR/BT/BS2/BV y el glosario de 80 términos, con build de **114 páginas**.
 - [x] **Verificación (24-Oct-2026)**: `pnpm test` 51/51, `tsc`, `lint`, `links:check` 35/35, `guides:check` 5/5, build 114 páginas, `audit:seo` **55/55** y `audit --prod` 0.
 - [x] **BV (24-Oct-2026)**: página `/mis-datos` con exportación JSON de claves `holentia:*` e importación validada (5 MB, merge seguro), enlaces en footer/home, privacidad actualizada y tests. Sin backend ni claves nuevas.
 - [ ] **Panel de progreso (BV+)**: pendiente de decisión; no entra en esta entrega.
