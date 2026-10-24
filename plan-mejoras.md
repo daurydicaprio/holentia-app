@@ -1,15 +1,15 @@
 # HOLENTIA — Plan de mejoras 2.0
 
-> Fecha: 20-Oct-2026 · Actualizado: 22-Oct-2026
-> Estado: propuesta en ejecución. BQ, BU, BN, BP y BS completas. Los cambios nuevos van por `dev`; `main` solo se toca con aprobación explícita.
-> Base inicial: `448c529`; estado actual: `main` y `dev` en `2761175`. 35 herramientas, 52 URLs, 48 rutas OG y 5 guías publicadas.
+> Fecha: 20-Oct-2026 · Actualizado: 24-Oct-2026
+> Estado: propuesta en ejecución. BO, BR, BT y BS2 completas sobre `dev`; `main` sigue en `2761175` y solo se toca con aprobación explícita.
+> Base inicial: `448c529`; `main` en `2761175`; `dev` en `61d5c48` + BS2. 35 herramientas, 54 URLs, 50 rutas OG y 5 guías publicadas.
 > Principios: local-first, sin tracking, server-first, español (es-DO) y documentación en el mismo commit.
 >
-> **Estado de ejecución (22-Oct-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); `/guias` con destacada + 3 recientes + archivo paginado; sitemap de 52 URLs, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` 52/52 y build de 108 páginas; red central de enlaces internos (`links:check` 35/35), 22 tests de cálculo y CI en GitHub Actions. Producción en `2761175` (con Next 15.5.28): la guía de prestaciones responde 200 y ya está en sitemap, `llms.txt` e índice; CI de `main` en verde. Search Console/Bing verificados e indexación de la guía solicitada por el autor.
+> **Estado de ejecución (24-Oct-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); sitemap de **54 URLs**, **50 OG**, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` **54/54** y build de **112 páginas**. `links:check` 35/35, **45 tests** de cálculo y CI en GitHub Actions. BO (gráficos), BR (tasas), BT (metodología/accesibilidad) y BS2 (préstamo, interés compuesto, IMC, grasa y calorías) están en `dev`; producción sigue en `2761175` con Next 15.5.28 y `main` verde. Search Console/Bing verificados.
 >
-> **Cerrado:** BN (dependencias/baseline), BP (red de enlaces), BS (tests núcleo + CI), BO (a11y de gráficos), BR (tasas centralizadas) y BT (metodología/accesibilidad). **En curso:** BS2 (tests de préstamo, interés compuesto, IMC, grasa y calorías). **Pendiente:** BV+ (producto local-first) y decisión de alcance.
+> **Cerrado:** BN (dependencias/baseline), BP (red de enlaces), BS (tests núcleo + CI), BO (a11y de gráficos), BR (tasas centralizadas), BT (metodología/accesibilidad) y BS2 (tests ampliados). **Pendiente:** BV+ (producto local-first) y decisión de alcance.
 
-## 0. Checklist de ejecución (22-Oct-2026)
+## 0. Checklist de ejecución (24-Oct-2026)
 
 - [x] ~~BQ — Estructura de guías en Markdown~~
 - [x] ~~BU — Primeras guías publicadas (5)~~
@@ -19,6 +19,7 @@
 - [x] ~~BP — Red de enlaces internos 2.0~~
 - [x] ~~BR — Tasas centralizadas y fechas de revisión~~
 - [x] ~~BS — Tests de cálculo núcleo + CI~~
+- [x] ~~BS2 — Tests de préstamo, interés compuesto, IMC, grasa y calorías~~
 - [x] ~~BT — Metodología/fuentes y accesibilidad~~
 - [ ] BV+ — Producto local-first (decisión pendiente)
 
@@ -27,7 +28,7 @@
 ### Fortalezas
 
 - Producto completo: 35 herramientas activas, 0 «Próximamente», 4 hubs y directorio.
-- SEO/GEO técnico sólido: auditoría 52/52, FAQ y JSON-LD en SSR, OG por ruta, `llms.txt`, sitemap y `robots` con bots de IA.
+- SEO/GEO técnico sólido: auditoría **54/54**, FAQ y JSON-LD en SSR, OG por ruta, `llms.txt`, sitemap y `robots` con bots de IA.
 - Accesibilidad por encima de la media: axe limpio, teclado, foco, contraste y `prefers-reduced-motion`.
 - Producción desplegada y verificada; el problema de deploy de la Fase BL quedó resuelto.
 - Search Console ya conectado. Aún sin datos: las primeras fases no dependen de métricas.
@@ -184,7 +185,7 @@ Aceptación:
 - [x] `pnpm test` 22/22 y CI preparada para `dev`/`main`.
 - [x] `tsc`, `lint`, `build` (108 páginas), `links:check` 35/35, `audit:seo` 52/52 y `audit --prod` 0.
 
-**Siguiente iteración (no incluida aquí):** ampliar la cobertura a préstamo, interés compuesto, IMC, grasa corporal y calorías. Hoy esos cálculos siguen verificados de forma manual; no se tocaron para no mezclar refactors grandes con esta fase.
+**Siguiente iteración:** completada en BS2 (24-Oct-2026): préstamo, interés compuesto, IMC, grasa corporal y calorías ya tienen módulos puros y tests.
 
 ### Fase BT — Metodología/fuentes y accesibilidad — HECHA (23-Oct-2026)
 
@@ -201,6 +202,22 @@ Aceptación:
 - [x] Ambas páginas publicadas y enlazadas desde el HTML inicial.
 - [x] `audit:seo` 54/54 PASS, 0 FAIL, 0 WARN; OG runtime 200 image/png.
 - [x] Guías y herramientas pueden enlazar a metodología/fuentes; `RatesNote` ya lo hace en cada calculadora financiera.
+
+### Fase BS2 — Tests de préstamo, interés compuesto, IMC, grasa y calorías — HECHA (24-Oct-2026)
+
+**Objetivo:** ampliar la red de seguridad a las fórmulas que quedaron fuera de BS sin cambiar el comportamiento visible.
+
+Tareas:
+- [x] Extraer a `lib/calculations/` las fórmulas puras de préstamo (`loan.ts`), interés compuesto (`compound.ts`), IMC (`bmi.ts`), grasa corporal US Navy (`body-fat.ts`) y calorías Mifflin-St Jeor (`calories.ts`).
+- [x] Los hooks/componentes importan esos módulos; se conservaron las mismas fórmulas, redondeos, validaciones y textos.
+- [x] Tests nuevos con `node:test`: cuota francesa y tabla de amortización, simulaciones mensual/anual y resumen con inflación, IMC, grasa hombre/mujer y calorías por objetivo.
+- [x] Casos de borde: tasa 0%, tabla que cierra en cero, sin años, entradas inválidas y déficit que no baja del metabolismo basal.
+- [x] CI existente ejecuta `tests/*.test.mjs` sin cambios.
+
+Aceptación:
+- [x] `pnpm test` **45/45** en verde (25 anteriores + 20 nuevos).
+- [x] `tsc`, `lint` y build **112 páginas** sin errores.
+- [x] Los resultados de las calculadoras no cambian: solo se movió la fórmula a un módulo testeable.
 
 ### Fase BU — Primeras guías publicadas
 

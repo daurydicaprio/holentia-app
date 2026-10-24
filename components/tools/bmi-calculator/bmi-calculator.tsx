@@ -14,6 +14,7 @@ import {
 import { useCountUp } from "@/hooks/use-count-up"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
+import { calculateBmi } from "@/lib/calculations/bmi"
 
 // Calculadora de IMC: peso ÷ estatura² (m).
 // Bandas OMS para adultos: <18.5 bajo peso · 18.5–24.9 normal · 25–29.9
@@ -145,8 +146,9 @@ export function BmiCalculator() {
     if (!Number.isFinite(w) || w <= 0 || !Number.isFinite(h) || h <= 0) return null
     const wKg = unit === "kg" ? w : w * KG_PER_LB
     if (wKg < 20 || wKg > 400 || h < 100 || h > 250) return null
-    const meters = h / 100
-    return { wKg, h, bmi: Math.round((wKg / (meters * meters)) * 10) / 10 }
+    const bmi = calculateBmi(wKg, h)
+    if (bmi === null) return null
+    return { wKg, h, bmi }
   }, [weight, height, unit])
 
   const hasBoth = Number.parseFloat(weight) > 0 && Number.parseFloat(height) > 0

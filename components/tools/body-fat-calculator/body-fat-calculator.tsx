@@ -12,6 +12,7 @@ import {
 import { useCountUp } from "@/hooks/use-count-up"
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { draftKey, storageGet, storageRemove, storageSet } from "@/lib/storage"
+import { calculateBodyFat, type Sex } from "@/lib/calculations/body-fat"
 
 // Calculadora de grasa corporal: método US Navy (densidad corporal) con
 // medidas en centímetros y conversión a % de grasa con la ecuación de Siri.
@@ -23,7 +24,6 @@ const DRAFT_KEY = draftKey("calculadora-grasa-corporal")
 const LB_PER_KG = 2.2046226218
 const KG_PER_LB = 1 / LB_PER_KG
 
-type Sex = "male" | "female"
 type WeightUnit = "kg" | "lb"
 type BandId = "very-low" | "essential" | "athletic" | "fitness" | "average" | "high"
 
@@ -242,14 +242,14 @@ export function BodyFatCalculator() {
     if (sex === "male" && waistCm <= n) return null
     if (sex === "female" && waistCm + hipCm <= n) return null
 
-    const density =
-      sex === "male"
-        ? 1.0324 - 0.19077 * Math.log10(waistCm - n) + 0.15456 * Math.log10(h)
-        : 1.29579 - 0.35004 * Math.log10(waistCm + hipCm - n) + 0.221 * Math.log10(h)
-
-    if (!Number.isFinite(density) || density <= 0) return null
-    const bodyFat = 495 / density - 450
-    if (!Number.isFinite(bodyFat) || bodyFat < 1 || bodyFat > 70) return null
+    const bodyFat = calculateBodyFat({
+      sex,
+      heightCm: h,
+      neckCm: n,
+      waistCm,
+      hipCm: sex === "female" ? hipCm : undefined,
+    })
+    if (bodyFat === null) return null
 
     const fatMass = wKg * (bodyFat / 100)
     const roundedBodyFat = Math.round(bodyFat * 10) / 10

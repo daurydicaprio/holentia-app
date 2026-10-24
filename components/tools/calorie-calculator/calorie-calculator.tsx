@@ -6,6 +6,7 @@ import { ArrowRight, Flame, Trash2, Info, Minus, Equal, Plus, Salad, Footprints,
 import { useHapticFeedback } from "@/hooks/use-haptic-feedback"
 import { useCountUp } from "@/hooks/use-count-up"
 import { getProteinProfile } from "@/lib/protein"
+import { calculateCalories } from "@/lib/calculations/calories"
 import { draftKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 
 // Mifflin-St Jeor + factor de actividad. Estimación educativa, no plan médico.
@@ -91,19 +92,15 @@ export function CalorieCalculator() {
     const h = Number.parseFloat(height)
     const a = Number.parseFloat(age)
     if (isNaN(w) || w <= 0 || isNaN(h) || h <= 0 || isNaN(a) || a <= 0) return null
-    const bmr = 10 * w + 6.25 * h - 5 * a + (sex === "male" ? 5 : -161)
-    const tdee = Math.round(bmr * (ACTIVITY[activity]?.factor ?? 1.55))
     // Bajar grasa: déficit moderado −20% (≈ −500 kcal/día → ~0.5 kg/semana, ACSM),
-    // nunca por debajo del metabolismo base.
-    // Subir músculo: superávit ligero +10% (ISSN: excedentes grandes solo suman grasa).
-    // Son porcentajes distintos a propósito: perder y ganar no son simétricos.
-    return {
-      bmr: Math.round(bmr),
+    // nunca por debajo del metabolismo base. Subir: superávit ligero +10%.
+    return calculateCalories({
       weightKg: w,
-      lose: Math.max(Math.round(tdee * 0.8), Math.round(bmr)),
-      maintain: tdee,
-      gain: Math.round(tdee * 1.1),
-    }
+      heightCm: h,
+      age: a,
+      sex: sex === "male" ? "male" : "female",
+      activityFactor: ACTIVITY[activity]?.factor ?? 1.55,
+    })
   }, [weight, height, age, sex, activity])
 
   // Rango de proteína orientativo según el objetivo y el contexto. La lógica de

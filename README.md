@@ -210,7 +210,7 @@ pnpm install
 # Ejecutar en modo desarrollo
 pnpm dev
 
-# Tests de cálculo (node:test: sueldo neto, aguinaldo, ITBIS y prestaciones)
+# Tests de cálculo (node:test: sueldo, aguinaldo, ITBIS, prestaciones, préstamo, interés compuesto, IMC, grasa y calorías)
 pnpm test
 
 # Lint (ESLint, .eslintrc.json con next/core-web-vitals)
@@ -258,4 +258,4 @@ Este proyecto es propiedad de Daury DiCaprio. Todos los derechos reservados.
 
 ---
 
-**Última actualización**: Octubre 2026 (35 herramientas y 54 URLs, calculadora de grasa corporal + planificador de comidas + rutinas HIIT + seguimiento de hábitos + calculadora de proteína + test de calidad del sueño, directorio `/herramientas` + calculadora de prestaciones, pase UI/UX móvil completo —contraste AA, tap targets, inputs sin zoom iOS—, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`, estructura editorial en `content/guias/` con validación `guides:check`, cinco guías publicadas —inversión desde cero, interés compuesto, sueldo neto 2027, grasa corporal y prestaciones laborales—, índice editorial con destacada + archivo paginado, barra de progreso de lectura global, red central de enlaces internos, tests de cálculo 25/25 con `node:test` y CI en GitHub Actions, páginas de metodología y accesibilidad con fuentes y fecha de revisión, y skills `create-guide`/`guia-voz`/`humanizer`)
+**Última actualización**: Octubre 2026 (35 herramientas y 54 URLs, calculadora de grasa corporal + planificador de comidas + rutinas HIIT + seguimiento de hábitos + calculadora de proteína + test de calidad del sueño, directorio `/herramientas` + calculadora de prestaciones, pase UI/UX móvil completo —contraste AA, tap targets, inputs sin zoom iOS—, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`, estructura editorial en `content/guias/` con validación `guides:check`, cinco guías publicadas —inversión desde cero, interés compuesto, sueldo neto 2027, grasa corporal y prestaciones laborales—, índice editorial con destacada + archivo paginado, barra de progreso de lectura global, red central de enlaces internos, tests de cálculo 45/45 con `node:test` y CI en GitHub Actions, páginas de metodología y accesibilidad con fuentes y fecha de revisión, y skills `create-guide`/`guia-voz`/`humanizer`)

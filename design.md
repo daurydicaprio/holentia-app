@@ -174,9 +174,9 @@ Regla derivada del hueco de la calculadora de proteína: la columna izquierda (f
 - **Validación**: `pnpm links:check` comprueba 35 herramientas, 2–3 salientes, ≥2 entrantes, destinos existentes, cero autorreferencias y que `app/{slug}/page.tsx` exista.
 - **Cobertura**: mente (diario ↔ hábitos ↔ respiración ↔ ansiedad ↔ sueño), relaciones (lenguajes ↔ apego ↔ preguntas ↔ diario de pareja), cuerpo (calorías ↔ proteína ↔ IMC ↔ grasa ↔ pasos ↔ hidratación ↔ HIIT ↔ comidas) y finanzas (sueldo ↔ prestaciones ↔ aguinaldo ↔ presupuesto ↔ ahorro ↔ inversión ↔ deuda ↔ compras ↔ servicios).
 
-### 4c. Páginas básicas (home, ayuda, apoyar, legales, qué-es) — monocromo de marca
+### 4c. Páginas básicas (home, ayuda, apoyar, legales, qué-es, metodología, accesibilidad) — monocromo de marca
 
-La marca HOLENTIA es **monocroma** (logo negro/blanco, OG `#121212` + blanco). Las páginas genéricas NO usan colores de sección ni degradados: su acento es el motivo de los **4 puntos** (`components/common/brand-dots`, los mismos de la imagen OG) bajo el logo. Recetas:
+La marca HOLENTIA es **monocroma** (logo negro/blanco, OG `#121212` + blanco). Las páginas genéricas NO usan colores de sección ni degradados: su acento es el motivo de los **4 puntos** (`components/common/brand-dots`, los mismos de la imagen OG) bajo el logo. `/metodologia` y `/accesibilidad` siguen esta receta y añaden tablas con scroll horizontal y enlaces a fuentes. Recetas:
 
 - **Favicon/PWA**: `app/icon.svg` es un cuadrado redondeado `#121212` con una H geométrica blanca; en `prefers-color-scheme: dark` invierte a fondo claro y H negra. `app/apple-icon.png` (180×180) y `public/icon-{192,512}.png` + `icon-512-maskable.png` se generan desde la misma marca con Sharp. Trazo grueso y sin texto: legible a 16 px.
 - **Superficie**: `border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900`; interactiva + `hover:border-gray-300 dark:hover:border-gray-600`. Radios: tarjeta `rounded-2xl`, mini `rounded-xl`, control `rounded-md`.

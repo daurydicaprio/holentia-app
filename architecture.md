@@ -71,7 +71,7 @@ components/
   seo/         og-template (plantilla compartida de las imágenes OG)
   ui/          primitivas shadcn (button, count-up, input, slider)
 hooks/         lógica por herramienta + use-count-up, use-haptic-feedback, use-media-query
-lib/           data.ts (catálogo), rates.ts (tasas/fuentes), seo.ts, guides.ts (lectura/parseo), guide-format.ts, storage.ts, protein.ts (perfiles/rangos), format.ts (formatDOP), calculations/ (fórmulas puras), utils.ts
+lib/           data.ts (catálogo), rates.ts (tasas/fuentes), seo.ts, guides.ts (lectura/parseo), guide-format.ts, storage.ts, protein.ts (perfiles/rangos), format.ts (formatDOP), calculations/ (fórmulas puras: sueldo, aguinaldo, ITBIS, prestaciones, préstamo, interés compuesto, IMC, grasa y calorías), utils.ts
 content/guias/ guías editoriales en Markdown + briefs + plantilla (validación `guides:check`)
 scripts/       audit-seo.mjs, validate-guides.mjs
 types/         index.ts (CardData, SectionType, AmortizationRow, …), guide.ts

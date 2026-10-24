@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react"
 import { simulationsKey, storageGet, storageSet, storageRemove } from "@/lib/storage"
 import { formatDOP } from "@/lib/format"
-import type { AmortizationRow } from "@/types"
+import { calculateMonthlyPayment, generateAmortizationTable } from "@/lib/calculations/loan"
 
 // Tipos para las simulaciones guardadas
 export interface LoanSimulation {
@@ -44,57 +44,6 @@ export function useLoanCalculator() {
 
   // Función para formatear moneda
   const formatCurrency = useCallback((value: number): string => formatDOP(value), [])
-
-  // Función para calcular la cuota mensual
-  const calculateMonthlyPayment = (loanAmount: number, interestRate: number, loanTerm: number): number => {
-    // Tasa de interés mensual (anual dividida por 12)
-    const monthlyInterestRate = interestRate / 100 / 12
-
-    // Fórmula para calcular la cuota mensual
-    if (monthlyInterestRate === 0) {
-      return loanAmount / loanTerm
-    }
-
-    return (
-      (loanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, loanTerm)) /
-      (Math.pow(1 + monthlyInterestRate, loanTerm) - 1)
-    )
-  }
-
-  // Función para generar la tabla de amortización
-  const generateAmortizationTable = (loanAmount: number, interestRate: number, loanTerm: number) => {
-    const monthlyPayment = calculateMonthlyPayment(loanAmount, interestRate, loanTerm)
-    let remainingBalance = loanAmount
-    const monthlyInterestRate = interestRate / 100 / 12
-    const amortizationData: AmortizationRow[] = []
-
-    for (let month = 1; month <= loanTerm; month++) {
-      // Calcular el interés mensual
-      const interestPayment = remainingBalance * monthlyInterestRate
-
-      // Calcular el pago al capital
-      const principalPayment = monthlyPayment - interestPayment
-
-      // Calcular el nuevo saldo
-      const initialBalance = remainingBalance
-      remainingBalance -= principalPayment
-
-      // Agregar datos a la tabla
-      amortizationData.push({
-        month,
-        initialBalance,
-        payment: monthlyPayment,
-        interest: interestPayment,
-        principal: principalPayment,
-        remainingBalance: Math.max(0, remainingBalance),
-      })
-    }
-
-    return {
-      monthlyPayment,
-      amortizationData,
-    }
-  }
 
   // Función para guardar una simulación
   const saveSimulation = (loanAmount: number, interestRate: number, loanTerm: number) => {
