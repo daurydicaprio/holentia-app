@@ -7,7 +7,7 @@
 >
 > **Estado de ejecución (22-Oct-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); `/guias` con destacada + 3 recientes + archivo paginado; sitemap de 52 URLs, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` 52/52 y build de 108 páginas; red central de enlaces internos (`links:check` 35/35), 22 tests de cálculo y CI en GitHub Actions. Producción en `2761175` (con Next 15.5.28): la guía de prestaciones responde 200 y ya está en sitemap, `llms.txt` e índice; CI de `main` en verde. Search Console/Bing verificados e indexación de la guía solicitada por el autor.
 >
-> **Cerrado:** BN (dependencias/baseline), BP (red de enlaces), BS (tests núcleo + CI), BO (a11y de gráficos) y BR (tasas centralizadas). **En curso:** BT (metodología/accesibilidad). **Pendiente:** BV+ (producto local-first) y ampliar tests a préstamo, interés compuesto, IMC, grasa y calorías.
+> **Cerrado:** BN (dependencias/baseline), BP (red de enlaces), BS (tests núcleo + CI), BO (a11y de gráficos), BR (tasas centralizadas) y BT (metodología/accesibilidad). **En curso:** BS2 (tests de préstamo, interés compuesto, IMC, grasa y calorías). **Pendiente:** BV+ (producto local-first) y decisión de alcance.
 
 ## 0. Checklist de ejecución (22-Oct-2026)
 
@@ -19,7 +19,7 @@
 - [x] ~~BP — Red de enlaces internos 2.0~~
 - [x] ~~BR — Tasas centralizadas y fechas de revisión~~
 - [x] ~~BS — Tests de cálculo núcleo + CI~~
-- [ ] BT — Metodología/fuentes y accesibilidad
+- [x] ~~BT — Metodología/fuentes y accesibilidad~~
 - [ ] BV+ — Producto local-first (decisión pendiente)
 
 ## 1. Diagnóstico
@@ -186,20 +186,21 @@ Aceptación:
 
 **Siguiente iteración (no incluida aquí):** ampliar la cobertura a préstamo, interés compuesto, IMC, grasa corporal y calorías. Hoy esos cálculos siguen verificados de forma manual; no se tocaron para no mezclar refactors grandes con esta fase.
 
-### Fase BT — Metodología/fuentes y accesibilidad
+### Fase BT — Metodología/fuentes y accesibilidad — HECHA (23-Oct-2026)
 
 **Objetivo:** dar transparencia y un lugar canónico para las fuentes.
 
 Tareas:
-- Página `/metodologia`: cómo se eligen fórmulas, fuentes, fecha de revisión, límites y política editorial.
-- Página `/accesibilidad`: conformidad, limitaciones conocidas y contacto.
-- Enlaces en footer, home y páginas relacionadas.
-- OG, sitemap, `llms.txt` y auditoría actualizados.
+- [x] `/metodologia`: criterios de elección de fórmulas, tabla de tasas vigentes leída de `lib/rates.ts`, vigencias, fuentes enlazadas, revisión, límites y política editorial.
+- [x] `/accesibilidad`: compromiso, teclado/foco, contraste, áreas táctiles, alternativa textual de los gráficos, limitaciones conocidas y contacto.
+- [x] Enlaces en footer, home, `RatesNote` de las 17 herramientas financieras y entre ambas páginas.
+- [x] OG propio por ruta, sitemap (54 URLs), `llms.txt` y `audit-seo` con las nuevas rutas en `NON_TOOL` (AboutPage + BreadcrumbList).
+- [x] Sin red en runtime: las fuentes son enlaces estáticos y las tasas se leen del archivo central.
 
 Aceptación:
-- Ambas páginas publicadas y enlazadas.
-- Auditoría con las nuevas URLs en verde.
-- Las guías y herramientas pueden enlazar a metodología/fuentes.
+- [x] Ambas páginas publicadas y enlazadas desde el HTML inicial.
+- [x] `audit:seo` 54/54 PASS, 0 FAIL, 0 WARN; OG runtime 200 image/png.
+- [x] Guías y herramientas pueden enlazar a metodología/fuentes; `RatesNote` ya lo hace en cada calculadora financiera.
 
 ### Fase BU — Primeras guías publicadas
 

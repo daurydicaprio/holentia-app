@@ -39,8 +39,8 @@ Regla: nada de `useEffect`/`mounted` guard para decidir si se renderiza contenid
 - **Metadata**: `lib/seo.ts` expone `toolMetadata`, `sectionMetadata`, `pageMetadata` (construyen title + description + canonical + OG + Twitter). `app/layout.tsx` pone `metadataBase`, `title.template` ("{página} | HOLENTIA") y `viewport`.
 - **JSON-LD**: `toolJsonLd` (WebApplication + BreadcrumbList + FAQPage), `sectionJsonLd` (CollectionPage + BreadcrumbList), home (WebSite + Organization), `/ayuda` (FAQPage). Se emite vía `<JsonLd>` (script `application/ld+json`).
 - **FAQ visible**: cada herramienta renderiza su FAQ en el HTML (acordeón, pero el texto está en el DOM) y `/ayuda`. Los hubs de sección **no** llevan FAQ (corrección 14-Oct-2026).
-- **Indexación**: `app/sitemap.ts` (52 URLs: home + 4 secciones + directorio + 35 herramientas + 5 informativas + `/guias` + 5 guías publicadas), `app/robots.ts` (allow all + sitemap), `public/llms.txt` (índice legible por LLMs, incluye guías publicadas).
-- **Imágenes sociales**: `app/{ruta}/opengraph-image.tsx` por ruta (48: raíz + 4 hubs + directorio + 35 herramientas + 5 informativas + índice de guías + OG dinámica por guía) sobre `components/seo/og-template.tsx`; la convención **no hereda**, cada ruta nueva necesita su OG propia. `app/manifest.ts` (PWA: iconos 192/512/maskable, themeColor claro/oscuro).
+- **Indexación**: `app/sitemap.ts` (54 URLs: home + 4 secciones + directorio + 35 herramientas + 7 informativas + `/guias` + 5 guías publicadas), `app/robots.ts` (allow all + sitemap), `public/llms.txt` (índice legible por LLMs, incluye guías publicadas).
+- **Imágenes sociales**: `app/{ruta}/opengraph-image.tsx` por ruta (50: raíz + 4 hubs + directorio + 35 herramientas + 7 informativas + índice de guías + OG dinámica por guía) sobre `components/seo/og-template.tsx`; la convención **no hereda**, cada ruta nueva necesita su OG propia. `app/manifest.ts` (PWA: iconos 192/512/maskable, themeColor claro/oscuro).
 - **Auditoría**: checklist de 16 puntos, barrido estático + runtime de OG y registro histórico en la skill `seo-geo-audit` (obligatoria antes de push con rutas nuevas).
 - El breadcrumb **no se muestra al usuario**; solo existe como `BreadcrumbList` en JSON-LD.
 
@@ -59,7 +59,7 @@ Regla: nada de `useEffect`/`mounted` guard para decidir si se renderiza contenid
 ## 6. Estructura de directorios
 
 ```
-app/           páginas (server-first): 4 hubs, 35 herramientas, directorio, 5 informativas, guías `/guias`, layout, error, manifest, sitemap, robots + OG por ruta
+app/           páginas (server-first): 4 hubs, 35 herramientas, directorio, 7 informativas, guías `/guias`, layout, error, manifest, sitemap, robots + OG por ruta
 components/
   common/      header, footer, logo, brand-dots, menu-button, scroll-to-top, clear-all-data, tab-swipe-navigation
   guides/      guide-card, guide-markdown (react-markdown server), guide-tool-links

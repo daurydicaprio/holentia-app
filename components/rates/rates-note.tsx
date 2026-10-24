@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { CalendarDays } from "lucide-react"
 import { RATE_GROUPS_BY_TOOL, RATE_META, REVIEWED_AT, formatRateDate } from "@/lib/rates"
 
@@ -45,6 +46,15 @@ export function RatesNote({ slug }: RatesNoteProps) {
           </span>
         ))}
         .
+      </p>
+      <p className="mt-1 pl-[1.375rem]">
+        <Link
+          href="/metodologia"
+          data-interactive="true"
+          className="underline decoration-gray-300 underline-offset-2 hover:text-finanzas-dark dark:decoration-gray-600 dark:hover:text-finanzas-light"
+        >
+          Ver metodología y fuentes
+        </Link>
       </p>
     </aside>
   )

@@ -4,7 +4,7 @@ import { getPublishedGuides } from "@/lib/guides"
 import { SITE_URL } from "@/lib/seo"
 
 // Fecha de última actualización real del contenido. Actualizar a mano al publicar cambios de contenido.
-const LAST_UPDATED = new Date("2026-10-21")
+const LAST_UPDATED = new Date("2026-10-23")
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -14,6 +14,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/cuerpo`, lastModified: LAST_UPDATED, changeFrequency: "weekly", priority: 0.8 },
     { url: `${SITE_URL}/finanzas`, lastModified: LAST_UPDATED, changeFrequency: "weekly", priority: 0.8 },
     { url: `${SITE_URL}/herramientas`, lastModified: LAST_UPDATED, changeFrequency: "weekly", priority: 0.6 },
+    { url: `${SITE_URL}/metodologia`, lastModified: LAST_UPDATED, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${SITE_URL}/accesibilidad`, lastModified: LAST_UPDATED, changeFrequency: "monthly", priority: 0.4 },
     { url: `${SITE_URL}/que-es-holentia`, lastModified: LAST_UPDATED, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE_URL}/ayuda`, lastModified: LAST_UPDATED, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE_URL}/apoyar`, lastModified: LAST_UPDATED, changeFrequency: "monthly", priority: 0.4 },

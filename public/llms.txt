@@ -4,9 +4,9 @@
 > Calculadoras, simuladores y tests que funcionan directamente en el navegador del usuario,
 > sin cuenta, sin registro y sin enviar datos a servidores.
 
-Las 35 herramientas son siempre gratuitas. Todas las fórmulas están documentadas en la página
-de cada herramienta, y los resultados son estimaciones educativas, no asesoramiento profesional
-(médico, financiero ni psicológico).
+Las 35 herramientas son siempre gratuitas. La metodología, las fuentes y las fechas de revisión
+están documentadas en [Metodología y fuentes](https://holentia.com/metodologia). Los resultados son
+estimaciones educativas, no asesoramiento profesional (médico, financiero ni psicológico).
 
 ## Secciones
 
@@ -71,6 +71,8 @@ de cada herramienta, y los resultados son estimaciones educativas, no asesoramie
 
 ## Páginas informativas
 
+- [Metodología y fuentes](https://holentia.com/metodologia): cómo se eligen las fórmulas, fuentes oficiales, tasas vigentes, fecha de revisión y límites de cada cálculo.
+- [Accesibilidad](https://holentia.com/accesibilidad): teclado, lectores de pantalla, contraste, alternativas a los gráficos y limitaciones conocidas.
 - [Qué es HOLENTIA](https://holentia.com/que-es-holentia)
 - [Centro de ayuda](https://holentia.com/ayuda)
 - [Apoyar el proyecto](https://holentia.com/apoyar)

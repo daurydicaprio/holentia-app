@@ -29,7 +29,7 @@ Reglas de referencia (SSOT): skill `seo-geo` §1–5. Esta skill es el **procedi
 | 8 | JSON-LD | los 3 tipos presentes: WebApplication + BreadcrumbList + FAQPage | HTML |
 | 9 | FAQ | 5–6 preguntas **visibles en el HTML inicial**; incluye la de privacidad con la clave `holentia:` real | `app/{slug}/page.tsx` |
 | 10 | `llms.txt` | línea `- [Nombre](https://holentia.com/{slug}): …` + recuento del header coherente | `public/llms.txt` |
-| 11 | Sitemap | `<loc>` presente; total = 5 informativas + 4 secciones + directorio + n herramientas | `sitemap.xml.body` |
+| 11 | Sitemap | `<loc>` presente; total = 7 informativas + 4 secciones + directorio + n herramientas | `sitemap.xml.body` |
 | 12 | Hub | tarjeta visible y enlazada en la sección correcta | `app/{seccion}.html` |
 | 13 | `noindex` | 0 apariciones (salvo `_not-found`, que lo lleva a propósito) | HTML |
 | 14 | Persistencia (si aplica) | clave en la tabla de `politica-cookies` + botón «Borrar mis datos» + FAQ de privacidad coherente | `app/politica-cookies/page.tsx` |
@@ -98,10 +98,10 @@ grep -l 'noindex' .next/server/app/*.html | grep -v '_not-found' || echo "ningun
 for s in $slugs; do [ -f "app/$s/opengraph-image.tsx" ] || echo "FALTA $s"; done
 # new Date() prohibido en estáticas (debe salir vacío)
 grep -n 'new Date()' app/sitemap.ts app/layout.tsx || echo "ninguno"
-# Total sitemap = 10 + nº de herramientas (5 informativas + 4 hubs + directorio)
+# Total sitemap = 12 + nº de herramientas (7 informativas + 4 hubs + directorio)
 grep -c '<loc>' .next/server/app/sitemap.xml.body
 # Hubs + directorio + informativas + home: og:image y canonical presentes
-for r in index finanzas mente cuerpo relaciones herramientas ayuda apoyar aviso-legal politica-cookies que-es-holentia; do
+for r in index finanzas mente cuerpo relaciones herramientas ayuda apoyar aviso-legal politica-cookies que-es-holentia metodologia accesibilidad; do
   f=".next/server/app/$r.html"
   printf "%-22s og:%s canonical:%s\n" "$r" "$(grep -o 'property="og:image"' "$f" | wc -l | tr -d ' ')" "$(grep -o 'rel="canonical"' "$f" | wc -l | tr -d ' ')"
 done
@@ -187,6 +187,7 @@ Esperado: `og:200 image/png` en todas las herramientas. Comprobar también las n
 | 22-Oct-2026 | Guía pilar «Prestaciones laborales en RD» (5ª) + límites de la calculadora | ✅ PASS: `seoTitle` 48 ch · `<title>` final 59 ch · metaDescription 134 ch · H1 ×1 · canonical/OG/twitter propias · `Article` + `BreadcrumbList` + `FAQPage` (6 preguntas visibles) + `citation` (7 fuentes MT/Código/DGII/SIDEL) · foto local 1600×1000 (85 KB) con AVIF 384/1080/1920 px (3,6/11,8/22,9 KB) · `/guias` con 5 enlaces y 5 imágenes únicas (destacada nueva + 3 compactas + 1 en «Últimas guías», sin duplicados) · enlaces bidireccionales en prestaciones, sueldo neto y aguinaldo · ejemplos 30k/50k/80k al 30-Sep-2026 con divisor 23.83 · calculadora alineada: preaviso 6 meses = 7 días, cesantía 6 meses = 13 días, vacaciones 5 años = 18 días, tope de Navidad documentado y nota de dimisión justificada (arts. 97/101) · 19/19 casos de borde · `llms.txt` 6 líneas (índice + 5 guías) · sitemap 52 `<loc>` · 0 `noindex` · OG runtime `200 image/png` (37,9 KB) · `guides:check` 5/5 · `tsc` · `lint` · build 108 páginas · `audit:seo` 52/52 · 0 FAIL · 0 WARN | Ninguna |
 
 | 22-Oct-2026 | Cierre BN + BP + BS (dependencias, enlaces internos y tests) | ✅ PASS: `audit:seo` 52/52 · 0 FAIL · 0 WARN · `links:check` 35/35 (2–3 salientes, ≥2 entrantes) · `test` 22/22 · `tsc` · `lint` · `guides:check` 5/5 · build 108 páginas · `audit --prod` 0 · sitemap 52 `<loc>` · OG runtime 200 `image/png` | PSI pendiente: API pública devolvió 429; baseline de curl/build en `docs/performance-baseline.md` |
+| 23-Oct-2026 | Cierre BO + BR + BT (a11y de gráficos, tasas centralizadas y páginas de transparencia) | ✅ PASS: `audit:seo` **54/54** · 0 FAIL · 0 WARN · `links:check` 35/35 · `test` 25/25 · `tsc` · `lint` · `guides:check` 5/5 · build 110 páginas · sitemap 54 `<loc>` · OG runtime 200 `image/png` en las 54 rutas · nuevas `/metodologia` (description 138 ch, AboutPage + Breadcrumb) y `/accesibilidad` (139 ch, AboutPage + Breadcrumb) en `NON_TOOL` · 17/17 herramientas financieras con `RatesNote` y fecha 23-Oct-2026 · 4 canvas con `role="img"` + tabla plegable · `llms.txt` con ambas páginas · `lib/rates.ts` como fuente única | PSI sigue pendiente por cuota 429; sin axe/Playwright instalados en esta pasada (revisión estructural + build) |
 > Añadir una fila por auditoría (barrido completo o por herramienta). El registro vive aquí.
 
 ## 5. Errores frecuentes
