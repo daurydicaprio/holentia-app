@@ -1,4 +1,4 @@
-export type GlossaryCategoryId = "presupuesto" | "credito" | "tasas" | "inversion" | "economia"
+export type GlossaryCategoryId = "presupuesto" | "credito" | "tasas" | "inversion" | "economia" | "sistema"
 
 export interface GlossaryCategory {
   id: GlossaryCategoryId
@@ -20,6 +20,7 @@ export const GLOSSARY_CATEGORIES: GlossaryCategory[] = [
   { id: "tasas", label: "Intereses e inflación" },
   { id: "inversion", label: "Inversiones" },
   { id: "economia", label: "Economía personal" },
+  { id: "sistema", label: "Sistema financiero" },
 ]
 
 const terms: GlossaryTerm[] = [
@@ -351,6 +352,90 @@ const terms: GlossaryTerm[] = [
     definition:
       "Ganancia que no exige trabajo activo constante: intereses, dividendos, rentas. Se construye con ahorro e inversión a largo plazo.",
   },
+
+  // — Sistema financiero —
+  {
+    term: "BCRD (Banco Central de la República Dominicana)",
+    category: "sistema",
+    definition:
+      "Es el banco central del país. Se encarga de la política monetaria, de regular el sistema financiero y de facilitar los pagos entre entidades. No es un banco comercial: no abres una cuenta de ahorro ahí ni resuelve reclamos de clientes.",
+  },
+  {
+    term: "LBTR (Liquidación Bruta en Tiempo Real)",
+    category: "sistema",
+    definition:
+      "Sistema de pagos del Banco Central que liquida transferencias entre bancos, una por una y en tiempo real. Es rápido, pero no equivale a que el dinero esté disponible al instante en la cuenta destino: depende de horarios, validaciones y del proceso de cada entidad.",
+    example:
+      "Si haces una transferencia interbancaria un domingo, el banco puede recibirla, pero la liquidación final espera al siguiente día operativo.",
+  },
+  {
+    term: "24/7",
+    category: "sistema",
+    definition:
+      "Disponibilidad continua las 24 horas, los 7 días de la semana. En servicios financieros suele referirse a la app o al canal digital, no a que todas las operaciones se acrediten de inmediato.",
+    example:
+      "Puedes consultar tu saldo 24/7, pero un préstamo o una transferencia interbancaria puede procesarse solo en horario laboral.",
+  },
+  {
+    term: "Intermediación financiera",
+    category: "sistema",
+    definition:
+      "Actividad por la que una entidad capta recursos del público (ahorros, depósitos) y los presta a otras personas o empresas. El banco gana con la diferencia entre lo que paga por esos recursos y lo que cobra por el crédito.",
+    related: { slug: "calculadora-prestamo", label: "Ver el costo de un préstamo" },
+  },
+  {
+    term: "Activos financieros",
+    category: "sistema",
+    definition:
+      "Bienes y derechos con valor económico que tiene una entidad: efectivo en caja, inversiones, cartera de créditos, títulos y cuentas por cobrar. Son los recursos con los que opera y genera ingresos.",
+  },
+  {
+    term: "Crecimiento interanual",
+    category: "sistema",
+    definition:
+      "Comparación de un indicador económico con el mismo período del año anterior. Sirve para separar el crecimiento real del efecto estacional; un 12% interanual significa que el indicador subió 12% frente a hace un año.",
+    example:
+      "Si los activos de un banco pasaron de $100,000 a $112,000 entre diciembre de 2025 y diciembre de 2026, crecieron 12% interanual.",
+  },
+  {
+    term: "Patrimonio (de una entidad financiera)",
+    category: "sistema",
+    definition:
+      "Recursos propios de la entidad: capital aportado por los accionistas más reservas y utilidades acumuladas. Funciona como colchón para absorber pérdidas y respaldar la confianza de los depositantes.",
+  },
+  {
+    term: "ROE (Return on Equity / Rentabilidad Patrimonial)",
+    category: "sistema",
+    definition:
+      "Mide la ganancia neta en relación con el patrimonio: ganancia neta ÷ patrimonio × 100. Un ROE de 23.1% indica que por cada 100 de fondos propios se generaron 23.10 de ganancias en el período; es una señal de alta rentabilidad para los accionistas.",
+  },
+  {
+    term: "ROA (Return on Assets / Rentabilidad sobre Activos)",
+    category: "sistema",
+    definition:
+      "Mide cuán eficientemente una entidad usa sus activos para generar beneficios: ganancia neta ÷ activos totales × 100. Un ROA de 2.9% significa que por cada 100 de activos se generaron 2.90 de ganancia neta.",
+  },
+  {
+    term: "Morosidad",
+    category: "sistema",
+    definition:
+      "Porcentaje de la cartera de créditos que está en atraso o impago. Un 1.5% indica que de cada 100 pesos prestados, 1.50 están en problemas de pago: un riesgo de crédito bajo y saludable.",
+  },
+  {
+    term: "Solvencia regulatoria",
+    category: "sistema",
+    definition:
+      "Indicador de solidez que mide si el capital propio alcanza para absorber pérdidas imprevistas. La norma suele exigir un mínimo de 10% sobre los activos ponderados por riesgo; un 18.9% del sistema muestra un colchón amplio.",
+    example:
+      "Con 18.9% de solvencia, el sistema supera el mínimo de 10% y tiene margen para cubrir pérdidas antes de comprometer el capital.",
+  },
+  {
+    term: "SB (Superintendencia de Bancos)",
+    category: "sistema",
+    definition:
+      "Órgano regulador que supervisa a bancos, asociaciones de ahorro y préstamo y otras entidades del sistema financiero dominicano. Vigila el cumplimiento de las normas, la solidez y la transparencia; también recibe consultas y reclamos de usuarios.",
+  },
+
 ]
 
 /** Términos ordenados alfabéticamente (por categoría en la UI). */

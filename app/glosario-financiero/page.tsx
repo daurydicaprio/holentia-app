@@ -30,7 +30,7 @@ const faq: FaqItem[] = [
   {
     question: "¿Qué es el glosario financiero?",
     answer:
-      "Es una colección de términos clave del dinero —ahorro, crédito, intereses, fondos y bolsa— explicados en lenguaje sencillo con ejemplos concretos. Incluye productos como depósitos a plazo, ETFs y CETES, y está pensado para que entiendas los conceptos que aparecen en las calculadoras y simuladores de la sección de finanzas.",
+      "Es una colección de términos clave del dinero —ahorro, crédito, intereses, fondos, bolsa y sistema financiero— explicados en lenguaje sencillo con ejemplos concretos. Incluye productos como depósitos a plazo, ETFs y CETES, y está pensado para que entiendas los conceptos que aparecen en las calculadoras y simuladores de la sección de finanzas.",
   },
   {
     question: "¿Por qué conviene entender estos términos?",
@@ -45,7 +45,7 @@ const faq: FaqItem[] = [
   {
     question: "¿Estos términos aplican en República Dominicana?",
     answer:
-      "Sí. Los conceptos son universales: lo que cambia de país en país son las siglas, los impuestos o las instituciones (por ejemplo, los reportes crediticios). Cuando hace falta una moneda de referencia, los ejemplos usan pesos dominicanos (DOP).",
+      "Sí. Los conceptos son universales: lo que cambia de país en país son las siglas, los impuestos o las instituciones (por ejemplo, el BCRD, la Superintendencia de Bancos o los reportes crediticios). Cuando hace falta una moneda de referencia, los ejemplos usan pesos dominicanos (DOP).",
   },
   {
     question: "¿Guardan ustedes mis datos?",

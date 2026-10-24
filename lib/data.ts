@@ -362,13 +362,13 @@ export const sectionsData: Record<string, SectionData> = {
       {
         id: "glosario-financiero",
         title: "Glosario Financiero",
-        description: "Términos de ahorro, crédito, intereses e inversiones explicados con ejemplos.",
+        description: "Términos de ahorro, crédito, intereses, inversiones y sistema financiero explicados con ejemplos.",
         slug: "glosario-financiero",
         isAvailable: true,
         category: "finanzas",
-        metaTitle: "Glosario financiero: ahorro, crédito e inversión",
+        metaTitle: "Glosario financiero: ahorro, crédito, banca e inversión",
         metaDescription:
-          "Más de 100 términos de finanzas personales explicados con lenguaje claro y ejemplos: ahorro, crédito, intereses e inversiones. Gratis y en español.",
+          "60 términos de finanzas personales y sistema financiero explicados con ejemplos: ahorro, crédito, intereses, bancos e inversiones. Gratis y en español.",
       },
       {
         id: "tracker-gastos-hormiga",

@@ -37,7 +37,7 @@ estimaciones educativas, no asesoramiento profesional (médico, financiero ni ps
 - [Diario guiado](https://holentia.com/diario-guiado): entradas de reflexión guardadas en el navegador.
 - [Seguimiento de hábitos](https://holentia.com/seguimiento-habitos): crea hábitos, marca tu día y sigue tu progreso semanal y tu racha; todo local y privado.
 - [Test de lenguajes del amor](https://holentia.com/test-lenguajes-amor): descubre tu lenguaje principal de cariño.
-- [Glosario financiero](https://holentia.com/glosario-financiero): términos de ahorro, crédito, intereses, fondos, bolsa y depósitos explicados con ejemplos.
+- [Glosario financiero](https://holentia.com/glosario-financiero): términos de ahorro, crédito, intereses, fondos, bolsa, depósitos y sistema financiero (BCRD, SB, ROE, ROA, morosidad) explicados con ejemplos.
 - [Tracker de gastos hormiga](https://holentia.com/tracker-gastos-hormiga): anota gastos pequeños y repetidos (café, delivery, recargas) y mira cuánto suman al día, al mes y al año.
 - [Calculadora de aguinaldo](https://holentia.com/calculadora-aguinaldo): el doble sueldo de diciembre: 1/12 del salario ordinario del año, proporcional a los meses trabajados y exento de ISR y TSS.
 - [Calculadora de sueldo neto](https://holentia.com/calculadora-sueldo-neto): de sueldo bruto a neto: descuentos de TSS (SFS 3.04% y AFP 2.87%), retención de ISR por tramos y otros descuentos fijos.
