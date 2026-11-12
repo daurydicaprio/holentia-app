@@ -1,11 +1,11 @@
 # HOLENTIA — Plan de mejoras 2.0
 
-> Fecha: 20-Oct-2026 · Actualizado: 24-Oct-2026
-> Estado: propuesta en ejecución. BO, BR, BT, BS2 y BV completas sobre `dev`; `main` y `dev` están sincronizados; producción desplegada desde `28bd01e`.
+> Fecha: 20-Oct-2026 · Actualizado: 12-Nov-2026
+> Estado: propuesta en ejecución. BO, BR, BT, BS2 y BV completas sobre `dev`; `main` y `dev` están sincronizados; producción desplegada desde la última promoción aprobada.
 > Base inicial: `448c529`; `main` y `dev` sincronizados. 35 herramientas, 55 URLs, 51 rutas OG, 80 términos de glosario y 5 guías publicadas.
 > Principios: local-first, sin tracking, server-first, español (es-DO) y documentación en el mismo commit.
 >
-> **Estado de ejecución (24-Oct-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); sitemap de **55 URLs**, **51 OG**, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` **55/55** y build de **114 páginas**. `links:check` 35/35, **51 tests** y CI en GitHub Actions. BO (gráficos), BR (tasas), BT (metodología/accesibilidad), BS2 (préstamo, interés compuesto, IMC, grasa y calorías) y BV (`/mis-datos`) están en `dev`; producción desplegada desde `28bd01e` con Next 15.5.28 y `main` verde. Glosario con **80 términos** (nueva categoría «Sistema financiero»). Search Console/Bing verificados.
+> **Estado de ejecución (24-Oct-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); sitemap de **55 URLs**, **51 OG**, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` **55/55** y build de **114 páginas**. `links:check` 35/35, **53 tests** y CI en GitHub Actions. BO (gráficos), BR (tasas), BT (metodología/accesibilidad), BS2 (préstamo, interés compuesto, IMC, grasa y calorías) y BV (`/mis-datos`) están en `dev`; producción desplegada desde la última promoción aprobada con Next 15.5.28 y `main` verde. Glosario con **80 términos** (nueva categoría «Sistema financiero») y bloques de **«Conceptos clave»** en cuerpo, mente y relaciones (7 términos por hub). Search Console/Bing verificados.
 >
 > **Cerrado:** BN (dependencias/baseline), BP (red de enlaces), BS (tests núcleo + CI), BO (a11y de gráficos), BR (tasas centralizadas), BT (metodología/accesibilidad), BS2 (tests ampliados) y BV (backup local). **Pendiente:** panel de progreso BV+ y promoción a `main` con aprobación.
 
@@ -234,7 +234,7 @@ Tareas:
 
 Aceptación:
 - [x] Sin red, sin backend, sin cuentas y sin claves nuevas de almacenamiento.
-- [x] `pnpm test` **51/51**; `tsc`, `lint`, `links:check`, `guides:check`, build **114 páginas** y `audit:seo` **55/55**.
+- [x] `pnpm test` **53/53**; `tsc`, `lint`, `links:check`, `guides:check`, build **114 páginas** y `audit:seo` **55/55**.
 - [x] Un archivo inválido no toca el almacenamiento; uno válido se previsualiza antes de escribir.
 
 ### Fase BU — Primeras guías publicadas

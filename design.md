@@ -277,6 +277,19 @@ Patrón buscador + chips + resultados agrupados (referencia: `glossary.tsx`):
 - **Estado vacío**: panel centrado con `Search`, mensaje con la consulta y botón outline (receta shell) «Limpiar filtros».
 - Búsqueda sin distinción de acentos (`normalize("NFD")` + strip diacríticos). Persistencia: efímera (patrón E, nada en localStorage).
 
+### Conceptos clave de sección (12-Nov-2026, ref. `components/sections/section-glossary.tsx`)
+
+Glosario breve y server-rendered en los hubs que aún no justifican una página propia (`cuerpo`, `mente`, `relaciones`). La URL de finanzas no se toca.
+
+- **Datos**: `lib/section-glossary.ts` con 7 términos por sección. Cada uno lleva `term`, `slug` estable, `definition`, `example` y 1–2 herramientas relacionadas; el bloque añade `intro`, `disclaimer` y 2–3 `sources`.
+- **Ubicación**: después de `ToolsGrid`, dentro de `SectionPage`, con `id="conceptos-clave"` y `scroll-mt-8`. Los términos llevan `id="concepto-{slug}"` + `scroll-mt-24` para deep links desde herramientas o guías.
+- **Superficie**: `border-t` + `pt-10` para separar del grid. Encabezado con eyebrow `BookOpen` (`text-xs font-semibold uppercase tracking-wide`), H2 `text-2xl sm:text-3xl font-bold` y entrada `text-sm sm:text-base text-gray-600 dark:text-gray-300`.
+- **Cards**: grid `sm:grid-cols-2 gap-4`; `rounded-xl border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-800`. Título H3 `text-lg font-semibold` en el tier AA de la sección (cuerpo `-darkest`, mente/relaciones `-dark`). Ejemplo en recuadro `rounded-lg` con `Lightbulb`; en oscuro, cuerpo usa `bg-cuerpo-darkest` (el ámbar `dark` no da contraste con texto claro).
+- **Enlaces**: `Link` de next/link con `ArrowRight h-4 w-4`, `data-interactive="true"`, foco `ring-2` de sección y hover al tier `darkest`/`lighter`. En cuerpo el hover es subrayado: `cuerpo-dark` no pasa AA a 14px.
+- **Aviso y fuentes**: caja neutra `rounded-xl border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800/60`; `AlertCircle` en color de sección; fuentes externas con `target="_blank" rel="noopener noreferrer"` y `ExternalLink h-3 w-3`.
+- **SEO/GEO**: `sectionJsonLd()` añade un `DefinedTermSet` con `hasDefinedTerm` cuando `getSectionGlossary(section)` existe. El texto completo queda en el HTML inicial; no hay estado ni localStorage.
+- **Cuándo crear página propia**: al llegar a 15–20 términos. Entonces se evalúa `/glosario/[seccion]` (con 301 desde `/glosario-financiero` si se unifica) y este bloque pasa a ser un resumen con enlace.
+
 ### Formularios de herramienta (inputs, ayuda ⓘ, agrupación)
 
 Receta canónica para calculadoras/tests con varios campos (refs: `compound-interest/calculator-inputs.tsx`, `fuel-expense-calculator/fuel-expense-calculator.tsx`; detalle operativo en skill `section-ui` §3c):

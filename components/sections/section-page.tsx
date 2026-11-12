@@ -4,11 +4,13 @@ import Footer from "@/components/common/footer/footer"
 import Logo from "@/components/common/logo/logo"
 import SectionTabs from "@/components/sections/section-tabs"
 import SectionHeader from "@/components/sections/section-header"
+import SectionGlossary from "@/components/sections/section-glossary"
 import ToolsGrid from "@/components/sections/tools-grid"
 import MobileFab from "@/components/common/mobile-fab/mobile-fab"
 import SectionSwipeNavigation from "@/components/sections/section-swipe-navigation"
 import MenuButton from "@/components/common/menu-button/menu-button"
 import JsonLd from "@/components/tool-seo/json-ld"
+import { getSectionGlossary } from "@/lib/section-glossary"
 import { sectionJsonLd } from "@/lib/seo"
 
 interface SectionPageProps {
@@ -18,6 +20,7 @@ interface SectionPageProps {
 /** Página de sección server-rendered (mente/relaciones/cuerpo/finanzas) */
 export default function SectionPage({ section }: SectionPageProps) {
   const sectionData = sectionsData[section]
+  const glossary = getSectionGlossary(section)
 
   return (
     <main id="contenido" tabIndex={-1} className="min-h-screen flex flex-col items-center p-4 sm:p-6 focus:outline-none">
@@ -43,6 +46,8 @@ export default function SectionPage({ section }: SectionPageProps) {
         {/* H2 de transición para que las tarjetas (h3) no salten desde el h1 */}
         <h2 className="sr-only">Herramientas de {sectionData.highlightText}</h2>
         <ToolsGrid cards={sectionData.cards} section={section} />
+
+        {glossary && <SectionGlossary section={glossary.section} content={glossary.content} />}
       </div>
 
       <Footer section={section} />

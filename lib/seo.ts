@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { sectionsData } from "@/lib/data"
+import { getSectionGlossary } from "@/lib/section-glossary"
 import type { CardData, SectionType } from "@/types"
 import type { Guide } from "@/types/guide"
 
@@ -377,6 +378,24 @@ export function sectionJsonLd(section: string) {
       ],
     },
   ]
+
+  const glossary = getSectionGlossary(section)
+
+  if (glossary) {
+    graph.push({
+      "@type": "DefinedTermSet",
+      name: `${glossary.content.title} | ${SITE_NAME}`,
+      description: glossary.content.intro,
+      url: `${SITE_URL}/${section}#conceptos-clave`,
+      inLanguage: "es-DO",
+      hasDefinedTerm: glossary.content.terms.map((term) => ({
+        "@type": "DefinedTerm",
+        name: term.term,
+        description: term.definition,
+        url: `${SITE_URL}/${section}#concepto-${term.slug}`,
+      })),
+    })
+  }
 
   return {
     "@context": "https://schema.org",

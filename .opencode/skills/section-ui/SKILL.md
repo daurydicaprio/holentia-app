@@ -119,6 +119,18 @@ Receta para el índice y el detalle; superficie monocroma, fotografía local y j
 - **Drafts**: `robots: noindex, nofollow`; solo con `NODE_ENV !== "production"`, `VERCEL_ENV=preview` o `GUIDES_PREVIEW=1`; fuera de sitemap y `llms.txt`.
 - **SEO**: `Article` + `BreadcrumbList` + `FAQPage`; OG por guía con `ogTemplate`; `/guias` y slugs solo con `draft: false`.
 
+## 3g. Conceptos clave de sección (12-Nov-2026)
+
+Bloque server-rendered en los hubs que aún no tienen glosario completo (`cuerpo`, `mente`, `relaciones`). Referencia: `components/sections/section-glossary.tsx` + `lib/section-glossary.ts`; receta completa en `design.md` §4.
+
+- **Datos**: 7 términos por sección con `slug`, `definition`, `example`, 1–2 herramientas relacionadas, `intro`, `disclaimer` y fuentes. Finanzas conserva `/glosario-financiero`; no crear rutas nuevas hasta 15–20 términos.
+- **Ubicación**: después de `ToolsGrid`, `id="conceptos-clave"`, `scroll-mt-8`; cada tarjeta `id="concepto-{slug}"` + `scroll-mt-24`.
+- **Superficie**: `border-t pt-10`; eyebrow `BookOpen` + H2 `text-2xl sm:text-3xl font-bold`; cards `rounded-xl border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-800` en grid `sm:grid-cols-2 gap-4`.
+- **Color**: título en tier AA (`cuerpo-darkest`, `mente-dark`, `relaciones-dark`; dark `-light`). Ejemplo en `bg-{s}-lighter text-gray-900`; en dark `bg-{s}-dark` salvo cuerpo, que usa `bg-cuerpo-darkest` para no perder contraste.
+- **Enlaces**: `ArrowRight h-4 w-4`, `data-interactive="true"`, foco `ring-2` de sección. Fuentes externas con `target="_blank" rel="noopener noreferrer"` + `ExternalLink`.
+- **SEO/GEO**: `sectionJsonLd()` añade `DefinedTermSet` cuando existe glosario. Todo el texto va en el HTML inicial; sin estado ni localStorage.
+- **Contenido**: definición breve, ejemplo concreto y siguiente paso real. En salud/mente/relaciones, aviso explícito de que no sustituye atención profesional y fuentes verificables.
+
 ## 4. Iconos (`lucide-react`)
 
 - **Por sección** (nivel sección/estados vacíos/acentos): Mente `Brain` · Relaciones `Heart` · Cuerpo `Activity` · Finanzas `Wallet`. Colorear con `text-{s}`.

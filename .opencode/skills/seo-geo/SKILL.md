@@ -32,13 +32,14 @@ Todo server-rendered vía `<JsonLd data={...} />`:
 | Página | Tipo | Helper |
 |---|---|---|
 | Home | WebSite + Organization (con logo, description) | inline en `app/page.tsx` |
-| Sección | CollectionPage + BreadcrumbList (**sin FAQPage**: los hubs no llevan FAQ visible) | `sectionJsonLd(section)` |
+| Sección | CollectionPage + BreadcrumbList (**sin FAQPage**: los hubs no llevan FAQ visible) + `DefinedTermSet` si el hub tiene «Conceptos clave» | `sectionJsonLd(section)` |
 | Herramienta | WebApplication (applicationCategory por sección, offers 0 DOP) + BreadcrumbList + FAQPage (si hay FAQ — obligatorio) | `toolJsonLd(section, slug, faq)` |
 | Informativa | AboutPage + BreadcrumbList | `pageJsonLd(name, path)` |
 | Ayuda | FAQPage + BreadcrumbList (un solo `@graph`) | `faqWithBreadcrumbJsonLd(faq, "/ayuda", "Centro de Ayuda")` |
 | Guías (índice) | CollectionPage + BreadcrumbList | `guidesIndexJsonLd(guides)` |
 | Guía | Article + BreadcrumbList + FAQPage (si hay FAQ) + `citation` de `sources` | `guideJsonLd(guide)` |
-| Glosario | DefinedTermSet | inline en `app/glosario-financiero/page.tsx` |
+| Glosario financiero | DefinedTermSet | inline en `app/glosario-financiero/page.tsx` |
+| Conceptos clave de hub | DefinedTermSet dentro del `@graph` de `sectionJsonLd()` | `lib/section-glossary.ts` |
 
 Miguita: **solo en JSON-LD** (no UI visible — los botones Volver y el footer cubren la navegación).
 
@@ -46,7 +47,7 @@ Miguita: **solo en JSON-LD** (no UI visible — los botones Volver y el footer c
 
 - **`public/llms.txt`** en la raíz (spec llms.txt): H1 + blockquote + `## Secciones` + `## Directorio` + `## Herramientas` con URLs `https://holentia.com/{slug}` y descripciones de una línea coherentes con la tool real. Al publicar una guía, añade `## Guías` con el índice y una línea por guía. Actualizar en el MISMO commit de la herramienta/guía nueva.
 - **robots.ts**: reglas explícitas `GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended` con `allow: "/"` + `*`. Nunca bloquear bots de IA: queremos ser citados.
-- **Contenido con respuesta inmediata**: H1 + subtítulo + FAQ en HTML inicial (server) **en cada herramienta y `/ayuda`** (1–3 frases por respuesta). Los hubs NO llevan FAQ ni intro visible (14-Oct-2026): su copy factual vive en `metaDescription` y el visible es el `subtitle` inspiracional.
+- **Contenido con respuesta inmediata**: H1 + subtítulo + FAQ en HTML inicial (server) **en cada herramienta y `/ayuda`** (1–3 frases por respuesta). Los hubs NO llevan FAQ ni intro de sección (14-Oct-2026): su copy factual vive en `metaDescription` y el visible es el `subtitle` inspiracional. El bloque «Conceptos clave» de cuerpo, mente y relaciones sí añade definiciones y ejemplos visibles en el HTML inicial (12-Nov-2026).
 - **Sin afirmaciones numéricas no verificables** (usuarios, descargas, precisiones sin fuente).
 - `lang="es-DO"`: los generativos usan el idioma para citar la fuente correcta.
 

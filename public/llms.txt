@@ -10,9 +10,9 @@ estimaciones educativas, no asesoramiento profesional (médico, financiero ni ps
 
 ## Secciones
 
-- [Mente](https://holentia.com/mente): diario guiado, seguimiento de hábitos, respiración guiada (4-7-8, caja y calma), test de ansiedad GAD-7, calculadora del sueño y test de calidad del sueño.
-- [Relaciones](https://holentia.com/relaciones): test de los 5 lenguajes del amor, test de estilo de apego, 45 preguntas profundas para conversar y diario para parejas.
-- [Cuerpo](https://holentia.com/cuerpo): calculadora de calorías (Mifflin-St Jeor), hidratación (EFSA/NASEM), IMC, grasa corporal (método US Navy), proteína diaria (0,8–2,2 g/kg según objetivo), plan de pasos 5-10-20 con objetivo y registro diario, rutinas HIIT de 10 a 25 min con temporizador guiado y modo bajo impacto, y planificador de comidas semanal con lista de compras.
+- [Mente](https://holentia.com/mente): diario guiado, seguimiento de hábitos, respiración guiada (4-7-8, caja y calma), test de ansiedad GAD-7, calculadora del sueño y test de calidad del sueño. Incluye conceptos clave de ansiedad, estrés, respiración 4-7-8, atención plena, rumiación, higiene del sueño y hábito.
+- [Relaciones](https://holentia.com/relaciones): test de los 5 lenguajes del amor, test de estilo de apego, 45 preguntas profundas para conversar y diario para parejas. Incluye conceptos clave de comunicación asertiva, límites, escucha activa, apego, lenguajes del amor, conflicto y reciprocidad.
+- [Cuerpo](https://holentia.com/cuerpo): calculadora de calorías (Mifflin-St Jeor), hidratación (EFSA/NASEM), IMC, grasa corporal (método US Navy), proteína diaria (0,8–2,2 g/kg según objetivo), plan de pasos 5-10-20 con objetivo y registro diario, rutinas HIIT de 10 a 25 min con temporizador guiado y modo bajo impacto, y planificador de comidas semanal con lista de compras. Incluye conceptos clave de IMC, grasa corporal, metabolismo basal, gasto energético total, déficit calórico, proteína e hidratación.
 - [Finanzas](https://holentia.com/finanzas): presupuesto, interés compuesto, préstamo, consumo eléctrico,
   gasto de combustible, corte/vencimiento de tarjeta, interés de tarjeta, perfil de riesgo, glosario financiero,
   tracker de gastos hormiga, calculadora de sueldo neto, calculadora de prestaciones laborales, calculadora de aguinaldo,

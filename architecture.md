@@ -5,13 +5,14 @@
 
 ## 1. Modelo mental
 
-**Catálogo → páginas → hooks → localStorage.** Toda la información de herramientas (título, descripción, slug, sección, disponibilidad) vive en un único catálogo (`lib/data.ts`). Las páginas son delgadas: componen un shell server-rendered + el componente client de la herramienta. La lógica de cálculo vive en `hooks/` y los dominios compartidos en `lib/` (p. ej. `protein.ts`, usado por dos herramientas; `calendar.ts`, fechas de semana compartidas por hábitos y comidas); la persistencia en `lib/storage.ts` con claves namespaced `holentia:{slug}:{draft|simulations|entries}:v1` (localStorage, solo navegador).
+**Catálogo → páginas → hooks → localStorage.** Toda la información de herramientas (título, descripción, slug, sección, disponibilidad) vive en un único catálogo (`lib/data.ts`). Las páginas son delgadas: componen un shell server-rendered + el componente client de la herramienta. La lógica de cálculo vive en `hooks/` y los dominios compartidos en `lib/` (p. ej. `protein.ts`, usado por dos herramientas; `calendar.ts`, fechas de semana compartidas por hábitos y comidas; `section-glossary.ts`, conceptos clave de los hubs); la persistencia en `lib/storage.ts` con claves namespaced `holentia:{slug}:{draft|simulations|entries}:v1` (localStorage, solo navegador).
 
 ```
 lib/data.ts (catálogo: sectionsData)
    │
    ├── app/{mente,relaciones,cuerpo,finanzas}/page.tsx  → SectionPage (server)
-   │       └── ToolsGrid → ToolCard (client, gradiente por sección)
+   │       ├── ToolsGrid → ToolCard (client, gradiente por sección)
+   │       └── SectionGlossary (server en cuerpo/mente/relaciones)
    │
    ├── app/{slug}/page.tsx  (35 herramientas)
    │       ├── generateMetadata() ← lib/seo.ts (title/canonical/OG)
@@ -29,7 +30,7 @@ lib/data.ts (catálogo: sectionsData)
 
 | Capa | Tipo | Por qué |
 |---|---|---|
-| `app/**/page.tsx`, `ToolPageShell`, `SectionPage`, `ToolsGrid` (estructura), `SectionTabs`, `JsonLd` | Server | HTML inicial completo: enlaces, H1, FAQ de herramientas/ayuda y JSON-LD visibles para buscadores y crawlers de AI sin ejecutar JS |
+| `app/**/page.tsx`, `ToolPageShell`, `SectionPage`, `ToolsGrid` (estructura), `SectionGlossary`, `SectionTabs`, `JsonLd` | Server | HTML inicial completo: enlaces, H1, conceptos clave, FAQ de herramientas/ayuda y JSON-LD visibles para buscadores y crawlers de AI sin ejecutar JS |
 | `ToolCard` (efecto 3D/haptic), `ToolFaq` (acordeón), componentes de herramientas, `hooks/*` | Client | Interactividad; el contenido (preguntas FAQ, respuestas) **sigue en el HTML inicial** aunque el panel esté colapsado vía CSS |
 
 Regla: nada de `useEffect`/`mounted` guard para decidir si se renderiza contenido. Antes `ToolPageClient` vaciaba el HTML (bug corregido); hoy todo lo importante está en el primer HTML.
@@ -37,8 +38,8 @@ Regla: nada de `useEffect`/`mounted` guard para decidir si se renderiza contenid
 ## 3. SEO / GEO
 
 - **Metadata**: `lib/seo.ts` expone `toolMetadata`, `sectionMetadata`, `pageMetadata` (construyen title + description + canonical + OG + Twitter). `app/layout.tsx` pone `metadataBase`, `title.template` ("{página} | HOLENTIA") y `viewport`.
-- **JSON-LD**: `toolJsonLd` (WebApplication + BreadcrumbList + FAQPage), `sectionJsonLd` (CollectionPage + BreadcrumbList), home (WebSite + Organization), `/ayuda` (FAQPage). Se emite vía `<JsonLd>` (script `application/ld+json`).
-- **FAQ visible**: cada herramienta renderiza su FAQ en el HTML (acordeón, pero el texto está en el DOM) y `/ayuda`. Los hubs de sección **no** llevan FAQ (corrección 14-Oct-2026).
+- **JSON-LD**: `toolJsonLd` (WebApplication + BreadcrumbList + FAQPage), `sectionJsonLd` (CollectionPage + BreadcrumbList + `DefinedTermSet` cuando el hub tiene conceptos clave), home (WebSite + Organization), `/ayuda` (FAQPage). Se emite vía `<JsonLd>` (script `application/ld+json`).
+- **FAQ visible**: cada herramienta renderiza su FAQ en el HTML (acordeón, pero el texto está en el DOM) y `/ayuda`. Los hubs de sección **no** llevan FAQ (corrección 14-Oct-2026); los que tienen glosario muestran «Conceptos clave» con definición y ejemplo en el HTML inicial.
 - **Indexación**: `app/sitemap.ts` (55 URLs: home + 4 secciones + directorio + 35 herramientas + 8 informativas + `/guias` + 5 guías publicadas), `app/robots.ts` (allow all + sitemap), `public/llms.txt` (índice legible por LLMs, incluye guías publicadas).
 - **Imágenes sociales**: `app/{ruta}/opengraph-image.tsx` por ruta (51: raíz + 4 hubs + directorio + 35 herramientas + 8 informativas + índice de guías + OG dinámica por guía) sobre `components/seo/og-template.tsx`; la convención **no hereda**, cada ruta nueva necesita su OG propia. `app/manifest.ts` (PWA: iconos 192/512/maskable, themeColor claro/oscuro).
 - **Auditoría**: checklist de 16 puntos, barrido estático + runtime de OG y registro histórico en la skill `seo-geo-audit` (obligatoria antes de push con rutas nuevas).
@@ -63,7 +64,7 @@ app/           páginas (server-first): 4 hubs, 35 herramientas, directorio, 8 i
 components/
   common/      header, footer, logo, brand-dots, menu-button, scroll-to-top, clear-all-data, tab-swipe-navigation
   guides/      guide-card, guide-markdown (react-markdown server), guide-tool-links
-  sections/    section-page, section-tabs, section-header, section-swipe-navigation, tool-card, tools-grid
+  sections/    section-page, section-tabs, section-header, section-swipe-navigation, tool-card, tools-grid, section-glossary
   tool-seo/    tool-page-shell, tool-faq (acordeón), json-ld
   tools/       35 componentes client de herramientas (+ subcomponentes y `related-tools/` compartido)
   charts/      chart-data-table (alternativa textual accesible a los canvas)
