@@ -22,7 +22,7 @@ Objivo: que Google, Bing y los buscadores generativos (ChatGPT, Claude, Perplexi
 
 - File-convention **por ruta**: `app/{ruta}/opengraph-image.tsx` (1200×630, PNG). Next la inyecta como `og:image` Y `twitter:image` con dims/alt. **No** declarar `images` en metadata (pisa la convención).
 - Plantilla compartida: `components/seo/og-template.tsx` (`ogTemplate({ title, subtitle })`) + fuente `app/og-font.ts` (INTER_BOLD_BASE64). Cada variante: `import { INTER_BOLD_BASE64 } from "../og-font"`.
-- Variantes existentes: raíz (`app/opengraph-image.tsx`), 4 secciones, directorio (`app/herramientas/`), 35 herramientas, 8 informativas (`ayuda`, `apoyar`, `aviso-legal`, `politica-cookies`, `que-es-holentia`, `metodologia`, `accesibilidad`, `mis-datos`) e índice de guías (`app/guias/opengraph-image.tsx`). Las guías tienen OG dinámica en `app/guias/[slug]/opengraph-image.tsx` (runtime Node, lee el Markdown). **Al añadir herramienta o página: crear `app/{ruta}/opengraph-image.tsx`** (copiar de otra y cambiar title/subtitle/alt). La convención NO hereda: cada ruta sin archivo sale sin `og:image`.
+- Variantes existentes: raíz (`app/opengraph-image.tsx`), 4 secciones, directorio (`app/herramientas/`), 38 herramientas, 8 informativas (`ayuda`, `apoyar`, `aviso-legal`, `politica-cookies`, `que-es-holentia`, `metodologia`, `accesibilidad`, `mis-datos`) e índice de guías (`app/guias/opengraph-image.tsx`). Las guías tienen OG dinámica en `app/guias/[slug]/opengraph-image.tsx` (runtime Node, lee el Markdown). **Al añadir herramienta o página: crear `app/{ruta}/opengraph-image.tsx`** (copiar de otra y cambiar title/subtitle/alt). La convención NO hereda: cada ruta sin archivo sale sin `og:image`.
 - `twitter.card` = `summary_large_image` (layout + `baseMetadata`).
 
 ## 3. Datos estructurados (JSON-LD)
@@ -32,14 +32,14 @@ Todo server-rendered vía `<JsonLd data={...} />`:
 | Página | Tipo | Helper |
 |---|---|---|
 | Home | WebSite + Organization (con logo, description) | inline en `app/page.tsx` |
-| Sección | CollectionPage + BreadcrumbList (**sin FAQPage**: los hubs no llevan FAQ visible) + `DefinedTermSet` si el hub tiene «Conceptos clave» | `sectionJsonLd(section)` |
+| Sección | CollectionPage + BreadcrumbList (**sin FAQPage**: los hubs no llevan FAQ visible) | `sectionJsonLd(section)` |
 | Herramienta | WebApplication (applicationCategory por sección, offers 0 DOP) + BreadcrumbList + FAQPage (si hay FAQ — obligatorio) | `toolJsonLd(section, slug, faq)` |
 | Informativa | AboutPage + BreadcrumbList | `pageJsonLd(name, path)` |
 | Ayuda | FAQPage + BreadcrumbList (un solo `@graph`) | `faqWithBreadcrumbJsonLd(faq, "/ayuda", "Centro de Ayuda")` |
 | Guías (índice) | CollectionPage + BreadcrumbList | `guidesIndexJsonLd(guides)` |
 | Guía | Article + BreadcrumbList + FAQPage (si hay FAQ) + `citation` de `sources` | `guideJsonLd(guide)` |
 | Glosario financiero | DefinedTermSet | inline en `app/glosario-financiero/page.tsx` |
-| Conceptos clave de hub | DefinedTermSet dentro del `@graph` de `sectionJsonLd()` | `lib/section-glossary.ts` |
+| Conceptos básicos de sección | WebApplication + BreadcrumbList + FAQPage (shell) + DefinedTermSet | `sectionGlossaryJsonLd(section)` |
 
 Miguita: **solo en JSON-LD** (no UI visible — los botones Volver y el footer cubren la navegación).
 
@@ -47,7 +47,7 @@ Miguita: **solo en JSON-LD** (no UI visible — los botones Volver y el footer c
 
 - **`public/llms.txt`** en la raíz (spec llms.txt): H1 + blockquote + `## Secciones` + `## Directorio` + `## Herramientas` con URLs `https://holentia.com/{slug}` y descripciones de una línea coherentes con la tool real. Al publicar una guía, añade `## Guías` con el índice y una línea por guía. Actualizar en el MISMO commit de la herramienta/guía nueva.
 - **robots.ts**: reglas explícitas `GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended` con `allow: "/"` + `*`. Nunca bloquear bots de IA: queremos ser citados.
-- **Contenido con respuesta inmediata**: H1 + subtítulo + FAQ en HTML inicial (server) **en cada herramienta y `/ayuda`** (1–3 frases por respuesta). Los hubs NO llevan FAQ ni intro de sección (14-Oct-2026): su copy factual vive en `metaDescription` y el visible es el `subtitle` inspiracional. El bloque «Conceptos clave» de cuerpo, mente y relaciones sí añade definiciones y ejemplos visibles en el HTML inicial (12-Nov-2026).
+- **Contenido con respuesta inmediata**: H1 + subtítulo + FAQ en HTML inicial (server) **en cada herramienta y `/ayuda`** (1–3 frases por respuesta). Los hubs NO llevan FAQ ni intro de sección (14-Oct-2026): su copy factual vive en `metaDescription` y el visible es el `subtitle` inspiracional. Las páginas «Conceptos básicos» de cuerpo, mente y relaciones sí añaden definiciones y ejemplos visibles en el HTML inicial (12-Nov-2026).
 - **Sin afirmaciones numéricas no verificables** (usuarios, descargas, precisiones sin fuente).
 - `lang="es-DO"`: los generativos usan el idioma para citar la fuente correcta.
 
@@ -55,7 +55,7 @@ Miguita: **solo en JSON-LD** (no UI visible — los botones Volver y el footer c
 
 - **Canonical + OG url** en el 100% de páginas (viene de `baseMetadata`/`pageMetadata`; home declara `alternates.canonical: "/"`).
 - **Sitemap** (`app/sitemap.ts`): se deriva de `sectionsData` (solo `isAvailable`) + rutas estáticas. Las guías se añaden solo con `getPublishedGuides()`: `/guias` y sus slugs entran cuando hay al menos una `draft: false`. `lastModified` usa la constante `LAST_UPDATED` (fecha fija, actualizar a mano al publicar cambios de contenido — NO `new Date()` en cada build); en guías usa `updatedAt`.
-- **Enlaces internos server-rendered**: el `Footer` enlaza `/herramientas`, `/guias`, `/mis-datos`, `/metodologia`, `/accesibilidad`, `/que-es-holentia`, `/ayuda`, `/apoyar`, `/aviso-legal`, `/politica-cookies` (sin esto las legales quedan huérfanas: el menú es client y no cuenta para el HTML inicial). `ToolPageShell` enlaza sección y `/apoyar`; las herramientas financieras añaden `RatesNote` con enlace a `/metodologia`. No romper estos enlaces. **Contextuales (22-Oct-2026)**: las 35 herramientas cierran con el bloque central «Sigue por aquí» (`components/tools/related-tools/tool-related-tools.tsx`) alimentado por `lib/related-tools.ts`; cada tool declara 2–3 salientes y recibe ≥2 entrantes. `pnpm links:check` valida el grafo y que `app/{slug}/page.tsx` exista. Verificar que los `href` aparezcan en `.next/server/app/{slug}.html`, no solo tras hidratar.
+- **Enlaces internos server-rendered**: el `Footer` enlaza `/herramientas`, `/guias`, `/mis-datos`, `/metodologia`, `/accesibilidad`, `/que-es-holentia`, `/ayuda`, `/apoyar`, `/aviso-legal`, `/politica-cookies` (sin esto las legales quedan huérfanas: el menú es client y no cuenta para el HTML inicial). `ToolPageShell` enlaza sección y `/apoyar`; las herramientas financieras añaden `RatesNote` con enlace a `/metodologia`. No romper estos enlaces. **Contextuales (22-Oct-2026)**: las 38 herramientas cierran con el bloque central «Sigue por aquí» (`components/tools/related-tools/tool-related-tools.tsx`) alimentado por `lib/related-tools.ts`; cada tool declara 2–3 salientes y recibe ≥2 entrantes. `pnpm links:check` valida el grafo y que `app/{slug}/page.tsx` exista. Verificar que los `href` aparezcan en `.next/server/app/{slug}.html`, no solo tras hidratar.
 - `app/manifest.ts` (PWA mínima) y `app/not-found.tsx` con `robots: { index: false }`.
 - Contenido fino: las secciones llevan `subtitle` visible (inspiracional) + `metaDescription` factual (120–155) en el catálogo — sin `intro` renderizada y sin FAQ de sección.
 

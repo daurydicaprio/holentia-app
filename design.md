@@ -165,13 +165,13 @@ Regla derivada del hueco de la calculadora de proteína: la columna izquierda (f
 
 ### 4b-bis. Bloque «Sigue por aquí» — red central de enlaces (22-Oct-2026)
 
-`components/tools/related-tools/tool-related-tools.tsx` se renderiza **una sola vez** desde `ToolPageShell`, después del contenido y antes del FAQ, en las 35 herramientas. Las relaciones viven en `lib/related-tools.ts`; no se escriben bloques sueltos en cada componente.
+`components/tools/related-tools/tool-related-tools.tsx` se renderiza **una sola vez** desde `ToolPageShell`, después del contenido y antes del FAQ, en las 38 herramientas. Las relaciones viven en `lib/related-tools.ts`; no se escriben bloques sueltos en cada componente.
 
 - **Formato**: `rounded-xl border border-gray-200 bg-white px-5 py-4 shadow-sm dark:border-gray-700 dark:bg-gray-800`; título `text-sm font-semibold`, intro `text-xs`, enlaces `text-sm` en una fila que envuelve. **2–3 enlaces** por herramienta.
 - **Enlace**: texto + `ArrowRight h-3.5 w-3.5`; `data-interactive="true"`, `py-2.5` (~40 px). El target es el enlace, no toda la superficie. Es un **server component**: no añade JS ni haptics; el haptic se reserva a acciones reales.
 - **Acento**: por sección (`mente`, `relaciones`, `cuerpo`, `finanzas`). Hidratación conserva la semántica de agua con `ACCENT_OVERRIDES` → `sky-600/400`; el resto de cuerpo usa ámbar. Sin fondos que cambien en bloque.
 - **Regla editorial**: relaciones reales y **dirigidas**; cada herramienta declara sus 2–3 siguientes pasos y todas tienen **≥2 enlaces entrantes**. Nada de “todo con todo”. Prioriza enlaces inline dentro de una frase que ya menciona la relación.
-- **Validación**: `pnpm links:check` comprueba 35 herramientas, 2–3 salientes, ≥2 entrantes, destinos existentes, cero autorreferencias y que `app/{slug}/page.tsx` exista.
+- **Validación**: `pnpm links:check` comprueba 38 herramientas, 2–3 salientes, ≥2 entrantes, destinos existentes, cero autorreferencias y que `app/{slug}/page.tsx` exista.
 - **Cobertura**: mente (diario ↔ hábitos ↔ respiración ↔ ansiedad ↔ sueño), relaciones (lenguajes ↔ apego ↔ preguntas ↔ diario de pareja), cuerpo (calorías ↔ proteína ↔ IMC ↔ grasa ↔ pasos ↔ hidratación ↔ HIIT ↔ comidas) y finanzas (sueldo ↔ prestaciones ↔ aguinaldo ↔ presupuesto ↔ ahorro ↔ inversión ↔ deuda ↔ compras ↔ servicios).
 
 ### 4c. Páginas básicas (home, ayuda, apoyar, legales, qué-es, metodología, accesibilidad, mis datos) — monocromo de marca
@@ -277,18 +277,20 @@ Patrón buscador + chips + resultados agrupados (referencia: `glossary.tsx`):
 - **Estado vacío**: panel centrado con `Search`, mensaje con la consulta y botón outline (receta shell) «Limpiar filtros».
 - Búsqueda sin distinción de acentos (`normalize("NFD")` + strip diacríticos). Persistencia: efímera (patrón E, nada en localStorage).
 
-### Conceptos clave de sección (12-Nov-2026, ref. `components/sections/section-glossary.tsx`)
+### Conceptos básicos por sección (12-Nov-2026, ref. `components/tools/section-concepts/section-concepts.tsx`)
 
-Glosario breve y server-rendered en los hubs que aún no justifican una página propia (`cuerpo`, `mente`, `relaciones`). La URL de finanzas no se toca.
+Glosario propio para `cuerpo`, `mente` y `relaciones`, con el mismo modelo que el Glosario Financiero: tarjeta en el hub y página independiente. **No se renderiza un bloque debajo del grid**; el hub solo muestra su tarjeta.
 
-- **Datos**: `lib/section-glossary.ts` con 7 términos por sección. Cada uno lleva `term`, `slug` estable, `definition`, `example` y 1–2 herramientas relacionadas; el bloque añade `intro`, `disclaimer` y 2–3 `sources`.
-- **Ubicación**: después de `ToolsGrid`, dentro de `SectionPage`, con `id="conceptos-clave"` y `scroll-mt-8`. Los términos llevan `id="concepto-{slug}"` + `scroll-mt-24` para deep links desde herramientas o guías.
-- **Superficie**: `border-t` + `pt-10` para separar del grid. Encabezado con eyebrow `BookOpen` (`text-xs font-semibold uppercase tracking-wide`), H2 `text-2xl sm:text-3xl font-bold` y entrada `text-sm sm:text-base text-gray-600 dark:text-gray-300`.
-- **Cards**: grid `sm:grid-cols-2 gap-4`; `rounded-xl border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-800`. Título H3 `text-lg font-semibold` en el tier AA de la sección (cuerpo `-darkest`, mente/relaciones `-dark`). Ejemplo en recuadro `rounded-lg` con `Lightbulb`; en oscuro, cuerpo usa `bg-cuerpo-darkest` (el ámbar `dark` no da contraste con texto claro).
+- **Datos**: `lib/section-glossary.ts` con `toolSlug`, `title`, `intro`, `heroText`, `searchExample`, `disclaimer`, 3 categorías y 7 términos por sección. Cada término lleva `term`, `slug` estable, `category`, `definition`, `example` y 1–2 herramientas relacionadas; el contenido añade 2–3 `sources`.
+- **Rutas**: `/conceptos-basicos-cuerpo`, `/conceptos-basicos-mente`, `/conceptos-basicos-relaciones`, registradas como tarjetas en `lib/data.ts` (entran solas al sitemap).
+- **Página**: `ToolPageShell` (H1, descripción, FAQ, JSON-LD de herramienta) + `SectionConcepts` + `sectionGlossaryJsonLd()` con `DefinedTermSet`.
+- **Buscador**: hero `rounded-2xl border p-6 sm:p-8` con gradiente de sección en claro y glass en oscuro; input `h-12` con `Search`, `focus:ring-{s}` y botón `X`. Chips de categoría `rounded-md` con estado activo `bg-{s}-dark text-white` (cuerpo: texto negro) y `aria-pressed`.
+- **Cards**: agrupadas por categoría, grid `sm:grid-cols-2 gap-4`; `rounded-xl border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-800`. Título H3 `text-lg font-semibold` en el tier AA de la sección (cuerpo `-darkest`, mente/relaciones `-dark`/`-lighter`). Ejemplo en recuadro `rounded-lg` con `Lightbulb`; en oscuro, cuerpo usa `bg-cuerpo-darkest` (el ámbar `dark` no da contraste con texto claro).
+- **Anclas**: cada término lleva `id="concepto-{slug}"` + `scroll-mt-24` para deep links desde herramientas o guías.
 - **Enlaces**: `Link` de next/link con `ArrowRight h-4 w-4`, `data-interactive="true"`, foco `ring-2` de sección y hover al tier `darkest`/`lighter`. En cuerpo el hover es subrayado: `cuerpo-dark` no pasa AA a 14px.
-- **Aviso y fuentes**: caja neutra `rounded-xl border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800/60`; `AlertCircle` en color de sección; fuentes externas con `target="_blank" rel="noopener noreferrer"` y `ExternalLink h-3 w-3`.
-- **SEO/GEO**: `sectionJsonLd()` añade un `DefinedTermSet` con `hasDefinedTerm` cuando `getSectionGlossary(section)` existe. El texto completo queda en el HTML inicial; no hay estado ni localStorage.
-- **Cuándo crear página propia**: al llegar a 15–20 términos. Entonces se evalúa `/glosario/[seccion]` (con 301 desde `/glosario-financiero` si se unifica) y este bloque pasa a ser un resumen con enlace.
+- **Aviso y fuentes**: caja neutra `rounded-xl border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800/60`; fuentes externas con `target="_blank" rel="noopener noreferrer"` y `ExternalLink h-3 w-3`.
+- **SEO/GEO**: `sectionGlossaryJsonLd()` emite un `DefinedTermSet` con `hasDefinedTerm` y URLs `/{slug}#concepto-{term}`. El texto completo queda en el HTML inicial; la búsqueda es efímera (patrón E, sin localStorage).
+- **Crecimiento**: al añadir términos, mantener las categorías existentes o ampliarlas en `lib/section-glossary.ts`; el test valida categorías, ejemplos, fuentes y enlaces a herramientas.
 
 ### Formularios de herramienta (inputs, ayuda ⓘ, agrupación)
 

@@ -81,6 +81,17 @@ export const sectionsData: Record<string, SectionData> = {
         metaDescription:
           "Evalúa tu sueño con 11 preguntas sobre duración, despertares, ronquidos, cafeína y hábitos. Puntuación 0–100, alertas y consejos personalizados. Gratis.",
       },
+      {
+        id: "conceptos-basicos-mente",
+        title: "Conceptos básicos de mente",
+        description: "Ansiedad, estrés, sueño y hábitos explicados sin etiquetas.",
+        slug: "conceptos-basicos-mente",
+        isAvailable: true,
+        category: "mente",
+        metaTitle: "Conceptos básicos de mente: ansiedad y estrés",
+        metaDescription:
+          "Ansiedad, estrés, atención plena, rumiación, higiene del sueño y hábito explicados con ejemplos y tests relacionados. Gratis y sin registro.",
+      },
     ],
   },
   relaciones: {
@@ -136,6 +147,17 @@ export const sectionsData: Record<string, SectionData> = {
         metaTitle: "Preguntas profundas para parejas, familia y amigos",
         metaDescription:
           "45 preguntas profundas para conversaciones que valen: en pareja, con familia y amigos o contigo mismo/a. Mezcla, copia y túrnense para escuchar de verdad.",
+      },
+      {
+        id: "conceptos-basicos-relaciones",
+        title: "Conceptos básicos de relaciones",
+        description: "Comunicación, límites, apego y conflicto para entender tus vínculos.",
+        slug: "conceptos-basicos-relaciones",
+        isAvailable: true,
+        category: "relaciones",
+        metaTitle: "Conceptos básicos de relaciones: apego y límites",
+        metaDescription:
+          "Comunicación asertiva, límites, escucha activa, apego, lenguajes del amor, conflicto y reciprocidad con ejemplos. Gratis y sin registro.",
       },
     ],
   },
@@ -236,6 +258,17 @@ export const sectionsData: Record<string, SectionData> = {
         metaTitle: "¿Cuántos pasos al día? Plan 5-10-20 y beneficios",
         metaDescription:
           "Define tu objetivo de pasos, arma tu plan 5-10-20 de minutos y descubre los beneficios de cada nivel. La ciencia marca la diferencia en 6,000-8,000 pasos.",
+      },
+      {
+        id: "conceptos-basicos-cuerpo",
+        title: "Conceptos básicos de cuerpo",
+        description: "Los términos de salud y nutrición que conviene entender.",
+        slug: "conceptos-basicos-cuerpo",
+        isAvailable: true,
+        category: "cuerpo",
+        metaTitle: "Conceptos básicos de cuerpo: 7 términos clave",
+        metaDescription:
+          "IMC, grasa corporal, metabolismo, déficit calórico, proteína e hidratación explicados con ejemplos y enlaces a cada calculadora. Gratis.",
       },
     ],
   },

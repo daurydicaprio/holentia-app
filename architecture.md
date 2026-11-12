@@ -5,23 +5,22 @@
 
 ## 1. Modelo mental
 
-**Catálogo → páginas → hooks → localStorage.** Toda la información de herramientas (título, descripción, slug, sección, disponibilidad) vive en un único catálogo (`lib/data.ts`). Las páginas son delgadas: componen un shell server-rendered + el componente client de la herramienta. La lógica de cálculo vive en `hooks/` y los dominios compartidos en `lib/` (p. ej. `protein.ts`, usado por dos herramientas; `calendar.ts`, fechas de semana compartidas por hábitos y comidas; `section-glossary.ts`, conceptos clave de los hubs); la persistencia en `lib/storage.ts` con claves namespaced `holentia:{slug}:{draft|simulations|entries}:v1` (localStorage, solo navegador).
+**Catálogo → páginas → hooks → localStorage.** Toda la información de herramientas (título, descripción, slug, sección, disponibilidad) vive en un único catálogo (`lib/data.ts`). Las páginas son delgadas: componen un shell server-rendered + el componente client de la herramienta. La lógica de cálculo vive en `hooks/` y los dominios compartidos en `lib/` (p. ej. `protein.ts`, usado por dos herramientas; `calendar.ts`, fechas de semana compartidas por hábitos y comidas; `section-glossary.ts`, conceptos básicos de las secciones); la persistencia en `lib/storage.ts` con claves namespaced `holentia:{slug}:{draft|simulations|entries}:v1` (localStorage, solo navegador).
 
 ```
 lib/data.ts (catálogo: sectionsData)
    │
    ├── app/{mente,relaciones,cuerpo,finanzas}/page.tsx  → SectionPage (server)
-   │       ├── ToolsGrid → ToolCard (client, gradiente por sección)
-   │       └── SectionGlossary (server en cuerpo/mente/relaciones)
+   │       └── ToolsGrid → ToolCard (client, gradiente por sección)
    │
-   ├── app/{slug}/page.tsx  (35 herramientas)
+   ├── app/{slug}/page.tsx  (38 herramientas)
    │       ├── generateMetadata() ← lib/seo.ts (title/canonical/OG)
    │       └── ToolPageShell (server: H1, botones, FAQ acordeón, JsonLd)
    │               └── children = componente client de la herramienta
    │                       └── hooks/use-{tool}.ts (lógica pura)
    │                               └── lib/storage.ts (borrador/snapshots)
    │
-   ├── app/herramientas/page.tsx  (directorio: índice server-rendered de las 35)
+   ├── app/herramientas/page.tsx  (directorio: índice server-rendered de las 38)
    │
    └── app/sitemap.ts · app/robots.ts · public/llms.txt  (SEO/GEO)
 ```
@@ -30,18 +29,18 @@ lib/data.ts (catálogo: sectionsData)
 
 | Capa | Tipo | Por qué |
 |---|---|---|
-| `app/**/page.tsx`, `ToolPageShell`, `SectionPage`, `ToolsGrid` (estructura), `SectionGlossary`, `SectionTabs`, `JsonLd` | Server | HTML inicial completo: enlaces, H1, conceptos clave, FAQ de herramientas/ayuda y JSON-LD visibles para buscadores y crawlers de AI sin ejecutar JS |
-| `ToolCard` (efecto 3D/haptic), `ToolFaq` (acordeón), componentes de herramientas, `hooks/*` | Client | Interactividad; el contenido (preguntas FAQ, respuestas) **sigue en el HTML inicial** aunque el panel esté colapsado vía CSS |
+| `app/**/page.tsx`, `ToolPageShell`, `SectionPage`, `ToolsGrid` (estructura), `SectionTabs`, `JsonLd` | Server | HTML inicial completo: enlaces, H1, definiciones de conceptos básicos, FAQ de herramientas/ayuda y JSON-LD visibles para buscadores y crawlers de AI sin ejecutar JS |
+| `ToolCard` (efecto 3D/haptic), `ToolFaq` (acordeón), `SectionConcepts` (búsqueda), componentes de herramientas, `hooks/*` | Client | Interactividad; el contenido (preguntas FAQ, respuestas, términos del glosario) **sigue en el HTML inicial** aunque el panel esté colapsado vía CSS |
 
 Regla: nada de `useEffect`/`mounted` guard para decidir si se renderiza contenido. Antes `ToolPageClient` vaciaba el HTML (bug corregido); hoy todo lo importante está en el primer HTML.
 
 ## 3. SEO / GEO
 
 - **Metadata**: `lib/seo.ts` expone `toolMetadata`, `sectionMetadata`, `pageMetadata` (construyen title + description + canonical + OG + Twitter). `app/layout.tsx` pone `metadataBase`, `title.template` ("{página} | HOLENTIA") y `viewport`.
-- **JSON-LD**: `toolJsonLd` (WebApplication + BreadcrumbList + FAQPage), `sectionJsonLd` (CollectionPage + BreadcrumbList + `DefinedTermSet` cuando el hub tiene conceptos clave), home (WebSite + Organization), `/ayuda` (FAQPage). Se emite vía `<JsonLd>` (script `application/ld+json`).
-- **FAQ visible**: cada herramienta renderiza su FAQ en el HTML (acordeón, pero el texto está en el DOM) y `/ayuda`. Los hubs de sección **no** llevan FAQ (corrección 14-Oct-2026); los que tienen glosario muestran «Conceptos clave» con definición y ejemplo en el HTML inicial.
-- **Indexación**: `app/sitemap.ts` (55 URLs: home + 4 secciones + directorio + 35 herramientas + 8 informativas + `/guias` + 5 guías publicadas), `app/robots.ts` (allow all + sitemap), `public/llms.txt` (índice legible por LLMs, incluye guías publicadas).
-- **Imágenes sociales**: `app/{ruta}/opengraph-image.tsx` por ruta (51: raíz + 4 hubs + directorio + 35 herramientas + 8 informativas + índice de guías + OG dinámica por guía) sobre `components/seo/og-template.tsx`; la convención **no hereda**, cada ruta nueva necesita su OG propia. `app/manifest.ts` (PWA: iconos 192/512/maskable, themeColor claro/oscuro).
+- **JSON-LD**: `toolJsonLd` (WebApplication + BreadcrumbList + FAQPage), `sectionJsonLd` (CollectionPage + BreadcrumbList), `sectionGlossaryJsonLd` (DefinedTermSet en las páginas de conceptos básicos), home (WebSite + Organization), `/ayuda` (FAQPage). Se emite vía `<JsonLd>` (script `application/ld+json`).
+- **FAQ visible**: cada herramienta renderiza su FAQ en el HTML (acordeón, pero el texto está en el DOM) y `/ayuda`. Los hubs de sección **no** llevan FAQ (corrección 14-Oct-2026); sus «Conceptos básicos» viven en una página propia enlazada desde la tarjeta del grid, con definiciones y ejemplos en el HTML inicial.
+- **Indexación**: `app/sitemap.ts` (58 URLs: home + 4 secciones + directorio + 38 herramientas + 8 informativas + `/guias` + 5 guías publicadas), `app/robots.ts` (allow all + sitemap), `public/llms.txt` (índice legible por LLMs, incluye guías publicadas).
+- **Imágenes sociales**: `app/{ruta}/opengraph-image.tsx` por ruta (54: raíz + 4 hubs + directorio + 38 herramientas + 8 informativas + índice de guías + OG dinámica por guía) sobre `components/seo/og-template.tsx`; la convención **no hereda**, cada ruta nueva necesita su OG propia. `app/manifest.ts` (PWA: iconos 192/512/maskable, themeColor claro/oscuro).
 - **Auditoría**: checklist de 16 puntos, barrido estático + runtime de OG y registro histórico en la skill `seo-geo-audit` (obligatoria antes de push con rutas nuevas).
 - El breadcrumb **no se muestra al usuario**; solo existe como `BreadcrumbList` en JSON-LD.
 
@@ -60,13 +59,13 @@ Regla: nada de `useEffect`/`mounted` guard para decidir si se renderiza contenid
 ## 6. Estructura de directorios
 
 ```
-app/           páginas (server-first): 4 hubs, 35 herramientas, directorio, 8 informativas, guías `/guias`, layout, error, manifest, sitemap, robots + OG por ruta
+app/           páginas (server-first): 4 hubs, 38 herramientas, directorio, 8 informativas, guías `/guias`, layout, error, manifest, sitemap, robots + OG por ruta
 components/
   common/      header, footer, logo, brand-dots, menu-button, scroll-to-top, clear-all-data, tab-swipe-navigation
   guides/      guide-card, guide-markdown (react-markdown server), guide-tool-links
-  sections/    section-page, section-tabs, section-header, section-swipe-navigation, tool-card, tools-grid, section-glossary
+  sections/    section-page, section-tabs, section-header, section-swipe-navigation, tool-card, tools-grid
   tool-seo/    tool-page-shell, tool-faq (acordeón), json-ld
-  tools/       35 componentes client de herramientas (+ subcomponentes y `related-tools/` compartido)
+  tools/       38 componentes client de herramientas (+ subcomponentes y `related-tools/` compartido)
   charts/      chart-data-table (alternativa textual accesible a los canvas)
   rates/       rates-note (fecha de revisión y fuentes en herramientas financieras)
   mis-datos/   data-backup (exportar/importar datos locales)
@@ -97,10 +96,10 @@ types/         index.ts (CardData, SectionType, AmortizationRow, …), guide.ts
 
 ## 8. Calidad
 
-- `pnpm test` (22 casos de cálculo) · `pnpm exec tsc --noEmit` · `pnpm lint` (ESLint 8.57 + `next/core-web-vitals`) · `pnpm build` — todo debe estar en verde antes de cada push.
+- `pnpm test` (53 casos de cálculo y consistencia) · `pnpm exec tsc --noEmit` · `pnpm lint` (ESLint 8.57 + `next/core-web-vitals`) · `pnpm build` — todo debe estar en verde antes de cada push.
 - CI: `.github/workflows/ci.yml` corre en Node 22 con pnpm 10.34.6: install congelado, tests, `links:check`, `tsc`, `lint`, `guides:check`, `audit --prod`, build y `audit:seo`.
 - Guías: `pnpm guides:check` valida frontmatter, slug, herramientas, fuentes, FAQ, fechas y enlaces internos.
-- Enlaces internos: `pnpm links:check` valida las 35 herramientas del grafo `lib/related-tools.ts` (2–3 salientes, ≥2 entrantes, destinos existentes, sin autorreferencias).
+- Enlaces internos: `pnpm links:check` valida las 38 herramientas del grafo `lib/related-tools.ts` (2–3 salientes, ≥2 entrantes, destinos existentes, sin autorreferencias).
 - Build estricto: sin `ignoreBuildErrors`/`ignoreDuringBuilds`.
 - Smoke antes de cada push con rutas nuevas: HTML prerenderado (H1 ×1, canonical, `noindex` solo esperado en borradores de guía, JSON-LD) + runtime de `opengraph-image` (`200 image/png`).
 - Auditoría automatizada: `pnpm audit:seo` (`scripts/audit-seo.mjs`) valida el sitemap completo — SEO/GEO, estructura a11y y runtime OG — en un paso (detalle: skill `seo-geo-audit` §2.0).

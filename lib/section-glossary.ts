@@ -4,10 +4,16 @@ export const GLOSSARY_SECTIONS = ["cuerpo", "mente", "relaciones"] as const
 
 export type GlossarySection = (typeof GLOSSARY_SECTIONS)[number]
 
+export interface SectionGlossaryCategory {
+  id: string
+  label: string
+}
+
 export interface SectionGlossaryTerm {
   term: string
   /** Ancla estable para enlazar un concepto concreto desde una herramienta o guía. */
   slug: string
+  category: string
   definition: string
   example: string
   related?: readonly {
@@ -17,9 +23,14 @@ export interface SectionGlossaryTerm {
 }
 
 export interface SectionGlossaryContent {
+  /** Slug de la página propia: /{toolSlug}. */
+  toolSlug: string
   title: string
   intro: string
+  heroText: string
+  searchExample: string
   disclaimer: string
+  categories: readonly SectionGlossaryCategory[]
   terms: readonly SectionGlossaryTerm[]
   sources: readonly {
     label: string
@@ -28,23 +39,32 @@ export interface SectionGlossaryContent {
 }
 
 /**
- * Conceptos clave de los hubs que todavía no tienen glosario completo.
+ * Conceptos básicos de cuerpo, mente y relaciones.
  *
- * La regla editorial es la misma que en finanzas: definición breve, un ejemplo
- * concreto y un siguiente paso real. Cuando una sección llegue a 15–20 términos,
- * este contenido puede pasar a `/glosario/[seccion]` sin reescribir el modelo.
+ * Cada sección tiene su propia página (`/{toolSlug}`) y una tarjeta en el hub,
+ * igual que el glosario financiero. La regla editorial es la misma: definición
+ * breve, ejemplo concreto y un siguiente paso real.
  */
 export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> = {
   cuerpo: {
-    title: "Conceptos clave de cuerpo",
+    toolSlug: "conceptos-basicos-cuerpo",
+    title: "Conceptos básicos de cuerpo",
     intro:
-      "Siete términos que aparecen en las calculadoras de esta sección. Sirven para entender qué estás midiendo y cómo leer el resultado sin sacar conclusiones de más.",
+      "Siete conceptos que aparecen en las calculadoras de cuerpo. Cada uno con una definición corta y un ejemplo para que sepas qué estás midiendo y cómo leer el resultado.",
+    heroText: "IMC, energía y nutrición: lo que hay detrás de cada número.",
+    searchExample: "déficit calórico",
     disclaimer:
       "Contenido educativo. No sustituye una evaluación médica, nutricional ni un plan de entrenamiento personalizado.",
+    categories: [
+      { id: "medicion", label: "Medición" },
+      { id: "energia", label: "Energía" },
+      { id: "nutricion", label: "Nutrición" },
+    ],
     terms: [
       {
         term: "IMC (Índice de Masa Corporal)",
         slug: "imc",
+        category: "medicion",
         definition:
           "Relaciona tu peso con tu estatura para dar una referencia rápida del estado nutricional. No distingue grasa de músculo ni mide dónde está la grasa.",
         example:
@@ -57,6 +77,7 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
       {
         term: "Grasa corporal",
         slug: "grasa-corporal",
+        category: "medicion",
         definition:
           "Es el porcentaje de tu peso que corresponde a grasa. Sirve para ver composición corporal, no solo el número de la balanza.",
         example:
@@ -66,6 +87,7 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
       {
         term: "Metabolismo basal",
         slug: "metabolismo-basal",
+        category: "energia",
         definition:
           "Es la energía que tu cuerpo gasta en reposo para mantener funciones vitales como respirar o regular la temperatura.",
         example:
@@ -75,6 +97,7 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
       {
         term: "Gasto energético total",
         slug: "gasto-energetico-total",
+        category: "energia",
         definition:
           "Es la suma de tu metabolismo basal, la actividad diaria y el ejercicio. Es la referencia para saber cuántas calorías gastas.",
         example:
@@ -84,6 +107,7 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
       {
         term: "Déficit calórico",
         slug: "deficit-calorico",
+        category: "energia",
         definition:
           "Es comer menos calorías de las que gastas. El cuerpo usa reservas para cubrir la diferencia; por eso se pierde peso.",
         example: "Si gastas 2,000 kcal y comes 1,700, el déficit es de 300 kcal al día.",
@@ -92,6 +116,7 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
       {
         term: "Proteína diaria",
         slug: "proteina-diaria",
+        category: "nutricion",
         definition:
           "Es la cantidad de proteína que necesitas al día para mantener músculo, saciedad y funciones básicas. Depende de tu peso y actividad.",
         example: "Una persona de 70 kg con 1.2 g/kg necesita 84 g de proteína al día.",
@@ -100,6 +125,7 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
       {
         term: "Hidratación",
         slug: "hidratacion",
+        category: "nutricion",
         definition:
           "Es el agua que repones para compensar lo que pierdes al respirar, sudar y orinar. No es solo beber agua: también cuenta lo que comes.",
         example:
@@ -108,21 +134,39 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
       },
     ],
     sources: [
-      { label: "OMS: alimentación saludable", href: "https://www.who.int/es/news-room/fact-sheets/detail/healthy-diet" },
-      { label: "OMS: obesidad y sobrepeso", href: "https://www.who.int/es/news-room/fact-sheets/detail/obesity-and-overweight" },
-      { label: "CDC: IMC en adultos", href: "https://www.cdc.gov/bmi/adult-calculator/index.html" },
+      {
+        label: "OMS: alimentación saludable",
+        href: "https://www.who.int/es/news-room/fact-sheets/detail/healthy-diet",
+      },
+      {
+        label: "OMS: obesidad y sobrepeso",
+        href: "https://www.who.int/es/news-room/fact-sheets/detail/obesity-and-overweight",
+      },
+      {
+        label: "CDC: IMC en adultos",
+        href: "https://www.cdc.gov/bmi/adult-calculator/index.html",
+      },
     ],
   },
   mente: {
-    title: "Conceptos clave de mente",
+    toolSlug: "conceptos-basicos-mente",
+    title: "Conceptos básicos de mente",
     intro:
-      "Términos que aparecen en los ejercicios y tests de esta sección. No son etiquetas para diagnosticarte: son herramientas para ponerle nombre a lo que sientes y decidir el siguiente paso.",
+      "Siete palabras que aparecen en los ejercicios y tests de mente. No son etiquetas para diagnosticarte: son herramientas para ponerle nombre a lo que sientes y decidir el siguiente paso.",
+    heroText: "Ansiedad, calma y descanso: palabras para entender lo que sientes.",
+    searchExample: "atención plena",
     disclaimer:
       "Contenido educativo. No sustituye una consulta psicológica o médica. Si estás en crisis o tienes pensamientos de hacerte daño, busca ayuda profesional o a una persona de confianza ahora.",
+    categories: [
+      { id: "ansiedad-estres", label: "Ansiedad y estrés" },
+      { id: "calma", label: "Calma y atención" },
+      { id: "sueno-habitos", label: "Sueño y hábitos" },
+    ],
     terms: [
       {
         term: "Ansiedad",
         slug: "ansiedad",
+        category: "ansiedad-estres",
         definition:
           "Es una respuesta normal ante una amenaza o incertidumbre: el cuerpo se activa para responder. Se vuelve un problema cuando aparece con mucha intensidad, dura mucho o te limita.",
         example:
@@ -135,6 +179,7 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
       {
         term: "Estrés",
         slug: "estres",
+        category: "ansiedad-estres",
         definition:
           "Es la tensión que aparece cuando las demandas superan los recursos que sientes que tienes. Puede ser puntual o mantenerse en el tiempo.",
         example:
@@ -147,6 +192,7 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
       {
         term: "Respiración 4-7-8",
         slug: "respiracion-4-7-8",
+        category: "calma",
         definition:
           "Es un ejercicio de respiración con cuatro tiempos: inhalar 4, sostener 7 y exhalar 8. Busca bajar el ritmo y darle al cuerpo una señal de calma.",
         example:
@@ -156,6 +202,7 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
       {
         term: "Atención plena (mindfulness)",
         slug: "atencion-plena",
+        category: "calma",
         definition:
           "Es prestar atención al momento presente sin juzgarlo. No es dejar la mente en blanco: es notar lo que pasa y volver con calma.",
         example:
@@ -168,6 +215,7 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
       {
         term: "Rumiación",
         slug: "rumiacion",
+        category: "calma",
         definition:
           "Es darle vueltas al mismo pensamiento una y otra vez, muchas veces sin llegar a una solución. Se siente como pensar mucho, pero te deja atrapado.",
         example:
@@ -177,6 +225,7 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
       {
         term: "Higiene del sueño",
         slug: "higiene-del-sueno",
+        category: "sueno-habitos",
         definition:
           "Son los hábitos que ayudan a dormir mejor: horarios estables, poca luz antes de acostarte y un ambiente fresco y oscuro.",
         example:
@@ -189,6 +238,7 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
       {
         term: "Hábito",
         slug: "habito",
+        category: "sueno-habitos",
         definition:
           "Es una conducta que se repite con poca fricción porque ya tiene un disparador y una recompensa. Se construye con repetición, no con fuerza de voluntad infinita.",
         example:
@@ -215,15 +265,24 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
     ],
   },
   relaciones: {
-    title: "Conceptos clave de relaciones",
+    toolSlug: "conceptos-basicos-relaciones",
+    title: "Conceptos básicos de relaciones",
     intro:
-      "Palabras que aparecen en los tests y diarios de esta sección. Sirven para conversar con más claridad, no para etiquetar a tu pareja ni justificar todo lo que pasa.",
+      "Siete palabras que aparecen en los tests y diarios de relaciones. Sirven para conversar con más claridad, no para etiquetar a tu pareja ni justificar todo lo que pasa.",
+    heroText: "Comunicación, apego y límites: ideas para cuidar tus vínculos.",
+    searchExample: "escucha activa",
     disclaimer:
       "Contenido educativo. No sustituye terapia de pareja, psicológica o médica. Si hay violencia, control o riesgo, busca ayuda profesional y protección.",
+    categories: [
+      { id: "comunicacion", label: "Comunicación" },
+      { id: "vinculo", label: "Vínculo" },
+      { id: "conflicto", label: "Conflicto" },
+    ],
     terms: [
       {
         term: "Comunicación asertiva",
         slug: "comunicacion-asertiva",
+        category: "comunicacion",
         definition:
           "Es decir lo que necesitas con claridad y respeto, sin callarte ni atacar. Habla de hechos y de cómo te afectan, no de lo que la otra persona es.",
         example:
@@ -236,6 +295,7 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
       {
         term: "Límites",
         slug: "limites",
+        category: "comunicacion",
         definition:
           "Son las reglas que marcan hasta dónde estás dispuesto a llegar para cuidarte. No son castigos: son información sobre lo que necesitas.",
         example:
@@ -248,6 +308,7 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
       {
         term: "Escucha activa",
         slug: "escucha-activa",
+        category: "comunicacion",
         definition:
           "Es escuchar para entender, no para preparar tu respuesta. Incluye mirar, preguntar y devolver lo que entendiste.",
         example:
@@ -257,6 +318,7 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
       {
         term: "Apego",
         slug: "apego",
+        category: "vinculo",
         definition:
           "Es la forma en que buscas seguridad y cercanía en tus vínculos. Puede ser seguro, ansioso o evitativo, y no es una condena: se puede trabajar.",
         example:
@@ -266,6 +328,7 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
       {
         term: "Lenguajes del amor",
         slug: "lenguajes-del-amor",
+        category: "vinculo",
         definition:
           "Son formas distintas de expresar y recibir afecto: palabras, tiempo, detalles, actos de servicio y contacto físico. No todos valoran lo mismo.",
         example:
@@ -275,6 +338,7 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
       {
         term: "Conflicto",
         slug: "conflicto",
+        category: "conflicto",
         definition:
           "Es una diferencia de necesidades, ideas o expectativas. No es sinónimo de pelea: puede resolverse mejor si se habla del problema y no de la persona.",
         example:
@@ -284,6 +348,7 @@ export const SECTION_GLOSSARY: Record<GlossarySection, SectionGlossaryContent> =
       {
         term: "Reciprocidad",
         slug: "reciprocidad",
+        category: "vinculo",
         definition:
           "Es el equilibrio de dar y recibir en una relación. No tiene que ser exacto en cada momento, pero sí sentirse justo con el tiempo.",
         example:
@@ -305,7 +370,7 @@ export function isGlossarySection(section: string): section is GlossarySection {
   return (GLOSSARY_SECTIONS as readonly string[]).includes(section)
 }
 
-/** Devuelve el bloque de conceptos clave de un hub, o undefined si aún no tiene. */
+/** Devuelve la página de conceptos básicos de una sección, o undefined si no tiene. */
 export function getSectionGlossary(
   section: string,
 ): { section: GlossarySection; content: SectionGlossaryContent } | undefined {

@@ -42,7 +42,7 @@ interface ToolRelatedToolsProps {
 }
 
 /**
- * Cierre contextual único para las 35 herramientas. Se renderiza en el shell
+ * Cierre contextual único para las 38 herramientas. Se renderiza en el shell
  * server-first, sin JS propio, y sustituye los bloques sueltos de cada tool.
  */
 export default function ToolRelatedTools({ slug }: ToolRelatedToolsProps) {

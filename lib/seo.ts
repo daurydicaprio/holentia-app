@@ -379,27 +379,32 @@ export function sectionJsonLd(section: string) {
     },
   ]
 
-  const glossary = getSectionGlossary(section)
-
-  if (glossary) {
-    graph.push({
-      "@type": "DefinedTermSet",
-      name: `${glossary.content.title} | ${SITE_NAME}`,
-      description: glossary.content.intro,
-      url: `${SITE_URL}/${section}#conceptos-clave`,
-      inLanguage: "es-DO",
-      hasDefinedTerm: glossary.content.terms.map((term) => ({
-        "@type": "DefinedTerm",
-        name: term.term,
-        description: term.definition,
-        url: `${SITE_URL}/${section}#concepto-${term.slug}`,
-      })),
-    })
-  }
-
   return {
     "@context": "https://schema.org",
     "@graph": graph,
+  }
+}
+
+/** JSON-LD de una página de conceptos básicos: DefinedTermSet con sus términos. */
+export function sectionGlossaryJsonLd(section: string) {
+  const glossary = getSectionGlossary(section)
+  if (!glossary) return null
+
+  const url = `${SITE_URL}/${glossary.content.toolSlug}`
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "DefinedTermSet",
+    name: `${glossary.content.title} | ${SITE_NAME}`,
+    description: glossary.content.intro,
+    url,
+    inLanguage: "es-DO",
+    hasDefinedTerm: glossary.content.terms.map((term) => ({
+      "@type": "DefinedTerm",
+      name: term.term,
+      description: term.definition,
+      url: `${url}#concepto-${term.slug}`,
+    })),
   }
 }
 

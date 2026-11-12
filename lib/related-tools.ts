@@ -10,21 +10,21 @@ export const RELATED_TOOL_SLUGS: Record<string, readonly string[]> = {
   "diario-guiado": ["seguimiento-habitos", "tecnicas-respiracion", "test-ansiedad"],
   "seguimiento-habitos": ["diario-guiado", "pasos-al-dia", "calculadora-sueno"],
   "tecnicas-respiracion": ["test-ansiedad", "calculadora-sueno", "diario-guiado"],
-  "test-ansiedad": ["tecnicas-respiracion", "test-calidad-sueno", "diario-guiado"],
+  "test-ansiedad": ["tecnicas-respiracion", "test-calidad-sueno", "conceptos-basicos-mente"],
   "calculadora-sueno": ["test-calidad-sueno", "tecnicas-respiracion", "seguimiento-habitos"],
-  "test-calidad-sueno": ["calculadora-sueno", "test-ansiedad", "rutinas-hiit"],
+  "test-calidad-sueno": ["calculadora-sueno", "test-ansiedad", "conceptos-basicos-mente"],
 
   // Relaciones
-  "test-lenguajes-amor": ["test-apego", "preguntas-profundas", "diario-parejas"],
+  "test-lenguajes-amor": ["test-apego", "preguntas-profundas", "conceptos-basicos-relaciones"],
   "diario-parejas": ["preguntas-profundas", "test-lenguajes-amor", "test-apego"],
-  "test-apego": ["test-lenguajes-amor", "diario-parejas", "preguntas-profundas"],
+  "test-apego": ["test-lenguajes-amor", "diario-parejas", "conceptos-basicos-relaciones"],
   "preguntas-profundas": ["diario-parejas", "test-lenguajes-amor", "test-apego"],
 
   // Cuerpo
   "calculadora-calorias": ["calculadora-proteina-diaria", "calculadora-imc", "calculadora-grasa-corporal"],
   "calculadora-hidratacion": ["calculadora-calorias", "pasos-al-dia", "rutinas-hiit"],
-  "calculadora-imc": ["calculadora-grasa-corporal", "calculadora-calorias", "calculadora-proteina-diaria"],
-  "calculadora-grasa-corporal": ["calculadora-imc", "calculadora-calorias", "calculadora-proteina-diaria"],
+  "calculadora-imc": ["calculadora-grasa-corporal", "calculadora-calorias", "conceptos-basicos-cuerpo"],
+  "calculadora-grasa-corporal": ["calculadora-imc", "calculadora-calorias", "conceptos-basicos-cuerpo"],
   "calculadora-proteina-diaria": ["calculadora-calorias", "calculadora-imc", "planificador-comidas"],
   "rutinas-hiit": ["pasos-al-dia", "calculadora-hidratacion", "planificador-comidas"],
   "planificador-comidas": ["calculadora-calorias", "planificador-compras", "calculadora-proteina-diaria"],
@@ -50,6 +50,11 @@ export const RELATED_TOOL_SLUGS: Record<string, readonly string[]> = {
   "test-perfil-riesgo": ["calculadora-interes-compuesto", "planificador-ahorros", "calculadora-certificado-financiero"],
   "calculadora-certificado-financiero": ["calculadora-interes-compuesto", "planificador-ahorros", "test-perfil-riesgo"],
   "glosario-financiero": ["crear-presupuesto-personal", "calculadora-interes-compuesto", "calculadora-itbis"],
+
+  // Conceptos básicos por sección
+  "conceptos-basicos-cuerpo": ["calculadora-imc", "calculadora-calorias", "calculadora-grasa-corporal"],
+  "conceptos-basicos-mente": ["test-ansiedad", "tecnicas-respiracion", "calculadora-sueno"],
+  "conceptos-basicos-relaciones": ["test-apego", "test-lenguajes-amor", "diario-parejas"],
 }
 
 export function getRelatedToolSlugs(slug: string): readonly string[] {

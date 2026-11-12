@@ -4,15 +4,15 @@
 > Calculadoras, simuladores y tests que funcionan directamente en el navegador del usuario,
 > sin cuenta, sin registro y sin enviar datos a servidores.
 
-Las 35 herramientas son siempre gratuitas. La metodología, las fuentes y las fechas de revisión
+Las 38 herramientas son siempre gratuitas. La metodología, las fuentes y las fechas de revisión
 están documentadas en [Metodología y fuentes](https://holentia.com/metodologia). Los resultados son
 estimaciones educativas, no asesoramiento profesional (médico, financiero ni psicológico).
 
 ## Secciones
 
-- [Mente](https://holentia.com/mente): diario guiado, seguimiento de hábitos, respiración guiada (4-7-8, caja y calma), test de ansiedad GAD-7, calculadora del sueño y test de calidad del sueño. Incluye conceptos clave de ansiedad, estrés, respiración 4-7-8, atención plena, rumiación, higiene del sueño y hábito.
-- [Relaciones](https://holentia.com/relaciones): test de los 5 lenguajes del amor, test de estilo de apego, 45 preguntas profundas para conversar y diario para parejas. Incluye conceptos clave de comunicación asertiva, límites, escucha activa, apego, lenguajes del amor, conflicto y reciprocidad.
-- [Cuerpo](https://holentia.com/cuerpo): calculadora de calorías (Mifflin-St Jeor), hidratación (EFSA/NASEM), IMC, grasa corporal (método US Navy), proteína diaria (0,8–2,2 g/kg según objetivo), plan de pasos 5-10-20 con objetivo y registro diario, rutinas HIIT de 10 a 25 min con temporizador guiado y modo bajo impacto, y planificador de comidas semanal con lista de compras. Incluye conceptos clave de IMC, grasa corporal, metabolismo basal, gasto energético total, déficit calórico, proteína e hidratación.
+- [Mente](https://holentia.com/mente): diario guiado, seguimiento de hábitos, respiración guiada (4-7-8, caja y calma), test de ansiedad GAD-7, calculadora del sueño, test de calidad del sueño y conceptos básicos de mente.
+- [Relaciones](https://holentia.com/relaciones): test de los 5 lenguajes del amor, test de estilo de apego, 45 preguntas profundas para conversar, diario para parejas y conceptos básicos de relaciones.
+- [Cuerpo](https://holentia.com/cuerpo): calculadora de calorías (Mifflin-St Jeor), hidratación (EFSA/NASEM), IMC, grasa corporal (método US Navy), proteína diaria (0,8–2,2 g/kg según objetivo), plan de pasos 5-10-20 con objetivo y registro diario, rutinas HIIT de 10 a 25 min con temporizador guiado y modo bajo impacto, planificador de comidas semanal con lista de compras y conceptos básicos de cuerpo.
 - [Finanzas](https://holentia.com/finanzas): presupuesto, interés compuesto, préstamo, consumo eléctrico,
   gasto de combustible, corte/vencimiento de tarjeta, interés de tarjeta, perfil de riesgo, glosario financiero,
   tracker de gastos hormiga, calculadora de sueldo neto, calculadora de prestaciones laborales, calculadora de aguinaldo,
@@ -20,7 +20,7 @@ estimaciones educativas, no asesoramiento profesional (médico, financiero ni ps
 
 ## Directorio
 
-- [Directorio de herramientas](https://holentia.com/herramientas): índice completo de las 35 herramientas por sección, con enlaces directos a cada una.
+- [Directorio de herramientas](https://holentia.com/herramientas): índice completo de las 38 herramientas por sección, con enlaces directos a cada una.
 
 ## Herramientas
 
@@ -38,6 +38,9 @@ estimaciones educativas, no asesoramiento profesional (médico, financiero ni ps
 - [Seguimiento de hábitos](https://holentia.com/seguimiento-habitos): crea hábitos, marca tu día y sigue tu progreso semanal y tu racha; todo local y privado.
 - [Test de lenguajes del amor](https://holentia.com/test-lenguajes-amor): descubre tu lenguaje principal de cariño.
 - [Glosario financiero](https://holentia.com/glosario-financiero): 80 términos de ahorro, crédito, intereses, fondos, bolsa, depósitos y sistema financiero (BCRD, SB, ROE, ROA, morosidad) explicados con ejemplos.
+- [Conceptos básicos de cuerpo](https://holentia.com/conceptos-basicos-cuerpo): 7 conceptos de salud, energía y nutrición (IMC, grasa corporal, metabolismo basal, gasto energético total, déficit calórico, proteína e hidratación) con ejemplos y enlaces a cada calculadora.
+- [Conceptos básicos de mente](https://holentia.com/conceptos-basicos-mente): 7 conceptos de ansiedad, estrés, calma, sueño y hábitos (incluida la respiración 4-7-8, la atención plena y la rumiación) con ejemplos y tests relacionados.
+- [Conceptos básicos de relaciones](https://holentia.com/conceptos-basicos-relaciones): 7 conceptos de comunicación, vínculo y conflicto (comunicación asertiva, límites, escucha activa, apego, lenguajes del amor, conflicto y reciprocidad) con ejemplos.
 - [Tracker de gastos hormiga](https://holentia.com/tracker-gastos-hormiga): anota gastos pequeños y repetidos (café, delivery, recargas) y mira cuánto suman al día, al mes y al año.
 - [Calculadora de aguinaldo](https://holentia.com/calculadora-aguinaldo): el doble sueldo de diciembre: 1/12 del salario ordinario del año, proporcional a los meses trabajados y exento de ISR y TSS.
 - [Calculadora de sueldo neto](https://holentia.com/calculadora-sueldo-neto): de sueldo bruto a neto: descuentos de TSS (SFS 3.04% y AFP 2.87%), retención de ISR por tramos y otros descuentos fijos.

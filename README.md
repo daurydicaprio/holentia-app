@@ -17,7 +17,7 @@ holentia/
 │   ├── relaciones/           # Página de la sección relaciones
 │   ├── cuerpo/               # Página de la sección cuerpo
 │   ├── finanzas/             # Página de la sección finanzas
-│   ├── {slug}/               # Páginas de las 35 herramientas (una carpeta por slug)
+│   ├── {slug}/               # Páginas de las 38 herramientas (una carpeta por slug)
 │   ├── que-es-holentia/      # Página informativa sobre Holentia
 │   ├── aviso-legal/          # Página con el aviso legal
 │   ├── politica-cookies/     # Página con la política de cookies
@@ -49,7 +49,7 @@ holentia/
 ├── scripts/                  # audit-seo.mjs + validate-guides.mjs
 ├── types/                    # Definiciones de tipos
 │   └── index.ts              # Tipos principales
-├── app/sitemap.ts            # Sitemap XML (55 URLs)
+├── app/sitemap.ts            # Sitemap XML (58 URLs)
 ├── app/robots.ts             # Robots.txt
 ├── app/manifest.ts           # Manifest PWA (iconos 192/512/maskable)
 ├── app/error.tsx             # Página de error de ruta
@@ -92,12 +92,12 @@ holentia/
 ## SEO y Rendimiento
 
 - **Páginas de herramienta server-rendered**: cada herramienta usa `ToolPageShell` (server component) con H1, descripción y FAQ en el HTML inicial; la interactividad vive dentro como client components
-- **Metadata por página**: `generateMetadata` en las 35 herramientas, las 4 secciones, el home, el directorio y las páginas informativas (title, description, canonical, openGraph, twitter) con template global `{página} | HOLENTIA` en `app/layout.tsx`
-- **Datos estructurados JSON-LD**: `WebApplication` + `BreadcrumbList` + `FAQPage` por herramienta, `CollectionPage` + `BreadcrumbList` por sección, `WebSite` + `Organization` en el home, `FAQPage` en Ayuda
-- **FAQ visible en el HTML inicial** de las 35 herramientas (acordeón, no escondido tras hydration gates) y de `/ayuda` — los hubs de sección no llevan FAQ
-- **`app/sitemap.ts`**: 55 URLs (home, 4 secciones, directorio, 35 herramientas, 8 informativas, `/guias` y 5 guías publicadas)
+- **Metadata por página**: `generateMetadata` en las 38 herramientas, las 4 secciones, el home, el directorio y las páginas informativas (title, description, canonical, openGraph, twitter) con template global `{página} | HOLENTIA` en `app/layout.tsx`
+- **Datos estructurados JSON-LD**: `WebApplication` + `BreadcrumbList` + `FAQPage` por herramienta, `DefinedTermSet` en las páginas de conceptos básicos, `CollectionPage` + `BreadcrumbList` por sección, `WebSite` + `Organization` en el home, `FAQPage` en Ayuda
+- **FAQ visible en el HTML inicial** de las 38 herramientas (acordeón, no escondido tras hydration gates) y de `/ayuda` — los hubs de sección no llevan FAQ
+- **`app/sitemap.ts`**: 58 URLs (home, 4 secciones, directorio, 38 herramientas, 8 informativas, `/guias` y 5 guías publicadas)
 - **`app/robots.ts`**: permite todo y apunta al sitemap
-- **`public/llms.txt`**: índice legible por LLMs con las 35 herramientas, sus fórmulas y las guías publicadas
+- **`public/llms.txt`**: índice legible por LLMs con las 38 herramientas, sus fórmulas y las guías publicadas
 - **Enlaces a herramientas en el HTML inicial** de las secciones (tabs y tarjetas server-rendered, sin `mounted` guard)
 - **Errores**: `app/error.tsx` + `app/global-error.tsx`; `app/ayuda/loading.tsx` con skeleton real
 
@@ -146,7 +146,7 @@ La aplicación está dividida en cuatro secciones principales, cada una con su p
 - **Calculadora interés tarjeta**: costo de financiar el saldo y meses para liquidarlo
 - **Test de perfil de riesgo**: 12 preguntas, nivel de inversor, colchón y proyección de ahorro
 - **Glosario financiero**: 80 términos de ahorro, crédito, intereses, fondos, bolsa, depósitos y sistema financiero (BCRD, SB, ROE, ROA, morosidad)
-- **Conceptos clave de sección**: bloques de 7 términos en los hubs de cuerpo, mente y relaciones, con ejemplo, herramienta relacionada, aviso y fuentes
+- **Conceptos básicos de sección**: páginas propias de cuerpo, mente y relaciones con 7 términos cada una, buscador, categorías, ejemplo, herramienta relacionada, aviso y fuentes
 - **Tracker de gastos hormiga**: gastos pequeños anualizados con proporción y tips de ahorro
 - **Calculadora de aguinaldo**: doble sueldo de diciembre, proporcional y exento de ISR/TSS
 - **Calculadora de sueldo neto**: de bruto a neto con TSS (SFS/AFP) e ISR por tramos
@@ -159,7 +159,7 @@ La aplicación está dividida en cuatro secciones principales, cada una con su p
 ## Páginas Informativas
 
 - **Home**: Página de inicio con introducción elegante y acceso directo a las secciones
-- **Directorio de herramientas**: índice completo de las 35 herramientas por sección (enlazado desde el footer)
+- **Directorio de herramientas**: índice completo de las 38 herramientas por sección (enlazado desde el footer)
 - **¿Qué es Holentia?**: Información detallada sobre la misión, valores y características de la plataforma con diseño atractivo y moderno
 - **Aviso Legal**: Términos de uso, propiedad intelectual y responsabilidades con presentación clara y profesional
 - **Política de Cookies**: Explicación detallada del uso mínimo de cookies y compromiso con la privacidad
@@ -259,4 +259,4 @@ Este proyecto es propiedad de Daury DiCaprio. Todos los derechos reservados.
 
 ---
 
-**Última actualización**: Octubre 2026 (35 herramientas y 55 URLs, calculadora de grasa corporal + planificador de comidas + rutinas HIIT + seguimiento de hábitos + calculadora de proteína + test de calidad del sueño, directorio `/herramientas` + calculadora de prestaciones, pase UI/UX móvil completo —contraste AA, tap targets, inputs sin zoom iOS—, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`, estructura editorial en `content/guias/` con validación `guides:check`, cinco guías publicadas —inversión desde cero, interés compuesto, sueldo neto 2027, grasa corporal y prestaciones laborales—, índice editorial con destacada + archivo paginado, barra de progreso de lectura global, red central de enlaces internos, tests de cálculo 51/51 con `node:test` y CI en GitHub Actions, páginas de metodología y accesibilidad con fuentes y fecha de revisión, y backup local exportable/importable en «Mis datos»; skills `create-guide`/`guia-voz`/`humanizer`)
+**Última actualización**: Noviembre 2026 (38 herramientas y 58 URLs, conceptos básicos de cuerpo, mente y relaciones con buscador y categorías, calculadora de grasa corporal + planificador de comidas + rutinas HIIT + seguimiento de hábitos + calculadora de proteína + test de calidad del sueño, directorio `/herramientas` + calculadora de prestaciones, pase UI/UX móvil completo —contraste AA, tap targets, inputs sin zoom iOS—, SEO server-rendered con metadata/JSON-LD/sitemap, build estricto, lint limpio, local-first, design system + skills de agente en `.opencode/skills/`, estructura editorial en `content/guias/` con validación `guides:check`, cinco guías publicadas —inversión desde cero, interés compuesto, sueldo neto 2027, grasa corporal y prestaciones laborales—, índice editorial con destacada + archivo paginado, barra de progreso de lectura global, red central de enlaces internos, tests de cálculo 53/53 con `node:test` y CI en GitHub Actions, páginas de metodología y accesibilidad con fuentes y fecha de revisión, y backup local exportable/importable en «Mis datos»; skills `create-guide`/`guia-voz`/`humanizer`)

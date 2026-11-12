@@ -1,11 +1,11 @@
 # HOLENTIA — Plan de mejoras 2.0
 
 > Fecha: 20-Oct-2026 · Actualizado: 12-Nov-2026
-> Estado: propuesta en ejecución. BO, BR, BT, BS2 y BV completas; `main` y `dev` sincronizados en `8368ec7` y promocionados a producción el 12-Nov-2026.
-> Base inicial: `448c529`; `main` y `dev` en `8368ec7`. 35 herramientas, 55 URLs, 51 rutas OG, 80 términos de glosario financiero, 21 conceptos clave de sección y 5 guías publicadas.
+> Estado: propuesta en ejecución. BO, BR, BT, BS2 y BV completas; `main` y `dev` sincronizados con la entrega de conceptos básicos (12-Nov-2026).
+> Base inicial: `448c529`; `main` y `dev` al día. 38 herramientas, 58 URLs, 54 rutas OG, 80 términos de glosario financiero, 21 conceptos básicos en tres páginas y 5 guías publicadas.
 > Principios: local-first, sin tracking, server-first, español (es-DO) y documentación en el mismo commit.
 >
-> **Estado de ejecución (12-Nov-2026):** 35 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); sitemap de **55 URLs**, **51 OG**, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` **55/55** y build de **114 páginas**. `links:check` 35/35, **53 tests** y CI en GitHub Actions. BO (gráficos), BR (tasas), BT (metodología/accesibilidad), BS2 (préstamo, interés compuesto, IMC, grasa y calorías) y BV (`/mis-datos`) están en producción desde `8368ec7` con Next 15.5.28 y `main` verde. Glosario con **80 términos** (nueva categoría «Sistema financiero») y bloques de **«Conceptos clave»** en cuerpo, mente y relaciones (7 términos por hub). Search Console/Bing verificados.
+> **Estado de ejecución (12-Nov-2026):** 38 herramientas activas y 0 «Próximamente»; 5 guías publicadas (`como-invertir-en-rd-desde-cero`, `interes-compuesto-rd`, `sueldo-neto-rd-2027`, `grasa-corporal-como-medirla` y `prestaciones-laborales-rd`); sitemap de **58 URLs**, **54 OG**, `llms.txt`, `RelatedGuides`, barra de lectura y `guides:check` 5/5; `audit:seo` **58/58** y build de **120 páginas**. `links:check` 38/38, **53 tests** y CI en GitHub Actions. BO (gráficos), BR (tasas), BT (metodología/accesibilidad), BS2 (préstamo, interés compuesto, IMC, grasa y calorías) y BV (`/mis-datos`) están en producción con Next 15.5.28 y `main` verde. Glosario con **80 términos** financieros y **conceptos básicos** de cuerpo, mente y relaciones en páginas propias con buscador (7 términos por sección). Search Console/Bing verificados.
 >
 > **Cerrado:** BN (dependencias/baseline), BP (red de enlaces), BS (tests núcleo + CI), BO (a11y de gráficos), BR (tasas centralizadas), BT (metodología/accesibilidad), BS2 (tests ampliados), BV (backup local) y la promoción a `main` de `8368ec7` (aprobada por el usuario). **Pendiente:** panel de progreso BV+.
 
@@ -28,7 +28,7 @@
 
 ### Fortalezas
 
-- Producto completo: 35 herramientas activas, 0 «Próximamente», 4 hubs y directorio.
+- Producto completo: 38 herramientas activas, 0 «Próximamente», 4 hubs y directorio.
 - SEO/GEO técnico sólido: auditoría **54/54**, FAQ y JSON-LD en SSR, OG por ruta, `llms.txt`, sitemap y `robots` con bots de IA.
 - Accesibilidad por encima de la media: axe limpio, teclado, foco, contraste y `prefers-reduced-motion`.
 - Producción desplegada y verificada; el problema de deploy de la Fase BL quedó resuelto.
@@ -120,7 +120,7 @@ Aceptación:
 **Objetivo:** que ninguna herramienta quede aislada y que el usuario encuentre el siguiente paso natural.
 
 Tareas:
-- [x] Mapa de relaciones dirigidas en `lib/related-tools.ts`: **35/35 herramientas**, 2–3 enlaces salientes y **≥2 entrantes** cada una.
+- [x] Mapa de relaciones dirigidas en `lib/related-tools.ts`: **38/38 herramientas**, 2–3 enlaces salientes y **≥2 entrantes** cada una.
 - [x] Bloque central `ToolRelatedTools` en `ToolPageShell` (server-first, sin JS propio): se renderiza una sola vez, antes del FAQ. Sustituye los bloques sueltos de calorías, proteína, IMC, grasa, pasos e hidratación.
 - [x] Cerrados los huecos de las 13 herramientas que no tenían entrada contextual: sueldo neto, aguinaldo, ITBIS, prestaciones, certificado, combustible, perfil de riesgo, planificador de compras, planificador de comidas, rutinas HIIT, seguimiento de hábitos, glosario y tracker de gastos.
 - [x] Relaciones con sentido de uso por clúster (mente, relaciones, cuerpo, finanzas); hidratación conserva el acento `sky`.
@@ -234,7 +234,7 @@ Tareas:
 
 Aceptación:
 - [x] Sin red, sin backend, sin cuentas y sin claves nuevas de almacenamiento.
-- [x] `pnpm test` **53/53**; `tsc`, `lint`, `links:check`, `guides:check`, build **114 páginas** y `audit:seo` **55/55**.
+- [x] `pnpm test` **53/53**; `tsc`, `lint`, `links:check`, `guides:check`, build **120 páginas** y `audit:seo` **58/58**.
 - [x] Un archivo inválido no toca el almacenamiento; uno válido se previsualiza antes de escribir.
 
 ### Fase BU — Primeras guías publicadas
